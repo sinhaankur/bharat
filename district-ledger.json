@@ -5,7 +5,7 @@
     "rules": "PDF-cited or it's a gap. Every fact carries source + source_tier. Gaps recorded in _gaps, never guessed. Footnotes in UI point to the public record.",
     "source_tiers": {"1": "gov_pdf", "2": "gov_html (.nic.in/.gov.in)", "3": "wikipedia (discovery)", "4": "news"},
     "footnotes_render": "source_tier 4 (news) and 3 (wikipedia) are shown but visibly flagged as needing upgrade to a government PDF source.",
-    "coverage": {"districts": 1, "districts_with_money_figures": 1, "note": "Kolkata: MPLADS spent/completed figures sourced (tier-4 news, 2026-01-06 review, needs gov-PDF upgrade); MPLADS portal release/unspent exact figures still pending. Roster partially sourced."}
+    "coverage": {"districts": 1, "districts_with_money_figures": 1, "note": "Kolkata: KMC civic budget grant flow now TIER-1 PDF-cited (₹2,897 cr Govt Grant of ₹5,525 cr receipts, BE 2025-26). MPLADS spent/completed figures tier-4 (2026-01-06 review) pending upgrade to official MPLADS portal. Roster partially sourced."}
   },
   "states": {
     "West Bengal": {
@@ -35,6 +35,13 @@
               "source": "https://sundayguardianlive.com/news/bengal-mps-show-uneven-mplads-delivery-164124/",
               "source_tier": 4,
               "needs_pdf_upgrade": true
+            },
+            {
+              "note": "Fiscal dependence: ~52% of Kolkata Municipal Corporation's ₹5,525 cr receipts (BE 2025-26) is Government Grant-in-Aid from Central + State governments (₹2,897 cr), versus ₹2,628 cr raised from its own sources. More than half of the city's civic money is transferred down rather than locally generated — and the budget still runs a deficit (expenditure ₹5,639.56 cr).",
+              "kind": "structural",
+              "source": "https://www.kmcgov.in/KMCPortal/downloads/Budget_English_2025_2026.pdf",
+              "source_tier": 1,
+              "needs_pdf_upgrade": false
             }
           ],
           "roster": {
@@ -58,6 +65,26 @@
             {"dept": "Kolkata Police", "type": "law_and_order", "officer": {"name": "Ajay Kumar Nand", "post": "Commissioner of Police", "source": "https://en.wikipedia.org/wiki/Kolkata"}, "schemes": []}
           ],
           "ledger": [
+            {
+              "fy": "2025-26 (BE)",
+              "scheme": "KMC civic budget — Government Grant (Central + State Grant-in-Aid)",
+              "stream": "intergovernmental_grant",
+              "through_dept": "Kolkata Municipal Corporation",
+              "money_in_cr": 2897.0,
+              "money_in_basis": "Budget Estimate 2025-26 'Government Grant' line; explicitly Grant-in-Aids from both Central and State Governments. (RE 2024-25: ₹2,347 cr.)",
+              "intended": "Civic services: water supply, solid waste, sewerage & drainage, roads, slum development, health, lighting, education.",
+              "what_happened": {
+                "utilisation_pct": null, "unspent_cr": null, "lapsed": null,
+                "audit_flag": null, "cag_para": null, "vendor": null,
+                "total_receipt_cr": 5524.84, "total_expenditure_cr": 5639.56, "own_source_revenue_cr": 2627.84,
+                "notes": "Government grant of ₹2,897 cr is ~52% of KMC's ₹5,525 cr total receipts — over half of Kolkata's civic money flows DOWN from Central+State govt, not raised locally. Budget is in deficit (expenditure ₹5,639.56 cr > receipts ₹5,524.84 cr). Named schemes flowing through: 15th Finance Commission Health Grants, AMRUT 2.0, NMCG (river/canal cleaning), NSAP, DAY-NULM."
+              },
+              "responsible": {"primary": "municipal_commissioner", "secondary": ["mayor"]},
+              "source": "https://www.kmcgov.in/KMCPortal/downloads/Budget_English_2025_2026.pdf",
+              "source_tier": 1,
+              "needs_pdf_upgrade": false,
+              "figure_gap": false
+            },
             {
               "fy": "2024-2026 (18th LS, as on 2026-01-06)",
               "scheme": "MPLADS",
@@ -106,8 +133,8 @@
             "minister_in_charge", "assembly_mlas",
             "governor", "chief_minister", "chief_secretary", "dgp",
             "mplads_exact_released_and_unspent_per_constituency (have spent+completed from review; need official portal release figure)",
-            "central_scheme_money_in (MGNREGS n/a urban; PMAY-U, AMRUT figures pending)",
-            "fc_grants_to_local_body", "treasury_establishment_cost",
+            "scheme-wise split of the ₹2,897 cr grant (AMRUT 2.0 / PMAY-U / 15th FC Health / NMCG amounts — named in budget, individual ₹ pending Volume-II)",
+            "treasury_establishment_cost",
             "utilisation_and_cag_audit_data", "vendor_companies"
           ]
         }
