@@ -806,6 +806,74 @@ a:hover { border-color: var(--foreground); }
 .ledger-gaps { margin-top: 0.5rem; font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); }
 .ledger-gaps summary { cursor: pointer; color: oklch(0.7 0.1 70); }
 .ledger-gaps ul { margin: 0.3rem 0 0 1rem; line-height: 1.5; }
+
+/* Interactive charts */
+.ledger-chart {
+  background: oklch(0.17 0 0);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 0.5rem 0.55rem;
+  margin: 0.2rem 0 0.3rem;
+}
+.ledger-chart svg { display: block; }
+.chart-note {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  line-height: 1.4;
+  color: var(--muted-foreground);
+  margin-top: 0.35rem;
+  opacity: 0.8;
+}
+.chart-legend-row {
+  display: flex; align-items: center; gap: 0.3rem;
+  font-size: 10px; line-height: 1.6; color: var(--foreground);
+}
+.chart-legend-row .sw { width: 9px; height: 9px; border-radius: 2px; flex: 0 0 9px; }
+.ledger-tip {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  background: oklch(0.12 0 0 / 0.97);
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  padding: 0.35rem 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1.45;
+  color: var(--foreground);
+  max-width: 240px;
+  box-shadow: 0 4px 14px oklch(0 0 0 / 0.5);
+}
+
+/* District colour-mode toggle (population ↔ money flow) */
+.district-mode-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 0 0.5rem;
+  flex-wrap: wrap;
+}
+.district-mode-toggle .dmt-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+.dmt-btn {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: oklch(0.18 0 0);
+  color: var(--foreground);
+  cursor: pointer;
+  transition: border-color .15s, background .15s;
+}
+.dmt-btn:hover:not(:disabled) { border-color: var(--border-strong); }
+.dmt-btn.on { background: oklch(0.78 0.16 70 / 0.18); border-color: oklch(0.78 0.16 70); color: oklch(0.85 0.16 75); }
+.dmt-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 .india-pc {
   background: oklch(0.17 0 0);
   border: 1px solid var(--border);

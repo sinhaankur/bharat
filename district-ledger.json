@@ -61,9 +61,20 @@
             "assembly": []
           },
           "departments": [
-            {"dept": "Kolkata Municipal Corporation", "type": "public_facing", "officer": {"name": null, "post": "Municipal Commissioner", "source": null}, "schemes": ["AMRUT", "PMAY-U", "Solid Waste Mgmt"]},
-            {"dept": "Kolkata Police", "type": "law_and_order", "officer": {"name": "Ajay Kumar Nand", "post": "Commissioner of Police", "source": "https://en.wikipedia.org/wiki/Kolkata"}, "schemes": []}
+            {"dept": "Solid Waste Management", "type": "public_facing", "alloc_cr": 720.85, "schemes": ["SWM Rules 2016"]},
+            {"dept": "Water Supply", "type": "public_facing", "alloc_cr": 444.97, "schemes": ["AMRUT 2.0"]},
+            {"dept": "Sewerage & Drainage", "type": "public_facing", "alloc_cr": 335.69, "schemes": ["NMCG"]},
+            {"dept": "Roads", "type": "public_facing", "alloc_cr": 318.22, "schemes": []},
+            {"dept": "Slum Development", "type": "public_facing", "alloc_cr": 232.69, "schemes": ["DAY-NULM", "PMAY-U"]},
+            {"dept": "Health", "type": "public_facing", "alloc_cr": 186.55, "schemes": ["15th FC Health Grants"]},
+            {"dept": "Lighting", "type": "public_facing", "alloc_cr": 164.45, "schemes": []},
+            {"dept": "Education", "type": "public_facing", "alloc_cr": 52.12, "schemes": []},
+            {"dept": "Parks & Squares", "type": "public_facing", "alloc_cr": 46.35, "schemes": []},
+            {"dept": "Social Welfare & Poverty Alleviation", "type": "public_facing", "alloc_cr": 29.52, "schemes": ["NSAP"]}
           ],
+          "departments_source": "https://www.kmcgov.in/KMCPortal/downloads/Budget_English_2025_2026.pdf",
+          "departments_fy": "2024-25 (allocations as reported)",
+          "departments_source_tier": 1,
           "ledger": [
             {
               "fy": "2025-26 (BE)",

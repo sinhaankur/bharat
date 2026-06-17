@@ -100,7 +100,7 @@
     population:     { name: 'Census of India 2011',   url: 'https://censusindia.gov.in' }
   };
 
-  const ui = { state: { view: 'ownTax', yearIdx: 9, selected: null, hover: null, mode: 'states', drillState: null, drillDistrict: null } };
+  const ui = { state: { view: 'ownTax', yearIdx: 9, selected: null, hover: null, mode: 'states', drillState: null, drillDistrict: null, districtMode: 'population' } };
 
   let DATA = null, EXTRAS = null, GEO = null, DISTRICT_POP = null, BLOCKS = null, LEDGER = null, PAY = null;
   let map = null, geoLayer = null, districtLayer = null;
@@ -442,9 +442,31 @@
     const popMax = pops.length ? Math.max(...pops) : 1;
     const popMin = pops.length ? Math.min(...pops) : 0;
 
+    // Money-flow overlay: which districts have ledger data, and their headline ₹ in.
+    const moneyByDistrict = new Map();
+    for (const f of geo.features) {
+      const dn = f.properties.DISTRICT;
+      const m = districtMoneyHeadline(stateName, dn);
+      if (m != null) moneyByDistrict.set(dn, m);
+    }
+    const moneyVals = [...moneyByDistrict.values()];
+    const moneyMax = moneyVals.length ? Math.max(...moneyVals) : 1;
+    const showMoney = ui.state.districtMode === 'money' && moneyVals.length > 0;
+
     districtLayer = L.geoJSON(geo, {
       style: f => {
-        const pop = getDistrictPop(stateName, f.properties.DISTRICT)?.population;
+        const dn = f.properties.DISTRICT;
+        if (showMoney) {
+          const m = moneyByDistrict.get(dn);
+          return {
+            className: 'india-state-path',
+            color: m != null ? 'oklch(0.85 0.16 80)' : 'oklch(0.985 0 0 / 0.25)',
+            weight: m != null ? 1 : 0.5,
+            fillColor: m != null ? seqColor(0.25 + 0.7 * (m / moneyMax)) : 'oklch(0.2 0 0)',
+            fillOpacity: m != null ? 0.92 : 0.35
+          };
+        }
+        const pop = getDistrictPop(stateName, dn)?.population;
         const t = pop != null ? (pop - popMin) / Math.max(1, popMax - popMin) : 0;
         return {
           className: 'india-state-path',
@@ -459,18 +481,61 @@
         districtPathByName.set(dn, layer);
         layer.on('mouseover', () => {
           layer.setStyle({ weight: 1.6, color: 'oklch(0.985 0 0)' });
-          const pop = getDistrictPop(stateName, dn)?.population;
-          updateDistrictReadout(dn, stateName, pop);
+          if (showMoney) updateDistrictMoneyReadout(dn, stateName, moneyByDistrict.get(dn));
+          else updateDistrictReadout(dn, stateName, getDistrictPop(stateName, dn)?.population);
         });
         layer.on('mouseout', () => {
-          if (ui.state.drillDistrict !== dn) layer.setStyle({ weight: 0.6, color: 'oklch(0.985 0 0 / 0.45)' });
+          if (ui.state.drillDistrict !== dn) layer.setStyle({ weight: showMoney && moneyByDistrict.get(dn) != null ? 1 : 0.6, color: showMoney && moneyByDistrict.get(dn) != null ? 'oklch(0.85 0.16 80)' : 'oklch(0.985 0 0 / 0.45)' });
           updateReadout();
         });
         layer.on('click', () => selectDistrict(dn, stateName));
       }
     }).addTo(map);
 
+    renderDistrictModeToggle(stateName, moneyVals.length);
+
     try { map.fitBounds(districtLayer.getBounds(), { padding: [30, 30] }); } catch (e) {}
+  }
+
+  // Headline money figure for a district (the biggest ₹-in row in its ledger), or null.
+  function districtMoneyHeadline(state, district) {
+    const L = ledgerForDistrict(state, district);
+    if (!L || !L.ledger) return null;
+    const vals = L.ledger.map(r => r.money_in_cr).filter(v => typeof v === 'number');
+    return vals.length ? Math.max(...vals) : null;
+  }
+
+  function updateDistrictMoneyReadout(district, state, money) {
+    $ind('.readout-label').textContent = `District money · ${state}`;
+    $ind('.readout-name').textContent = district;
+    const valEl = $ind('.readout-value');
+    valEl.textContent = money != null ? `₹${money >= 1000 ? (money / 1000).toFixed(2) + 'k' : Math.round(money)} cr headline flow` : 'No ledger data yet';
+    valEl.style.color = money != null ? 'oklch(0.82 0.16 75)' : 'var(--muted-foreground)';
+    valEl.style.fontSize = '12.5px';
+  }
+
+  // Toggle: population view ↔ money-flow view for the district layer.
+  function renderDistrictModeToggle(stateName, moneyCount) {
+    const host = $ind('#india-detail');
+    if (!host) return;
+    let bar = $ind('#district-mode-toggle');
+    if (!bar) {
+      bar = document.createElement('div');
+      bar.id = 'district-mode-toggle';
+      bar.className = 'district-mode-toggle';
+      host.parentNode.insertBefore(bar, host);
+    }
+    const mode = ui.state.districtMode || 'population';
+    bar.innerHTML = `
+      <span class="dmt-label">Colour districts by</span>
+      <button class="dmt-btn ${mode === 'population' ? 'on' : ''}" data-m="population">Population</button>
+      <button class="dmt-btn ${mode === 'money' ? 'on' : ''}" data-m="money" ${moneyCount ? '' : 'disabled title="No district money data in this state yet"'}>Money flow ${moneyCount ? `· ${moneyCount}` : ''}</button>`;
+    bar.querySelectorAll('.dmt-btn').forEach(b => b.addEventListener('click', () => {
+      if (b.disabled) return;
+      ui.state.districtMode = b.dataset.m;
+      const geo = districtGeoCache.get(stateName);
+      if (geo) renderDistrictLayer(geo, stateName);
+    }));
   }
 
   function updateDistrictReadout(district, state, pop) {
@@ -593,6 +658,7 @@
     });
     detail.querySelector('#india-back-to-state')?.addEventListener('click', () => exitDrill(state));
     bindBlockClicks(detail);
+    bindLedgerCharts(detail, state, district);
   }
 
   /* ───────── BLOCK / TALUK level (V1 pilot — Kerala, Goa, Sikkim) ───────── */
@@ -678,13 +744,200 @@
       ? `<details class="ledger-gaps"><summary>${L._gaps.length} known data gaps (recorded, not estimated)</summary><ul>${L._gaps.map(g => `<li>${esc(g)}</li>`).join('')}</ul></details>`
       : '';
 
+    // Interactive charts (drawn after insertion via bindLedgerCharts).
+    const hasGrant = (L.ledger || []).some(r => r.stream === 'intergovernmental_grant' && r.money_in_cr);
+    const hasDepts = (L.departments || []).some(d => d.alloc_cr);
+    const hasSchemeBars = (L.ledger || []).some(r => r.what_happened && (r.what_happened.works_recommended != null || r.what_happened.spent_cr != null));
+    const chartsHtml = `
+      ${hasGrant ? `<div class="india-detail-section-title">Where the money comes from</div>
+        <div class="ledger-chart" id="chart-donut"></div>` : ''}
+      ${hasDepts ? `<div class="india-detail-section-title">Where it flows — by department</div>
+        <div class="ledger-chart" id="chart-sankey"></div>` : ''}
+      ${hasSchemeBars ? `<div class="india-detail-section-title">Allocated → spent → completed</div>
+        <div class="ledger-chart" id="chart-bars"></div>` : ''}
+      <div class="india-detail-section-title">Money in vs utilised, over time</div>
+      <div class="ledger-chart" id="chart-timeline"></div>`;
+
     return `
       <div class="india-detail-section-title">Money flow &amp; accountability${L.admin_model && L.admin_model !== 'standard' ? ` <span style="font-family:var(--font-mono);font-size:10px;color:oklch(0.78 0.16 70);text-transform:none">· ${esc(L.admin_model)} admin model</span>` : ''}</div>
       ${notesHtml}
-      ${ledgerHtml ? `<div class="ledger-list">${ledgerHtml}</div>` : ''}
+      ${chartsHtml}
+      ${ledgerHtml ? `<div class="india-detail-section-title" style="margin-top:0.8rem">Ledger detail</div><div class="ledger-list">${ledgerHtml}</div>` : ''}
       ${(rosterRows || mps) ? `<div class="india-detail-section-title" style="margin-top:0.8rem">Who is responsible</div><div class="roster-list">${rosterRows}${mps}</div>` : ''}
       ${gapsHtml}
       <p class="india-caveat">Figures are PDF-cited where ⚠ is absent; ⚠ marks tier-3/4 (Wikipedia/news) sources pending upgrade to a government PDF. Salary shown is the per-post cost-to-government estimate, not a person's pay.</p>`;
+  }
+
+  /* ───────── Interactive ledger charts (inline SVG, no deps) ───────── */
+  let _ledgerTip = null;
+  function ledgerTip() {
+    if (!_ledgerTip) {
+      _ledgerTip = document.createElement('div');
+      _ledgerTip.className = 'ledger-tip';
+      _ledgerTip.style.display = 'none';
+      document.body.appendChild(_ledgerTip);
+    }
+    return _ledgerTip;
+  }
+  function showTip(html, evt) {
+    const t = ledgerTip();
+    t.innerHTML = html;
+    t.style.display = 'block';
+    const pad = 14;
+    let x = evt.clientX + pad, y = evt.clientY + pad;
+    const r = t.getBoundingClientRect();
+    if (x + r.width > window.innerWidth) x = evt.clientX - r.width - pad;
+    if (y + r.height > window.innerHeight) y = evt.clientY - r.height - pad;
+    t.style.left = x + 'px'; t.style.top = y + 'px';
+  }
+  function hideTip() { if (_ledgerTip) _ledgerTip.style.display = 'none'; }
+  const crLabel = v => v >= 1000 ? `₹${(v / 1000).toFixed(2)}k cr` : `₹${v.toFixed(v < 10 ? 2 : 0)} cr`;
+
+  function bindLedgerCharts(detail, state, district) {
+    const L = ledgerForDistrict(state, district);
+    if (!L) return;
+    drawDonut(detail.querySelector('#chart-donut'), L);
+    drawSankey(detail.querySelector('#chart-sankey'), L);
+    drawBars(detail.querySelector('#chart-bars'), L);
+    drawTimeline(detail.querySelector('#chart-timeline'), L);
+  }
+
+  // (1) Grant-dependence donut: own-source vs govt grant.
+  function drawDonut(el, L) {
+    if (!el) return;
+    const grantRow = (L.ledger || []).find(r => r.stream === 'intergovernmental_grant' && r.money_in_cr);
+    if (!grantRow) { el.remove(); return; }
+    const grant = grantRow.money_in_cr;
+    const own = grantRow.what_happened?.own_source_revenue_cr;
+    const total = grantRow.what_happened?.total_receipt_cr || (own != null ? grant + own : grant);
+    const segs = [
+      { label: 'Govt grant (Central+State)', val: grant, color: 'oklch(0.78 0.16 70)' },
+      ...(own != null ? [{ label: 'Own-source revenue', val: own, color: 'oklch(0.7 0.17 162)' }] : [])
+    ];
+    const sum = segs.reduce((a, s) => a + s.val, 0);
+    const W = 320, H = 130, cx = 70, cy = 65, rO = 52, rI = 30;
+    let a0 = -Math.PI / 2, paths = '';
+    segs.forEach((s, i) => {
+      const a1 = a0 + (s.val / sum) * Math.PI * 2;
+      const large = (a1 - a0) > Math.PI ? 1 : 0;
+      const p = (r, a) => `${cx + r * Math.cos(a)},${cy + r * Math.sin(a)}`;
+      paths += `<path d="M ${p(rI, a0)} L ${p(rO, a0)} A ${rO} ${rO} 0 ${large} 1 ${p(rO, a1)} L ${p(rI, a1)} A ${rI} ${rI} 0 ${large} 0 ${p(rI, a0)} Z"
+        fill="${s.color}" stroke="oklch(0.145 0 0)" stroke-width="1.5" class="donut-seg" data-i="${i}" style="cursor:pointer;transition:opacity .15s"/>`;
+      a0 = a1;
+    });
+    const grantPct = Math.round(grant / sum * 100);
+    const legend = segs.map((s, i) => `<div class="chart-legend-row" data-i="${i}"><span class="sw" style="background:${s.color}"></span>${esc(s.label)} · <b>${crLabel(s.val)}</b> (${Math.round(s.val / sum * 100)}%)</div>`).join('');
+    el.innerHTML = `<div style="display:flex;gap:0.4rem;align-items:center">
+      <svg viewBox="0 0 ${W} ${H}" style="width:140px;flex:0 0 140px">${paths}
+        <text x="${cx}" y="${cy - 2}" text-anchor="middle" fill="var(--foreground)" font-family="ui-monospace,monospace" font-size="15" font-weight="700">${grantPct}%</text>
+        <text x="${cx}" y="${cy + 11}" text-anchor="middle" fill="oklch(0.6 0 0)" font-family="ui-monospace,monospace" font-size="7">grant-funded</text>
+      </svg>
+      <div style="flex:1">${legend}<div class="chart-note">Total receipts ${crLabel(total)} · ${grantPct}% flows down from higher govts</div></div></div>`;
+    el.querySelectorAll('.donut-seg').forEach(seg => {
+      const s = segs[+seg.dataset.i];
+      seg.addEventListener('mousemove', e => { seg.style.opacity = '0.8'; showTip(`<b>${esc(s.label)}</b><br>${crLabel(s.val)} · ${Math.round(s.val / sum * 100)}% of receipts`, e); });
+      seg.addEventListener('mouseleave', () => { seg.style.opacity = '1'; hideTip(); });
+    });
+  }
+
+  // (2) Department flow — horizontal bars (a readable Sankey-style "where it goes").
+  function drawSankey(el, L) {
+    if (!el) return;
+    const deps = (L.departments || []).filter(d => d.alloc_cr).sort((a, b) => b.alloc_cr - a.alloc_cr);
+    if (!deps.length) { el.remove(); return; }
+    const max = deps[0].alloc_cr;
+    const total = deps.reduce((a, d) => a + d.alloc_cr, 0);
+    const rowH = 22, W = 320, labelW = 130, barW = W - labelW - 50;
+    let svg = '';
+    deps.forEach((d, i) => {
+      const y = i * rowH + 4;
+      const w = Math.max(2, (d.alloc_cr / max) * barW);
+      const hasScheme = d.schemes && d.schemes.length;
+      const color = hasScheme ? 'oklch(0.78 0.16 70)' : 'oklch(0.55 0.05 250)';
+      svg += `<text x="${labelW - 6}" y="${y + 13}" text-anchor="end" fill="var(--foreground)" font-family="ui-monospace,monospace" font-size="9">${esc(d.dept.length > 20 ? d.dept.slice(0, 19) + '…' : d.dept)}</text>`;
+      svg += `<rect x="${labelW}" y="${y + 3}" width="${w}" height="${rowH - 9}" rx="2" fill="${color}" class="dep-bar" data-i="${i}" style="cursor:pointer;transition:opacity .15s"/>`;
+      svg += `<text x="${labelW + w + 5}" y="${y + 13}" fill="oklch(0.7 0 0)" font-family="ui-monospace,monospace" font-size="8">${Math.round(d.alloc_cr)}</text>`;
+    });
+    const H = deps.length * rowH + 8;
+    el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" style="width:100%">${svg}</svg>
+      <div class="chart-note">${deps.length} departments · total ₹${Math.round(total)} cr (KMC 2024-25) · <span style="color:oklch(0.78 0.16 70)">▮</span> carries a named central/state scheme</div>`;
+    el.querySelectorAll('.dep-bar').forEach(bar => {
+      const d = deps[+bar.dataset.i];
+      bar.addEventListener('mousemove', e => { bar.style.opacity = '0.8'; showTip(`<b>${esc(d.dept)}</b><br>${crLabel(d.alloc_cr)} · ${Math.round(d.alloc_cr / total * 100)}% of dept spend${d.schemes && d.schemes.length ? `<br>schemes: ${esc(d.schemes.join(', '))}` : ''}`, e); });
+      bar.addEventListener('mouseleave', () => { bar.style.opacity = '1'; hideTip(); });
+    });
+  }
+
+  // (3) Allocated → spent → completed grouped bars per scheme.
+  function drawBars(el, L) {
+    if (!el) return;
+    const rows = (L.ledger || []).filter(r => r.what_happened && (r.what_happened.works_recommended != null || r.what_happened.spent_cr != null));
+    if (!rows.length) { el.remove(); return; }
+    const W = 320, padL = 8, padR = 8, padB = 28, groupGap = 14;
+    const groupW = (W - padL - padR - groupGap * (rows.length - 1)) / rows.length;
+    const H = 130, top = 8, plotH = H - top - padB;
+    let svg = '';
+    rows.forEach((r, gi) => {
+      const w = r.what_happened;
+      const inV = r.money_in_cr || 0, spent = w.spent_cr || 0;
+      const recd = w.works_recommended, done = w.works_completed;
+      const gx = padL + gi * (groupW + groupGap);
+      // money bars (left axis = money) and works completion ratio (as % fill)
+      const maxMoney = Math.max(inV, spent, 1);
+      const bw = groupW / 3 - 2;
+      const bars = [
+        { label: 'In', v: inV, h: (inV / maxMoney) * plotH, color: 'oklch(0.6 0.05 250)', tip: `Money available: ${crLabel(inV)}` },
+        { label: 'Spent', v: spent, h: (spent / maxMoney) * plotH, color: 'oklch(0.78 0.16 70)', tip: `Spent: ${crLabel(spent)} (${Math.round(spent / maxMoney * 100)}% of available)` },
+        ...(recd != null ? [{ label: 'Done', v: done, h: (recd ? (done / recd) : 0) * plotH, color: done === 0 ? 'oklch(0.6 0.2 25)' : 'oklch(0.7 0.17 162)', tip: `Works completed: ${done}/${recd}` }] : [])
+      ];
+      bars.forEach((b, bi) => {
+        const x = gx + bi * (bw + 2);
+        const y = top + plotH - b.h;
+        svg += `<rect x="${x}" y="${y}" width="${bw}" height="${Math.max(1, b.h)}" rx="1.5" fill="${b.color}" class="grp-bar" data-g="${gi}" data-b="${bi}" style="cursor:pointer;transition:opacity .15s"/>`;
+        svg += `<text x="${x + bw / 2}" y="${H - padB + 10}" text-anchor="middle" fill="oklch(0.55 0 0)" font-family="ui-monospace,monospace" font-size="6.5">${b.label}</text>`;
+      });
+      const name = (r.through_dept || r.scheme).split('—')[1]?.trim() || r.scheme;
+      svg += `<text x="${gx + groupW / 2}" y="${H - 4}" text-anchor="middle" fill="oklch(0.7 0 0)" font-family="ui-monospace,monospace" font-size="7.5">${esc((name).slice(0, 16))}</text>`;
+      r._bars = bars;
+    });
+    el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" style="width:100%">${svg}</svg>
+      <div class="chart-note">Per scheme: money available vs spent vs works completed. A tall 'In' with short 'Spent'/'Done' = money that didn't convert to delivery.</div>`;
+    el.querySelectorAll('.grp-bar').forEach(bar => {
+      const r = rows[+bar.dataset.g], b = r._bars[+bar.dataset.b];
+      bar.addEventListener('mousemove', e => { bar.style.opacity = '0.8'; showTip(`<b>${esc(r.scheme.split('—')[0])}</b><br>${esc(b.tip)}`, e); });
+      bar.addEventListener('mouseleave', () => { bar.style.opacity = '1'; hideTip(); });
+    });
+  }
+
+  // (4) Utilisation timeline: money-in vs utilised% across ledger FYs (interactive points).
+  function drawTimeline(el, L) {
+    if (!el) return;
+    // Build a simple per-row series ordered as given; x = scheme/FY, y = money_in, marker = util.
+    const rows = (L.ledger || []);
+    if (!rows.length) { el.innerHTML = '<div class="chart-note">No ledger rows yet.</div>'; return; }
+    const W = 320, H = 120, padL = 34, padR = 10, padT = 10, padB = 26;
+    const iw = W - padL - padR, ih = H - padT - padB;
+    const max = Math.max(...rows.map(r => r.money_in_cr || 0), 1) * 1.1;
+    const x = i => padL + (rows.length === 1 ? iw / 2 : (i / (rows.length - 1)) * iw);
+    const y = v => padT + ih - (v / max) * ih;
+    let svg = '';
+    for (let g = 0; g <= 2; g++) { const v = max * g / 2, yy = y(v); svg += `<line x1="${padL}" x2="${W - padR}" y1="${yy}" y2="${yy}" stroke="oklch(0.985 0 0 / 0.07)"/><text x="${padL - 4}" y="${yy + 3}" text-anchor="end" fill="oklch(0.55 0 0)" font-family="ui-monospace,monospace" font-size="7">${Math.round(v)}</text>`; }
+    const pts = rows.map((r, i) => `${x(i)},${y(r.money_in_cr || 0)}`).join(' ');
+    if (rows.length > 1) svg += `<polyline points="${pts}" fill="none" stroke="oklch(0.78 0.16 70)" stroke-width="1.4"/>`;
+    rows.forEach((r, i) => {
+      const util = r.what_happened?.utilisation_pct;
+      const col = util == null ? 'oklch(0.55 0 0)' : util < 40 ? 'oklch(0.62 0.2 25)' : util < 75 ? 'oklch(0.78 0.16 70)' : 'oklch(0.7 0.17 162)';
+      svg += `<circle cx="${x(i)}" cy="${y(r.money_in_cr || 0)}" r="4" fill="${col}" stroke="oklch(0.145 0 0)" stroke-width="1" class="tl-pt" data-i="${i}" style="cursor:pointer"/>`;
+      const lbl = (r.scheme.match(/MPLADS|KMC|MGNREGS|PMAY|AMRUT/i) || [r.scheme])[0];
+      svg += `<text x="${x(i)}" y="${H - 4}" text-anchor="middle" fill="oklch(0.6 0 0)" font-family="ui-monospace,monospace" font-size="7">${esc(String(lbl).slice(0, 8))}</text>`;
+    });
+    el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" style="width:100%">${svg}</svg>
+      <div class="chart-note">Point height = money in (₹ cr); colour = utilisation (<span style="color:oklch(0.62 0.2 25)">red &lt;40%</span> · <span style="color:oklch(0.78 0.16 70)">amber</span> · <span style="color:oklch(0.7 0.17 162)">green &gt;75%</span>).</div>`;
+    el.querySelectorAll('.tl-pt').forEach(pt => {
+      const r = rows[+pt.dataset.i], w = r.what_happened || {};
+      pt.addEventListener('mousemove', e => showTip(`<b>${esc(r.scheme.split('—')[0])}</b><br>${esc(r.fy)}<br>In: ${crLabel(r.money_in_cr || 0)}${w.utilisation_pct != null ? `<br>Utilised: ${w.utilisation_pct}%` : ''}${w.spent_cr != null ? `<br>Spent: ${crLabel(w.spent_cr)}` : ''}`, e));
+      pt.addEventListener('mouseleave', hideTip);
+    });
   }
   function renderBlockSection(state, district) {
     if (!BLOCKS) return '';
@@ -772,6 +1025,7 @@
     ui.state.mode = 'states';
     ui.state.drillState = null;
     ui.state.drillDistrict = null;
+    $ind('#district-mode-toggle')?.remove();
     if (districtLayer) { districtLayer.remove(); districtLayer = null; districtPathByName.clear(); }
     // Restore state layer styling
     if (geoLayer) geoLayer.eachLayer(layer => layer.setStyle(fillStyle(layer.feature.properties.ST_NM)));
@@ -780,6 +1034,7 @@
   }
 
   function renderEmptyState() {
+    $ind('#district-mode-toggle')?.remove();
     const detail = $ind('#india-detail');
     const view = VIEWS[ui.state.view];
     detail.innerHTML = `
