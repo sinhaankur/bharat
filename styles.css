@@ -848,10 +848,38 @@ a:hover { border-color: var(--foreground); }
 /* District colour-mode toggle (population ↔ money flow) */
 .district-mode-toggle {
   display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 0 0 0.5rem;
+}
+.district-mode-toggle .dmt-row {
+  display: flex;
   align-items: center;
   gap: 0.4rem;
-  margin: 0 0 0.5rem;
   flex-wrap: wrap;
+}
+.dmt-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding: 0.3rem 0.4rem;
+  background: oklch(0.16 0 0);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+.dmt-leg-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  color: var(--muted-foreground);
+}
+.dmt-leg-note { opacity: 0.6; }
+.dmt-chip { width: 11px; height: 11px; border-radius: 2px; flex: 0 0 11px; }
+.dmt-chip--flag {
+  background: transparent;
+  border: 1.5px dashed oklch(0.65 0.22 25);
 }
 .district-mode-toggle .dmt-label {
   font-family: var(--font-mono);

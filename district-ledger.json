@@ -5,7 +5,7 @@
     "rules": "PDF-cited or it's a gap. Every fact carries source + source_tier. Gaps recorded in _gaps, never guessed. Footnotes in UI point to the public record.",
     "source_tiers": {"1": "gov_pdf", "2": "gov_html (.nic.in/.gov.in)", "3": "wikipedia (discovery)", "4": "news"},
     "footnotes_render": "source_tier 4 (news) and 3 (wikipedia) are shown but visibly flagged as needing upgrade to a government PDF source.",
-    "coverage": {"districts": 1, "districts_with_money_figures": 1, "note": "Kolkata: KMC civic budget grant flow now TIER-1 PDF-cited (₹2,897 cr Govt Grant of ₹5,525 cr receipts, BE 2025-26). MPLADS spent/completed figures tier-4 (2026-01-06 review) pending upgrade to official MPLADS portal. Roster partially sourced."}
+    "coverage": {"districts": 2, "districts_with_money_figures": 2, "note": "Kolkata (split-admin metro): KMC grant flow TIER-1 PDF-cited (₹2,897 cr of ₹5,525 cr receipts). Birbhum (standard rural): DM/ADM/SDO roster from official birbhum.gov.in (tier-2); MGNREGS ~4-yr fund freeze (₹0 release, ₹3,038 cr+ dues) — opposite dysfunction to Kolkata. MPLADS figures tier-4 (official portal is interactive JS, timed out twice — verifiable upgrade path noted)."}
   },
   "states": {
     "West Bengal": {
@@ -147,6 +147,98 @@
             "scheme-wise split of the ₹2,897 cr grant (AMRUT 2.0 / PMAY-U / 15th FC Health / NMCG amounts — named in budget, individual ₹ pending Volume-II)",
             "treasury_establishment_cost",
             "utilisation_and_cag_audit_data", "vendor_companies"
+          ]
+        },
+        "Birbhum": {
+          "admin_model": "standard",
+          "system_notes": [
+            {
+              "note": "MGNREGS — the rural job-guarantee scheme — was FROZEN for West Bengal (and thus Birbhum) for nearly four years. The Centre stopped fund release from 9 March 2022 under Section 27 of the MGNREGA Act, citing non-compliance/corruption. Work resumed only 1 June 2026 after Supreme Court intervention. This is the opposite dysfunction to Kolkata's: not 'money came and wasn't spent', but money WITHHELD from the top — wages went unpaid for months.",
+              "kind": "fund_freeze_dysfunction",
+              "source": "https://vajiramandravi.com/current-affairs/mgnregs-in-west-bengal-why-it-was-halted-and-how-it-could-restart/",
+              "source_tier": 4,
+              "needs_pdf_upgrade": true
+            },
+            {
+              "note": "Pending MGNREGS dues to West Bengal stood at ₹3,038 cr (Centre's figure, 2025 Rajya Sabha) — the highest of any state; the state claims ₹18,000 cr across MGNREGS+PMAY-G. A standard rural district like Birbhum, MGNREGS-dependent, bore the brunt: assets unbuilt, migrants displaced.",
+              "kind": "structural",
+              "source": "https://www.business-standard.com/india-news/centre-owes-3-000-crore-mgnrega-dues-to-bengal-govt-in-rajya-sabha-125080101525_1.html",
+              "source_tier": 4,
+              "needs_pdf_upgrade": true
+            },
+            {
+              "note": "Delivery contrast: Bolpur (the Birbhum-area Lok Sabha seat) is West Bengal's TOP MPLADS performer — MP Asit Kumar Mal recommended 189 works, completed 67, and spent ₹14.27 cr (highest of all 42 WB MPs), versus Kolkata's metro seats completing 3/36 and 0/73. Rural delivery outpaced the metros.",
+              "kind": "delivery_contrast",
+              "source": "https://sundayguardianlive.com/news/bengal-mps-show-uneven-mplads-delivery-164124/",
+              "source_tier": 4,
+              "needs_pdf_upgrade": true
+            }
+          ],
+          "roster": {
+            "collector":          {"name": "Dhaval Jain", "post": "District Magistrate & Collector", "service": "IAS", "as_of": "2026-05", "source": "https://birbhum.gov.in/whos-who/", "source_tier": 2, "needs_pdf_upgrade": false},
+            "adm_landrecords":    {"name": "Shubham Aggarwal", "post": "Additional District Magistrate (Land Records)", "service": "IAS", "as_of": "2026-05", "source": "https://birbhum.gov.in/whos-who/", "source_tier": 2, "needs_pdf_upgrade": false},
+            "sdo_bolpur":         {"name": "Animesh Kanti Manna", "post": "Sub-Divisional Officer, Bolpur", "service": "WBCS", "as_of": "2026-05", "source": "https://birbhum.gov.in/whos-who/", "source_tier": 2, "needs_pdf_upgrade": false},
+            "sp":                 {"name": "Amandeep", "post": "Superintendent of Police", "service": "IPS", "as_of": "2025-11", "source": "https://www.indianbureaucracy.com/dhaval-jain-ias-appointed-as-collector-and-executive-magistrate-birbhum-west-bengal/", "source_tier": 4, "needs_pdf_upgrade": true},
+            "district_judge":     {"name": null, "post": "District & Sessions Judge", "service": "Judicial", "as_of": null, "source": null, "source_tier": null}
+          },
+          "legislature": {
+            "lok_sabha": [
+              {"constituency": "Bolpur (SC)", "name": "Asit Kumar Mal", "party": "AITC", "term": "18th LS (2024-)", "source": "https://www.indiavotes.com/lok-sabha/2024/west-bengal/bolpur/", "source_tier": 4, "needs_pdf_upgrade": true},
+              {"constituency": "Birbhum", "name": null, "party": null, "term": "18th LS (2024-)", "source": null, "source_tier": null}
+            ],
+            "assembly": []
+          },
+          "departments": [
+            {"dept": "Panchayat & Rural Development (MGNREGS)", "type": "public_facing", "officer": {"name": "Dhaval Jain", "post": "DM (district programme coordinator)", "source": "https://birbhum.gov.in/whos-who/"}, "schemes": ["MGNREGS", "PMAY-G"]}
+          ],
+          "ledger": [
+            {
+              "fy": "2022-2026 (Mar 2022 – Jun 2026)",
+              "scheme": "MGNREGS (rural job guarantee)",
+              "stream": "central_scheme",
+              "through_dept": "Panchayat & Rural Development",
+              "money_in_cr": 0,
+              "money_in_basis": "Central fund release to West Bengal FROZEN under Section 27 from 9 Mar 2022; ₹0 new central money flowed for ~4 years. Resumed 1 Jun 2026.",
+              "intended": "100 days/yr guaranteed wage employment + durable rural assets.",
+              "what_happened": {
+                "utilisation_pct": 0, "unspent_cr": null, "lapsed": true,
+                "audit_flag": "fund_release_frozen", "cag_para": null, "vendor": null,
+                "pending_dues_cr": 3038,
+                "notes": "₹0 central release for ~4 years; ₹3,038 cr+ dues pending to WB (Centre's figure). Wages unpaid for months; resumed only after SC intervention (work restarted 1 Jun 2026 with 1.5 cr mandays approved statewide). The dysfunction here is fund WITHHOLDING upstream, not local mis-spend."
+              },
+              "responsible": {"primary": "collector", "secondary": ["sdo_bolpur"], "upstream": "Union Ministry of Rural Development (release authority)"},
+              "source": "https://vajiramandravi.com/current-affairs/mgnregs-in-west-bengal-why-it-was-halted-and-how-it-could-restart/",
+              "source_tier": 4,
+              "needs_pdf_upgrade": true,
+              "figure_gap": false
+            },
+            {
+              "fy": "2024-2026 (18th LS, as on 2026-01-06)",
+              "scheme": "MPLADS",
+              "stream": "mp_local_area",
+              "through_dept": "Bolpur — released via nodal District Authority",
+              "money_in_cr": 14.27,
+              "money_in_basis": "~₹10 cr cumulative entitlement; ₹14.27 cr actually spent (highest of all 42 WB MPs — includes earlier-term carryover).",
+              "intended": "MP recommends local works; District Authority sanctions/executes/pays vendors.",
+              "what_happened": {
+                "works_recommended": 189, "works_completed": 67,
+                "spent_cr": 14.27, "utilisation_pct": 100, "unspent_cr_est": 0,
+                "lapsed": false, "audit_flag": null, "cag_para": null, "vendor": null,
+                "notes": "WB's top MPLADS implementer: 67 of 189 works completed, ₹14.27 cr spent — the highest financial execution among all 42 WB MPs. A rural counter-example to Kolkata's metro under-delivery."
+              },
+              "responsible": {"primary": "lok_sabha[0]", "secondary": ["collector"]},
+              "source": "https://sundayguardianlive.com/news/bengal-mps-show-uneven-mplads-delivery-164124/",
+              "source_tier": 4,
+              "needs_pdf_upgrade": true,
+              "figure_gap": false
+            }
+          ],
+          "_gaps": [
+            "mgnregs_exact_birbhum_district_figures (state-level freeze known; district person-days/expenditure pending nrega.nic.in MIS)",
+            "district_judge", "assembly_mlas", "birbhum_LS_mp_name",
+            "sp_official_portal_citation (currently tier-4 news)",
+            "mplads_official_portal_figures (portal is interactive JS — timed out; tier-4 review figure used)",
+            "pmay_g_flows", "treasury_establishment_cost", "vendor_companies"
           ]
         }
       }

@@ -442,7 +442,7 @@
     const popMax = pops.length ? Math.max(...pops) : 1;
     const popMin = pops.length ? Math.min(...pops) : 0;
 
-    // Money-flow overlay: which districts have ledger data, and their headline ₹ in.
+    // Money-flow overlay: which districts have ledger data, their headline ₹ in, and any flag.
     const moneyByDistrict = new Map();
     for (const f of geo.features) {
       const dn = f.properties.DISTRICT;
@@ -450,7 +450,8 @@
       if (m != null) moneyByDistrict.set(dn, m);
     }
     const moneyVals = [...moneyByDistrict.values()];
-    const moneyMax = moneyVals.length ? Math.max(...moneyVals) : 1;
+    // Log scale: headline flows span orders of magnitude (₹14 cr ↔ ₹2,897 cr).
+    const logMax = moneyVals.length ? Math.max(...moneyVals.map(o => Math.log10(Math.max(1, o.headline + 1)))) : 1;
     const showMoney = ui.state.districtMode === 'money' && moneyVals.length > 0;
 
     districtLayer = L.geoJSON(geo, {
@@ -458,12 +459,16 @@
         const dn = f.properties.DISTRICT;
         if (showMoney) {
           const m = moneyByDistrict.get(dn);
+          if (!m) return { className: 'india-state-path', color: 'oklch(0.985 0 0 / 0.2)', weight: 0.5, fillColor: 'oklch(0.2 0 0)', fillOpacity: 0.3 };
+          const t = Math.log10(Math.max(1, m.headline + 1)) / Math.max(0.001, logMax);
           return {
             className: 'india-state-path',
-            color: m != null ? 'oklch(0.85 0.16 80)' : 'oklch(0.985 0 0 / 0.25)',
-            weight: m != null ? 1 : 0.5,
-            fillColor: m != null ? seqColor(0.25 + 0.7 * (m / moneyMax)) : 'oklch(0.2 0 0)',
-            fillOpacity: m != null ? 0.92 : 0.35
+            // Flagged (freeze/dysfunction) districts get a red-orange ring; others gold.
+            color: m.flagged ? 'oklch(0.65 0.22 25)' : 'oklch(0.85 0.16 80)',
+            weight: m.flagged ? 2 : 1.2,
+            dashArray: m.flagged ? '4 2' : null,
+            fillColor: seqColor(0.2 + 0.75 * t),
+            fillOpacity: 0.92
           };
         }
         const pop = getDistrictPop(stateName, dn)?.population;
@@ -485,7 +490,11 @@
           else updateDistrictReadout(dn, stateName, getDistrictPop(stateName, dn)?.population);
         });
         layer.on('mouseout', () => {
-          if (ui.state.drillDistrict !== dn) layer.setStyle({ weight: showMoney && moneyByDistrict.get(dn) != null ? 1 : 0.6, color: showMoney && moneyByDistrict.get(dn) != null ? 'oklch(0.85 0.16 80)' : 'oklch(0.985 0 0 / 0.45)' });
+          if (ui.state.drillDistrict !== dn) {
+            const m = showMoney ? moneyByDistrict.get(dn) : null;
+            if (m) layer.setStyle({ weight: m.flagged ? 2 : 1.2, color: m.flagged ? 'oklch(0.65 0.22 25)' : 'oklch(0.85 0.16 80)' });
+            else layer.setStyle({ weight: 0.6, color: showMoney ? 'oklch(0.985 0 0 / 0.2)' : 'oklch(0.985 0 0 / 0.45)' });
+          }
           updateReadout();
         });
         layer.on('click', () => selectDistrict(dn, stateName));
@@ -502,14 +511,24 @@
     const L = ledgerForDistrict(state, district);
     if (!L || !L.ledger) return null;
     const vals = L.ledger.map(r => r.money_in_cr).filter(v => typeof v === 'number');
-    return vals.length ? Math.max(...vals) : null;
+    if (!vals.length) return null;
+    const headline = Math.max(...vals);
+    // Dysfunction flag: any frozen/lapsed/zero-completion row, or a system note flagging a freeze.
+    const flagged = L.ledger.some(r => {
+      const w = r.what_happened || {};
+      return w.audit_flag === 'fund_release_frozen' || w.lapsed === true ||
+        w.audit_flag === 'zero_completion' || (typeof r.money_in_cr === 'number' && r.money_in_cr === 0);
+    }) || (L.system_notes || []).some(n => /freeze|frozen|withh/i.test(n.kind + ' ' + n.note));
+    return { headline, flagged, admin: L.admin_model };
   }
 
-  function updateDistrictMoneyReadout(district, state, money) {
+  function updateDistrictMoneyReadout(district, state, m) {
+    const money = m && typeof m === 'object' ? m.headline : m;
+    const flagged = m && typeof m === 'object' ? m.flagged : false;
     $ind('.readout-label').textContent = `District money · ${state}`;
     $ind('.readout-name').textContent = district;
     const valEl = $ind('.readout-value');
-    valEl.textContent = money != null ? `₹${money >= 1000 ? (money / 1000).toFixed(2) + 'k' : Math.round(money)} cr headline flow` : 'No ledger data yet';
+    valEl.textContent = money != null ? `₹${money >= 1000 ? (money / 1000).toFixed(2) + 'k' : Math.round(money)} cr headline flow${flagged ? ' · ⚠ flagged' : ''}` : 'No ledger data yet';
     valEl.style.color = money != null ? 'oklch(0.82 0.16 75)' : 'var(--muted-foreground)';
     valEl.style.fontSize = '12.5px';
   }
@@ -526,10 +545,20 @@
       host.parentNode.insertBefore(bar, host);
     }
     const mode = ui.state.districtMode || 'population';
+    const legend = (mode === 'money' && moneyCount) ? `
+      <div class="dmt-legend">
+        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${seqColor(0.3)}"></span>low</span>
+        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${seqColor(0.95)}"></span>high ₹ in <span class="dmt-leg-note">(log scale)</span></span>
+        <span class="dmt-leg-item"><span class="dmt-chip dmt-chip--flag"></span>⚠ fund freeze / non-delivery</span>
+        <span class="dmt-leg-item"><span class="dmt-chip" style="background:oklch(0.2 0 0);border:1px solid oklch(0.985 0 0 / 0.2)"></span>no data yet</span>
+      </div>` : '';
     bar.innerHTML = `
-      <span class="dmt-label">Colour districts by</span>
-      <button class="dmt-btn ${mode === 'population' ? 'on' : ''}" data-m="population">Population</button>
-      <button class="dmt-btn ${mode === 'money' ? 'on' : ''}" data-m="money" ${moneyCount ? '' : 'disabled title="No district money data in this state yet"'}>Money flow ${moneyCount ? `· ${moneyCount}` : ''}</button>`;
+      <div class="dmt-row">
+        <span class="dmt-label">Colour districts by</span>
+        <button class="dmt-btn ${mode === 'population' ? 'on' : ''}" data-m="population">Population</button>
+        <button class="dmt-btn ${mode === 'money' ? 'on' : ''}" data-m="money" ${moneyCount ? '' : 'disabled title="No district money data in this state yet"'}>Money flow ${moneyCount ? `· ${moneyCount}` : ''}</button>
+      </div>
+      ${legend}`;
     bar.querySelectorAll('.dmt-btn').forEach(b => b.addEventListener('click', () => {
       if (b.disabled) return;
       ui.state.districtMode = b.dataset.m;
