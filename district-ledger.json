@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "as_of": "2026-06",
+    "goal": "Money flow to each district over time + who is responsible + how the system functions/dysfunctions. Pilot district: Kolkata.",
+    "rules": "PDF-cited or it's a gap. Every fact carries source + source_tier. Gaps recorded in _gaps, never guessed. Footnotes in UI point to the public record.",
+    "source_tiers": {"1": "gov_pdf", "2": "gov_html (.nic.in/.gov.in)", "3": "wikipedia (discovery)", "4": "news"},
+    "footnotes_render": "source_tier 4 (news) and 3 (wikipedia) are shown but visibly flagged as needing upgrade to a government PDF source.",
+    "coverage": {"districts": 1, "districts_with_money_figures": 1, "note": "Kolkata: MPLADS spent/completed figures sourced (tier-4 news, 2026-01-06 review, needs gov-PDF upgrade); MPLADS portal release/unspent exact figures still pending. Roster partially sourced."}
+  },
+  "states": {
+    "West Bengal": {
+      "entity_type": "state",
+      "heads": {
+        "governor":        {"name": null, "post": "Governor", "as_of": null, "source": null, "source_tier": null},
+        "chief_minister":  {"name": null, "post": "Chief Minister", "as_of": null, "source": null, "source_tier": null},
+        "chief_secretary": {"name": null, "post": "Chief Secretary", "as_of": null, "source": null, "source_tier": null},
+        "dgp":             {"name": null, "post": "Director General of Police", "as_of": null, "source": null, "source_tier": null},
+        "high_court":      {"name": "Calcutta High Court", "chief_justice": null, "source": null}
+      },
+      "rajya_sabha": [],
+      "districts": {
+        "Kolkata": {
+          "admin_model": "split",
+          "system_notes": [
+            {
+              "note": "Kolkata has no conventional District Magistrate/Collector. Magisterial powers vest in the Commissioner of Police (one of the oldest such posts in British India); a limited Collector post handles stamp revenue/registration; service delivery is run by the Kolkata Municipal Corporation. A standard 'who is the DM responsible for this money' question therefore has no single answer here.",
+              "kind": "structural_dysfunction",
+              "source": "https://en.wikipedia.org/wiki/District_magistrate",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true
+            },
+            {
+              "note": "MPLADS delivery in Kolkata's metro seats is recommendation-heavy but completion-poor: Kolkata Uttar completed 3 of 36 works, Kolkata Dakshin 0 of 73 (as on 2026-01-06). A WB-wide review found dense metropolitan seats show limited tangible outcomes versus rural constituencies — money flows in on paper but converts to far less on the ground.",
+              "kind": "delivery_dysfunction",
+              "source": "https://sundayguardianlive.com/news/bengal-mps-show-uneven-mplads-delivery-164124/",
+              "source_tier": 4,
+              "needs_pdf_upgrade": true
+            }
+          ],
+          "roster": {
+            "collector":          {"name": null, "post": "Collector (limited: stamp/registration)", "service": "IAS", "as_of": null, "source": null, "source_tier": null},
+            "police_commissioner":{"name": "Ajay Kumar Nand", "post": "Commissioner of Police, Kolkata", "service": "IPS", "as_of": "2026-06", "source": "https://en.wikipedia.org/wiki/Kolkata", "source_tier": 3, "needs_pdf_upgrade": true},
+            "municipal_commissioner": {"name": null, "post": "Municipal Commissioner, KMC", "service": "IAS", "as_of": null, "source": null, "source_tier": null},
+            "mayor":              {"name": null, "post": "Mayor (vacant per source)", "service": "Political", "as_of": "2026-06", "source": "https://en.wikipedia.org/wiki/Kolkata", "source_tier": 3, "needs_pdf_upgrade": true},
+            "deputy_mayor":       {"name": "Atin Ghosh", "post": "Deputy Mayor, KMC", "service": "Political", "as_of": "2026-06", "source": "https://en.wikipedia.org/wiki/Kolkata", "source_tier": 3, "needs_pdf_upgrade": true},
+            "district_judge":     {"name": null, "post": "District & Sessions Judge", "service": "Judicial", "as_of": null, "source": null, "source_tier": null},
+            "minister_in_charge": {"name": null, "post": "District-in-charge Minister", "service": "Political", "as_of": null, "source": null, "source_tier": null}
+          },
+          "legislature": {
+            "lok_sabha": [
+              {"constituency": "Kolkata Uttar (North)", "name": "Sudip Bandyopadhyay", "party": "AITC", "term": "18th LS (2024-)", "source": "https://zeenews.india.com/india/kolkata-dakshin-uttar-lok-sabha-election-result-live-coverage-winners-loser-candidate-name-2024-total-votes-margin-bjp-congress-tmc-gov-in-2754606.html", "source_tier": 4, "needs_pdf_upgrade": true},
+              {"constituency": "Kolkata Dakshin (South)", "name": "Mala Roy", "party": "AITC", "term": "18th LS (2024-)", "source": "https://www.indiatvnews.com/elections/lok-sabha-elections-2024/west-bengal/kolkata-dakshin-constituency-result", "source_tier": 4, "needs_pdf_upgrade": true}
+            ],
+            "assembly": []
+          },
+          "departments": [
+            {"dept": "Kolkata Municipal Corporation", "type": "public_facing", "officer": {"name": null, "post": "Municipal Commissioner", "source": null}, "schemes": ["AMRUT", "PMAY-U", "Solid Waste Mgmt"]},
+            {"dept": "Kolkata Police", "type": "law_and_order", "officer": {"name": "Ajay Kumar Nand", "post": "Commissioner of Police", "source": "https://en.wikipedia.org/wiki/Kolkata"}, "schemes": []}
+          ],
+          "ledger": [
+            {
+              "fy": "2024-2026 (18th LS, as on 2026-01-06)",
+              "scheme": "MPLADS",
+              "stream": "mp_local_area",
+              "through_dept": "Kolkata Uttar — released via nodal District Authority",
+              "money_in_cr": 10.0,
+              "money_in_basis": "entitlement: ~₹10 cr cumulative (₹5 cr/yr × ~2 FY into 18th LS)",
+              "intended": "MP recommends local works; District Authority sanctions/executes/pays vendors.",
+              "what_happened": {
+                "works_recommended": 36, "works_completed": 3,
+                "spent_cr": 2.25, "utilisation_pct": 22.5,
+                "unspent_cr_est": 7.75, "lapsed": null, "audit_flag": "low_completion",
+                "cag_para": null, "vendor": null,
+                "notes": "Only 3 of 36 recommended works completed; ₹2.25 cr spent of ~₹10 cr entitlement. Money was recommended and partly disbursed but tangible delivery is low — a 'recommended ≠ spent ≠ completed' gap."
+              },
+              "responsible": {"primary": "lok_sabha[0]", "secondary": ["collector", "police_commissioner"]},
+              "source": "https://sundayguardianlive.com/news/bengal-mps-show-uneven-mplads-delivery-164124/",
+              "source_tier": 4,
+              "needs_pdf_upgrade": true,
+              "figure_gap": false
+            },
+            {
+              "fy": "2024-2026 (18th LS, as on 2026-01-06)",
+              "scheme": "MPLADS",
+              "stream": "mp_local_area",
+              "through_dept": "Kolkata Dakshin — released via nodal District Authority",
+              "money_in_cr": 10.0,
+              "money_in_basis": "entitlement: ~₹10 cr cumulative (₹5 cr/yr × ~2 FY into 18th LS)",
+              "intended": "MP recommends local works; District Authority sanctions/executes/pays vendors.",
+              "what_happened": {
+                "works_recommended": 73, "works_completed": 0,
+                "spent_cr": 2.74, "utilisation_pct": 27.4,
+                "unspent_cr_est": 7.26, "lapsed": null, "audit_flag": "zero_completion",
+                "cag_para": null, "vendor": null,
+                "notes": "73 works recommended, ZERO completed; ₹2.74 cr spent of ~₹10 cr. Highest recommendation count among the three Kolkata-area seats, lowest completion. Stark 'money wasn't spent right' case."
+              },
+              "responsible": {"primary": "lok_sabha[1]", "secondary": ["collector", "police_commissioner"]},
+              "source": "https://sundayguardianlive.com/news/bengal-mps-show-uneven-mplads-delivery-164124/",
+              "source_tier": 4,
+              "needs_pdf_upgrade": true,
+              "figure_gap": false
+            }
+          ],
+          "_gaps": [
+            "collector_name", "municipal_commissioner_name", "district_judge",
+            "minister_in_charge", "assembly_mlas",
+            "governor", "chief_minister", "chief_secretary", "dgp",
+            "mplads_exact_released_and_unspent_per_constituency (have spent+completed from review; need official portal release figure)",
+            "central_scheme_money_in (MGNREGS n/a urban; PMAY-U, AMRUT figures pending)",
+            "fc_grants_to_local_body", "treasury_establishment_cost",
+            "utilisation_and_cag_audit_data", "vendor_companies"
+          ]
+        }
+      }
+    }
+  }
+}

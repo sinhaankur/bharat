@@ -726,6 +726,86 @@ a:hover { border-color: var(--foreground); }
   gap: 0.6rem;
   margin-top: 0.4rem;
 }
+
+/* ───────── Money-flow accountability ledger ───────── */
+.ledger-note {
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--foreground);
+  background: oklch(0.19 0 0);
+  border-left: 2px solid oklch(0.55 0.16 30);
+  border-radius: 3px;
+  padding: 0.5rem 0.6rem;
+  margin: 0.3rem 0;
+}
+.ledger-note--delivery_dysfunction,
+.ledger-note--structural_dysfunction { border-left-color: oklch(0.65 0.2 30); }
+.ledger-note-tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: oklch(0.78 0.16 70);
+  margin-right: 0.4rem;
+}
+.ledger-list { display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.3rem; }
+.ledger-row {
+  background: oklch(0.18 0 0);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.5rem 0.6rem;
+}
+.ledger-row-head {
+  display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem;
+}
+.ledger-scheme { font-weight: 600; font-size: 12px; color: var(--foreground); }
+.ledger-fy { font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); }
+.ledger-flag {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+.ledger-flag--bad { background: oklch(0.3 0.12 30); color: oklch(0.85 0.14 40); }
+.ledger-row-body { display: flex; flex-wrap: wrap; gap: 0.8rem; font-size: 11.5px; }
+.ledger-cell b {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  margin-right: 0.25rem;
+}
+.ledger-channel {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  color: var(--muted-foreground);
+  margin-top: 0.35rem;
+}
+.ledger-rownote { font-size: 10.5px; line-height: 1.45; color: var(--muted-foreground); margin-top: 0.35rem; }
+.ledger-tier-warn { color: oklch(0.78 0.16 70); font-size: 10px; margin-left: 1px; cursor: help; }
+.roster-list { display: flex; flex-direction: column; gap: 0.25rem; }
+.roster-row {
+  display: flex; align-items: baseline; gap: 0.5rem;
+  font-size: 11.5px; padding: 0.25rem 0;
+  border-bottom: 1px solid oklch(0.22 0 0);
+}
+.roster-name { font-weight: 600; color: var(--foreground); }
+.roster-post { font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); }
+.roster-cost {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  color: oklch(0.7 0.13 150);
+}
+.ledger-gaps { margin-top: 0.5rem; font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); }
+.ledger-gaps summary { cursor: pointer; color: oklch(0.7 0.1 70); }
+.ledger-gaps ul { margin: 0.3rem 0 0 1rem; line-height: 1.5; }
 .india-pc {
   background: oklch(0.17 0 0);
   border: 1px solid var(--border);

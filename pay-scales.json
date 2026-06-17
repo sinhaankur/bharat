@@ -1,0 +1,102 @@
+{
+  "_meta": {
+    "as_of": "2026-06",
+    "source": "7th Central Pay Commission pay matrix (Wikipedia: Indian Administrative Service, Indian Police Service, Higher Judicial Service); state DA/establishment ratios are approximate.",
+    "caveat": "Salary is a PER-POST role attribute, never per-person. Figures are the pay-matrix BASIC range. 'cost_to_govt' multiplies basic by est_cost_multiplier to approximate full cost-to-government (DA, HRA, pension liability, vehicle, staff, office). Multiplier is an editorial estimate (~2.2x basic) consistent with this project's ±10% approximation convention. Use as directional, not auditable to the rupee.",
+    "currency": "INR",
+    "est_cost_multiplier": 2.2,
+    "cost_note": "annual_cost_to_govt_est = monthly_basic_mid * 12 * est_cost_multiplier"
+  },
+  "posts": {
+    "District Collector": {
+      "service": "IAS", "pay_level": 13,
+      "monthly_basic_min": 118500, "monthly_basic_max": 214100,
+      "annual_cost_to_govt_est": 4400000,
+      "note": "Selection grade / Junior Administrative+ . Also District Magistrate."
+    },
+    "Superintendent of Police": {
+      "service": "IPS", "pay_level": 13,
+      "monthly_basic_min": 118500, "monthly_basic_max": 214100,
+      "annual_cost_to_govt_est": 4400000,
+      "note": "District SP. Senior districts headed by an SSP (Level 13A)."
+    },
+    "Commissioner of Police": {
+      "service": "IPS", "pay_level": 14,
+      "monthly_basic_min": 144200, "monthly_basic_max": 218200,
+      "annual_cost_to_govt_est": 5000000,
+      "note": "Heads a city Police Commissionerate (e.g. Kolkata, Mumbai). Holds magisterial powers a DM would elsewhere; senior to a district SP."
+    },
+    "District & Sessions Judge": {
+      "service": "Judicial", "pay_level": null,
+      "monthly_basic_min": 144840, "monthly_basic_max": 224100,
+      "annual_cost_to_govt_est": 4900000,
+      "note": "Higher Judicial Service pay (2nd National Judicial Pay Commission scale)."
+    },
+    "Sub-Divisional Magistrate": {
+      "service": "IAS", "pay_level": 10,
+      "monthly_basic_min": 56100, "monthly_basic_max": 132000,
+      "annual_cost_to_govt_est": 2100000,
+      "note": "SDM / Sub-Collector. Junior time scale entry."
+    },
+    "Chief Secretary": {
+      "service": "IAS", "pay_level": 18,
+      "monthly_basic_min": 250000, "monthly_basic_max": 250000,
+      "annual_cost_to_govt_est": 6600000,
+      "note": "Apex scale, fixed. State's senior-most civil servant."
+    },
+    "Director General of Police": {
+      "service": "IPS", "pay_level": 17,
+      "monthly_basic_min": 225000, "monthly_basic_max": 225000,
+      "annual_cost_to_govt_est": 5900000,
+      "note": "State police head, fixed apex scale."
+    },
+    "Governor": {
+      "service": "Constitutional", "pay_level": null,
+      "monthly_basic_min": 350000, "monthly_basic_max": 350000,
+      "annual_cost_to_govt_est": 9000000,
+      "note": "Salary fixed by Governors (Emoluments) Act; plus Raj Bhavan establishment (much larger)."
+    },
+    "Lieutenant Governor": {
+      "service": "Constitutional", "pay_level": null,
+      "monthly_basic_min": 350000, "monthly_basic_max": 350000,
+      "annual_cost_to_govt_est": 9000000,
+      "note": "UT constitutional head; pay on par with Governor."
+    },
+    "Administrator": {
+      "service": "Constitutional", "pay_level": null,
+      "monthly_basic_min": 350000, "monthly_basic_max": 350000,
+      "annual_cost_to_govt_est": 9000000,
+      "note": "UT-without-legislature head; often a Governor of an adjacent state holding additional charge (then no extra salary)."
+    },
+    "Chief Minister": {
+      "service": "Political", "pay_level": null,
+      "monthly_basic_min": 100000, "monthly_basic_max": 400000,
+      "annual_cost_to_govt_est": 4800000,
+      "note": "Varies widely by state (salary + constituency + sumptuary allowances). Wide range is real, not error."
+    },
+    "District-in-charge Minister": {
+      "service": "Political", "pay_level": null,
+      "monthly_basic_min": 90000, "monthly_basic_max": 350000,
+      "annual_cost_to_govt_est": 4200000,
+      "note": "A state cabinet minister also assigned a district portfolio; cost counted at state level, not additive per district."
+    },
+    "Member of Parliament (Lok Sabha)": {
+      "service": "Legislature", "pay_level": null,
+      "monthly_basic_min": 100000, "monthly_basic_max": 100000,
+      "annual_cost_to_govt_est": 4500000,
+      "note": "₹1L salary + constituency/office/secretarial allowances + travel; full cost well above basic."
+    },
+    "Member of Parliament (Rajya Sabha)": {
+      "service": "Legislature", "pay_level": null,
+      "monthly_basic_min": 100000, "monthly_basic_max": 100000,
+      "annual_cost_to_govt_est": 4500000,
+      "note": "Same emolument structure as Lok Sabha members."
+    },
+    "Member of Legislative Assembly": {
+      "service": "Legislature", "pay_level": null,
+      "monthly_basic_min": 50000, "monthly_basic_max": 250000,
+      "annual_cost_to_govt_est": 2800000,
+      "note": "Salary + allowances vary sharply by state; range reflects that, not uncertainty."
+    }
+  }
+}

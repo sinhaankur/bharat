@@ -102,7 +102,7 @@
 
   const ui = { state: { view: 'ownTax', yearIdx: 9, selected: null, hover: null, mode: 'states', drillState: null, drillDistrict: null } };
 
-  let DATA = null, EXTRAS = null, GEO = null, DISTRICT_POP = null, BLOCKS = null;
+  let DATA = null, EXTRAS = null, GEO = null, DISTRICT_POP = null, BLOCKS = null, LEDGER = null, PAY = null;
   let map = null, geoLayer = null, districtLayer = null;
   const pathByName = new Map();
   const districtPathByName = new Map();
@@ -484,10 +484,15 @@
 
   function selectDistrict(district, state) {
     ui.state.drillDistrict = district;
+    const selLayer = districtPathByName.get(district);
     districtPathByName.forEach((layer, n) => {
       if (n === district) layer.setStyle({ weight: 2, color: 'oklch(0.985 0 0)' });
       else layer.setStyle({ weight: 0.6, color: 'oklch(0.985 0 0 / 0.45)' });
     });
+    // Zoom into the individual district. maxZoom caps tiny districts (e.g. Kolkata) from over-zooming.
+    if (selLayer && selLayer.getBounds) {
+      try { map.fitBounds(selLayer.getBounds(), { padding: [40, 40], maxZoom: 9 }); } catch (e) {}
+    }
     renderDistrictDetail(district, state);
   }
 
@@ -550,7 +555,7 @@
       <div class="india-detail-head">
         <div>
           <div class="india-detail-name">${esc(district)}</div>
-          <div class="mono" style="font-size:10.5px;letter-spacing:0.04em;color:var(--muted-foreground);text-transform:uppercase;margin-top:2px">District of ${esc(state)} · headed by 1 IAS Collector</div>
+          <div class="mono" style="font-size:10.5px;letter-spacing:0.04em;color:var(--muted-foreground);text-transform:uppercase;margin-top:2px">District of ${esc(state)} · ${ledgerForDistrict(state, district)?.admin_model === 'split' ? 'split admin (no single DM)' : 'headed by 1 IAS Collector'}</div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.4rem">
           <button class="india-back-btn" id="india-back-to-districts">← All districts</button>
@@ -568,10 +573,12 @@
       </div>
       ` : `<p class="india-detail-empty-body">No Census 2011 record for this district — likely carved out post-2011.</p>`}
 
+      ${renderLedgerSection(state, district)}
+
       ${renderBlockSection(state, district)}
 
       <div class="india-caveat">
-        Census 2011 totals are persons (not lakh / crore). Sex / household figures from the same Census round. IAS Collector posting changes ~every 2–3 years; the current DM's name isn't in this dashboard (no central machine-readable list — would have to scrape state DOPT sites). What IS structural: every district has exactly one DM, and that's the state's only routine IAS field deployment outside the secretariat.
+        Census 2011 totals are persons (not lakh / crore). Sex / household figures from the same Census round. IAS Collector posting changes ~every 2–3 years; the current DM's name isn't in this dashboard (no central machine-readable list — would have to scrape state DOPT sites). ${ledgerForDistrict(state, district)?.admin_model === 'split' ? 'Note: this district does <strong>not</strong> follow the one-DM model — see the money-flow section above.' : 'What IS structural: every district has exactly one DM, and that\'s the state\'s only routine IAS field deployment outside the secretariat.'}
       </div>
     `;
     detail.querySelector('#india-back-to-districts')?.addEventListener('click', () => {
@@ -579,6 +586,10 @@
       const geo = districtGeoCache.get(state);
       if (geo) renderDistrictPanel(state, geo);
       districtPathByName.forEach(layer => layer.setStyle({ weight: 0.6, color: 'oklch(0.985 0 0 / 0.45)' }));
+      // Zoom back out from the single district to the whole state's districts.
+      if (districtLayer && districtLayer.getBounds) {
+        try { map.fitBounds(districtLayer.getBounds(), { padding: [30, 30] }); } catch (e) {}
+      }
     });
     detail.querySelector('#india-back-to-state')?.addEventListener('click', () => exitDrill(state));
     bindBlockClicks(detail);
@@ -591,6 +602,89 @@
   }
   function blocksForDistrict(state, district) {
     return BLOCKS?.states?.[state]?.districts?.[district] || null;
+  }
+
+  /* ───────── MONEY-FLOW ACCOUNTABILITY LEDGER ───────── */
+  function ledgerForDistrict(state, district) {
+    return LEDGER?.states?.[state]?.districts?.[district] || null;
+  }
+  // Source footnote: visible link + tier flag (per user: "clear footnote based on public record").
+  function srcFootnote(source, tier) {
+    if (!source) return '';
+    const tierName = LEDGER?._meta?.source_tiers?.[String(tier)] || '';
+    const weak = tier >= 3; // wikipedia/news — flag as needing gov-PDF upgrade
+    return `<a class="src-link" href="${esc(source)}" target="_blank" rel="noopener" title="Source (tier ${tier}: ${esc(tierName)})">↗</a>${weak ? `<span class="ledger-tier-warn" title="Tier ${tier} (${esc(tierName)}) — pending upgrade to a government PDF source">⚠</span>` : ''}`;
+  }
+  function payForPost(postName) {
+    if (!PAY || !postName) return null;
+    // Try exact, then strip a trailing ", <place>" or " (<qualifier>)" to match the generic post key.
+    return PAY.posts?.[postName]
+      || PAY.posts?.[postName.split(',')[0].trim()]
+      || PAY.posts?.[postName.split(' (')[0].trim()]
+      || null;
+  }
+  function fmtCr(v) { return (v == null) ? '—' : `₹${v} cr`; }
+
+  function renderLedgerSection(state, district) {
+    const L = ledgerForDistrict(state, district);
+    if (!L) return '';
+
+    // System function/dysfunction notes — the "how the system works" layer.
+    const notesHtml = (L.system_notes || []).map(n => `
+      <div class="ledger-note ledger-note--${esc(n.kind || 'note')}">
+        <span class="ledger-note-tag">${esc((n.kind || 'note').replace(/_/g, ' '))}</span>
+        ${esc(n.note)} ${srcFootnote(n.source, n.source_tier)}
+      </div>`).join('');
+
+    // Money-flow ledger rows — the timeline of money in vs what happened.
+    const ledgerHtml = (L.ledger || []).map(r => {
+      const w = r.what_happened || {};
+      const util = w.utilisation_pct != null ? `${w.utilisation_pct}%` : '—';
+      const done = (w.works_completed != null && w.works_recommended != null)
+        ? `${w.works_completed}/${w.works_recommended} works` : '';
+      const flag = w.audit_flag ? `<span class="ledger-flag ledger-flag--bad">${esc(w.audit_flag.replace(/_/g, ' '))}</span>` : '';
+      return `
+        <div class="ledger-row">
+          <div class="ledger-row-head">
+            <span class="ledger-scheme">${esc(r.scheme)}</span>
+            <span class="ledger-fy">${esc(r.fy)}</span>
+            ${flag}
+          </div>
+          <div class="ledger-row-body">
+            <span class="ledger-cell"><b>In</b> ${fmtCr(r.money_in_cr)}</span>
+            <span class="ledger-cell"><b>Spent</b> ${fmtCr(w.spent_cr)}</span>
+            <span class="ledger-cell"><b>Util</b> ${util}</span>
+            ${done ? `<span class="ledger-cell"><b>Done</b> ${esc(done)}</span>` : ''}
+          </div>
+          <div class="ledger-channel">via ${esc(r.through_dept || '—')} ${srcFootnote(r.source, r.source_tier)}</div>
+          ${w.notes ? `<div class="ledger-rownote">${esc(w.notes)}</div>` : ''}
+        </div>`;
+    }).join('');
+
+    // Roster — who is responsible — with cost-to-government joined from pay-scales.json.
+    const roster = L.roster || {};
+    const rosterRows = Object.values(roster).filter(o => o && o.name).map(o => {
+      const pay = payForPost(o.post) || payForPost((o.post || '').split(' (')[0]);
+      const cost = pay?.annual_cost_to_govt_est
+        ? `<span class="roster-cost" title="Est. annual cost-to-government for this post (pay-scales.json)">~₹${(pay.annual_cost_to_govt_est / 1e7).toFixed(2)} cr/yr</span>` : '';
+      return `<div class="roster-row"><span class="roster-name">${esc(o.name)}</span><span class="roster-post">${esc(o.post)}</span>${cost}${srcFootnote(o.source, o.source_tier)}</div>`;
+    }).join('');
+
+    const mps = (L.legislature?.lok_sabha || []).filter(m => m.name).map(m =>
+      `<div class="roster-row"><span class="roster-name">${esc(m.name)}</span><span class="roster-post">MP · ${esc(m.constituency || '')} (${esc(m.party || '')})</span>${srcFootnote(m.source, m.source_tier)}</div>`
+    ).join('');
+
+    const gapsHtml = (L._gaps && L._gaps.length)
+      ? `<details class="ledger-gaps"><summary>${L._gaps.length} known data gaps (recorded, not estimated)</summary><ul>${L._gaps.map(g => `<li>${esc(g)}</li>`).join('')}</ul></details>`
+      : '';
+
+    return `
+      <div class="india-detail-section-title">Money flow &amp; accountability${L.admin_model && L.admin_model !== 'standard' ? ` <span style="font-family:var(--font-mono);font-size:10px;color:oklch(0.78 0.16 70);text-transform:none">· ${esc(L.admin_model)} admin model</span>` : ''}</div>
+      ${notesHtml}
+      ${ledgerHtml ? `<div class="ledger-list">${ledgerHtml}</div>` : ''}
+      ${(rosterRows || mps) ? `<div class="india-detail-section-title" style="margin-top:0.8rem">Who is responsible</div><div class="roster-list">${rosterRows}${mps}</div>` : ''}
+      ${gapsHtml}
+      <p class="india-caveat">Figures are PDF-cited where ⚠ is absent; ⚠ marks tier-3/4 (Wikipedia/news) sources pending upgrade to a government PDF. Salary shown is the per-post cost-to-government estimate, not a person's pay.</p>`;
   }
   function renderBlockSection(state, district) {
     if (!BLOCKS) return '';
@@ -858,12 +952,14 @@
 
   async function bootstrap() {
     try {
-      const [geoRes, dataRes, extrasRes, popRes, blocksRes] = await Promise.all([
+      const [geoRes, dataRes, extrasRes, popRes, blocksRes, ledgerRes, payRes] = await Promise.all([
         fetch('india-states.geojson'),
         fetch('india-fiscal.json'),
         fetch('india-extras.json'),
         fetch('district-pop.json'),
-        fetch('india-blocks.json')
+        fetch('india-blocks.json'),
+        fetch('district-ledger.json'),
+        fetch('pay-scales.json')
       ]);
       if (!geoRes.ok) throw new Error('GeoJSON HTTP ' + geoRes.status);
       if (!dataRes.ok) throw new Error('Fiscal JSON HTTP ' + dataRes.status);
@@ -875,6 +971,10 @@
       else console.warn('district-pop.json missing — district drill-down will show names only');
       if (blocksRes.ok) BLOCKS = await blocksRes.json();
       else console.warn('india-blocks.json missing — block list will be skipped');
+      if (ledgerRes.ok) LEDGER = await ledgerRes.json();
+      else console.warn('district-ledger.json missing — money-flow ledger will be skipped');
+      if (payRes.ok) PAY = await payRes.json();
+      else console.warn('pay-scales.json missing — cost-to-govt join will be skipped');
 
       ui.state.yearIdx = DATA._meta.years.length - 1;
       // Compute the color domain BEFORE building the map: Leaflet's GeoJSON layer
