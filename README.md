@@ -82,10 +82,13 @@ UI, a ⚠ marks tier 3–4 figures awaiting upgrade to a government PDF.
   by [`gen_baseline_ledger.py`](gen_baseline_ledger.py); a deep-dive simply
   *promotes* one (see `promote_*.py`).
 
-The current deep exemplars span four governance models on purpose:
+The current deep exemplars span several governance models on purpose:
 
 | District | State | Model | Money figure | Notable |
 |---|---|---|---|---|
+| **Mumbai** | Maharashtra | split-admin metro | ₹74,427 cr BMC budget (T1) | India's largest civic budget — ~25× Kolkata; no elected body 2022–26 |
+| **Chennai** | Tamil Nadu | split-admin metro | ₹5,146 cr GCC revenue (T2) | Auto + port + IT; property tax >₹2,000 cr |
+| **Lucknow** | Uttar Pradesh | standard (capital) | ₹4,305 cr LMC budget | Own revenue just ₹295 cr — heavily grant-funded |
 | **Kolkata** | West Bengal | split-admin metro | ₹2,897 cr KMC grant (T1) | No conventional DM; 52% grant-funded |
 | **Ernakulam** | Kerala | standard | ₹225 cr KMC grant (T2) | ~50% grant; healthy own-source; full taluk drill |
 | **Birbhum** | West Bengal | standard rural | ₹0 (MGNREGS frozen) | 4-yr central fund freeze; ₹3,038 cr+ dues |

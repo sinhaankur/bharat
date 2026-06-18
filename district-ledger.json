@@ -12,10 +12,10 @@
     "footnotes_render": "source_tier 4 (news) and 3 (wikipedia) are shown but visibly flagged as needing upgrade to a government PDF source.",
     "coverage": {
       "districts": 594,
-      "districts_with_money_figures": 3,
+      "districts_with_money_figures": 6,
       "note": "594 districts across 35 states/UTs. 3 hand-authored deep exemplars (Kolkata, Birbhum, Jamshedpur); the rest are honest baseline skeletons (admin-model classified, empty roster/ledger with explicit _gaps — not fabricated).",
-      "deep_districts": 6,
-      "baseline_districts": 588
+      "deep_districts": 9,
+      "baseline_districts": 585
     }
   },
   "states": {
@@ -17349,29 +17349,45 @@
           ]
         },
         "Greater Bombay": {
-          "admin_model": "standard",
-          "baseline": true,
-          "system_notes": [],
+          "admin_model": "split",
+          "system_notes": [
+            {
+              "note": "BMC (Brihanmumbai Municipal Corporation) is India's richest civic body. Its 2025-26 budget of ₹74,427 cr is the largest in its history — bigger than the annual budget of several Indian STATES, and ~25× Kolkata's KMC. Over a decade BMC allocated ₹2.19 lakh cr. The 'money flowing through one district' here dwarfs most state-level flows.",
+              "kind": "structural",
+              "source": "https://www.mcgm.gov.in/irj/go/km/docs/documents/MCGM%20Department%20List/Chief%20Accountant%20(Finance)/Budget/Budget%20Estimate%202025-2026/1-%20MC's%20Speech/BUDGET%20A,B,G/ENGLISH%20SPEECH.pdf",
+              "source_tier": 1,
+              "needs_pdf_upgrade": false
+            },
+            {
+              "note": "Like Kolkata, Mumbai's civic governance has run WITHOUT an elected body since March 2022 — the ₹74,427 cr budget was presented to a state-appointed administrator (BMC Commissioner Bhushan Gagrani), not an elected council. Elections were finally held in Jan 2026. A democratic-deficit dysfunction in the country's richest municipality.",
+              "kind": "governance_deficit",
+              "source": "https://en.wikipedia.org/wiki/Brihanmumbai_Municipal_Corporation",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true
+            }
+          ],
           "roster": {
+            "municipal_commissioner": {
+              "name": "Bhushan Gagrani",
+              "post": "Municipal Commissioner & Administrator, BMC",
+              "service": "IAS",
+              "as_of": "2025",
+              "source": "https://en.wikipedia.org/wiki/Brihanmumbai_Municipal_Corporation",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true
+            },
             "collector": {
               "name": null,
-              "post": "District Magistrate & Collector",
+              "post": "District Collector (Mumbai City / Suburban — revenue only)",
               "service": "IAS",
               "as_of": null,
               "source": null,
-              "source_tier": null
-            },
-            "sp": {
-              "name": null,
-              "post": "Superintendent of Police",
-              "service": "IPS",
-              "as_of": null,
-              "source": null,
-              "source_tier": null
+              "source_tier": null,
+              "note": "Mumbai is split into City & Suburban revenue districts; civic power sits with BMC + Police Commissioner, not a single DM."
             },
             "district_judge": {
               "name": null,
-              "post": "District & Sessions Judge",
+              "post": "Principal District & Sessions Judge",
               "service": "Judicial",
               "as_of": null,
               "source": null,
@@ -17379,20 +17395,83 @@
             }
           },
           "legislature": {
-            "lok_sabha": [],
+            "lok_sabha": [
+              {
+                "constituency": "Mumbai (6 LS seats across the metro)",
+                "name": null,
+                "party": null,
+                "term": "18th LS (2024-)",
+                "source": null,
+                "source_tier": null
+              }
+            ],
             "assembly": []
           },
-          "plants": [],
+          "plants": [
+            {
+              "name": "Bombay Stock Exchange / financial sector",
+              "sector": "Finance",
+              "ownership": "Mixed (BSE + banks + RBI HQ)",
+              "capacity": "India's financial capital; RBI, SEBI, BSE, NSE, most banks/MFs HQ'd here",
+              "employment_note": "Largest white-collar financial workforce in India.",
+              "significance": "Mumbai contributes a disproportionate share of India's direct-tax collection and corporate HQs.",
+              "source": "https://en.wikipedia.org/wiki/Economy_of_Mumbai",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true
+            },
+            {
+              "name": "Bollywood / media & entertainment",
+              "sector": "Media & entertainment",
+              "ownership": "Private",
+              "capacity": "World's largest film-production base by output",
+              "employment_note": null,
+              "significance": "Hindi film industry + broadcast/OTT hub.",
+              "source": "https://en.wikipedia.org/wiki/Economy_of_Mumbai",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true
+            }
+          ],
+          "plants_note": "Mumbai's 'economic base' is services (finance, media, ports, real estate), not factories — so much of its tax origin is corporate/financial and HQ-attributed. This is why district-level tax-origin is hard to pin to geography.",
           "departments": [],
-          "ledger": [],
+          "ledger": [
+            {
+              "fy": "2025-26 (BE)",
+              "scheme": "BMC civic budget",
+              "stream": "intergovernmental_grant",
+              "through_dept": "Brihanmumbai Municipal Corporation",
+              "money_in_cr": 74427.0,
+              "money_in_basis": "BMC Budget Estimate 2025-26 total outlay ₹74,427 cr — largest in its history (+14.19% YoY). Capex ₹43,166 cr (58%).",
+              "intended": "Urban civic services (water, sanitation, roads, health, infrastructure).",
+              "what_happened": {
+                "utilisation_pct": null,
+                "unspent_cr": null,
+                "lapsed": null,
+                "audit_flag": null,
+                "cag_para": null,
+                "vendor": null,
+                "total_receipt_cr": 74427.0,
+                "total_expenditure_cr": null,
+                "own_source_revenue_cr": null,
+                "notes": "India's largest municipal budget — ₹74,427 cr through ONE metro. Capex ₹43,166 cr (58%) incl. ₹26,356 cr infrastructure. 15th FC gave ₹992 cr for electric buses (BEST). Presented to an administrator, not an elected council (no elected body Mar 2022–Jan 2026)."
+              },
+              "responsible": {
+                "primary": "municipal_commissioner",
+                "secondary": []
+              },
+              "source": "https://www.mcgm.gov.in/irj/go/km/docs/documents/MCGM%20Department%20List/Chief%20Accountant%20(Finance)/Budget/Budget%20Estimate%202025-2026/1-%20MC's%20Speech/BUDGET%20A,B,G/ENGLISH%20SPEECH.pdf",
+              "source_tier": 1,
+              "needs_pdf_upgrade": false,
+              "figure_gap": false
+            }
+          ],
           "_gaps": [
-            "roster_names",
-            "lok_sabha_mps",
+            "mumbai_LS_mp_names",
+            "collector_names_city_and_suburban",
+            "district_judge",
             "assembly_mlas",
-            "money_flows",
-            "scheme_utilisation",
-            "plants",
-            "all figures — baseline skeleton, not yet sourced"
+            "grant_vs_own_source_split_of_BMC_budget (have total, not breakdown)",
+            "central_scheme_flows",
+            "plant_employment"
           ]
         },
         "Hingoli": {
@@ -24481,28 +24560,47 @@
         },
         "Chennai": {
           "admin_model": "split",
-          "baseline": true,
-          "system_notes": [],
+          "system_notes": [
+            {
+              "note": "Chennai is a split-admin metro: civic services run by the Greater Chennai Corporation (GCC), law-and-order by a Police Commissioner (not a district SP). GCC's 2025-26 budget projects ₹5,145 cr revenue against ₹5,214 cr expenditure — a small planned deficit. Property tax + stamp duty dominate own revenue (property tax alone >₹2,000 cr).",
+              "kind": "structural",
+              "source": "https://chennaicorporation.gov.in/gcc/budget/",
+              "source_tier": 2,
+              "needs_pdf_upgrade": false
+            }
+          ],
           "roster": {
+            "police_commissioner": {
+              "name": "A. Amalraj",
+              "post": "Commissioner of Greater Chennai Police",
+              "service": "IPS",
+              "as_of": "2026-05",
+              "source": "https://www.thenewsminute.com/tamil-nadu/a-amalraj-appointed-as-chennai-police-commissioner",
+              "source_tier": 4,
+              "needs_pdf_upgrade": true,
+              "note": "Appointed under the new TN govt (May 2026), replacing Abhin Dinesh Modak."
+            },
             "collector": {
               "name": null,
-              "post": "District Magistrate & Collector",
+              "post": "District Collector, Chennai",
               "service": "IAS",
               "as_of": null,
-              "source": null,
-              "source_tier": null
+              "source": "https://chennai.nic.in/about-district/whos-who/",
+              "source_tier": 2,
+              "needs_pdf_upgrade": false
             },
-            "sp": {
-              "name": null,
-              "post": "Superintendent of Police",
-              "service": "IPS",
-              "as_of": null,
-              "source": null,
-              "source_tier": null
+            "mayor": {
+              "name": "R. Priya",
+              "post": "Mayor, Greater Chennai Corporation",
+              "service": "Political",
+              "as_of": "2026",
+              "source": "https://www.thenewsminute.com/tamil-nadu/chennai-corporation-budget-2025-26-focus-remains-on-swds-roads-infrastructure",
+              "source_tier": 4,
+              "needs_pdf_upgrade": true
             },
             "district_judge": {
               "name": null,
-              "post": "District & Sessions Judge",
+              "post": "Principal District & Sessions Judge",
               "service": "Judicial",
               "as_of": null,
               "source": null,
@@ -24510,20 +24608,86 @@
             }
           },
           "legislature": {
-            "lok_sabha": [],
+            "lok_sabha": [
+              {
+                "constituency": "Chennai (3 LS seats: North/Central/South)",
+                "name": null,
+                "party": null,
+                "term": "18th LS (2024-)",
+                "source": null,
+                "source_tier": null
+              }
+            ],
             "assembly": []
           },
-          "plants": [],
+          "plants": [
+            {
+              "name": "Chennai auto cluster ('Detroit of India')",
+              "sector": "Automotive manufacturing",
+              "ownership": "Private (Hyundai, Ford ex-, Ashok Leyland, etc.)",
+              "capacity": "One of India's largest auto-manufacturing & export hubs",
+              "employment_note": "Large manufacturing workforce in the metro & periphery.",
+              "significance": "Major share of India's car exports originate from the Chennai region.",
+              "source": "https://en.wikipedia.org/wiki/Economy_of_Chennai",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true
+            },
+            {
+              "name": "Chennai Port + IT corridor (OMR)",
+              "sector": "Ports / IT services",
+              "ownership": "Mixed (govt port + private IT)",
+              "capacity": "Major container port + the OMR IT corridor",
+              "employment_note": null,
+              "significance": "Trade gateway + one of India's largest IT/ITeS employment belts.",
+              "source": "https://en.wikipedia.org/wiki/Economy_of_Chennai",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true
+            }
+          ],
+          "plants_note": "Chennai pairs heavy manufacturing (autos) with services (IT, port) — a more balanced industrial+services base than Mumbai's finance-heavy one.",
           "departments": [],
-          "ledger": [],
+          "ledger": [
+            {
+              "fy": "2025-26 (BE)",
+              "scheme": "Greater Chennai Corporation civic budget",
+              "stream": "intergovernmental_grant",
+              "through_dept": "Greater Chennai Corporation",
+              "money_in_cr": 5145.52,
+              "money_in_basis": "GCC Budget 2025-26 projected revenue ₹5,145.52 cr; expenditure ₹5,214 cr. Capex ₹3,190.61 cr.",
+              "intended": "Urban civic services (water, sanitation, roads, health, infrastructure).",
+              "what_happened": {
+                "utilisation_pct": null,
+                "unspent_cr": null,
+                "lapsed": null,
+                "audit_flag": null,
+                "cag_para": null,
+                "vendor": null,
+                "total_receipt_cr": 5145.52,
+                "total_expenditure_cr": 5214.0,
+                "own_source_revenue_cr": null,
+                "notes": "₹5,146 cr revenue vs ₹5,214 cr expenditure — small planned deficit. Capex ₹3,191 cr: SWD ₹1,032 cr, roads ₹628 cr, buildings ₹413 cr, SWM ₹352 cr. Property tax projected >₹2,000 cr (strong own-source)."
+              },
+              "responsible": {
+                "primary": "mayor",
+                "secondary": [
+                  "collector",
+                  "police_commissioner"
+                ]
+              },
+              "source": "https://www.dtnext.in/news/chennai/chennai-corporation-budget-over-rs-5000-cr-revenue-expected-in-2025-26-fiscal-826943",
+              "source_tier": 4,
+              "needs_pdf_upgrade": true,
+              "figure_gap": false
+            }
+          ],
           "_gaps": [
-            "roster_names",
-            "lok_sabha_mps",
+            "chennai_collector_name",
+            "LS_mp_names",
+            "district_judge",
             "assembly_mlas",
-            "money_flows",
-            "scheme_utilisation",
-            "plants",
-            "all figures — baseline skeleton, not yet sourced"
+            "grant_share_of_GCC_budget",
+            "central_scheme_flows",
+            "plant_employment"
           ]
         },
         "Coimbatore": {
@@ -28229,21 +28393,30 @@
         },
         "Lucknow": {
           "admin_model": "standard",
-          "baseline": true,
-          "system_notes": [],
+          "system_notes": [
+            {
+              "note": "Lucknow Municipal Corporation's 2025-26 budget jumped ~50% to ₹4,304.53 cr (from ₹2,865 cr) — but its own tax/fee revenue is only ₹295 cr, i.e. the civic budget is overwhelmingly grant/transfer-funded, not locally raised. A heavy grant-dependence typical of north-Indian ULBs, contrasting with Kochi's healthier own-source share. ~₹600 cr earmarked for sanitation after poor Swachh rankings.",
+              "kind": "structural",
+              "source": "https://en.wikipedia.org/wiki/Lucknow_Municipal_Corporation",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true
+            }
+          ],
           "roster": {
             "collector": {
-              "name": null,
-              "post": "District Magistrate & Collector",
+              "name": "Vishak G Iyer",
+              "post": "District Magistrate, Lucknow",
               "service": "IAS",
-              "as_of": null,
-              "source": null,
-              "source_tier": null
+              "as_of": "2025-01",
+              "source": "https://lucknow.nic.in/dm-profile/vishak-g/",
+              "source_tier": 2,
+              "needs_pdf_upgrade": false,
+              "note": "2011 batch; Oxford MPP; ex-DM Kanpur/Aligarh."
             },
-            "sp": {
+            "municipal_commissioner": {
               "name": null,
-              "post": "Superintendent of Police",
-              "service": "IPS",
+              "post": "Municipal Commissioner, LMC",
+              "service": "IAS",
               "as_of": null,
               "source": null,
               "source_tier": null
@@ -28258,20 +28431,83 @@
             }
           },
           "legislature": {
-            "lok_sabha": [],
+            "lok_sabha": [
+              {
+                "constituency": "Lucknow",
+                "name": null,
+                "party": null,
+                "term": "18th LS (2024-)",
+                "source": null,
+                "source_tier": null
+              }
+            ],
             "assembly": []
           },
-          "plants": [],
+          "plants": [
+            {
+              "name": "Government / administrative sector",
+              "sector": "Government & services",
+              "ownership": "Public (UP state capital)",
+              "capacity": "Seat of UP govt — India's most populous state (~240 mn)",
+              "employment_note": "Large public-sector & administrative workforce.",
+              "significance": "Capital of Uttar Pradesh; the state secretariat and most state PSUs/HQs.",
+              "source": "https://en.wikipedia.org/wiki/Lucknow",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true
+            },
+            {
+              "name": "HAL Lucknow + defence/aerospace",
+              "sector": "Defence / aerospace",
+              "ownership": "Central PSU (Hindustan Aeronautics)",
+              "capacity": "Accessories & avionics division",
+              "employment_note": null,
+              "significance": "HAL accessories complex; part of the UP defence-corridor push.",
+              "source": "https://en.wikipedia.org/wiki/Lucknow",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true
+            }
+          ],
+          "plants_note": "Lucknow's base is government + services + some defence PSU (HAL) — a capital-city economy rather than an industrial one.",
           "departments": [],
-          "ledger": [],
+          "ledger": [
+            {
+              "fy": "2025-26",
+              "scheme": "Lucknow Municipal Corporation civic budget",
+              "stream": "intergovernmental_grant",
+              "through_dept": "Lucknow Municipal Corporation",
+              "money_in_cr": 4304.53,
+              "money_in_basis": "LMC budget 2025-26 ₹4,304.53 cr (up ~50% from ₹2,865 cr). Own tax/fee revenue only ₹295.42 cr; capital grants + water charges ₹111.92 cr.",
+              "intended": "Urban civic services (water, sanitation, roads, health, infrastructure).",
+              "what_happened": {
+                "utilisation_pct": null,
+                "unspent_cr": null,
+                "lapsed": null,
+                "audit_flag": null,
+                "cag_para": null,
+                "vendor": null,
+                "total_receipt_cr": 4304.53,
+                "total_expenditure_cr": null,
+                "own_source_revenue_cr": 295.42,
+                "notes": "Budget ₹4,305 cr but own revenue just ₹295 cr — heavily grant/transfer-funded, a sharp contrast to Kochi's healthy own-source effort. ~₹600 cr for sanitation after poor Swachh Survekshan rankings."
+              },
+              "responsible": {
+                "primary": "collector",
+                "secondary": []
+              },
+              "source": "https://en.wikipedia.org/wiki/Lucknow_Municipal_Corporation",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true,
+              "figure_gap": false
+            }
+          ],
           "_gaps": [
-            "roster_names",
-            "lok_sabha_mps",
+            "lmc_municipal_commissioner_name",
+            "LS_mp_name",
+            "district_judge",
             "assembly_mlas",
-            "money_flows",
-            "scheme_utilisation",
-            "plants",
-            "all figures — baseline skeleton, not yet sourced"
+            "exact_grant_total (own ₹295 cr known; grant remainder inferred)",
+            "central_scheme_flows",
+            "plant_employment"
           ]
         },
         "Maharajganj": {
