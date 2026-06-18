@@ -737,6 +737,28 @@
     const L = ledgerForDistrict(state, district);
     if (!L) return '';
 
+    // Baseline (skeleton) district: show structure honestly, not broken empty charts.
+    const isBaseline = L.baseline === true &&
+      !(L.ledger || []).length && !(L.plants || []).length &&
+      !(L.system_notes || []).length &&
+      !Object.values(L.roster || {}).some(o => o && o.name);
+    if (isBaseline) {
+      const adminLabel = L.admin_model && L.admin_model !== 'standard'
+        ? ` · <span style="color:oklch(0.78 0.16 70)">${esc(L.admin_model)} admin model</span>` : '';
+      return `
+        <div class="india-detail-section-title">Money flow &amp; accountability${adminLabel}</div>
+        <div class="ledger-baseline">
+          <div class="ledger-baseline-eyebrow">Baseline coverage — not yet deep-sourced</div>
+          <p>This district has a structured ledger slot but its money flows, named officials,
+          and industrial base haven't been sourced yet. It's classified as a
+          <b>${esc(L.admin_model || 'standard')}</b> administration.</p>
+          <p class="ledger-baseline-note">Deep, PDF-cited exemplars so far: <b>Kolkata</b> (split metro),
+          <b>Birbhum</b> (rural fund-freeze), <b>Jamshedpur</b> (company township). The structure here
+          is ready to be filled the same way — nothing is fabricated in the meantime.</p>
+          <details class="ledger-gaps"><summary>${(L._gaps || []).length} fields awaiting sourcing</summary><ul>${(L._gaps || []).map(g => `<li>${esc(g)}</li>`).join('')}</ul></details>
+        </div>`;
+    }
+
     // System function/dysfunction notes — the "how the system works" layer.
     const notesHtml = (L.system_notes || []).map(n => `
       <div class="ledger-note ledger-note--${esc(n.kind || 'note')}">
