@@ -12,10 +12,10 @@
     "footnotes_render": "source_tier 4 (news) and 3 (wikipedia) are shown but visibly flagged as needing upgrade to a government PDF source.",
     "coverage": {
       "districts": 594,
-      "districts_with_money_figures": 2,
+      "districts_with_money_figures": 3,
       "note": "594 districts across 35 states/UTs. 3 hand-authored deep exemplars (Kolkata, Birbhum, Jamshedpur); the rest are honest baseline skeletons (admin-model classified, empty roster/ledger with explicit _gaps — not fabricated).",
-      "deep_districts": 5,
-      "baseline_districts": 589
+      "deep_districts": 6,
+      "baseline_districts": 588
     }
   },
   "states": {
@@ -13684,24 +13684,41 @@
         },
         "Ernakulam": {
           "admin_model": "standard",
-          "baseline": true,
-          "system_notes": [],
+          "system_notes": [
+            {
+              "note": "Kochi Municipal Corporation is ~50% grant-dependent: of ₹453 cr total revenue (audited FY24), ₹225 cr is government grant vs ₹229 cr own-source — and it runs close to balance (expenditure ₹402 cr). Comparable to Kolkata's grant-dependence but with a far healthier own-source share (₹229 cr own vs ₹184 cr tax). A relatively well-run urban local body.",
+              "kind": "structural",
+              "source": "https://www.cityfinance.in/municipal-data/city/kochi",
+              "source_tier": 2,
+              "needs_pdf_upgrade": false
+            },
+            {
+              "note": "Ernakulam is Kerala's commercial capital (Kochi) — port, IT (Infopark/SmartCity), shipbuilding (Cochin Shipyard, a central PSU), and the Cochin International Airport (CIAL), the world's first fully solar-powered airport and a pioneering public-private-shareholder model. Diversified base, unlike single-industry districts.",
+              "kind": "structural",
+              "source": "https://en.wikipedia.org/wiki/Ernakulam_district",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true
+            }
+          ],
           "roster": {
             "collector": {
-              "name": null,
-              "post": "District Magistrate & Collector",
+              "name": "G. Priyanka",
+              "post": "District Collector & Magistrate",
               "service": "IAS",
-              "as_of": null,
-              "source": null,
-              "source_tier": null
+              "as_of": "2025-08",
+              "source": "https://ernakulam.nic.in/en/district_collector/",
+              "source_tier": 2,
+              "needs_pdf_upgrade": false,
+              "note": "2017 batch; 3rd woman Collector of Ernakulam."
             },
-            "sp": {
-              "name": null,
-              "post": "Superintendent of Police",
+            "police_commissioner": {
+              "name": "Putta Vimaladitya",
+              "post": "Commissioner of Police, Kochi City",
               "service": "IPS",
-              "as_of": null,
-              "source": null,
-              "source_tier": null
+              "as_of": "2026",
+              "source": "https://en.wikipedia.org/wiki/Ernakulam_district",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true
             },
             "district_judge": {
               "name": null,
@@ -13713,20 +13730,122 @@
             }
           },
           "legislature": {
-            "lok_sabha": [],
+            "lok_sabha": [
+              {
+                "constituency": "Ernakulam",
+                "name": null,
+                "party": null,
+                "term": "18th LS (2024-)",
+                "source": "https://en.wikipedia.org/wiki/Ernakulam_district",
+                "source_tier": 3,
+                "needs_pdf_upgrade": true
+              },
+              {
+                "constituency": "Chalakudy (partial)",
+                "name": null,
+                "party": null,
+                "term": "18th LS (2024-)",
+                "source": "https://en.wikipedia.org/wiki/Ernakulam_district",
+                "source_tier": 3,
+                "needs_pdf_upgrade": true
+              }
+            ],
             "assembly": []
           },
-          "plants": [],
-          "departments": [],
-          "ledger": [],
+          "plants": [
+            {
+              "name": "Cochin Shipyard Ltd (CSL)",
+              "sector": "Shipbuilding / heavy engineering",
+              "ownership": "Central PSU (listed)",
+              "capacity": "India's largest shipbuilding & maintenance facility; built INS Vikrant (1st indigenous aircraft carrier)",
+              "employment_note": "Major skilled-employment anchor for Kochi.",
+              "significance": "Strategic defence + commercial shipbuilding; delivered India's first indigenous aircraft carrier.",
+              "source": "https://en.wikipedia.org/wiki/Cochin_Shipyard",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true
+            },
+            {
+              "name": "BPCL Kochi Refinery",
+              "sector": "Petroleum refining",
+              "ownership": "Central PSU (Bharat Petroleum)",
+              "capacity": "~15.5 MMTPA — among India's largest public-sector refineries",
+              "employment_note": null,
+              "significance": "One of India's biggest refineries; anchors Kochi's petrochemical cluster.",
+              "source": "https://en.wikipedia.org/wiki/Kochi_Refineries",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true
+            },
+            {
+              "name": "Cochin International Airport (CIAL)",
+              "sector": "Aviation / infrastructure",
+              "ownership": "Public-private (govt + public shareholders)",
+              "capacity": "World's first fully solar-powered airport",
+              "employment_note": null,
+              "significance": "First Indian airport built on a public-private-shareholder model (1999); a much-cited governance innovation.",
+              "source": "https://en.wikipedia.org/wiki/Cochin_International_Airport",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true
+            }
+          ],
+          "plants_note": "Ernakulam/Kochi has a DIVERSIFIED base — central PSUs (Cochin Shipyard, BPCL refinery), IT parks, port, and the CIAL public-shareholder airport. Unlike single-industry districts, no one employer dominates. Figures from encyclopaedic/PSU sources; upgrade to annual reports for tier-1.",
+          "departments": [
+            {
+              "dept": "Kochi Municipal Corporation",
+              "type": "public_facing",
+              "alloc_cr": null,
+              "officer": {
+                "name": null,
+                "post": "Municipal Secretary",
+                "source": null
+              },
+              "schemes": [
+                "AMRUT",
+                "Housing (3,448 built in 4 yrs)",
+                "Drainage master plan"
+              ]
+            }
+          ],
+          "ledger": [
+            {
+              "fy": "2023-24 (audited)",
+              "scheme": "Kochi Municipal Corporation — civic budget",
+              "stream": "intergovernmental_grant",
+              "through_dept": "Kochi Municipal Corporation",
+              "money_in_cr": 225.0,
+              "money_in_basis": "Government grant ₹225 cr of ₹453 cr total revenue (audited FY24, MoHUA CityFinance). Own revenue ₹229 cr; tax revenue ₹184 cr.",
+              "intended": "Urban civic services: sanitation, housing, drainage, mosquito/vector control, poverty alleviation across 74 wards.",
+              "what_happened": {
+                "utilisation_pct": null,
+                "unspent_cr": null,
+                "lapsed": null,
+                "audit_flag": null,
+                "cag_para": null,
+                "vendor": null,
+                "total_receipt_cr": 453.0,
+                "total_expenditure_cr": 402.0,
+                "own_source_revenue_cr": 229.0,
+                "notes": "~50% grant-funded (₹225 cr of ₹453 cr), but a healthy ₹229 cr own-source — better local revenue effort than Kolkata. Near-balanced (exp ₹402 cr < revenue ₹453 cr). Audited figures via MoHUA CityFinance portal."
+              },
+              "responsible": {
+                "primary": "collector",
+                "secondary": [
+                  "police_commissioner"
+                ]
+              },
+              "source": "https://www.cityfinance.in/municipal-data/city/kochi",
+              "source_tier": 2,
+              "needs_pdf_upgrade": false,
+              "figure_gap": false
+            }
+          ],
           "_gaps": [
-            "roster_names",
-            "lok_sabha_mps",
+            "ernakulam_LS_mp_names",
+            "district_judge",
             "assembly_mlas",
-            "money_flows",
-            "scheme_utilisation",
-            "plants",
-            "all figures — baseline skeleton, not yet sourced"
+            "department-wise KMC budget split (have totals, not dept breakdown)",
+            "central_scheme_flows_to_rural_taluks (MGNREGS/PMAY-G)",
+            "plant_employment_headcounts",
+            "taluk-level figures (block drill is name-only)"
           ]
         },
         "Idukki": {
