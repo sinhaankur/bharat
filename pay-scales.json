@@ -38,6 +38,18 @@
       "annual_cost_to_govt_est": 2100000,
       "note": "SDM / Sub-Collector. Junior time scale entry."
     },
+    "Block Development Officer": {
+      "service": "State (provincial civil service)", "pay_level": 9,
+      "monthly_basic_min": 53100, "monthly_basic_max": 167800,
+      "annual_cost_to_govt_est": 1700000,
+      "note": "BDO — development side at block level (runs MGNREGS, PMAY-G, panchayat schemes). State civil service, NOT IAS. The lowest rung that directly disburses central-scheme money."
+    },
+    "Tehsildar": {
+      "service": "State (provincial civil service)", "pay_level": 8,
+      "monthly_basic_min": 47600, "monthly_basic_max": 151100,
+      "annual_cost_to_govt_est": 1500000,
+      "note": "Tahsildar — revenue side at tehsil/taluk level (land records, revenue collection, relief). State civil service, NOT IAS."
+    },
     "Chief Secretary": {
       "service": "IAS", "pay_level": 18,
       "monthly_basic_min": 250000, "monthly_basic_max": 250000,

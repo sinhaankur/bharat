@@ -1070,6 +1070,40 @@
       row.addEventListener('click', () => renderBlockDetail(row.dataset.block, row.dataset.district, row.dataset.state));
     });
   }
+
+  // Sub-district / block accountability skeleton — the honest level below district.
+  // Blocks are where central schemes (MGNREGS, PMAY-G) actually disburse. We have
+  // the named place; we do NOT yet have its money figures — shown as explicit gaps.
+  function renderBlockLedgerSkeleton(block, district, state, label) {
+    const post = (name) => {
+      const pay = PAY?.posts?.[name];
+      const cost = pay?.annual_cost_to_govt_est
+        ? `<span class="roster-cost" title="Per-post cost-to-government (pay-scales.json)">~₹${(pay.annual_cost_to_govt_est / 1e7).toFixed(2)} cr/yr</span>` : '';
+      return `<div class="roster-row"><span class="roster-name">${esc(name)}</span><span class="roster-post">${pay ? esc(pay.service) : 'state civil service'}</span>${cost}</div>`;
+    };
+    // Schemes that flow THROUGH a block (the accountability link to money).
+    const schemes = ['MGNREGS (wage employment + assets)', 'PMAY-G (rural housing)', 'PM-KISAN (DBT)', '15th FC tied grants to Gram Panchayats'];
+    return `
+      <div class="india-detail-section-title">Who is responsible here</div>
+      <div class="roster-list">
+        ${post('Block Development Officer')}
+        ${post('Tehsildar')}
+      </div>
+      <div class="india-detail-section-title" style="margin-top:0.7rem">Money that flows through this ${esc(label.toLowerCase())}</div>
+      <div class="ledger-baseline">
+        <div class="ledger-baseline-eyebrow">Baseline coverage — block-level figures not yet sourced</div>
+        <p>The block/${esc(label.toLowerCase())} is where central rural schemes actually disburse — the BDO is the
+        accountable officer. Scheme money typically routed through here:</p>
+        <ul style="margin:0.3rem 0 0.3rem 1rem;line-height:1.6">${schemes.map(s => `<li>${esc(s)}</li>`).join('')}</ul>
+        <details class="ledger-gaps"><summary>5 block-level fields awaiting sourcing</summary><ul>
+          <li>BDO &amp; Tehsildar names (state portals, not centrally machine-readable)</li>
+          <li>MGNREGS person-days &amp; expenditure (nrega.nic.in MIS — no clean open API)</li>
+          <li>PMAY-G houses sanctioned vs completed (pmayg.nic.in)</li>
+          <li>Block population &amp; Gram Panchayat count (Census 2011 sub-district PDF)</li>
+          <li>15th FC tied/untied grant to local bodies in this block</li>
+        </ul></details>
+      </div>`;
+  }
   function renderBlockDetail(block, district, state) {
     const label = blockLabelFor(state);
     const detail = $ind('#india-detail');
@@ -1097,9 +1131,17 @@
         <div class="india-stat" style="grid-column:span 2"><div class="label">IAS deployment ${src('ias')}</div><div class="value" style="font-size:11px">Typically <strong>none</strong> — Tahsildar and BDO are state civil service. IAS cadre stops at district HQ.</div></div>
       </div>
 
+      ${renderBlockLedgerSkeleton(block, district, state, label)}
+
       <div class="india-caveat">
         Block name from Census 2011 sub-district directory. Population, MGNREGA delivery, and PMAY-G performance data not yet integrated for this level — Census PDFs need parsing; MGNREGA's nrega.nic.in lacks a clean open API. Source: <a href="https://censusindia.gov.in" target="_blank" rel="noopener" style="color:oklch(0.78 0.16 70)">censusindia.gov.in</a> directory of sub-districts, cross-checked with state revenue department websites.
       </div>`;
+
+    // Map zoom: blocks have no polygon geometry, so focus the PARENT DISTRICT (geometry we have).
+    const dLayer = districtPathByName.get(district);
+    if (dLayer && dLayer.getBounds) {
+      try { map.fitBounds(dLayer.getBounds(), { padding: [40, 40], maxZoom: 11 }); } catch (e) {}
+    }
     detail.querySelector('#block-back-to-district')?.addEventListener('click', () => {
       // Re-render district detail (which includes the block list)
       renderDistrictDetail(district, state);
@@ -1270,13 +1312,14 @@
       zoomControl: true,
       worldCopyJump: false,
       minZoom: 4,
-      maxZoom: 7,
+      maxZoom: 12,            // allow zoom down to town/locality level (was 7 — capped district drill-in)
+      scrollWheelZoom: true,
     }).setView([22.5, 80], 4.5);
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
       subdomains: 'abcd',
       attribution: '&copy; OSM, &copy; CARTO',
-      maxZoom: 7,
+      maxZoom: 20,           // tiles support deep zoom; map maxZoom is the real cap
     }).addTo(map);
 
     geoLayer = L.geoJSON(GEO, {
