@@ -99,6 +99,16 @@ The current deep exemplars span several governance models on purpose:
 Coverage also extends one level down to **2,184 sub-districts/blocks** (BDO +
 Tehsildar chain, the schemes that disburse there), again as honest skeletons.
 
+### Industrial heritage
+
+Each deep district's plants carry a `founded` year and an `era`
+(`pre_colonial` · `colonial` 1757–1947 · `nehruvian_psu` 1947–91 ·
+`liberalisation` 1991–), rendered as a **"how this district industrialised"**
+timeline in the drill-down. The pattern is the arc of Indian industry itself:
+colonial-era heritage (Munger's 1762 gun trade, Jamshedpur's 1907 Tata Steel,
+Bombay's 1875 stock exchange) → the Nehruvian public-sector build-out (Barauni
+refinery 1964, Cochin Shipyard 1972) → post-1991 PPP (Cochin airport 1999).
+
 > **Caveat:** the district ledger is a young, opinionated dataset. Named officials
 > rotate; most districts are baseline, not deep; only a handful have real money
 > figures. It is built to be *honest about what it doesn't know* rather than to

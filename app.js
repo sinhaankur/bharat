@@ -810,13 +810,16 @@
 
     // Industrial plants — the district's economic base (jobs / tax origin).
     const plants = L.plants || [];
+    const heritageHtml = renderHeritageTimeline(plants, district);
     const plantsHtml = plants.length ? `
+      ${heritageHtml}
       <div class="india-detail-section-title" style="margin-top:0.8rem">Industrial base — major plants</div>
       <div class="plants-list">
         ${plants.map(p => `
           <div class="plant-row">
             <div class="plant-head">
               <span class="plant-name">${esc(p.name)}</span>
+              ${p.founded ? `<span class="plant-founded">est. ${p.founded}</span>` : ''}
               <span class="plant-sector">${esc(p.sector || '')}</span>
             </div>
             <div class="plant-meta">
@@ -1069,6 +1072,43 @@
     detail.querySelectorAll('.block-row').forEach(row => {
       row.addEventListener('click', () => renderBlockDetail(row.dataset.block, row.dataset.district, row.dataset.state));
     });
+  }
+
+  // Industrial-heritage timeline — when this district's industry was founded, by era.
+  const ERA_META = {
+    pre_colonial:   { label: 'Pre-colonial', short: 'pre-1757', color: 'oklch(0.7 0.13 300)' },
+    colonial:       { label: 'Colonial era', short: '1757–1947', color: 'oklch(0.7 0.15 50)' },
+    nehruvian_psu:  { label: 'Public-sector build-out', short: '1947–1991', color: 'oklch(0.7 0.16 160)' },
+    liberalisation: { label: 'Post-liberalisation', short: '1991–', color: 'oklch(0.72 0.16 250)' },
+  };
+  function renderHeritageTimeline(plants, district) {
+    const dated = (plants || []).filter(p => typeof p.founded === 'number').sort((a, b) => a.founded - b.founded);
+    if (dated.length < 2) return '';
+    const minY = dated[0].founded, maxY = dated[dated.length - 1].founded;
+    const span = Math.max(1, maxY - minY);
+    const rows = dated.map(p => {
+      const t = (p.founded - minY) / span;
+      const em = ERA_META[p.era] || { label: '', color: 'oklch(0.6 0 0)' };
+      const tip = `${esc(p.name)} · est. ${p.founded} · ${esc(em.label)}${p.heritage_note ? '\n' + p.heritage_note.replace(/"/g, '') : ''}`;
+      return `
+        <div class="heritage-row" title="${esc(tip)}">
+          <span class="heritage-year" style="color:${em.color}">${p.founded}</span>
+          <div class="heritage-track">
+            <span class="heritage-dot" style="left:${(t * 100).toFixed(1)}%;background:${em.color}"></span>
+          </div>
+          <span class="heritage-name">${esc(p.name.split('(')[0].split('/')[0].trim())}</span>
+        </div>`;
+    }).join('');
+    // era legend (only the eras present)
+    const present = [...new Set(dated.map(p => p.era))];
+    const legend = present.map(e => {
+      const m = ERA_META[e]; if (!m) return '';
+      return `<span class="heritage-leg"><span class="heritage-sw" style="background:${m.color}"></span>${esc(m.label)} <span class="heritage-leg-yr">${esc(m.short)}</span></span>`;
+    }).join('');
+    return `
+      <div class="india-detail-section-title" style="margin-top:0.8rem">How ${esc(district)} industrialised — ${minY}→${maxY}</div>
+      <div class="heritage-timeline">${rows}</div>
+      <div class="heritage-legend">${legend}</div>`;
   }
 
   // Sub-district / block accountability skeleton — the honest level below district.

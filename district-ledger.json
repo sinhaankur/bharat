@@ -1456,7 +1456,10 @@
               "source": "https://www.gem.wiki/Tata_Steel_Jamshedpur_steel_plant",
               "source_tier": 3,
               "needs_pdf_upgrade": true,
-              "capacity_source": "https://www.tatasteel.com/newsroom/press-releases/india/2025/tata-steel-s-blast-furnace-in-jamshedpur-achieves-historic-50-million-tonnes-production-milestone/"
+              "capacity_source": "https://www.tatasteel.com/newsroom/press-releases/india/2025/tata-steel-s-blast-furnace-in-jamshedpur-achieves-historic-50-million-tonnes-production-milestone/",
+              "founded": 1907,
+              "era": "colonial",
+              "heritage_note": "Asia's first integrated steel plant; founded by Jamsetji Tata's vision, built by Dorabji Tata."
             },
             {
               "name": "Tata Motors Jamshedpur",
@@ -1467,7 +1470,10 @@
               "significance": "One of Tata Motors' oldest plants; anchors the city's auto-component ecosystem.",
               "source": "https://en.wikipedia.org/wiki/Jamshedpur",
               "source_tier": 3,
-              "needs_pdf_upgrade": true
+              "needs_pdf_upgrade": true,
+              "founded": 1945,
+              "era": "colonial",
+              "heritage_note": "Founded as TELCO (Tata Engineering & Locomotive Co); CV manufacturing from 1954 via Daimler JV."
             }
           ],
           "plants_note": "Jamshedpur's economic base IS a private company — the district's jobs and tax origin are dominated by the Tata group, which also governs the city. Plant-level employment/output figures are partly company-confidential; capacity figures are from Tata Steel press releases (upgrade to annual-report PDF for tier-1).",
@@ -5871,7 +5877,10 @@
               "source": "https://en.wikipedia.org/wiki/Barauni_Refinery",
               "source_tier": 3,
               "needs_pdf_upgrade": true,
-              "capacity_source": "https://iocl.com/barauni-refinery"
+              "capacity_source": "https://iocl.com/barauni-refinery",
+              "founded": 1964,
+              "era": "nehruvian_psu",
+              "heritage_note": "Built with Soviet/Romanian collaboration; dedicated to the nation 1965."
             },
             {
               "name": "Barauni Thermal Power Station (NTPC)",
@@ -5882,7 +5891,10 @@
               "significance": "Operational since 1962 (Russian collaboration); transferred from Bihar state to NTPC on 15 Dec 2018.",
               "source": "https://en.wikipedia.org/wiki/Barauni_Thermal_Power_Station",
               "source_tier": 3,
-              "needs_pdf_upgrade": true
+              "needs_pdf_upgrade": true,
+              "founded": 1962,
+              "era": "nehruvian_psu",
+              "heritage_note": "Russian collaboration; transferred from Bihar state to NTPC in 2018."
             },
             {
               "name": "HURL Barauni Fertiliser Plant",
@@ -5894,7 +5906,10 @@
               "source": "https://en.wikipedia.org/wiki/HURL_Barauni",
               "source_tier": 3,
               "needs_pdf_upgrade": true,
-              "capacity_source": "https://www.fert.nic.in/fertilizer-projects/hindustan-urvarak-rasayan-ltd-hurl"
+              "capacity_source": "https://www.fert.nic.in/fertilizer-projects/hindustan-urvarak-rasayan-ltd-hurl",
+              "founded": 1976,
+              "era": "nehruvian_psu",
+              "heritage_note": "Original HFCL plant 1976; shut 1999; revived by HURL (~₹9,512 cr), urea restarted 2022."
             }
           ],
           "plants_note": "Begusarai's industrial base is overwhelmingly CENTRAL PSU: refinery (IOCL), power (NTPC), fertiliser (HURL JV). The 'companies in the district' are, in effect, instruments of Union fiscal policy — jobs and output here trace back to central capital, not local/state money. Capacity figures from company/PSU sources (upgrade to annual-report/gazette PDFs for tier-1).",
@@ -6686,7 +6701,10 @@
               "significance": "Asia's first cigarette production (1907); ITC's oldest manufacturing unit.",
               "source": "https://en.wikipedia.org/wiki/Munger",
               "source_tier": 3,
-              "needs_pdf_upgrade": true
+              "needs_pdf_upgrade": true,
+              "founded": 1907,
+              "era": "colonial",
+              "heritage_note": "Asia's first cigarette production; ITC's (then Imperial Tobacco) oldest unit."
             },
             {
               "name": "Jamalpur Locomotive Workshop",
@@ -6697,7 +6715,10 @@
               "significance": "Founded 8 Feb 1862 by the East India Company; produces inserts, brake blocks, BOX wagons, cranes.",
               "source": "https://en.wikipedia.org/wiki/Jamalpur,_Munger",
               "source_tier": 3,
-              "needs_pdf_upgrade": true
+              "needs_pdf_upgrade": true,
+              "founded": 1862,
+              "era": "colonial",
+              "heritage_note": "Founded 8 Feb 1862 by the East India Company; Asia's oldest railway workshop."
             },
             {
               "name": "Munger Gun Factories (BIADA)",
@@ -6708,7 +6729,10 @@
               "significance": "Arms-making since 1762 (Mir Qasim era); among India's oldest surviving arms units.",
               "source": "https://en.wikipedia.org/wiki/Munger",
               "source_tier": 3,
-              "needs_pdf_upgrade": true
+              "needs_pdf_upgrade": true,
+              "founded": 1762,
+              "era": "colonial",
+              "heritage_note": "Arms-making since 1762 (Mir Qasim era); among India's oldest surviving arms units."
             }
           ],
           "plants_note": "Munger's base is HERITAGE/colonial-era industry (private ITC + govt Railways + licensed arms), not modern central PSUs — a different economic-origin story than Begusarai. Plant figures are from encyclopaedic sources; upgrade to company/Railways reports for tier-1.",
@@ -13762,7 +13786,10 @@
               "significance": "Strategic defence + commercial shipbuilding; delivered India's first indigenous aircraft carrier.",
               "source": "https://en.wikipedia.org/wiki/Cochin_Shipyard",
               "source_tier": 3,
-              "needs_pdf_upgrade": true
+              "needs_pdf_upgrade": true,
+              "founded": 1972,
+              "era": "nehruvian_psu",
+              "heritage_note": "Incorporated 29 Apr 1972 as a GoI company; first phase 1982; built INS Vikrant."
             },
             {
               "name": "BPCL Kochi Refinery",
@@ -13773,7 +13800,10 @@
               "significance": "One of India's biggest refineries; anchors Kochi's petrochemical cluster.",
               "source": "https://en.wikipedia.org/wiki/Kochi_Refineries",
               "source_tier": 3,
-              "needs_pdf_upgrade": true
+              "needs_pdf_upgrade": true,
+              "founded": 1966,
+              "era": "nehruvian_psu",
+              "heritage_note": "Inaugurated 23 Sep 1966 (as Cochin Refineries, Phillips Petroleum JV); now BPCL."
             },
             {
               "name": "Cochin International Airport (CIAL)",
@@ -13784,7 +13814,10 @@
               "significance": "First Indian airport built on a public-private-shareholder model (1999); a much-cited governance innovation.",
               "source": "https://en.wikipedia.org/wiki/Cochin_International_Airport",
               "source_tier": 3,
-              "needs_pdf_upgrade": true
+              "needs_pdf_upgrade": true,
+              "founded": 1999,
+              "era": "liberalisation",
+              "heritage_note": "First Indian airport on a public-private-shareholder model; world's first fully solar-powered airport."
             }
           ],
           "plants_note": "Ernakulam/Kochi has a DIVERSIFIED base — central PSUs (Cochin Shipyard, BPCL refinery), IT parks, port, and the CIAL public-shareholder airport. Unlike single-industry districts, no one employer dominates. Figures from encyclopaedic/PSU sources; upgrade to annual reports for tier-1.",
@@ -17417,7 +17450,10 @@
               "significance": "Mumbai contributes a disproportionate share of India's direct-tax collection and corporate HQs.",
               "source": "https://en.wikipedia.org/wiki/Economy_of_Mumbai",
               "source_tier": 3,
-              "needs_pdf_upgrade": true
+              "needs_pdf_upgrade": true,
+              "founded": 1875,
+              "era": "colonial",
+              "heritage_note": "Founded 9 Jul 1875 by Premchand Roychand as 'The Native Share & Stock Brokers' Association' — Asia's oldest stock exchange."
             },
             {
               "name": "Bollywood / media & entertainment",
@@ -17428,7 +17464,10 @@
               "significance": "Hindi film industry + broadcast/OTT hub.",
               "source": "https://en.wikipedia.org/wiki/Economy_of_Mumbai",
               "source_tier": 3,
-              "needs_pdf_upgrade": true
+              "needs_pdf_upgrade": true,
+              "founded": 1913,
+              "era": "colonial",
+              "heritage_note": "Indian cinema dates to Dadasaheb Phalke's Raja Harishchandra (1913); Bombay became its hub."
             }
           ],
           "plants_note": "Mumbai's 'economic base' is services (finance, media, ports, real estate), not factories — so much of its tax origin is corporate/financial and HQ-attributed. This is why district-level tax-origin is hard to pin to geography.",
@@ -24630,7 +24669,10 @@
               "significance": "Major share of India's car exports originate from the Chennai region.",
               "source": "https://en.wikipedia.org/wiki/Economy_of_Chennai",
               "source_tier": 3,
-              "needs_pdf_upgrade": true
+              "needs_pdf_upgrade": true,
+              "founded": 1948,
+              "era": "nehruvian_psu",
+              "heritage_note": "Anchored by Ashok Leyland (1948) & later Hyundai (1996); the 'Detroit of India' belt."
             },
             {
               "name": "Chennai Port + IT corridor (OMR)",
@@ -24641,7 +24683,10 @@
               "significance": "Trade gateway + one of India's largest IT/ITeS employment belts.",
               "source": "https://en.wikipedia.org/wiki/Economy_of_Chennai",
               "source_tier": 3,
-              "needs_pdf_upgrade": true
+              "needs_pdf_upgrade": true,
+              "founded": 1881,
+              "era": "colonial",
+              "heritage_note": "Chennai (Madras) Port commissioned 1881 under the Raj; the OMR IT corridor is post-2000."
             }
           ],
           "plants_note": "Chennai pairs heavy manufacturing (autos) with services (IT, port) — a more balanced industrial+services base than Mumbai's finance-heavy one.",
@@ -28453,7 +28498,10 @@
               "significance": "Capital of Uttar Pradesh; the state secretariat and most state PSUs/HQs.",
               "source": "https://en.wikipedia.org/wiki/Lucknow",
               "source_tier": 3,
-              "needs_pdf_upgrade": true
+              "needs_pdf_upgrade": true,
+              "founded": 1775,
+              "era": "colonial",
+              "heritage_note": "Lucknow became the Awadh Nawabi capital ~1775; UP state capital post-1947."
             },
             {
               "name": "HAL Lucknow + defence/aerospace",
@@ -28464,7 +28512,10 @@
               "significance": "HAL accessories complex; part of the UP defence-corridor push.",
               "source": "https://en.wikipedia.org/wiki/Lucknow",
               "source_tier": 3,
-              "needs_pdf_upgrade": true
+              "needs_pdf_upgrade": true,
+              "founded": 1970,
+              "era": "nehruvian_psu",
+              "heritage_note": "HAL Accessories Division Lucknow established ~1970; part of the UP defence corridor today."
             }
           ],
           "plants_note": "Lucknow's base is government + services + some defence PSU (HAL) — a capital-city economy rather than an industrial one.",
