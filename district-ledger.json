@@ -14,8 +14,8 @@
       "districts": 594,
       "districts_with_money_figures": 2,
       "note": "594 districts across 35 states/UTs. 3 hand-authored deep exemplars (Kolkata, Birbhum, Jamshedpur); the rest are honest baseline skeletons (admin-model classified, empty roster/ledger with explicit _gaps — not fabricated).",
-      "deep_districts": 3,
-      "baseline_districts": 591
+      "deep_districts": 5,
+      "baseline_districts": 589
     }
   },
   "states": {
@@ -5803,24 +5803,40 @@
         },
         "Begusarai": {
           "admin_model": "standard",
-          "baseline": true,
-          "system_notes": [],
+          "system_notes": [
+            {
+              "note": "Begusarai is the 'industrial & financial capital of Bihar' — and its heavy industry was BUILT BY CENTRAL PUBLIC MONEY. The Barauni Refinery (IOCL), Barauni Thermal Power (NTPC), and HURL Barauni fertiliser plant are all central PSUs / PSU joint ventures. The district's economic base is, in effect, the Union government's balance sheet made physical.",
+              "kind": "structural",
+              "source": "https://en.wikipedia.org/wiki/Begusarai_district",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true
+            },
+            {
+              "note": "HURL Barauni revived a defunct 1976 fertiliser plant (shut 1999 as unviable) with ~₹9,512 cr central investment; urea production restarted 18 Oct 2022. A case of public money re-animating dead industrial capacity — contrast with Birbhum's fund-freeze.",
+              "kind": "revival",
+              "source": "https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=2010953",
+              "source_tier": 1,
+              "needs_pdf_upgrade": false
+            }
+          ],
           "roster": {
             "collector": {
-              "name": null,
+              "name": "Shrikant Shastri",
               "post": "District Magistrate & Collector",
               "service": "IAS",
-              "as_of": null,
-              "source": null,
-              "source_tier": null
+              "as_of": "2026-02",
+              "source": "https://begusarai.nic.in/whoswho/dm-begusarai/",
+              "source_tier": 2,
+              "needs_pdf_upgrade": false
             },
             "sp": {
-              "name": null,
+              "name": "Maneesh",
               "post": "Superintendent of Police",
               "service": "IPS",
-              "as_of": null,
-              "source": null,
-              "source_tier": null
+              "as_of": "2026",
+              "source": "https://begusarai.nic.in/directory/",
+              "source_tier": 2,
+              "needs_pdf_upgrade": false
             },
             "district_judge": {
               "name": null,
@@ -5832,20 +5848,66 @@
             }
           },
           "legislature": {
-            "lok_sabha": [],
+            "lok_sabha": [
+              {
+                "constituency": "Begusarai",
+                "name": null,
+                "party": null,
+                "term": "18th LS (2024-)",
+                "source": null,
+                "source_tier": null
+              }
+            ],
             "assembly": []
           },
-          "plants": [],
+          "plants": [
+            {
+              "name": "Barauni Refinery (IOCL)",
+              "sector": "Petroleum refining",
+              "ownership": "Central PSU (Indian Oil Corporation Ltd)",
+              "capacity": "6.0 MMTPA crude (expanding to 9.0 MMTPA by ~2026, + polypropylene petrochem)",
+              "employment_note": "Large PSU workforce; plant-specific headcount not separately published.",
+              "significance": "Commissioned 1964-65 with Soviet/Romanian collaboration; Bihar's only refinery. BR-9 expansion adds petrochemicals.",
+              "source": "https://en.wikipedia.org/wiki/Barauni_Refinery",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true,
+              "capacity_source": "https://iocl.com/barauni-refinery"
+            },
+            {
+              "name": "Barauni Thermal Power Station (NTPC)",
+              "sector": "Thermal power",
+              "ownership": "Central PSU (NTPC Ltd)",
+              "capacity": "720 MW installed; ~500 MW operational (Stage-I 220 MW retired 31 Mar 2024)",
+              "employment_note": null,
+              "significance": "Operational since 1962 (Russian collaboration); transferred from Bihar state to NTPC on 15 Dec 2018.",
+              "source": "https://en.wikipedia.org/wiki/Barauni_Thermal_Power_Station",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true
+            },
+            {
+              "name": "HURL Barauni Fertiliser Plant",
+              "sector": "Fertiliser (gas-based urea)",
+              "ownership": "Central PSU JV (NTPC/IOCL/CIL/FCIL)",
+              "capacity": "12.7 LMTPA urea",
+              "employment_note": null,
+              "significance": "~₹9,512 cr revival of a 1976 plant shut since 1999; urea production restarted 18 Oct 2022.",
+              "source": "https://en.wikipedia.org/wiki/HURL_Barauni",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true,
+              "capacity_source": "https://www.fert.nic.in/fertilizer-projects/hindustan-urvarak-rasayan-ltd-hurl"
+            }
+          ],
+          "plants_note": "Begusarai's industrial base is overwhelmingly CENTRAL PSU: refinery (IOCL), power (NTPC), fertiliser (HURL JV). The 'companies in the district' are, in effect, instruments of Union fiscal policy — jobs and output here trace back to central capital, not local/state money. Capacity figures from company/PSU sources (upgrade to annual-report/gazette PDFs for tier-1).",
           "departments": [],
           "ledger": [],
           "_gaps": [
-            "roster_names",
-            "lok_sabha_mps",
+            "begusarai_LS_mp_name",
+            "district_judge",
             "assembly_mlas",
-            "money_flows",
-            "scheme_utilisation",
-            "plants",
-            "all figures — baseline skeleton, not yet sourced"
+            "central_scheme_flows (MGNREGS/PMAY-G to rural blocks)",
+            "plant_employment_headcounts (PSU group figures only)",
+            "district_tax_origin (PSU corporate tax HQ-attributed, not district-level)",
+            "kmc_style_civic_budget (no single municipal budget sourced yet)"
           ]
         },
         "Bhabua": {
@@ -6555,24 +6617,41 @@
         },
         "Munger": {
           "admin_model": "standard",
-          "baseline": true,
-          "system_notes": [],
+          "system_notes": [
+            {
+              "note": "Munger's economy rests on three HERITAGE industries, each a national 'first/oldest': ITC's cigarette factory (1907 — Asia's first cigarette production), the gun/arms factories (est. 1762, Mir Qasim era), and the Jamalpur Railway Workshop (1862 — Asia's oldest & among its largest). 2nd-highest per-capita income in Bihar after Patna (₹42,793, FY21). Contrast with Begusarai's central-PSU heavy industry.",
+              "kind": "structural",
+              "source": "https://en.wikipedia.org/wiki/Munger",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true
+            },
+            {
+              "note": "The arms tradition has a dark fiscal side: alongside ~37 licensed BIADA gun factories, Munger became a notorious hub of ILLEGAL country-made firearms (pistols to Kalashnikovs). A licit heritage industry shadowed by an untaxed, criminal one — a governance/revenue leakage story.",
+              "kind": "informal_economy",
+              "source": "https://en.wikipedia.org/wiki/Munger",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true
+            }
+          ],
           "roster": {
             "collector": {
-              "name": null,
+              "name": "Arvind Kumar Verma",
               "post": "District Magistrate & Collector",
               "service": "IAS",
-              "as_of": null,
-              "source": null,
-              "source_tier": null
+              "as_of": "2026",
+              "source": "https://munger.nic.in/collector-district-magistrate/",
+              "source_tier": 2,
+              "needs_pdf_upgrade": false
             },
             "sp": {
-              "name": null,
+              "name": "Syed Imran Masood",
               "post": "Superintendent of Police",
               "service": "IPS",
-              "as_of": null,
-              "source": null,
-              "source_tier": null
+              "as_of": "2026",
+              "source": "https://munger.nic.in/superintendent-of-police/",
+              "source_tier": 2,
+              "needs_pdf_upgrade": false,
+              "note": "March-2026 report names Manavjeet Singh Dhillon as incoming SP; official portal still showed Masood."
             },
             "district_judge": {
               "name": null,
@@ -6584,20 +6663,66 @@
             }
           },
           "legislature": {
-            "lok_sabha": [],
+            "lok_sabha": [
+              {
+                "constituency": "Munger",
+                "name": "Rajiv Ranjan Singh (Lalan Singh)",
+                "party": "JD(U)",
+                "term": "18th LS (2024-)",
+                "source": "https://en.wikipedia.org/wiki/Munger_(Lok_Sabha_constituency)",
+                "source_tier": 3,
+                "needs_pdf_upgrade": true
+              }
+            ],
             "assembly": []
           },
-          "plants": [],
+          "plants": [
+            {
+              "name": "ITC Cigarette Factory, Munger",
+              "sector": "Tobacco / FMCG",
+              "ownership": "Private (ITC Ltd; orig. Imperial Tobacco 1910)",
+              "capacity": "~17.4-acre campus; one of India's largest tobacco factories",
+              "employment_note": "Major local employer; tobacco is the district's leading export.",
+              "significance": "Asia's first cigarette production (1907); ITC's oldest manufacturing unit.",
+              "source": "https://en.wikipedia.org/wiki/Munger",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true
+            },
+            {
+              "name": "Jamalpur Locomotive Workshop",
+              "sector": "Railways (rolling stock)",
+              "ownership": "Government (Indian Railways)",
+              "capacity": "Asia's oldest & among largest railway workshops; 50+ acres",
+              "employment_note": "Major employer of the local population.",
+              "significance": "Founded 8 Feb 1862 by the East India Company; produces inserts, brake blocks, BOX wagons, cranes.",
+              "source": "https://en.wikipedia.org/wiki/Jamalpur,_Munger",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true
+            },
+            {
+              "name": "Munger Gun Factories (BIADA)",
+              "sector": "Small arms",
+              "ownership": "Private (licensed) + historic Ordnance",
+              "capacity": "~37 licensed gun factories across ~8 acres (BIADA land)",
+              "employment_note": "Generational craft; supplied arms to the Indian Army in WWI & 1962.",
+              "significance": "Arms-making since 1762 (Mir Qasim era); among India's oldest surviving arms units.",
+              "source": "https://en.wikipedia.org/wiki/Munger",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true
+            }
+          ],
+          "plants_note": "Munger's base is HERITAGE/colonial-era industry (private ITC + govt Railways + licensed arms), not modern central PSUs — a different economic-origin story than Begusarai. Plant figures are from encyclopaedic sources; upgrade to company/Railways reports for tier-1.",
           "departments": [],
           "ledger": [],
           "_gaps": [
-            "roster_names",
-            "lok_sabha_mps",
+            "district_judge",
             "assembly_mlas",
-            "money_flows",
-            "scheme_utilisation",
-            "plants",
-            "all figures — baseline skeleton, not yet sourced"
+            "central_scheme_flows (MGNREGS/PMAY-G to rural blocks)",
+            "itc_munger_employment_and_output",
+            "jamalpur_workshop_headcount",
+            "illegal_arms_revenue_leakage (by nature unmeasured)",
+            "district_tax_origin",
+            "kmc_style_civic_budget"
           ]
         },
         "Muzaffarpur": {

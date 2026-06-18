@@ -934,6 +934,17 @@ a:hover { border-color: var(--foreground); }
   margin-bottom: 0.2rem;
 }
 .ledger-baseline-note { font-size: 10.5px; opacity: 0.85; }
+.block-parent-ctx {
+  font-size: 10.5px;
+  line-height: 1.45;
+  color: var(--muted-foreground);
+  background: oklch(0.18 0 0);
+  border-left: 2px solid oklch(0.7 0.13 250);
+  border-radius: 3px;
+  padding: 0.4rem 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.block-parent-ctx b { color: var(--foreground); }
 .district-mode-toggle .dmt-label {
   font-family: var(--font-mono);
   font-size: 9px;

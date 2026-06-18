@@ -1083,7 +1083,25 @@
     };
     // Schemes that flow THROUGH a block (the accountability link to money).
     const schemes = ['MGNREGS (wage employment + assets)', 'PMAY-G (rural housing)', 'PM-KISAN (DBT)', '15th FC tied grants to Gram Panchayats'];
+
+    // Parent-district context: if the district is a deep (sourced) entry, surface it.
+    const parent = ledgerForDistrict(state, district);
+    const siblingCount = (BLOCKS?.states?.[state]?.districts?.[district] || []).length;
+    let parentCtx = '';
+    if (parent && parent.baseline !== true) {
+      const dm = parent.roster?.collector?.name;
+      const plantN = (parent.plants || []).length;
+      const bits = [];
+      if (dm) bits.push(`DM <b>${esc(dm)}</b> (district level)`);
+      if (plantN) bits.push(`${plantN} major plant${plantN === 1 ? '' : 's'} in the parent district`);
+      if (parent.admin_model && parent.admin_model !== 'standard') bits.push(`<b>${esc(parent.admin_model)}</b> district admin model`);
+      if (bits.length) parentCtx = `<div class="block-parent-ctx">Parent district <b>${esc(district)}</b> is deep-sourced — ${bits.join(' · ')}. ${siblingCount ? `One of ${siblingCount} ${esc(label.toLowerCase())}s.` : ''}</div>`;
+    } else if (siblingCount) {
+      parentCtx = `<div class="block-parent-ctx">One of ${siblingCount} ${esc(label.toLowerCase())}s in ${esc(district)}.</div>`;
+    }
+
     return `
+      ${parentCtx}
       <div class="india-detail-section-title">Who is responsible here</div>
       <div class="roster-list">
         ${post('Block Development Officer')}
