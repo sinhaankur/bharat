@@ -451,7 +451,7 @@
     }
     const moneyVals = [...moneyByDistrict.values()];
     // Log scale: headline flows span orders of magnitude (₹14 cr ↔ ₹2,897 cr).
-    const logMax = moneyVals.length ? Math.max(...moneyVals.map(o => Math.log10(Math.max(1, o.headline + 1)))) : 1;
+    const logMax = moneyVals.length ? Math.max(1, ...moneyVals.filter(o => o.headline != null).map(o => Math.log10(Math.max(1, o.headline + 1)))) : 1;
     const showMoney = ui.state.districtMode === 'money' && moneyVals.length > 0;
 
     districtLayer = L.geoJSON(geo, {
@@ -460,6 +460,10 @@
         if (showMoney) {
           const m = moneyByDistrict.get(dn);
           if (!m) return { className: 'india-state-path', color: 'oklch(0.985 0 0 / 0.2)', weight: 0.5, fillColor: 'oklch(0.2 0 0)', fillOpacity: 0.3 };
+          if (m.noFigure) {
+            // Data present but no public money figure (e.g. off-books civic spend).
+            return { className: 'india-state-path', color: 'oklch(0.72 0.13 250)', weight: 1.5, dashArray: '2 2', fillColor: 'oklch(0.32 0.06 250)', fillOpacity: 0.7 };
+          }
           const t = Math.log10(Math.max(1, m.headline + 1)) / Math.max(0.001, logMax);
           return {
             className: 'india-state-path',
@@ -509,9 +513,14 @@
   // Headline money figure for a district (the biggest ₹-in row in its ledger), or null.
   function districtMoneyHeadline(state, district) {
     const L = ledgerForDistrict(state, district);
-    if (!L || !L.ledger) return null;
-    const vals = L.ledger.map(r => r.money_in_cr).filter(v => typeof v === 'number');
-    if (!vals.length) return null;
+    if (!L) return null;
+    const vals = (L.ledger || []).map(r => r.money_in_cr).filter(v => typeof v === 'number');
+    if (!vals.length) {
+      // District has ledger data but no public money figure (e.g. Jamshedpur's
+      // off-municipal-books civic spend). Mark it present-but-unquantified.
+      const hasContent = (L.ledger || []).length || (L.plants || []).length || (L.system_notes || []).length;
+      return hasContent ? { headline: null, flagged: true, admin: L.admin_model, noFigure: true } : null;
+    }
     const headline = Math.max(...vals);
     // Dysfunction flag: any frozen/lapsed/zero-completion row, or a system note flagging a freeze.
     const flagged = L.ledger.some(r => {
@@ -525,10 +534,13 @@
   function updateDistrictMoneyReadout(district, state, m) {
     const money = m && typeof m === 'object' ? m.headline : m;
     const flagged = m && typeof m === 'object' ? m.flagged : false;
+    const noFigure = m && typeof m === 'object' ? m.noFigure : false;
     $ind('.readout-label').textContent = `District money · ${state}`;
     $ind('.readout-name').textContent = district;
     const valEl = $ind('.readout-value');
-    valEl.textContent = money != null ? `₹${money >= 1000 ? (money / 1000).toFixed(2) + 'k' : Math.round(money)} cr headline flow${flagged ? ' · ⚠ flagged' : ''}` : 'No ledger data yet';
+    valEl.textContent = noFigure ? 'Data present · no public money figure'
+      : money != null ? `₹${money >= 1000 ? (money / 1000).toFixed(2) + 'k' : Math.round(money)} cr headline flow${flagged ? ' · ⚠ flagged' : ''}`
+      : 'No ledger data yet';
     valEl.style.color = money != null ? 'oklch(0.82 0.16 75)' : 'var(--muted-foreground)';
     valEl.style.fontSize = '12.5px';
   }
@@ -550,6 +562,7 @@
         <span class="dmt-leg-item"><span class="dmt-chip" style="background:${seqColor(0.3)}"></span>low</span>
         <span class="dmt-leg-item"><span class="dmt-chip" style="background:${seqColor(0.95)}"></span>high ₹ in <span class="dmt-leg-note">(log scale)</span></span>
         <span class="dmt-leg-item"><span class="dmt-chip dmt-chip--flag"></span>⚠ fund freeze / non-delivery</span>
+        <span class="dmt-leg-item"><span class="dmt-chip" style="background:oklch(0.32 0.06 250);border:1.5px dashed oklch(0.72 0.13 250)"></span>data, no public ₹ figure</span>
         <span class="dmt-leg-item"><span class="dmt-chip" style="background:oklch(0.2 0 0);border:1px solid oklch(0.985 0 0 / 0.2)"></span>no data yet</span>
       </div>` : '';
     bar.innerHTML = `
@@ -773,6 +786,29 @@
       ? `<details class="ledger-gaps"><summary>${L._gaps.length} known data gaps (recorded, not estimated)</summary><ul>${L._gaps.map(g => `<li>${esc(g)}</li>`).join('')}</ul></details>`
       : '';
 
+    // Industrial plants — the district's economic base (jobs / tax origin).
+    const plants = L.plants || [];
+    const plantsHtml = plants.length ? `
+      <div class="india-detail-section-title" style="margin-top:0.8rem">Industrial base — major plants</div>
+      <div class="plants-list">
+        ${plants.map(p => `
+          <div class="plant-row">
+            <div class="plant-head">
+              <span class="plant-name">${esc(p.name)}</span>
+              <span class="plant-sector">${esc(p.sector || '')}</span>
+            </div>
+            <div class="plant-meta">
+              <span class="plant-tag">${esc(p.ownership || '')}</span>
+              ${p.capacity ? `<span class="plant-tag plant-tag--cap">${esc(p.capacity)}</span>` : ''}
+              ${p.site_acres ? `<span class="plant-tag">${p.site_acres.toLocaleString('en-IN')} acres</span>` : ''}
+              ${srcFootnote(p.source, p.source_tier)}
+            </div>
+            ${p.significance ? `<div class="plant-note">${esc(p.significance)}</div>` : ''}
+            ${p.employment_note ? `<div class="plant-note plant-note--emp">👷 ${esc(p.employment_note)}</div>` : ''}
+          </div>`).join('')}
+      </div>
+      ${L.plants_note ? `<p class="india-caveat">${esc(L.plants_note)}</p>` : ''}` : '';
+
     // Interactive charts (drawn after insertion via bindLedgerCharts).
     const hasGrant = (L.ledger || []).some(r => r.stream === 'intergovernmental_grant' && r.money_in_cr);
     const hasDepts = (L.departments || []).some(d => d.alloc_cr);
@@ -793,6 +829,7 @@
       ${chartsHtml}
       ${ledgerHtml ? `<div class="india-detail-section-title" style="margin-top:0.8rem">Ledger detail</div><div class="ledger-list">${ledgerHtml}</div>` : ''}
       ${(rosterRows || mps) ? `<div class="india-detail-section-title" style="margin-top:0.8rem">Who is responsible</div><div class="roster-list">${rosterRows}${mps}</div>` : ''}
+      ${plantsHtml}
       ${gapsHtml}
       <p class="india-caveat">Figures are PDF-cited where ⚠ is absent; ⚠ marks tier-3/4 (Wikipedia/news) sources pending upgrade to a government PDF. Salary shown is the per-post cost-to-government estimate, not a person's pay.</p>`;
   }

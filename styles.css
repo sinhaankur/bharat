@@ -881,6 +881,37 @@ a:hover { border-color: var(--foreground); }
   background: transparent;
   border: 1.5px dashed oklch(0.65 0.22 25);
 }
+
+/* Industrial plants — district economic base */
+.plants-list { display: flex; flex-direction: column; gap: 0.4rem; }
+.plant-row {
+  background: oklch(0.18 0 0);
+  border: 1px solid var(--border);
+  border-left: 2px solid oklch(0.7 0.13 250);
+  border-radius: 4px;
+  padding: 0.5rem 0.6rem;
+}
+.plant-head { display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap; }
+.plant-name { font-weight: 600; font-size: 12px; color: var(--foreground); }
+.plant-sector {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: oklch(0.72 0.13 250);
+}
+.plant-meta { display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap; margin-top: 0.3rem; }
+.plant-tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: oklch(0.22 0 0);
+  color: var(--muted-foreground);
+}
+.plant-tag--cap { background: oklch(0.3 0.08 250); color: oklch(0.82 0.1 250); }
+.plant-note { font-size: 10.5px; line-height: 1.45; color: var(--muted-foreground); margin-top: 0.3rem; }
+.plant-note--emp { color: oklch(0.75 0.12 150); }
 .district-mode-toggle .dmt-label {
   font-family: var(--font-mono);
   font-size: 9px;

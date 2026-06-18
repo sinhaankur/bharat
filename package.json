@@ -1,0 +1,24 @@
+{
+  "name": "india-fiscal-map",
+  "version": "1.0.0",
+  "description": "A single-screen interactive dashboard for **state-wise revenue, corruption, and GSDP** across India's 28 states + key UTs, FY15 → FY24.",
+  "main": "app-usa.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sinhaankur/india-fiscal-map.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/sinhaankur/india-fiscal-map/issues"
+  },
+  "homepage": "https://github.com/sinhaankur/india-fiscal-map#readme",
+  "dependencies": {
+    "puppeteer": "^25.1.0"
+  }
+}

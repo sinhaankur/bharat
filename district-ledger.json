@@ -5,7 +5,7 @@
     "rules": "PDF-cited or it's a gap. Every fact carries source + source_tier. Gaps recorded in _gaps, never guessed. Footnotes in UI point to the public record.",
     "source_tiers": {"1": "gov_pdf", "2": "gov_html (.nic.in/.gov.in)", "3": "wikipedia (discovery)", "4": "news"},
     "footnotes_render": "source_tier 4 (news) and 3 (wikipedia) are shown but visibly flagged as needing upgrade to a government PDF source.",
-    "coverage": {"districts": 2, "districts_with_money_figures": 2, "note": "Kolkata (split-admin metro): KMC grant flow TIER-1 PDF-cited (₹2,897 cr of ₹5,525 cr receipts). Birbhum (standard rural): DM/ADM/SDO roster from official birbhum.gov.in (tier-2); MGNREGS ~4-yr fund freeze (₹0 release, ₹3,038 cr+ dues) — opposite dysfunction to Kolkata. MPLADS figures tier-4 (official portal is interactive JS, timed out twice — verifiable upgrade path noted)."}
+    "coverage": {"districts": 3, "districts_with_money_figures": 2, "note": "3 districts, 3 admin models. Kolkata (split metro): KMC grant TIER-1 PDF (₹2,897 cr of ₹5,525 cr). Birbhum (standard rural): tier-2 roster; MGNREGS ~4-yr fund freeze. Purba Singhbhum/Jamshedpur (company township): no elected municipality — Tata/JUSCO + nominated Industrial Area Committee; civic spend off public books (no ₹ figure); 2 major plants (Tata Steel ~10 MTPA, Tata Motors). MPLADS tier-4 (official portal unreachable; standalone scrape_mplads.mjs provided to run off-sandbox)."}
   },
   "states": {
     "West Bengal": {
@@ -239,6 +239,99 @@
             "sp_official_portal_citation (currently tier-4 news)",
             "mplads_official_portal_figures (portal is interactive JS — timed out; tier-4 review figure used)",
             "pmay_g_flows", "treasury_establishment_cost", "vendor_companies"
+          ]
+        }
+      }
+    },
+    "Jharkhand": {
+      "entity_type": "state",
+      "heads": {
+        "governor":        {"name": null, "post": "Governor", "as_of": null, "source": null, "source_tier": null},
+        "chief_minister":  {"name": null, "post": "Chief Minister", "as_of": null, "source": null, "source_tier": null},
+        "chief_secretary": {"name": null, "post": "Chief Secretary", "as_of": null, "source": null, "source_tier": null},
+        "dgp":             {"name": null, "post": "Director General of Police", "as_of": null, "source": null, "source_tier": null},
+        "high_court":      {"name": "Jharkhand High Court", "seat": "Ranchi", "chief_justice": null, "source": null}
+      },
+      "rajya_sabha": [],
+      "districts": {
+        "Purba Singhbhum": {
+          "aka": "East Singhbhum (HQ: Jamshedpur)",
+          "admin_model": "company_township",
+          "system_notes": [
+            {
+              "note": "Jamshedpur is the only major city in India with NO democratically elected municipality. It was run as a private Tata township via the Jamshedpur Notified Area Committee (JNAC), services delivered by JUSCO (a Tata Steel subsidiary). A 1993 constitutional provision for an 'industrial township' (Art. 243Q proviso) let it avoid a municipal corporation despite the 74th Amendment. So 'who is responsible for civic money' has never had a normal municipal answer here.",
+              "kind": "structural_dysfunction",
+              "source": "https://en.wikipedia.org/wiki/Jamshedpur",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true
+            },
+            {
+              "note": "In 2025 the Jharkhand govt dissolved JNAC and formed the Jamshedpur Industrial Area Committee — a NOMINATED (not elected) body of 27: 6 state govt, 11 Tata Steel, 10 local. The East Singhbhum Deputy Commissioner is vice-chairperson; the district-in-charge minister chairs. MLA Saryu Roy called it unconstitutional for sidestepping the 74th Amendment's elected-local-body mandate. Tata holds the largest single bloc on the body governing the city.",
+              "kind": "governance_capture",
+              "source": "https://uditvani.in/english-news/jamshedpur-municipality-new-body-2025/",
+              "source_tier": 4,
+              "needs_pdf_upgrade": true
+            }
+          ],
+          "roster": {
+            "collector":          {"name": "Rajiv Ranjan", "post": "Deputy Commissioner cum District Magistrate", "service": "IAS", "as_of": "2026-04", "source": "https://jamshedpur.nic.in/deputy-commissioner-east-singhbhum-2/", "source_tier": 2, "needs_pdf_upgrade": false, "note": "Per Apr-2026 reshuffle; official portal page lagged showing predecessor Karn Satyarthi."},
+            "iac_administrator":  {"name": "Nagendra Paswan", "post": "Administrator, Jamshedpur Industrial Area Committee (Dy Development Commissioner)", "service": "State", "as_of": "2025", "source": "https://uditvani.in/english-news/jamshedpur-municipality-new-body-2025/", "source_tier": 4, "needs_pdf_upgrade": true},
+            "district_judge":     {"name": null, "post": "District & Sessions Judge", "service": "Judicial", "as_of": null, "source": null, "source_tier": null}
+          },
+          "legislature": {
+            "lok_sabha": [
+              {"constituency": "Jamshedpur", "name": null, "party": null, "term": "18th LS (2024-)", "source": null, "source_tier": null}
+            ],
+            "assembly": []
+          },
+          "plants": [
+            {
+              "name": "Tata Steel Jamshedpur (TSJ)",
+              "sector": "Steel", "ownership": "Private (Tata Steel Ltd)",
+              "capacity": "~10 MTPA crude steel", "site_acres": 2000,
+              "employment_note": "Tata Steel group ~78,000 globally; Jamshedpur plant-specific current headcount not separately published (historical ~40,000 in 1970).",
+              "significance": "Asia's first integrated steel plant (1907). India's first ResponsibleSteel-certified site. H-Blast Furnace crossed 50 MT hot metal (Jan 2025), a national first.",
+              "source": "https://www.gem.wiki/Tata_Steel_Jamshedpur_steel_plant",
+              "source_tier": 3, "needs_pdf_upgrade": true,
+              "capacity_source": "https://www.tatasteel.com/newsroom/press-releases/india/2025/tata-steel-s-blast-furnace-in-jamshedpur-achieves-historic-50-million-tonnes-production-milestone/"
+            },
+            {
+              "name": "Tata Motors Jamshedpur",
+              "sector": "Automotive (commercial vehicles)", "ownership": "Private (Tata Motors Ltd)",
+              "capacity": null, "employment_note": "Major CV manufacturing; figures pending company report.",
+              "significance": "One of Tata Motors' oldest plants; anchors the city's auto-component ecosystem.",
+              "source": "https://en.wikipedia.org/wiki/Jamshedpur", "source_tier": 3, "needs_pdf_upgrade": true
+            }
+          ],
+          "plants_note": "Jamshedpur's economic base IS a private company — the district's jobs and tax origin are dominated by the Tata group, which also governs the city. Plant-level employment/output figures are partly company-confidential; capacity figures are from Tata Steel press releases (upgrade to annual-report PDF for tier-1).",
+          "departments": [],
+          "ledger": [
+            {
+              "fy": "n/a (structural)",
+              "scheme": "Civic services (water, sanitation, roads, lighting)",
+              "stream": "company_provided",
+              "through_dept": "JUSCO (Tata Steel subsidiary) + Jamshedpur Industrial Area Committee",
+              "money_in_cr": null,
+              "money_in_basis": "Civic spend is largely off the municipal books — funded by Tata Steel/JUSCO under the lease agreement, not a public municipal budget. No KMC-style public civic budget exists to cite.",
+              "intended": "Citywide civic amenities under the 2005 Tata Steel lease-renewal agreement.",
+              "what_happened": {
+                "utilisation_pct": null, "unspent_cr": null, "lapsed": null,
+                "audit_flag": "off_municipal_books", "cag_para": null, "vendor": "JUSCO (Tata Steel subsidiary)",
+                "notes": "Because the city has no municipal corporation, there is no public civic budget to audit the way Kolkata's KMC budget can be. Non-company areas historically got poorer services than Tata-lease areas — the inequity the 2025 IAC reform claims to fix."
+              },
+              "responsible": {"primary": "iac_administrator", "secondary": ["collector"], "private": "Tata Steel / JUSCO"},
+              "source": "https://uditvani.in/english-news/jamshedpur-municipality-new-body-2025/",
+              "source_tier": 4,
+              "needs_pdf_upgrade": true,
+              "figure_gap": true
+            }
+          ],
+          "_gaps": [
+            "jamshedpur_LS_mp_name", "district_judge", "assembly_mlas",
+            "jusco_civic_spend_cr (company-provided, not a public municipal budget — hard to cite)",
+            "tata_steel_jamshedpur_plant_employment (group figure only; plant-specific not published)",
+            "central_scheme_flows_to_district (MGNREGS/PMAY rural blocks of E.Singhbhum)",
+            "mplads_jamshedpur", "district_tax_origin (Tata corp tax HQ-attributed, not district-level)"
           ]
         }
       }
