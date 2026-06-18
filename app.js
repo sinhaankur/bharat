@@ -829,10 +829,18 @@
               ${srcFootnote(p.source, p.source_tier)}
             </div>
             ${p.significance ? `<div class="plant-note">${esc(p.significance)}</div>` : ''}
+            ${p.lineage ? `<div class="plant-lineage">
+              ${p.control_type ? `<span class="plant-control plant-control--${esc(p.control_type)}">${esc(controlLabel(p.control_type))}</span>` : ''}
+              ${p.founder ? `<span class="plant-founder-by">founded by ${esc(p.founder)}</span>` : ''}
+              <span class="plant-lineage-chain">${esc(p.lineage)}</span>
+              ${srcFootnote(p.lineage_source, p.lineage_source_tier)}
+            </div>` : ''}
             ${p.employment_note ? `<div class="plant-note plant-note--emp">👷 ${esc(p.employment_note)}</div>` : ''}
           </div>`).join('')}
       </div>
-      ${L.plants_note ? `<p class="india-caveat">${esc(L.plants_note)}</p>` : ''}` : '';
+      ${L.plants_note ? `<p class="india-caveat">${esc(L.plants_note)}</p>` : ''}
+      ${plants.some(p => p.control_type === 'indian_managing_agency' || p.control_type === 'british_colonial_parent') && LEDGER?._meta?.managing_agency_note
+        ? `<p class="india-caveat plant-agency-note">📜 ${esc(LEDGER._meta.managing_agency_note)}</p>` : ''}` : '';
 
     // Interactive charts (drawn after insertion via bindLedgerCharts).
     const hasGrant = (L.ledger || []).some(r => r.stream === 'intergovernmental_grant' && r.money_in_cr);
@@ -1081,6 +1089,9 @@
     nehruvian_psu:  { label: 'Public-sector build-out', short: '1947–1991', color: 'oklch(0.7 0.16 160)' },
     liberalisation: { label: 'Post-liberalisation', short: '1991–', color: 'oklch(0.72 0.16 250)' },
   };
+  function controlLabel(ct) {
+    return (LEDGER?._meta?.control_labels || {})[ct] || ct.replace(/_/g, ' ');
+  }
   function renderHeritageTimeline(plants, district) {
     const dated = (plants || []).filter(p => typeof p.founded === 'number').sort((a, b) => a.founded - b.founded);
     if (dated.length < 2) return '';

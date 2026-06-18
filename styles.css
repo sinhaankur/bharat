@@ -947,6 +947,38 @@ a:hover { border-color: var(--foreground); }
 .heritage-sw { width: 8px; height: 8px; border-radius: 50%; flex: 0 0 8px; }
 .heritage-leg-yr { opacity: 0.6; }
 
+/* Ownership lineage / managing-agency layer */
+.plant-lineage {
+  margin-top: 0.35rem;
+  padding-top: 0.35rem;
+  border-top: 1px dashed oklch(0.985 0 0 / 0.08);
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem;
+  font-size: 10px; line-height: 1.5;
+}
+.plant-control {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.03em;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: oklch(0.26 0.05 50);
+  color: oklch(0.85 0.1 60);
+  white-space: nowrap;
+}
+.plant-control--indian_managing_agency { background: oklch(0.28 0.08 160); color: oklch(0.85 0.13 160); }
+.plant-control--british_colonial_parent,
+.plant-control--colonial_state { background: oklch(0.3 0.1 30); color: oklch(0.85 0.12 40); }
+.plant-control--pre_colonial_state { background: oklch(0.28 0.09 300); color: oklch(0.85 0.12 300); }
+.plant-control--central_psu { background: oklch(0.28 0.07 250); color: oklch(0.84 0.12 250); }
+.plant-founder-by { color: var(--foreground); }
+.plant-lineage-chain { color: var(--muted-foreground); flex-basis: 100%; }
+.plant-agency-note {
+  border-left: 2px solid oklch(0.7 0.13 50);
+  padding-left: 0.5rem !important;
+  opacity: 0.9 !important;
+  font-style: italic;
+}
+
 /* Baseline (skeleton) district state */
 .ledger-baseline {
   background: oklch(0.17 0 0);

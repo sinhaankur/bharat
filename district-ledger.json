@@ -16,7 +16,19 @@
       "note": "594 districts across 35 states/UTs. 3 hand-authored deep exemplars (Kolkata, Birbhum, Jamshedpur); the rest are honest baseline skeletons (admin-model classified, empty roster/ledger with explicit _gaps — not fabricated).",
       "deep_districts": 9,
       "baseline_districts": 585
-    }
+    },
+    "control_labels": {
+      "indian_managing_agency": "Indian managing agency",
+      "british_colonial_parent": "British colonial parent co.",
+      "colonial_state": "Colonial state",
+      "pre_colonial_state": "Pre-colonial state",
+      "central_psu": "Central public-sector (PSU)",
+      "public_private_shareholder": "Public-private shareholder",
+      "private_association": "Private association",
+      "private": "Private",
+      "state": "State / govt"
+    },
+    "managing_agency_note": "Until April 1970, the colonial 'managing agency' system let a few partners control ~3/4 of Indian industry via tiny shareholdings. The Indira Gandhi govt abolished it; post-1947 heavy industry shifted to central PSUs."
   },
   "states": {
     "West Bengal": {
@@ -1459,7 +1471,12 @@
               "capacity_source": "https://www.tatasteel.com/newsroom/press-releases/india/2025/tata-steel-s-blast-furnace-in-jamshedpur-achieves-historic-50-million-tonnes-production-milestone/",
               "founded": 1907,
               "era": "colonial",
-              "heritage_note": "Asia's first integrated steel plant; founded by Jamsetji Tata's vision, built by Dorabji Tata."
+              "heritage_note": "Asia's first integrated steel plant; founded by Jamsetji Tata's vision, built by Dorabji Tata.",
+              "founder": "Jamsetji Tata (vision) / Dorabji Tata (built)",
+              "control_type": "indian_managing_agency",
+              "lineage": "Tata Sons managing agency (est. 1887) → Tata Steel Ltd (public, post-agency reforms 1970)",
+              "lineage_source": "https://en.wikipedia.org/wiki/Jamsetji_Tata",
+              "lineage_source_tier": 3
             },
             {
               "name": "Tata Motors Jamshedpur",
@@ -1473,7 +1490,12 @@
               "needs_pdf_upgrade": true,
               "founded": 1945,
               "era": "colonial",
-              "heritage_note": "Founded as TELCO (Tata Engineering & Locomotive Co); CV manufacturing from 1954 via Daimler JV."
+              "heritage_note": "Founded as TELCO (Tata Engineering & Locomotive Co); CV manufacturing from 1954 via Daimler JV.",
+              "founder": "J. R. D. Tata (as TELCO, 1945)",
+              "control_type": "indian_managing_agency",
+              "lineage": "Tata Sons agency → Tata Engineering & Locomotive Co (TELCO) → Tata Motors Ltd (2003)",
+              "lineage_source": "https://en.wikipedia.org/wiki/Tata_Motors",
+              "lineage_source_tier": 3
             }
           ],
           "plants_note": "Jamshedpur's economic base IS a private company — the district's jobs and tax origin are dominated by the Tata group, which also governs the city. Plant-level employment/output figures are partly company-confidential; capacity figures are from Tata Steel press releases (upgrade to annual-report PDF for tier-1).",
@@ -5880,7 +5902,12 @@
               "capacity_source": "https://iocl.com/barauni-refinery",
               "founded": 1964,
               "era": "nehruvian_psu",
-              "heritage_note": "Built with Soviet/Romanian collaboration; dedicated to the nation 1965."
+              "heritage_note": "Built with Soviet/Romanian collaboration; dedicated to the nation 1965.",
+              "founder": "Indian Oil Corporation (Soviet/Romanian collab, 1964)",
+              "control_type": "central_psu",
+              "lineage": "Built 1964 with USSR/Romania aid → Indian Oil Corporation Ltd (central PSU)",
+              "lineage_source": "https://en.wikipedia.org/wiki/Barauni_Refinery",
+              "lineage_source_tier": 3
             },
             {
               "name": "Barauni Thermal Power Station (NTPC)",
@@ -5894,7 +5921,12 @@
               "needs_pdf_upgrade": true,
               "founded": 1962,
               "era": "nehruvian_psu",
-              "heritage_note": "Russian collaboration; transferred from Bihar state to NTPC in 2018."
+              "heritage_note": "Russian collaboration; transferred from Bihar state to NTPC in 2018.",
+              "founder": "Bihar State Electricity Board (Russian collab, 1962)",
+              "control_type": "central_psu",
+              "lineage": "Bihar SEB (1962, Russian collab) → transferred to NTPC Ltd (central PSU) in 2018",
+              "lineage_source": "https://en.wikipedia.org/wiki/Barauni_Thermal_Power_Station",
+              "lineage_source_tier": 3
             },
             {
               "name": "HURL Barauni Fertiliser Plant",
@@ -5909,7 +5941,12 @@
               "capacity_source": "https://www.fert.nic.in/fertilizer-projects/hindustan-urvarak-rasayan-ltd-hurl",
               "founded": 1976,
               "era": "nehruvian_psu",
-              "heritage_note": "Original HFCL plant 1976; shut 1999; revived by HURL (~₹9,512 cr), urea restarted 2022."
+              "heritage_note": "Original HFCL plant 1976; shut 1999; revived by HURL (~₹9,512 cr), urea restarted 2022.",
+              "founder": "Hindustan Fertilizer Corp (1976) → revived by HURL (2018-22)",
+              "control_type": "central_psu",
+              "lineage": "HFCL plant (1976, shut 1999) → HURL JV of NTPC/IOCL/CIL/FCIL (~₹9,512 cr revival, 2022)",
+              "lineage_source": "https://en.wikipedia.org/wiki/HURL_Barauni",
+              "lineage_source_tier": 3
             }
           ],
           "plants_note": "Begusarai's industrial base is overwhelmingly CENTRAL PSU: refinery (IOCL), power (NTPC), fertiliser (HURL JV). The 'companies in the district' are, in effect, instruments of Union fiscal policy — jobs and output here trace back to central capital, not local/state money. Capacity figures from company/PSU sources (upgrade to annual-report/gazette PDFs for tier-1).",
@@ -6704,7 +6741,12 @@
               "needs_pdf_upgrade": true,
               "founded": 1907,
               "era": "colonial",
-              "heritage_note": "Asia's first cigarette production; ITC's (then Imperial Tobacco) oldest unit."
+              "heritage_note": "Asia's first cigarette production; ITC's (then Imperial Tobacco) oldest unit.",
+              "founder": "Imperial Tobacco Co. of India (1910), subsidiary of British American Tobacco",
+              "control_type": "british_colonial_parent",
+              "lineage": "Imperial Tobacco (British, 1910) → India Tobacco Co (1970) → ITC Ltd (1974); BAT still ~29.4%",
+              "lineage_source": "https://www.itcportal.com/about-itc/profile/history-and-evolution.aspx",
+              "lineage_source_tier": 2
             },
             {
               "name": "Jamalpur Locomotive Workshop",
@@ -6718,7 +6760,12 @@
               "needs_pdf_upgrade": true,
               "founded": 1862,
               "era": "colonial",
-              "heritage_note": "Founded 8 Feb 1862 by the East India Company; Asia's oldest railway workshop."
+              "heritage_note": "Founded 8 Feb 1862 by the East India Company; Asia's oldest railway workshop.",
+              "founder": "East India Company (1862)",
+              "control_type": "colonial_state",
+              "lineage": "East India Company (1862) → Raj-era railways → Indian Railways (govt, post-1947)",
+              "lineage_source": "https://en.wikipedia.org/wiki/Jamalpur,_Munger",
+              "lineage_source_tier": 3
             },
             {
               "name": "Munger Gun Factories (BIADA)",
@@ -6732,7 +6779,12 @@
               "needs_pdf_upgrade": true,
               "founded": 1762,
               "era": "colonial",
-              "heritage_note": "Arms-making since 1762 (Mir Qasim era); among India's oldest surviving arms units."
+              "heritage_note": "Arms-making since 1762 (Mir Qasim era); among India's oldest surviving arms units.",
+              "founder": "Nawab Mir Qasim of Bengal (1762)",
+              "control_type": "pre_colonial_state",
+              "lineage": "Nawabi arsenal (1762) → colonial ordnance → today licensed private units on BIADA land",
+              "lineage_source": "https://en.wikipedia.org/wiki/Munger",
+              "lineage_source_tier": 3
             }
           ],
           "plants_note": "Munger's base is HERITAGE/colonial-era industry (private ITC + govt Railways + licensed arms), not modern central PSUs — a different economic-origin story than Begusarai. Plant figures are from encyclopaedic sources; upgrade to company/Railways reports for tier-1.",
@@ -13789,7 +13841,12 @@
               "needs_pdf_upgrade": true,
               "founded": 1972,
               "era": "nehruvian_psu",
-              "heritage_note": "Incorporated 29 Apr 1972 as a GoI company; first phase 1982; built INS Vikrant."
+              "heritage_note": "Incorporated 29 Apr 1972 as a GoI company; first phase 1982; built INS Vikrant.",
+              "founder": "Government of India (incorporated 1972)",
+              "control_type": "central_psu",
+              "lineage": "GoI company (1972) under Ministry of Ports, Shipping & Waterways; listed PSU (IPO 2017)",
+              "lineage_source": "https://en.wikipedia.org/wiki/Cochin_Shipyard",
+              "lineage_source_tier": 3
             },
             {
               "name": "BPCL Kochi Refinery",
@@ -13803,7 +13860,12 @@
               "needs_pdf_upgrade": true,
               "founded": 1966,
               "era": "nehruvian_psu",
-              "heritage_note": "Inaugurated 23 Sep 1966 (as Cochin Refineries, Phillips Petroleum JV); now BPCL."
+              "heritage_note": "Inaugurated 23 Sep 1966 (as Cochin Refineries, Phillips Petroleum JV); now BPCL.",
+              "founder": "Cochin Refineries Ltd (Phillips Petroleum JV, 1966)",
+              "control_type": "central_psu",
+              "lineage": "Cochin Refineries (US JV, 1966) → nationalised → Kochi Refineries → merged into BPCL (central PSU)",
+              "lineage_source": "https://en.wikipedia.org/wiki/Kochi_Refineries",
+              "lineage_source_tier": 3
             },
             {
               "name": "Cochin International Airport (CIAL)",
@@ -13817,7 +13879,12 @@
               "needs_pdf_upgrade": true,
               "founded": 1999,
               "era": "liberalisation",
-              "heritage_note": "First Indian airport on a public-private-shareholder model; world's first fully solar-powered airport."
+              "heritage_note": "First Indian airport on a public-private-shareholder model; world's first fully solar-powered airport.",
+              "founder": "V. J. Kurian IAS (promoter) / CIAL (1999)",
+              "control_type": "public_private_shareholder",
+              "lineage": "CIAL — first PPP airport in India; Kerala govt + NRIs/public as shareholders (1999)",
+              "lineage_source": "https://en.wikipedia.org/wiki/Cochin_International_Airport",
+              "lineage_source_tier": 3
             }
           ],
           "plants_note": "Ernakulam/Kochi has a DIVERSIFIED base — central PSUs (Cochin Shipyard, BPCL refinery), IT parks, port, and the CIAL public-shareholder airport. Unlike single-industry districts, no one employer dominates. Figures from encyclopaedic/PSU sources; upgrade to annual reports for tier-1.",
@@ -17453,7 +17520,12 @@
               "needs_pdf_upgrade": true,
               "founded": 1875,
               "era": "colonial",
-              "heritage_note": "Founded 9 Jul 1875 by Premchand Roychand as 'The Native Share & Stock Brokers' Association' — Asia's oldest stock exchange."
+              "heritage_note": "Founded 9 Jul 1875 by Premchand Roychand as 'The Native Share & Stock Brokers' Association' — Asia's oldest stock exchange.",
+              "founder": "Premchand Roychand (1875)",
+              "control_type": "private_association",
+              "lineage": "'Native Share & Stock Brokers' Association' (1875) → BSE Ltd (demutualised 2005, listed 2017)",
+              "lineage_source": "https://en.wikipedia.org/wiki/Bombay_Stock_Exchange",
+              "lineage_source_tier": 3
             },
             {
               "name": "Bollywood / media & entertainment",
@@ -17467,7 +17539,12 @@
               "needs_pdf_upgrade": true,
               "founded": 1913,
               "era": "colonial",
-              "heritage_note": "Indian cinema dates to Dadasaheb Phalke's Raja Harishchandra (1913); Bombay became its hub."
+              "heritage_note": "Indian cinema dates to Dadasaheb Phalke's Raja Harishchandra (1913); Bombay became its hub.",
+              "founder": "Dadasaheb Phalke (Indian cinema, 1913)",
+              "control_type": "private",
+              "lineage": "Studio era → independent producers → corporatised studios + OTT (post-2000)",
+              "lineage_source": "https://en.wikipedia.org/wiki/Cinema_of_India",
+              "lineage_source_tier": 3
             }
           ],
           "plants_note": "Mumbai's 'economic base' is services (finance, media, ports, real estate), not factories — so much of its tax origin is corporate/financial and HQ-attributed. This is why district-level tax-origin is hard to pin to geography.",
@@ -24672,7 +24749,12 @@
               "needs_pdf_upgrade": true,
               "founded": 1948,
               "era": "nehruvian_psu",
-              "heritage_note": "Anchored by Ashok Leyland (1948) & later Hyundai (1996); the 'Detroit of India' belt."
+              "heritage_note": "Anchored by Ashok Leyland (1948) & later Hyundai (1996); the 'Detroit of India' belt.",
+              "founder": "Ashok Leyland (1948) anchored the cluster",
+              "control_type": "private",
+              "lineage": "Ashok Leyland (1948, Hinduja) → MNC entrants (Hyundai 1996, Ford, etc.) — the 'Detroit of India'",
+              "lineage_source": "https://en.wikipedia.org/wiki/Economy_of_Chennai",
+              "lineage_source_tier": 3
             },
             {
               "name": "Chennai Port + IT corridor (OMR)",
@@ -24686,7 +24768,12 @@
               "needs_pdf_upgrade": true,
               "founded": 1881,
               "era": "colonial",
-              "heritage_note": "Chennai (Madras) Port commissioned 1881 under the Raj; the OMR IT corridor is post-2000."
+              "heritage_note": "Chennai (Madras) Port commissioned 1881 under the Raj; the OMR IT corridor is post-2000.",
+              "founder": "British Raj (Madras Port, 1881)",
+              "control_type": "colonial_state",
+              "lineage": "Madras Port (Raj, 1881) → Chennai Port Authority (Union govt); OMR IT corridor is private, post-2000",
+              "lineage_source": "https://en.wikipedia.org/wiki/Chennai_Port",
+              "lineage_source_tier": 3
             }
           ],
           "plants_note": "Chennai pairs heavy manufacturing (autos) with services (IT, port) — a more balanced industrial+services base than Mumbai's finance-heavy one.",
@@ -28501,7 +28588,12 @@
               "needs_pdf_upgrade": true,
               "founded": 1775,
               "era": "colonial",
-              "heritage_note": "Lucknow became the Awadh Nawabi capital ~1775; UP state capital post-1947."
+              "heritage_note": "Lucknow became the Awadh Nawabi capital ~1775; UP state capital post-1947.",
+              "founder": "Nawabs of Awadh (capital ~1775)",
+              "control_type": "state",
+              "lineage": "Awadh Nawabi capital (~1775) → British annexation (1856) → UP state capital (post-1947)",
+              "lineage_source": "https://en.wikipedia.org/wiki/Lucknow",
+              "lineage_source_tier": 3
             },
             {
               "name": "HAL Lucknow + defence/aerospace",
@@ -28515,7 +28607,12 @@
               "needs_pdf_upgrade": true,
               "founded": 1970,
               "era": "nehruvian_psu",
-              "heritage_note": "HAL Accessories Division Lucknow established ~1970; part of the UP defence corridor today."
+              "heritage_note": "HAL Accessories Division Lucknow established ~1970; part of the UP defence corridor today.",
+              "founder": "Hindustan Aeronautics Ltd (Accessories Div, ~1970)",
+              "control_type": "central_psu",
+              "lineage": "HAL (central defence PSU) Accessories Division, Lucknow (~1970); part of UP defence corridor",
+              "lineage_source": "https://en.wikipedia.org/wiki/Hindustan_Aeronautics_Limited",
+              "lineage_source_tier": 3
             }
           ],
           "plants_note": "Lucknow's base is government + services + some defence PSU (HAL) — a capital-city economy rather than an industrial one.",

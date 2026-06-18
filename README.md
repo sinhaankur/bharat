@@ -109,6 +109,16 @@ colonial-era heritage (Munger's 1762 gun trade, Jamshedpur's 1907 Tata Steel,
 Bombay's 1875 stock exchange) → the Nehruvian public-sector build-out (Barauni
 refinery 1964, Cochin Shipyard 1972) → post-1991 PPP (Cochin airport 1999).
 
+Each plant also carries an **ownership lineage** — founder + controlling entity
+through the eras — capturing the colonial **managing-agency system** (which
+controlled ~¾ of Indian industry until the Indira Gandhi govt abolished it in
+April 1970) and the post-1947 shift to **central PSUs**. Control types:
+`indian_managing_agency` (Tata Sons), `british_colonial_parent` (ITC ← Imperial
+Tobacco/BAT), `colonial_state` (EIC railways), `pre_colonial_state` (Munger's
+Nawabi arsenal), `central_psu`, `public_private_shareholder` (CIAL), etc. Munger
+alone spans three regimes of control in one district: Nawabi (1762) → East India
+Company (1862) → British-owned Imperial Tobacco (1907).
+
 > **Caveat:** the district ledger is a young, opinionated dataset. Named officials
 > rotate; most districts are baseline, not deep; only a handful have real money
 > figures. It is built to be *honest about what it doesn't know* rather than to
