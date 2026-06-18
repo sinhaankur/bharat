@@ -47,6 +47,61 @@ Headline numbers (Finance Commission horizontal shares) are exact. Per-state per
 
 Full source list and caveats: [references.html](references.html).
 
+## District money-flow accountability ledger
+
+Beyond the state choropleth, the dashboard drills into a **per-district money-flow
+ledger**: for each district, *who is responsible*, *what money flows in*, *what
+happened to it*, and *how the system functions or dysfunctions* — plus the
+**industrial base** (the plants that anchor jobs and tax).
+
+Data lives in [`district-ledger.json`](district-ledger.json); per-post
+cost-to-government in [`pay-scales.json`](pay-scales.json); the model is
+documented in [`officials-schema.md`](officials-schema.md).
+
+### Source tiers — *PDF-cited or it's a gap*
+
+Every named figure carries a `source` and a `source_tier`. A number with no public
+source stays blank and is recorded as an explicit gap — **never guessed**. In the
+UI, a ⚠ marks tier 3–4 figures awaiting upgrade to a government PDF.
+
+| Tier | Source | Examples |
+|---|---|---|
+| **1** | government PDF | Pay Commission, gazette, CAG, Finance Commission, PIB |
+| **2** | government HTML | official `.nic.in` / `.gov.in` district & corporation portals |
+| **3** | Wikipedia | discovery only — flagged for upgrade |
+| **4** | news | corroborated reporting — flagged for upgrade |
+
+### Deep vs baseline
+
+- **Deep districts** (6 so far) are fully researched — money flows, named
+  officials, and industrial base. They surface as cards on the landing screen and
+  light up on the **Money-flow** map view.
+- **Baseline districts** (the remaining ~588) are honest **skeletons**: real
+  structure (admin-model classification, the chain of command, the schemes that
+  flow through), with every unsourced figure listed as an explicit gap. Generated
+  by [`gen_baseline_ledger.py`](gen_baseline_ledger.py); a deep-dive simply
+  *promotes* one (see `promote_*.py`).
+
+The current deep exemplars span four governance models on purpose:
+
+| District | State | Model | Money figure | Notable |
+|---|---|---|---|---|
+| **Kolkata** | West Bengal | split-admin metro | ₹2,897 cr KMC grant (T1) | No conventional DM; 52% grant-funded |
+| **Ernakulam** | Kerala | standard | ₹225 cr KMC grant (T2) | ~50% grant; healthy own-source; full taluk drill |
+| **Birbhum** | West Bengal | standard rural | ₹0 (MGNREGS frozen) | 4-yr central fund freeze; ₹3,038 cr+ dues |
+| **Jamshedpur** | Jharkhand | company township | off-books (no public ₹) | India's only major city with no elected municipality |
+| **Begusarai** | Bihar | standard | central-PSU base | Barauni Refinery / NTPC / HURL — Union money made physical |
+| **Munger** | Bihar | standard | heritage industry | ITC 1907 (Asia's 1st cigarette factory), 1762 gun trade |
+
+Coverage also extends one level down to **2,184 sub-districts/blocks** (BDO +
+Tehsildar chain, the schemes that disburse there), again as honest skeletons.
+
+> **Caveat:** the district ledger is a young, opinionated dataset. Named officials
+> rotate; most districts are baseline, not deep; only a handful have real money
+> figures. It is built to be *honest about what it doesn't know* rather than to
+> look complete. `scrape_mplads.mjs` is a standalone scraper (the MPLADS portal is
+> JS-only and unreachable from CI) for upgrading MP fund figures off-line.
+
 ## Running locally
 
 The page fetches three JSON/GeoJSON files, so it needs a static server (not `file://`):

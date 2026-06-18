@@ -1189,9 +1189,105 @@
       <div class="india-detail-empty">
         <div class="eyebrow">Active view: ${esc(view.shortLabel)} · ${esc(DATA._meta.yearLabels[ui.state.yearIdx])}</div>
         <p class="india-detail-empty-body">Click any state for its 10-year history, governance footprint (IAS · employees · bribe-paid %), departments split (back-office vs public-facing), and structural pros / cons.</p>
+        ${renderFeaturedDistricts()}
         <div id="india-summary" class="india-summary-inline"></div>
       </div>`;
+    bindFeaturedDistricts(detail);
     renderSummary();
+  }
+
+  // The deep-sourced districts, surfaced so visitors find them without hunting.
+  function deepDistricts() {
+    const out = [];
+    if (!LEDGER?.states) return out;
+    for (const [state, sd] of Object.entries(LEDGER.states)) {
+      for (const [district, d] of Object.entries(sd.districts || {})) {
+        if (d.baseline === true) continue;
+        const money = (d.ledger || []).map(r => r.money_in_cr).filter(v => typeof v === 'number');
+        out.push({
+          state, district,
+          admin: d.admin_model,
+          headlineCr: money.length ? Math.max(...money) : null,
+          plants: (d.plants || []).length,
+          tagline: (d.system_notes && d.system_notes[0]) ? shortTag(d.admin_model) : ''
+        });
+      }
+    }
+    return out;
+  }
+  function shortTag(admin) {
+    return ({ split: 'split-admin metro', standard: 'standard model',
+      company_township: 'company township' })[admin] || admin || '';
+  }
+
+  function renderFeaturedDistricts() {
+    const deep = deepDistricts();
+    if (!deep.length) return '';
+    const card = d => {
+      const money = d.headlineCr != null
+        ? `₹${d.headlineCr >= 1000 ? (d.headlineCr / 1000).toFixed(1) + 'k' : Math.round(d.headlineCr)} cr`
+        : 'no public ₹';
+      return `
+        <button class="feat-card" data-state="${esc(d.state)}" data-district="${esc(d.district)}">
+          <span class="feat-name">${esc(d.district)}</span>
+          <span class="feat-sub">${esc(d.state)} · ${esc(shortTag(d.admin))}</span>
+          <span class="feat-stats">${money}${d.plants ? ` · ${d.plants} plant${d.plants === 1 ? '' : 's'}` : ''}</span>
+        </button>`;
+    };
+    return `
+      <div class="feat-block">
+        <div class="feat-head">Deep-sourced districts <span class="feat-count">${deep.length}</span></div>
+        <div class="feat-note">Fully researched, PDF-cited exemplars — the rest of the map is honest baseline structure. Click to explore:</div>
+        <div class="feat-grid">${deep.map(card).join('')}</div>
+        <button class="feat-method" id="feat-method-btn">How this is sourced (tiers &amp; gaps) →</button>
+      </div>`;
+  }
+
+  function bindFeaturedDistricts(detail) {
+    detail.querySelectorAll('.feat-card').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const { state, district } = btn.dataset;
+        // Select state (so the state context + back buttons are correct), drill, then pick the district.
+        selectState(state, true);
+        await drillIntoDistricts(state);
+        selectDistrict(district, state);
+      });
+    });
+    detail.querySelector('#feat-method-btn')?.addEventListener('click', showMethodology);
+  }
+
+  function showMethodology() {
+    const m = ledgerMeta();
+    const overlay = document.createElement('div');
+    overlay.className = 'method-overlay';
+    overlay.innerHTML = `
+      <div class="method-box">
+        <button class="method-close" aria-label="Close">×</button>
+        <h2>How this data is sourced</h2>
+        <p>This dashboard's goal is to show <b>the flow of money to each district, who's responsible, and how the system functions or dysfunctions</b> — grounded in public records, never invented.</p>
+        <h3>Source tiers</h3>
+        <p>Every named figure carries a source and a tier. Lower is more authoritative; ⚠ in the panel marks tier&nbsp;3–4 awaiting upgrade to a government PDF.</p>
+        <ul class="method-tiers">
+          <li><b>Tier 1 — gov PDF</b> · Pay Commission, gazette, CAG, Finance Commission, PIB. Most authoritative.</li>
+          <li><b>Tier 2 — gov HTML</b> · official <code>.nic.in</code> / <code>.gov.in</code> district & corporation portals.</li>
+          <li><b>Tier 3 — Wikipedia</b> · discovery only; flagged for upgrade.</li>
+          <li><b>Tier 4 — news</b> · corroborated reporting; flagged for upgrade.</li>
+        </ul>
+        <h3>Deep vs baseline</h3>
+        <p><b>${m.deep} deep districts</b> are fully researched with money flows, officials, and industrial base. The other <b>${m.baseline}</b> are honest <b>baseline skeletons</b> — real structure (admin model, the chain of command, the schemes that flow) with every unsourced figure listed as an explicit gap. <b>Nothing is fabricated.</b></p>
+        <p class="method-rule">Rule: <b>PDF-cited or it's a gap.</b> A number with no public source stays blank and is recorded as missing, rather than guessed.</p>
+        <p class="method-foot">Coverage: ${m.total} districts across ${m.states} states/UTs · ${m.withMoney} with real money figures · 2,184 sub-districts/blocks. Open data on <a href="https://github.com/sinhaankur/india-fiscal-map" target="_blank" rel="noopener">GitHub</a>.</p>
+      </div>`;
+    overlay.addEventListener('click', e => { if (e.target === overlay || e.target.classList.contains('method-close')) overlay.remove(); });
+    document.body.appendChild(overlay);
+  }
+  function ledgerMeta() {
+    const c = LEDGER?._meta?.coverage || {};
+    return {
+      total: c.districts || 0, deep: c.deep_districts || 0,
+      baseline: c.baseline_districts || 0, states: LEDGER?.states ? Object.keys(LEDGER.states).length : 0,
+      withMoney: c.districts_with_money_figures || 0
+    };
   }
 
   function deselectState() {
