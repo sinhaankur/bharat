@@ -82,11 +82,16 @@ UI, a ⚠ marks tier 3–4 figures awaiting upgrade to a government PDF.
   by [`gen_baseline_ledger.py`](gen_baseline_ledger.py); a deep-dive simply
   *promotes* one (see `promote_*.py`).
 
-The current deep exemplars span several governance models on purpose:
+The deep exemplars (13 across 11 states, spanning every region incl. the
+Northeast) cover many governance and economic models on purpose:
 
 | District | State | Model | Money figure | Notable |
 |---|---|---|---|---|
 | **Mumbai** | Maharashtra | split-admin metro | ₹74,427 cr BMC budget (T1) | India's largest civic budget — ~25× Kolkata; no elected body 2022–26 |
+| **Surat** | Gujarat | split-admin metro | ₹10,004 cr SMC budget | World's diamond-polishing capital + ~40% of India's man-made fabric (MSME) |
+| **Jaipur** | Rajasthan | standard (capital) | ₹6,946 cr JMC budget | 1727 planned city; gems + UNESCO heritage tourism |
+| **Ludhiana** | Punjab | standard | ~₹900 cr MC budget | Diversified MSME hub — ~50% of India's bicycles, hosiery |
+| **Guwahati** | Assam | standard | (off public books) | Gateway to NE India; tea (GTAC) + India's 1st PSU refinery (1962) |
 | **Chennai** | Tamil Nadu | split-admin metro | ₹5,146 cr GCC revenue (T2) | Auto + port + IT; property tax >₹2,000 cr |
 | **Lucknow** | Uttar Pradesh | standard (capital) | ₹4,305 cr LMC budget | Own revenue just ₹295 cr — heavily grant-funded |
 | **Kolkata** | West Bengal | split-admin metro | ₹2,897 cr KMC grant (T1) | No conventional DM; 52% grant-funded |

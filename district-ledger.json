@@ -12,10 +12,10 @@
     "footnotes_render": "source_tier 4 (news) and 3 (wikipedia) are shown but visibly flagged as needing upgrade to a government PDF source.",
     "coverage": {
       "districts": 594,
-      "districts_with_money_figures": 6,
+      "districts_with_money_figures": 9,
       "note": "594 districts across 35 states/UTs. 3 hand-authored deep exemplars (Kolkata, Birbhum, Jamshedpur); the rest are honest baseline skeletons (admin-model classified, empty roster/ledger with explicit _gaps — not fabricated).",
-      "deep_districts": 9,
-      "baseline_districts": 585
+      "deep_districts": 13,
+      "baseline_districts": 581
     },
     "control_labels": {
       "indian_managing_agency": "Indian managing agency",
@@ -5084,25 +5084,45 @@
           ]
         },
         "Kamrup": {
+          "aka": "Kamrup Metropolitan (HQ: Guwahati)",
           "admin_model": "standard",
-          "baseline": true,
-          "system_notes": [],
+          "system_notes": [
+            {
+              "note": "Guwahati (Kamrup Metro) is the GATEWAY TO NORTHEAST INDIA — the regional hub for industry, commerce, education and the primary airport for the NE's eight states. Its economy rests on tea (Assam grows >half of India's tea), oil (the Assam-Arakan basin holds ~¼ of India's oil reserves; the Guwahati Refinery is a central PSU), and a fast-growing service/hospitality sector. First NE district in this dataset.",
+              "kind": "structural",
+              "source": "https://en.wikipedia.org/wiki/Guwahati",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true
+            }
+          ],
           "roster": {
             "collector": {
-              "name": null,
-              "post": "District Magistrate & Collector",
+              "name": "Swapnil Paul",
+              "post": "District Commissioner (DC), Kamrup Metropolitan",
               "service": "IAS",
-              "as_of": null,
-              "source": null,
-              "source_tier": null
+              "as_of": "2026-01",
+              "source": "https://kamrupmetro.assam.gov.in/district-commissioner-profile",
+              "source_tier": 2,
+              "needs_pdf_upgrade": false,
+              "note": "2018 batch; took charge 5 Jan 2026, ex-DC Tinsukia."
             },
-            "sp": {
-              "name": null,
-              "post": "Superintendent of Police",
-              "service": "IPS",
-              "as_of": null,
-              "source": null,
-              "source_tier": null
+            "municipal_commissioner": {
+              "name": "Megha Nidhi Dahal",
+              "post": "Commissioner, Guwahati Municipal Corporation",
+              "service": "IAS",
+              "as_of": "2026",
+              "source": "https://gmc.assam.gov.in/",
+              "source_tier": 2,
+              "needs_pdf_upgrade": false
+            },
+            "mayor": {
+              "name": "Mrigen Sarania",
+              "post": "Mayor, GMC",
+              "service": "Political",
+              "as_of": "2026",
+              "source": "https://en.wikipedia.org/wiki/Guwahati_Municipal_Corporation",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true
             },
             "district_judge": {
               "name": null,
@@ -5114,20 +5134,98 @@
             }
           },
           "legislature": {
-            "lok_sabha": [],
+            "lok_sabha": [
+              {
+                "constituency": "Guwahati",
+                "name": null,
+                "party": null,
+                "term": "18th LS (2024-)",
+                "source": null,
+                "source_tier": null
+              }
+            ],
             "assembly": []
           },
-          "plants": [],
+          "plants": [
+            {
+              "name": "Guwahati Tea Auction Centre (GTAC)",
+              "sector": "Tea trade",
+              "ownership": "Industry body (govt-supported)",
+              "capacity": "2nd-largest CTC tea auction in the world",
+              "employment_note": null,
+              "significance": "Established 25 Sep 1970; world's 2nd-largest CTC tea auction centre. Assam tea = ~17% of state revenue; ~25 lakh direct jobs statewide.",
+              "source": "https://en.wikipedia.org/wiki/Guwahati_Tea_Auction_Centre",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true,
+              "founded": 1970,
+              "era": "nehruvian_psu",
+              "heritage_note": "Established 25 Sep 1970; world's 2nd-largest CTC tea auction centre. Assam tea = ~17% of state revenue; ~25 lakh direct jobs statewide.",
+              "founder": "Indian Tea Association / govt (1970)",
+              "control_type": "central_psu",
+              "lineage": "Set up 1970 adjacent to the State Secretariat; anchors Assam's tea trade",
+              "lineage_source": "https://en.wikipedia.org/wiki/Guwahati_Tea_Auction_Centre",
+              "lineage_source_tier": 3
+            },
+            {
+              "name": "Guwahati Refinery (IOCL)",
+              "sector": "Petroleum refining",
+              "ownership": "Central PSU (Indian Oil Corporation)",
+              "capacity": "India's first PSU refinery (1962)",
+              "employment_note": null,
+              "significance": "India's first public-sector refinery (commissioned 1962); processes Upper Assam crude; meets NE region's fuel needs.",
+              "source": "https://en.wikipedia.org/wiki/Guwahati_Refinery",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true,
+              "founded": 1962,
+              "era": "nehruvian_psu",
+              "heritage_note": "India's first public-sector refinery (commissioned 1962); processes Upper Assam crude; meets NE region's fuel needs.",
+              "founder": "Indian Oil Corporation (1962)",
+              "control_type": "central_psu",
+              "lineage": "India's FIRST public-sector refinery (1962) → Indian Oil Corporation Ltd",
+              "lineage_source": "https://en.wikipedia.org/wiki/Guwahati_Refinery",
+              "lineage_source_tier": 3
+            }
+          ],
+          "plants_note": "Guwahati pairs a resource economy (tea, Assam crude oil via the IOCL refinery — India's FIRST PSU refinery, 1962) with a fast-growing gateway service sector. Strategic NE hub more than a manufacturing centre.",
           "departments": [],
-          "ledger": [],
+          "ledger": [
+            {
+              "fy": "n/a",
+              "scheme": "Guwahati Municipal Corporation civic budget",
+              "stream": "intergovernmental_grant",
+              "through_dept": "Guwahati Municipal Corporation (formed 1971)",
+              "money_in_cr": null,
+              "money_in_basis": "GMC governs 216.79 km² / 31-60 wards; exact 2026 budget figure not surfaced in public reporting (pending gmc.assam.gov.in).",
+              "intended": "Urban civic services (water, sanitation, roads, health, infrastructure).",
+              "what_happened": {
+                "utilisation_pct": null,
+                "unspent_cr": null,
+                "lapsed": null,
+                "audit_flag": null,
+                "cag_para": null,
+                "vendor": null,
+                "total_receipt_cr": null,
+                "total_expenditure_cr": null,
+                "own_source_revenue_cr": null,
+                "notes": "GMC's exact budget figure isn't publicly surfaced yet — recorded as a gap. The district's fiscal weight is more about tea/oil revenue and central NE-development transfers than a large civic budget."
+              },
+              "responsible": {
+                "primary": "municipal_commissioner",
+                "secondary": []
+              },
+              "source": "https://gmc.assam.gov.in/",
+              "source_tier": 2,
+              "needs_pdf_upgrade": false,
+              "figure_gap": false
+            }
+          ],
           "_gaps": [
-            "roster_names",
-            "lok_sabha_mps",
+            "gmc_exact_budget_figure (not in public reporting; pending official portal)",
+            "LS_mp_name",
+            "district_judge",
             "assembly_mlas",
-            "money_flows",
-            "scheme_utilisation",
-            "plants",
-            "all figures — baseline skeleton, not yet sourced"
+            "ne_special_central_transfers",
+            "tea_oil_revenue_to_district"
           ]
         },
         "Karbi Anglong": {
@@ -9888,29 +9986,38 @@
           ]
         },
         "Surat": {
-          "admin_model": "standard",
-          "baseline": true,
-          "system_notes": [],
+          "admin_model": "split",
+          "system_notes": [
+            {
+              "note": "Surat is the world's diamond-cutting capital — ~90% of the world's natural diamonds and ~25% of lab-grown diamonds are polished here, across ~6,000 units (70% MSMEs). It's also 'Manchester of India': ~65,000 textile factories, ~40% of national man-made fabric, ~90% of synthetic fabric. An MSME-driven export economy uniquely exposed to global shocks (e.g. demonetisation hit it hard).",
+              "kind": "structural",
+              "source": "https://en.wikipedia.org/wiki/Surat",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true
+            }
+          ],
           "roster": {
             "collector": {
-              "name": null,
-              "post": "District Magistrate & Collector",
+              "name": "Tejas Parmar",
+              "post": "District Collector & Magistrate",
               "service": "IAS",
-              "as_of": null,
-              "source": null,
-              "source_tier": null
+              "as_of": "2026-05",
+              "source": "https://surat.nic.in/whoswho/",
+              "source_tier": 2,
+              "needs_pdf_upgrade": false
             },
-            "sp": {
-              "name": null,
-              "post": "Superintendent of Police",
-              "service": "IPS",
-              "as_of": null,
-              "source": null,
-              "source_tier": null
+            "municipal_commissioner": {
+              "name": "Shalini Agarwal",
+              "post": "Municipal Commissioner, SMC",
+              "service": "IAS",
+              "as_of": "2025",
+              "source": "https://www.suratmunicipal.gov.in/",
+              "source_tier": 2,
+              "needs_pdf_upgrade": false
             },
             "district_judge": {
               "name": null,
-              "post": "District & Sessions Judge",
+              "post": "Principal District & Sessions Judge",
               "service": "Judicial",
               "as_of": null,
               "source": null,
@@ -9918,20 +10025,98 @@
             }
           },
           "legislature": {
-            "lok_sabha": [],
+            "lok_sabha": [
+              {
+                "constituency": "Surat",
+                "name": null,
+                "party": null,
+                "term": "18th LS (2024-)",
+                "source": null,
+                "source_tier": null
+              }
+            ],
             "assembly": []
           },
-          "plants": [],
+          "plants": [
+            {
+              "name": "Surat diamond-cutting cluster",
+              "sector": "Diamonds (cutting & polishing)",
+              "ownership": "Private MSME (~6,000 units)",
+              "capacity": "~90% of world's natural diamonds; ~6,000 units",
+              "employment_note": null,
+              "significance": "Polishes ~90% of the world's natural diamonds; Surat Diamond Bourse (2023) is among the world's largest office buildings.",
+              "source": "https://en.wikipedia.org/wiki/Surat",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true,
+              "founded": 1960,
+              "era": "nehruvian_psu",
+              "heritage_note": "Polishes ~90% of the world's natural diamonds; Surat Diamond Bourse (2023) is among the world's largest office buildings.",
+              "founder": "Migrant Kathiawadi entrepreneurs (mid-20th c.)",
+              "control_type": "private",
+              "lineage": "Family MSME units → organised via Surat Diamond Bourse (2023)",
+              "lineage_source": "https://en.wikipedia.org/wiki/Surat",
+              "lineage_source_tier": 3
+            },
+            {
+              "name": "Surat textile cluster",
+              "sector": "Textiles (man-made fabric)",
+              "ownership": "Private (~65,000 factories)",
+              "capacity": "~40% of India's man-made fabric",
+              "employment_note": null,
+              "significance": "'Silk City' / 'Manchester of India'; ~40% of India's man-made fabric, ~90% of synthetic fabric.",
+              "source": "https://en.wikipedia.org/wiki/Surat",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true,
+              "founded": 1900,
+              "era": "colonial",
+              "heritage_note": "'Silk City' / 'Manchester of India'; ~40% of India's man-made fabric, ~90% of synthetic fabric.",
+              "founder": "Colonial-era trade port; powerloom boom post-1960s",
+              "control_type": "private",
+              "lineage": "Colonial trading port → powerloom/synthetic-fabric MSME hub",
+              "lineage_source": "https://en.wikipedia.org/wiki/Surat",
+              "lineage_source_tier": 3
+            }
+          ],
+          "plants_note": "Surat's base is overwhelmingly PRIVATE MSME (diamonds + textiles) — millions of jobs, export-driven, little PSU presence. A bottom-up entrepreneurial economy, the opposite of Begusarai's top-down PSU base.",
           "departments": [],
-          "ledger": [],
+          "ledger": [
+            {
+              "fy": "2025-26 (approved)",
+              "scheme": "Surat Municipal Corporation civic budget",
+              "stream": "intergovernmental_grant",
+              "through_dept": "Surat Municipal Corporation",
+              "money_in_cr": 10004.0,
+              "money_in_basis": "SMC Standing Committee approved ₹10,004 cr (draft ₹9,603 cr); revenue target ₹5,500 cr; no tax hike.",
+              "intended": "Urban civic services (water, sanitation, roads, health, infrastructure).",
+              "what_happened": {
+                "utilisation_pct": null,
+                "unspent_cr": null,
+                "lapsed": null,
+                "audit_flag": null,
+                "cag_para": null,
+                "vendor": null,
+                "total_receipt_cr": 10004.0,
+                "total_expenditure_cr": null,
+                "own_source_revenue_cr": null,
+                "notes": "₹10,004 cr — among India's largest civic budgets, larger than Chennai's. ₹4,562 cr for development; ₹130 cr for bridges ('City of Bridges'). Funds a fast-growing MSME megacity."
+              },
+              "responsible": {
+                "primary": "municipal_commissioner",
+                "secondary": []
+              },
+              "source": "https://deshgujarat.com/2025/03/21/rs-10004-crore-budget-of-smc-gets-standing-committee-approval/",
+              "source_tier": 4,
+              "needs_pdf_upgrade": true,
+              "figure_gap": false
+            }
+          ],
           "_gaps": [
-            "roster_names",
-            "lok_sabha_mps",
+            "surat_LS_mp_name",
+            "district_judge",
             "assembly_mlas",
-            "money_flows",
-            "scheme_utilisation",
-            "plants",
-            "all figures — baseline skeleton, not yet sourced"
+            "grant_vs_own_split_of_SMC_budget",
+            "central_scheme_flows",
+            "diamond_textile_employment_exact"
           ]
         },
         "Surendranagar": {
@@ -22438,21 +22623,30 @@
         },
         "Ludhiana": {
           "admin_model": "standard",
-          "baseline": true,
-          "system_notes": [],
+          "system_notes": [
+            {
+              "note": "Ludhiana is the 'Manchester of India' for a different reason than Surat — a diversified MSME manufacturing powerhouse: >1.5 lakh registered MSMEs, ~50% of India's bicycles, dominant in woollen hosiery/knitwear, plus auto-parts, hand tools, machine tools. A multi-cluster, risk-diversified industrial economy built bottom-up — Punjab's largest city & industrial hub.",
+              "kind": "structural",
+              "source": "https://en.wikipedia.org/wiki/Economy_of_Ludhiana",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true
+            }
+          ],
           "roster": {
             "collector": {
-              "name": null,
-              "post": "District Magistrate & Collector",
+              "name": "Himanshu Jain",
+              "post": "Deputy Commissioner cum District Magistrate",
               "service": "IAS",
-              "as_of": null,
-              "source": null,
-              "source_tier": null
+              "as_of": "2026",
+              "source": "https://ludhiana.nic.in/whoswho/deputy-commissioner-ludhiana/",
+              "source_tier": 2,
+              "needs_pdf_upgrade": false,
+              "note": "2017 batch; ex-DC Rupnagar, ex-Addl Principal Secy to CM."
             },
-            "sp": {
+            "municipal_commissioner": {
               "name": null,
-              "post": "Superintendent of Police",
-              "service": "IPS",
+              "post": "Commissioner, Municipal Corporation Ludhiana",
+              "service": "IAS",
               "as_of": null,
               "source": null,
               "source_tier": null
@@ -22467,20 +22661,80 @@
             }
           },
           "legislature": {
-            "lok_sabha": [],
+            "lok_sabha": [
+              {
+                "constituency": "Ludhiana",
+                "name": null,
+                "party": null,
+                "term": "18th LS (2024-)",
+                "source": null,
+                "source_tier": null
+              }
+            ],
             "assembly": []
           },
-          "plants": [],
+          "plants": [
+            {
+              "name": "Ludhiana bicycle & hosiery cluster",
+              "sector": "Manufacturing (MSME)",
+              "ownership": "Private (>1.5 lakh MSMEs)",
+              "capacity": "~50% of India's bicycles; >1.5 lakh MSMEs",
+              "employment_note": null,
+              "significance": "~50% of India's bicycles + dominant woollen hosiery/knitwear; plus auto-parts, hand tools, machine tools.",
+              "source": "https://en.wikipedia.org/wiki/Economy_of_Ludhiana",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true,
+              "founded": 1950,
+              "era": "nehruvian_psu",
+              "heritage_note": "~50% of India's bicycles + dominant woollen hosiery/knitwear; plus auto-parts, hand tools, machine tools.",
+              "founder": "Post-Partition Punjabi entrepreneurs",
+              "control_type": "private",
+              "lineage": "Post-1947 refugee enterprise → multi-cluster MSME hub (Hero Cycles etc.)",
+              "lineage_source": "https://en.wikipedia.org/wiki/Economy_of_Ludhiana",
+              "lineage_source_tier": 3
+            }
+          ],
+          "plants_note": "Ludhiana is a textbook DIVERSIFIED MSME economy — bicycles, hosiery, auto-parts, tools evolved together, so no single sector dominates (a naturally hedged risk profile). Like Surat, bottom-up and private, not PSU.",
           "departments": [],
-          "ledger": [],
+          "ledger": [
+            {
+              "fy": "recent",
+              "scheme": "Municipal Corporation Ludhiana civic budget",
+              "stream": "intergovernmental_grant",
+              "through_dept": "Municipal Corporation Ludhiana",
+              "money_in_cr": 900.0,
+              "money_in_basis": "MC Ludhiana budget has crossed ~₹900 cr (was ₹50 cr in 1970) — figure approximate, exact year-budget pending official portal.",
+              "intended": "Urban civic services (water, sanitation, roads, health, infrastructure).",
+              "what_happened": {
+                "utilisation_pct": null,
+                "unspent_cr": null,
+                "lapsed": null,
+                "audit_flag": null,
+                "cag_para": null,
+                "vendor": null,
+                "total_receipt_cr": 900.0,
+                "total_expenditure_cr": null,
+                "own_source_revenue_cr": null,
+                "notes": "~₹900 cr civic budget for Punjab's largest industrial city — modest relative to its MSME output, a common ULB under-resourcing pattern. (Approximate; awaiting exact SMC budget doc.)"
+              },
+              "responsible": {
+                "primary": "collector",
+                "secondary": []
+              },
+              "source": "https://ludhiana.nic.in/departments/state-govt/municipal-corporation/",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true,
+              "figure_gap": false
+            }
+          ],
           "_gaps": [
-            "roster_names",
-            "lok_sabha_mps",
+            "exact_MC_budget_year_and_figure",
+            "mc_commissioner_name",
+            "LS_mp_name",
+            "district_judge",
             "assembly_mlas",
-            "money_flows",
-            "scheme_utilisation",
-            "plants",
-            "all figures — baseline skeleton, not yet sourced"
+            "central_scheme_flows",
+            "msme_employment_exact"
           ]
         },
         "Mansa": {
@@ -23607,24 +23861,35 @@
         },
         "Jaipur": {
           "admin_model": "standard",
-          "baseline": true,
-          "system_notes": [],
+          "system_notes": [
+            {
+              "note": "Jaipur is Rajasthan's capital and a gems & tourism economy. Rajasthan does ~17.5% of India's gems & jewellery exports, ~90% of meenakari and ~60% of kundan exports; Jaipur processes 300+ gemstone varieties. District GDP ~₹192,668 cr (~US$20bn). Tourism is a major pillar — the 2026-27 state budget built a tourism push (Special Tourism Zones, heritage conservation).",
+              "kind": "structural",
+              "source": "https://en.wikipedia.org/wiki/Jaipur",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true
+            }
+          ],
           "roster": {
             "collector": {
-              "name": null,
-              "post": "District Magistrate & Collector",
+              "name": "Sandesh Nayak",
+              "post": "District Collector & Magistrate, Jaipur",
               "service": "IAS",
-              "as_of": null,
-              "source": null,
-              "source_tier": null
+              "as_of": "2026-04",
+              "source": "https://en.wikipedia.org/wiki/Jaipur_district",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true,
+              "note": "Apr-2026 reshuffle; replaced Dr J.K. Soni (moved to CMO)."
             },
-            "sp": {
-              "name": null,
-              "post": "Superintendent of Police",
-              "service": "IPS",
-              "as_of": null,
-              "source": null,
-              "source_tier": null
+            "municipal_commissioner": {
+              "name": "Om Prakash Kasera",
+              "post": "Commissioner, Jaipur Municipal Corporation",
+              "service": "IAS",
+              "as_of": "2026",
+              "source": "https://en.wikipedia.org/wiki/Jaipur_Municipal_Corporation",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true,
+              "note": "JMC Greater + Heritage merged by state govt in 2025."
             },
             "district_judge": {
               "name": null,
@@ -23636,20 +23901,98 @@
             }
           },
           "legislature": {
-            "lok_sabha": [],
+            "lok_sabha": [
+              {
+                "constituency": "Jaipur",
+                "name": null,
+                "party": null,
+                "term": "18th LS (2024-)",
+                "source": null,
+                "source_tier": null
+              }
+            ],
             "assembly": []
           },
-          "plants": [],
+          "plants": [
+            {
+              "name": "Jaipur gems & jewellery cluster",
+              "sector": "Gems & jewellery",
+              "ownership": "Private (~112 factories in state)",
+              "capacity": "~17.5% of India's gems & jewellery exports",
+              "employment_note": null,
+              "significance": "Founded with the planned city (1727); world hub for coloured-gemstone cutting; 300+ gemstone varieties; meenakari/kundan crafts.",
+              "source": "https://en.wikipedia.org/wiki/Jaipur",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true,
+              "founded": 1727,
+              "era": "pre_colonial",
+              "heritage_note": "Founded with the planned city (1727); world hub for coloured-gemstone cutting; 300+ gemstone varieties; meenakari/kundan crafts.",
+              "founder": "Maharaja Sawai Jai Singh II (planned city, 1727)",
+              "control_type": "pre_colonial_state",
+              "lineage": "Royal craft workshops (1727) → modern gem-export cluster; planned 'Gem Bourse' (~1 lakh jobs)",
+              "lineage_source": "https://en.wikipedia.org/wiki/Jaipur",
+              "lineage_source_tier": 3
+            },
+            {
+              "name": "Jaipur heritage tourism",
+              "sector": "Tourism / hospitality",
+              "ownership": "Mixed (private + state heritage)",
+              "capacity": "UNESCO World Heritage City (2019)",
+              "employment_note": null,
+              "significance": "Amber Fort, City Palace, Hawa Mahal; the 'Pink City' is a UNESCO World Heritage city (2019) and a tourism mainstay.",
+              "source": "https://en.wikipedia.org/wiki/Jaipur",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true,
+              "founded": 1727,
+              "era": "pre_colonial",
+              "heritage_note": "Amber Fort, City Palace, Hawa Mahal; the 'Pink City' is a UNESCO World Heritage city (2019) and a tourism mainstay.",
+              "founder": "Sawai Jai Singh II (1727)",
+              "control_type": "state",
+              "lineage": "Princely heritage (1727) → UNESCO World Heritage City (2019) → state tourism economy",
+              "lineage_source": "https://en.wikipedia.org/wiki/Jaipur",
+              "lineage_source_tier": 3
+            }
+          ],
+          "plants_note": "Jaipur's base is gems + tourism — craft-and-heritage industries rooted in the 1727 planned royal city, now a major export + services economy. District GDP ~₹192,668 cr.",
           "departments": [],
-          "ledger": [],
+          "ledger": [
+            {
+              "fy": "recent",
+              "scheme": "Jaipur Municipal Corporation civic budget",
+              "stream": "intergovernmental_grant",
+              "through_dept": "Jaipur Municipal Corporation (Greater + Heritage, merged 2025)",
+              "money_in_cr": 6945.6,
+              "money_in_basis": "Jaipur city budget ~₹6,945.60 cr (per encyclopaedic figure); JMC Greater & Heritage merged by the state in 2025.",
+              "intended": "Urban civic services (water, sanitation, roads, health, infrastructure).",
+              "what_happened": {
+                "utilisation_pct": null,
+                "unspent_cr": null,
+                "lapsed": null,
+                "audit_flag": null,
+                "cag_para": null,
+                "vendor": null,
+                "total_receipt_cr": 6945.6,
+                "total_expenditure_cr": null,
+                "own_source_revenue_cr": null,
+                "notes": "~₹6,946 cr civic budget for a city with ~₹192,668 cr district GDP. JMC was split into Greater + Heritage, then re-merged in 2025 — a governance-structure churn."
+              },
+              "responsible": {
+                "primary": "municipal_commissioner",
+                "secondary": []
+              },
+              "source": "https://en.wikipedia.org/wiki/Jaipur",
+              "source_tier": 3,
+              "needs_pdf_upgrade": true,
+              "figure_gap": false
+            }
+          ],
           "_gaps": [
-            "roster_names",
-            "lok_sabha_mps",
+            "exact_JMC_budget_source (encyclopaedic figure; need official doc)",
+            "LS_mp_name",
+            "district_judge",
             "assembly_mlas",
-            "money_flows",
-            "scheme_utilisation",
-            "plants",
-            "all figures — baseline skeleton, not yet sourced"
+            "central_scheme_flows",
+            "gems_tourism_employment"
           ]
         },
         "Jaisalmer": {
