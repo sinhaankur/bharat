@@ -11,3 +11,5 @@ package-lock.json
 # moderation-pending. Not committed (goes stale; curated events live in
 # fiscal-events.json instead).
 news-feed.json
+# Curator's local export — feed into apply_curation.py, not committed.
+curation-export.json

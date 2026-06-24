@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Curate — news moderation &amp; anchoring (local tool)</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .cu-wrap { max-width: 980px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; }
+    .cu-head h1 { margin: 0.3rem 0 0.4rem; font-size: clamp(1.5rem, 3vw, 2.1rem); }
+    .cu-head p { color: var(--muted-foreground); font-size: 0.9rem; line-height: 1.55; max-width: 72ch; }
+    .cu-warn { background: oklch(0.2 0.05 60 / 0.4); border: 1px solid oklch(0.7 0.15 70 / 0.4); border-left: 3px solid oklch(0.78 0.16 70); border-radius: var(--radius-sm); padding: 0.7rem 0.9rem; margin: 0.9rem 0; font-size: 0.82rem; color: var(--foreground); line-height: 1.5; }
+
+    .cu-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin: 1rem 0; position: sticky; top: 0; background: oklch(0.145 0 0 / 0.95); padding: 0.6rem 0; z-index: 5; border-bottom: 1px solid var(--border); }
+    .cu-bar select, .cu-bar input { background: oklch(0.18 0 0); color: var(--foreground); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 0.4rem 0.6rem; font-family: var(--font-mono); font-size: 11px; }
+    .cu-bar input[type=search] { flex: 1; min-width: 160px; }
+    .cu-stat { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); margin-left: auto; }
+    .btn { font-family: var(--font-mono); font-size: 11px; padding: 0.45rem 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border-strong); background: transparent; color: var(--foreground); cursor: pointer; }
+    .btn:hover { border-color: var(--foreground); }
+    .btn-go { background: var(--warm); color: oklch(0.18 0 0); border-color: transparent; font-weight: 600; }
+
+    .item { border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 0.9rem 1rem; margin-bottom: 0.8rem; background: oklch(0.165 0 0); }
+    .item.is-approved { border-left: 3px solid oklch(0.70 0.15 162); }
+    .item.is-rejected { border-left: 3px solid oklch(0.6 0.04 250); opacity: 0.55; }
+    .item.is-pending  { border-left: 3px solid oklch(0.78 0.16 70); }
+    .item-head { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: baseline; }
+    .item-headline { font-weight: 600; font-size: 0.95rem; flex: 1; min-width: 200px; }
+    .item-headline a { color: var(--foreground); text-decoration: none; }
+    .item-headline a:hover { color: oklch(0.82 0.15 78); }
+    .chip { font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.04em; text-transform: uppercase; padding: 1px 7px; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
+    .chip-lean { color: oklch(0.80 0.13 50); } .chip-lang { color: oklch(0.78 0.10 230); } .chip-auto { color: oklch(0.80 0.14 60); } .chip-none { color: var(--muted-foreground); }
+    .item-snip { font-size: 0.8rem; color: var(--muted-foreground); line-height: 1.5; margin: 0.4rem 0 0.6rem; }
+    .item-anchor { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; }
+    .item-anchor label { font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); text-transform: uppercase; letter-spacing: 0.05em; }
+    .item-anchor select, .item-anchor input { background: oklch(0.2 0 0); color: var(--foreground); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 0.3rem 0.5rem; font-size: 11px; }
+    .item-actions { display: flex; gap: 0.4rem; margin-top: 0.6rem; }
+    .btn-approve.on { background: oklch(0.70 0.15 162); color: oklch(0.15 0 0); border-color: transparent; }
+    .btn-reject.on  { background: oklch(0.6 0.04 250); color: oklch(0.15 0 0); border-color: transparent; }
+    .cu-empty { color: var(--muted-foreground); font-size: 0.9rem; padding: 2rem 0; text-align: center; }
+    .drop { border: 1px dashed var(--border-strong); border-radius: var(--radius); padding: 1rem; text-align: center; color: var(--muted-foreground); font-size: 0.85rem; margin: 1rem 0; }
+  </style>
+</head>
+<body>
+
+  <nav id="nav">
+    <div class="brand"><span class="brand-dot"></span> FISCAL MAP <span style="font-family:var(--font-mono);font-size:10px;color:oklch(0.78 0.16 70)">· curator</span></div>
+    <div class="nav-links"><a href="timeline.html">← Timeline</a><a href="index.html">Map</a></div>
+  </nav>
+
+  <main class="cu-wrap">
+    <header class="cu-head">
+      <div class="eyebrow">Local moderation &amp; anchoring tool — not for the public site</div>
+      <h1 class="display">Curate the feed</h1>
+      <p>Review aggregated news, confirm which district/scheme each item belongs to, link it to a
+      fund story so it strengthens that event's coverage bar, then approve or reject. Decisions are
+      saved in your browser; <strong>Export</strong> when done and run <code>apply_curation.py</code>
+      to write the approved, anchored set into the site.</p>
+      <div class="cu-warn">⚠ Run this locally (<code>python3 -m http.server</code> then open this page). It needs
+      <code>news-feed.json</code> (generated by <code>ingest_news.py</code>), which is gitignored and not on the public site.
+      Nothing here writes to the server — it can only export a file you commit.</div>
+    </header>
+
+    <div id="loadzone"></div>
+
+    <div class="cu-bar" id="bar" hidden>
+      <select id="f-show">
+        <option value="pending">Pending</option>
+        <option value="anchored">Auto-anchored only</option>
+        <option value="approved">Approved</option>
+        <option value="rejected">Rejected</option>
+        <option value="all">All</option>
+      </select>
+      <input type="search" id="f-q" placeholder="search headline / outlet…" />
+      <button class="btn btn-go" id="export">⤓ Export curated JSON</button>
+      <span class="cu-stat" id="stat"></span>
+    </div>
+
+    <div id="list"><p class="cu-empty">Load <code>news-feed.json</code> to begin.</p></div>
+  </main>
+
+  <script>
+    const LS_KEY = "fiscalmap_curation_v1";
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    let NEWS = [], EVENTS = [], CHAINS = [], SCHEMES = [], DISTRICTS = [];
+    let DEC = JSON.parse(localStorage.getItem(LS_KEY) || "{}"); // id -> {moderation, scheme_ref, geo, fiscal_event_ids}
+
+    // Try to auto-load the local files; if blocked (file://), offer a drop/upload.
+    Promise.all([
+      fetch("news-feed.json").then(r => r.ok ? r.json() : Promise.reject()),
+      fetch("fiscal-events.json").then(r => r.json()),
+      fetch("district-ledger.json").then(r => r.json()),
+    ]).then(([nf, ev, led]) => boot(nf, ev, led))
+      .catch(() => showUpload());
+
+    function showUpload() {
+      document.getElementById("loadzone").innerHTML = `
+        <div class="drop">Couldn't auto-load. Serve the folder (<code>python3 -m http.server</code>) and open via http://, or
+        <label class="btn" style="display:inline-block;cursor:pointer">choose news-feed.json<input id="up" type="file" accept="application/json" hidden></label></div>`;
+      document.getElementById("up").addEventListener("change", async e => {
+        const nf = JSON.parse(await e.target.files[0].text());
+        const [ev, led] = await Promise.all([fetch("fiscal-events.json").then(r=>r.json()), fetch("district-ledger.json").then(r=>r.json())]);
+        boot(nf, ev, led);
+      });
+    }
+
+    function boot(nf, ev, led) {
+      NEWS = nf.news_items || [];
+      EVENTS = ev.fiscal_events || [];
+      CHAINS = ev.story_chains || [];
+      const reg = led?._meta?.scheme_registry || {};
+      SCHEMES = Object.keys(reg);
+      DISTRICTS = [];
+      for (const [sn, s] of Object.entries(led?.states || {})) for (const dn of Object.keys(s.districts||{})) DISTRICTS.push(`${dn} | ${sn}`);
+      DISTRICTS.sort();
+      // seed decisions from any existing item state
+      NEWS.forEach(n => { if (!DEC[n.id]) DEC[n.id] = { moderation: n.moderation || "pending", scheme_ref: n.scheme_ref, geo: n.geo || {}, fiscal_event_ids: n.fiscal_event_ids || [] }; });
+      document.getElementById("loadzone").innerHTML = "";
+      document.getElementById("bar").hidden = false;
+      ["f-show","f-q"].forEach(id => document.getElementById(id).addEventListener("input", render));
+      document.getElementById("export").addEventListener("click", exportJSON);
+      render();
+    }
+
+    function save() { localStorage.setItem(LS_KEY, JSON.stringify(DEC)); }
+
+    function setDec(id, patch) { DEC[id] = { ...DEC[id], ...patch }; save(); render(); }
+
+    function eventOptions(sel) {
+      return `<option value="">— link to event —</option>` + EVENTS.map(e =>
+        `<option value="${esc(e.id)}" ${sel?.includes(e.id)?"selected":""}>${esc(e.title.slice(0,50))} (${esc(e.stage)})</option>`).join("");
+    }
+
+    function render() {
+      const show = document.getElementById("f-show").value;
+      const q = document.getElementById("f-q").value.toLowerCase();
+      let items = NEWS.filter(n => {
+        const d = DEC[n.id];
+        if (show === "pending"  && d.moderation !== "pending") return false;
+        if (show === "approved" && d.moderation !== "approved") return false;
+        if (show === "rejected" && d.moderation !== "rejected") return false;
+        if (show === "anchored" && n.anchor_confidence !== "auto_suggested") return false;
+        if (q && !(`${n.headline} ${n.outlet}`.toLowerCase().includes(q))) return false;
+        return true;
+      });
+      // prioritise auto-anchored in pending view
+      items.sort((a,b) => (b.anchor_confidence==="auto_suggested") - (a.anchor_confidence==="auto_suggested"));
+
+      const counts = NEWS.reduce((a,n)=>{a[DEC[n.id].moderation]=(a[DEC[n.id].moderation]||0)+1;return a;},{});
+      document.getElementById("stat").textContent =
+        `${NEWS.length} items · ${counts.approved||0} approved · ${counts.rejected||0} rejected · ${counts.pending||0} pending`;
+
+      const list = document.getElementById("list");
+      if (!items.length) { list.innerHTML = `<p class="cu-empty">Nothing in this view.</p>`; return; }
+      list.innerHTML = items.slice(0, 200).map(n => {
+        const d = DEC[n.id];
+        const distVal = d.geo?.district ? `${d.geo.district} | ${d.geo.state||""}` : "";
+        return `
+        <div class="item is-${d.moderation}">
+          <div class="item-head">
+            <div class="item-headline"><a href="${esc(n.url)}" target="_blank" rel="noopener">${esc(n.headline)}</a></div>
+            <span class="chip chip-lean">${esc(n.outlet||"")} · ${esc(n.outlet_lean||"unknown")}</span>
+            <span class="chip chip-lang">${esc(n.language||"en")}</span>
+            <span class="chip ${n.anchor_confidence==="auto_suggested"?"chip-auto":"chip-none"}">${esc(n.anchor_confidence)}</span>
+          </div>
+          ${n.snippet ? `<div class="item-snip">${esc(n.snippet)}</div>` : ""}
+          <div class="item-anchor">
+            <label>scheme</label>
+            <select data-id="${n.id}" data-k="scheme">
+              <option value="">—</option>
+              ${SCHEMES.map(s=>`<option ${d.scheme_ref===s?"selected":""}>${esc(s)}</option>`).join("")}
+            </select>
+            <label>district</label>
+            <input list="districts" data-id="${n.id}" data-k="district" value="${esc(distVal)}" placeholder="District | State" size="22">
+            <label>corroborates</label>
+            <select data-id="${n.id}" data-k="event">${eventOptions(d.fiscal_event_ids)}</select>
+          </div>
+          <div class="item-actions">
+            <button class="btn btn-approve ${d.moderation==="approved"?"on":""}" data-id="${n.id}" data-act="approve">✓ Approve</button>
+            <button class="btn btn-reject ${d.moderation==="rejected"?"on":""}" data-id="${n.id}" data-act="reject">✕ Reject</button>
+          </div>
+        </div>`;
+      }).join("") + `<datalist id="districts">${DISTRICTS.map(d=>`<option value="${esc(d)}">`).join("")}</datalist>`;
+
+      list.querySelectorAll("[data-act]").forEach(b => b.addEventListener("click", () => {
+        const id = b.dataset.id;
+        setDec(id, { moderation: b.dataset.act === "approve" ? "approved" : "rejected" });
+      }));
+      list.querySelectorAll("select[data-k], input[data-k]").forEach(el => el.addEventListener("change", () => {
+        const id = el.dataset.id, k = el.dataset.k;
+        if (k === "scheme") setDec(id, { scheme_ref: el.value || null });
+        else if (k === "district") {
+          const [dist, st] = el.value.split("|").map(x=>x.trim());
+          setDec(id, { geo: { ...(DEC[id].geo||{}), district: dist||null, state: st||null } });
+        } else if (k === "event") setDec(id, { fiscal_event_ids: el.value ? [el.value] : [] });
+      }));
+    }
+
+    function exportJSON() {
+      const out = {
+        _meta: { purpose: "Curator export — feed into apply_curation.py", exported_at: new Date().toISOString(), tool: "curate.html" },
+        decisions: NEWS.map(n => ({
+          id: n.id, url: n.url, headline: n.headline, outlet: n.outlet, outlet_lean: n.outlet_lean,
+          lean_source: n.lean_source, outlet_type: n.outlet_type, language: n.language, snippet: n.snippet,
+          published_at: n.published_at,
+          moderation: DEC[n.id].moderation, scheme_ref: DEC[n.id].scheme_ref, geo: DEC[n.id].geo,
+          fiscal_event_ids: DEC[n.id].fiscal_event_ids || [],
+        })).filter(d => d.moderation !== "pending"),
+      };
+      const blob = new Blob([JSON.stringify(out, null, 2)], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob); a.download = "curation-export.json"; a.click();
+    }
+  </script>
+</body>
+</html>

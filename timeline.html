@@ -107,7 +107,7 @@
         <span class="conf conf-alleged">alleged</span>. Amounts show only when sourced; otherwise
         an honest <span class="ev-gap">figure gap</span>. News items are aggregated link-and-snippet
         only, attributed, and shown only after moderation — see <a href="about.html" style="color:oklch(0.74 0.16 75)">methodology</a>.
-        Data lives in <code>fiscal-events.json</code>; the aggregation pipeline is <code>ingest_news.py</code> + <code>feeds.json</code>.
+        Data lives in <code>fiscal-events.json</code>; the pipeline is <code>ingest_news.py</code> → <code>curate.html</code> → <code>apply_curation.py</code> → <code>approved-news.json</code>.
       </p>
     </div>
   </main>
@@ -129,7 +129,7 @@
 
     Promise.all([
       fetch("fiscal-events.json").then(r => r.json()),
-      fetch("news-feed.json").then(r => r.ok ? r.json() : { news_items: [] }).catch(() => ({ news_items: [] })),
+      fetch("approved-news.json").then(r => r.ok ? r.json() : { news_items: [] }).catch(() => ({ news_items: [] })),
     ]).then(([events, news]) => {
       DOC = events;
       (news.news_items || []).forEach(n => { NEWS[n.id] = n; });

@@ -1,0 +1,9 @@
+{
+  "_meta": {
+    "purpose": "Human-approved, anchored news items — the only news the public timeline loads. Produced by apply_curation.py from a curate.html export. Empty until the curator approves real items; the pipeline (ingest_news.py -> curate.html -> apply_curation.py) is verified working.",
+    "generated_at": null,
+    "count": 0,
+    "safety": "Link + snippet only; attributed; lean carries lean_source; all items human-approved."
+  },
+  "news_items": []
+}

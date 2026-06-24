@@ -3,8 +3,23 @@
     "purpose": "Fund-lifecycle events on a timeline, anchored to the district ledger, grouped into story chains. The atomic unit of the news/timeline layer. See news-timeline-schema.md.",
     "as_of": "2026-06-24",
     "rules": "Same sourcing discipline as the ledger: every event carries a source + tier and a confidence (documented = gov source / reported = news only / alleged). amount_cr stays null unless PDF-cited (figure_gap). No event is fabricated; seeds are real, ledger-anchored stories.",
-    "stage_order": ["sanction", "release", "delay", "implementation", "shortfall", "audit_flag", "cag_para", "investigation", "action", "outcome"],
-    "confidence_vocab": ["documented", "reported", "alleged"],
+    "stage_order": [
+      "sanction",
+      "release",
+      "delay",
+      "implementation",
+      "shortfall",
+      "audit_flag",
+      "cag_para",
+      "investigation",
+      "action",
+      "outcome"
+    ],
+    "confidence_vocab": [
+      "documented",
+      "reported",
+      "alleged"
+    ],
     "coverage": "2 seed story chains (Birbhum MGNREGS freeze; Kolkata KMC grant dependency). Built to be extended by ingest_news.py + human anchoring.",
     "scheme_ref_note": "scheme_ref resolves against district-ledger.json _meta.scheme_registry / scheme_aliases. official_ref resolves against the district roster role keys + _meta.authority_map."
   },
@@ -12,7 +27,10 @@
     {
       "id": "sc_birbhum_mgnregs_freeze",
       "title": "Birbhum's MGNREGS money: frozen at the top for four years",
-      "geo": { "state": "West Bengal", "district": "Birbhum" },
+      "geo": {
+        "state": "West Bengal",
+        "district": "Birbhum"
+      },
       "scheme_ref": "MGNREGS",
       "status": "resolved",
       "event_ids": [
@@ -28,10 +46,15 @@
     {
       "id": "sc_kolkata_kmc_grant",
       "title": "Kolkata's civic money: over half flows down as grant",
-      "geo": { "state": "West Bengal", "district": "Kolkata" },
+      "geo": {
+        "state": "West Bengal",
+        "district": "Kolkata"
+      },
       "scheme_ref": "_ULB_CIVIC_BUDGET",
       "status": "open",
-      "event_ids": ["fe_kmc_grant_be_2025"],
+      "event_ids": [
+        "fe_kmc_grant_be_2025"
+      ],
       "started_at": "2025-04-01",
       "last_event_at": "2025-04-01",
       "one_line": "KMC's BE 2025-26 shows ₹2,897 cr of ₹5,525 cr receipts are Central+State grant — 52% grant-dependent, budget in deficit."
@@ -45,14 +68,22 @@
       "stage": "delay",
       "title": "Centre freezes MGNREGS fund release to West Bengal (Sec 27)",
       "summary": "The Union stopped MGNREGS fund release to West Bengal from 9 March 2022 under Section 27 of the MGNREGA Act, citing non-compliance/corruption. Every MGNREGS-dependent district, including Birbhum, was cut off from wages at source.",
-      "geo": { "state": "West Bengal", "district": "Birbhum" },
+      "geo": {
+        "state": "West Bengal",
+        "district": "Birbhum"
+      },
       "scheme_ref": "MGNREGS",
       "official_ref": "collector",
       "ledger_row_ref": null,
       "amount_cr": null,
       "chain_id": "sc_birbhum_mgnregs_freeze",
       "chain_seq": 1,
-      "primary_source": { "type": "news", "title": "MGNREGS in West Bengal — why it was halted", "url": "https://vajiramandravi.com/current-affairs/mgnregs-in-west-bengal-why-it-was-halted-and-how-it-could-restart/", "source_tier": 4 },
+      "primary_source": {
+        "type": "news",
+        "title": "MGNREGS in West Bengal — why it was halted",
+        "url": "https://vajiramandravi.com/current-affairs/mgnregs-in-west-bengal-why-it-was-halted-and-how-it-could-restart/",
+        "source_tier": 4
+      },
       "corroborating_news": [],
       "confidence": "reported",
       "figure_gap": true,
@@ -65,14 +96,22 @@
       "stage": "shortfall",
       "title": "Pending MGNREGS dues to WB reach ₹3,038 cr (highest of any state)",
       "summary": "Per the Centre's figure in the Rajya Sabha (2025), pending MGNREGS dues to West Bengal stood at ₹3,038 cr — the highest of any state. The state claims ₹18,000 cr across MGNREGS + PMAY-G. Rural districts like Birbhum bore the brunt: assets unbuilt, migration.",
-      "geo": { "state": "West Bengal", "district": "Birbhum" },
+      "geo": {
+        "state": "West Bengal",
+        "district": "Birbhum"
+      },
       "scheme_ref": "MGNREGS",
       "official_ref": "collector",
       "ledger_row_ref": null,
       "amount_cr": 3038,
       "chain_id": "sc_birbhum_mgnregs_freeze",
       "chain_seq": 2,
-      "primary_source": { "type": "news", "title": "Centre owes ₹3,000 crore MGNREGA dues to Bengal (Rajya Sabha)", "url": "https://www.business-standard.com/india-news/centre-owes-3-000-crore-mgnrega-dues-to-bengal-govt-in-rajya-sabha-125080101525_1.html", "source_tier": 4 },
+      "primary_source": {
+        "type": "news",
+        "title": "Centre owes ₹3,000 crore MGNREGA dues to Bengal (Rajya Sabha)",
+        "url": "https://www.business-standard.com/india-news/centre-owes-3-000-crore-mgnrega-dues-to-bengal-govt-in-rajya-sabha-125080101525_1.html",
+        "source_tier": 4
+      },
       "corroborating_news": [],
       "confidence": "reported",
       "figure_gap": false,
@@ -86,14 +125,22 @@
       "stage": "action",
       "title": "Supreme Court intervention pushes MGNREGS restart",
       "summary": "After roughly four years of frozen funds, Supreme Court intervention paved the way for MGNREGS to restart in West Bengal.",
-      "geo": { "state": "West Bengal", "district": "Birbhum" },
+      "geo": {
+        "state": "West Bengal",
+        "district": "Birbhum"
+      },
       "scheme_ref": "MGNREGS",
       "official_ref": "collector",
       "ledger_row_ref": null,
       "amount_cr": null,
       "chain_id": "sc_birbhum_mgnregs_freeze",
       "chain_seq": 3,
-      "primary_source": { "type": "news", "title": "MGNREGS in West Bengal — how it could restart", "url": "https://vajiramandravi.com/current-affairs/mgnregs-in-west-bengal-why-it-was-halted-and-how-it-could-restart/", "source_tier": 4 },
+      "primary_source": {
+        "type": "news",
+        "title": "MGNREGS in West Bengal — how it could restart",
+        "url": "https://vajiramandravi.com/current-affairs/mgnregs-in-west-bengal-why-it-was-halted-and-how-it-could-restart/",
+        "source_tier": 4
+      },
       "corroborating_news": [],
       "confidence": "reported",
       "figure_gap": true,
@@ -106,14 +153,22 @@
       "stage": "outcome",
       "title": "MGNREGS work resumes in West Bengal",
       "summary": "MGNREGS work resumed in West Bengal on 1 June 2026 after the near-four-year freeze, restoring the rural job-guarantee channel to districts like Birbhum.",
-      "geo": { "state": "West Bengal", "district": "Birbhum" },
+      "geo": {
+        "state": "West Bengal",
+        "district": "Birbhum"
+      },
       "scheme_ref": "MGNREGS",
       "official_ref": "collector",
       "ledger_row_ref": null,
       "amount_cr": null,
       "chain_id": "sc_birbhum_mgnregs_freeze",
       "chain_seq": 4,
-      "primary_source": { "type": "news", "title": "MGNREGS in West Bengal — restart", "url": "https://vajiramandravi.com/current-affairs/mgnregs-in-west-bengal-why-it-was-halted-and-how-it-could-restart/", "source_tier": 4 },
+      "primary_source": {
+        "type": "news",
+        "title": "MGNREGS in West Bengal — restart",
+        "url": "https://vajiramandravi.com/current-affairs/mgnregs-in-west-bengal-why-it-was-halted-and-how-it-could-restart/",
+        "source_tier": 4
+      },
       "corroborating_news": [],
       "confidence": "reported",
       "figure_gap": true,
@@ -126,14 +181,22 @@
       "stage": "release",
       "title": "KMC budget: ₹2,897 cr of ₹5,525 cr receipts are Central+State grant",
       "summary": "Kolkata Municipal Corporation's Budget Estimate 2025-26 records a 'Government Grant' (Central + State Grant-in-Aid) of ₹2,897 cr against total receipts of ₹5,524.84 cr — about 52% of the city's civic money flows down as grant, not raised locally. The budget is in deficit.",
-      "geo": { "state": "West Bengal", "district": "Kolkata" },
+      "geo": {
+        "state": "West Bengal",
+        "district": "Kolkata"
+      },
       "scheme_ref": "_ULB_CIVIC_BUDGET",
       "official_ref": "municipal_commissioner",
       "ledger_row_ref": null,
       "amount_cr": 2897,
       "chain_id": "sc_kolkata_kmc_grant",
       "chain_seq": 1,
-      "primary_source": { "type": "gov_pdf", "title": "KMC Budget English 2025-2026", "url": "https://www.kmcgov.in/KMCPortal/downloads/Budget_English_2025_2026.pdf", "source_tier": 1 },
+      "primary_source": {
+        "type": "gov_pdf",
+        "title": "KMC Budget English 2025-2026",
+        "url": "https://www.kmcgov.in/KMCPortal/downloads/Budget_English_2025_2026.pdf",
+        "source_tier": 1
+      },
       "corroborating_news": [],
       "confidence": "documented",
       "figure_gap": false
