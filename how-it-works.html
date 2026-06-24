@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How it works — department-wise money &amp; protocol flow</title>
+  <meta name="description" content="Department by department: how public money and authority flow from the Union ministry, through the State, to the district officer and the block — with the sanction and audit gates at each step." />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .hw-wrap { max-width: 1180px; margin: 0 auto; padding: 2rem var(--pad-x) 5rem; }
+    .hw-head { max-width: 780px; margin-bottom: 2rem; }
+    .hw-head h1 { margin: 0.4rem 0 0.6rem; font-size: clamp(1.8rem, 4vw, 2.9rem); line-height: 1.04; }
+    .hw-head p { color: var(--muted-foreground); font-size: 0.98rem; line-height: 1.6; max-width: 70ch; }
+
+    .hw-legend { display: flex; flex-wrap: wrap; gap: 0.5rem 1.1rem; margin: 1.3rem 0 0; font-family: var(--font-mono); font-size: 11px; }
+    .hw-legend span { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--muted-foreground); }
+    .hw-legend i { width: 13px; height: 13px; border-radius: 3px; display: inline-block; }
+    .cl-union { background: oklch(0.62 0.21 28); } .cl-state { background: oklch(0.74 0.16 75); }
+    .cl-conc { background: oklch(0.62 0.16 285); } .cl-local { background: oklch(0.70 0.15 162); }
+
+    /* ---- summary matrix ---- */
+    .hw-section-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted-foreground); margin: 2.6rem 0 0.9rem; display: flex; align-items: center; gap: 0.6rem; }
+    .hw-section-label::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+    .hw-matrix-scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); }
+    table.hw-matrix { border-collapse: collapse; width: 100%; min-width: 760px; font-size: 12.5px; }
+    .hw-matrix th { text-align: left; font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted-foreground); padding: 0.7rem 0.9rem; border-bottom: 1px solid var(--border-strong); background: oklch(0.165 0 0); }
+    .hw-matrix td { padding: 0.7rem 0.9rem; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--foreground); }
+    .hw-matrix tr:last-child td { border-bottom: 0; }
+    .hw-matrix .dept { font-weight: 600; }
+    .hw-matrix .muted { color: var(--muted-foreground); font-family: var(--font-mono); font-size: 11px; }
+    .pill { font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.04em; text-transform: uppercase; padding: 1px 7px; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
+    .p-union { color: oklch(0.78 0.16 35); } .p-state { color: oklch(0.84 0.15 78); }
+    .p-conc { color: oklch(0.80 0.13 285); } .p-local { color: oklch(0.82 0.16 162); }
+
+    /* ---- per-department pipelines ---- */
+    .hw-dept { border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 1.1rem 1.2rem 1.2rem; margin-bottom: 1rem; background: oklch(0.165 0 0); }
+    .hw-dept-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.6rem; margin-bottom: 0.2rem; }
+    .hw-dept-head h3 { margin: 0; font-size: 1.05rem; }
+    .hw-dept-head .schemes { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
+    .hw-dept-sub { font-size: 0.82rem; color: var(--muted-foreground); margin: 0 0 0.9rem; line-height: 1.5; }
+
+    .pipe { display: flex; align-items: stretch; gap: 0; overflow-x: auto; padding-bottom: 0.3rem; }
+    .pipe-step { flex: 1 1 0; min-width: 130px; display: flex; flex-direction: column; }
+    .pipe-box { flex: 1; border: 1px solid var(--border-strong); border-left-width: 3px; border-radius: var(--radius-sm); padding: 0.6rem 0.7rem; background: var(--card); }
+    .pipe-box.b-union { border-left-color: oklch(0.62 0.21 28); }
+    .pipe-box.b-state { border-left-color: oklch(0.74 0.16 75); }
+    .pipe-box.b-local { border-left-color: oklch(0.70 0.15 162); }
+    .pipe-box.b-out   { border-left-color: oklch(0.62 0.16 285); }
+    .pipe-box .lvl { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted-foreground); }
+    .pipe-box .who { font-weight: 600; font-size: 0.82rem; margin-top: 0.1rem; line-height: 1.25; }
+    .pipe-box .det { font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); margin-top: 0.25rem; line-height: 1.4; }
+    .pipe-arrow { align-self: center; color: var(--muted-foreground); padding: 0 0.3rem; font-size: 1.1rem; }
+
+    .gates { margin-top: 0.85rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem; }
+    .gates .glabel { font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted-foreground); margin-right: 0.2rem; }
+    .gate { font-family: var(--font-mono); font-size: 9px; padding: 2px 7px; border-radius: 999px; border: 1px dashed oklch(0.6 0.05 250 / 0.5); color: oklch(0.78 0.04 250); }
+    .gate.fail { border-color: oklch(0.62 0.18 28 / 0.55); color: oklch(0.76 0.15 32); }
+
+    .hw-note { margin-top: 2.6rem; padding: 1.1rem 1.2rem; border: 1px solid var(--border); border-radius: var(--radius); background: oklch(0.165 0 0); }
+    .hw-note p, .hw-note li { color: var(--muted-foreground); font-size: 0.86rem; line-height: 1.6; }
+    .hw-note code { font-family: var(--font-mono); font-size: 11px; background: oklch(0.22 0 0); padding: 1px 5px; border-radius: 3px; color: var(--foreground); }
+    .hw-src { margin-top: 1.4rem; font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); line-height: 1.7; }
+    .hw-src a { color: oklch(0.74 0.16 75); }
+  </style>
+</head>
+<body>
+
+  <nav id="nav">
+    <div class="brand"><span class="brand-dot"></span> FISCAL MAP</div>
+    <div class="nav-links">
+      <a href="index.html">Map</a>
+      <a href="command-chain.html">Chain of command</a>
+      <a href="how-it-works.html">How it works</a>
+      <a href="references.html">Sources ↗</a>
+      <a href="about.html">About ↗</a>
+    </div>
+  </nav>
+
+  <main class="hw-wrap">
+    <header class="hw-head">
+      <div class="eyebrow">Governance protocol · department-wise process</div>
+      <h1 class="display">How the money &amp; the <em>protocol</em> works — by department</h1>
+      <p>
+        Same money, traced department by department. For each one: which constitutional list it
+        falls under, the Union ministry it starts from, the scheme it rides, the State department
+        and the district officer it passes through, and the <strong>sanction &amp; audit gates</strong>
+        that are supposed to catch leakage. This is the engine behind every district "pixel" on the
+        <a href="index.html" style="color:oklch(0.74 0.16 75)">map</a>.
+      </p>
+      <div class="hw-legend">
+        <span><i class="cl-union"></i> Union List</span>
+        <span><i class="cl-state"></i> State List</span>
+        <span><i class="cl-conc"></i> Concurrent List</span>
+        <span><i class="cl-local"></i> Local body (73rd/74th Amdt)</span>
+      </div>
+    </header>
+
+    <!-- ============ SUMMARY MATRIX ============ -->
+    <div class="hw-section-label">At a glance — who controls what</div>
+    <div class="hw-matrix-scroll">
+      <table class="hw-matrix">
+        <thead>
+          <tr><th>Department</th><th>Const. list</th><th>Union ministry</th><th>Flagship schemes</th><th>District officer</th><th>Key gate</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="dept">Rural Development</td>
+            <td><span class="pill p-conc">Concurrent</span></td>
+            <td class="muted">Rural Development</td>
+            <td>MGNREGS · PMAY-G · NSAP</td>
+            <td class="muted">DM + Zilla Parishad CEO</td>
+            <td class="muted">Social Audit · CAG</td>
+          </tr>
+          <tr>
+            <td class="dept">Urban / Civic</td>
+            <td><span class="pill p-local">Local body</span></td>
+            <td class="muted">Housing &amp; Urban Affairs</td>
+            <td>AMRUT · PMAY-U · DAY-NULM · SWM</td>
+            <td class="muted">Municipal Commissioner</td>
+            <td class="muted">Local Fund Audit · CAG</td>
+          </tr>
+          <tr>
+            <td class="dept">Water &amp; Sanitation</td>
+            <td><span class="pill p-union">Union*</span> <span class="pill p-state">State</span></td>
+            <td class="muted">Jal Shakti</td>
+            <td>NMCG (rivers) · AMRUT (supply)</td>
+            <td class="muted">PHED Exec. Engineer + DM</td>
+            <td class="muted">UC · third-party · CAG</td>
+          </tr>
+          <tr>
+            <td class="dept">Health</td>
+            <td><span class="pill p-conc">Concurrent</span></td>
+            <td class="muted">Finance (15th FC) / Health</td>
+            <td>15th FC Health Grants</td>
+            <td class="muted">CMO + DM</td>
+            <td class="muted">Conditional release · UC · CAG</td>
+          </tr>
+          <tr>
+            <td class="dept">Social Welfare</td>
+            <td><span class="pill p-conc">Concurrent</span></td>
+            <td class="muted">Rural Development</td>
+            <td>NSAP (pensions)</td>
+            <td class="muted">DSWO + DM</td>
+            <td class="muted">DBT · UC · CAG</td>
+          </tr>
+          <tr>
+            <td class="dept">Police</td>
+            <td><span class="pill p-state">State</span></td>
+            <td class="muted">State Home (IPS = All-India Svc)</td>
+            <td class="muted">State budget</td>
+            <td class="muted">SP / Commissioner (IPS)</td>
+            <td class="muted">State AG · CAG</td>
+          </tr>
+          <tr>
+            <td class="dept">MP Local Area</td>
+            <td><span class="pill p-union">Union</span></td>
+            <td class="muted">Statistics &amp; Prog. Impl. (MoSPI)</td>
+            <td>MPLADS (₹5 cr/MP/yr)</td>
+            <td class="muted">District Authority (DM) — MP recommends</td>
+            <td class="muted">80% UC before next tranche · CAG</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="hw-src" style="margin-top:0.6rem">* Inter-state rivers (e.g. Ganga / NMCG) are Union List Entry 56; general water supply is a State subject delivered through local bodies.</p>
+
+    <!-- ============ PER-DEPARTMENT PIPELINES ============ -->
+    <div class="hw-section-label">Department by department — the full pipeline</div>
+
+    <!-- RURAL DEVELOPMENT -->
+    <div class="hw-dept">
+      <div class="hw-dept-head"><h3>Rural Development</h3><span class="schemes">MGNREGS · PMAY-G · NSAP · Concurrent List</span></div>
+      <p class="hw-dept-sub">The biggest rural money channel. MGNREGS wages are 100% Union and go straight to worker accounts by DBT; material/admin runs down the State→district→block→panchayat chain.</p>
+      <div class="pipe">
+        <div class="pipe-step"><div class="pipe-box b-union"><div class="lvl">Union ministry</div><div class="who">Ministry of Rural Development</div><div class="det">designs scheme, holds the fund (NEFMS)</div></div></div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step"><div class="pipe-box b-state"><div class="lvl">State dept</div><div class="who">State Rural Development / Panchayati Raj</div><div class="det">labour budget, material 75:25</div></div></div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step"><div class="pipe-box b-state"><div class="lvl">District</div><div class="who">DM (nodal) + Zilla Parishad CEO</div><div class="det">sanction, monitoring</div></div></div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step"><div class="pipe-box b-local"><div class="lvl">Block</div><div class="who">BDO / Programme Officer</div><div class="det">releases to GPs</div></div></div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step"><div class="pipe-box b-out"><div class="lvl">Last mile</div><div class="who">Gram Panchayat → worker (DBT)</div><div class="det">muster roll, geo-tagged asset</div></div></div>
+      </div>
+      <div class="gates"><span class="glabel">Gates</span><span class="gate">sanction order</span><span class="gate">PFMS release</span><span class="gate">Utilisation Cert</span><span class="gate">geo-tag</span><span class="gate fail">Social Audit (NREGA s.17)</span><span class="gate fail">CAG</span></div>
+    </div>
+
+    <!-- URBAN / CIVIC -->
+    <div class="hw-dept">
+      <div class="hw-dept-head"><h3>Urban / Civic</h3><span class="schemes">AMRUT · PMAY-U · DAY-NULM · SWM Rules · Local body (74th Amdt)</span></div>
+      <p class="hw-dept-sub">Constitutionally devolved to municipalities (12th Schedule). Central schemes top up the Corporation's own revenue — which for most cities is &lt;50% of the budget, so the city runs on grants from above.</p>
+      <div class="pipe">
+        <div class="pipe-step"><div class="pipe-box b-union"><div class="lvl">Union ministry</div><div class="who">Housing &amp; Urban Affairs</div><div class="det">AMRUT / PMAY-U central share</div></div></div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step"><div class="pipe-box b-state"><div class="lvl">State agency</div><div class="who">State Urban Dev / SLNA</div><div class="det">State Annual Action Plan</div></div></div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step"><div class="pipe-box b-local"><div class="lvl">Local body</div><div class="who">Municipal Commissioner (exec)</div><div class="det">+ elected Mayor / Corporation</div></div></div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step"><div class="pipe-box b-out"><div class="lvl">Delivery</div><div class="who">Ward / citizen</div><div class="det">water, SWM, housing, drainage</div></div></div>
+      </div>
+      <div class="gates"><span class="glabel">Gates</span><span class="gate">SAAP approval</span><span class="gate">instalment on progress</span><span class="gate">Utilisation Cert</span><span class="gate fail">Local Fund Audit</span><span class="gate fail">CAG (TGS)</span></div>
+    </div>
+
+    <!-- WATER & SANITATION -->
+    <div class="hw-dept">
+      <div class="hw-dept-head"><h3>Water &amp; Sanitation</h3><span class="schemes">NMCG (Union*) · AMRUT (local) · SWM</span></div>
+      <p class="hw-dept-sub">Split brain: river cleaning (Ganga basin) is a Union subject run by a central society; everyday supply &amp; sewerage are State/local. Big-ticket sewage treatment increasingly via hybrid-annuity PPP.</p>
+      <div class="pipe">
+        <div class="pipe-step"><div class="pipe-box b-union"><div class="lvl">Union ministry</div><div class="who">Jal Shakti / NMCG society</div><div class="det">100% central (flagship)</div></div></div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step"><div class="pipe-box b-state"><div class="lvl">State group</div><div class="who">State Programme Mgmt Group</div><div class="det">DPRs, PPP contracts</div></div></div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step"><div class="pipe-box b-state"><div class="lvl">District</div><div class="who">PHED Executive Engineer + DM</div><div class="det">execution, land</div></div></div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step"><div class="pipe-box b-out"><div class="lvl">Asset</div><div class="who">STP / pipeline / drain</div><div class="det">measured outcome</div></div></div>
+      </div>
+      <div class="gates"><span class="glabel">Gates</span><span class="gate">DPR sanction</span><span class="gate">milestone release</span><span class="gate">third-party audit</span><span class="gate fail">CAG</span></div>
+    </div>
+
+    <!-- HEALTH -->
+    <div class="hw-dept">
+      <div class="hw-dept-head"><h3>Health</h3><span class="schemes">15th FC Health Grants · NHM · Concurrent List</span></div>
+      <p class="hw-dept-sub">Finance Commission health grants are 100% Union, but <em>tied</em>: a local body only gets them if it meets entry conditions (audited accounts, property-tax floor). Money with strings — the conditions are the gate.</p>
+      <div class="pipe">
+        <div class="pipe-step"><div class="pipe-box b-union"><div class="lvl">Union</div><div class="who">Finance Commission award / MoHFW</div><div class="det">tied health grant</div></div></div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step"><div class="pipe-box b-state"><div class="lvl">State</div><div class="who">State Health / Finance</div><div class="det">passes through to local body</div></div></div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step"><div class="pipe-box b-state"><div class="lvl">District</div><div class="who">Chief Medical Officer + DM</div><div class="det">PHC/CHC infrastructure</div></div></div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step"><div class="pipe-box b-out"><div class="lvl">Service</div><div class="who">Block PHC → patient</div><div class="det">tied to health outcomes</div></div></div>
+      </div>
+      <div class="gates"><span class="glabel">Gates</span><span class="gate fail">entry-level conditions</span><span class="gate">conditional release</span><span class="gate">Utilisation Cert</span><span class="gate fail">CAG</span></div>
+    </div>
+
+    <!-- MP LOCAL AREA -->
+    <div class="hw-dept">
+      <div class="hw-dept-head"><h3>MP Local Area (MPLADS)</h3><span class="schemes">MPLADS · Union · 100% central</span></div>
+      <p class="hw-dept-sub">A rare 100%-Union channel that lands directly on the district. The MP only <em>recommends</em> works; the DM's District Authority sanctions and executes. Next ₹2.5 cr tranche is blocked until 80% of the last one is certified spent.</p>
+      <div class="pipe">
+        <div class="pipe-step"><div class="pipe-box b-union"><div class="lvl">Union ministry</div><div class="who">MoSPI</div><div class="det">₹5 cr / MP / year</div></div></div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step"><div class="pipe-box b-out"><div class="lvl">Recommends</div><div class="who">Member of Parliament</div><div class="det">suggests works only</div></div></div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step"><div class="pipe-box b-state"><div class="lvl">District</div><div class="who">District Authority (DM/Collector)</div><div class="det">eligibility, sanction, execution</div></div></div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step"><div class="pipe-box b-out"><div class="lvl">Asset</div><div class="who">local works</div><div class="det">in the constituency</div></div></div>
+      </div>
+      <div class="gates"><span class="glabel">Gates</span><span class="gate">MP recommendation</span><span class="gate">DM eligibility check</span><span class="gate fail">80% UC before next tranche</span><span class="gate fail">CAG</span></div>
+    </div>
+
+    <!-- POLICE -->
+    <div class="hw-dept">
+      <div class="hw-dept-head"><h3>Police</h3><span class="schemes">State List Entry 2 · State budget · IPS = All-India Service</span></div>
+      <p class="hw-dept-sub">The clearest case of the dual-control fault line: policing is a <em>State</em> subject funded from the State budget, but the officers running it (SP/Commissioner) are <em>Union-recruited</em> IPS. State pays; Centre staffs.</p>
+      <div class="pipe">
+        <div class="pipe-step"><div class="pipe-box b-state"><div class="lvl">State govt</div><div class="who">State Home Department</div><div class="det">funds from State budget</div></div></div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step"><div class="pipe-box b-union"><div class="lvl">Cadre (Union)</div><div class="who">DGP → SP / Commissioner (IPS)</div><div class="det">All-India Service, Art. 312</div></div></div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step"><div class="pipe-box b-state"><div class="lvl">Field</div><div class="who">SDPO → SHO (police station)</div><div class="det">State police service</div></div></div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step"><div class="pipe-box b-out"><div class="lvl">Citizen</div><div class="who">law &amp; order</div><div class="det">FIR, investigation</div></div></div>
+      </div>
+      <div class="gates"><span class="glabel">Gates</span><span class="gate">State budget sanction</span><span class="gate">State AG audit</span><span class="gate fail">CAG</span></div>
+    </div>
+
+    <div class="hw-note">
+      <p>
+        <strong>How to read a pipeline.</strong> Left-to-right is the money's journey; colour is the
+        appointing/owning level (red = Union, amber = State, green = local/elected, purple =
+        outcome). The dashed chips below each pipeline are the <strong>gates</strong> — sanction,
+        utilisation certificate, social audit, CAG. <strong>Red dashed gates</strong> are the ones
+        that most often jam or get bypassed: a missing UC blocks the next tranche, a skipped social
+        audit hides leakage, an unactioned CAG para is where accountability quietly dies.
+      </p>
+      <p style="margin-top:0.7rem">
+        Every figure that would fill these pipelines for a real district lives in
+        <code>district-ledger.json</code> and is shown on a <a href="index.html" style="color:oklch(0.74 0.16 75)">district pixel</a>
+        only when a government PDF backs it — otherwise it stays an honest gap. This page shows the
+        <em>structure</em>; the map shows the <em>amounts</em>, where they exist.
+      </p>
+      <div class="hw-src">
+        Sources — Constitution of India, Seventh + Eleventh + Twelfth Schedules (<a href="https://www.indiacode.nic.in/handle/123456789/15240" target="_blank" rel="noopener">indiacode.nic.in</a>);
+        scheme guidelines: nrega.nic.in, pmayg.nic.in, amrut.gov.in, nmcg.nic.in, nsap.nic.in, mplads.gov.in;
+        15th Finance Commission (fincomindia.nic.in). Mirrors <code>_meta.scheme_registry</code> + <code>protocol_layers</code> in the data.
+      </div>
+    </div>
+  </main>
+</body>
+</html>
