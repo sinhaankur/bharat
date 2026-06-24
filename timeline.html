@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Timeline — fund stories, dated &amp; sourced</title>
+  <meta name="description" content="Public-money story chains on a timeline: each fund's lifecycle (sanction → release → delay → audit → action) dated, anchored to a district, and shown with Ground News-style source coverage." />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .tl-wrap { max-width: 1040px; margin: 0 auto; padding: 2rem var(--pad-x) 5rem; }
+    .tl-head { max-width: 760px; margin-bottom: 1.4rem; }
+    .tl-head h1 { margin: 0.4rem 0 0.6rem; font-size: clamp(1.8rem, 4vw, 2.8rem); line-height: 1.05; }
+    .tl-head p { color: var(--muted-foreground); font-size: 0.96rem; line-height: 1.6; max-width: 70ch; }
+
+    .tl-controls { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.2rem 0 0.4rem; }
+    .tl-controls select { background: oklch(0.18 0 0); color: var(--foreground); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 0.45rem 0.7rem; font-family: var(--font-mono); font-size: 11px; }
+
+    /* stage legend */
+    .tl-legend { display: flex; flex-wrap: wrap; gap: 0.35rem 0.6rem; margin: 1rem 0 0; }
+    .stage-key { font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.04em; text-transform: uppercase; padding: 1px 7px; border-radius: 999px; border: 1px solid currentColor; }
+
+    /* stage colours (fund-lifecycle) */
+    .st-sanction{color:oklch(0.80 0.13 200)} .st-release{color:oklch(0.80 0.16 162)}
+    .st-delay{color:oklch(0.80 0.14 60)} .st-implementation{color:oklch(0.78 0.10 230)}
+    .st-shortfall{color:oklch(0.80 0.15 45)} .st-audit_flag{color:oklch(0.78 0.16 35)}
+    .st-cag_para{color:oklch(0.74 0.18 28)} .st-investigation{color:oklch(0.74 0.18 20)}
+    .st-action{color:oklch(0.80 0.14 285)} .st-outcome{color:oklch(0.82 0.16 150)}
+
+    /* story chain card */
+    .chain { border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 1.2rem 1.3rem 1.3rem; margin-top: 1.1rem; background: oklch(0.165 0 0); }
+    .chain-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem 0.8rem; }
+    .chain-head h2 { margin: 0; font-size: 1.12rem; line-height: 1.2; }
+    .chain-meta { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
+    .chain-status { font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.06em; text-transform: uppercase; padding: 1px 8px; border-radius: 999px; border: 1px solid currentColor; }
+    .cs-open{color:oklch(0.80 0.14 60)} .cs-resolved{color:oklch(0.80 0.16 150)} .cs-dormant{color:var(--muted-foreground)}
+    .chain-oneline { font-size: 0.86rem; color: var(--muted-foreground); line-height: 1.55; margin: 0.5rem 0 0; }
+
+    /* the timeline rail */
+    .rail { margin-top: 1.1rem; border-left: 2px solid var(--border-strong); padding-left: 1.1rem; display: flex; flex-direction: column; gap: 0.9rem; }
+    .ev { position: relative; }
+    .ev::before { content: ""; position: absolute; left: calc(-1.1rem - 6px); top: 4px; width: 9px; height: 9px; border-radius: 50%; background: currentColor; box-shadow: 0 0 0 3px oklch(0.165 0 0); }
+    .ev-date { font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); letter-spacing: 0.03em; }
+    .ev-title { font-weight: 600; font-size: 0.92rem; margin: 0.1rem 0 0; color: var(--foreground); display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; }
+    .ev-summary { font-size: 0.82rem; color: var(--muted-foreground); line-height: 1.55; margin: 0.3rem 0 0; }
+    .ev-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin-top: 0.4rem; }
+    .ev-amt { font-family: var(--font-mono); font-size: 9.5px; color: oklch(0.82 0.16 70); }
+    .ev-gap { font-family: var(--font-mono); font-size: 9px; color: oklch(0.78 0.16 70); font-style: italic; }
+    .conf { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.05em; text-transform: uppercase; padding: 1px 6px; border-radius: 999px; border: 1px solid currentColor; }
+    .conf-documented{color:oklch(0.80 0.16 150)} .conf-reported{color:oklch(0.80 0.14 60)} .conf-alleged{color:oklch(0.76 0.16 28)}
+    .src-link { color: oklch(0.74 0.16 75); font-size: 11px; text-decoration: none; }
+    .tier-warn { color: oklch(0.78 0.16 70); font-size: 10px; cursor: help; }
+
+    /* Ground News-style coverage bar */
+    .cov { margin-top: 0.5rem; }
+    .cov-bar { display: flex; height: 7px; border-radius: 999px; overflow: hidden; background: var(--muted); }
+    .cov-seg { height: 100%; }
+    .cov-left{background:oklch(0.65 0.18 25)} .cov-cleft{background:oklch(0.70 0.13 40)}
+    .cov-centre{background:oklch(0.72 0.04 250)} .cov-cright{background:oklch(0.70 0.12 250)}
+    .cov-right{background:oklch(0.60 0.16 265)} .cov-state{background:oklch(0.55 0.10 300)} .cov-unknown{background:oklch(0.45 0 0)}
+    .cov-meta { font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); margin-top: 0.3rem; display: flex; flex-wrap: wrap; gap: 0.6rem; }
+    .cov-blind { color: oklch(0.80 0.15 50); }
+    .cov-none { font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); font-style: italic; margin-top: 0.35rem; }
+
+    .tl-empty, .tl-note { color: var(--muted-foreground); font-size: 0.86rem; line-height: 1.6; }
+    .tl-note { margin-top: 2.4rem; padding: 1.1rem 1.2rem; border: 1px solid var(--border); border-radius: var(--radius); background: oklch(0.165 0 0); }
+    .tl-note code { font-family: var(--font-mono); font-size: 11px; background: oklch(0.22 0 0); padding: 1px 5px; border-radius: 3px; color: var(--foreground); }
+  </style>
+</head>
+<body>
+
+  <nav id="nav">
+    <div class="brand"><span class="brand-dot"></span> FISCAL MAP</div>
+    <div class="nav-links">
+      <a href="index.html">Map</a>
+      <a href="command-chain.html">Chain of command</a>
+      <a href="how-it-works.html">How it works</a>
+      <a href="timeline.html">Timeline</a>
+      <a href="about.html">About ↗</a>
+    </div>
+  </nav>
+
+  <main class="tl-wrap">
+    <header class="tl-head">
+      <div class="eyebrow">Money over time · fund story-chains</div>
+      <h1 class="display">When the money <em>moved</em> — and when it didn't</h1>
+      <p>
+        Each card is one fund's <strong>story chain</strong>: the lifecycle of public money over
+        time — sanctioned, released, delayed, flagged, acted on — every step dated and anchored to a
+        district. Where multiple outlets report a step, a <strong>coverage bar</strong> shows the
+        spread of sources (and the blindspots), Ground News–style.
+      </p>
+      <div class="tl-controls">
+        <select id="f-state"><option value="">All states</option></select>
+        <select id="f-scheme"><option value="">All schemes</option></select>
+        <select id="f-status"><option value="">Any status</option><option value="open">Open</option><option value="resolved">Resolved</option><option value="dormant">Dormant</option></select>
+      </div>
+      <div class="tl-legend" id="legend"></div>
+    </header>
+
+    <div id="chains"><p class="tl-empty">Loading…</p></div>
+
+    <div class="tl-note">
+      <p>
+        <strong>How this stays honest.</strong> Every event carries a source and a confidence:
+        <span class="conf conf-documented">documented</span> (a government PDF backs it),
+        <span class="conf conf-reported">reported</span> (news only), or
+        <span class="conf conf-alleged">alleged</span>. Amounts show only when sourced; otherwise
+        an honest <span class="ev-gap">figure gap</span>. News items are aggregated link-and-snippet
+        only, attributed, and shown only after moderation — see <a href="about.html" style="color:oklch(0.74 0.16 75)">methodology</a>.
+        Data lives in <code>fiscal-events.json</code>; the aggregation pipeline is <code>ingest_news.py</code> + <code>feeds.json</code>.
+      </p>
+    </div>
+  </main>
+
+  <script>
+    const STAGE_ORDER = ["sanction","release","delay","implementation","shortfall","audit_flag","cag_para","investigation","action","outcome"];
+    const STAGE_LABEL = { sanction:"Sanction", release:"Release", delay:"Delay", implementation:"Implementation", shortfall:"Shortfall", audit_flag:"Audit flag", cag_para:"CAG para", investigation:"Investigation", action:"Action", outcome:"Outcome" };
+    const LEAN_SEG = { "left":"cov-left","centre-left":"cov-cleft","centre":"cov-centre","centre-right":"cov-cright","right":"cov-right","state_media":"cov-state","unknown":"cov-unknown" };
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const fmtDate = (d, prec) => {
+      if (!d) return "—";
+      const dt = new Date(d);
+      if (prec === "year") return dt.getFullYear();
+      if (prec === "month") return dt.toLocaleDateString("en-IN", { month:"short", year:"numeric" });
+      return dt.toLocaleDateString("en-IN", { day:"numeric", month:"short", year:"numeric" });
+    };
+
+    let DOC = null, NEWS = {};
+
+    Promise.all([
+      fetch("fiscal-events.json").then(r => r.json()),
+      fetch("news-feed.json").then(r => r.ok ? r.json() : { news_items: [] }).catch(() => ({ news_items: [] })),
+    ]).then(([events, news]) => {
+      DOC = events;
+      (news.news_items || []).forEach(n => { NEWS[n.id] = n; });
+      initFilters();
+      render();
+    }).catch(e => {
+      document.getElementById("chains").innerHTML = `<p class="tl-empty">Could not load timeline data (${esc(e.message)}).</p>`;
+    });
+
+    function eventsFor(chain) {
+      const all = DOC.fiscal_events || [];
+      return (chain.event_ids || [])
+        .map(id => all.find(e => e.id === id))
+        .filter(Boolean)
+        .sort((a, b) => (a.chain_seq || 0) - (b.chain_seq || 0));
+    }
+
+    function initFilters() {
+      const states = [...new Set((DOC.story_chains || []).map(c => c.geo?.state).filter(Boolean))].sort();
+      const schemes = [...new Set((DOC.story_chains || []).map(c => c.scheme_ref).filter(Boolean))].sort();
+      const sSel = document.getElementById("f-state"), scSel = document.getElementById("f-scheme");
+      states.forEach(s => sSel.add(new Option(s, s)));
+      schemes.forEach(s => scSel.add(new Option(s, s)));
+      ["f-state","f-scheme","f-status"].forEach(id => document.getElementById(id).addEventListener("change", render));
+      // stage legend
+      document.getElementById("legend").innerHTML = STAGE_ORDER
+        .map(s => `<span class="stage-key st-${s}">${esc(STAGE_LABEL[s])}</span>`).join("");
+    }
+
+    function coverageBar(ev) {
+      const ids = ev.corroborating_news || [];
+      const items = ids.map(id => NEWS[id]).filter(Boolean);
+      if (!items.length) {
+        return `<div class="cov-none">No corroborating news linked yet ${ids.length ? "(items pending moderation)" : ""}</div>`;
+      }
+      const counts = {};
+      const langs = new Set();
+      items.forEach(n => { const l = n.outlet_lean || "unknown"; counts[l] = (counts[l]||0)+1; langs.add(n.language || "en"); });
+      const total = items.length;
+      const order = ["left","centre-left","centre","centre-right","right","state_media","unknown"];
+      const segs = order.filter(l => counts[l]).map(l =>
+        `<span class="cov-seg ${LEAN_SEG[l]}" style="width:${(counts[l]/total*100).toFixed(1)}%" title="${esc(l)}: ${counts[l]}"></span>`).join("");
+      const present = order.filter(l => counts[l] && l !== "unknown" && l !== "state_media");
+      const blind = present.length <= 1 ? `<span class="cov-blind">⚠ blindspot — one-sided coverage</span>` : "";
+      const langBlind = langs.size <= 1 ? `<span class="cov-blind">single-language (${[...langs].join(",")})</span>` : `${langs.size} languages`;
+      return `<div class="cov"><div class="cov-bar">${segs}</div>
+        <div class="cov-meta"><span>${total} source${total>1?"s":""}</span>${blind}<span>${langBlind}</span></div></div>`;
+    }
+
+    function srcFoot(ps) {
+      if (!ps || !ps.url) return "";
+      const weak = (ps.source_tier || 9) >= 3;
+      return `<a class="src-link" href="${esc(ps.url)}" target="_blank" rel="noopener" title="${esc(ps.title||"source")} (tier ${ps.source_tier})">↗</a>${weak ? `<span class="tier-warn" title="Tier ${ps.source_tier} — pending upgrade to a government PDF">⚠</span>` : ""}`;
+    }
+
+    function render() {
+      const fState = document.getElementById("f-state").value;
+      const fScheme = document.getElementById("f-scheme").value;
+      const fStatus = document.getElementById("f-status").value;
+      let chains = (DOC.story_chains || []).filter(c =>
+        (!fState || c.geo?.state === fState) &&
+        (!fScheme || c.scheme_ref === fScheme) &&
+        (!fStatus || c.status === fStatus));
+      chains.sort((a, b) => (b.last_event_at || "").localeCompare(a.last_event_at || ""));
+
+      if (!chains.length) { document.getElementById("chains").innerHTML = `<p class="tl-empty">No story chains match these filters.</p>`; return; }
+
+      document.getElementById("chains").innerHTML = chains.map(c => {
+        const evs = eventsFor(c);
+        const rail = evs.map(e => `
+          <div class="ev st-${e.stage}">
+            <div class="ev-date">${fmtDate(e.date, e.date_precision)} · <span class="st-${e.stage}">${esc(STAGE_LABEL[e.stage]||e.stage)}</span></div>
+            <div class="ev-title">${esc(e.title)}</div>
+            ${e.summary ? `<div class="ev-summary">${esc(e.summary)}</div>` : ""}
+            <div class="ev-foot">
+              ${e.amount_cr != null ? `<span class="ev-amt">₹${Number(e.amount_cr).toLocaleString("en-IN")} cr</span>` : (e.figure_gap ? `<span class="ev-gap">figure gap</span>` : "")}
+              <span class="conf conf-${e.confidence}">${esc(e.confidence)}</span>
+              ${srcFoot(e.primary_source)}
+            </div>
+            ${coverageBar(e)}
+          </div>`).join("");
+        return `
+          <article class="chain">
+            <div class="chain-head">
+              <h2>${esc(c.title)}</h2>
+              <span class="chain-status cs-${c.status}">${esc(c.status)}</span>
+              <span class="chain-meta">${esc(c.geo?.district||"")}${c.geo?.state?", "+esc(c.geo.state):""} · ${esc(c.scheme_ref||"")} · ${evs.length} events</span>
+            </div>
+            ${c.one_line ? `<p class="chain-oneline">${esc(c.one_line)}</p>` : ""}
+            <div class="rail">${rail}</div>
+          </article>`;
+      }).join("");
+    }
+  </script>
+</body>
+</html>

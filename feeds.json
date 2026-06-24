@@ -1,0 +1,67 @@
+{
+  "_meta": {
+    "purpose": "Registry of news sources for the fiscal-news aggregation layer. The ingestion script (ingest_news.py) reads this, fetches each feed, and writes link+snippet-only news_items to news-feed.json. Nothing here republishes article text.",
+    "as_of": "2026-06-24",
+    "rules": {
+      "tos": "Only RSS/official APIs that permit aggregation. Record ingest_source for auditability.",
+      "lean": "outlet_lean must come from a published, citable media-bias assessment (lean_source). Where none exists, use 'unknown'. Lean is the aggregation of third-party assessments, never our editorial verdict.",
+      "store": "link + short snippet (outlet's own summary / first ~40 words) only — never full text."
+    },
+    "lean_vocab": ["left", "centre-left", "centre", "centre-right", "right", "state_media", "unknown"],
+    "type_vocab": ["national", "regional_daily", "wire", "tv", "digital", "gov_release"]
+  },
+  "feeds": [
+    {
+      "id": "pib_releases",
+      "outlet": "Press Information Bureau",
+      "url": "https://pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=3",
+      "outlet_type": "gov_release",
+      "outlet_lean": "state_media",
+      "lean_source": "Government of India official channel — categorised as state communication, not independent media.",
+      "language": "en",
+      "cadence": "hourly",
+      "note": "Official scheme launches, fund-release announcements. Tier-1/2 anchor for the 'sanction'/'release' end of a chain."
+    },
+    {
+      "id": "the_hindu_national",
+      "outlet": "The Hindu",
+      "url": "https://www.thehindu.com/news/national/feeder/default.rss",
+      "outlet_type": "national",
+      "outlet_lean": "centre-left",
+      "lean_source": "Multiple published India media-bias assessments classify The Hindu as centre-left; recorded as third-party aggregation, not our judgement.",
+      "language": "en",
+      "cadence": "hourly"
+    },
+    {
+      "id": "indian_express",
+      "outlet": "The Indian Express",
+      "url": "https://indianexpress.com/section/india/feed/",
+      "outlet_type": "national",
+      "outlet_lean": "centre",
+      "lean_source": "Third-party media-bias aggregations classify IE around centre; recorded as aggregation.",
+      "language": "en",
+      "cadence": "hourly"
+    },
+    {
+      "id": "pti_feed",
+      "outlet": "Press Trust of India",
+      "url": "https://www.ptinews.com/rss",
+      "outlet_type": "wire",
+      "outlet_lean": "centre",
+      "lean_source": "Wire service; treated as centre/neutral by convention. Marked aggregation.",
+      "language": "en",
+      "cadence": "frequent"
+    },
+    {
+      "id": "down_to_earth",
+      "outlet": "Down To Earth",
+      "url": "https://www.downtoearth.org.in/rss",
+      "outlet_type": "digital",
+      "outlet_lean": "unknown",
+      "lean_source": "No widely-cited bias assessment found; left as unknown rather than guessed. Strong on scheme/rural-development reporting (MGNREGS, water).",
+      "language": "en",
+      "cadence": "daily"
+    }
+  ],
+  "notes": "URLs are the publicly-advertised RSS endpoints as of 2026-06; verify each is live + ToS-permitted before enabling. Add regional-language feeds (bn/hi/ta) here to power the coverage-bar 'blindspot' (language-coverage) feature."
+}
