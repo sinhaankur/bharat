@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chain of command — how the IAS / IPS system actually works</title>
+  <meta name="description" content="Flow chart of India's bureaucratic chain of command: Union → State → District → Block. Formal constitutional chain vs the 'steel cage' critique." />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ---- page-local layout for the command-chain flow chart ---- */
+    .cc-wrap { max-width: 1180px; margin: 0 auto; padding: 2rem var(--pad-x) 5rem; }
+    .cc-head { max-width: 760px; margin-bottom: 2.5rem; }
+    .cc-head h1 { margin: 0.4rem 0 0.6rem; font-size: clamp(1.8rem, 4vw, 2.9rem); line-height: 1.04; }
+    .cc-head p { color: var(--muted-foreground); font-size: 0.98rem; line-height: 1.6; max-width: 68ch; }
+
+    .cc-legend { display: flex; flex-wrap: wrap; gap: 0.5rem 1.1rem; margin: 1.4rem 0 0; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.02em; }
+    .cc-legend span { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--muted-foreground); }
+    .cc-legend i { width: 14px; height: 14px; border-radius: 3px; display: inline-block; }
+    .sw-union   { background: oklch(0.62 0.21 28); }     /* red — Union/President appointed */
+    .sw-state   { background: oklch(0.74 0.16 75); }     /* warm — State/Governor appointed */
+    .sw-elected { background: oklch(0.70 0.15 162); }    /* green — elected */
+    .sw-jud     { background: oklch(0.66 0.13 265); }    /* blue — judiciary */
+
+    .cc-toggle { display: inline-flex; gap: 0; margin: 1.6rem 0 0; border: 1px solid var(--border-strong); border-radius: var(--radius); overflow: hidden; }
+    .cc-toggle button { background: transparent; color: var(--muted-foreground); border: none; padding: 0.55rem 1rem; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.04em; cursor: pointer; }
+    .cc-toggle button.active { background: var(--warm); color: oklch(0.18 0 0); font-weight: 600; }
+
+    /* tiers */
+    .cc-tier { margin: 0 0 0.2rem; }
+    .cc-tier-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted-foreground); margin: 1.8rem 0 0.7rem; display: flex; align-items: center; gap: 0.6rem; }
+    .cc-tier-label::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+
+    .cc-row { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+    .cc-node { flex: 1 1 230px; min-width: 220px; background: var(--card); border: 1px solid var(--border-strong); border-left-width: 3px; border-radius: var(--radius-sm); padding: 0.85rem 0.95rem; }
+    .cc-node.u { border-left-color: oklch(0.62 0.21 28); }
+    .cc-node.s { border-left-color: oklch(0.74 0.16 75); }
+    .cc-node.e { border-left-color: oklch(0.70 0.15 162); }
+    .cc-node.j { border-left-color: oklch(0.66 0.13 265); }
+    .cc-node .post { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.15rem; }
+    .cc-node .who  { font-family: var(--font-mono); font-size: 10.5px; color: var(--muted-foreground); line-height: 1.5; }
+    .cc-node .art  { display: inline-block; margin-top: 0.5rem; font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.03em; color: oklch(0.708 0 0); border: 1px solid var(--border); border-radius: 999px; padding: 1px 7px; }
+
+    .cc-flow { text-align: center; color: var(--muted-foreground); font-size: 1.3rem; line-height: 1; margin: 0.15rem 0; }
+
+    /* critique callouts */
+    .cc-crit { display: none; }
+    body.show-crit .cc-crit { display: block; }
+    .cc-critbox { margin-top: 0.55rem; background: oklch(0.22 0.04 28 / 0.5); border: 1px dashed oklch(0.62 0.18 28 / 0.6); border-radius: var(--radius-sm); padding: 0.6rem 0.75rem; }
+    .cc-critbox .tag { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.74 0.16 35); }
+    .cc-critbox p { margin: 0.25rem 0 0; font-size: 0.83rem; line-height: 1.55; color: var(--foreground); }
+
+    .cc-note { margin-top: 3rem; padding: 1.1rem 1.2rem; border: 1px solid var(--border); border-radius: var(--radius); background: oklch(0.165 0 0); }
+    .cc-note h3 { margin: 0 0 0.5rem; font-size: 0.95rem; }
+    .cc-note p, .cc-note li { color: var(--muted-foreground); font-size: 0.86rem; line-height: 1.6; }
+    .cc-note ul { margin: 0.4rem 0 0; padding-left: 1.1rem; }
+    .cc-src { margin-top: 1.5rem; font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); line-height: 1.7; }
+    .cc-src a { color: oklch(0.74 0.16 75); }
+  </style>
+</head>
+<body>
+
+  <nav id="nav">
+    <div class="brand"><span class="brand-dot"></span> FISCAL MAP</div>
+    <div class="nav-links">
+      <a href="index.html">Map</a>
+      <a href="history.html">History race ↗</a>
+      <a href="command-chain.html">Chain of command</a>
+      <a href="references.html">Sources ↗</a>
+      <a href="https://github.com/sinhaankur/india-fiscal-map" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+  </nav>
+
+  <main class="cc-wrap">
+    <header class="cc-head">
+      <div class="eyebrow">Governance protocol · administrative layer</div>
+      <h1 class="display">How the <em>chain of command</em> actually works</h1>
+      <p>
+        Who appoints whom, and who answers to whom — from the President down to the village. The
+        spine is the <strong>All-India Services</strong> (IAS / IPS): officers <em>recruited by the
+        Union</em> but <em>posted by the States</em>. That split — "dual control" — is the structural
+        fault line everything below hangs on. Colour shows the appointing authority.
+      </p>
+      <div class="cc-legend">
+        <span><i class="sw-union"></i> Union / President-appointed (All-India Service)</span>
+        <span><i class="sw-state"></i> State / Governor-appointed</span>
+        <span><i class="sw-elected"></i> Elected (people)</span>
+        <span><i class="sw-jud"></i> Judiciary (separate)</span>
+      </div>
+      <div class="cc-toggle" role="tablist" aria-label="View">
+        <button id="btn-formal" class="active">Formal chain</button>
+        <button id="btn-crit">Formal chain + the "steel cage" critique</button>
+      </div>
+    </header>
+
+    <!-- TIER 0: UNION APEX -->
+    <div class="cc-tier-label">Union apex</div>
+    <div class="cc-row">
+      <div class="cc-node u">
+        <div class="post">President of India</div>
+        <div class="who">Head of State. Appoints Governors, all-India service officers' apex authority, Comptroller &amp; Auditor General.</div>
+        <span class="art">Arts. 52–53</span>
+      </div>
+      <div class="cc-node u">
+        <div class="post">Union Cabinet / PMO</div>
+        <div class="who">Real executive power. Sets schemes (CSS), the divisible pool, cadre policy for All-India Services.</div>
+        <span class="art">Art. 74</span>
+      </div>
+      <div class="cc-node j">
+        <div class="post">Comptroller &amp; Auditor General</div>
+        <div class="who">Audits every rupee of Union + State spending. Reports tabled in legislatures → PAC.</div>
+        <span class="art">Arts. 148–151</span>
+      </div>
+    </div>
+
+    <div class="cc-flow">↓ appoints / controls cadre ↓</div>
+
+    <!-- TIER 1: UNION-AT-STATE -->
+    <div class="cc-tier-label">The Union inside the State</div>
+    <div class="cc-row">
+      <div class="cc-node u">
+        <div class="post">Governor</div>
+        <div class="who">Appointed by the President; holds office "during the President's pleasure". The Union's representative in the State.</div>
+        <span class="art">Arts. 155–156</span>
+        <div class="cc-crit cc-critbox">
+          <span class="tag">Critique (Kilhor / commentators)</span>
+          <p>Often used as a political lever over elected State governments — a colonial viceroy role that survived 1947.</p>
+        </div>
+      </div>
+      <div class="cc-node e">
+        <div class="post">Chief Minister + Council of Ministers</div>
+        <div class="who">Elected head of the State executive. Directs State subjects; <em>posts</em> the IAS/IPS officers the Union recruited.</div>
+        <span class="art">Arts. 163–164</span>
+      </div>
+    </div>
+
+    <div class="cc-flow">↓</div>
+
+    <!-- TIER 2: STATE SECRETARIAT -->
+    <div class="cc-tier-label">State secretariat (permanent executive)</div>
+    <div class="cc-row">
+      <div class="cc-node u">
+        <div class="post">Chief Secretary (IAS)</div>
+        <div class="who">Top bureaucrat of the State. All-India Service officer — recruited by the Union (UPSC), serving the State.</div>
+        <span class="art">Art. 312</span>
+      </div>
+      <div class="cc-node u">
+        <div class="post">Director General of Police (IPS)</div>
+        <div class="who">Top of the State police. IPS = All-India Service. Police itself is a State subject.</div>
+        <span class="art">State List Entry 2</span>
+      </div>
+      <div class="cc-node u">
+        <div class="post">Principal/Addl. Secretaries (IAS)</div>
+        <div class="who">Run departments (Finance, Health, Rural Dev...). The funnel CSS money passes through.</div>
+        <span class="art">Art. 312</span>
+        <div class="cc-crit cc-critbox">
+          <span class="tag">Critique</span>
+          <p>"Honest officers aren't fired — they're transferred to irrelevant departments." Posting power is used to neutralise, not dismiss.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="cc-flow">↓ the district is where money meets the ground ↓</div>
+
+    <!-- TIER 3: DISTRICT -->
+    <div class="cc-tier-label">District — the operational heart</div>
+    <div class="cc-row">
+      <div class="cc-node u">
+        <div class="post">District Magistrate / Collector (IAS)</div>
+        <div class="who">Single most powerful district post. Revenue, magistracy, disaster, land, and nodal officer for most central schemes. Recruited by Union, posted by State.</div>
+        <span class="art">Art. 312 · CrPC/BNSS</span>
+        <div class="cc-crit cc-critbox">
+          <span class="tag">Critique — "steel cage"</span>
+          <p>One generalist officer gatekeeps dozens of unrelated domains — a colonial design built for revenue extraction, not service delivery.</p>
+        </div>
+      </div>
+      <div class="cc-node u">
+        <div class="post">Superintendent of Police / Commissioner (IPS)</div>
+        <div class="who">District police head. Parallel to the DM, not under them. Reports up the DGP/State Home chain.</div>
+        <span class="art">Art. 312 · Police Act</span>
+      </div>
+      <div class="cc-node j">
+        <div class="post">District &amp; Sessions Judge</div>
+        <div class="who">Head of district judiciary. Appointed by the Governor on High Court consultation; HC controls subordinate judiciary. Independent of the DM/SP.</div>
+        <span class="art">Arts. 233–235</span>
+      </div>
+      <div class="cc-node s">
+        <div class="post">Treasury Officer</div>
+        <div class="who">Gatekeeps disbursement from the Consolidated Fund of the State at district level. State Finance service.</div>
+        <span class="art">Art. 266</span>
+      </div>
+    </div>
+
+    <div class="cc-flow">↓ (parallel) elected local self-government ↓</div>
+
+    <!-- TIER 4: LOCAL BODIES -->
+    <div class="cc-tier-label">Local self-government (73rd / 74th Amendment, 1992)</div>
+    <div class="cc-row">
+      <div class="cc-node e">
+        <div class="post">Zilla Parishad — elected · Mayor / Corporation — elected</div>
+        <div class="who">The constitutionally devolved tier (29 rural + 18 urban functions). Elected representatives of the local people.</div>
+        <span class="art">Arts. 243B / 243Q–R</span>
+        <div class="cc-crit cc-critbox">
+          <span class="tag">Critique</span>
+          <p>Devolved on paper, hollow in practice: funds, functions and functionaries ("3 Fs") are rarely fully handed down, so elected local bodies depend on the appointed officer.</p>
+        </div>
+      </div>
+      <div class="cc-node s">
+        <div class="post">ZP CEO / Municipal Commissioner (IAS / State svc)</div>
+        <div class="who">The <em>appointed</em> executive sitting beside the elected head — and usually holding the real administrative + financial control.</div>
+        <span class="art">State municipal/panchayat Acts</span>
+      </div>
+    </div>
+
+    <div class="cc-flow">↓</div>
+
+    <!-- TIER 5: BLOCK / FIELD -->
+    <div class="cc-tier-label">Block &amp; field — where the citizen meets the state</div>
+    <div class="cc-row">
+      <div class="cc-node s">
+        <div class="post">Sub-Divisional Officer (SDO/SDM) → Block Development Officer (BDO)</div>
+        <div class="who">SDM often IAS/State; BDO is State service. The BDO releases scheme money to Gram Panchayats (MGNREGS, PMAY-G).</div>
+        <span class="art">State service</span>
+      </div>
+      <div class="cc-node e">
+        <div class="post">Gram Panchayat — Sarpanch (elected) + Secretary (appointed)</div>
+        <div class="who">The last mile. Executes works, maintains the muster roll, faces the mandatory Social Audit.</div>
+        <span class="art">Art. 243 · NREGA s.17</span>
+        <div class="cc-crit cc-critbox">
+          <span class="tag">Critique — "mundane corruption"</span>
+          <p>The interview's core claim: rent is charged simply to perform a <em>legitimate, legal duty</em> — the routine friction citizens pay at the counter.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="cc-note">
+      <h3>How to read this</h3>
+      <p>
+        <strong>Red</strong> posts are the spine — recruited by the Union under <em>Article 312</em>
+        (All-India Services), then handed to States to post. That is "dual control": neither the
+        Union nor the State fully owns the officer, which is exactly why both the appointing power
+        (transfers) and the accountability gap (hard to dismiss) sit where they do.
+      </p>
+      <ul>
+        <li><strong>Formal chain</strong> = what the Constitution and service rules say. Source-backed, article-cited.</li>
+        <li><strong>Critique boxes</strong> = the "steel cage" argument (Amit Kilhor on the Raj Shamani podcast, and longstanding administrative-reform commentary). These are <em>claims/analysis</em>, shown dashed-red, <strong>not</strong> documented fiscal fact — held to a lower bar than the figures elsewhere in this project.</li>
+        <li>This page mirrors <code>_meta.protocol_layers</code> (layer 3) and <code>_meta.authority_map</code> in <code>district-ledger.json</code>, so the per-district panels can badge each roster post with the same appointing authority.</li>
+      </ul>
+      <div class="cc-src">
+        Sources — Constitution of India (Arts. 52–53, 74, 148–151, 155–164, 233–235, 243-series, 266, 309–312, Seventh Schedule):
+        <a href="https://www.indiacode.nic.in/handle/123456789/15240" target="_blank" rel="noopener">indiacode.nic.in</a>.
+        All-India Services framework: DoPT. Critique layer: Amit Kilhor / Raj Shamani interview (commentary, not a primary source).
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const bF = document.getElementById('btn-formal');
+    const bC = document.getElementById('btn-crit');
+    bF.addEventListener('click', () => { document.body.classList.remove('show-crit'); bF.classList.add('active'); bC.classList.remove('active'); });
+    bC.addEventListener('click', () => { document.body.classList.add('show-crit'); bC.classList.add('active'); bF.classList.remove('active'); });
+  </script>
+</body>
+</html>
