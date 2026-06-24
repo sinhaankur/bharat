@@ -733,6 +733,32 @@
   }
   function fmtCr(v) { return (v == null) ? '—' : `₹${v} cr`; }
 
+  /* ───────── Governance-protocol badges (from _meta protocol layers) ───────── */
+  // Constitutional list (Seventh Schedule) → short label + colour class.
+  const CONST_LIST_META = {
+    union:      { label: 'Union List',      cls: 'cl-union',   title: 'Seventh Schedule, List I — only Parliament may legislate' },
+    state:      { label: 'State List',      cls: 'cl-state',   title: 'Seventh Schedule, List II — only the State Legislature' },
+    concurrent: { label: 'Concurrent List', cls: 'cl-conc',    title: 'Seventh Schedule, List III — both; Union law prevails (Art. 254)' },
+    local_body: { label: 'Local body',      cls: 'cl-local',   title: '11th/12th Schedule (73rd/74th Amendment) — devolved to panchayats/municipalities' },
+  };
+  // Who appoints a post → colour class by tier (mirrors command-chain.html).
+  const AUTH_TIER_CLS = { 1: 'au-union', 2: 'au-state', 3: 'au-state', 4: 'au-elected', 5: 'au-elected' };
+
+  function constBadge(constList, fundingPattern) {
+    const m = CONST_LIST_META[constList];
+    if (!m) return '';
+    const fund = fundingPattern ? `<span class="proto-fund" title="Funding pattern (centre:state share)">${esc(fundingPattern)}</span>` : '';
+    return `<span class="proto-badge ${m.cls}" title="${esc(m.title)}">${esc(m.label)}</span>${fund}`;
+  }
+  function authorityBadge(auth) {
+    if (!auth) return '';
+    const cls = AUTH_TIER_CLS[auth.tier] || 'au-state';
+    // condense "Union (IAS cadre...)" → "Union" for the chip; full detail in tooltip.
+    const who = (auth.appointed_by || '').split('(')[0].trim().split(' ')[0] || 'Appointed';
+    const tip = `Appointed by: ${auth.appointed_by}\nAnswers to: ${auth.accountable_to}\n${auth.const_basis || ''}`;
+    return `<span class="proto-badge ${cls}" title="${esc(tip)}">appt: ${esc(who)}</span>`;
+  }
+
   function renderLedgerSection(state, district) {
     const L = ledgerForDistrict(state, district);
     if (!L) return '';
@@ -745,18 +771,48 @@
     if (isBaseline) {
       const adminLabel = L.admin_model && L.admin_model !== 'standard'
         ? ` · <span style="color:oklch(0.78 0.16 70)">${esc(L.admin_model)} admin model</span>` : '';
+
+      // Applicable central schemes — the structural protocol layer, present for every
+      // district even before money figures are sourced. Amounts intentionally null.
+      const applic = L.applicable_schemes || [];
+      const applicHtml = applic.length ? `
+        <div class="india-detail-section-title" style="margin-top:0.8rem">Central schemes that reach this district</div>
+        <p class="ledger-baseline-note">Structural — these flow to every district of this type. Amounts &amp; utilisation are <b>not shown because no district-level PDF is sourced yet</b> (project rule: PDF-cited or it's a gap).</p>
+        <div class="ledger-list">
+          ${applic.map(a => `
+            <div class="ledger-row ledger-row--applic">
+              <div class="ledger-row-head">
+                <span class="ledger-scheme">${esc(a.scheme)}</span>
+                ${a.full_name ? `<span class="ledger-fy" title="${esc(a.full_name)}">${esc(a.full_name)}</span>` : ''}
+              </div>
+              <div class="ledger-proto">${constBadge(a.const_list, a.funding_pattern)}</div>
+              ${a.fiscal_route ? `<div class="ledger-channel">route: ${esc(a.fiscal_route)} ${srcFootnote(a.source, a.source_tier)}</div>` : ''}
+              <div class="ledger-row-body"><span class="ledger-cell ledger-cell--gap"><b>In</b> — <span class="proto-gap">figure gap</span></span></div>
+            </div>`).join('')}
+        </div>` : '';
+
+      // Appointing-authority chain — present for every district (posts exist even
+      // without named officeholders). Shows the Union-vs-State-vs-elected protocol.
+      const authPosts = Object.values(L.roster || {}).filter(o => o && o.authority);
+      const authHtml = authPosts.length ? `
+        <div class="india-detail-section-title" style="margin-top:0.8rem">Who is accountable — and who appoints them</div>
+        <div class="roster-list">
+          ${authPosts.map(o => `<div class="roster-row"><span class="roster-name roster-name--vacant">${esc(o.post)}</span>${authorityBadge(o.authority)}<span class="roster-namegap">name not sourced</span></div>`).join('')}
+        </div>` : '';
+
       return `
         <div class="india-detail-section-title">Money flow &amp; accountability${adminLabel}</div>
         <div class="ledger-baseline">
-          <div class="ledger-baseline-eyebrow">Baseline coverage — not yet deep-sourced</div>
-          <p>This district has a structured ledger slot but its money flows, named officials,
-          and industrial base haven't been sourced yet. It's classified as a
-          <b>${esc(L.admin_model || 'standard')}</b> administration.</p>
-          <p class="ledger-baseline-note">Deep, PDF-cited exemplars so far: <b>Kolkata</b> (split metro),
-          <b>Birbhum</b> (rural fund-freeze), <b>Jamshedpur</b> (company township). The structure here
-          is ready to be filled the same way — nothing is fabricated in the meantime.</p>
-          <details class="ledger-gaps"><summary>${(L._gaps || []).length} fields awaiting sourcing</summary><ul>${(L._gaps || []).map(g => `<li>${esc(g)}</li>`).join('')}</ul></details>
-        </div>`;
+          <div class="ledger-baseline-eyebrow">Baseline coverage — structure mapped, figures not yet sourced</div>
+          <p>Classified as a <b>${esc(L.admin_model || 'standard')}</b> administration. The
+          governance <b>structure</b> below — which schemes apply, their constitutional basis and
+          funding split, and who appoints each responsible officer — is mapped for every district.
+          The <b>money figures and officer names</b> are not fabricated; they fill in only with a
+          government PDF.</p>
+        </div>
+        ${applicHtml}
+        ${authHtml}
+        <details class="ledger-gaps"><summary>${(L._gaps || []).length} fields awaiting sourcing</summary><ul>${(L._gaps || []).map(g => `<li>${esc(g)}</li>`).join('')}</ul></details>`;
     }
 
     // System function/dysfunction notes — the "how the system works" layer.
@@ -780,6 +836,7 @@
             <span class="ledger-fy">${esc(r.fy)}</span>
             ${flag}
           </div>
+          ${r.protocol ? `<div class="ledger-proto">${constBadge(r.protocol.const_list, r.protocol.funding_pattern)}</div>` : ''}
           <div class="ledger-row-body">
             <span class="ledger-cell"><b>In</b> ${fmtCr(r.money_in_cr)}</span>
             <span class="ledger-cell"><b>Spent</b> ${fmtCr(w.spent_cr)}</span>
@@ -797,7 +854,7 @@
       const pay = payForPost(o.post) || payForPost((o.post || '').split(' (')[0]);
       const cost = pay?.annual_cost_to_govt_est
         ? `<span class="roster-cost" title="Est. annual cost-to-government for this post (pay-scales.json)">~₹${(pay.annual_cost_to_govt_est / 1e7).toFixed(2)} cr/yr</span>` : '';
-      return `<div class="roster-row"><span class="roster-name">${esc(o.name)}</span><span class="roster-post">${esc(o.post)}</span>${cost}${srcFootnote(o.source, o.source_tier)}</div>`;
+      return `<div class="roster-row"><span class="roster-name">${esc(o.name)}</span><span class="roster-post">${esc(o.post)}</span>${authorityBadge(o.authority)}${cost}${srcFootnote(o.source, o.source_tier)}</div>`;
     }).join('');
 
     const mps = (L.legislature?.lok_sabha || []).filter(m => m.name).map(m =>
