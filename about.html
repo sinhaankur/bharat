@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About, Methodology &amp; Disclaimer — India Fiscal Map</title>
+  <meta name="description" content="An independent civic-data project mapping India's public money flows. Methodology, sourcing rules, and disclaimer — not affiliated with any government body." />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .ab-wrap { max-width: 900px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
+    .ab-wrap h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.8rem, 3vw, 2.4rem); line-height: 1.1; margin: 0 0 0.5rem; letter-spacing: -0.01em; }
+    .ab-wrap h1 em { font-family: var(--font-italic); font-style: italic; }
+    .ab-wrap > .lede { font-size: 14px; color: var(--muted-foreground); line-height: 1.6; margin-bottom: 2.5rem; max-width: 720px; }
+    .ab-back { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted-foreground); display: inline-block; margin-bottom: 1.5rem; border: 1px solid var(--border-strong); padding: 5px 12px; border-radius: 999px; }
+    .ab-back:hover { color: var(--foreground); border-color: var(--foreground); }
+    .ab-section { margin-top: 2.5rem; }
+    .ab-section h2 { font-family: var(--font-sans); font-weight: 500; font-size: 18px; letter-spacing: -0.005em; margin: 0 0 0.6rem; color: var(--foreground); }
+    .ab-section h2 .num { font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); font-weight: 400; letter-spacing: 0.05em; margin-right: 0.6rem; }
+    .ab-section p { font-size: 13.5px; line-height: 1.65; color: var(--muted-foreground); margin: 0 0 0.8rem; max-width: 72ch; }
+    .ab-section p strong { color: var(--foreground); }
+    .ab-section ul { margin: 0.4rem 0 0.8rem; padding-left: 1.2rem; }
+    .ab-section li { font-size: 13.5px; line-height: 1.6; color: var(--muted-foreground); margin-bottom: 0.4rem; }
+    .ab-section li strong { color: var(--foreground); }
+    .ab-section a { color: oklch(0.78 0.16 70); border-bottom: 1px solid oklch(0.78 0.16 70 / 0.4); }
+    .ab-section a:hover { border-bottom-color: oklch(0.78 0.16 70); }
+    .ab-section code { font-family: var(--font-mono); font-size: 12px; background: oklch(0.22 0 0); padding: 1px 5px; border-radius: 3px; color: var(--foreground); }
+    /* the headline disclaimer — visually distinct, top of page */
+    .ab-disclaimer { background: oklch(0.18 0.05 30 / 0.45); border: 1px solid oklch(0.6 0.16 30 / 0.5); border-left: 3px solid oklch(0.7 0.18 30); border-radius: var(--radius-sm); padding: 1.1rem 1.3rem; margin: 0 0 1rem; }
+    .ab-disclaimer .tag { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.78 0.16 35); }
+    .ab-disclaimer p { font-size: 13.5px; line-height: 1.6; color: var(--foreground); margin: 0.4rem 0 0; }
+    .ab-tiers { list-style: none; padding: 0; margin: 0.6rem 0 0; }
+    .ab-tiers li { display: flex; gap: 0.7rem; align-items: baseline; padding: 0.45rem 0; border-bottom: 1px dashed oklch(0.985 0 0 / 0.08); }
+    .ab-tiers .t { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.05em; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+    .t1 { background: oklch(0.7 0.17 162 / 0.2); color: oklch(0.8 0.16 162); border: 1px solid oklch(0.7 0.17 162 / 0.4); }
+    .t2 { background: oklch(0.74 0.16 75 / 0.18); color: oklch(0.82 0.15 75); border: 1px solid oklch(0.74 0.16 75 / 0.4); }
+    .t3 { background: oklch(0.65 0.13 265 / 0.18); color: oklch(0.78 0.12 265); border: 1px solid oklch(0.65 0.13 265 / 0.4); }
+    .t4 { background: oklch(0.62 0.21 28 / 0.18); color: oklch(0.78 0.16 35); border: 1px solid oklch(0.62 0.21 28 / 0.4); }
+    .ab-contact { background: oklch(0.16 0 0); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 1.1rem 1.3rem; margin-top: 1rem; }
+  </style>
+</head>
+<body>
+
+<div class="ab-wrap">
+  <a class="ab-back" href="index.html#map">← Back to map</a>
+
+  <h1>About, methodology &amp; <em>disclaimer</em></h1>
+  <p class="lede">
+    An independent civic-data project that maps how public money flows through India — from the
+    Union, through States, to districts and local bodies — and who is accountable at each step.
+    It republishes and structures information already in the public record.
+  </p>
+
+  <div class="ab-disclaimer">
+    <span class="tag">Disclaimer</span>
+    <p>
+      This is an <strong>independent, non-commercial research project</strong>. It is
+      <strong>not affiliated with, endorsed by, or representing</strong> the Government of India,
+      any State Government, any ministry, the Finance Commission, the CAG, or any public body. It
+      uses no government emblems and claims no official status. Figures are drawn from public
+      government documents and are presented for transparency and public-interest research; they
+      may contain errors or omissions and should be verified against the cited primary source
+      before being relied upon. Commentary sections reflect opinion/analysis, clearly labelled
+      as such, not statements of fact.
+    </p>
+  </div>
+
+  <section class="ab-section">
+    <h2><span class="num">01</span>What this project is</h2>
+    <p>
+      A district-by-district ledger of public money: <strong>what came in</strong> (central
+      schemes, Finance Commission devolution, state &amp; local grants, MPLADS), <strong>through
+      which department</strong>, the <strong>intended outcome</strong>, and — where the public
+      record allows — <strong>what actually happened</strong> (utilisation, unspent/lapsed funds,
+      audit flags). It also decodes the <strong>governance protocol</strong>: who has
+      constitutional authority over each subject, how the money is routed, who is appointed by
+      whom, and what sanction/audit gates apply.
+    </p>
+  </section>
+
+  <section class="ab-section">
+    <h2><span class="num">02</span>Sourcing rule — "PDF-cited or it's a gap"</h2>
+    <p>
+      The project's core rule: <strong>a figure ships only with a government source citation;
+      otherwise it stays blank and is recorded as an explicit gap</strong> — never guessed,
+      estimated, or filled in. Accountability claims are only as trustworthy as the document
+      behind them, so every fact carries a source and a source tier:
+    </p>
+    <ul class="ab-tiers">
+      <li><span class="t t1">Tier 1</span><span>Government PDF — budget documents, CAG audit reports, Finance Commission reports, scheme guidelines. The gold standard.</span></li>
+      <li><span class="t t2">Tier 2</span><span>Government web (<code>.gov.in</code> / <code>.nic.in</code>) — official portals and district sites.</span></li>
+      <li><span class="t t3">Tier 3</span><span>Wikipedia — used for <em>discovery only</em>, visibly flagged as needing upgrade to a government source.</span></li>
+      <li><span class="t t4">Tier 4</span><span>News reports — lowest tier, flagged, used only where no official source yet exists.</span></li>
+    </ul>
+  </section>
+
+  <section class="ab-section">
+    <h2><span class="num">03</span>Coverage — depth vs. honesty</h2>
+    <p>
+      India has ~594 districts. A small number are <strong>hand-authored deep dives</strong> with
+      real, PDF-cited money figures and named officials. The rest carry an
+      <strong>honest baseline</strong>: the administrative model, the constitutional/fiscal
+      <em>structure</em> of the schemes that apply, and the appointing authority of each post —
+      but with <strong>monetary amounts left blank</strong> and listed as gaps.
+    </p>
+    <p>
+      This is deliberate. District-level utilisation, audit, and officer data are
+      <strong>not published uniformly</strong> across all districts. Rather than fabricate
+      precision, the project shows the structure everywhere and the figures only where a real
+      government document backs them. <strong>An honest gap is preferred over an invented
+      number.</strong>
+    </p>
+  </section>
+
+  <section class="ab-section">
+    <h2><span class="num">04</span>Fact vs. commentary</h2>
+    <p>
+      Two kinds of content are kept strictly separate. <strong>Documented data</strong> (money
+      figures, allocations, official posts) is sourced and cited as above. <strong>Commentary and
+      critique</strong> — for example, analysis of how the bureaucratic system functions or
+      dysfunctions — is <strong>opinion and analysis, clearly labelled as critique</strong>, and
+      is held to a lower bar than the cited figures. Where commentary draws on a public
+      interview or article, it is attributed; it is not presented as established fact.
+    </p>
+  </section>
+
+  <section class="ab-section">
+    <h2><span class="num">05</span>Corrections &amp; takedown</h2>
+    <p>
+      Accuracy matters more than being first. If you find an error, a misattributed figure, or
+      believe something should be corrected or removed, the source is open and corrections are
+      welcome.
+    </p>
+    <div class="ab-contact">
+      <p style="margin:0">
+        Raise an issue or correction on the public repository:
+        <a href="https://github.com/sinhaankur/india-fiscal-map/issues" target="_blank" rel="noopener">github.com/sinhaankur/india-fiscal-map/issues ↗</a>.
+        Every data point links back to its primary source on the
+        <a href="references.html">Sources</a> page — please check the cited document first.
+      </p>
+    </div>
+  </section>
+
+  <section class="ab-section">
+    <h2><span class="num">06</span>Licence &amp; reuse</h2>
+    <p>
+      Underlying government data is public record. This project's structuring, code, and
+      compilation are open on GitHub. If you reuse the data, <strong>cite the primary government
+      source</strong> (linked throughout), not this site alone — this site is a convenience layer
+      over the public record, not the authority for it.
+    </p>
+  </section>
+</div>
+
+</body>
+</html>
