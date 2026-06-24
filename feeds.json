@@ -61,7 +61,64 @@
       "lean_source": "No widely-cited bias assessment found; left as unknown rather than guessed. Strong on scheme/rural-development reporting (MGNREGS, water).",
       "language": "en",
       "cadence": "daily"
+    },
+
+    {
+      "id": "ndtv_khabar_hi",
+      "outlet": "NDTV Khabar",
+      "url": "https://feeds.feedburner.com/ndtvkhabar-latest",
+      "outlet_type": "tv",
+      "outlet_lean": "unknown",
+      "lean_source": "No single citable bias assessment applied to the Hindi edition; left unknown. Hindi-language coverage — powers cross-language blindspot detection.",
+      "language": "hi",
+      "cadence": "frequent",
+      "verified": "2026-06-24 — 200 application/xml, ~100 items"
+    },
+    {
+      "id": "abp_bengali_bn",
+      "outlet": "ABP Ananda (Bengali)",
+      "url": "https://bengali.abplive.com/home/feed",
+      "outlet_type": "regional_daily",
+      "outlet_lean": "unknown",
+      "lean_source": "No citable bias assessment for the regional edition; left unknown. Bengali-language — critical for West Bengal districts (Birbhum, Kolkata) blindspot detection.",
+      "language": "bn",
+      "cadence": "frequent",
+      "verified": "2026-06-24 — 200 application/xml, ~21 items"
+    },
+    {
+      "id": "abp_tamil_ta",
+      "outlet": "ABP Nadu (Tamil)",
+      "url": "https://tamil.abplive.com/home/feed",
+      "outlet_type": "regional_daily",
+      "outlet_lean": "unknown",
+      "lean_source": "No citable bias assessment for the regional edition; left unknown. Tamil-language — for Tamil Nadu district coverage.",
+      "language": "ta",
+      "cadence": "frequent",
+      "verified": "2026-06-24 — 200 application/xml, ~21 items"
+    },
+    {
+      "id": "abp_telugu_te",
+      "outlet": "ABP Desam (Telugu)",
+      "url": "https://telugu.abplive.com/home/feed",
+      "outlet_type": "regional_daily",
+      "outlet_lean": "unknown",
+      "lean_source": "No citable bias assessment for the regional edition; left unknown. Telugu-language — for Andhra Pradesh / Telangana districts.",
+      "language": "te",
+      "cadence": "frequent",
+      "verified": "2026-06-24 — 200 application/xml"
+    },
+    {
+      "id": "abp_marathi_mr",
+      "outlet": "ABP Majha (Marathi)",
+      "url": "https://marathi.abplive.com/home/feed",
+      "outlet_type": "regional_daily",
+      "outlet_lean": "unknown",
+      "lean_source": "No citable bias assessment for the regional edition; left unknown. Marathi-language — for Maharashtra districts.",
+      "language": "mr",
+      "cadence": "frequent",
+      "verified": "2026-06-24 — 200 application/xml"
     }
   ],
-  "notes": "URLs are the publicly-advertised RSS endpoints as of 2026-06; verify each is live + ToS-permitted before enabling. Add regional-language feeds (bn/hi/ta) here to power the coverage-bar 'blindspot' (language-coverage) feature."
+  "languages": ["en", "hi", "bn", "ta", "te", "mr"],
+  "notes": "URLs are the publicly-advertised RSS endpoints; all regional feeds re-verified live (200 + real RSS) on 2026-06-24 — see each feed's 'verified' field. Regional-language feeds power the coverage-bar 'blindspot' detection (an event covered only in English vs. also in Bengali/Hindi etc.). KNOWN LIMITATION: ingest_news.py auto-anchors by matching Latin-script district/scheme names, so it won't auto-anchor headlines written in Indian scripts — those ingest as 'unanchored' and must be anchored by hand in curate.html. A future transliteration/alias step would close this. Verify ToS before enabling any feed."
 }
