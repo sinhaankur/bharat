@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For organisations — data licensing, widgets &amp; commissioned research</title>
+  <meta name="description" content="License India's district fiscal+governance data and API, embed source-cited widgets, or commission a deep-dive on a district or scheme. For newsrooms, researchers, and civil-society organisations." />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .fo-wrap { max-width: 1000px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; }
+    .fo-head h1 { margin: 0.3rem 0 0.5rem; font-size: clamp(1.7rem, 3.5vw, 2.6rem); }
+    .fo-head p { color: var(--muted-foreground); font-size: 0.96rem; line-height: 1.6; max-width: 72ch; }
+    .fo-section { margin-top: 2.6rem; }
+    .fo-section > h2 { font-size: 1.2rem; margin: 0 0 0.3rem; display: flex; align-items: baseline; gap: 0.6rem; }
+    .fo-section > h2 .tag { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: oklch(0.18 0 0); background: var(--warm); padding: 2px 7px; border-radius: 999px; }
+    .fo-section > .sub { color: var(--muted-foreground); font-size: 0.88rem; line-height: 1.55; margin: 0.2rem 0 1rem; max-width: 72ch; }
+    .tiers { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.8rem; }
+    .tier { border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 1rem 1.1rem; background: oklch(0.165 0 0); display: flex; flex-direction: column; }
+    .tier.featured { border-color: var(--warm); }
+    .tier h3 { margin: 0 0 0.2rem; font-size: 1rem; }
+    .tier .price { font-family: var(--font-mono); font-size: 12px; color: oklch(0.84 0.15 78); margin-bottom: 0.6rem; }
+    .tier ul { margin: 0; padding-left: 1.1rem; }
+    .tier li { font-size: 0.84rem; color: var(--muted-foreground); line-height: 1.5; margin-bottom: 0.35rem; }
+    .tier li b { color: var(--foreground); }
+    .who { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.8rem; }
+    .who span { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); border: 1px solid var(--border); border-radius: 999px; padding: 2px 9px; }
+    .honest { background: oklch(0.2 0.04 250 / 0.4); border: 1px solid oklch(0.6 0.1 250 / 0.4); border-left: 3px solid oklch(0.7 0.12 250); border-radius: var(--radius-sm); padding: 0.9rem 1.1rem; margin-top: 1rem; }
+    .honest p { font-size: 0.85rem; line-height: 1.55; color: var(--foreground); margin: 0; }
+    .cta { background: oklch(0.165 0 0); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.3rem 1.4rem; margin-top: 2.6rem; text-align: center; }
+    .cta h2 { margin: 0 0 0.4rem; }
+    .cta p { color: var(--muted-foreground); font-size: 0.9rem; margin: 0 0 1rem; }
+    .cta a.btn { display: inline-block; background: var(--warm); color: oklch(0.18 0 0); font-weight: 600; font-family: var(--font-mono); font-size: 13px; padding: 0.6rem 1.3rem; border-radius: var(--radius-sm); text-decoration: none; }
+    .cta .alt { font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); margin-top: 0.7rem; }
+    .cta .alt a { color: oklch(0.74 0.16 75); }
+    .stat-strip { display: flex; flex-wrap: wrap; gap: 1.4rem; margin: 1.2rem 0 0; padding: 0.9rem 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .stat-strip div { font-family: var(--font-mono); }
+    .stat-strip .n { font-size: 1.3rem; color: oklch(0.84 0.15 78); }
+    .stat-strip .l { font-size: 9px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted-foreground); }
+  </style>
+</head>
+<body>
+
+  <nav id="nav">
+    <div class="brand"><span class="brand-dot"></span> 🇮🇳 INDIA FISCAL MAP</div>
+    <div class="nav-links">
+      <a href="index.html">Map</a>
+      <a href="explore.html">Explore</a>
+      <a href="data.html">Data &amp; API</a>
+      <a href="for-organisations.html">For organisations</a>
+      <a href="about.html">About ↗</a>
+    </div>
+  </nav>
+
+  <main class="fo-wrap">
+    <header class="fo-head">
+      <div class="eyebrow">For newsrooms · researchers · civil-society · analysts</div>
+      <h1 class="display">Work with the <em>data</em></h1>
+      <p>India's district fiscal &amp; governance data, structured and source-cited — license it,
+      embed it, or commission original deep-dive research. Built on one rule: every figure is tied to
+      a government document, or it's marked an honest gap. That rigour is what you're paying for.</p>
+      <div class="stat-strip">
+        <div><div class="n">594</div><div class="l">districts · 35 states/UTs</div></div>
+        <div><div class="n">13</div><div class="l">deep PDF-cited exemplars</div></div>
+        <div><div class="n">10</div><div class="l">schemes protocol-tagged</div></div>
+        <div><div class="n">6</div><div class="l">news languages</div></div>
+      </div>
+    </header>
+
+    <!-- ===== 1. Data / API licensing ===== -->
+    <div class="fo-section">
+      <h2>Data &amp; API licensing <span class="tag">core</span></h2>
+      <p class="sub">Structured district-level fiscal + governance data: money flows, departments,
+      the chain of command, and the governance-protocol layer (constitutional basis, funding pattern,
+      sanction gates) — as files or a queryable feed, with the government-source citation on every record.</p>
+      <div class="tiers">
+        <div class="tier">
+          <h3>Open</h3>
+          <div class="price">free · attribution</div>
+          <ul>
+            <li>Public JSON + static API on the live site</li>
+            <li>Embeddable widgets</li>
+            <li><b>Cite the primary gov source</b>, per licence</li>
+          </ul>
+        </div>
+        <div class="tier featured">
+          <h3>Newsroom / Research</h3>
+          <div class="price">licensed · annual (indicative)</div>
+          <ul>
+            <li>Bulk + scheduled data delivery</li>
+            <li>Custom slices (by state / scheme / dimension)</li>
+            <li>Support + update notifications</li>
+            <li>Commercial use in your reporting/products</li>
+          </ul>
+        </div>
+        <div class="tier">
+          <h3>Enterprise</h3>
+          <div class="price">licensed · custom</div>
+          <ul>
+            <li>Priority deep-district coverage on request</li>
+            <li>SLA on updates</li>
+            <li>Bespoke fields / integration</li>
+          </ul>
+        </div>
+      </div>
+      <div class="who"><span>data desks</span><span>think tanks</span><span>electoral analysts</span><span>academia</span><span>fintech / research</span></div>
+    </div>
+
+    <!-- ===== 2. Embeddable widgets ===== -->
+    <div class="fo-section">
+      <h2>Embeddable widgets <span class="tag">low-touch</span></h2>
+      <p class="sub">Drop a live, source-cited district fiscal card into any article or dashboard. The
+      attribution and source links travel inside the embed, so your readers can verify every figure.</p>
+      <div class="tiers">
+        <div class="tier">
+          <h3>Free embed</h3>
+          <div class="price">free · with branding</div>
+          <ul><li>The standard district card</li><li>Links back to the source + map</li></ul>
+        </div>
+        <div class="tier featured">
+          <h3>Licensed embed</h3>
+          <div class="price">per-outlet · annual (indicative)</div>
+          <ul><li>Unbranded / co-branded</li><li>Custom district/scheme cards</li><li>Styling to match your site</li></ul>
+        </div>
+      </div>
+      <p class="sub" style="margin-top:0.8rem">See a live example and grab the snippet on the
+      <a href="data.html" style="color:oklch(0.74 0.16 75)">Data &amp; API page</a>.</p>
+    </div>
+
+    <!-- ===== 3. Commissioned deep-dives ===== -->
+    <div class="fo-section">
+      <h2>Commissioned deep-dives <span class="tag">billable now</span></h2>
+      <p class="sub">Need a district or scheme traced end-to-end, to publication standard? We
+      hand-author a full PDF-cited ledger — money in, through which department, intended vs. what the
+      record shows happened, who's accountable — the same depth as the Kolkata and Birbhum exemplars.</p>
+      <div class="tiers">
+        <div class="tier">
+          <h3>Single district</h3>
+          <div class="price">fixed-fee per district</div>
+          <ul><li>Full ledger + roster + departments</li><li>Every figure gov-sourced or gapped</li><li>Delivered as data + a written brief</li></ul>
+        </div>
+        <div class="tier">
+          <h3>Scheme tracker</h3>
+          <div class="price">fixed-fee per scheme</div>
+          <ul><li>One scheme across chosen districts</li><li>Fund-lifecycle story chain + timeline</li></ul>
+        </div>
+        <div class="tier">
+          <h3>Ongoing retainer</h3>
+          <div class="price">monthly</div>
+          <ul><li>A rolling set of districts/schemes</li><li>For a newsroom's standing coverage</li></ul>
+        </div>
+      </div>
+      <div class="honest">
+        <p><strong>Straight talk on coverage.</strong> 13 districts are deep today; the other 581 carry
+        honest <em>structure</em> (schemes, command chain, constitutional basis) with money figures left
+        as explicit gaps where no government PDF exists yet. We don't fabricate to look complete — so if
+        you need a specific district deep, that's exactly what a commissioned deep-dive delivers.</p>
+      </div>
+    </div>
+
+    <!-- ===== CTA ===== -->
+    <div class="cta">
+      <h2>Talk to us</h2>
+      <p>Tell us the districts, schemes, or data you need and how you'd use it — we'll scope it.</p>
+      <a class="btn" href="mailto:[CONTACT EMAIL]?subject=India%20Fiscal%20Map%20%E2%80%94%20data%2Fcommission%20enquiry">✉ Email an enquiry</a>
+      <div class="alt">or open an issue / discussion on <a href="https://github.com/sinhaankur/india-fiscal-map" target="_blank" rel="noopener">GitHub ↗</a> · see <a href="about.html">methodology &amp; disclaimer</a></div>
+    </div>
+  </main>
+</body>
+</html>
