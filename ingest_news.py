@@ -29,6 +29,7 @@ from xml.etree import ElementTree as ET
 
 FEEDS = "feeds.json"
 LEDGER = "district-ledger.json"
+SCRIPT_ALIASES = "script-aliases.json"
 OUT = "news-feed.json"
 SNIPPET_WORDS = 40
 USER_AGENT = "india-fiscal-map news aggregator (+https://github.com/sinhaankur/india-fiscal-map)"
@@ -41,8 +42,13 @@ def load_json(path, default=None):
         return json.load(f)
 
 
-def build_anchor_vocab(ledger):
-    """Return (scheme_terms, district_terms, state_terms) for naive matching."""
+def build_anchor_vocab(ledger, script_aliases=None):
+    """Return (scheme_terms, district_terms, state_terms, script_terms).
+
+    The first three are Latin/lowercase terms matched with word boundaries.
+    script_terms holds Indian-script aliases (Bengali/Hindi/Tamil/…) matched by
+    plain substring — .lower() is a no-op and \\b doesn't apply to those scripts.
+    """
     meta = (ledger or {}).get("_meta", {})
     reg = meta.get("scheme_registry", {})
     aliases = meta.get("scheme_aliases", {})
@@ -61,13 +67,33 @@ def build_anchor_vocab(ledger):
         states[sname.lower()] = sname
         for dname in s.get("districts", {}):
             districts[dname.lower()] = (sname, dname)
-    return schemes, districts, states
+
+    # Indian-script aliases: substring-matched, kept separate from Latin terms.
+    script_terms = {"schemes": {}, "states": {}, "districts": {}}
+    sa = script_aliases or {}
+    for term, target in (sa.get("schemes") or {}).items():
+        script_terms["schemes"][term] = target
+    for term, target in (sa.get("states") or {}).items():
+        script_terms["states"][term] = target
+    for term, pair in (sa.get("districts") or {}).items():
+        # stored as [state, district] in JSON
+        script_terms["districts"][term] = (pair[0], pair[1])
+    return schemes, districts, states, script_terms
 
 
-def suggest_anchor(text, schemes, districts, states):
+def suggest_anchor(text, schemes, districts, states, script_terms=None):
     t = text.lower()
-    scheme_ref = next((v for k, v in schemes.items() if k and k in t), None)
+    raw = text  # original case/script for Indian-script substring matching
     geo = {"state": None, "district": None}
+
+    # --- Latin scheme match (lowercased) ---
+    scheme_ref = next((v for k, v in schemes.items() if k and k in t), None)
+
+    # --- Indian-script scheme match (substring on original text) ---
+    if not scheme_ref and script_terms:
+        scheme_ref = next((v for term, v in script_terms["schemes"].items() if term and term in raw), None)
+
+    # --- Latin district / state (word-boundary) ---
     for k, (sname, dname) in districts.items():
         if k and re.search(r"\b" + re.escape(k) + r"\b", t):
             geo = {"state": sname, "district": dname}
@@ -75,6 +101,18 @@ def suggest_anchor(text, schemes, districts, states):
     if not geo["state"]:
         for k, sname in states.items():
             if k and re.search(r"\b" + re.escape(k) + r"\b", t):
+                geo["state"] = sname
+                break
+
+    # --- Indian-script district / state (substring) ---
+    if script_terms and not geo["district"]:
+        for term, (sname, dname) in script_terms["districts"].items():
+            if term and term in raw:
+                geo = {"state": sname, "district": dname}
+                break
+    if script_terms and not geo["state"]:
+        for term, sname in script_terms["states"].items():
+            if term and term in raw:
                 geo["state"] = sname
                 break
     return scheme_ref, geo
@@ -129,7 +167,8 @@ def main():
         print(f"ERROR: {FEEDS} missing.", file=sys.stderr)
         return 2
     ledger = load_json(LEDGER, {})
-    schemes, districts, states = build_anchor_vocab(ledger)
+    script_aliases = load_json(SCRIPT_ALIASES, {})
+    schemes, districts, states, script_terms = build_anchor_vocab(ledger, script_aliases)
 
     existing = load_json(OUT, {"_meta": {}, "news_items": []})
     by_url = {n.get("url"): n for n in existing.get("news_items", []) if n.get("url")}
@@ -155,7 +194,7 @@ def main():
             if not link or link in by_url:
                 skipped += 1
                 continue
-            scheme_ref, geo = suggest_anchor(f"{title} {desc}", schemes, districts, states)
+            scheme_ref, geo = suggest_anchor(f"{title} {desc}", schemes, districts, states, script_terms)
             anchored = bool(scheme_ref or geo.get("district") or geo.get("state"))
             item = {
                 "id": mk_id(feed["id"], link),
