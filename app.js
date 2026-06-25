@@ -103,6 +103,7 @@
   const ui = { state: { view: 'ownTax', yearIdx: 9, selected: null, hover: null, mode: 'states', drillState: null, drillDistrict: null, districtMode: 'population' } };
 
   let DATA = null, EXTRAS = null, GEO = null, DISTRICT_POP = null, BLOCKS = null, LEDGER = null, PAY = null;
+  let EVENTS = null, NEWS = null;
   let map = null, geoLayer = null, districtLayer = null;
   const pathByName = new Map();
   const districtPathByName = new Map();
@@ -682,6 +683,8 @@
 
       ${renderLedgerSection(state, district)}
 
+      ${renderDistrictEvents(state, district)}
+
       ${renderBlockSection(state, district)}
 
       <div class="india-caveat">
@@ -757,6 +760,49 @@
     const who = (auth.appointed_by || '').split('(')[0].trim().split(' ')[0] || 'Appointed';
     const tip = `Appointed by: ${auth.appointed_by}\nAnswers to: ${auth.accountable_to}\n${auth.const_basis || ''}`;
     return `<span class="proto-badge ${cls}" title="${esc(tip)}">appt: ${esc(who)}</span>`;
+  }
+
+  // Map-as-hub: a district's story-chain timeline + approved news, inline in the panel.
+  // Legal-safe by construction: news shows link + snippet + attribution + confidence
+  // label only — never republished text, never an unsourced claim.
+  function renderDistrictEvents(state, district) {
+    if (!EVENTS) return '';
+    const chains = (EVENTS.story_chains || []).filter(c => c.geo?.state === state && c.geo?.district === district);
+    const allEv = EVENTS.fiscal_events || [];
+    const newsItems = (NEWS?.news_items || []);
+    if (!chains.length) return '';
+
+    const stageLabel = s => (s || '').replace(/_/g, ' ');
+    const confCls = c => ({ documented: 'pos', reported: 'warm', alleged: 'bad' }[c] || 'warm');
+
+    const chainHtml = chains.map(c => {
+      const evs = (c.event_ids || []).map(id => allEv.find(e => e.id === id)).filter(Boolean)
+        .sort((a, b) => (a.chain_seq || 0) - (b.chain_seq || 0));
+      const rail = evs.map(e => {
+        const corr = (e.corroborating_news || []).map(id => newsItems.find(n => n.id === id)).filter(Boolean);
+        const newsHtml = corr.length ? `<div class="ev-news">${corr.map(n =>
+          `<a class="ev-news-item" href="${esc(n.url)}" target="_blank" rel="noopener" title="${esc(n.outlet)} · ${esc(n.outlet_lean || 'unknown')}">📰 ${esc(n.outlet)}<span class="ev-news-snip">${esc((n.snippet || '').slice(0, 80))}</span></a>`).join('')}</div>` : '';
+        const amt = e.amount_cr != null ? `<span class="ev-amt">₹${Number(e.amount_cr).toLocaleString('en-IN')} cr</span>` : (e.figure_gap ? `<span class="ev-gap">figure gap</span>` : '');
+        const ps = e.primary_source;
+        return `
+          <div class="dev-ev dev-stage--${esc(e.stage)}">
+            <div class="dev-ev-top"><span class="dev-date">${esc(e.date || '')}</span><span class="dev-stage">${esc(stageLabel(e.stage))}</span></div>
+            <div class="dev-title">${esc(e.title)}</div>
+            <div class="dev-foot">${amt}<span class="dev-conf dev-conf--${confCls(e.confidence)}">${esc(e.confidence)}</span>${ps && ps.url ? srcFootnote(ps.url, ps.source_tier) : ''}</div>
+            ${newsHtml}
+          </div>`;
+      }).join('');
+      return `
+        <div class="dev-chain">
+          <div class="dev-chain-head"><span class="dev-chain-status dev-chain-status--${esc(c.status)}">${esc(c.status)}</span> ${esc(c.title)}</div>
+          ${c.one_line ? `<div class="dev-chain-line">${esc(c.one_line)}</div>` : ''}
+          <div class="dev-rail">${rail}</div>
+        </div>`;
+    }).join('');
+
+    return `
+      <div class="india-detail-section-title">Money over time — story chains <a class="dev-more" href="timeline.html">full timeline ↗</a></div>
+      ${chainHtml}`;
   }
 
   function renderLedgerSection(state, district) {
@@ -1560,14 +1606,16 @@
 
   async function bootstrap() {
     try {
-      const [geoRes, dataRes, extrasRes, popRes, blocksRes, ledgerRes, payRes] = await Promise.all([
+      const [geoRes, dataRes, extrasRes, popRes, blocksRes, ledgerRes, payRes, eventsRes, newsRes] = await Promise.all([
         fetch('india-states.geojson'),
         fetch('india-fiscal.json'),
         fetch('india-extras.json'),
         fetch('district-pop.json'),
         fetch('india-blocks.json'),
         fetch('district-ledger.json'),
-        fetch('pay-scales.json')
+        fetch('pay-scales.json'),
+        fetch('fiscal-events.json').catch(() => null),
+        fetch('approved-news.json').catch(() => null)
       ]);
       if (!geoRes.ok) throw new Error('GeoJSON HTTP ' + geoRes.status);
       if (!dataRes.ok) throw new Error('Fiscal JSON HTTP ' + dataRes.status);
@@ -1583,6 +1631,10 @@
       else console.warn('district-ledger.json missing — money-flow ledger will be skipped');
       if (payRes.ok) PAY = await payRes.json();
       else console.warn('pay-scales.json missing — cost-to-govt join will be skipped');
+      if (eventsRes && eventsRes.ok) EVENTS = await eventsRes.json();
+      else console.warn('fiscal-events.json missing — district timeline will be skipped');
+      if (newsRes && newsRes.ok) NEWS = await newsRes.json();
+      else console.warn('approved-news.json missing — district news will be skipped');
 
       ui.state.yearIdx = DATA._meta.years.length - 1;
       // Compute the color domain BEFORE building the map: Leaflet's GeoJSON layer
