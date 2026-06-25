@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explore — search, sections &amp; rankings</title>
+  <meta name="description" content="Search every district, scheme and official; browse by state, scheme or story; and see honest rankings of where public money is most grant-dependent or flagged." />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .ex-wrap { max-width: 1100px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; }
+    .ex-head h1 { margin: 0.3rem 0 0.5rem; font-size: clamp(1.7rem, 3.5vw, 2.6rem); }
+    .ex-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.55; max-width: 70ch; }
+
+    .ex-search { position: sticky; top: 0; background: oklch(0.145 0 0 / 0.96); padding: 0.9rem 0; z-index: 10; border-bottom: 1px solid var(--border); margin: 1rem 0 0; }
+    .ex-search input { width: 100%; background: oklch(0.18 0 0); color: var(--foreground); border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 0.7rem 0.9rem; font-size: 0.95rem; }
+    .ex-results { margin-top: 0.5rem; max-height: 360px; overflow-y: auto; }
+    .ex-r { display: flex; align-items: baseline; gap: 0.6rem; padding: 0.5rem 0.2rem; border-bottom: 1px solid var(--border); cursor: pointer; text-decoration: none; }
+    .ex-r:hover { background: oklch(0.2 0 0); }
+    .ex-r .kind { font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.05em; text-transform: uppercase; padding: 1px 7px; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
+    .k-district{color:oklch(0.82 0.15 78)} .k-scheme{color:oklch(0.80 0.16 162)} .k-official{color:oklch(0.78 0.16 35)} .k-story{color:oklch(0.80 0.14 285)}
+    .ex-r .name { font-weight: 600; font-size: 0.9rem; color: var(--foreground); }
+    .ex-r .ctx { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); margin-left: auto; }
+    .ex-deep { font-family: var(--font-mono); font-size: 8px; color: oklch(0.80 0.16 162); border: 1px solid currentColor; border-radius: 999px; padding: 0 5px; }
+
+    .ex-tabs { display: flex; flex-wrap: wrap; gap: 0; border: 1px solid var(--border-strong); border-radius: var(--radius); overflow: hidden; margin: 1.6rem 0 0; width: fit-content; }
+    .ex-tabs button { background: transparent; color: var(--muted-foreground); border: none; padding: 0.5rem 1rem; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.03em; cursor: pointer; }
+    .ex-tabs button.active { background: var(--warm); color: oklch(0.18 0 0); font-weight: 600; }
+
+    .ex-panel { margin-top: 1.2rem; }
+    .ex-section-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted-foreground); margin: 1.4rem 0 0.7rem; display: flex; align-items: center; gap: 0.6rem; }
+    .ex-section-label::after { content:""; flex:1; height:1px; background: var(--border); }
+
+    .rank-row { display: flex; align-items: center; gap: 0.7rem; padding: 0.55rem 0.2rem; border-bottom: 1px solid var(--border); }
+    .rank-n { font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); width: 1.4rem; }
+    .rank-name { font-weight: 600; font-size: 0.9rem; }
+    .rank-name a { color: var(--foreground); text-decoration: none; }
+    .rank-name a:hover { color: oklch(0.82 0.15 78); }
+    .rank-ctx { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
+    .rank-bar { flex: 1; height: 7px; background: var(--muted); border-radius: 999px; overflow: hidden; max-width: 320px; margin-left: auto; }
+    .rank-fill { height: 100%; background: oklch(0.74 0.16 70); }
+    .rank-val { font-family: var(--font-mono); font-size: 11px; color: oklch(0.82 0.16 70); width: 6.5rem; text-align: right; }
+    .flag { color: oklch(0.74 0.18 28); }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+    .chip { font-family: var(--font-mono); font-size: 10px; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--border-strong); color: var(--muted-foreground); cursor: pointer; text-decoration: none; }
+    .chip:hover, .chip.on { border-color: var(--warm); color: oklch(0.84 0.15 78); }
+    .sec-list { columns: 2; column-gap: 1.5rem; margin-top: 0.6rem; }
+    @media (max-width: 640px){ .sec-list{columns:1} }
+    .sec-list a { display: block; padding: 0.3rem 0; color: var(--foreground); text-decoration: none; font-size: 0.86rem; break-inside: avoid; }
+    .sec-list a:hover { color: oklch(0.82 0.15 78); }
+    .sec-list .muted { color: var(--muted-foreground); font-family: var(--font-mono); font-size: 9px; }
+    .ex-note { color: var(--muted-foreground); font-size: 0.8rem; line-height: 1.55; margin-top: 0.6rem; }
+    .ex-empty { color: var(--muted-foreground); padding: 2rem 0; text-align: center; }
+  </style>
+</head>
+<body>
+
+  <nav id="nav">
+    <div class="brand"><span class="brand-dot"></span> FISCAL MAP</div>
+    <div class="nav-links">
+      <a href="index.html">Map</a>
+      <a href="explore.html">Explore</a>
+      <a href="timeline.html">Timeline</a>
+      <a href="how-it-works.html">How it works</a>
+      <a href="about.html">About ↗</a>
+    </div>
+  </nav>
+
+  <main class="ex-wrap">
+    <header class="ex-head">
+      <div class="eyebrow">Search · sections · rankings</div>
+      <h1 class="display">Explore the <em>pixels</em></h1>
+      <p>Search any district, scheme, official or story. Browse by state or scheme. And see honest
+      rankings — computed only where real figures exist, with structure-only districts marked.</p>
+    </header>
+
+    <div class="ex-search">
+      <input id="q" type="search" placeholder="Search districts, schemes, officials, stories…  (e.g. Kolkata, MGNREGS, Birbhum)" autocomplete="off" />
+      <div class="ex-results" id="results" hidden></div>
+    </div>
+
+    <div class="ex-tabs" role="tablist">
+      <button data-tab="rank" class="active">Rankings</button>
+      <button data-tab="states">By state</button>
+      <button data-tab="schemes">By scheme</button>
+      <button data-tab="stories">Stories &amp; news</button>
+    </div>
+
+    <div class="ex-panel" id="panel"><p class="ex-empty">Loading…</p></div>
+  </main>
+
+  <script>
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const fmtCr = v => v == null ? "—" : `₹${Number(v).toLocaleString("en-IN")} cr`;
+    let LED = null, EVENTS = { story_chains: [], fiscal_events: [] }, IDX = [];
+
+    Promise.all([
+      fetch("district-ledger.json").then(r => r.json()),
+      fetch("fiscal-events.json").then(r => r.ok ? r.json() : EVENTS).catch(() => EVENTS),
+    ]).then(([led, ev]) => { LED = led; EVENTS = ev; buildIndex(); initTabs(); render("rank"); })
+      .catch(e => document.getElementById("panel").innerHTML = `<p class="ex-empty">Load error: ${esc(e.message)}</p>`);
+
+    // ---- search index over districts / schemes / officials / stories ----
+    function buildIndex() {
+      for (const [sn, s] of Object.entries(LED.states || {})) {
+        for (const [dn, dist] of Object.entries(s.districts || {})) {
+          IDX.push({ kind: "district", name: dn, ctx: sn, deep: !dist.baseline, href: `index.html?state=${encodeURIComponent(sn)}&district=${encodeURIComponent(dn)}` });
+          for (const [role, o] of Object.entries(dist.roster || {})) {
+            if (o && o.name) IDX.push({ kind: "official", name: o.name, ctx: `${o.post} · ${dn}`, href: `index.html?state=${encodeURIComponent(sn)}&district=${encodeURIComponent(dn)}` });
+          }
+        }
+      }
+      for (const k of Object.keys(LED._meta?.scheme_registry || {})) {
+        if (k.startsWith("_")) continue;
+        const e = LED._meta.scheme_registry[k];
+        IDX.push({ kind: "scheme", name: k, ctx: e.full_name || "", href: `how-it-works.html` });
+      }
+      for (const c of EVENTS.story_chains || []) {
+        IDX.push({ kind: "story", name: c.title, ctx: `${c.geo?.district || ""} · ${c.scheme_ref || ""}`, href: `timeline.html` });
+      }
+      const q = document.getElementById("q");
+      q.addEventListener("input", () => doSearch(q.value.trim().toLowerCase()));
+    }
+
+    function doSearch(t) {
+      const box = document.getElementById("results");
+      if (!t) { box.hidden = true; box.innerHTML = ""; return; }
+      const hits = IDX.filter(x => x.name.toLowerCase().includes(t) || (x.ctx || "").toLowerCase().includes(t)).slice(0, 40);
+      box.hidden = false;
+      box.innerHTML = hits.length ? hits.map(h => `
+        <a class="ex-r" href="${h.href}">
+          <span class="kind k-${h.kind}">${h.kind}</span>
+          <span class="name">${esc(h.name)}</span>
+          ${h.deep ? `<span class="ex-deep">deep</span>` : ""}
+          <span class="ctx">${esc(h.ctx || "")}</span>
+        </a>`).join("") : `<p class="ex-empty">No matches for "${esc(t)}".</p>`;
+    }
+
+    // ---- tabs ----
+    function initTabs() {
+      document.querySelectorAll(".ex-tabs button").forEach(b => b.addEventListener("click", () => {
+        document.querySelectorAll(".ex-tabs button").forEach(x => x.classList.remove("active"));
+        b.classList.add("active"); render(b.dataset.tab);
+      }));
+    }
+
+    function deepDistricts() {
+      const out = [];
+      for (const [sn, s] of Object.entries(LED.states || {}))
+        for (const [dn, dist] of Object.entries(s.districts || {}))
+          if (!dist.baseline) {
+            const led = dist.ledger || [];
+            const totalIn = led.reduce((a, L) => a + (typeof L.money_in_cr === "number" ? L.money_in_cr : 0), 0);
+            const grant = led.filter(L => L.stream === "intergovernmental_grant").reduce((a, L) => a + (L.money_in_cr || 0), 0);
+            const flagged = led.some(L => (L.what_happened || {}).audit_flag);
+            out.push({ sn, dn, totalIn, grant, flagged, href: `index.html?state=${encodeURIComponent(sn)}&district=${encodeURIComponent(dn)}` });
+          }
+      return out;
+    }
+
+    function render(tab) {
+      const p = document.getElementById("panel");
+      if (tab === "rank") return renderRank(p);
+      if (tab === "states") return renderStates(p);
+      if (tab === "schemes") return renderSchemes(p);
+      if (tab === "stories") return renderStories(p);
+    }
+
+    function renderRank(p) {
+      const deep = deepDistricts().filter(d => d.totalIn > 0).sort((a, b) => b.totalIn - a.totalIn);
+      const max = Math.max(...deep.map(d => d.totalIn), 1);
+      const rows = deep.map((d, i) => `
+        <div class="rank-row">
+          <span class="rank-n">${i + 1}</span>
+          <span class="rank-name"><a href="${d.href}">${esc(d.dn)}</a> <span class="rank-ctx">${esc(d.sn)}${d.flagged ? ` · <span class="flag">⚑ flagged</span>` : ""}</span></span>
+          <span class="rank-bar"><span class="rank-fill" style="width:${(d.totalIn / max * 100).toFixed(1)}%"></span></span>
+          <span class="rank-val">${fmtCr(d.totalIn)}</span>
+        </div>`).join("");
+      p.innerHTML = `
+        <div class="ex-section-label">Money tracked — deep districts (PDF-sourced figures only)</div>
+        ${rows}
+        <p class="ex-note">Honest ranking: only the ${deep.length} districts with real, PDF-cited money figures are ranked.
+        The other ${594 - deepDistricts().length} are structure-only (schemes/command-chain mapped, amounts not yet sourced) and
+        are <strong>not</strong> ranked rather than ranked on fabricated numbers. ⚑ = an audit flag is recorded in the ledger.</p>`;
+    }
+
+    function renderStates(p) {
+      const states = Object.keys(LED.states || {}).sort();
+      const items = states.map(sn => {
+        const dists = Object.entries(LED.states[sn].districts || {});
+        const deep = dists.filter(([, d]) => !d.baseline).length;
+        return `<a href="index.html?state=${encodeURIComponent(sn)}">${esc(sn)} <span class="muted">${dists.length} districts${deep ? ` · ${deep} deep` : ""}</span></a>`;
+      }).join("");
+      p.innerHTML = `<div class="ex-section-label">${states.length} states &amp; UTs</div><div class="sec-list">${items}</div>`;
+    }
+
+    function renderSchemes(p) {
+      const reg = LED._meta?.scheme_registry || {};
+      const items = Object.entries(reg).filter(([k]) => !k.startsWith("_")).map(([k, e]) =>
+        `<a href="how-it-works.html"><b>${esc(k)}</b> <span class="muted">${esc(e.const_list || "")} · ${esc((e.ministry || "").split("(")[0].trim())}</span></a>`).join("");
+      p.innerHTML = `<div class="ex-section-label">Flagship schemes — by constitutional list &amp; ministry</div><div class="sec-list">${items}</div>
+        <p class="ex-note">Click through to <a href="how-it-works.html" style="color:oklch(0.74 0.16 75)">How it works</a> for each scheme's full money+protocol pipeline.</p>`;
+    }
+
+    function renderStories(p) {
+      const chains = EVENTS.story_chains || [];
+      const byScheme = {};
+      chains.forEach(c => { (byScheme[c.scheme_ref || "other"] ||= []).push(c); });
+      const sections = Object.entries(byScheme).map(([sch, cs]) => `
+        <div class="ex-section-label">${esc(sch)}</div>
+        ${cs.map(c => `<a class="ex-r" href="timeline.html" style="border:0">
+          <span class="kind k-story">${esc(c.status)}</span>
+          <span class="name">${esc(c.title)}</span>
+          <span class="ctx">${esc(c.geo?.district || "")} · ${(c.event_ids || []).length} events</span></a>`).join("")}`).join("");
+      p.innerHTML = (chains.length ? sections : `<p class="ex-empty">No story chains yet.</p>`) +
+        `<p class="ex-note">Story chains group fund-lifecycle events over time. Full timelines + source-coverage bars on the <a href="timeline.html" style="color:oklch(0.74 0.16 75)">Timeline</a>.</p>`;
+    }
+  </script>
+</body>
+</html>

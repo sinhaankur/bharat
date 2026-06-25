@@ -1593,6 +1593,7 @@
       wireControls();
       buildMap();
       repaint();
+      await applyDeepLink();
     } catch (err) {
       console.error('Bootstrap failed:', err);
       const wrap = $ind('#india-map-wrap');
@@ -1600,6 +1601,23 @@
         wrap.innerHTML = `<div style="padding:2rem;color:var(--muted-foreground);font-family:var(--font-mono);font-size:12px"><strong style="color:var(--foreground)">Bootstrap failed.</strong><br/><br/><code style="display:block;background:oklch(0.18 0 0);padding:0.5rem;border-radius:4px;color:oklch(0.7 0.18 30)">${esc(err.message)}</code><br/>If you're opening the HTML file directly (file://), serve it over HTTP instead:<br/><code>python3 -m http.server 8000</code></div>`;
       }
     }
+  }
+
+  // Deep-link: ?state=…&district=… (used by explore.html cross-links).
+  // Reuses the featured-district selection sequence so context/back buttons stay correct.
+  async function applyDeepLink() {
+    try {
+      const q = new URLSearchParams(window.location.search);
+      const state = q.get('state');
+      const district = q.get('district');
+      if (!state) return;
+      if (!LEDGER?.states?.[state]) return;            // unknown state → ignore, no crash
+      selectState(state, true);
+      if (district && LEDGER.states[state].districts?.[district]) {
+        await drillIntoDistricts(state);
+        selectDistrict(district, state);
+      }
+    } catch (e) { console.warn('Deep-link failed:', e); }
   }
 
   bootstrap();
