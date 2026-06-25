@@ -681,6 +681,8 @@
       </div>
       ` : `<p class="india-detail-empty-body">No Census 2011 record for this district — likely carved out post-2011.</p>`}
 
+      ${renderDistrictDimensions(state, district)}
+
       ${renderLedgerSection(state, district)}
 
       ${renderDistrictEvents(state, district)}
@@ -760,6 +762,32 @@
     const who = (auth.appointed_by || '').split('(')[0].trim().split(' ')[0] || 'Appointed';
     const tip = `Appointed by: ${auth.appointed_by}\nAnswers to: ${auth.accountable_to}\n${auth.const_basis || ''}`;
     return `<span class="proto-badge ${cls}" title="${esc(tip)}">appt: ${esc(who)}</span>`;
+  }
+
+  // District dimensions (language now; crime/economy/politics/geopolitics to follow).
+  // Honest: shows sourced facts (state official language) + marks district-level gaps.
+  function renderDistrictDimensions(state, district) {
+    const dist = LEDGER?.states?.[state]?.districts?.[district];
+    const dims = dist?.dimensions;
+    if (!dims) return '';
+    const rows = [];
+    const lang = dims.language;
+    if (lang) {
+      const official = (lang.state_official || []).join(', ') || '—';
+      const dom = lang.dominant_mother_tongue
+        ? `${esc(lang.dominant_mother_tongue)}${lang.dominant_pct != null ? ` (${lang.dominant_pct}%)` : ''}`
+        : `<span class="dim-gap">district mother-tongue: gap (Census C-16)</span>`;
+      rows.push(`
+        <div class="dim-row">
+          <span class="dim-key">Language</span>
+          <span class="dim-val">Official: <b>${esc(official)}</b> · ${dom}
+            ${lang.state_official_source ? `<span class="dim-src" title="${esc(lang.state_official_source)}">ⓘ</span>` : ''}</span>
+        </div>`);
+    }
+    if (!rows.length) return '';
+    return `
+      <div class="india-detail-section-title">District dimensions</div>
+      <div class="dim-list">${rows.join('')}</div>`;
   }
 
   // Map-as-hub: a district's story-chain timeline + approved news, inline in the panel.
