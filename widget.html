@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fiscal card</title>
+  <style>
+    /* self-contained — no external CSS, so it works embedded anywhere */
+    :root { --bg:#1c1c1c; --fg:#fafafa; --mut:#a0a0a0; --bd:#333; --warm:#e0a050; --grn:#5ec99a; }
+    * { box-sizing: border-box; }
+    html,body { margin:0; height:100%; }
+    body { background:var(--bg); color:var(--fg); font:13px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    .card { height:100%; padding:11px 13px; display:flex; flex-direction:column; gap:5px; }
+    .top { display:flex; align-items:baseline; gap:6px; }
+    .dist { font-weight:700; font-size:15px; }
+    .state { font-size:10px; color:var(--mut); }
+    .badge { margin-left:auto; font:9px/1 ui-monospace,monospace; padding:2px 6px; border-radius:999px; border:1px solid; }
+    .b-deep { color:var(--grn); } .b-base { color:var(--mut); }
+    .big { font-weight:700; font-size:20px; color:var(--warm); }
+    .biglabel { font:9px/1 ui-monospace,monospace; color:var(--mut); text-transform:uppercase; letter-spacing:.06em; }
+    .rows { display:flex; flex-direction:column; gap:2px; margin-top:2px; font-size:11px; }
+    .row { display:flex; gap:6px; color:var(--mut); }
+    .row b { color:var(--fg); font-weight:600; }
+    .gap { color:var(--warm); font-style:italic; font-size:10px; }
+    .foot { margin-top:auto; display:flex; align-items:center; gap:6px; font:9px/1 ui-monospace,monospace; color:var(--mut); }
+    .foot a { color:var(--warm); text-decoration:none; }
+    .src { color:var(--grn); }
+  </style>
+</head>
+<body>
+  <div class="card" id="card"><div class="biglabel">loading…</div></div>
+  <script>
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const q = new URLSearchParams(location.search);
+    const S = q.get("state"), D = q.get("district");
+    const base = "https://sinhaankur.github.io/india-fiscal-map";
+    fetch("district-ledger.json").then(r => r.json()).then(led => {
+      const dist = led.states?.[S]?.districts?.[D];
+      const card = document.getElementById("card");
+      if (!dist) { card.innerHTML = `<div class="biglabel">district not found</div>`; return; }
+      const deep = !dist.baseline;
+      const ledger = dist.ledger || [];
+      const totalIn = ledger.reduce((a,L)=>a+(typeof L.money_in_cr==="number"?L.money_in_cr:0),0);
+      const grant = ledger.filter(L=>L.stream==="intergovernmental_grant").reduce((a,L)=>a+(L.money_in_cr||0),0);
+      const dm = dist.roster?.collector?.name || dist.roster?.collector?.post || "—";
+      const flagged = ledger.some(L => (L.what_happened||{}).audit_flag);
+      const srcUrl = (ledger.find(L=>L.source)||{}).source;
+      card.innerHTML = `
+        <div class="top">
+          <span class="dist">${esc(D)}</span><span class="state">${esc(S)}</span>
+          <span class="badge ${deep?"b-deep":"b-base"}">${deep?"deep":"baseline"}</span>
+        </div>
+        ${deep && totalIn>0
+          ? `<div><span class="big">₹${totalIn.toLocaleString("en-IN")} cr</span></div><div class="biglabel">money tracked${flagged?" · ⚑ flagged":""}</div>`
+          : `<div class="gap">Money figures not yet sourced — structure mapped, amounts are gaps.</div>`}
+        <div class="rows">
+          ${grant>0?`<div class="row"><b>Grant-in</b> ₹${grant.toLocaleString("en-IN")} cr</div>`:""}
+          <div class="row"><b>DM/Collector</b> ${esc(dm)}</div>
+          <div class="row"><b>Ledger rows</b> ${ledger.length} · <b>Gaps</b> ${(dist._gaps||[]).length}</div>
+        </div>
+        <div class="foot">
+          ${srcUrl?`<a class="src" href="${esc(srcUrl)}" target="_blank" rel="noopener">↗ source</a>`:""}
+          <a href="${base}/index.html?state=${encodeURIComponent(S)}&district=${encodeURIComponent(D)}" target="_blank" rel="noopener">india-fiscal-map ↗</a>
+        </div>`;
+    }).catch(()=>{ document.getElementById("card").innerHTML = `<div class="biglabel">load error</div>`; });
+  </script>
+</body>
+</html>

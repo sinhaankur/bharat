@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data &amp; API — download, embed, reuse</title>
+  <meta name="description" content="Download the district fiscal+governance dataset, grab a per-district JSON slice, embed a widget, or read the data straight from the static JSON 'API'." />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .dt-wrap { max-width: 1000px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; }
+    .dt-head h1 { margin: 0.3rem 0 0.5rem; font-size: clamp(1.7rem, 3.5vw, 2.6rem); }
+    .dt-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.55; max-width: 72ch; }
+    .dt-section { margin-top: 2.4rem; }
+    .dt-section h2 { font-size: 1.1rem; margin: 0 0 0.3rem; }
+    .dt-section .sub { color: var(--muted-foreground); font-size: 0.86rem; line-height: 1.55; margin: 0 0 0.9rem; max-width: 72ch; }
+    .files { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 0.7rem; }
+    .file { border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 0.85rem 0.95rem; background: oklch(0.165 0 0); }
+    .file .fn { font-family: var(--font-mono); font-size: 12px; color: oklch(0.82 0.15 78); word-break: break-all; }
+    .file .fd { font-size: 0.78rem; color: var(--muted-foreground); line-height: 1.45; margin: 0.3rem 0 0.5rem; }
+    .file a { font-family: var(--font-mono); font-size: 10px; color: var(--foreground); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 3px 9px; text-decoration: none; }
+    .file a:hover { border-color: var(--warm); color: oklch(0.84 0.15 78); }
+    .picker { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-top: 0.5rem; }
+    .picker select { background: oklch(0.18 0 0); color: var(--foreground); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 0.45rem 0.7rem; font-family: var(--font-mono); font-size: 12px; min-width: 160px; }
+    .btn { font-family: var(--font-mono); font-size: 11px; padding: 0.5rem 0.9rem; border-radius: var(--radius-sm); border: 1px solid var(--border-strong); background: transparent; color: var(--foreground); cursor: pointer; }
+    .btn-go { background: var(--warm); color: oklch(0.18 0 0); border-color: transparent; font-weight: 600; }
+    pre.code { background: oklch(0.13 0 0); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.9rem 1rem; overflow-x: auto; font-family: var(--font-mono); font-size: 11.5px; line-height: 1.6; color: oklch(0.85 0.02 250); }
+    pre.code .k { color: oklch(0.80 0.16 162); } pre.code .s { color: oklch(0.82 0.15 78); } pre.code .c { color: var(--muted-foreground); }
+    .copy { float: right; }
+    .preview { margin-top: 0.6rem; border: 1px solid var(--border-strong); border-radius: var(--radius); overflow: hidden; }
+    .preview iframe { width: 100%; height: 168px; border: 0; background: oklch(0.145 0 0); }
+    .dt-note { color: var(--muted-foreground); font-size: 0.82rem; line-height: 1.55; margin-top: 0.6rem; }
+    .lic { background: oklch(0.165 0 0); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.2rem; margin-top: 1rem; }
+    .lic p { color: var(--muted-foreground); font-size: 0.85rem; line-height: 1.6; margin: 0 0 0.5rem; }
+    .lic p:last-child { margin: 0; }
+  </style>
+</head>
+<body>
+
+  <nav id="nav">
+    <div class="brand"><span class="brand-dot"></span> FISCAL MAP</div>
+    <div class="nav-links">
+      <a href="index.html">Map</a>
+      <a href="explore.html">Explore</a>
+      <a href="data.html">Data &amp; API</a>
+      <a href="about.html">About ↗</a>
+      <a href="https://github.com/sinhaankur/india-fiscal-map" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+  </nav>
+
+  <main class="dt-wrap">
+    <header class="dt-head">
+      <div class="eyebrow">Open data · download · embed · reuse</div>
+      <h1 class="display">Data &amp; <em>API</em></h1>
+      <p>Everything here is open. Grab the whole dataset, slice one district, embed a live widget, or
+      read the JSON straight off the URL — it's a static site, so the raw files <em>are</em> the API.
+      If you reuse a figure, cite the primary government source it links to (see
+      <a href="about.html" style="color:oklch(0.74 0.16 75)">methodology</a>), not this site alone.</p>
+    </header>
+
+    <!-- ===== full files ===== -->
+    <div class="dt-section">
+      <h2>Full datasets</h2>
+      <p class="sub">The complete files behind the map. JSON, UTF-8, indented.</p>
+      <div class="files">
+        <div class="file">
+          <div class="fn">district-ledger.json</div>
+          <div class="fd">594 districts: money ledger, roster, departments, protocol layers (constitutional/fiscal/admin/sanction), gaps.</div>
+          <a href="district-ledger.json" download>⤓ download</a> <a href="district-ledger.json" target="_blank">view</a>
+        </div>
+        <div class="file">
+          <div class="fn">fiscal-events.json</div>
+          <div class="fd">Fund-lifecycle events + story chains for the timeline.</div>
+          <a href="fiscal-events.json" download>⤓ download</a> <a href="fiscal-events.json" target="_blank">view</a>
+        </div>
+        <div class="file">
+          <div class="fn">feeds.json</div>
+          <div class="fd">News-source registry (6 languages) for the aggregation layer.</div>
+          <a href="feeds.json" download>⤓ download</a> <a href="feeds.json" target="_blank">view</a>
+        </div>
+        <div class="file">
+          <div class="fn">india-fiscal.json</div>
+          <div class="fd">State-level revenue / GSDP / devolution time series.</div>
+          <a href="india-fiscal.json" download>⤓ download</a> <a href="india-fiscal.json" target="_blank">view</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== per-district slice ===== -->
+    <div class="dt-section">
+      <h2>Per-district slice</h2>
+      <p class="sub">Pick a district to download just its ledger object (money, roster, departments, protocol, gaps).</p>
+      <div class="picker">
+        <select id="d-state"><option value="">State…</option></select>
+        <select id="d-district" disabled><option value="">District…</option></select>
+        <button class="btn btn-go" id="d-dl" disabled>⤓ Download district JSON</button>
+        <a class="btn" id="d-open" target="_blank" style="display:none">Open on map ↗</a>
+      </div>
+      <div class="dt-note" id="d-note"></div>
+    </div>
+
+    <!-- ===== embeddable widget ===== -->
+    <div class="dt-section">
+      <h2>Embeddable widget</h2>
+      <p class="sub">Drop a live, source-cited fiscal card for one district into any page. Pick a district; copy the snippet.</p>
+      <pre class="code"><button class="btn copy" id="emb-copy">copy</button><code id="emb-code">&lt;!-- pick a district above --&gt;</code></pre>
+      <div class="preview"><iframe id="emb-preview" title="widget preview"></iframe></div>
+      <p class="dt-note">The widget is a tiny standalone page (<code>widget.html</code>) that reads the same open JSON. It carries its own source links, so attribution travels with it.</p>
+    </div>
+
+    <!-- ===== API ===== -->
+    <div class="dt-section">
+      <h2>Read it as an API</h2>
+      <p class="sub">No server, no key — fetch the static JSON and index into it. CORS-open via GitHub Pages.</p>
+      <pre class="code"><span class="c">// base</span>
+<span class="k">const</span> BASE = <span class="s">"https://sinhaankur.github.io/india-fiscal-map"</span>;
+
+<span class="c">// whole ledger, then one district</span>
+<span class="k">const</span> led = <span class="k">await</span> fetch(`${BASE}/district-ledger.json`).then(r =&gt; r.json());
+<span class="k">const</span> kol = led.states[<span class="s">"West Bengal"</span>].districts[<span class="s">"Kolkata"</span>];
+
+<span class="c">// the governance protocol registry (constitutional list, funding, authority)</span>
+<span class="k">const</span> reg = led._meta.scheme_registry;     <span class="c">// scheme → protocol</span>
+<span class="k">const</span> auth = led._meta.authority_map;       <span class="c">// post  → who appoints</span></pre>
+    </div>
+
+    <div class="lic">
+      <p><strong>Licence &amp; attribution.</strong> Underlying figures are public government records; this project's compilation/structure/code is open on <a href="https://github.com/sinhaankur/india-fiscal-map" target="_blank" rel="noopener" style="color:oklch(0.74 0.16 75)">GitHub</a>.</p>
+      <p>When you reuse data, <strong>cite the primary government source</strong> linked in each record (CAG / Finance Commission / budget PDF / scheme portal) — this site is a convenience layer, not the authority. See <a href="about.html" style="color:oklch(0.74 0.16 75)">methodology &amp; disclaimer</a>.</p>
+    </div>
+  </main>
+
+  <script>
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    let LED = null;
+    fetch("district-ledger.json").then(r => r.json()).then(led => { LED = led; initPicker(); });
+
+    function initPicker() {
+      const st = document.getElementById("d-state");
+      Object.keys(LED.states).sort().forEach(s => st.add(new Option(s, s)));
+      st.addEventListener("change", () => {
+        const ds = document.getElementById("d-district");
+        ds.innerHTML = `<option value="">District…</option>`;
+        if (st.value) { Object.keys(LED.states[st.value].districts).sort().forEach(d => ds.add(new Option(d, d))); ds.disabled = false; }
+        else ds.disabled = true;
+        sync();
+      });
+      document.getElementById("d-district").addEventListener("change", sync);
+      document.getElementById("d-dl").addEventListener("click", downloadSlice);
+      document.getElementById("emb-copy").addEventListener("click", () => {
+        navigator.clipboard?.writeText(document.getElementById("emb-code").textContent);
+        document.getElementById("emb-copy").textContent = "copied!";
+        setTimeout(() => document.getElementById("emb-copy").textContent = "copy", 1200);
+      });
+    }
+
+    function sync() {
+      const s = document.getElementById("d-state").value, d = document.getElementById("d-district").value;
+      const ok = s && d;
+      document.getElementById("d-dl").disabled = !ok;
+      const open = document.getElementById("d-open");
+      const note = document.getElementById("d-note");
+      if (ok) {
+        const dist = LED.states[s].districts[d];
+        const deep = !dist.baseline;
+        open.style.display = ""; open.href = `index.html?state=${encodeURIComponent(s)}&district=${encodeURIComponent(d)}`;
+        note.innerHTML = `<b>${esc(d)}</b>, ${esc(s)} — ${deep ? "deep (PDF-sourced figures)" : "baseline (structure mapped, figures are gaps)"} · ${(dist.ledger||[]).length} ledger rows · ${(dist._gaps||[]).length} gaps.`;
+        const base = "https://sinhaankur.github.io/india-fiscal-map";
+        const params = `?state=${encodeURIComponent(s)}&district=${encodeURIComponent(d)}`;
+        document.getElementById("emb-code").textContent =
+          `<iframe src="${base}/widget.html${params}" width="340" height="168" style="border:0;border-radius:10px" title="${d} fiscal card" loading="lazy"></iframe>`;
+        document.getElementById("emb-preview").src = `widget.html${params}`;
+      } else { open.style.display = "none"; note.textContent = ""; }
+    }
+
+    function downloadSlice() {
+      const s = document.getElementById("d-state").value, d = document.getElementById("d-district").value;
+      const dist = LED.states[s].districts[d];
+      const out = { _meta: { source: "india-fiscal-map", state: s, district: d, exported_at: new Date().toISOString(), note: "Cite the primary government source linked in each record, not this file alone." }, district: dist };
+      const blob = new Blob([JSON.stringify(out, null, 2)], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob); a.download = `${d.replace(/\s+/g,"_")}_ledger.json`; a.click();
+    }
+  </script>
+</body>
+</html>
