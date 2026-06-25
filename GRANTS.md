@@ -1,12 +1,12 @@
 # India Fiscal Map — grant application kit
 
-> Paste-ready text for grant / fellowship applications. Replace `[CONTACT EMAIL]`
-> and `[YOUR NAME]` before sending. All figures below are current and verifiable
+> Paste-ready text for grant / fellowship applications. Add your preferred contact
+> email where noted before sending. All figures below are current and verifiable
 > against the live site + the open repo — do not inflate them.
 
 **Live:** https://sinhaankur.github.io/india-fiscal-map/
 **Code & data (open):** https://github.com/sinhaankur/india-fiscal-map
-**Contact:** [YOUR NAME] · [CONTACT EMAIL]
+**Lead:** Ankur Sinha · GitHub: https://github.com/sinhaankur · _(add contact email)_
 
 ---
 
