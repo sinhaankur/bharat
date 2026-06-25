@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analysis — India Fiscal Map</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .at-wrap { max-width: 720px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; }
+    .at-back { font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); text-decoration: none; }
+    .at-back:hover { color: var(--foreground); }
+    .at-title { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.7rem, 4vw, 2.6rem); line-height: 1.1; margin: 1rem 0 0.4rem; }
+    .at-dek { font-size: 1.05rem; color: var(--muted-foreground); line-height: 1.5; margin: 0 0 0.8rem; }
+    .at-meta { font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); display: flex; flex-wrap: wrap; gap: 0.5rem 0.8rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+    .at-body { font-size: 1.02rem; line-height: 1.7; color: var(--foreground); margin-top: 1.4rem; }
+    .at-body h2 { font-size: 1.3rem; margin: 1.8rem 0 0.6rem; }
+    .at-body p { margin: 0 0 1rem; }
+    .at-body a { color: oklch(0.78 0.16 70); border-bottom: 1px solid oklch(0.78 0.16 70 / 0.4); text-decoration: none; }
+    .at-body a:hover { border-bottom-color: oklch(0.78 0.16 70); }
+    .at-body ul { margin: 0 0 1rem; padding-left: 1.3rem; }
+    .at-body li { margin-bottom: 0.4rem; }
+    .at-body strong { color: var(--foreground); font-weight: 700; }
+    .at-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.5rem; }
+    .at-chips a { font-family: var(--font-mono); font-size: 10px; color: oklch(0.84 0.15 78); border: 1px solid var(--border-strong); border-radius: 999px; padding: 3px 10px; text-decoration: none; }
+    .at-chips a:hover { border-color: var(--warm); }
+    .at-sources { margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1rem; }
+    .at-sources h3 { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted-foreground); margin: 0 0 0.5rem; }
+    .at-sources ol { margin: 0; padding-left: 1.2rem; }
+    .at-sources li { font-size: 0.85rem; line-height: 1.5; margin-bottom: 0.4rem; }
+    .at-sources a { color: oklch(0.74 0.16 75); }
+    .at-tier { font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); }
+    /* sponsor slot — high-value, not a banner ad */
+    .at-sponsor { margin: 1.6rem 0; border: 1px solid oklch(0.7 0.13 162 / 0.4); border-radius: var(--radius); padding: 0.8rem 1rem; background: oklch(0.18 0.04 162 / 0.2); }
+    .at-sponsor .lbl { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: oklch(0.78 0.14 162); }
+    .at-sponsor a { color: var(--foreground); font-weight: 600; text-decoration: none; }
+    .at-sponsor .note { font-size: 0.82rem; color: var(--muted-foreground); margin-top: 0.2rem; }
+    /* ad slot — DISABLED by default. Do not enable until real traffic. */
+    .at-ad { display: none; margin: 1.6rem 0; border: 1px dashed var(--border-strong); border-radius: var(--radius); padding: 1rem; text-align: center; font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
+    .at-disclaimer { margin-top: 2rem; font-size: 0.8rem; color: var(--muted-foreground); line-height: 1.55; border-top: 1px solid var(--border); padding-top: 1rem; }
+    .at-empty { color: var(--muted-foreground); padding: 3rem 0; text-align: center; }
+  </style>
+</head>
+<body>
+
+  <nav id="nav">
+    <div class="brand"><span class="brand-dot"></span> 🇮🇳 INDIA FISCAL MAP</div>
+    <div class="nav-links">
+      <a href="index.html">Map</a>
+      <a href="articles.html">Analysis</a>
+      <a href="explore.html">Explore</a>
+      <a href="about.html">About ↗</a>
+    </div>
+  </nav>
+
+  <main class="at-wrap">
+    <a class="at-back" href="articles.html">← All analysis</a>
+    <article id="art"><p class="at-empty">Loading…</p></article>
+
+    <!-- Ad slot: present but DISABLED (display:none). Enabling it before you have
+         real traffic earns ~nothing and adds clutter + a commercial-pressure /
+         legal surface to content that names officials. Turn on only at scale. -->
+    <div class="at-ad" id="ad-slot">ad slot — disabled until traffic (see source comment)</div>
+  </main>
+
+  <script>
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    // tiny markdown: ## h2, **bold**, [t](u), - bullets, blank-line paragraphs
+    function md(src) {
+      const esc2 = s => s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+      const inline = s => esc2(s)
+        .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+        .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2">$1</a>');
+      const blocks = src.split(/\n\n+/);
+      let html = "";
+      for (const b of blocks) {
+        if (b.startsWith("## ")) html += `<h2>${inline(b.slice(3))}</h2>`;
+        else if (b.split("\n").every(l => l.startsWith("- ")))
+          html += `<ul>${b.split("\n").map(l => `<li>${inline(l.slice(2))}</li>`).join("")}</ul>`;
+        else html += `<p>${inline(b).replace(/\n/g, "<br>")}</p>`;
+      }
+      return html;
+    }
+
+    const slug = new URLSearchParams(location.search).get("slug");
+    fetch("articles.json").then(r => r.json()).then(doc => {
+      const a = (doc.articles || []).find(x => x.slug === slug && x.status === "published");
+      const el = document.getElementById("art");
+      if (!a) { el.innerHTML = `<p class="at-empty">Article not found. <a href="articles.html" style="color:oklch(0.74 0.16 75)">All analysis →</a></p>`; return; }
+      document.title = `${a.title} — India Fiscal Map`;
+      const districtChips = (a.districts || []).map(([s, d]) =>
+        `<a href="index.html?state=${encodeURIComponent(s)}&district=${encodeURIComponent(d)}">📍 ${esc(d)}, ${esc(s)}</a>`).join("");
+      const schemeChips = (a.schemes || []).map(s => `<a href="how-it-works.html">${esc(s)}</a>`).join("");
+      const sponsor = a.sponsor ? `
+        <div class="at-sponsor"><div class="lbl">Supported by</div>
+          <a href="${esc(a.sponsor.url)}" target="_blank" rel="noopener nofollow sponsored">${esc(a.sponsor.name)}</a>
+          ${a.sponsor.note ? `<div class="note">${esc(a.sponsor.note)}</div>` : ""}</div>` : "";
+      const sources = (a.sources || []).length ? `
+        <div class="at-sources"><h3>Sources</h3><ol>
+          ${a.sources.map(s => `<li><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title)}</a> <span class="at-tier">(tier ${esc(s.tier)})</span></li>`).join("")}
+        </ol></div>` : "";
+      el.innerHTML = `
+        <h1 class="at-title">${esc(a.title)}</h1>
+        <p class="at-dek">${esc(a.dek || "")}</p>
+        <div class="at-meta"><span>${esc(a.published || "")}</span><span>· ${esc(a.author || "")}</span>${a.updated && a.updated !== a.published ? `<span>· updated ${esc(a.updated)}</span>` : ""}</div>
+        ${sponsor}
+        <div class="at-body">${md(a.body || "")}</div>
+        <div class="at-chips">${districtChips}${schemeChips}</div>
+        ${sources}
+        <div class="at-disclaimer">Independent analysis. Figures are drawn from the cited public records; where a government source is absent, that is stated rather than estimated. Commentary is the author's, clearly distinguished from documented fact. See <a href="about.html" style="color:oklch(0.74 0.16 75)">methodology &amp; disclaimer</a>.</div>`;
+    }).catch(e => document.getElementById("art").innerHTML = `<p class="at-empty">Load error: ${esc(e.message)}</p>`);
+  </script>
+</body>
+</html>

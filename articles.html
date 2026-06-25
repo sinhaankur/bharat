@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analysis — data-journalism on India's public money</title>
+  <meta name="description" content="Source-cited data-journalism tracing how public money flows through India's districts — and what the record shows actually happened." />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .ar-wrap { max-width: 860px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; }
+    .ar-head h1 { margin: 0.3rem 0 0.5rem; font-size: clamp(1.7rem, 3.5vw, 2.6rem); }
+    .ar-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.6; max-width: 68ch; }
+    .ar-list { margin-top: 2rem; display: flex; flex-direction: column; gap: 1rem; }
+    .ar-card { border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 1.1rem 1.2rem; background: oklch(0.165 0 0); text-decoration: none; display: block; }
+    .ar-card:hover { border-color: var(--warm); }
+    .ar-card h2 { margin: 0 0 0.3rem; font-size: 1.15rem; color: var(--foreground); line-height: 1.25; }
+    .ar-card .dek { color: var(--muted-foreground); font-size: 0.9rem; line-height: 1.5; }
+    .ar-meta { display: flex; flex-wrap: wrap; gap: 0.4rem 0.7rem; margin-top: 0.6rem; font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
+    .ar-tag { border: 1px solid var(--border); border-radius: 999px; padding: 1px 8px; }
+    .ar-empty { color: var(--muted-foreground); padding: 2rem 0; }
+    /* newsletter */
+    .nl { margin-top: 2.6rem; border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 1.3rem 1.4rem; background: oklch(0.18 0.03 75 / 0.25); }
+    .nl h2 { margin: 0 0 0.3rem; font-size: 1.15rem; }
+    .nl p { color: var(--muted-foreground); font-size: 0.88rem; line-height: 1.55; margin: 0 0 0.9rem; max-width: 62ch; }
+    .nl form { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .nl input { flex: 1; min-width: 200px; background: oklch(0.18 0 0); color: var(--foreground); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 0.6rem 0.8rem; font-size: 0.9rem; }
+    .nl button { background: var(--warm); color: oklch(0.18 0 0); font-weight: 600; font-family: var(--font-mono); font-size: 12px; border: none; border-radius: var(--radius-sm); padding: 0.6rem 1.1rem; cursor: pointer; }
+    .nl .note { font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); margin-top: 0.6rem; }
+  </style>
+</head>
+<body>
+
+  <nav id="nav">
+    <div class="brand"><span class="brand-dot"></span> 🇮🇳 INDIA FISCAL MAP</div>
+    <div class="nav-links">
+      <a href="index.html">Map</a>
+      <a href="explore.html">Explore</a>
+      <a href="articles.html">Analysis</a>
+      <a href="timeline.html">Timeline</a>
+      <a href="about.html">About ↗</a>
+    </div>
+  </nav>
+
+  <main class="ar-wrap">
+    <header class="ar-head">
+      <div class="eyebrow">Data-journalism · source-cited</div>
+      <h1 class="display">Analysis</h1>
+      <p>Original reporting built on the ledger: how public money moved through a district or scheme,
+      and what the government record shows actually happened. Every claim links to its source.</p>
+    </header>
+
+    <div class="ar-list" id="list"><p class="ar-empty">Loading…</p></div>
+
+    <!-- Newsletter: reader revenue beats ads at small scale. Swap the form action
+         for your provider (Substack/Buttondown/Ghost) when you pick one. -->
+    <div class="nl">
+      <h2>The fiscal brief</h2>
+      <p>A periodic, plain-language note on where India's public money went — which districts, which
+      schemes, what the audits found. No spam; unsubscribe anytime.</p>
+      <form id="nl-form" onsubmit="return nlSubmit(event)">
+        <input type="email" id="nl-email" placeholder="you@email.com" required aria-label="Email" />
+        <button type="submit">Subscribe</button>
+      </form>
+      <div class="note" id="nl-note">Provider not yet connected — replace the form action with your
+      Substack/Buttondown/Ghost embed to start collecting subscribers.</div>
+    </div>
+  </main>
+
+  <script>
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    fetch("articles.json").then(r => r.json()).then(doc => {
+      const arts = (doc.articles || []).filter(a => a.status === "published")
+        .sort((a, b) => (b.published || "").localeCompare(a.published || ""));
+      const list = document.getElementById("list");
+      if (!arts.length) { list.innerHTML = `<p class="ar-empty">No articles published yet. Add one to <code>articles.json</code>.</p>`; return; }
+      list.innerHTML = arts.map(a => `
+        <a class="ar-card" href="article.html?slug=${encodeURIComponent(a.slug)}">
+          <h2>${esc(a.title)}</h2>
+          <div class="dek">${esc(a.dek || "")}</div>
+          <div class="ar-meta">
+            <span>${esc(a.published || "")}</span>
+            <span>· ${esc(a.author || "")}</span>
+            ${(a.tags || []).map(t => `<span class="ar-tag">${esc(t)}</span>`).join("")}
+          </div>
+        </a>`).join("");
+    }).catch(e => document.getElementById("list").innerHTML = `<p class="ar-empty">Load error: ${esc(e.message)}</p>`);
+
+    function nlSubmit(e) {
+      e.preventDefault();
+      document.getElementById("nl-note").textContent = "Thanks! (Connect a newsletter provider to actually capture this — see the comment in the page source.)";
+      return false;
+    }
+  </script>
+</body>
+</html>

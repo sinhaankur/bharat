@@ -1,0 +1,28 @@
+{
+  "_meta": {
+    "purpose": "Articles (data-journalism) for the site. Static-CMS: edit this JSON to publish. Each article is source-cited like everything else (PDF-cited or it's a gap). Body is light markdown (## headings, **bold**, [text](url), blank-line paragraphs, - bullets).",
+    "as_of": "2026-06-25",
+    "editorial_rule": "Analysis is COMPARATIVE, not declarative. Report what sourced records show ('CAG flagged ₹X under X's office [src]'), never an unproven accusation. Mark opinion as opinion. Mirrors about.html.",
+    "fields": "slug, title, dek, author, published, updated, tags[], districts[], schemes[], body, sources[], sponsor(optional {name,url,note}), status(draft|published)"
+  },
+  "articles": [
+    {
+      "slug": "birbhum-mgnregs-four-year-freeze",
+      "title": "How Birbhum's job-guarantee money was frozen for four years",
+      "dek": "West Bengal's MGNREGS funds were halted at the source from March 2022. A rural district shows what happens when money is withheld from the top — not misspent at the bottom.",
+      "author": "Ankur Sinha",
+      "published": "2026-06-25",
+      "updated": "2026-06-25",
+      "tags": ["fiscal federalism", "rural development", "accountability"],
+      "districts": [["West Bengal", "Birbhum"]],
+      "schemes": ["MGNREGS"],
+      "status": "published",
+      "sponsor": null,
+      "body": "Most stories about misused public money follow a familiar shape: funds arrive, and they are spent badly. Birbhum, a rural district in West Bengal, shows the **opposite** failure — money that never arrived at all.\n\n## The freeze\n\nFrom **9 March 2022**, the Union government stopped releasing MGNREGS funds to West Bengal under **Section 27 of the MGNREGA Act**, citing non-compliance. The rural job-guarantee scheme — the wage floor for millions — went dry across the state. For an MGNREGS-dependent district like Birbhum, that meant unpaid wages, unbuilt assets, and migration.\n\n## What piled up\n\nBy 2025, the Centre's own figure in the Rajya Sabha put pending MGNREGS dues to West Bengal at **₹3,038 crore** — the highest of any state. The state's claim across MGNREGS and PMAY-G ran far higher.\n\n## Why it matters\n\nThis is the federal-friction axis made concrete: a State-implemented, Union-funded scheme, switched off upstream. Work resumed only in **June 2026**, after Supreme Court intervention. Whether you read the freeze as a justified anti-corruption measure or as political leverage, the **structure** is the story — and it is the same structure that decides whether money reaches every other district.\n\nSee the full dated chain on the [timeline](timeline.html), and Birbhum's ledger on the [map](index.html?state=West%20Bengal&district=Birbhum).",
+      "sources": [
+        { "title": "MGNREGS in West Bengal — why it was halted and how it could restart", "url": "https://vajiramandravi.com/current-affairs/mgnregs-in-west-bengal-why-it-was-halted-and-how-it-could-restart/", "tier": 4 },
+        { "title": "Centre owes ₹3,000 crore MGNREGA dues to Bengal (Rajya Sabha)", "url": "https://www.business-standard.com/india-news/centre-owes-3-000-crore-mgnrega-dues-to-bengal-govt-in-rajya-sabha-125080101525_1.html", "tier": 4 }
+      ]
+    }
+  ]
+}
