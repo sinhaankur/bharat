@@ -14,6 +14,13 @@
 
     .tl-controls { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.2rem 0 0.4rem; }
     .tl-controls select { background: oklch(0.18 0 0); color: var(--foreground); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 0.45rem 0.7rem; font-family: var(--font-mono); font-size: 11px; }
+    .tl-scrub { display: flex; align-items: center; gap: 0.6rem; margin: 0.8rem 0 0; padding: 0.6rem 0.8rem; border: 1px solid var(--border-strong); border-radius: var(--radius); background: oklch(0.165 0 0); }
+    .tl-scrub-label { font-size: 10px; color: var(--muted-foreground); text-transform: uppercase; letter-spacing: 0.06em; }
+    .tl-scrub input[type=range] { flex: 1; accent-color: var(--warm); }
+    .tl-scrub-val { font-size: 12px; color: oklch(0.84 0.15 78); min-width: 6.5rem; }
+    .tl-scrub-reset { background: transparent; border: 1px solid var(--border-strong); color: var(--muted-foreground); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 10px; padding: 0.3rem 0.6rem; cursor: pointer; }
+    .tl-scrub-reset:hover { border-color: var(--foreground); color: var(--foreground); }
+    .ev.ev-future { opacity: 0.3; }
 
     /* stage legend */
     .tl-legend { display: flex; flex-wrap: wrap; gap: 0.35rem 0.6rem; margin: 1rem 0 0; }
@@ -94,6 +101,12 @@
         <select id="f-scheme"><option value="">All schemes</option></select>
         <select id="f-status"><option value="">Any status</option><option value="open">Open</option><option value="resolved">Resolved</option><option value="dormant">Dormant</option></select>
       </div>
+      <div class="tl-scrub" id="tl-scrub" hidden>
+        <span class="tl-scrub-label mono">As of</span>
+        <input type="range" id="f-date" min="0" max="100" value="100" step="1" aria-label="Date scrubber" />
+        <span class="tl-scrub-val mono" id="f-date-val">—</span>
+        <button class="tl-scrub-reset" id="f-date-reset" title="Show all">↺ all</button>
+      </div>
       <div class="tl-legend" id="legend"></div>
     </header>
 
@@ -147,6 +160,7 @@
         .sort((a, b) => (a.chain_seq || 0) - (b.chain_seq || 0));
     }
 
+    let DATE_MIN = null, DATE_MAX = null;  // epoch ms span of all events
     function initFilters() {
       const states = [...new Set((DOC.story_chains || []).map(c => c.geo?.state).filter(Boolean))].sort();
       const schemes = [...new Set((DOC.story_chains || []).map(c => c.scheme_ref).filter(Boolean))].sort();
@@ -157,6 +171,21 @@
       // stage legend
       document.getElementById("legend").innerHTML = STAGE_ORDER
         .map(s => `<span class="stage-key st-${s}">${esc(STAGE_LABEL[s])}</span>`).join("");
+
+      // date-scrubber: compute the span across all events, wire the slider
+      const times = (DOC.fiscal_events || []).map(e => Date.parse(e.date)).filter(n => !isNaN(n));
+      if (times.length >= 2) {
+        DATE_MIN = Math.min(...times); DATE_MAX = Math.max(...times);
+        document.getElementById("tl-scrub").hidden = false;
+        const sl = document.getElementById("f-date");
+        sl.addEventListener("input", render);
+        document.getElementById("f-date-reset").addEventListener("click", () => { sl.value = 100; render(); });
+      }
+    }
+    function scrubCutoff() {
+      if (DATE_MIN == null) return null;
+      const pct = +document.getElementById("f-date").value / 100;
+      return DATE_MIN + (DATE_MAX - DATE_MIN) * pct;  // epoch ms cutoff
     }
 
     function coverageBar(ev) {
@@ -189,18 +218,30 @@
       const fState = document.getElementById("f-state").value;
       const fScheme = document.getElementById("f-scheme").value;
       const fStatus = document.getElementById("f-status").value;
+      const cutoff = scrubCutoff();
+      if (cutoff != null) {
+        const lbl = new Date(cutoff).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+        document.getElementById("f-date-val").textContent = (+document.getElementById("f-date").value === 100) ? "all time" : lbl;
+      }
       let chains = (DOC.story_chains || []).filter(c =>
         (!fState || c.geo?.state === fState) &&
         (!fScheme || c.scheme_ref === fScheme) &&
         (!fStatus || c.status === fStatus));
+      // date scrubber: keep chains that had at least one event by the cutoff
+      if (cutoff != null && +document.getElementById("f-date").value < 100) {
+        chains = chains.filter(c => eventsFor(c).some(e => { const t = Date.parse(e.date); return isNaN(t) || t <= cutoff; }));
+      }
       chains.sort((a, b) => (b.last_event_at || "").localeCompare(a.last_event_at || ""));
 
       if (!chains.length) { document.getElementById("chains").innerHTML = `<p class="tl-empty">No story chains match these filters.</p>`; return; }
 
       document.getElementById("chains").innerHTML = chains.map(c => {
         const evs = eventsFor(c);
-        const rail = evs.map(e => `
-          <div class="ev st-${e.stage}">
+        const rail = evs.map(e => {
+          const t = Date.parse(e.date);
+          const future = cutoff != null && +document.getElementById("f-date").value < 100 && !isNaN(t) && t > cutoff;
+          return `
+          <div class="ev st-${e.stage}${future ? " ev-future" : ""}">
             <div class="ev-date">${fmtDate(e.date, e.date_precision)} · <span class="st-${e.stage}">${esc(STAGE_LABEL[e.stage]||e.stage)}</span></div>
             <div class="ev-title">${esc(e.title)}</div>
             ${e.summary ? `<div class="ev-summary">${esc(e.summary)}</div>` : ""}
@@ -210,7 +251,8 @@
               ${srcFoot(e.primary_source)}
             </div>
             ${coverageBar(e)}
-          </div>`).join("");
+          </div>`;
+        }).join("");
         return `
           <article class="chain">
             <div class="chain-head">
