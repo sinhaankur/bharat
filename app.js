@@ -422,6 +422,29 @@
     return null;
   }
 
+  // Categorical palette for dimension overlays (language / politics).
+  const DIM_LANG_COLORS = {};  // dominant language → stable colour, assigned on demand
+  const DIM_PALETTE = ['oklch(0.70 0.15 30)','oklch(0.72 0.14 90)','oklch(0.70 0.15 150)','oklch(0.68 0.14 210)','oklch(0.68 0.16 280)','oklch(0.72 0.15 340)','oklch(0.75 0.12 60)','oklch(0.66 0.13 180)','oklch(0.70 0.14 250)','oklch(0.74 0.13 120)'];
+  function langColor(lang) {
+    if (!lang) return 'oklch(0.22 0 0)';
+    if (!(lang in DIM_LANG_COLORS)) DIM_LANG_COLORS[lang] = DIM_PALETTE[Object.keys(DIM_LANG_COLORS).length % DIM_PALETTE.length];
+    return DIM_LANG_COLORS[lang];
+  }
+  function dimLangFor(state, district) {
+    const lang = LEDGER?.states?.[state]?.districts?.[district]?.dimensions?.language;
+    // prefer district mother-tongue if ever sourced; else the state official (first listed)
+    return lang?.dominant_mother_tongue || (lang?.state_official || [])[0] || null;
+  }
+  function dimAlignFor(state, district) {
+    return LEDGER?.states?.[state]?.districts?.[district]?.dimensions?.politics?.alignment_with_centre || null;
+  }
+  function alignColor(align) {
+    if (!align) return 'oklch(0.22 0 0)';
+    if (/aligned with Union/.test(align)) return 'oklch(0.70 0.15 150)';   // green
+    if (/opposition/.test(align)) return 'oklch(0.66 0.20 28)';            // red
+    return 'oklch(0.60 0.05 250)';                                          // neutral (UT-admin/other)
+  }
+
   function renderDistrictLayer(geo, stateName) {
     // Hide the state layer's other states by drastically reducing their opacity (keep selected state visible underneath as outline)
     if (geoLayer) {
@@ -475,6 +498,12 @@
             fillColor: seqColor(0.2 + 0.75 * t),
             fillOpacity: 0.92
           };
+        }
+        if (ui.state.districtMode === 'language') {
+          return { className: 'india-state-path', color: 'oklch(0.985 0 0 / 0.35)', weight: 0.6, fillColor: langColor(dimLangFor(stateName, dn)), fillOpacity: 0.85 };
+        }
+        if (ui.state.districtMode === 'politics') {
+          return { className: 'india-state-path', color: 'oklch(0.985 0 0 / 0.35)', weight: 0.6, fillColor: alignColor(dimAlignFor(stateName, dn)), fillOpacity: 0.85 };
         }
         const pop = getDistrictPop(stateName, dn)?.population;
         const t = pop != null ? (pop - popMin) / Math.max(1, popMax - popMin) : 0;
@@ -558,19 +587,33 @@
       host.parentNode.insertBefore(bar, host);
     }
     const mode = ui.state.districtMode || 'population';
-    const legend = (mode === 'money' && moneyCount) ? `
+    let legend = '';
+    if (mode === 'money' && moneyCount) legend = `
       <div class="dmt-legend">
         <span class="dmt-leg-item"><span class="dmt-chip" style="background:${seqColor(0.3)}"></span>low</span>
         <span class="dmt-leg-item"><span class="dmt-chip" style="background:${seqColor(0.95)}"></span>high ₹ in <span class="dmt-leg-note">(log scale)</span></span>
         <span class="dmt-leg-item"><span class="dmt-chip dmt-chip--flag"></span>⚠ fund freeze / non-delivery</span>
         <span class="dmt-leg-item"><span class="dmt-chip" style="background:oklch(0.32 0.06 250);border:1.5px dashed oklch(0.72 0.13 250)"></span>data, no public ₹ figure</span>
         <span class="dmt-leg-item"><span class="dmt-chip" style="background:oklch(0.2 0 0);border:1px solid oklch(0.985 0 0 / 0.2)"></span>no data yet</span>
-      </div>` : '';
+      </div>`;
+    else if (mode === 'language') {
+      // distinct languages present in this state's districts
+      const langs = [...new Set([...districtPathByName.keys()].map(dn => dimLangFor(stateName, dn)).filter(Boolean))];
+      legend = `<div class="dmt-legend">
+        ${langs.map(l => `<span class="dmt-leg-item"><span class="dmt-chip" style="background:${langColor(l)}"></span>${l}</span>`).join('')}
+        <span class="dmt-leg-item dmt-leg-note">official language (state); district mother-tongue = gap</span></div>`;
+    } else if (mode === 'politics') legend = `<div class="dmt-legend">
+        <span class="dmt-leg-item"><span class="dmt-chip" style="background:oklch(0.70 0.15 150)"></span>aligned with Union</span>
+        <span class="dmt-leg-item"><span class="dmt-chip" style="background:oklch(0.66 0.20 28)"></span>opposition to Union</span>
+        <span class="dmt-leg-item"><span class="dmt-chip" style="background:oklch(0.60 0.05 250)"></span>UT-admin / other</span>
+        <span class="dmt-leg-item dmt-leg-note">state govt alignment — shown beside money, not a causal claim</span></div>`;
     bar.innerHTML = `
       <div class="dmt-row">
         <span class="dmt-label">Colour districts by</span>
         <button class="dmt-btn ${mode === 'population' ? 'on' : ''}" data-m="population">Population</button>
         <button class="dmt-btn ${mode === 'money' ? 'on' : ''}" data-m="money" ${moneyCount ? '' : 'disabled title="No district money data in this state yet"'}>Money flow ${moneyCount ? `· ${moneyCount}` : ''}</button>
+        <button class="dmt-btn ${mode === 'language' ? 'on' : ''}" data-m="language">Language</button>
+        <button class="dmt-btn ${mode === 'politics' ? 'on' : ''}" data-m="politics">Politics</button>
       </div>
       ${legend}`;
     bar.querySelectorAll('.dmt-btn').forEach(b => b.addEventListener('click', () => {
