@@ -784,10 +784,24 @@
             ${lang.state_official_source ? `<span class="dim-src" title="${esc(lang.state_official_source)}">ⓘ</span>` : ''}</span>
         </div>`);
     }
+    const pol = dims.politics;
+    if (pol && pol.state_ruling_party) {
+      const align = pol.alignment_with_centre || '';
+      const alignCls = /aligned with Union/.test(align) ? 'dim-align-yes'
+        : /opposition/.test(align) ? 'dim-align-no' : 'dim-align-neutral';
+      rows.push(`
+        <div class="dim-row">
+          <span class="dim-key">Politics</span>
+          <span class="dim-val">State govt: <b>${esc(pol.state_ruling_party)}</b>
+            <span class="dim-align ${alignCls}" title="Shown to juxtapose with money flow — not a causal claim">${esc(align)}</span>
+            · <span class="dim-gap">constituency MP/MLA: gap (ECI)</span></span>
+        </div>`);
+    }
     if (!rows.length) return '';
     return `
       <div class="india-detail-section-title">District dimensions</div>
-      <div class="dim-list">${rows.join('')}</div>`;
+      <div class="dim-list">${rows.join('')}</div>
+      <p class="india-caveat" style="margin-top:0.4rem">Dimensions are shown side-by-side with the money flow so patterns are visible; correlation is not causation, and no "bias score" is computed. State-level values are labelled as such.</p>`;
   }
 
   // Map-as-hub: a district's story-chain timeline + approved news, inline in the panel.

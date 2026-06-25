@@ -850,6 +850,8 @@ a:hover { border-color: var(--foreground); }
 .dim-val b { font-weight: 600; }
 .dim-gap { font-family: var(--font-mono); font-size: 9px; color: oklch(0.78 0.16 70); font-style: italic; }
 .dim-src { color: var(--muted-foreground); cursor: help; font-size: 10px; margin-left: 2px; }
+.dim-align { font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.03em; padding: 1px 6px; border-radius: 999px; border: 1px solid currentColor; cursor: help; }
+.dim-align-yes { color: oklch(0.80 0.16 150); } .dim-align-no { color: oklch(0.76 0.16 28); } .dim-align-neutral { color: var(--muted-foreground); }
 .roster-list { display: flex; flex-direction: column; gap: 0.25rem; }
 .roster-row {
   display: flex; align-items: baseline; gap: 0.5rem;
