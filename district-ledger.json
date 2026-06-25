@@ -22363,11 +22363,46 @@
           ],
           "plants_note": "Munger's base is HERITAGE/colonial-era industry (private ITC + govt Railways + licensed arms), not modern central PSUs — a different economic-origin story than Begusarai. Plant figures are from encyclopaedic sources; upgrade to company/Railways reports for tier-1.",
           "departments": [],
-          "ledger": [],
+          "ledger": [
+            {
+              "fy": "2024-25",
+              "scheme": "MGNREGS",
+              "stream": "central_scheme",
+              "through_dept": "Rural Development (DRDA) → Block (BDO) → Gram Panchayat",
+              "money_in_cr": null,
+              "money_in_basis": "Munger DISTRICT MGNREGS expenditure not in any published static PDF — it lives only in the dynamic nrega.nic.in MIS portal (not machine-fetchable). Left as a gap rather than estimated.",
+              "intended": "Rural wage employment (100 days/household) + durable assets in Munger's rural blocks.",
+              "what_happened": {
+                "utilisation_pct": null,
+                "unspent_cr": null,
+                "lapsed": null,
+                "audit_flag": null,
+                "cag_para": null,
+                "vendor": null,
+                "state_context": {
+                  "bihar_total_expenditure_cr": 8473.73,
+                  "bihar_total_availability_cr": 7286.45,
+                  "bihar_persondays_cr": 25.04,
+                  "basis": "Bihar STATE totals FY2024-25 (₹8,473.73 cr actual expenditure; 25.04 cr persondays). Munger is one of 38 Bihar districts drawing from this pool; its district share is not separately published in this report."
+                },
+                "notes": "State-level figure shown for context; Munger's district-level expenditure/persondays/works are an explicit gap (dynamic MIS portal only)."
+              },
+              "responsible": {
+                "primary": "collector",
+                "secondary": []
+              },
+              "source": "https://www.dord.gov.in/static/uploads/2025/09/d81193f25cde78b36f36b559ffabbb18.pdf",
+              "source_tier": 1,
+              "source_name": "MGNREGA State Performance Report 2024-25, Dept of Rural Development (DORD), GoI",
+              "needs_pdf_upgrade": false,
+              "figure_gap": true,
+              "figure_gap_scope": "district-level (state figure is sourced)"
+            }
+          ],
           "_gaps": [
             "district_judge",
             "assembly_mlas",
-            "central_scheme_flows (MGNREGS/PMAY-G to rural blocks)",
+            "MGNREGS Munger DISTRICT expenditure/persondays (dynamic MIS only; Bihar STATE total IS sourced); PMAY-G district flows",
             "itc_munger_employment_and_output",
             "jamalpur_workshop_headcount",
             "illegal_arms_revenue_leakage (by nature unmeasured)",

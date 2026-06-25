@@ -932,6 +932,7 @@
             ${done ? `<span class="ledger-cell"><b>Done</b> ${esc(done)}</span>` : ''}
           </div>
           <div class="ledger-channel">via ${esc(r.through_dept || '—')} ${srcFootnote(r.source, r.source_tier)}</div>
+          ${w.state_context ? `<div class="ledger-statectx"><span class="ledger-statectx-tag">state context</span> ${esc(w.state_context.basis)}</div>` : ''}
           ${w.notes ? `<div class="ledger-rownote">${esc(w.notes)}</div>` : ''}
         </div>`;
     }).join('');
