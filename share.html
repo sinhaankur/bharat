@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Share — social posts from the data</title>
+  <meta name="description" content="Turn each fiscal story into ready-to-post Twitter/X, Instagram and Facebook copy — with the scale-of-problem and source-coverage hook." />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .sh-wrap { max-width: 920px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; }
+    .sh-head h1 { margin: 0.3rem 0 0.5rem; font-size: clamp(1.6rem, 3.5vw, 2.4rem); }
+    .sh-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.55; max-width: 70ch; }
+    .sh-pick { margin: 1.2rem 0; }
+    .sh-pick select { background: oklch(0.18 0 0); color: var(--foreground); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 0.5rem 0.8rem; font-family: var(--font-mono); font-size: 12px; min-width: 280px; }
+    .sh-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
+    .sh-card { border: 1px solid var(--border-strong); border-radius: var(--radius); background: oklch(0.165 0 0); padding: 1rem 1.1rem; display: flex; flex-direction: column; }
+    .sh-plat { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.6rem; }
+    .sh-plat .ic { font-size: 16px; }
+    .sh-plat .nm { font-weight: 600; font-size: 0.9rem; }
+    .sh-plat .len { margin-left: auto; font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
+    .sh-plat .len.over { color: oklch(0.7 0.2 28); }
+    .sh-text { flex: 1; white-space: pre-wrap; font-size: 0.85rem; line-height: 1.5; color: var(--foreground); background: oklch(0.13 0 0); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.7rem 0.8rem; margin-bottom: 0.6rem; }
+    .sh-actions { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .sh-btn { font-family: var(--font-mono); font-size: 11px; padding: 0.4rem 0.8rem; border-radius: var(--radius-sm); border: 1px solid var(--border-strong); background: transparent; color: var(--foreground); cursor: pointer; text-decoration: none; }
+    .sh-btn:hover { border-color: var(--warm); }
+    .sh-btn.primary { background: var(--warm); color: oklch(0.18 0 0); border-color: transparent; font-weight: 600; }
+    .sh-note { font-size: 0.8rem; color: var(--muted-foreground); line-height: 1.55; margin-top: 1.6rem; border-top: 1px solid var(--border); padding-top: 1rem; }
+    .sh-note code { font-family: var(--font-mono); font-size: 11px; background: oklch(0.22 0 0); padding: 1px 5px; border-radius: 3px; }
+    .sh-empty { color: var(--muted-foreground); padding: 2rem 0; }
+  </style>
+</head>
+<body>
+  <div id="site-nav"></div>
+
+  <main class="sh-wrap">
+    <header class="sh-head">
+      <div class="eyebrow">Distribution · ready-to-post</div>
+      <h1 class="display">Share the data</h1>
+      <p>Pick a story; get post copy tailored to each platform — the scale-of-problem and source-coverage
+      hook baked in, with a link back. Copy it, or open the platform's composer pre-filled. Every post
+      is built from sourced data — no clickbait, no invented numbers.</p>
+      <div class="sh-pick">
+        <label class="mono" style="font-size:11px;color:var(--muted-foreground)">Story: </label>
+        <select id="pick"></select>
+      </div>
+    </header>
+
+    <div class="sh-cards" id="cards"><p class="sh-empty">Loading…</p></div>
+
+    <p class="sh-note">
+      <b>How posting works:</b> this page generates copy + opens the platform composer (X/Facebook
+      web-share). Instagram has no web-composer, so copy the text + attach your own image. For
+      <b>fully automatic</b> posting on a schedule, run <code>post_to_social.py</code> on your own
+      machine with your own API keys (a static site can't auto-post). See <a href="about.html">methodology</a>.
+    </p>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script>
+    const BASE = "https://sinhaankur.github.io/india-fiscal-map";
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    let DOC = null;
+
+    fetch("fiscal-events.json").then(r => r.json()).then(ev => {
+      DOC = ev;
+      const sel = document.getElementById("pick");
+      (ev.story_chains || []).forEach(c => sel.add(new Option(`${c.title}`, c.id)));
+      sel.addEventListener("change", render);
+      render();
+    }).catch(e => document.getElementById("cards").innerHTML = `<p class="sh-empty">Load error: ${esc(e.message)}</p>`);
+
+    function chain() {
+      const id = document.getElementById("pick").value;
+      return (DOC.story_chains || []).find(c => c.id === id) || (DOC.story_chains || [])[0];
+    }
+    function eventsFor(c) {
+      return (c.event_ids || []).map(id => (DOC.fiscal_events || []).find(e => e.id === id)).filter(Boolean);
+    }
+    function maxSeverity(c) {
+      let best = null;
+      for (const e of eventsFor(c)) { const s = e.severity; if (s && (best == null || (s.score||0) > best.score)) best = { score: s.score||0, band: s.band }; }
+      return best;
+    }
+    function topAmount(c) {
+      let m = 0; for (const e of eventsFor(c)) if (typeof e.amount_cr === "number") m = Math.max(m, e.amount_cr);
+      return m || null;
+    }
+
+    function buildPosts(c) {
+      const loc = `${c.geo?.district || ""}${c.geo?.state ? ", " + c.geo.state : ""}`.trim();
+      const sev = maxSeverity(c);
+      const amt = topAmount(c);
+      const url = `${BASE}/story.html?chain=${encodeURIComponent(c.id)}`;
+      const sevTxt = sev ? `${sev.band.toUpperCase()} (${sev.score}/12 scale-of-problem)` : "";
+      const amtTxt = amt ? `₹${Number(amt).toLocaleString("en-IN")} cr` : "";
+      const tags = ["#IndiaFiscalMap", c.scheme_ref && !c.scheme_ref.startsWith("_") ? "#" + c.scheme_ref.replace(/[^A-Za-z0-9]/g, "") : "", c.geo?.state ? "#" + c.geo.state.replace(/[^A-Za-z0-9]/g, "") : "", "#PublicMoney"].filter(Boolean);
+
+      // Twitter/X — tight, hook-first, <=280
+      const x = `${c.one_line || c.title}\n\n${amtTxt ? "💰 " + amtTxt + "  " : ""}${sevTxt ? "⚠ " + sevTxt : ""}\n📍 ${loc}\n\n${tags.slice(0, 3).join(" ")}\n${url}`;
+
+      // Facebook — a touch longer, context ok
+      const fb = `${c.title}\n\n${c.one_line || ""}\n\n${amtTxt ? "Funds in question: " + amtTxt + "\n" : ""}${sevTxt ? "Scale of the problem: " + sevTxt + "\n" : ""}Where: ${loc}\n\nEvery figure is government-sourced or flagged as a gap. See the full source-and-bias breakdown:\n${url}\n\n${tags.join(" ")}`;
+
+      // Instagram — caption style, hashtag block, no clickable link (put in bio)
+      const ig = `${c.title} 🇮🇳\n\n${c.one_line || ""}\n${amtTxt ? "\n💰 " + amtTxt : ""}${sevTxt ? "\n⚠ " + sevTxt : ""}\n📍 ${loc}\n\nSourced data, not opinion. Link in bio.\n\n${[...tags, "#dataviz", "#accountability", "#governance"].join(" ")}`;
+
+      return { x, fb, ig, url };
+    }
+
+    function card(plat, ic, name, text, limit, openUrl) {
+      const len = text.length;
+      const over = limit && len > limit;
+      return `
+        <div class="sh-card">
+          <div class="sh-plat"><span class="ic">${ic}</span><span class="nm">${name}</span>
+            <span class="len ${over ? "over" : ""}">${len}${limit ? "/" + limit : ""}</span></div>
+          <div class="sh-text" data-text="${esc(text)}">${esc(text)}</div>
+          <div class="sh-actions">
+            <button class="sh-btn primary" data-copy>📋 Copy</button>
+            ${openUrl ? `<a class="sh-btn" href="${openUrl}" target="_blank" rel="noopener">↗ Open ${name}</a>` : ""}
+          </div>
+        </div>`;
+    }
+
+    function render() {
+      const c = chain();
+      if (!c) { document.getElementById("cards").innerHTML = `<p class="sh-empty">No stories yet.</p>`; return; }
+      const p = buildPosts(c);
+      const xIntent = `https://twitter.com/intent/tweet?text=${encodeURIComponent(p.x)}`;
+      const fbIntent = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(p.url)}&quote=${encodeURIComponent(p.fb)}`;
+      document.getElementById("cards").innerHTML =
+        card("x", "𝕏", "Twitter / X", p.x, 280, xIntent) +
+        card("fb", "📘", "Facebook", p.fb, null, fbIntent) +
+        card("ig", "📷", "Instagram", p.ig, 2200, null);
+      document.querySelectorAll("[data-copy]").forEach(b => b.addEventListener("click", () => {
+        const t = b.closest(".sh-card").querySelector(".sh-text").dataset.text;
+        navigator.clipboard?.writeText(t);
+        b.textContent = "✓ Copied"; setTimeout(() => b.textContent = "📋 Copy", 1300);
+      }));
+    }
+  </script>
+  <script src="site-nav.js"></script>
+</body>
+</html>

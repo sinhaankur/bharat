@@ -13,3 +13,6 @@ package-lock.json
 news-feed.json
 # Curator's local export — feed into apply_curation.py, not committed.
 curation-export.json
+# Social auto-poster local state + secrets — NEVER commit keys.
+.social_posted.json
+.env

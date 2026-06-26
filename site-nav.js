@@ -9,6 +9,7 @@
       { href: "explore.html", text: "Explore" },
       { href: "timeline.html", text: "Timeline" },
       { href: "articles.html", text: "Analysis" },
+      { href: "share.html", text: "Share" },
     ]},
     { label: "Understand", items: [
       { href: "how-it-works.html", text: "How it works" },
