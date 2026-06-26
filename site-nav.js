@@ -15,6 +15,7 @@
       { href: "how-it-works.html", text: "How it works" },
       { href: "command-chain.html", text: "Chain of command" },
       { href: "history.html", text: "History race" },
+      { href: "global.html", text: "India vs world" },
     ]},
     { label: "Data", items: [
       { href: "data.html", text: "Data & API" },
