@@ -92,15 +92,22 @@ def main():
         key = (g.get("state"), g.get("district"))
         if not key[0] or not key[1]:
             continue
-        a = agg.setdefault(key, {"events": 0, "news": 0, "flagged": False, "top_title": None})
+        a = agg.setdefault(key, {"events": 0, "news": 0, "flagged": False, "top_title": None, "max_severity": 0, "top_band": "low"})
         a["events"] += len(ch.get("event_ids", []))
         if a["top_title"] is None:
             a["top_title"] = ch.get("title")
-        # flag if any event in this chain is a delay/freeze/shortfall/audit stage
+        # flag if any event in this chain is a delay/freeze/shortfall/audit stage,
+        # and track the MAX severity score so bubble size = scale of problem.
         for eid in ch.get("event_ids", []):
             e = next((x for x in ev.get("fiscal_events", []) if x.get("id") == eid), None)
-            if e and e.get("stage") in ("delay", "shortfall", "audit_flag", "cag_para", "investigation"):
+            if not e:
+                continue
+            if e.get("stage") in ("delay", "shortfall", "audit_flag", "cag_para", "investigation"):
                 a["flagged"] = True
+            sev = (e.get("severity") or {}).get("score") or 0
+            if sev > a["max_severity"]:
+                a["max_severity"] = sev
+                a["top_band"] = (e.get("severity") or {}).get("band", "low")
 
     for n in approved.get("news_items", []):
         g = n.get("geo", {})
@@ -122,9 +129,10 @@ def main():
             "lat": round(c[0], 4), "lon": round(c[1], 4),
             "events": a["events"], "news": a["news"],
             "flagged": a["flagged"], "top_title": a["top_title"],
+            "max_severity": a.get("max_severity", 0), "top_band": a.get("top_band", "low"),
         })
 
-    bubbles.sort(key=lambda b: -(b["events"] + b["news"]))
+    bubbles.sort(key=lambda b: -(b.get("max_severity", 0)))
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump({
             "_meta": {

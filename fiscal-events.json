@@ -87,7 +87,17 @@
       "corroborating_news": [],
       "confidence": "reported",
       "figure_gap": true,
-      "needs_pdf_upgrade": true
+      "needs_pdf_upgrade": true,
+      "severity": {
+        "money": null,
+        "people": 4,
+        "people_scope": "state",
+        "governance": 1,
+        "score": 5,
+        "band": "moderate",
+        "basis": "₹ unsourced → money n/a; state → people 4/4; stage 'delay' → governance 1/4",
+        "components_sourced": false
+      }
     },
     {
       "id": "fe_wb_mgnregs_dues_2025",
@@ -116,7 +126,17 @@
       "confidence": "reported",
       "figure_gap": false,
       "amount_note": "₹3,038 cr is a Centre-stated Rajya Sabha figure (news-reported); upgrade to the Lok Sabha/RS Q&A PDF for tier-1.",
-      "needs_pdf_upgrade": true
+      "needs_pdf_upgrade": true,
+      "severity": {
+        "money": 4,
+        "people": 4,
+        "people_scope": "state",
+        "governance": 2,
+        "score": 10,
+        "band": "severe",
+        "basis": "₹3038 cr → money 4/4; state → people 4/4; stage 'shortfall' → governance 2/4",
+        "components_sourced": true
+      }
     },
     {
       "id": "fe_wb_mgnregs_sc_2026",
@@ -144,7 +164,17 @@
       "corroborating_news": [],
       "confidence": "reported",
       "figure_gap": true,
-      "needs_pdf_upgrade": true
+      "needs_pdf_upgrade": true,
+      "severity": {
+        "money": null,
+        "people": 4,
+        "people_scope": "state",
+        "governance": 1,
+        "score": 5,
+        "band": "moderate",
+        "basis": "₹ unsourced → money n/a; state → people 4/4; stage 'action' → governance 1/4",
+        "components_sourced": false
+      }
     },
     {
       "id": "fe_wb_mgnregs_resume_2026",
@@ -172,7 +202,17 @@
       "corroborating_news": [],
       "confidence": "reported",
       "figure_gap": true,
-      "needs_pdf_upgrade": true
+      "needs_pdf_upgrade": true,
+      "severity": {
+        "money": null,
+        "people": 4,
+        "people_scope": "state",
+        "governance": 0,
+        "score": 4,
+        "band": "moderate",
+        "basis": "₹ unsourced → money n/a; state → people 4/4; stage 'outcome' → governance 0/4",
+        "components_sourced": false
+      }
     },
     {
       "id": "fe_kmc_grant_be_2025",
@@ -199,7 +239,17 @@
       },
       "corroborating_news": [],
       "confidence": "documented",
-      "figure_gap": false
+      "figure_gap": false,
+      "severity": {
+        "money": 4,
+        "people": 4,
+        "people_scope": "state",
+        "governance": 0,
+        "score": 8,
+        "band": "high",
+        "basis": "₹2897 cr → money 4/4; state → people 4/4; stage 'release' → governance 0/4",
+        "components_sourced": true
+      }
     }
   ]
 }

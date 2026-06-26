@@ -1699,11 +1699,15 @@
   function buildNewsBubbles() {
     if (!map || !BUBBLES || !(BUBBLES.bubbles || []).length) return;
     newsBubbleLayer = L.layerGroup();
-    const maxAct = Math.max(...BUBBLES.bubbles.map(b => b.events + b.news), 1);
+    // Bubble size = SCALE OF PROBLEM (max severity score 0-12), falling back to
+    // raw activity count where severity is absent.
+    const useSev = BUBBLES.bubbles.some(b => (b.max_severity || 0) > 0);
+    const maxMetric = Math.max(...BUBBLES.bubbles.map(b => useSev ? (b.max_severity || 0) : (b.events + b.news)), 1);
+    const SEV_COLOR = { severe: 'oklch(0.64 0.24 25)', high: 'oklch(0.72 0.18 45)', moderate: 'oklch(0.80 0.15 75)', low: 'oklch(0.78 0.13 150)' };
     for (const b of BUBBLES.bubbles) {
-      const act = b.events + b.news;
-      const r = 7 + 13 * Math.sqrt(act / maxAct);   // area-ish scaling
-      const color = b.flagged ? 'oklch(0.65 0.22 25)' : 'oklch(0.80 0.16 75)';
+      const metric = useSev ? (b.max_severity || 0) : (b.events + b.news);
+      const r = 7 + 14 * Math.sqrt(metric / maxMetric);   // area-ish scaling by severity
+      const color = b.top_band ? (SEV_COLOR[b.top_band] || 'oklch(0.80 0.16 75)') : (b.flagged ? 'oklch(0.65 0.22 25)' : 'oklch(0.80 0.16 75)');
       const m = L.circleMarker([b.lat, b.lon], {
         radius: r, color, weight: 1.5,
         fillColor: color, fillOpacity: 0.35,
@@ -1712,6 +1716,7 @@
       m.bindTooltip(
         `<b>${esc(b.district)}</b>, ${esc(b.state)}<br>` +
         `${b.events} event${b.events === 1 ? '' : 's'}${b.news ? ` · ${b.news} news` : ''}` +
+        `${b.max_severity ? `<br>scale of problem: <b>${esc(b.top_band)}</b> (${b.max_severity}/12)` : ''}` +
         `${b.flagged ? '<br>⚑ flagged (fund freeze / audit)' : ''}` +
         `${b.top_title ? `<br><span style="opacity:.8">${esc(b.top_title)}</span>` : ''}`,
         { direction: 'top', className: 'news-bubble-tip' }

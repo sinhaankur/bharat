@@ -12,7 +12,9 @@
       "events": 4,
       "news": 0,
       "flagged": true,
-      "top_title": "Birbhum's MGNREGS money: frozen at the top for four years"
+      "top_title": "Birbhum's MGNREGS money: frozen at the top for four years",
+      "max_severity": 10,
+      "top_band": "severe"
     },
     {
       "state": "West Bengal",
@@ -22,7 +24,9 @@
       "events": 1,
       "news": 0,
       "flagged": false,
-      "top_title": "Kolkata's civic money: over half flows down as grant"
+      "top_title": "Kolkata's civic money: over half flows down as grant",
+      "max_severity": 8,
+      "top_band": "high"
     }
   ]
 }

@@ -54,6 +54,8 @@
     .ev-gap { font-family: var(--font-mono); font-size: 9px; color: oklch(0.78 0.16 70); font-style: italic; }
     .conf { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.05em; text-transform: uppercase; padding: 1px 6px; border-radius: 999px; border: 1px solid currentColor; }
     .conf-documented{color:oklch(0.80 0.16 150)} .conf-reported{color:oklch(0.80 0.14 60)} .conf-alleged{color:oklch(0.76 0.16 28)}
+    .sev { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.04em; text-transform: uppercase; padding: 1px 7px; border-radius: 999px; border: 1px solid currentColor; cursor: help; font-weight: 600; }
+    .sev-low{color:oklch(0.72 0.10 150)} .sev-mod{color:oklch(0.80 0.14 75)} .sev-high{color:oklch(0.76 0.17 45)} .sev-sev{color:oklch(0.66 0.22 25)} .sev-unk{color:var(--muted-foreground)}
     .src-link { color: oklch(0.74 0.16 75); font-size: 11px; text-decoration: none; }
     .tier-warn { color: oklch(0.78 0.16 70); font-size: 10px; cursor: help; }
 
@@ -100,6 +102,7 @@
         <select id="f-state"><option value="">All states</option></select>
         <select id="f-scheme"><option value="">All schemes</option></select>
         <select id="f-status"><option value="">Any status</option><option value="open">Open</option><option value="resolved">Resolved</option><option value="dormant">Dormant</option></select>
+        <select id="f-sev"><option value="">Any severity</option><option value="severe">Severe only</option><option value="high">High+</option><option value="moderate">Moderate+</option></select>
       </div>
       <div class="tl-scrub" id="tl-scrub" hidden>
         <span class="tl-scrub-label mono">As of</span>
@@ -167,7 +170,7 @@
       const sSel = document.getElementById("f-state"), scSel = document.getElementById("f-scheme");
       states.forEach(s => sSel.add(new Option(s, s)));
       schemes.forEach(s => scSel.add(new Option(s, s)));
-      ["f-state","f-scheme","f-status"].forEach(id => document.getElementById(id).addEventListener("change", render));
+      ["f-state","f-scheme","f-status","f-sev"].forEach(id => document.getElementById(id).addEventListener("change", render));
       // stage legend
       document.getElementById("legend").innerHTML = STAGE_ORDER
         .map(s => `<span class="stage-key st-${s}">${esc(STAGE_LABEL[s])}</span>`).join("");
@@ -208,6 +211,15 @@
         <div class="cov-meta"><span>${total} source${total>1?"s":""}</span>${blind}<span>${langBlind}</span></div></div>`;
     }
 
+    const SEV_BAND = { low: "sev-low", moderate: "sev-mod", high: "sev-high", severe: "sev-sev", unknown: "sev-unk" };
+    function severityBadge(s) {
+      if (!s) return "";
+      const cls = SEV_BAND[s.band] || "sev-unk";
+      const num = s.score != null ? `${s.score}/12` : "n/a";
+      const partial = s.components_sourced === false ? " ·partial" : "";
+      const tip = (s.basis || "") + (s.components_sourced === false ? "  (₹ unsourced — partial score)" : "");
+      return `<span class="sev ${cls}" title="${esc(tip)}">⚠ ${esc(s.band)} ${num}${partial}</span>`;
+    }
     function srcFoot(ps) {
       if (!ps || !ps.url) return "";
       const weak = (ps.source_tier || 9) >= 3;
@@ -231,6 +243,12 @@
       if (cutoff != null && +document.getElementById("f-date").value < 100) {
         chains = chains.filter(c => eventsFor(c).some(e => { const t = Date.parse(e.date); return isNaN(t) || t <= cutoff; }));
       }
+      // severity floor: keep chains with at least one event at/above the chosen band
+      const fSev = document.getElementById("f-sev").value;
+      if (fSev) {
+        const floor = { moderate: 4, high: 7, severe: 10 }[fSev] || 0;
+        chains = chains.filter(c => eventsFor(c).some(e => (e.severity?.score || 0) >= floor));
+      }
       chains.sort((a, b) => (b.last_event_at || "").localeCompare(a.last_event_at || ""));
 
       if (!chains.length) { document.getElementById("chains").innerHTML = `<p class="tl-empty">No story chains match these filters.</p>`; return; }
@@ -246,6 +264,7 @@
             <div class="ev-title">${esc(e.title)}</div>
             ${e.summary ? `<div class="ev-summary">${esc(e.summary)}</div>` : ""}
             <div class="ev-foot">
+              ${severityBadge(e.severity)}
               ${e.amount_cr != null ? `<span class="ev-amt">₹${Number(e.amount_cr).toLocaleString("en-IN")} cr</span>` : (e.figure_gap ? `<span class="ev-gap">figure gap</span>` : "")}
               <span class="conf conf-${e.confidence}">${esc(e.confidence)}</span>
               ${srcFoot(e.primary_source)}
