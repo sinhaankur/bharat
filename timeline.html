@@ -56,6 +56,19 @@
     .conf-documented{color:oklch(0.80 0.16 150)} .conf-reported{color:oklch(0.80 0.14 60)} .conf-alleged{color:oklch(0.76 0.16 28)}
     .sev { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.04em; text-transform: uppercase; padding: 1px 7px; border-radius: 999px; border: 1px solid currentColor; cursor: help; font-weight: 600; }
     .sev-low{color:oklch(0.72 0.10 150)} .sev-mod{color:oklch(0.80 0.14 75)} .sev-high{color:oklch(0.76 0.17 45)} .sev-sev{color:oklch(0.66 0.22 25)} .sev-unk{color:var(--muted-foreground)}
+    .tl-views { display: inline-flex; gap: 0; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); overflow: hidden; margin: 0.8rem 0 0; }
+    .tl-view-btn { background: transparent; color: var(--muted-foreground); border: none; padding: 0.5rem 0.9rem; font-family: var(--font-mono); font-size: 11px; cursor: pointer; }
+    .tl-view-btn.on { background: var(--warm); color: oklch(0.18 0 0); font-weight: 600; }
+    .chain-politics { margin: 0.5rem 0 0.2rem; font-size: 0.82rem; color: var(--muted-foreground); background: oklch(0.18 0.03 285 / 0.3); border-left: 3px solid oklch(0.6 0.14 285); border-radius: var(--radius-sm); padding: 0.5rem 0.7rem; line-height: 1.5; }
+    .chain-politics b { color: var(--foreground); }
+    .pl-tag { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.06em; text-transform: uppercase; color: oklch(0.78 0.12 285); margin-right: 0.3rem; }
+    .pl-align { font-family: var(--font-mono); font-size: 9px; padding: 1px 6px; border-radius: 999px; border: 1px solid currentColor; }
+    .pl-yes{color:oklch(0.80 0.16 150)} .pl-no{color:oklch(0.74 0.18 28)} .pl-neutral{color:var(--muted-foreground)}
+    .pl-caveat { display: block; font-family: var(--font-mono); font-size: 8.5px; color: var(--muted-foreground); margin-top: 0.25rem; }
+    .chain-related { margin-top: 0.6rem; font-size: 11px; display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; }
+    .cr-tag { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted-foreground); }
+    .cr-link { background: transparent; border: 1px solid var(--border-strong); color: oklch(0.84 0.15 78); border-radius: 999px; padding: 2px 9px; font-size: 10px; cursor: pointer; }
+    .cr-link:hover { border-color: var(--warm); }
     .src-link { color: oklch(0.74 0.16 75); font-size: 11px; text-decoration: none; }
     .tier-warn { color: oklch(0.78 0.16 70); font-size: 10px; cursor: help; }
 
@@ -104,6 +117,10 @@
         <select id="f-status"><option value="">Any status</option><option value="open">Open</option><option value="resolved">Resolved</option><option value="dormant">Dormant</option></select>
         <select id="f-sev"><option value="">Any severity</option><option value="severe">Severe only</option><option value="high">High+</option><option value="moderate">Moderate+</option></select>
       </div>
+      <div class="tl-views" role="tablist" aria-label="View">
+        <button class="tl-view-btn on" data-view="money" title="Money &amp; scale only — no political framing">💰 Money view</button>
+        <button class="tl-view-btn" data-view="politics" title="Adds state party-alignment framing beside the money">🏛 Politics view</button>
+      </div>
       <div class="tl-scrub" id="tl-scrub" hidden>
         <span class="tl-scrub-label mono">As of</span>
         <input type="range" id="f-date" min="0" max="100" value="100" step="1" aria-label="Date scrubber" />
@@ -141,14 +158,22 @@
       return dt.toLocaleDateString("en-IN", { day:"numeric", month:"short", year:"numeric" });
     };
 
-    let DOC = null, NEWS = {};
+    let DOC = null, NEWS = {}, LEDGER = null, VIEW = "money";
 
     Promise.all([
       fetch("fiscal-events.json").then(r => r.json()),
       fetch("approved-news.json").then(r => r.ok ? r.json() : { news_items: [] }).catch(() => ({ news_items: [] })),
-    ]).then(([events, news]) => {
+      fetch("district-ledger.json").then(r => r.ok ? r.json() : null).catch(() => null),
+    ]).then(([events, news, ledger]) => {
       DOC = events;
+      LEDGER = ledger;
       (news.news_items || []).forEach(n => { NEWS[n.id] = n; });
+      // Money/Politics view switch
+      document.querySelectorAll(".tl-view-btn").forEach(b => b.addEventListener("click", () => {
+        VIEW = b.dataset.view;
+        document.querySelectorAll(".tl-view-btn").forEach(x => x.classList.toggle("on", x === b));
+        render();
+      }));
       initFilters();
       render();
     }).catch(e => {
@@ -272,6 +297,9 @@
             ${coverageBar(e)}
           </div>`;
         }).join("");
+        const related = relatedChains(c);
+        const relatedHtml = related.length ? `<div class="chain-related"><span class="cr-tag">related (same scheme + district)</span> ${related.map(r => `<button class="cr-link" data-chain="${esc(r.id)}">${esc(r.title)}</button>`).join("")}</div>` : "";
+        const politicsHtml = (VIEW === "politics") ? politicsLens(c) : "";
         return `
           <article class="chain">
             <div class="chain-head">
@@ -280,9 +308,41 @@
               <span class="chain-meta">${esc(c.geo?.district||"")}${c.geo?.state?", "+esc(c.geo.state):""} · ${esc(c.scheme_ref||"")} · ${evs.length} events</span>
             </div>
             ${c.one_line ? `<p class="chain-oneline">${esc(c.one_line)}</p>` : ""}
+            ${politicsHtml}
             <div class="rail">${rail}</div>
+            ${relatedHtml}
           </article>`;
       }).join("");
+
+      // related-chain jump links
+      document.querySelectorAll(".cr-link").forEach(b => b.addEventListener("click", () => {
+        const t = document.querySelector(`article.chain h2`);
+        const target = (DOC.story_chains || []).find(c => c.id === b.dataset.chain);
+        if (target) { document.getElementById("f-scheme").value = ""; document.getElementById("f-state").value = ""; render();
+          setTimeout(() => { const el = [...document.querySelectorAll("article.chain h2")].find(h => h.textContent === target.title); el?.scrollIntoView({behavior:"smooth", block:"center"}); }, 50); }
+      }));
+    }
+
+    // Chain reaction: chains sharing the SAME scheme + district are mechanically
+    // related (always-true link — never an asserted causal claim).
+    function relatedChains(c) {
+      return (DOC.story_chains || []).filter(o => o.id !== c.id
+        && o.scheme_ref === c.scheme_ref
+        && o.geo?.district === c.geo?.district);
+    }
+
+    // Politics lens (only in Politics view): the state's alignment-with-centre,
+    // shown BESIDE the money — juxtaposition, never a causal/bias claim.
+    function politicsLens(c) {
+      const st = c.geo?.state;
+      const pol = LEDGER?.states?.[st]?.politics;
+      if (!pol || !pol.ruling_party) return "";
+      const align = pol.alignment_with_centre || "";
+      const cls = /aligned/.test(align) ? "pl-yes" : /opposition/.test(align) ? "pl-no" : "pl-neutral";
+      return `<div class="chain-politics">
+        <span class="pl-tag">political lens</span>
+        State govt: <b>${esc(pol.ruling_party)}</b> <span class="pl-align ${cls}">${esc(align)}</span> · Union: ${esc(pol.union_ruling||"")}
+        <span class="pl-caveat">shown beside the money for context — not a causal claim</span></div>`;
     }
   </script>
   <script src="site-nav.js"></script>
