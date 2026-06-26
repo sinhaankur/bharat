@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Story — source &amp; bias comparison</title>
+  <meta name="description" content="One fiscal story across every outlet that covered it — left, centre, right — with a bias distribution and blindspot view." />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .sy-wrap { max-width: 1100px; margin: 0 auto; padding: 1.4rem var(--pad-x) 5rem; display: grid; grid-template-columns: 1fr 300px; gap: 1.8rem; }
+    @media (max-width: 820px){ .sy-wrap { grid-template-columns: 1fr; } }
+    .sy-back { font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); text-decoration: none; }
+    .sy-title { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.6rem, 3.5vw, 2.4rem); line-height: 1.12; margin: 0.8rem 0 0.5rem; }
+    .sy-sub { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.55; margin: 0 0 1rem; }
+    /* L/C/R tabs */
+    .sy-tabs { display: inline-flex; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); overflow: hidden; margin-bottom: 1rem; }
+    .sy-tab { background: transparent; color: var(--muted-foreground); border: none; padding: 0.4rem 0.9rem; font-family: var(--font-mono); font-size: 11px; cursor: pointer; }
+    .sy-tab.on { background: var(--warm); color: oklch(0.18 0 0); font-weight: 600; }
+    .sy-bullets { margin: 0 0 1.4rem; padding-left: 1.2rem; }
+    .sy-bullets li { font-size: 0.95rem; line-height: 1.6; color: var(--foreground); margin-bottom: 0.6rem; }
+    .sy-srclist { display: flex; flex-direction: column; gap: 0.55rem; }
+    .sy-src { border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 0.7rem 0.85rem; background: oklch(0.165 0 0); text-decoration: none; display: block; }
+    .sy-src:hover { border-color: var(--warm); }
+    .sy-src-head { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+    .sy-outlet { font-weight: 600; font-size: 0.85rem; color: var(--foreground); }
+    .sy-lean { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.04em; text-transform: uppercase; padding: 1px 7px; border-radius: 999px; border: 1px solid currentColor; }
+    .lean-left{color:oklch(0.65 0.18 25)} .lean-cleft{color:oklch(0.70 0.13 40)} .lean-centre{color:oklch(0.72 0.04 250)} .lean-cright{color:oklch(0.70 0.12 250)} .lean-right{color:oklch(0.62 0.16 265)} .lean-state{color:oklch(0.62 0.12 300)} .lean-unknown{color:var(--muted-foreground)}
+    .sy-snip { font-size: 0.8rem; color: var(--muted-foreground); line-height: 1.45; margin-top: 0.3rem; }
+    .sy-lang { font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); }
+    /* sidebar */
+    .sy-side { align-self: start; position: sticky; top: 70px; }
+    .sy-card { border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 1rem 1.1rem; background: oklch(0.165 0 0); margin-bottom: 1rem; }
+    .sy-card h3 { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted-foreground); margin: 0 0 0.7rem; }
+    .sy-stat { display: flex; justify-content: space-between; font-size: 12.5px; padding: 0.3rem 0; border-bottom: 1px solid oklch(0.22 0 0); }
+    .sy-stat:last-child { border-bottom: 0; }
+    .sy-stat b { color: var(--foreground); }
+    .sy-biasbar { display: flex; height: 10px; border-radius: 999px; overflow: hidden; background: var(--muted); margin: 0.5rem 0; }
+    .sy-biasbar span { height: 100%; }
+    .bb-left{background:oklch(0.65 0.18 25)} .bb-cleft{background:oklch(0.70 0.13 40)} .bb-centre{background:oklch(0.72 0.06 250)} .bb-cright{background:oklch(0.70 0.12 250)} .bb-right{background:oklch(0.60 0.16 265)} .bb-state{background:oklch(0.55 0.10 300)} .bb-unknown{background:oklch(0.4 0 0)}
+    .sy-bias-pct { font-family: var(--font-mono); font-size: 11px; color: var(--foreground); text-align: center; margin-top: 0.3rem; }
+    .sy-blind { background: oklch(0.2 0.05 60 / 0.4); border: 1px solid oklch(0.7 0.15 70 / 0.4); border-left: 3px solid oklch(0.78 0.16 70); border-radius: var(--radius-sm); padding: 0.7rem 0.85rem; font-size: 0.82rem; color: var(--foreground); line-height: 1.5; }
+    .sy-empty { color: var(--muted-foreground); padding: 2rem 0; }
+    .sy-note { font-size: 0.75rem; color: var(--muted-foreground); line-height: 1.5; margin-top: 0.5rem; }
+    .sy-note a { color: oklch(0.74 0.16 75); }
+  </style>
+</head>
+<body>
+  <div id="site-nav"></div>
+
+  <main class="sy-wrap" id="wrap">
+    <div class="sy-main" id="main"><p class="sy-empty">Loading…</p></div>
+    <aside class="sy-side" id="side"></aside>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script>
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    // lean → {bucket for L/C/R tab, css suffix, bar class}
+    const LEAN = {
+      "left":        { bucket: "left",   cls: "lean-left",   bb: "bb-left",   label: "Left" },
+      "centre-left": { bucket: "left",   cls: "lean-cleft",  bb: "bb-cleft",  label: "Centre-left" },
+      "centre":      { bucket: "centre", cls: "lean-centre", bb: "bb-centre", label: "Centre" },
+      "centre-right":{ bucket: "right",  cls: "lean-cright", bb: "bb-cright", label: "Centre-right" },
+      "right":       { bucket: "right",  cls: "lean-right",  bb: "bb-right",  label: "Right" },
+      "state_media": { bucket: "centre", cls: "lean-state",  bb: "bb-state",  label: "State media" },
+      "unknown":     { bucket: "centre", cls: "lean-unknown",bb: "bb-unknown",label: "Unknown" },
+    };
+    const meta = l => LEAN[l] || LEAN.unknown;
+
+    let DOC = null, NEWS = [], TAB = "all";
+    const chainId = new URLSearchParams(location.search).get("chain");
+
+    Promise.all([
+      fetch("fiscal-events.json").then(r => r.json()),
+      fetch("approved-news.json").then(r => r.ok ? r.json() : { news_items: [] }).catch(() => ({ news_items: [] })),
+    ]).then(([ev, news]) => { DOC = ev; NEWS = news.news_items || []; render(); })
+      .catch(e => document.getElementById("main").innerHTML = `<p class="sy-empty">Load error: ${esc(e.message)}</p>`);
+
+    function chain() {
+      const chains = DOC.story_chains || [];
+      return chains.find(c => c.id === chainId) || chains[0];
+    }
+    function eventsFor(c) {
+      return (c.event_ids || []).map(id => (DOC.fiscal_events || []).find(e => e.id === id)).filter(Boolean);
+    }
+    // every approved news item linked to any event in this chain
+    function sourcesFor(c) {
+      const evIds = new Set(c.event_ids || []);
+      const ids = new Set();
+      (DOC.fiscal_events || []).forEach(e => { if (evIds.has(e.id)) (e.corroborating_news || []).forEach(n => ids.add(n)); });
+      return NEWS.filter(n => ids.has(n.id));
+    }
+
+    function render() {
+      const c = chain();
+      if (!c) { document.getElementById("main").innerHTML = `<p class="sy-empty">No story found.</p>`; return; }
+      const evs = eventsFor(c);
+      const srcs = sourcesFor(c);
+
+      // summary bullets from event titles+summaries (factual, sourced)
+      const bullets = evs.map(e => `<li><b>${fmtDate(e.date)}:</b> ${esc(e.title)}${e.amount_cr!=null?` <span class="sy-lang">(₹${Number(e.amount_cr).toLocaleString("en-IN")} cr)</span>`:""}</li>`).join("");
+
+      // L/C/R tab filter
+      const shown = TAB === "all" ? srcs : srcs.filter(n => meta(n.outlet_lean).bucket === TAB);
+      const srcList = shown.length ? shown.map(n => {
+        const m = meta(n.outlet_lean);
+        return `<a class="sy-src" href="${esc(n.url)}" target="_blank" rel="noopener">
+          <div class="sy-src-head"><span class="sy-outlet">${esc(n.outlet||"")}</span>
+            <span class="sy-lean ${m.cls}">${esc(m.label)}</span>
+            <span class="sy-lang">${esc(n.language||"en")}</span></div>
+          ${n.snippet?`<div class="sy-snip">${esc(n.snippet)}</div>`:""}
+        </a>`;
+      }).join("") : `<p class="sy-empty">No ${TAB==="all"?"":TAB+" "}sources linked yet. Approve &amp; anchor news in the curator to populate this.</p>`;
+
+      const tabCount = b => b==="all"?srcs.length:srcs.filter(n=>meta(n.outlet_lean).bucket===b).length;
+      document.getElementById("main").innerHTML = `
+        <a class="sy-back" href="timeline.html">← Timeline</a>
+        <h1 class="sy-title">${esc(c.title)}</h1>
+        <p class="sy-sub">${esc(c.one_line||"")}</p>
+        <ul class="sy-bullets">${bullets}</ul>
+        <div class="sy-tabs">
+          ${["all","left","centre","right"].map(b=>`<button class="sy-tab ${TAB===b?"on":""}" data-tab="${b}">${b==="all"?"All":b[0].toUpperCase()+b.slice(1)} ${tabCount(b)}</button>`).join("")}
+        </div>
+        <div class="sy-srclist">${srcList}</div>`;
+      document.querySelectorAll(".sy-tab").forEach(b=>b.addEventListener("click",()=>{TAB=b.dataset.tab;render();}));
+
+      renderSide(c, srcs);
+    }
+
+    function renderSide(c, srcs) {
+      const total = srcs.length;
+      const counts = { left:0, centre:0, right:0 };
+      const leanCounts = {};
+      const langs = new Set();
+      srcs.forEach(n => { const m=meta(n.outlet_lean); counts[m.bucket]++; leanCounts[n.outlet_lean]=(leanCounts[n.outlet_lean]||0)+1; langs.add(n.language||"en"); });
+      const pct = b => total?Math.round(counts[b]/total*100):0;
+      const order = ["left","centre-left","centre","centre-right","right","state_media","unknown"];
+      const bar = total ? order.filter(l=>leanCounts[l]).map(l=>`<span class="${meta(l).bb}" style="width:${(leanCounts[l]/total*100).toFixed(1)}%" title="${esc(l)}: ${leanCounts[l]}"></span>`).join("") : "";
+      // blindspot: covered by only one side
+      const sidesPresent = ["left","centre","right"].filter(b=>counts[b]>0);
+      const blind = total>0 && sidesPresent.length<=1
+        ? `<div class="sy-blind">⚠ <b>Blindspot:</b> this story is currently covered only by ${sidesPresent[0]||"one"}-leaning / single-perspective sources here. Coverage breadth grows as more outlets are linked.</div>` : "";
+
+      document.getElementById("side").innerHTML = `
+        <div class="sy-card">
+          <h3>Coverage details</h3>
+          <div class="sy-stat"><span>Total sources</span><b>${total}</b></div>
+          <div class="sy-stat"><span>Leaning left</span><b>${counts.left}</b></div>
+          <div class="sy-stat"><span>Centre</span><b>${counts.centre}</b></div>
+          <div class="sy-stat"><span>Leaning right</span><b>${counts.right}</b></div>
+          <div class="sy-stat"><span>Languages</span><b>${langs.size||0}</b></div>
+        </div>
+        <div class="sy-card">
+          <h3>Bias distribution</h3>
+          ${total?`<div class="sy-biasbar">${bar}</div><div class="sy-bias-pct">${pct("centre")}% Centre · ${pct("left")}% Left · ${pct("right")}% Right</div>`
+            :`<p class="sy-empty" style="padding:0.5rem 0">No sources linked yet.</p>`}
+          ${blind}
+          <p class="sy-note">Lean ratings come from published third-party media-bias assessments (see <a href="feeds.json" target="_blank">feeds.json</a>), shown as aggregation — not our verdict. <a href="about.html">Methodology</a>.</p>
+        </div>`;
+    }
+
+    function fmtDate(d){ if(!d) return ""; const x=new Date(d); return isNaN(x)?d:x.toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"}); }
+  </script>
+  <script src="site-nav.js"></script>
+</body>
+</html>

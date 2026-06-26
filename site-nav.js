@@ -22,6 +22,7 @@
     ]},
     { label: "About", items: [
       { href: "about.html", text: "Methodology & disclaimer" },
+      { href: "privacy-policy.html", text: "Privacy & policy" },
       { href: "usa.html", text: "Compare: US" },
       { href: "https://github.com/sinhaankur/india-fiscal-map", text: "GitHub ↗", ext: true },
     ]},
