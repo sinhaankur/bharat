@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feed — just the news, no noise</title>
+  <meta name="description" content="A clean, curated stream of India's public-money news — original analysis, fund story-chains, and sourced headlines. No clutter, no clickbait." />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .fd-wrap { max-width: 760px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; }
+    .fd-head h1 { margin: 0.3rem 0 0.4rem; font-size: clamp(1.6rem, 3.5vw, 2.4rem); }
+    .fd-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.55; max-width: 64ch; }
+    .fd-filters { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 1.2rem 0; }
+    .fd-chip { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.03em; padding: 4px 11px; border-radius: 999px; border: 1px solid var(--border-strong); color: var(--muted-foreground); background: transparent; cursor: pointer; }
+    .fd-chip.on { border-color: var(--warm); color: oklch(0.18 0 0); background: var(--warm); font-weight: 600; }
+    .fd-list { display: flex; flex-direction: column; gap: 0; }
+    .fd-item { display: block; text-decoration: none; padding: 1rem 0; border-bottom: 1px solid var(--border); }
+    .fd-item:hover .fd-title { color: oklch(0.84 0.15 78); }
+    .fd-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem; }
+    .fd-kind { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.05em; text-transform: uppercase; padding: 1px 7px; border-radius: 999px; border: 1px solid currentColor; }
+    .k-analysis { color: oklch(0.80 0.14 285); }
+    .k-story { color: oklch(0.80 0.16 75); }
+    .k-headline { color: oklch(0.74 0.16 200); }
+    .fd-type { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted-foreground); }
+    .fd-type.money { color: oklch(0.82 0.16 78); }
+    .fd-date { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); margin-left: auto; }
+    .fd-sev { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.04em; text-transform: uppercase; padding: 1px 6px; border-radius: 999px; border: 1px solid currentColor; font-weight: 600; }
+    .sev-low{color:oklch(0.72 0.10 150)} .sev-moderate{color:oklch(0.80 0.14 75)} .sev-high{color:oklch(0.76 0.17 45)} .sev-severe{color:oklch(0.66 0.22 25)}
+    .fd-title { font-size: 1.08rem; font-weight: 600; line-height: 1.3; color: var(--foreground); margin: 0 0 0.25rem; }
+    .fd-dek { font-size: 0.88rem; color: var(--muted-foreground); line-height: 1.5; }
+    .fd-loc { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); margin-top: 0.35rem; }
+    .fd-empty { color: var(--muted-foreground); padding: 2rem 0; text-align: center; }
+    .fd-note { font-size: 0.78rem; color: var(--muted-foreground); line-height: 1.5; margin-top: 1.6rem; }
+    .fd-note a { color: oklch(0.74 0.16 75); }
+  </style>
+</head>
+<body>
+  <div id="site-nav"></div>
+
+  <main class="fd-wrap">
+    <header class="fd-head">
+      <div class="eyebrow">The feed · curated, no noise</div>
+      <h1 class="display">Just the <em>news</em></h1>
+      <p>One clean stream of India's public-money story — original analysis, fund timelines, and
+      sourced headlines. Newest first. Every item is sourced or marked a gap; nothing invented.</p>
+      <div class="fd-filters" id="filters">
+        <button class="fd-chip on" data-f="all">All</button>
+        <button class="fd-chip" data-f="money">💰 Money-driven</button>
+        <button class="fd-chip" data-f="general">General</button>
+        <button class="fd-chip" data-f="analysis">Analysis</button>
+        <button class="fd-chip" data-f="story">Story chains</button>
+      </div>
+    </header>
+
+    <div class="fd-list" id="list"><p class="fd-empty">Loading…</p></div>
+
+    <p class="fd-note">
+      The feed merges <a href="articles.html">analysis</a>, fund <a href="timeline.html">story chains</a>,
+      and moderated headlines. Headlines link out to the original outlet (we show only a title +
+      snippet). Severity = the transparent <a href="about.html">scale-of-problem</a> score.
+    </p>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script>
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const fmtDate = d => { if (!d) return ""; const x = new Date(d); return isNaN(x) ? d : x.toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"}); };
+    let ITEMS = [], FILTER = "all";
+
+    Promise.all([
+      fetch("articles.json").then(r => r.ok ? r.json() : {articles:[]}).catch(()=>({articles:[]})),
+      fetch("fiscal-events.json").then(r => r.ok ? r.json() : {story_chains:[],fiscal_events:[]}).catch(()=>({story_chains:[],fiscal_events:[]})),
+      fetch("approved-news.json").then(r => r.ok ? r.json() : {news_items:[]}).catch(()=>({news_items:[]})),
+    ]).then(([arts, ev, news]) => {
+      build(arts, ev, news);
+      document.querySelectorAll(".fd-chip").forEach(b => b.addEventListener("click", () => {
+        FILTER = b.dataset.f;
+        document.querySelectorAll(".fd-chip").forEach(x => x.classList.toggle("on", x === b));
+        render();
+      }));
+      render();
+    }).catch(e => document.getElementById("list").innerHTML = `<p class="fd-empty">Load error: ${esc(e.message)}</p>`);
+
+    function maxSev(ev, c) {
+      let best = null;
+      (c.event_ids||[]).forEach(id => { const e=(ev.fiscal_events||[]).find(x=>x.id===id); const s=e&&e.severity; if(s&&(best==null||(s.score||0)>best.score)) best={score:s.score||0,band:s.band}; });
+      return best;
+    }
+
+    function build(arts, ev, news) {
+      ITEMS = [];
+      // 1. original analysis (always money/data-driven, original content)
+      (arts.articles||[]).filter(a=>a.status==="published").forEach(a => ITEMS.push({
+        kind:"analysis", type:"money", date:a.published, title:a.title, dek:a.dek,
+        loc:(a.districts||[]).map(d=>d.join(", ")).join(" · "), href:`article.html?slug=${encodeURIComponent(a.slug)}`, sev:null
+      }));
+      // 2. fund story chains (money-driven)
+      (ev.story_chains||[]).forEach(c => { const s=maxSev(ev,c); ITEMS.push({
+        kind:"story", type:"money", date:c.last_event_at, title:c.title, dek:c.one_line,
+        loc:`${c.geo?.district||""}${c.geo?.state?", "+c.geo.state:""}`, href:`story.html?chain=${encodeURIComponent(c.id)}`, sev:s
+      });});
+      // 3. moderated headlines (general or money; link out)
+      (news.news_items||[]).forEach(n => ITEMS.push({
+        kind:"headline", type: n.scheme_ref ? "money" : "general", date:n.published_at, title:n.headline, dek:n.snippet,
+        loc:`${n.geo?.district||n.geo?.state||""}`, href:n.url, ext:true, outlet:n.outlet, sev:null
+      }));
+      ITEMS.sort((a,b)=> (new Date(b.date||0)) - (new Date(a.date||0)));
+    }
+
+    function render() {
+      let items = ITEMS.filter(it => {
+        if (FILTER==="all") return true;
+        if (FILTER==="money"||FILTER==="general") return it.type===FILTER;
+        return it.kind===FILTER;
+      });
+      const list = document.getElementById("list");
+      if (!items.length) { list.innerHTML = `<p class="fd-empty">Nothing here yet. As analysis, story chains, and moderated headlines are added, they appear here newest-first.</p>`; return; }
+      list.innerHTML = items.map(it => `
+        <a class="fd-item" href="${esc(it.href)}" ${it.ext?'target="_blank" rel="noopener"':''}>
+          <div class="fd-meta">
+            <span class="fd-kind k-${it.kind}">${it.kind}</span>
+            <span class="fd-type ${it.type==='money'?'money':''}">${it.type==='money'?'money-driven':'general'}</span>
+            ${it.sev?`<span class="fd-sev sev-${it.sev.band}">⚠ ${it.sev.band} ${it.sev.score}/12</span>`:''}
+            <span class="fd-date">${esc(fmtDate(it.date))}</span>
+          </div>
+          <div class="fd-title">${esc(it.title)}${it.ext?' ↗':''}</div>
+          ${it.dek?`<div class="fd-dek">${esc(it.dek)}</div>`:''}
+          ${it.loc?`<div class="fd-loc">📍 ${esc(it.loc)}${it.outlet?` · ${esc(it.outlet)}`:''}</div>`:''}
+        </a>`).join("");
+    }
+  </script>
+  <script src="site-nav.js"></script>
+</body>
+</html>

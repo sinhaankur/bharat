@@ -5,6 +5,7 @@
   // ---- Information Architecture: 4 groups -------------------------------
   const NAV = [
     { label: "Explore", items: [
+      { href: "feed.html", text: "The feed" },
       { href: "index.html", text: "Map" },
       { href: "explore.html", text: "Explore" },
       { href: "timeline.html", text: "Timeline" },
