@@ -1,0 +1,69 @@
+name: Auto-post to social
+
+# The "server" for social posting — free scheduled runner. Posts the committed,
+# already-moderated story chains (from fiscal-events.json) to X/Twitter. Safe by
+# design: no-ops unless the API-key SECRETS are set, and the script is dry-run
+# unless invoked with --post. State (.social_posted.json) is committed back so a
+# chain is never posted twice.
+
+on:
+  schedule:
+    - cron: "30 9 * * *"    # once daily at 09:30 UTC (~3pm IST)
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run only (don't actually post)"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write           # to commit .social_posted.json back
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install deps
+        run: pip install tweepy
+
+      - name: Guard — only post if keys are configured
+        id: guard
+        env:
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+        run: |
+          if [ -z "$X_API_KEY" ]; then
+            echo "have_keys=false" >> $GITHUB_OUTPUT
+            echo "No X_API_KEY secret set — running dry-run only. Add repo secrets to enable posting." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "have_keys=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Post (or dry-run)
+        env:
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
+        run: |
+          if [ "${{ steps.guard.outputs.have_keys }}" = "true" ] && [ "${{ github.event.inputs.dry_run }}" != "true" ]; then
+            python3 post_to_social.py --post
+          else
+            python3 post_to_social.py   # dry-run
+          fi
+
+      - name: Commit post-state (so nothing posts twice)
+        if: ${{ steps.guard.outputs.have_keys == 'true' && github.event.inputs.dry_run != 'true' }}
+        run: |
+          if [ -f .social_posted.json ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add -f .social_posted.json
+            git commit -m "chore: update social-post state [skip ci]" || echo "nothing to commit"
+            git push || echo "nothing to push"
+          fi

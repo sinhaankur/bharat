@@ -1,0 +1,43 @@
+name: Ingest news feeds
+
+# The "server" for news ingestion — a free scheduled runner, no server to manage.
+# Runs ingest_news.py and uploads the result as an ARTIFACT for you to curate
+# locally. It deliberately does NOT auto-commit news to the live site, because
+# nothing unmoderated should go public (the human curation gate stays intact).
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"   # every 6 hours (UTC)
+  workflow_dispatch: {}       # also runnable on-demand from the Actions tab
+
+permissions:
+  contents: read
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run the aggregator
+        run: python3 ingest_news.py || true   # don't fail the run if some feeds are down
+
+      - name: Upload ingested feed (for local curation)
+        if: ${{ hashFiles('news-feed.json') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: news-feed-${{ github.run_number }}
+          path: news-feed.json
+          retention-days: 14
+
+      - name: Summary
+        run: |
+          echo "### News ingest complete" >> $GITHUB_STEP_SUMMARY
+          echo "Download the \`news-feed\` artifact above, curate it in curate.html," >> $GITHUB_STEP_SUMMARY
+          echo "run apply_curation.py, and commit approved-news.json." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Nothing is auto-published — the moderation gate stays intact." >> $GITHUB_STEP_SUMMARY
