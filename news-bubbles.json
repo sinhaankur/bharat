@@ -1,0 +1,28 @@
+{
+  "_meta": {
+    "purpose": "Precomputed map bubbles for districts with news/fiscal activity. Centroids from districts/*.geojson. Only districts with real events/news appear.",
+    "count": 2
+  },
+  "bubbles": [
+    {
+      "state": "West Bengal",
+      "district": "Birbhum",
+      "lat": 23.9517,
+      "lon": 87.6616,
+      "events": 4,
+      "news": 0,
+      "flagged": true,
+      "top_title": "Birbhum's MGNREGS money: frozen at the top for four years"
+    },
+    {
+      "state": "West Bengal",
+      "district": "Kolkata",
+      "lat": 22.5517,
+      "lon": 88.3523,
+      "events": 1,
+      "news": 0,
+      "flagged": false,
+      "top_title": "Kolkata's civic money: over half flows down as grant"
+    }
+  ]
+}

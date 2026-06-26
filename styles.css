@@ -147,6 +147,27 @@ a:hover { border-color: var(--foreground); }
   font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
 .sfoot-base a { color: oklch(0.74 0.16 75); text-decoration: none; }
 
+/* ───────── News-bubble map layer ───────── */
+.news-toggle-ctl { margin: 8px; }
+.news-toggle-btn {
+  background: oklch(0.16 0 0 / 0.92); color: var(--foreground);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.03em;
+  padding: 0.4rem 0.7rem; cursor: pointer; backdrop-filter: blur(8px);
+}
+.news-toggle-btn:hover { border-color: var(--foreground); }
+.news-toggle-btn.on { background: var(--warm); color: oklch(0.18 0 0); border-color: transparent; font-weight: 600; }
+.news-bubble { animation: bubblePulse 2.6s ease-in-out infinite; }
+.news-bubble--flag { animation: bubblePulse 1.6s ease-in-out infinite; }
+@keyframes bubblePulse { 0%,100% { opacity: 0.85; } 50% { opacity: 0.45; } }
+.news-bubble-tip {
+  background: oklch(0.16 0 0); color: var(--foreground);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  font-family: var(--font-sans); font-size: 11px; line-height: 1.4; padding: 6px 9px;
+}
+.news-bubble-tip b { color: oklch(0.84 0.15 78); }
+.leaflet-tooltip.news-bubble-tip::before { display: none; }
+
 .country-pick {
   display: inline-flex; align-items: center; margin-left: 0.6rem;
   background: oklch(0.18 0 0); border: 1px solid var(--border-strong);

@@ -100,10 +100,11 @@
     population:     { name: 'Census of India 2011',   url: 'https://censusindia.gov.in' }
   };
 
-  const ui = { state: { view: 'ownTax', yearIdx: 9, selected: null, hover: null, mode: 'states', drillState: null, drillDistrict: null, districtMode: 'population' } };
+  const ui = { state: { view: 'ownTax', yearIdx: 9, selected: null, hover: null, mode: 'states', drillState: null, drillDistrict: null, districtMode: 'population', showNews: true } };
 
   let DATA = null, EXTRAS = null, GEO = null, DISTRICT_POP = null, BLOCKS = null, LEDGER = null, PAY = null;
-  let EVENTS = null, NEWS = null;
+  let EVENTS = null, NEWS = null, BUBBLES = null;
+  let newsBubbleLayer = null;
   let map = null, geoLayer = null, districtLayer = null;
   const pathByName = new Map();
   const districtPathByName = new Map();
@@ -1688,11 +1689,65 @@
     }).addTo(map);
 
     try { map.fitBounds(geoLayer.getBounds(), { padding: [10, 10] }); } catch (e) {}
+
+    buildNewsBubbles();
+  }
+
+  // News-bubble layer: one circle per district with news/fiscal activity.
+  // Size scales with activity; red = a dysfunction flag (freeze/audit). Click →
+  // that district + its timeline. Honest: only districts with real events appear.
+  function buildNewsBubbles() {
+    if (!map || !BUBBLES || !(BUBBLES.bubbles || []).length) return;
+    newsBubbleLayer = L.layerGroup();
+    const maxAct = Math.max(...BUBBLES.bubbles.map(b => b.events + b.news), 1);
+    for (const b of BUBBLES.bubbles) {
+      const act = b.events + b.news;
+      const r = 7 + 13 * Math.sqrt(act / maxAct);   // area-ish scaling
+      const color = b.flagged ? 'oklch(0.65 0.22 25)' : 'oklch(0.80 0.16 75)';
+      const m = L.circleMarker([b.lat, b.lon], {
+        radius: r, color, weight: 1.5,
+        fillColor: color, fillOpacity: 0.35,
+        className: 'news-bubble' + (b.flagged ? ' news-bubble--flag' : ''),
+      });
+      m.bindTooltip(
+        `<b>${esc(b.district)}</b>, ${esc(b.state)}<br>` +
+        `${b.events} event${b.events === 1 ? '' : 's'}${b.news ? ` · ${b.news} news` : ''}` +
+        `${b.flagged ? '<br>⚑ flagged (fund freeze / audit)' : ''}` +
+        `${b.top_title ? `<br><span style="opacity:.8">${esc(b.top_title)}</span>` : ''}`,
+        { direction: 'top', className: 'news-bubble-tip' }
+      );
+      m.on('click', () => { selectState(b.state, true); drillIntoDistricts(b.state).then(() => selectDistrict(b.district, b.state)); });
+      m.addTo(newsBubbleLayer);
+    }
+    if (ui.state.showNews) newsBubbleLayer.addTo(map);
+    renderNewsToggle();
+  }
+
+  function renderNewsToggle() {
+    if (!map || document.getElementById('news-toggle-ctl')) return;
+    const Ctl = L.Control.extend({
+      options: { position: 'topright' },
+      onAdd() {
+        const div = L.DomUtil.create('div', 'news-toggle-ctl');
+        div.id = 'news-toggle-ctl';
+        const n = (BUBBLES?.bubbles || []).length;
+        div.innerHTML = `<button class="news-toggle-btn ${ui.state.showNews ? 'on' : ''}" title="Show districts with news / fiscal events">📰 News${n ? ` · ${n}` : ''}</button>`;
+        L.DomEvent.disableClickPropagation(div);
+        div.querySelector('button').addEventListener('click', () => {
+          ui.state.showNews = !ui.state.showNews;
+          if (ui.state.showNews) newsBubbleLayer && newsBubbleLayer.addTo(map);
+          else newsBubbleLayer && newsBubbleLayer.remove();
+          div.querySelector('button').classList.toggle('on', ui.state.showNews);
+        });
+        return div;
+      }
+    });
+    map.addControl(new Ctl());
   }
 
   async function bootstrap() {
     try {
-      const [geoRes, dataRes, extrasRes, popRes, blocksRes, ledgerRes, payRes, eventsRes, newsRes] = await Promise.all([
+      const [geoRes, dataRes, extrasRes, popRes, blocksRes, ledgerRes, payRes, eventsRes, newsRes, bubblesRes] = await Promise.all([
         fetch('india-states.geojson'),
         fetch('india-fiscal.json'),
         fetch('india-extras.json'),
@@ -1701,7 +1756,8 @@
         fetch('district-ledger.json'),
         fetch('pay-scales.json'),
         fetch('fiscal-events.json').catch(() => null),
-        fetch('approved-news.json').catch(() => null)
+        fetch('approved-news.json').catch(() => null),
+        fetch('news-bubbles.json').catch(() => null)
       ]);
       if (!geoRes.ok) throw new Error('GeoJSON HTTP ' + geoRes.status);
       if (!dataRes.ok) throw new Error('Fiscal JSON HTTP ' + dataRes.status);
@@ -1719,6 +1775,7 @@
       else console.warn('pay-scales.json missing — cost-to-govt join will be skipped');
       if (eventsRes && eventsRes.ok) EVENTS = await eventsRes.json();
       else console.warn('fiscal-events.json missing — district timeline will be skipped');
+      if (bubblesRes && bubblesRes.ok) BUBBLES = await bubblesRes.json();
       if (newsRes && newsRes.ok) NEWS = await newsRes.json();
       else console.warn('approved-news.json missing — district news will be skipped');
 
