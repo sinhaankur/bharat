@@ -1,7 +1,61 @@
-/* site-nav.js — single source of truth for the global header + footer.
+/* site-nav.js — single source of truth for the global header + footer + SEO.
    Renders a grouped-dropdown nav into #site-nav and a sitemap footer into
-   #site-footer on every page. Edit the IA here, once. */
+   #site-footer on every page, and injects SEO/social meta into <head>.
+   Edit the IA + SEO defaults here, once. */
 (function () {
+  // ---- SEO: inject Open Graph / Twitter cards / canonical / JSON-LD --------
+  // Derived from each page's existing <title> + meta[description]; the domain is
+  // brandable so SEO comes from content + rich social cards, not the name.
+  const SITE = {
+    name: "India Fiscal Map",
+    base: "https://sinhaankur.github.io/india-fiscal-map",   // update to custom domain when bought
+    image: "https://sinhaankur.github.io/india-fiscal-map/og-image.png",
+    twitter: "",   // add @handle once social accounts exist
+  };
+  function injectSEO() {
+    const head = document.head;
+    if (!head) return;
+    const title = document.title || SITE.name;
+    const descEl = document.querySelector('meta[name="description"]');
+    const desc = descEl ? descEl.getAttribute("content") : "Tracing public money to every Indian district — what came in, who's accountable, and what the record shows.";
+    const path = (location.pathname.split("/").pop() || "index.html");
+    const url = `${SITE.base}/${path}`;
+
+    const metas = [
+      ["og:title", title], ["og:description", desc], ["og:type", "website"],
+      ["og:url", url], ["og:site_name", SITE.name], ["og:image", SITE.image],
+      ["twitter:card", "summary_large_image"], ["twitter:title", title],
+      ["twitter:description", desc], ["twitter:image", SITE.image],
+    ];
+    if (SITE.twitter) metas.push(["twitter:site", SITE.twitter]);
+
+    for (const [k, v] of metas) {
+      if (!v) continue;
+      const isOG = k.startsWith("og:");
+      const attr = isOG ? "property" : "name";
+      if (head.querySelector(`meta[${attr}="${k}"]`)) continue;   // don't duplicate page-set tags
+      const m = document.createElement("meta");
+      m.setAttribute(attr, k); m.setAttribute("content", v);
+      head.appendChild(m);
+    }
+    // canonical
+    if (!head.querySelector('link[rel="canonical"]')) {
+      const l = document.createElement("link"); l.rel = "canonical"; l.href = url; head.appendChild(l);
+    }
+    // JSON-LD: Organization + WebSite (once, on the homepage is enough but harmless everywhere)
+    if (!document.getElementById("ld-org")) {
+      const ld = document.createElement("script");
+      ld.type = "application/ld+json"; ld.id = "ld-org";
+      ld.textContent = JSON.stringify({
+        "@context": "https://schema.org", "@type": "WebSite",
+        "name": SITE.name, "url": SITE.base,
+        "description": "Source-cited atlas of India's public-money flows by district, with governance, news and bias analysis.",
+        "publisher": { "@type": "Organization", "name": SITE.name, "url": SITE.base }
+      });
+      head.appendChild(ld);
+    }
+  }
+
   // ---- Information Architecture: 4 groups -------------------------------
   const NAV = [
     { label: "Explore", items: [
@@ -84,6 +138,7 @@
   }
 
   function mount() {
+    injectSEO();
     // header: replace #site-nav placeholder, or any pre-existing #nav, or prepend to body
     const navHost = document.getElementById("site-nav");
     if (navHost) navHost.outerHTML = navHTML();

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1a1a1a"/>
+      <stop offset="1" stop-color="#0e0e0e"/>
+    </linearGradient>
+    <linearGradient id="warm" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#e0a050"/>
+      <stop offset="1" stop-color="#d98a3a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <!-- accent dot -->
+  <circle cx="90" cy="96" r="13" fill="#e8694a"/>
+  <text x="120" y="106" font-family="monospace" font-size="26" fill="#fafafa" letter-spacing="2">🇮🇳 INDIA FISCAL MAP</text>
+  <!-- headline -->
+  <text x="88" y="270" font-family="Georgia, serif" font-size="78" fill="#fafafa">Follow the public</text>
+  <text x="88" y="360" font-family="Georgia, serif" font-size="78" fill="url(#warm)">money.</text>
+  <!-- sub -->
+  <text x="90" y="440" font-family="sans-serif" font-size="30" fill="#a0a0a0">Where it came from · who's accountable ·</text>
+  <text x="90" y="482" font-family="sans-serif" font-size="30" fill="#a0a0a0">what the record shows. 594 districts, source-cited.</text>
+  <!-- footer strip -->
+  <rect x="88" y="540" width="1024" height="2" fill="#333"/>
+  <text x="90" y="582" font-family="monospace" font-size="22" fill="#5ec99a">money flow · chain of command · severity · bias</text>
+  <text x="1110" y="582" text-anchor="end" font-family="monospace" font-size="20" fill="#a0a0a0">PDF-cited or it's a gap</text>
+</svg>
