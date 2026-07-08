@@ -372,6 +372,48 @@ STATE_RIVERS = {
     "Lakshadweep": [],
 }
 
+IMD_SRC = "https://mausam.imd.gov.in/responsive/rainfallinformation.php"
+
+# ---------------------------------------------------------------------------
+# RAINFALL — IMD publishes district-wise ANNUAL NORMAL rainfall (LPA, 1971-2020),
+# but only via a DYNAMIC portal query (mausam.imd.gov.in), not a single bulk table
+# we can honestly ingest for all 594. So: (a) a climate BAND per state (broad, from
+# IMD's own zone maps) gives every district context; (b) a small set of WELL-
+# DOCUMENTED anchor figures (national extremes) carry real mm; (c) the precise
+# per-district normal stays an explicit GAP → IMD portal. No 594 rainfall numbers
+# are fabricated. Same portal-blocker honesty as the MGNREGA MIS case.
+#
+# Band (mm/yr, broad IMD climatic zones): arid <400, semi-arid 400-750,
+# moderate 750-1150, high 1150-2000, very-high >2000.
+# ---------------------------------------------------------------------------
+STATE_RAIN_BAND = {
+    "Rajasthan": "arid-to-semiarid", "Gujarat": "semiarid-to-moderate",
+    "Haryana": "semiarid", "Punjab": "semiarid-to-moderate", "Delhi": "semiarid",
+    "Chandigarh": "moderate", "Uttar Pradesh": "moderate",
+    "Madhya Pradesh": "moderate", "Bihar": "moderate-to-high",
+    "Jharkhand": "moderate-to-high", "Chhattisgarh": "high",
+    "West Bengal": "high", "Odisha": "high", "Telangana": "moderate",
+    "Andhra Pradesh": "moderate-to-high", "Karnataka": "moderate-to-high",
+    "Tamil Nadu": "moderate", "Kerala": "very-high", "Goa": "very-high",
+    "Maharashtra": "moderate-to-high", "Himachal Pradesh": "high",
+    "Uttarakhand": "high", "Jammu & Kashmir": "moderate",
+    "Ladakh": "arid", "Sikkim": "very-high", "Assam": "very-high",
+    "Arunachal Pradesh": "very-high", "Meghalaya": "very-high",
+    "Nagaland": "very-high", "Manipur": "high", "Mizoram": "very-high",
+    "Tripura": "very-high", "Puducherry": "moderate",
+    "Andaman & Nicobar": "very-high", "Lakshadweep": "high",
+    "Dadra and Nagar Haveli": "high", "Daman and Diu": "moderate",
+}
+# Documented anchor figures — real IMD-cited annual normals (mm) for a few
+# well-known districts (the national extremes + reference points). These carry a
+# value; everything else is band + gap.
+RAIN_ANCHORS = {
+    ("Meghalaya", "East Khasi Hills"): (11000, "Mawsynram/Cherrapunji — world's "
+        "wettest (East Khasi Hills); ~11,000 mm/yr", IMD_SRC),
+    ("Rajasthan", "Jaisalmer"): (210, "Thar desert — among India's driest; IMD "
+        "normal ~160-210 mm/yr (revised upward recently)", IMD_SRC),
+}
+
 TERRAIN_DEV_NOTE = {
     "himalayan-hill": "Steep Himalayan terrain: high per-km infrastructure cost, "
         "landslide + glacial-lake-outburst-flood (GLOF) exposure, seismic zone.",
@@ -508,6 +550,19 @@ def main():
                             "prone = only inherits the state flag (not district-"
                             "confirmed); not-flagged = neither.",
                 },
+                "rainfall": {
+                    "annual_normal_mm": (RAIN_ANCHORS.get((sname, dname)) or (None,))[0],
+                    "band": STATE_RAIN_BAND.get(sname),   # broad IMD climatic zone
+                    "level": "district" if (sname, dname) in RAIN_ANCHORS else "state-band",
+                    "figure_gap": (sname, dname) not in RAIN_ANCHORS,
+                    "note": (RAIN_ANCHORS[(sname, dname)][1] if (sname, dname) in RAIN_ANCHORS
+                             else "Precise district annual-normal rainfall is on the "
+                                  "IMD portal (dynamic query, not a bulk table) — gap. "
+                                  "Band is the broad state climatic zone. Ties to "
+                                  "rains→floods: high-rain + flood-prone + poor "
+                                  "drainage = urban flooding."),
+                    "source": IMD_SRC,
+                },
                 "urban_planning": {
                     "sewage_treatment_gap_pct": None,  # CPCB inventory is city-level GAP
                     "drainage_master_plan": None,      # municipal, unpublished GAP
@@ -568,6 +623,7 @@ def main():
                 "geography CRZ category (district CZMP map) unsourced",
                 "geography annual flood damage ₹ (state relief memo) unsourced",
                 "geography sewage/drainage gap % (CPCB city-level) unsourced",
+                "geography per-district annual rainfall mm (IMD portal, dynamic) unsourced",
                 "geography per-district terrain refinement (intra-state) unsourced",
                 "geography illegal-encroachment cases (NGT/court/CAG) unpinned",
                 "geography change-over-time series (JRC/Bhuvan/Sentinel) unpinned",
