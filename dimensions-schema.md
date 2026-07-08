@@ -177,10 +177,21 @@ equivalents (or link out to Earth Engine if ever needed). Pilot districts: Kolka
 (East Kolkata Wetlands shrinkage), Chennai (lake/marsh loss → 2015 flood). Exact
 open ha figures to be pinned; left as `figure_gap` until then.
 
-**3D GLB deferred (`cadastral`):** a "civilian-only, no govt land" 3D model needs a
-cadastral ownership layer that isn't openly available (per-state revenue records,
-mostly not machine-readable). Logged as a gap, not faked. Revisit if state cadastre
-opens.
+**3D GLB — BUILT (`build_india_glb.py` → `india.glb` + `atlas-3d.html`).** Standalone
+pure-Python glTF-2.0 writer (numpy only; does NOT touch any running Blender session).
+Extrudes `india-states.geojson`: height = sourced constraint index (base + coastal/
+CRZ + flood-prone + terrain), colour = constraint class. 36 states, ~78.6k tris.
+Viewed in `atlas-3d.html` (three.js orbit). **Civilian-only / no-govt-land cut is
+NOT applied** — no open cadastral ownership layer exists for India — and that
+exclusion is recorded in `india-glb-meta.json` + a page callout, not silently
+dropped. Height is a documented SUM of constraint flags, NOT a hindrance score.
+
+**Timeline + encroachment — REAL sourced pilot pinned** (not just schema): Kolkata
+East Kolkata Wetlands 65→41 km² (1991→2021, ~36% loss, range_note flags 36–63%
+spread); Chennai Pallikaranai 5,500 ha (1965)→593 ha (2002) + 2015 flood.
+Encroachment = documented NGT cases only (Kolkata 2017 'Temple of Knowledge'
+demolition, Sapui v. WB; Chennai NGT O.A.91/2023 Sep-2025 approval freeze + Jan-2024
+eviction/70 houses). Every point/case cites its source; other districts stay gaps.
 
 **Map + panel:** new "Flood & coast" district-layer toggle in app.js (`geoColor`/
 `dimGeoFor`/`geoClass`) recolours by constraint class (coast+flood > flood > coast
