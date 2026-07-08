@@ -445,6 +445,32 @@
     if (/opposition/.test(align)) return 'oklch(0.66 0.20 28)';            // red
     return 'oklch(0.60 0.05 250)';                                          // neutral (UT-admin/other)
   }
+  // Geography layer: colour by physical-constraint class (coast+flood > flood > coast > terrain).
+  function dimGeoFor(state, district) {
+    return LEDGER?.states?.[state]?.districts?.[district]?.dimensions?.geography || null;
+  }
+  function geoClass(g) {
+    if (!g) return null;
+    if (g.on_coast && g.flood_prone) return 'coast-flood';
+    if (g.flood_prone) return 'flood';
+    if (g.on_coast) return 'coast';
+    return g.terrain || 'other';
+  }
+  function geoColor(g) {
+    const c = geoClass(g);
+    return ({
+      'coast-flood': 'oklch(0.62 0.20 20)',    // red — coastal CRZ + flood-prone (max constraint)
+      'flood': 'oklch(0.66 0.16 250)',         // blue — chronically flood-prone
+      'coast': 'oklch(0.72 0.13 200)',         // teal — coastal (CRZ applies)
+      'himalayan-hill': 'oklch(0.80 0.05 260)',
+      'northeast-hill': 'oklch(0.68 0.10 150)',
+      'plateau': 'oklch(0.62 0.08 70)',
+      'indo-gangetic-plain': 'oklch(0.82 0.10 110)',
+      'coastal-plain': 'oklch(0.74 0.11 195)',
+      'desert-arid': 'oklch(0.80 0.12 80)',
+      'island': 'oklch(0.70 0.12 210)',
+    })[c] || 'oklch(0.22 0 0)';
+  }
 
   function renderDistrictLayer(geo, stateName) {
     // Hide the state layer's other states by drastically reducing their opacity (keep selected state visible underneath as outline)
@@ -505,6 +531,9 @@
         }
         if (ui.state.districtMode === 'politics') {
           return { className: 'india-state-path', color: 'oklch(0.985 0 0 / 0.35)', weight: 0.6, fillColor: alignColor(dimAlignFor(stateName, dn)), fillOpacity: 0.85 };
+        }
+        if (ui.state.districtMode === 'geography') {
+          return { className: 'india-state-path', color: 'oklch(0.985 0 0 / 0.35)', weight: 0.6, fillColor: geoColor(dimGeoFor(stateName, dn)), fillOpacity: 0.85 };
         }
         const pop = getDistrictPop(stateName, dn)?.population;
         const t = pop != null ? (pop - popMin) / Math.max(1, popMax - popMin) : 0;
@@ -608,6 +637,13 @@
         <span class="dmt-leg-item"><span class="dmt-chip" style="background:oklch(0.66 0.20 28)"></span>opposition to Union</span>
         <span class="dmt-leg-item"><span class="dmt-chip" style="background:oklch(0.60 0.05 250)"></span>UT-admin / other</span>
         <span class="dmt-leg-item dmt-leg-note">state govt alignment — shown beside money, not a causal claim</span></div>`;
+    else if (mode === 'geography') legend = `<div class="dmt-legend">
+        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoColor({on_coast:true,flood_prone:true})}"></span>coastal + flood-prone</span>
+        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoColor({flood_prone:true})}"></span>flood-prone (CWC/NDMA)</span>
+        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoColor({on_coast:true})}"></span>coastal — CRZ applies</span>
+        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoColor({terrain:'himalayan-hill'})}"></span>hill/mountain</span>
+        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoColor({terrain:'desert-arid'})}"></span>arid</span>
+        <span class="dmt-leg-item dmt-leg-note">physical constraint on development — state-level; district CRZ category &amp; flood ₹ are gaps</span></div>`;
     bar.innerHTML = `
       <div class="dmt-row">
         <span class="dmt-label">Colour districts by</span>
@@ -615,6 +651,7 @@
         <button class="dmt-btn ${mode === 'money' ? 'on' : ''}" data-m="money" ${moneyCount ? '' : 'disabled title="No district money data in this state yet"'}>Money flow ${moneyCount ? `· ${moneyCount}` : ''}</button>
         <button class="dmt-btn ${mode === 'language' ? 'on' : ''}" data-m="language">Language</button>
         <button class="dmt-btn ${mode === 'politics' ? 'on' : ''}" data-m="politics">Politics</button>
+        <button class="dmt-btn ${mode === 'geography' ? 'on' : ''}" data-m="geography" title="Terrain, flood-prone, coastal CRZ — the physical constraints on development">Flood &amp; coast</button>
       </div>
       ${legend}`;
     bar.querySelectorAll('.dmt-btn').forEach(b => b.addEventListener('click', () => {
@@ -840,6 +877,28 @@
             <span class="dim-align ${alignCls}" title="Shown to juxtapose with money flow — not a causal claim">${esc(align)}</span>
             · <span class="dim-gap">constituency MP/MLA: gap (ECI)</span></span>
         </div>`);
+    }
+    const geo = dims.geography;
+    if (geo) {
+      const tags = [];
+      if (geo.on_coast) tags.push('<span class="dim-geo-tag dim-geo-coast" title="Coastal Regulation Zone (MoEFCC 2019) restricts near-shore construction">coastal · CRZ</span>');
+      if (geo.flood_prone) tags.push('<span class="dim-geo-tag dim-geo-flood" title="On the CWC/NDMA chronically flood-prone list">flood-prone</span>');
+      if (geo.terrain) tags.push(`<span class="dim-geo-tag dim-geo-terrain">${esc((geo.terrain || '').replace(/-/g, ' '))}</span>`);
+      const rivers = (geo.major_rivers || []).slice(0, 3).join(', ');
+      rows.push(`
+        <div class="dim-row">
+          <span class="dim-key">Geography</span>
+          <span class="dim-val">${tags.join(' ') || '—'}
+            ${rivers ? `· rivers: ${esc(rivers)}` : ''}
+            · <span class="dim-gap">district CRZ category / flood ₹ / sewage %: gap</span></span>
+        </div>`);
+      if (geo.hinders_dev_note) {
+        rows.push(`
+        <div class="dim-row dim-row--note">
+          <span class="dim-key"></span>
+          <span class="dim-val dim-hinder">${esc(geo.hinders_dev_note)}</span>
+        </div>`);
+      }
     }
     if (!rows.length) return '';
     return `

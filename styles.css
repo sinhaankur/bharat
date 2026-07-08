@@ -928,6 +928,10 @@ a:hover { border-color: var(--foreground); }
 .dim-src { color: var(--muted-foreground); cursor: help; font-size: 10px; margin-left: 2px; }
 .dim-align { font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.03em; padding: 1px 6px; border-radius: 999px; border: 1px solid currentColor; cursor: help; }
 .dim-align-yes { color: oklch(0.80 0.16 150); } .dim-align-no { color: oklch(0.76 0.16 28); } .dim-align-neutral { color: var(--muted-foreground); }
+.dim-geo-tag { font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.03em; padding: 1px 6px; border-radius: 999px; border: 1px solid currentColor; margin-right: 2px; cursor: help; }
+.dim-geo-coast { color: oklch(0.78 0.13 200); } .dim-geo-flood { color: oklch(0.74 0.16 250); } .dim-geo-terrain { color: oklch(0.80 0.10 90); text-transform: capitalize; }
+.dim-row--note { border-bottom: none; padding-top: 0.15rem; }
+.dim-hinder { font-size: 10.5px; line-height: 1.5; color: var(--muted-foreground); font-style: italic; }
 .ledger-statectx { font-size: 10px; line-height: 1.45; color: var(--muted-foreground); margin-top: 0.35rem; padding-left: 0.5rem; border-left: 2px solid oklch(0.5 0.08 250 / 0.5); }
 .ledger-statectx-tag { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.05em; text-transform: uppercase; color: oklch(0.78 0.10 250); margin-right: 0.3rem; }
 .roster-list { display: flex; flex-direction: column; gap: 0.25rem; }
