@@ -446,6 +446,9 @@ a:hover { border-color: var(--foreground); }
 .mlp-chip-flag { background: oklch(0.65 0.22 25); }
 .mlp-leg-note { font-size: 9px; color: var(--muted-foreground); font-style: italic; }
 .mlp-hint { font-size: 9.5px; color: var(--muted-foreground); line-height: 1.45; margin-top: 6px; padding-top: 5px; border-top: 1px dashed var(--border); }
+.mlp-elev-legend { margin: 0 0 4px 22px; }
+.mlp-elev-bar { height: 8px; border-radius: 3px; border: 1px solid var(--border); }
+.mlp-elev-ticks { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 8px; color: var(--muted-foreground); margin-top: 1px; }
 @media (max-width: 640px) { .mlp { width: 168px; top: 8px; left: 8px; padding: 6px 7px; } }
 
 /* metres-above-sea-level readout, bottom-left of the map */

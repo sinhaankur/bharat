@@ -1823,8 +1823,14 @@
     const hillshade = L.tileLayer('https://services.arcgisonline.com/arcgis/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Hillshade &copy; Esri, USGS, NASA SRTM (open 30 m DEM)', maxZoom: 16, opacity: 0.55,
     });
+    // Elevation TINT: a coloured metres-above-sea-level ramp, decoded per-pixel from
+    // open Terrarium terrain-RGB tiles (SRTM/NASADEM). Leaflet can't recolour those
+    // tiles natively, so we subclass GridLayer, fetch each terrarium tile, decode
+    // elevation per pixel and paint the ramp onto a canvas. Semi-transparent so the
+    // basemap reads through. 30 m open DEM — not LIDAR (no open nationwide LIDAR).
+    const elevTint = buildElevationTintLayer();
     // Stash for the unified layers panel (replaces the default Leaflet controls).
-    mapLayers = { basemaps, labels, hillshade, current: 'Dark map' };
+    mapLayers = { basemaps, labels, hillshade, elevTint, current: 'Dark map' };
     buildLayersPanel();
     setupElevationReadout();
 
@@ -1847,6 +1853,65 @@
   // ---- Unified LAYERS panel: one intuitive control for basemap + overlays +
   // "colour districts by". Always visible (top-left of the map), collapsible.
   // Replaces the scattered Leaflet layer control + in-panel district-mode toggle.
+  // Elevation colour ramp (metres → rgb): blue lowland → green → tan → brown → white.
+  const ELEV_RAMP = [
+    [-50, [40, 60, 95]], [0, [50, 90, 130]], [200, [70, 130, 95]], [600, [120, 150, 80]],
+    [1200, [175, 160, 100]], [2500, [150, 115, 80]], [4000, [200, 195, 185]], [6000, [255, 255, 255]],
+  ];
+  function elevRampRGB(m) {
+    for (let i = 1; i < ELEV_RAMP.length; i++) {
+      if (m <= ELEV_RAMP[i][0]) {
+        const [m0, c0] = ELEV_RAMP[i - 1], [m1, c1] = ELEV_RAMP[i];
+        const t = (m - m0) / (m1 - m0 || 1);
+        return c0.map((c, k) => Math.round(c + (c1[k] - c) * t));
+      }
+    }
+    return [255, 255, 255];
+  }
+
+  // Custom GridLayer: decode open Terrarium terrain-RGB → coloured elevation tint.
+  function buildElevationTintLayer() {
+    const TintLayer = L.GridLayer.extend({
+      createTile(coords, doneCb) {
+        const size = this.getTileSize();
+        const tile = document.createElement('canvas');
+        tile.width = size.x; tile.height = size.y;
+        const ctx = tile.getContext('2d');
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => {
+          // draw source terrarium tile, decode, repaint as ramp
+          const off = document.createElement('canvas');
+          off.width = 256; off.height = 256;
+          const octx = off.getContext('2d', { willReadFrequently: true });
+          octx.drawImage(img, 0, 0, 256, 256);
+          let src;
+          try { src = octx.getImageData(0, 0, 256, 256); }
+          catch (e) { doneCb(null, tile); return; }   // CORS/tainted → skip
+          const out = ctx.createImageData(256, 256);
+          const s = src.data, o = out.data;
+          for (let i = 0; i < s.length; i += 4) {
+            const m = (s[i] * 256 + s[i + 1] + s[i + 2] / 256) - 32768;
+            if (m <= -1000 || m > 9000) { o[i + 3] = 0; continue; }  // ocean/nodata → transparent
+            const [r, g, b] = elevRampRGB(m);
+            o[i] = r; o[i + 1] = g; o[i + 2] = b;
+            o[i + 3] = m <= 0 ? 90 : 200;   // sea-level slightly more transparent
+          }
+          ctx.putImageData(out, 0, 0);
+          doneCb(null, tile);
+        };
+        img.onerror = () => doneCb(null, tile);
+        const z = coords.z, x = coords.x, y = coords.y;
+        img.src = `https://s3.amazonaws.com/elevation-tiles-prod/terrarium/${z}/${x}/${y}.png`;
+        return tile;
+      }
+    });
+    return new TintLayer({
+      maxNativeZoom: 12, maxZoom: 18, opacity: 0.72, pane: 'overlayPane',
+      attribution: 'Elevation tint: AWS Terrain Tiles (Terrarium, open SRTM/NASADEM)',
+    });
+  }
+
   function switchBasemap(name) {
     if (!mapLayers || !mapLayers.basemaps[name]) return;
     Object.values(mapLayers.basemaps).forEach(l => map.removeLayer(l));
@@ -1894,6 +1959,7 @@
     const baseBtns = Object.keys(mapLayers?.basemaps || {}).map(n =>
       `<button class="mlp-base ${cur === n ? 'on' : ''}" data-base="${esc(n)}">${esc(n.replace(' map', '').replace('Recent satellite (Sentinel-2)', 'Recent (S2)'))}</button>`).join('');
     const hillOn = mapLayers && map.hasLayer(mapLayers.hillshade);
+    const elevOn = mapLayers && mapLayers.elevTint && map.hasLayer(mapLayers.elevTint);
     const labelsOn = mapLayers && map.hasLayer(mapLayers.labels);
     const subOn = subdistrictLayer != null;
 
@@ -1916,6 +1982,8 @@
       <div class="mlp-bases">${baseBtns}</div>
       <div class="mlp-sec-h">Overlays</div>
       <label class="mlp-check"><input type="checkbox" id="mlp-hill" ${hillOn ? 'checked' : ''}> Topography (hillshade)</label>
+      <label class="mlp-check"><input type="checkbox" id="mlp-elev" ${elevOn ? 'checked' : ''}> Elevation tint (m above sea)</label>
+      ${elevOn ? `<div class="mlp-elev-legend">${elevTintLegend()}</div>` : ''}
       <label class="mlp-check"><input type="checkbox" id="mlp-labels" ${labelsOn ? 'checked' : ''}> Place labels</label>
       <label class="mlp-check"><input type="checkbox" id="mlp-sub" ${subOn ? 'checked' : ''} ${ui.state.drillDistrict ? '' : 'disabled'}> Sub-districts (taluk/tehsil)</label>
       ${dataSection}`;
@@ -1924,6 +1992,7 @@
     panel.querySelectorAll('.mlp-base').forEach(b => b.onclick = () => { switchBasemap(b.dataset.base); renderLayersPanel(); });
     // overlays
     panel.querySelector('#mlp-hill').onchange = e => toggleOverlay('hillshade', e.target.checked);
+    panel.querySelector('#mlp-elev').onchange = e => { toggleOverlay('elevTint', e.target.checked); renderLayersPanel(); };
     panel.querySelector('#mlp-labels').onchange = e => toggleOverlay('labels', e.target.checked);
     const subEl = panel.querySelector('#mlp-sub');
     if (subEl) subEl.onchange = e => {
@@ -1945,6 +2014,16 @@
       renderLayersPanel();
     });
     panel.querySelector('#mlp-close').onclick = () => { ui.state.layersCollapsed = true; renderLayersPanel(); };
+  }
+
+  // Gradient legend for the elevation-tint overlay (metres above sea level).
+  function elevTintLegend() {
+    const stops = [0, 200, 600, 1200, 2500, 4000];
+    const grad = `linear-gradient(90deg, ${stops.map(m => {
+      const [r, g, b] = elevRampRGB(m); return `rgb(${r},${g},${b})`;
+    }).join(', ')})`;
+    return `<div class="mlp-elev-bar" style="background:${grad}"></div>
+      <div class="mlp-elev-ticks"><span>0 m</span><span>1.2k</span><span>4k+</span></div>`;
   }
 
   function geoFacetChooserHTML() {
