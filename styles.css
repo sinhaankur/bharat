@@ -935,6 +935,15 @@ a:hover { border-color: var(--foreground); }
 .geo-tl-subj { font-size: 10.5px; color: oklch(0.82 0.10 200); }
 .geo-tl-pt { font-family: var(--font-mono); font-size: 10px; }
 .geo-tl-arrow { color: var(--muted-foreground); margin: 0 4px; }
+.geo-tl-unit { color: var(--muted-foreground); font-size: 9px; }
+.geo-tl-event { color: oklch(0.76 0.16 28); }
+.geo-tl-src { color: oklch(0.72 0.13 250); text-decoration: none; margin-left: 2px; }
+.geo-tl-range { font-size: 9.5px; line-height: 1.4; color: var(--muted-foreground); font-style: italic; }
+.geo-enc-case { margin: 0.25rem 0; padding-left: 0.5rem; border-left: 2px solid oklch(0.55 0.14 28 / 0.5); }
+.geo-enc-type { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.03em; color: oklch(0.78 0.14 28); }
+.geo-enc-status { font-family: var(--font-mono); font-size: 8.5px; color: oklch(0.80 0.12 150); margin-left: 4px; }
+.geo-enc-ref { font-size: 9.5px; color: var(--muted-foreground); margin-top: 1px; }
+.geo-enc-ref a { color: oklch(0.72 0.13 250); }
 .ledger-statectx { font-size: 10px; line-height: 1.45; color: var(--muted-foreground); margin-top: 0.35rem; padding-left: 0.5rem; border-left: 2px solid oklch(0.5 0.08 250 / 0.5); }
 .ledger-statectx-tag { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.05em; text-transform: uppercase; color: oklch(0.78 0.10 250); margin-right: 0.3rem; }
 .roster-list { display: flex; flex-direction: column; gap: 0.25rem; }

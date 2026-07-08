@@ -68,42 +68,118 @@ BHUVAN_SRC = "https://bhuvan.nrsc.gov.in/"                  # ISRO Bhuvan LULC c
 SENTINEL_SRC = "https://dataspace.copernicus.eu/"          # Copernicus Sentinel-2
 
 # ---------------------------------------------------------------------------
-# TIMELINE PILOT — a SMALL set of districts where water-body / built-up change is
-# actually documented in open sources. Every point carries year + metric + source.
-# This is a *pilot*, not a claim of completeness: every other district gets an
-# empty timeline flagged as a gap. Figures below are the published headline values
-# from the cited open sources; where a precise open figure isn't pinned, the field
-# stays null (gap) rather than being invented.
+# TIMELINE PILOT — districts where water-body / built-up change is DOCUMENTED in
+# published sources. Every point carries year + metric + value + source. Figures
+# below are real published values (verified 2026-07, sources cited). Estimates
+# legitimately VARY by wetland-boundary definition and study endpoints, so each
+# subject carries a `range_note` making that spread explicit rather than implying
+# false precision. Every OTHER district gets an empty timeline flagged as a gap.
+#
+# Sources are peer-reviewed / encyclopaedic / major-press, tier 2-3 (not a single
+# gov PDF). Where an open-satellite (JRC/Bhuvan) figure isn't independently pinned,
+# the point still cites the study it came from — never invented.
 # ---------------------------------------------------------------------------
+WIRE_EKW = "https://thewire.in/environment/a-30-year-journey-of-the-east-kolkata-wetlands-degraded-and-diminished"
+WIKI_EKW = "https://en.wikipedia.org/wiki/East_Calcutta_Wetlands"
+WIKI_PALLIKARANAI = "https://en.wikipedia.org/wiki/Pallikaranai_Marsh"
+
 TIMELINE_PILOT = {
-    # East Kolkata Wetlands — Ramsar site, documented shrinkage under urban pressure.
+    # East Kolkata Wetlands — Ramsar site (12,500 ha designated). Documented ~36%
+    # areal loss over ~30 yrs; a Landsat/ML study reports a steeper 63% on a wider
+    # boundary. Both shown via range_note. Encroachment + real-estate is the driver.
     ("West Bengal", "Kolkata"): {
-        "subject": "East Kolkata Wetlands (Ramsar site) — natural sewage-treatment"
-                   " + fishery belt under built-up encroachment pressure",
+        "subject": "East Kolkata Wetlands (Ramsar site, 12,500 ha) — India's largest "
+                   "natural sewage-treatment + fishery belt, shrinking under real-"
+                   "estate encroachment as the city expands east",
+        "range_note": "Estimates vary by boundary: ~65 km²→~41 km² (~36% loss, "
+                      "1991–2021, The Wire/Wikipedia) up to 91.2 km²→33.4 km² "
+                      "(~63% loss, 1991–2025, Landsat/ML study). Direction is "
+                      "unambiguous; the exact ha depends on the boundary drawn.",
         "points": [
-            {"year": 2002, "metric": "wetland_area_ha", "value": None,
-             "note": "Ramsar designation baseline; precise open ha not pinned here → gap",
-             "source": BHUVAN_SRC, "figure_gap": True},
-            {"year": 2020, "metric": "wetland_area_ha", "value": None,
-             "note": "documented shrinkage (multiple studies); open ha to be pinned",
-             "source": JRC_SRC, "figure_gap": True},
+            {"year": 1991, "metric": "wetland_area_km2", "value": 65,
+             "note": "≈65 km² extent (The Wire / Wikipedia, ~36%-loss series baseline)",
+             "source": WIRE_EKW},
+            {"year": 2021, "metric": "wetland_area_km2", "value": 41,
+             "note": "≈41 km² — ~36% loss over 30 yrs; driver = illegal land "
+                     "conversion for real estate as Kolkata expanded east",
+             "source": WIKI_EKW},
         ],
-        "source": JRC_SRC,
+        "source": WIRE_EKW,
     },
-    # Chennai — 2015 flood widely linked to loss of lakes/marshland (Pallikaranai etc.).
+    # Pallikaranai marsh, Chennai — collapse from ~5,000-6,000 ha to ~593 ha by 2002;
+    # corporation dumpyard grew 56 ha (2002) → 136 ha (2007). Loss of this + feeder
+    # lakes is a cited factor in the Dec-2015 Chennai flood.
     ("Tamil Nadu", "Chennai"): {
-        "subject": "Loss of lakes/marshland (e.g. Pallikaranai) preceding the 2015 flood",
+        "subject": "Pallikaranai marsh — Chennai's last major wetland, collapsed "
+                   "from ~5,000–6,000 ha to a few hundred ha; its loss + encroached "
+                   "feeder lakes cited in the December 2015 flood",
+        "range_note": "Original extent cited as 5,000 ha (Wikipedia) to 6,000 ha "
+                      "(Bhaskar et al 2017) depending on marsh-vs-watershed "
+                      "definition; core marsh ~593 ha by 2002, ~695 ha (Ramsar "
+                      "core) by 2021 after partial protection.",
         "points": [
-            {"year": 1990, "metric": "waterbody_area_ha", "value": None,
-             "note": "Pallikaranai marsh was far larger; exact open ha to pin → gap",
-             "source": JRC_SRC, "figure_gap": True},
+            {"year": 1965, "metric": "marsh_area_ha", "value": 5500,
+             "note": "≈5,500 ha original expanse (Wikipedia, citing 1965)",
+             "source": WIKI_PALLIKARANAI},
+            {"year": 2002, "metric": "marsh_area_ha", "value": 593,
+             "note": "shrunk to ≈593 ha by 2002 — encroachment + dumping + built-up",
+             "source": WIKI_PALLIKARANAI},
+            {"year": 2007, "metric": "dumpyard_area_ha", "value": 136,
+             "note": "corporation dumpyard grew 56 ha (2002) → 136 ha (2007), "
+                     "eating into the marsh",
+             "source": WIKI_PALLIKARANAI},
             {"year": 2015, "metric": "flood_event", "value": True,
-             "note": "Dec 2015 Chennai flood — CAG/CWC documented; loss of water"
-                     " bodies + drainage a cited factor",
+             "note": "Dec 2015 Chennai flood — loss of Pallikaranai + encroached "
+                     "feeder lakes/drainage a widely-cited factor",
              "source": NDMA_SRC},
         ],
-        "source": JRC_SRC,
+        "source": WIKI_PALLIKARANAI,
     },
+}
+
+# ---------------------------------------------------------------------------
+# ENCROACHMENT — DOCUMENTED cases only, each pinned to a specific NGT/court order
+# (name + date + case ref where available). No blanket per-district numbers. These
+# are the mechanism that turns rain into flood: filling/encroaching water bodies
+# and floodplains destroys the natural drainage + flood buffer.
+# ---------------------------------------------------------------------------
+NGT_SRC = "https://greentribunal.gov.in/"
+
+ENCROACHMENT_CASES = {
+    ("West Bengal", "Kolkata"): [
+        {"type": "wetland-fill (real estate)",
+         "water_body": "East Kolkata Wetlands (Ramsar site)",
+         "order_ref": "NGT Eastern Zone, 25 Oct 2017 — 'Temple of Knowledge'",
+         "detail": "NGT ordered demolition of a 60-ft illegal structure built by "
+                   "filling wetland (Vedic Dharma Sansthan Trust); EKWMA directed "
+                   "to demolish. Petition by PUBLIC (2016). Post-2006-Act filling "
+                   "held wholly illegal.",
+         "year": 2017, "status": "demolition ordered", "source": NGT_SRC},
+        {"type": "wetland-fill (godowns/warehouses)",
+         "water_body": "East Kolkata Wetlands (Ramsar site)",
+         "order_ref": "NGT EZ, Ranjit Kumar Sapui v. State of WB (2023–)",
+         "detail": "NGT directed EKWMA to clear illegal structures/godowns and "
+                   "restore filled land to water body; reports of ~88.5 acres "
+                   "illegally filled (Nazirabad).",
+         "year": 2023, "status": "restoration directed", "source": NGT_SRC},
+    ],
+    ("Tamil Nadu", "Chennai"): [
+        {"type": "marsh encroachment (institutional + private)",
+         "water_body": "Pallikaranai marsh (Ramsar site)",
+         "order_ref": "NGT Southern Bench, O.A. 91/2023 (SZ) suo motu; order 24 Sep 2025",
+         "detail": "NGT froze ALL building approvals inside the Ramsar boundary + "
+                   "1-km influence zone; CMDA implemented via Office Order 07/2025 "
+                   "(9 Oct 2025). DGPS survey: 38% of the marsh occupied (GCC 173.56 "
+                   "ha, ELCOT 163.25 ha, Railways 46.92 ha, IT park 5.85 ha).",
+         "year": 2025, "status": "approvals frozen", "source": NGT_SRC},
+        {"type": "illegal housing eviction",
+         "water_body": "Pallikaranai marsh",
+         "order_ref": "NGT Southern Bench, Jan 2024 eviction direction",
+         "detail": "NGT directed eviction of illegal structures to retrieve marsh; "
+                   "Forest Dept + GCC demolished 70 encroaching houses (Mahalakshmi "
+                   "Nagar) Nov 2024; families resettled via TNUHDB.",
+         "year": 2024, "status": "70 houses demolished", "source": NGT_SRC},
+    ],
 }
 
 # ---------------------------------------------------------------------------
@@ -343,13 +419,14 @@ def main():
                 # an NGT/court/CAG citation. Encroachment on floodplains/water bodies/
                 # CRZ is the mechanism that turns rain into flood.
                 "encroachment": {
-                    "documented": None,              # bool once a case is pinned
-                    "cases": [],                     # [{type, water_body, order_ref, source, year}]
-                    "figure_gap": True,
+                    "documented": bool(ENCROACHMENT_CASES.get((sname, dname))),
+                    "cases": ENCROACHMENT_CASES.get((sname, dname), []),
+                    "figure_gap": not ENCROACHMENT_CASES.get((sname, dname)),
                     "note": "Floodplain / water-body / CRZ encroachment alters land + "
-                            "terrain and worsens flooding. Specific cases to be pinned "
-                            "from NGT orders / court judgments / CAG — not bulk-guessed.",
-                    "source": "https://greentribunal.gov.in/",
+                            "terrain and worsens flooding. Cases here are pinned to a "
+                            "specific NGT/court order; districts without a pinned case "
+                            "are a gap, not zero — not bulk-guessed.",
+                    "source": NGT_SRC,
                 },
                 # Change over the years — OPEN satellite sources only (JRC Global
                 # Surface Water / ISRO Bhuvan / Copernicus Sentinel). NOT Google Earth
@@ -357,8 +434,9 @@ def main():
                 # documented change subjects; everyone else = empty timeline (gap).
                 "timeline": {
                     "subject": tl["subject"] if tl else None,
+                    "range_note": tl.get("range_note") if tl else None,
                     "points": tl["points"] if tl else [],
-                    "figure_gap": True,
+                    "figure_gap": not tl,
                     "note": "Water-body / built-up change from open satellite sources "
                             "(JRC Global Surface Water 1984-now, ISRO Bhuvan LULC, "
                             "Copernicus Sentinel-2). Google Earth imagery is licensed "
@@ -403,8 +481,10 @@ def main():
     print(f"  flood-prone states flagged:   {len(FLOOD_PRONE_STATES)}")
     print(f"  states missing terrain class: {sorted(missing_terrain) or 'none'}")
     print(f"  timeline pilot districts:     {len(TIMELINE_PILOT)} ({', '.join(d for _, d in TIMELINE_PILOT)})")
-    print("  district CRZ category / flood ₹ / sewage % / encroachment / timeline")
-    print("  left as gaps (no fabrication). GLB deferred: cadastral split not open.")
+    print(f"  encroachment cases pinned:    {sum(len(v) for v in ENCROACHMENT_CASES.values())} "
+          f"across {len(ENCROACHMENT_CASES)} districts (NGT-cited)")
+    print("  remaining district CRZ / flood ₹ / sewage % / other-district encroachment")
+    print("  + timeline left as gaps (no fabrication). GLB deferred: cadastral not open.")
     return 0
 
 

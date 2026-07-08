@@ -895,25 +895,38 @@
       // Change over the years (open satellite: JRC/Bhuvan/Sentinel — not Google Earth).
       const tl = geo.timeline;
       if (tl && (tl.subject || (tl.points || []).length)) {
+        const unitLabel = m => ({
+          wetland_area_km2: 'km²', marsh_area_ha: 'ha', dumpyard_area_ha: 'ha dump',
+          waterbody_area_ha: 'ha', wetland_area_ha: 'ha',
+        }[m] || '');
         const pts = (tl.points || []).map(p => {
-          const val = p.value === true ? '⚠ event' : (p.value != null ? `${p.value}` : '<span class="dim-gap">fig gap</span>');
-          return `<span class="geo-tl-pt"><b>${esc(String(p.year))}</b> ${val}</span>`;
+          const val = p.value === true ? '<span class="geo-tl-event">⚠ flood</span>'
+            : (p.value != null ? `${p.value} <span class="geo-tl-unit">${esc(unitLabel(p.metric))}</span>` : '<span class="dim-gap">fig gap</span>');
+          const src = p.source ? `<a class="geo-tl-src" href="${esc(p.source)}" target="_blank" rel="noopener" title="${esc(p.note || '')}">ⓘ</a>` : '';
+          return `<span class="geo-tl-pt"><b>${esc(String(p.year))}</b> ${val}${src}</span>`;
         }).join('<span class="geo-tl-arrow">→</span>');
         rows.push(`
         <div class="dim-row dim-row--note">
           <span class="dim-key">Over time</span>
           <span class="dim-val">${tl.subject ? `<span class="geo-tl-subj">${esc(tl.subject)}</span><br>` : ''}${pts}
-            <span class="dim-gap"> (open satellite — JRC/Bhuvan/Sentinel; not Google Earth)</span></span>
+            ${tl.range_note ? `<br><span class="geo-tl-range">${esc(tl.range_note)}</span>` : ''}
+            <br><span class="dim-gap">open satellite — JRC Global Surface Water / ISRO Bhuvan / Sentinel; not Google Earth (licensed)</span></span>
         </div>`);
       }
-      // Illegal encroachment — flag/gap; documented cases when pinned.
+      // Illegal encroachment — documented NGT/court cases only; gap otherwise.
       const enc = geo.encroachment;
       if (enc && (enc.documented != null || (enc.cases || []).length)) {
-        const cases = (enc.cases || []).map(c => `${esc(c.type || 'encroachment')}${c.water_body ? ' · ' + esc(c.water_body) : ''}${c.order_ref ? ` (${esc(c.order_ref)})` : ''}`).join('; ');
+        const cases = (enc.cases || []);
+        const body = cases.length ? cases.map(c => `
+          <div class="geo-enc-case">
+            <span class="geo-enc-type">${esc(c.type || 'encroachment')}</span>${c.water_body ? ` · <b>${esc(c.water_body)}</b>` : ''}
+            ${c.status ? `<span class="geo-enc-status">${esc(c.status)}</span>` : ''}
+            ${c.order_ref ? `<div class="geo-enc-ref">${esc(c.order_ref)}${c.source ? ` <a href="${esc(c.source)}" target="_blank" rel="noopener">↗</a>` : ''}</div>` : ''}
+          </div>`).join('') : '<span class="dim-gap">documented cases: gap (NGT/court/CAG)</span>';
         rows.push(`
         <div class="dim-row dim-row--note">
           <span class="dim-key">Encroachment</span>
-          <span class="dim-val">${cases || '<span class="dim-gap">documented cases: gap (NGT/court/CAG)</span>'}</span>
+          <span class="dim-val">${body}</span>
         </div>`);
       }
       if (geo.hinders_dev_note) {
