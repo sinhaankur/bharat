@@ -1874,6 +1874,21 @@
 
     try { map.fitBounds(geoLayer.getBounds(), { padding: [10, 10] }); } catch (e) {}
 
+    // "Home" control — the map is now global (pan/zoom anywhere), so give an easy
+    // one-click way back to India.
+    const HomeCtl = L.Control.extend({
+      options: { position: 'topright' },
+      onAdd() {
+        const b = L.DomUtil.create('button', 'map-home-btn');
+        b.innerHTML = '⌂ India';
+        b.title = 'Reset view to India';
+        L.DomEvent.disableClickPropagation(b);
+        b.onclick = () => { try { map.fitBounds(geoLayer.getBounds(), { padding: [10, 10] }); } catch (e) {} };
+        return b;
+      }
+    });
+    map.addControl(new HomeCtl());
+
     buildNewsBubbles();
   }
 
@@ -1954,10 +1969,12 @@
           const s = src.data, o = out.data;
           for (let i = 0; i < s.length; i += 4) {
             const m = (s[i] * 256 + s[i + 1] + s[i + 2] / 256) - 32768;
-            if (m <= -1000 || m > 9000) { o[i + 3] = 0; continue; }  // ocean/nodata → transparent
+            // Only tint LAND (above sea level). Ocean/bathymetry/nodata → transparent,
+            // so the tint doesn't wash the seas green (fixes the global-view murk).
+            if (m <= 2 || m > 9000) { o[i + 3] = 0; continue; }
             const [r, g, b] = elevRampRGB(m);
             o[i] = r; o[i + 1] = g; o[i + 2] = b;
-            o[i + 3] = m <= 0 ? 90 : 200;   // sea-level slightly more transparent
+            o[i + 3] = m < 60 ? 130 : 200;   // near-coast lowland a touch softer
           }
           ctx.putImageData(out, 0, 0);
           doneCb(null, tile);
