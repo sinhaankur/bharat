@@ -82,6 +82,13 @@ SENTINEL_SRC = "https://dataspace.copernicus.eu/"          # Copernicus Sentinel
 WIRE_EKW = "https://thewire.in/environment/a-30-year-journey-of-the-east-kolkata-wetlands-degraded-and-diminished"
 WIKI_EKW = "https://en.wikipedia.org/wiki/East_Calcutta_Wetlands"
 WIKI_PALLIKARANAI = "https://en.wikipedia.org/wiki/Pallikaranai_Marsh"
+IISC_BLR = "https://en.wikipedia.org/wiki/Lakes_in_Bengaluru"          # IISc lake count
+WIKI_BELLANDUR = "https://en.wikipedia.org/wiki/Bellandur_Lake"
+FLOODLIST_MITHI = "https://floodlist.com/asia/mumbai-floods-mithi-river"
+NRSC_HYD = "https://sandrp.in/2026/02/17/hyderabad-lakes-2025-degradation-continues-amid-hydraa-efforts/"
+CAG_DAL = "https://kashmirobserver.net/2026/04/10/cag-flags-over-10-shrinkage-in-dal-lakes-open-water-area/"
+SANDRP_YAMUNA = "https://sandrp.in/2024/07/04/yamuna-manthan-040724-a-year-after-historic-floods-where-is-river-governance/"
+WIKI_DEEPOR = "https://testbook.com/articles/deepor-beel"
 
 TIMELINE_PILOT = {
     # East Kolkata Wetlands — Ramsar site (12,500 ha designated). Documented ~36%
@@ -135,6 +142,113 @@ TIMELINE_PILOT = {
         ],
         "source": WIKI_PALLIKARANAI,
     },
+    # Bengaluru — "city of lakes" collapse; broken tank cascade → chronic flooding.
+    ("Karnataka", "Bangalore Urban"): {
+        "subject": "Bengaluru's lake collapse — the broken tank cascade whose "
+                   "stormwater drains, once encroached, now flood the city",
+        "range_note": "IISc: ~1,452 lakes (1960s) → ~194 today. A 2021 House "
+                      "committee found 837 lakes vanished in Bengaluru Urban, 88 "
+                      "fully gone (528 ha). Bellandur (~360 ha, largest surviving) "
+                      "+ Begur + Hulimavu lost ~90% to encroachment 2000–2021.",
+        "points": [
+            {"year": 1960, "metric": "lake_count", "value": 1452,
+             "note": "~1,452 lakes in the 1960s (IISc)", "source": IISC_BLR},
+            {"year": 2024, "metric": "lake_count", "value": 194,
+             "note": "~194 remain; stormwater drains at valley lows built over → "
+                     "floods (NGT-supervised Bellandur restoration ongoing)",
+             "source": IISC_BLR},
+        ],
+        "source": IISC_BLR,
+    },
+    # Mumbai — Mithi river narrowed by reclamation/encroachment; 2005 deluge.
+    ("Maharashtra", "Greater Bombay"): {
+        "subject": "Mithi river — narrowed by BKC reclamation, mangrove loss and "
+                   "slum encroachment; the choke that drowned Mumbai on 26 July 2005",
+        "range_note": "SC-appointed committee: 620 ha reclaimed for Bandra-Kurla "
+                      "Complex; ~50% river-width reduction and built-up up from 29% "
+                      "(1966) to 70% (2005); Mumbai lost ~40% of mangroves 1995–2005.",
+        "points": [
+            {"year": 1966, "metric": "builtup_pct", "value": 29,
+             "note": "built-up 29% of Mithi catchment (1966)", "source": FLOODLIST_MITHI},
+            {"year": 2005, "metric": "builtup_pct", "value": 70,
+             "note": "built-up 70%; ~50% width loss + mangrove loss → 26 Jul 2005 "
+                     "flood killed 900+", "source": FLOODLIST_MITHI},
+            {"year": 2005, "metric": "flood_event", "value": True,
+             "note": "26 July 2005 Mumbai deluge — Mithi couldn't carry Powai "
+                     "overflow; 900+ dead", "source": FLOODLIST_MITHI},
+        ],
+        "source": FLOODLIST_MITHI,
+    },
+    # Hyderabad — lakes down 61% (NRSC 1979→2024); Oct-2020 flood; HYDRAA reclaim.
+    ("Andhra Pradesh", "Hyderabad"): {
+        "subject": "Hyderabad's lakes — 61% shrinkage (NRSC 1979→2024); FTL/nala "
+                   "encroachment behind the Oct-2020 flood; HYDRAA reclaiming beds",
+        "range_note": "NRSC: lake extent −61% (1979–2024); ~185 lakes remain; "
+                      "HYDRAA: >61% of lakes encroached, >30,000 nala encroachments.",
+        "points": [
+            {"year": 1979, "metric": "lake_extent_index", "value": 100,
+             "note": "1979 baseline (NRSC remote sensing)", "source": NRSC_HYD},
+            {"year": 2024, "metric": "lake_extent_index", "value": 39,
+             "note": "−61% lake extent by 2024; FTL/nala encroachment → Oct-2020 "
+                     "flood; HYDRAA formed Jul-2024 to demolish FTL encroachments",
+             "source": NRSC_HYD},
+            {"year": 2020, "metric": "flood_event", "value": True,
+             "note": "Oct 13–14 2020 Hyderabad flood — encroached lake beds/nalas",
+             "source": NRSC_HYD},
+        ],
+        "source": NRSC_HYD,
+    },
+    # Srinagar — Wular/Dal/Hokersar shrinkage destroyed the valley flood buffer; 2014.
+    ("Jammu & Kashmir", "Srinagar"): {
+        "subject": "Kashmir's flood-buffer wetlands (Wular, Dal, Hokersar, Anchar) "
+                   "shrunk away — the lost sponge behind the September 2014 deluge",
+        "range_note": "Wular open water 89.59 km² (1911) → 15.73 km² (2013); Dal "
+                      "15.40 km² (2007) → 12.91 km² (2020, CAG); >half of Srinagar "
+                      "wetland area (1971) gone by 2010; ~20 wetlands lost to colonies.",
+        "points": [
+            {"year": 1911, "metric": "wular_openwater_km2", "value": 89.59,
+             "note": "Wular open-water 89.59 km² (1911)", "source": CAG_DAL},
+            {"year": 2013, "metric": "wular_openwater_km2", "value": 15.73,
+             "note": "Wular 15.73 km²; wetland collapse → 2014 Jhelum flood (~300 "
+                     "dead) as lost sponges pushed water into Srinagar", "source": CAG_DAL},
+            {"year": 2014, "metric": "flood_event", "value": True,
+             "note": "Sept 2014 Kashmir flood — wetland loss a cited cause",
+             "source": CAG_DAL},
+        ],
+        "source": CAG_DAL,
+    },
+    # Delhi — Yamuna floodplain (O-zone) ~75% encroached; July-2023 flood.
+    ("Delhi", "Delhi"): {
+        "subject": "Yamuna floodplain (the protected 'O-zone') ~75% encroached by "
+                   "roads, colonies and casting yards — exposed by the July-2023 flood",
+        "range_note": "~75% of Delhi's floodplain reportedly encroached; NGT: ~230k "
+                      "O-zone households not on a sewer; DDA has run ≥15 demolition "
+                      "drives since the mid-2000s under NGT/court orders.",
+        "points": [
+            {"year": 2023, "metric": "flood_event", "value": True,
+             "note": "July 2023 Yamuna flood — floodplain encroachment + siltation "
+                     "+ barrage operation amplified it; forced a DDA master-plan "
+                     "rethink (NGT O.A. 537/2023)", "source": SANDRP_YAMUNA},
+        ],
+        "source": SANDRP_YAMUNA,
+    },
+    # Guwahati — Deepor Beel (Assam's only Ramsar) shrinking → lost stormwater sponge.
+    ("Assam", "Kamrup"): {
+        "subject": "Deepor Beel — Assam's only Ramsar wetland and Guwahati's natural "
+                   "stormwater reservoir, shrinking under encroachment + waste dumping",
+        "range_note": "Once a Brahmaputra channel; 4.14 km² notified as bird "
+                      "sanctuary (1989). Water-storage capacity down sharply; municipal "
+                      "dumping at Boragaon + colony encroachment; NGT flagged pollution "
+                      "(Jan 2026) and pushed an Eco-Sensitive-Zone notification.",
+        "points": [
+            {"year": 2002, "metric": "ramsar_designated", "value": True,
+             "note": "Deepor Beel declared a Ramsar site (2002)", "source": WIKI_DEEPOR},
+            {"year": 2026, "metric": "shrinkage_flagged", "value": True,
+             "note": "storage capacity fallen; NGT flagged pollution/degradation; "
+                     "shrinkage raises Guwahati flash-flood risk", "source": WIKI_DEEPOR},
+        ],
+        "source": WIKI_DEEPOR,
+    },
 }
 
 # ---------------------------------------------------------------------------
@@ -179,6 +293,66 @@ ENCROACHMENT_CASES = {
                    "Forest Dept + GCC demolished 70 encroaching houses (Mahalakshmi "
                    "Nagar) Nov 2024; families resettled via TNUHDB.",
          "year": 2024, "status": "70 houses demolished", "source": NGT_SRC},
+    ],
+    ("Karnataka", "Bangalore Urban"): [
+        {"type": "lakebed encroachment (builders)",
+         "water_body": "Bellandur / Agara / Kundanahalli lakes",
+         "order_ref": "NGT 2015–2016; SC 2017 (buffer)",
+         "detail": "NGT ordered demolitions in Bellandur/Kundanahalli (2016) and "
+                   "a 75-m lake buffer; SC (2017) trimmed the buffer but upheld "
+                   "₹139 cr fines on builders Mantri & Coremind (2015) for "
+                   "construction on Agara lake / stormwater drains.",
+         "year": 2016, "status": "demolitions + ₹139 cr fines", "source": NGT_SRC},
+    ],
+    ("Maharashtra", "Greater Bombay"): [
+        {"type": "floodplain reclamation + mangrove loss",
+         "water_body": "Mithi river / Bandra-Kurla Complex",
+         "order_ref": "SC-appointed fact-finding committee (post-2005)",
+         "detail": "SC-appointed committee found 620 ha reclaimed for BKC and "
+                   "bridge bottlenecks narrowed the Mithi; Bombay HC/court-driven "
+                   "mangrove-protection orders followed. 2017 committee: encroachment "
+                   "removal 'not totally satisfactory'.",
+         "year": 2006, "status": "committee findings; partial removal", "source": FLOODLIST_MITHI},
+    ],
+    ("Andhra Pradesh", "Hyderabad"): [
+        {"type": "FTL/nala encroachment (real estate)",
+         "water_body": "Hussain Sagar + city lakes/nalas",
+         "order_ref": "HYDRAA (est. 19 Jul 2024); GHMC show-cause; NGT/FTL rules",
+         "detail": "HYDRAA razed encroachments within lake FTL/buffer from Aug 2024 "
+                   "(Khanapur, Gandipet, Shankerpally); GHMC show-cause to Pradeep "
+                   "Constructions for a 17-storey tower found inside Hussain Sagar "
+                   "FTL (2026). >30,000 nala encroachments identified.",
+         "year": 2024, "status": "demolitions ongoing", "source": NRSC_HYD},
+    ],
+    ("Jammu & Kashmir", "Srinagar"): [
+        {"type": "wetland/lake encroachment",
+         "water_body": "Dal Lake / Wular / Hokersar",
+         "order_ref": "CAG audit (2026); NGT/High Court monitoring",
+         "detail": "CAG flagged >10% Dal open-water shrinkage (2007–2020) from "
+                   "encroachment (Mir Behri, Lati Mohalla, Nandapora) + floating "
+                   "gardens; Wular encroachment/siltation eroded the valley flood "
+                   "buffer. New colonies (Nowgam, Bemina) sit on former wetland.",
+         "year": 2026, "status": "audit-flagged; conservation ordered", "source": CAG_DAL},
+    ],
+    ("Delhi", "Delhi"): [
+        {"type": "floodplain (O-zone) encroachment",
+         "water_body": "Yamuna floodplain",
+         "order_ref": "NGT O.A. 537/2023; DDA action plan; ≥15 demolition drives",
+         "detail": "NGT directed DDA to remove floodplain encroachments and restore "
+                   "the O-zone after the July-2023 flood; DDA issued eviction notices "
+                   "(e.g. 310 families, Yamuna Bazar) and began wetland restoration "
+                   "(Asita, Yamuna Vanasthali) — rehabilitation criticised as partial.",
+         "year": 2023, "status": "restoration + evictions ordered", "source": SANDRP_YAMUNA},
+    ],
+    ("Assam", "Kamrup"): [
+        {"type": "Ramsar wetland encroachment + dumping",
+         "water_body": "Deepor Beel (Ramsar site)",
+         "order_ref": "NGT (Eco-Sensitive-Zone direction; Jan-2026 pollution notice)",
+         "detail": "NGT directed Assam to notify an Eco-Sensitive Zone around Deepor "
+                   "Beel and took note of pollution/degradation (Jan 2026); Kamrup "
+                   "(Metro) admin banned community fishing/excavation/construction. "
+                   "Municipal dumping at Boragaon + railway-corridor tree-felling.",
+         "year": 2026, "status": "ESZ directed; activity banned", "source": WIKI_DEEPOR},
     ],
 }
 
@@ -522,6 +696,9 @@ def main():
                 dist_flood, flood_level = False, "not-flagged"
             dims = dist.setdefault("dimensions", {})
             tl = TIMELINE_PILOT.get((sname, dname))
+            # Preserve the elevation block if add_district_elevation.py already ran —
+            # it's expensive (live SRTM API) and independent of this generator.
+            prev_elev = dims.get("geography", {}).get("elevation")
             dims["geography"] = {
                 "terrain": terrain,                  # state dominant type
                 "on_coast": dist_coastal,            # PER-DISTRICT: touches the sea?
@@ -618,6 +795,9 @@ def main():
                 "figure_gap": True,
                 "source_tier": 2,
             }
+            # keep previously-fetched SRTM elevation (don't clobber it on rerun)
+            if prev_elev is not None:
+                dims["geography"]["elevation"] = prev_elev
             gaps = dist.setdefault("_gaps", [])
             for g in [
                 "geography CRZ category (district CZMP map) unsourced",
