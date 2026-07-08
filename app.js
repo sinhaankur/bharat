@@ -186,16 +186,33 @@
     return { min: Math.min(...values), max: Math.max(...values) };
   }
 
+  // True when a landscape basemap or terrain overlay is showing, so the choropleth
+  // should go translucent (with crisper borders) to let the terrain read through.
+  function terrainActive() {
+    if (!map || !mapLayers) return false;
+    const baseTerrain = mapLayers.current && mapLayers.current !== 'Dark map';
+    const overlayOn = (mapLayers.hillshade && map.hasLayer(mapLayers.hillshade)) ||
+                      (mapLayers.elevTint && map.hasLayer(mapLayers.elevTint));
+    return baseTerrain || overlayOn;
+  }
+  // Fill opacity + border for choropleth, adapting to whether terrain shows beneath.
+  function choroStyle(baseFill, baseBorder) {
+    return terrainActive()
+      ? { fillOpacity: baseFill * 0.45, borderColor: 'oklch(0.99 0 0 / 0.8)', borderWeight: 1.1 }
+      : { fillOpacity: baseFill, borderColor: baseBorder, borderWeight: 0.6 };
+  }
+
   function fillStyle(name) {
     const view = VIEWS[ui.state.view];
     const r = rowFor(name, ui.state.yearIdx);
-    if (!r) return { color: 'oklch(0.985 0 0 / 0.18)', weight: 0.5, fillColor: 'oklch(0.22 0 0)', fillOpacity: 0.55, className: 'india-state-path no-data' };
+    if (!r) return { color: 'oklch(0.985 0 0 / 0.18)', weight: 0.5, fillColor: 'oklch(0.22 0 0)', fillOpacity: terrainActive() ? 0.15 : 0.55, className: 'india-state-path no-data' };
     const v = view.compute(r, extFor(name));
+    const cs = choroStyle(0.92, 'oklch(0.985 0 0 / 0.22)');
     return {
-      color: 'oklch(0.985 0 0 / 0.22)',
-      weight: 0.5,
+      color: cs.borderColor,
+      weight: cs.borderWeight,
       fillColor: colorFor(v, view, ui._domain),
-      fillOpacity: 0.92,
+      fillOpacity: cs.fillOpacity,
       className: 'india-state-path'
     };
   }
@@ -537,15 +554,18 @@
     const logMax = moneyVals.length ? Math.max(1, ...moneyVals.filter(o => o.headline != null).map(o => Math.log10(Math.max(1, o.headline + 1)))) : 1;
     const showMoney = ui.state.districtMode === 'money' && moneyVals.length > 0;
 
+    // Scale district fill opacity down (and brighten borders) when terrain shows through.
+    const fo = base => terrainActive() ? Math.min(base, base * 0.5) : base;
+    const bc = base => terrainActive() ? 'oklch(0.99 0 0 / 0.75)' : base;
     districtLayer = L.geoJSON(geo, {
       style: f => {
         const dn = f.properties.DISTRICT;
         if (showMoney) {
           const m = moneyByDistrict.get(dn);
-          if (!m) return { className: 'india-state-path', color: 'oklch(0.985 0 0 / 0.2)', weight: 0.5, fillColor: 'oklch(0.2 0 0)', fillOpacity: 0.3 };
+          if (!m) return { className: 'india-state-path', color: bc('oklch(0.985 0 0 / 0.2)'), weight: 0.5, fillColor: 'oklch(0.2 0 0)', fillOpacity: fo(0.3) };
           if (m.noFigure) {
             // Data present but no public money figure (e.g. off-books civic spend).
-            return { className: 'india-state-path', color: 'oklch(0.72 0.13 250)', weight: 1.5, dashArray: '2 2', fillColor: 'oklch(0.32 0.06 250)', fillOpacity: 0.7 };
+            return { className: 'india-state-path', color: 'oklch(0.72 0.13 250)', weight: 1.5, dashArray: '2 2', fillColor: 'oklch(0.32 0.06 250)', fillOpacity: fo(0.7) };
           }
           const t = Math.log10(Math.max(1, m.headline + 1)) / Math.max(0.001, logMax);
           return {
@@ -555,27 +575,27 @@
             weight: m.flagged ? 2 : 1.2,
             dashArray: m.flagged ? '4 2' : null,
             fillColor: seqColor(0.2 + 0.75 * t),
-            fillOpacity: 0.92
+            fillOpacity: fo(0.92)
           };
         }
         if (ui.state.districtMode === 'language') {
-          return { className: 'india-state-path', color: 'oklch(0.985 0 0 / 0.35)', weight: 0.6, fillColor: langColor(dimLangFor(stateName, dn)), fillOpacity: 0.85 };
+          return { className: 'india-state-path', color: bc('oklch(0.985 0 0 / 0.35)'), weight: 0.6, fillColor: langColor(dimLangFor(stateName, dn)), fillOpacity: fo(0.85) };
         }
         if (ui.state.districtMode === 'politics') {
-          return { className: 'india-state-path', color: 'oklch(0.985 0 0 / 0.35)', weight: 0.6, fillColor: alignColor(dimAlignFor(stateName, dn)), fillOpacity: 0.85 };
+          return { className: 'india-state-path', color: bc('oklch(0.985 0 0 / 0.35)'), weight: 0.6, fillColor: alignColor(dimAlignFor(stateName, dn)), fillOpacity: fo(0.85) };
         }
         if (ui.state.districtMode === 'geography') {
           const facet = ui.state.geoFacet || 'constraint';
-          return { className: 'india-state-path', color: 'oklch(0.985 0 0 / 0.35)', weight: 0.6, fillColor: geoFacetColor(dimGeoFor(stateName, dn), facet), fillOpacity: 0.85 };
+          return { className: 'india-state-path', color: bc('oklch(0.985 0 0 / 0.35)'), weight: 0.6, fillColor: geoFacetColor(dimGeoFor(stateName, dn), facet), fillOpacity: fo(0.85) };
         }
         const pop = getDistrictPop(stateName, dn)?.population;
         const t = pop != null ? (pop - popMin) / Math.max(1, popMax - popMin) : 0;
         return {
           className: 'india-state-path',
-          color: 'oklch(0.985 0 0 / 0.45)',
+          color: bc('oklch(0.985 0 0 / 0.45)'),
           weight: 0.6,
           fillColor: pop == null ? 'oklch(0.22 0 0)' : seqColor(t),
-          fillOpacity: pop == null ? 0.45 : 0.9
+          fillOpacity: pop == null ? fo(0.45) : fo(0.9)
         };
       },
       onEachFeature: (feature, layer) => {
@@ -1788,9 +1808,9 @@
     map = L.map('india-map', {
       attributionControl: true,
       zoomControl: true,
-      worldCopyJump: false,
-      minZoom: 4,
-      maxZoom: 18,           // deep zoom for satellite/terrain imagery (was 12)
+      worldCopyJump: true,
+      minZoom: 2,            // zoom right out to the whole globe — no India lock
+      maxZoom: 19,           // deep zoom to locality / pixel detail (satellite/tint)
       scrollWheelZoom: true,
     }).setView([22.5, 80], 4.5);
 
