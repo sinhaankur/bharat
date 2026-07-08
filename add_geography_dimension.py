@@ -194,6 +194,40 @@ COASTAL_STATES = {
 }
 
 # ---------------------------------------------------------------------------
+# COASTAL DISTRICTS — the districts that ACTUALLY touch the sea (so CRZ applies at
+# district level, not just state level). Names match the ledger's Census-2011
+# spellings exactly. Inland districts of a coastal state are NOT here → CRZ=false
+# for them, which is the honest per-district position. This is well-established
+# geography (Survey of India / district coastlines); MoEFCC CZMPs are prepared
+# only for these coastal districts.
+# ---------------------------------------------------------------------------
+COASTAL_DISTRICTS = {
+    "Gujarat": {"Kachchh", "Jamnagar", "Porbandar", "Junagadh", "Amreli",
+                "Bhavnagar", "Anand", "Bharuch", "Surat", "Navsari", "Valsad",
+                "Ahmadabad"},
+    "Maharashtra": {"Greater Bombay", "Thane", "Raigarh", "Ratnagiri", "Sindhudurg"},
+    "Goa": {"North Goa", "South Goa"},
+    "Karnataka": {"Uttar Kannand", "Udupi", "Dakshin Kannad"},
+    "Kerala": {"Kasaragod", "Kannur", "Kozhikode", "Malappuram", "Thrissur",
+               "Ernakulam", "Alappuzha", "Kollam", "Thiruvananthapuram"},
+    "Tamil Nadu": {"Thiruvallur", "Chennai", "Kancheepuram", "Cuddalore",
+                   "Nagapattinam", "Thiruvarur", "Thanjavur", "Pudukkottai",
+                   "Ramanathapuram", "Thoothukudi", "Tirunelveli Kattabo",
+                   "Kanniyakumari", "Villupuram"},
+    "Andhra Pradesh": {"Srikakulam", "Vizianagaram", "Vishakhapatnam",
+                       "East Godavari", "West Godavari", "Krishna", "Guntur",
+                       "Prakasam", "Nellore"},
+    "Odisha": {"Baleshwar", "Bhadrak", "Kendrapara", "Jagatsinghpur", "Puri",
+               "Ganjam"},
+    "West Bengal": {"North 24 Parganas", "South 24 Parganas", "East Midnapore",
+                    "Haora", "Kolkata"},
+    "Puducherry": {"Puducherry", "Karaikal", "Yanam", "Mahe"},
+    "Daman and Diu": {"Daman", "Junagadh"},   # Diu is administratively "Junagadh" here
+    "Andaman & Nicobar": {"Andaman Islands", "Nicobar Islands"},
+    "Lakshadweep": {"Kavaratti"},
+}
+
+# ---------------------------------------------------------------------------
 # Chronically flood-prone states — CWC / NDMA / Rashtriya Barh Ayog. We flag the
 # STATE; the per-district flood micro-zone + annual damage ₹ stays a district gap.
 # ---------------------------------------------------------------------------
@@ -382,19 +416,26 @@ def main():
         }
         n_state += 1
 
+        coastal_dists = COASTAL_DISTRICTS.get(sname, set())
         for dname, dist in s.get("districts", {}).items():
             n_dist += 1
+            # Per-district coastal: only districts that actually touch the sea.
+            # For coastal states we have a district list → precise true/false.
+            # For non-coastal states every district is simply false.
+            dist_coastal = dname in coastal_dists
             dims = dist.setdefault("dimensions", {})
             tl = TIMELINE_PILOT.get((sname, dname))
             dims["geography"] = {
                 "terrain": terrain,                  # state dominant type
-                "on_coast": coastal,                 # coastal state (district may be inland)
-                "flood_prone": flood,                # state-level flag
+                "on_coast": dist_coastal,            # PER-DISTRICT: touches the sea?
+                "on_coast_level": "district",        # honesty: this flag is district-precise
+                "flood_prone": flood,                # state-level flag (refined in task #2)
                 "major_rivers": rivers,              # state river systems
                 "crz": {
-                    "applies": coastal,
+                    "applies": dist_coastal,
                     "category": None,                # I/II/III/IV — district CZMP GAP
-                    "restricts_dev": coastal,
+                    "restricts_dev": dist_coastal,
+                    "level": "district",
                     "figure_gap": True,
                     "source": CRZ_SRC,
                 },
@@ -455,8 +496,8 @@ def main():
                             "(per-state revenue records). GLB deferred; gap logged.",
                     "source": None,
                 },
-                "hinders_dev_note": note,
-                "level": "state-proxy",              # honesty: mostly the STATE's geography
+                "hinders_dev_note": hinders_note(dist_coastal, flood, terrain, rivers),
+                "level": "mixed",                    # coastal=district-precise; flood/terrain=state-proxy
                 "figure_gap": True,
                 "source_tier": 2,
             }
@@ -476,8 +517,10 @@ def main():
     with open(LEDGER, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
+    n_coastal_dist = sum(len(v) for v in COASTAL_DISTRICTS.values())
     print(f"geography dimension attached: {n_state} states + {n_dist} districts")
     print(f"  coastal states (CRZ applies): {len(COASTAL_STATES)}")
+    print(f"  coastal DISTRICTS (per-district CRZ): {n_coastal_dist}")
     print(f"  flood-prone states flagged:   {len(FLOOD_PRONE_STATES)}")
     print(f"  states missing terrain class: {sorted(missing_terrain) or 'none'}")
     print(f"  timeline pilot districts:     {len(TIMELINE_PILOT)} ({', '.join(d for _, d in TIMELINE_PILOT)})")
