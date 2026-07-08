@@ -452,6 +452,10 @@ a:hover { border-color: var(--foreground); }
 .mlp-tip { font-size: 9px; line-height: 1.4; color: oklch(0.82 0.1 78); background: oklch(0.3 0.08 78 / 0.18); border-radius: 4px; padding: 3px 6px; margin: 2px 0 4px 22px; }
 .mlp-tip b { color: oklch(0.88 0.12 78); }
 .mlp-base { white-space: nowrap; }
+.mlp-live { font-family: var(--font-mono); font-size: 8px; color: oklch(0.72 0.2 25); letter-spacing: 0.05em; animation: mlp-pulse 2s ease-in-out infinite; }
+@keyframes mlp-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+.mlp-wx-time { font-family: var(--font-mono); font-size: 8px; color: var(--muted-foreground); margin-left: auto; }
+.mlp-check { justify-content: flex-start; }
 @media (max-width: 640px) { .mlp { width: 168px; top: 8px; left: 8px; padding: 6px 7px; } }
 
 /* metres-above-sea-level readout, bottom-left of the map */

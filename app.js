@@ -1849,10 +1849,17 @@
     // elevation per pixel and paint the ramp onto a canvas. Semi-transparent so the
     // basemap reads through. 30 m open DEM — not LIDAR (no open nationwide LIDAR).
     const elevTint = buildElevationTintLayer();
+    // LIVE rain radar (RainViewer — free, keyless, global, updates ~every 10 min).
+    // Real "is it raining/flooding right now" — ties to the flood story (Pune/Mumbai
+    // in the monsoon). Placeholder layer; the timestamped source is set once we fetch
+    // the latest frame index from RainViewer's JSON (setupWeatherLayer).
+    const rain = L.tileLayer('', { opacity: 0.6, maxZoom: 19, attribution: 'Rain radar &copy; RainViewer (live)', pane: 'overlayPane' });
+    const clouds = L.tileLayer('', { opacity: 0.5, maxZoom: 19, attribution: 'Clouds (infrared) &copy; RainViewer', pane: 'overlayPane' });
     // Stash for the unified layers panel (replaces the default Leaflet controls).
-    mapLayers = { basemaps, labels, hillshade, elevTint, current: 'Dark map' };
+    mapLayers = { basemaps, labels, hillshade, elevTint, rain, clouds, current: 'Dark map' };
     buildLayersPanel();
     setupElevationReadout();
+    setupWeatherLayer();
 
     geoLayer = L.geoJSON(GEO, {
       style: f => fillStyle(f.properties.ST_NM),
@@ -1873,6 +1880,41 @@
   // ---- Unified LAYERS panel: one intuitive control for basemap + overlays +
   // "colour districts by". Always visible (top-left of the map), collapsible.
   // Replaces the scattered Leaflet layer control + in-panel district-mode toggle.
+  // ---- LIVE weather (RainViewer): real-time rain radar + cloud (IR) tiles.
+  // Free, keyless, global; the frame path is timestamped and rotates, so we fetch
+  // the latest index and (re)point the tile layers, then refresh every 5 min. This
+  // is the "sync to each day's activity" layer — during the monsoon you can see
+  // rain actually falling over Pune/Mumbai etc.
+  let weatherMeta = null;
+  async function setupWeatherLayer() {
+    async function refresh() {
+      try {
+        const j = await (await fetch('https://api.rainviewer.com/public/weather-maps.json', { cache: 'no-store' })).json();
+        const host = j.host;
+        const past = j.radar?.past || [];
+        const nowcast = j.radar?.nowcast || [];
+        const frame = (nowcast.length ? nowcast[nowcast.length - 1] : past[past.length - 1]);
+        const ir = (j.satellite?.infrared || []);
+        const irFrame = ir.length ? ir[ir.length - 1] : null;
+        if (!frame) return;
+        weatherMeta = { time: frame.time, host };
+        // colour scheme 2 (universal blue→red), smooth=1, snow=1
+        mapLayers.rain.setUrl(`${host}${frame.path}/256/{z}/{x}/{y}/2/1_1.png`);
+        if (irFrame) mapLayers.clouds.setUrl(`${host}${irFrame.path}/256/{z}/{x}/{y}/0/0_0.png`);
+        // refresh the panel timestamp if the weather section is showing
+        const tEl = document.getElementById('mlp-wx-time');
+        if (tEl) tEl.textContent = wxAgeLabel();
+      } catch (e) { /* offline → layer just stays blank */ }
+    }
+    await refresh();
+    setInterval(refresh, 5 * 60 * 1000);   // every 5 minutes
+  }
+  function wxAgeLabel() {
+    if (!weatherMeta) return 'live radar';
+    const mins = Math.max(0, Math.round((Date.now() / 1000 - weatherMeta.time) / 60));
+    return mins <= 1 ? 'updated just now' : `updated ${mins} min ago`;
+  }
+
   // Elevation colour ramp (metres → rgb): blue lowland → green → tan → brown → white.
   const ELEV_RAMP = [
     [-50, [40, 60, 95]], [0, [50, 90, 130]], [200, [70, 130, 95]], [600, [120, 150, 80]],
@@ -1981,6 +2023,8 @@
     const hillOn = mapLayers && map.hasLayer(mapLayers.hillshade);
     const elevOn = mapLayers && mapLayers.elevTint && map.hasLayer(mapLayers.elevTint);
     const labelsOn = mapLayers && map.hasLayer(mapLayers.labels);
+    const rainOn = mapLayers && mapLayers.rain && map.hasLayer(mapLayers.rain);
+    const cloudsOn = mapLayers && mapLayers.clouds && map.hasLayer(mapLayers.clouds);
     const subOn = subdistrictLayer != null;
 
     const modes = dataOverlayModes();
@@ -2007,6 +2051,9 @@
       ${(elevOn || hillOn) && cur === 'Terrain' ? `<div class="mlp-tip">Tip: elevation tint / hillshade read best over the <b>Dark</b> or <b>Satellite</b> base (Terrain already shades relief).</div>` : ''}
       <label class="mlp-check"><input type="checkbox" id="mlp-labels" ${labelsOn ? 'checked' : ''}> Place labels</label>
       <label class="mlp-check"><input type="checkbox" id="mlp-sub" ${subOn ? 'checked' : ''} ${ui.state.drillDistrict ? '' : 'disabled'}> Sub-districts (taluk/tehsil)</label>
+      <div class="mlp-sec-h">Live weather <span class="mlp-live">● live</span></div>
+      <label class="mlp-check"><input type="checkbox" id="mlp-rain" ${rainOn ? 'checked' : ''}> Rain radar <span class="mlp-wx-time" id="mlp-wx-time">${esc(wxAgeLabel())}</span></label>
+      <label class="mlp-check"><input type="checkbox" id="mlp-clouds" ${cloudsOn ? 'checked' : ''}> Clouds (infrared)</label>
       ${dataSection}`;
 
     // wire base
@@ -2015,6 +2062,8 @@
     panel.querySelector('#mlp-hill').onchange = e => toggleOverlay('hillshade', e.target.checked);
     panel.querySelector('#mlp-elev').onchange = e => { toggleOverlay('elevTint', e.target.checked); renderLayersPanel(); };
     panel.querySelector('#mlp-labels').onchange = e => toggleOverlay('labels', e.target.checked);
+    panel.querySelector('#mlp-rain').onchange = e => toggleOverlay('rain', e.target.checked);
+    panel.querySelector('#mlp-clouds').onchange = e => toggleOverlay('clouds', e.target.checked);
     const subEl = panel.querySelector('#mlp-sub');
     if (subEl) subEl.onchange = e => {
       if (e.target.checked && ui.state.drillState) renderSubdistrictLayer(ui.state.drillState);
