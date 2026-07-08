@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>India in 3D — geography constraint atlas</title>
+  <meta name="description" content="India extruded in 3D by physical constraint on development — coastal CRZ, flood-prone, and terrain. Height = sourced constraint flags; colour = constraint class. Open glTF model." />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .a3-wrap { max-width: 1100px; margin: 0 auto; padding: 1.6rem var(--pad-x) 4rem; }
+    .a3-head h1 { margin: 0.3rem 0 0.5rem; font-size: clamp(1.6rem, 3.5vw, 2.4rem); }
+    .a3-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.55; max-width: 74ch; }
+    #a3-canvas { width: 100%; height: 62vh; min-height: 420px; border: 1px solid var(--border-strong); border-radius: var(--radius); background: radial-gradient(ellipse at 50% 30%, oklch(0.2 0.02 250), oklch(0.13 0 0)); display: block; margin: 1.2rem 0 0.8rem; cursor: grab; }
+    #a3-canvas:active { cursor: grabbing; }
+    .a3-legend { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: center; font-size: 11px; color: var(--muted-foreground); margin: 0.6rem 0 1rem; }
+    .a3-chip { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: middle; margin-right: 5px; }
+    .a3-leg-item { font-family: var(--font-mono); }
+    .a3-note { font-size: 0.82rem; color: var(--muted-foreground); line-height: 1.6; margin-top: 1.4rem; border-top: 1px solid var(--border); padding-top: 1rem; }
+    .a3-note a { color: oklch(0.74 0.16 75); }
+    .a3-gap { border-left: 3px solid oklch(0.6 0.16 60); padding: 0.6rem 0.9rem; background: oklch(0.2 0.03 60 / 0.3); border-radius: var(--radius-sm); margin: 1rem 0; font-size: 0.85rem; line-height: 1.55; }
+    .a3-tip { position: relative; }
+    #a3-readout { font-family: var(--font-mono); font-size: 11.5px; color: oklch(0.82 0.14 78); min-height: 1.2em; margin-bottom: 0.4rem; }
+    .a3-loading { color: var(--muted-foreground); font-family: var(--font-mono); font-size: 12px; padding: 2rem 0; }
+  </style>
+</head>
+<body>
+  <div id="site-nav"></div>
+
+  <main class="a3-wrap">
+    <header class="a3-head">
+      <div class="eyebrow">Geography layer · 3D</div>
+      <h1 class="display">India, extruded by <em>constraint</em></h1>
+      <p>Every state rises in proportion to the <strong>physical constraints on
+      development</strong> that we already source in the geography layer — coastal
+      (CRZ applies), flood-prone (CWC/NDMA), and terrain difficulty. The
+      Himalayan flood belt stands tallest; the flat plains sit low. Colour is the
+      constraint class. Drag to orbit, scroll to zoom.</p>
+    </header>
+
+    <div id="a3-readout">Hover a state…</div>
+    <canvas id="a3-canvas"></canvas>
+
+    <div class="a3-legend" id="a3-legend"></div>
+
+    <div class="a3-gap">
+      <strong>Honest gap — not a “no government land” model.</strong> You asked for a
+      civilian-area-only version excluding government land. India has no open
+      cadastral ownership layer to separate civilian from government parcels
+      (land records are per-state, mostly not machine-readable), so this model
+      includes <em>all</em> land. That exclusion is recorded, not silently applied —
+      see <a href="india-glb-meta.json">india-glb-meta.json</a>.
+    </div>
+
+    <p class="a3-note">
+      <strong>What the height means.</strong> It is a transparent, additive index of
+      <em>already-sourced constraint flags</em> (base + coastal + flood-prone +
+      terrain), <strong>not</strong> a development-outcome or “hindrance score.” The
+      point is to <em>see</em> where the land itself pushes back on building — then
+      read that beside the money flow on the <a href="index.html">map</a>. Model:
+      open glTF 2.0 (<a href="india.glb">india.glb</a>), built from
+      <code>india-states.geojson</code> by <code>build_india_glb.py</code>. Sources:
+      MoEFCC CRZ Notification 2019, CWC/NDMA flood lists, India-WRIS, standard
+      physiography. Comparative, no composite verdict.
+    </p>
+  </main>
+
+  <script src="site-nav.js"></script>
+  <script type="importmap">
+    { "imports": {
+      "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+    } }
+  </script>
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+    const CLASS_LABELS = {
+      'coast-flood': 'coastal + flood-prone', 'flood': 'flood-prone (CWC/NDMA)',
+      'coast': 'coastal — CRZ applies', 'himalayan-hill': 'Himalayan hill',
+      'northeast-hill': 'Northeast hill', 'plateau': 'plateau',
+      'indo-gangetic-plain': 'river plain', 'coastal-plain': 'coastal plain',
+      'desert-arid': 'arid', 'island': 'island', 'other': 'other',
+    };
+    const CLASS_RGB = {
+      'coast-flood': '#c73329', 'flood': '#5273d9', 'coast': '#33a0ad',
+      'himalayan-hill': '#b3b8d1', 'northeast-hill': '#599e73', 'plateau': '#8c744d',
+      'indo-gangetic-plain': '#b8b359', 'coastal-plain': '#669ea8',
+      'desert-arid': '#cca859', 'island': '#6694b8', 'other': '#737373',
+    };
+
+    const canvas = document.getElementById('a3-canvas');
+    const readout = document.getElementById('a3-readout');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, 2, 0.1, 100);
+    camera.position.set(0, 9, 9);
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+
+    scene.add(new THREE.AmbientLight(0xffffff, 0.75));
+    const key = new THREE.DirectionalLight(0xffffff, 1.1);
+    key.position.set(5, 12, 6); scene.add(key);
+    const fill = new THREE.DirectionalLight(0x88aaff, 0.4);
+    fill.position.set(-6, 4, -4); scene.add(fill);
+
+    const controls = new OrbitControls(camera, canvas);
+    controls.enableDamping = true; controls.target.set(0, 0.3, 0);
+    controls.maxPolarAngle = Math.PI * 0.49;
+
+    function resize() {
+      const w = canvas.clientWidth, h = canvas.clientHeight;
+      if (canvas.width !== w || canvas.height !== h) {
+        renderer.setSize(w, h, false);
+        camera.aspect = w / h; camera.updateProjectionMatrix();
+      }
+    }
+
+    // Legend from the sidecar meta so it always matches the model.
+    fetch('india-glb-meta.json').then(r => r.json()).then(meta => {
+      const seen = new Set(meta.states.map(s => s.class));
+      const order = ['coast-flood','flood','coast','himalayan-hill','northeast-hill','plateau','indo-gangetic-plain','coastal-plain','desert-arid','island','other'];
+      document.getElementById('a3-legend').innerHTML =
+        order.filter(c => seen.has(c)).map(c =>
+          `<span class="a3-leg-item"><span class="a3-chip" style="background:${CLASS_RGB[c]}"></span>${CLASS_LABELS[c] || c}</span>`
+        ).join('') + '<span class="a3-leg-item" style="opacity:0.7">· height = coastal + flood + terrain constraint</span>';
+    }).catch(() => {});
+
+    new GLTFLoader().load('india.glb', (gltf) => {
+      readout.textContent = 'Hover a state · drag to orbit · scroll to zoom';
+      const model = gltf.scene;
+      // vertex colours are baked into the mesh; enable them
+      model.traverse(o => {
+        if (o.isMesh) {
+          o.material.vertexColors = true;
+          o.material.metalness = 0; o.material.roughness = 0.9;
+        }
+      });
+      // centre on origin
+      const box = new THREE.Box3().setFromObject(model);
+      const c = box.getCenter(new THREE.Vector3());
+      model.position.sub(new THREE.Vector3(c.x, box.min.y, c.z));
+      scene.add(model);
+    }, undefined, (err) => {
+      readout.textContent = 'Could not load india.glb — build it with: python3 build_india_glb.py';
+      console.error(err);
+    });
+
+    function loop() {
+      resize(); controls.update();
+      // gentle idle spin only before first interaction
+      renderer.render(scene, camera);
+      requestAnimationFrame(loop);
+    }
+    loop();
+    addEventListener('resize', resize);
+  </script>
+</body>
+</html>

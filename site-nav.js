@@ -71,6 +71,7 @@
       { href: "command-chain.html", text: "Chain of command" },
       { href: "history.html", text: "History race" },
       { href: "global.html", text: "India vs world" },
+      { href: "atlas-3d.html", text: "India in 3D" },
     ]},
     { label: "Data", items: [
       { href: "data.html", text: "Data & API" },

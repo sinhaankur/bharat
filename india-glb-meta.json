@@ -1,0 +1,349 @@
+{
+  "generated_by": "build_india_glb.py",
+  "geometry_source": "india-states.geojson (state boundaries)",
+  "height_encodes": "physical-constraint index = BASE + coastal(CRZ) + flood-prone(CWC/NDMA) + terrain-difficulty. A documented SUM of already-sourced constraint flags — NOT an outcome score and NOT a 'development-hindrance score'.",
+  "height_weights": {
+    "base": 0.15,
+    "coast": 0.25,
+    "flood": 0.35,
+    "terrain": {
+      "himalayan-hill": 0.6,
+      "northeast-hill": 0.5,
+      "plateau": 0.25,
+      "indo-gangetic-plain": 0.15,
+      "coastal-plain": 0.2,
+      "desert-arid": 0.3,
+      "island": 0.45
+    }
+  },
+  "colour_encodes": "constraint class (coast+flood > flood > coast > terrain)",
+  "GAP_civilian_only": "This GLB includes ALL land. The requested 'civilian area only, no government land' cut is NOT applied: India has no open cadastral ownership layer to distinguish civilian vs government parcels (per-state revenue records, mostly not machine-readable). Recorded as a gap, not silently dropped.",
+  "vertices": 52608,
+  "triangles": 78612,
+  "states": [
+    {
+      "state": "Arunachal Pradesh",
+      "class": "flood",
+      "height": 1.0,
+      "on_coast": false,
+      "flood_prone": true,
+      "terrain": "northeast-hill",
+      "tri_count": 2239
+    },
+    {
+      "state": "Assam",
+      "class": "flood",
+      "height": 0.65,
+      "on_coast": false,
+      "flood_prone": true,
+      "terrain": "indo-gangetic-plain",
+      "tri_count": 2401
+    },
+    {
+      "state": "Chandigarh",
+      "class": "indo-gangetic-plain",
+      "height": 0.3,
+      "on_coast": false,
+      "flood_prone": false,
+      "terrain": "indo-gangetic-plain",
+      "tri_count": 58
+    },
+    {
+      "state": "Karnataka",
+      "class": "coast",
+      "height": 0.65,
+      "on_coast": true,
+      "flood_prone": false,
+      "terrain": "plateau",
+      "tri_count": 4036
+    },
+    {
+      "state": "Manipur",
+      "class": "flood",
+      "height": 1.0,
+      "on_coast": false,
+      "flood_prone": true,
+      "terrain": "northeast-hill",
+      "tri_count": 811
+    },
+    {
+      "state": "Meghalaya",
+      "class": "flood",
+      "height": 1.0,
+      "on_coast": false,
+      "flood_prone": true,
+      "terrain": "northeast-hill",
+      "tri_count": 958
+    },
+    {
+      "state": "Mizoram",
+      "class": "northeast-hill",
+      "height": 0.65,
+      "on_coast": false,
+      "flood_prone": false,
+      "terrain": "northeast-hill",
+      "tri_count": 907
+    },
+    {
+      "state": "Nagaland",
+      "class": "northeast-hill",
+      "height": 0.65,
+      "on_coast": false,
+      "flood_prone": false,
+      "terrain": "northeast-hill",
+      "tri_count": 856
+    },
+    {
+      "state": "Punjab",
+      "class": "flood",
+      "height": 0.65,
+      "on_coast": false,
+      "flood_prone": true,
+      "terrain": "indo-gangetic-plain",
+      "tri_count": 1585
+    },
+    {
+      "state": "Rajasthan",
+      "class": "desert-arid",
+      "height": 0.45,
+      "on_coast": false,
+      "flood_prone": false,
+      "terrain": "desert-arid",
+      "tri_count": 4348
+    },
+    {
+      "state": "Sikkim",
+      "class": "himalayan-hill",
+      "height": 0.75,
+      "on_coast": false,
+      "flood_prone": false,
+      "terrain": "himalayan-hill",
+      "tri_count": 433
+    },
+    {
+      "state": "Tripura",
+      "class": "flood",
+      "height": 1.0,
+      "on_coast": false,
+      "flood_prone": true,
+      "terrain": "northeast-hill",
+      "tri_count": 733
+    },
+    {
+      "state": "Uttarakhand",
+      "class": "flood",
+      "height": 1.1,
+      "on_coast": false,
+      "flood_prone": true,
+      "terrain": "himalayan-hill",
+      "tri_count": 1462
+    },
+    {
+      "state": "Telangana",
+      "class": "other",
+      "height": 0.35,
+      "on_coast": false,
+      "flood_prone": false,
+      "terrain": null,
+      "tri_count": 2320
+    },
+    {
+      "state": "Bihar",
+      "class": "flood",
+      "height": 0.65,
+      "on_coast": false,
+      "flood_prone": true,
+      "terrain": "indo-gangetic-plain",
+      "tri_count": 2440
+    },
+    {
+      "state": "Kerala",
+      "class": "coast-flood",
+      "height": 0.95,
+      "on_coast": true,
+      "flood_prone": true,
+      "terrain": "coastal-plain",
+      "tri_count": 1357
+    },
+    {
+      "state": "Madhya Pradesh",
+      "class": "plateau",
+      "height": 0.4,
+      "on_coast": false,
+      "flood_prone": false,
+      "terrain": "plateau",
+      "tri_count": 6388
+    },
+    {
+      "state": "Andaman & Nicobar",
+      "class": "coast",
+      "height": 0.85,
+      "on_coast": true,
+      "flood_prone": false,
+      "terrain": "island",
+      "tri_count": 2135
+    },
+    {
+      "state": "Gujarat",
+      "class": "coast",
+      "height": 0.6,
+      "on_coast": true,
+      "flood_prone": false,
+      "terrain": "coastal-plain",
+      "tri_count": 3793
+    },
+    {
+      "state": "Lakshadweep",
+      "class": "coast",
+      "height": 0.85,
+      "on_coast": true,
+      "flood_prone": false,
+      "terrain": "island",
+      "tri_count": 16
+    },
+    {
+      "state": "Odisha",
+      "class": "coast-flood",
+      "height": 0.95,
+      "on_coast": true,
+      "flood_prone": true,
+      "terrain": "coastal-plain",
+      "tri_count": 2947
+    },
+    {
+      "state": "Dadra and Nagar Haveli and Daman and Diu",
+      "class": "other",
+      "height": 0.35,
+      "on_coast": false,
+      "flood_prone": false,
+      "terrain": null,
+      "tri_count": 261
+    },
+    {
+      "state": "Ladakh",
+      "class": "other",
+      "height": 0.35,
+      "on_coast": false,
+      "flood_prone": false,
+      "terrain": null,
+      "tri_count": 2671
+    },
+    {
+      "state": "Jammu & Kashmir",
+      "class": "flood",
+      "height": 1.1,
+      "on_coast": false,
+      "flood_prone": true,
+      "terrain": "himalayan-hill",
+      "tri_count": 1258
+    },
+    {
+      "state": "Chhattisgarh",
+      "class": "plateau",
+      "height": 0.4,
+      "on_coast": false,
+      "flood_prone": false,
+      "terrain": "plateau",
+      "tri_count": 3088
+    },
+    {
+      "state": "Delhi",
+      "class": "indo-gangetic-plain",
+      "height": 0.3,
+      "on_coast": false,
+      "flood_prone": false,
+      "terrain": "indo-gangetic-plain",
+      "tri_count": 232
+    },
+    {
+      "state": "Goa",
+      "class": "coast",
+      "height": 0.6,
+      "on_coast": true,
+      "flood_prone": false,
+      "terrain": "coastal-plain",
+      "tri_count": 364
+    },
+    {
+      "state": "Haryana",
+      "class": "indo-gangetic-plain",
+      "height": 0.3,
+      "on_coast": false,
+      "flood_prone": false,
+      "terrain": "indo-gangetic-plain",
+      "tri_count": 2344
+    },
+    {
+      "state": "Himachal Pradesh",
+      "class": "flood",
+      "height": 1.1,
+      "on_coast": false,
+      "flood_prone": true,
+      "terrain": "himalayan-hill",
+      "tri_count": 1507
+    },
+    {
+      "state": "Jharkhand",
+      "class": "plateau",
+      "height": 0.4,
+      "on_coast": false,
+      "flood_prone": false,
+      "terrain": "plateau",
+      "tri_count": 2515
+    },
+    {
+      "state": "Tamil Nadu",
+      "class": "coast",
+      "height": 0.6,
+      "on_coast": true,
+      "flood_prone": false,
+      "terrain": "coastal-plain",
+      "tri_count": 2529
+    },
+    {
+      "state": "Uttar Pradesh",
+      "class": "flood",
+      "height": 0.65,
+      "on_coast": false,
+      "flood_prone": true,
+      "terrain": "indo-gangetic-plain",
+      "tri_count": 5090
+    },
+    {
+      "state": "West Bengal",
+      "class": "coast-flood",
+      "height": 0.9,
+      "on_coast": true,
+      "flood_prone": true,
+      "terrain": "indo-gangetic-plain",
+      "tri_count": 5048
+    },
+    {
+      "state": "Andhra Pradesh",
+      "class": "coast-flood",
+      "height": 0.95,
+      "on_coast": true,
+      "flood_prone": true,
+      "terrain": "coastal-plain",
+      "tri_count": 4228
+    },
+    {
+      "state": "Puducherry",
+      "class": "coast",
+      "height": 0.6,
+      "on_coast": true,
+      "flood_prone": false,
+      "terrain": "coastal-plain",
+      "tri_count": 347
+    },
+    {
+      "state": "Maharashtra",
+      "class": "coast",
+      "height": 0.65,
+      "on_coast": true,
+      "flood_prone": false,
+      "terrain": "plateau",
+      "tri_count": 4907
+    }
+  ]
+}
