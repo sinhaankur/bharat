@@ -164,11 +164,27 @@ unplanned/CRZ-ignoring construction → floods → hinders further development.*
 }
 ```
 
-**Sourced now (list-level):** coastal states → CRZ applies (closed list, MoEFCC);
-flood-prone states (CWC/NDMA/Rashtriya Barh Ayog); dominant terrain per state
-physiography; state river systems (India-WRIS). **District gaps (never faked):**
-CRZ category (CZMP), annual flood ₹, sewage %, per-district terrain, encroachment
-cases, change-timeline series.
+**Sourced now (PER-DISTRICT, added 2026-07-08):**
+- **Coastal/CRZ** — 73 districts that actually touch the sea flagged (was a state
+  flag; inland districts of coastal states now correctly false). `on_coast_level:
+  district`.
+- **Flood** — 3-level: `district-chronic` (87 districts named in CWC/NDMA/state-DMA/
+  Bhuvan Flood Hazard Atlas) | `state-flood-prone` (220, inherits state flag,
+  labelled) | `not-flagged` (287). `geography.flood_level`.
+- **Elevation** — real district-centroid elevation for all 594 from open SRTM
+  (`add_district_elevation.py`, open-elevation API). Cross-validates terrain
+  (himalayan mean 2,104 m, plains 139 m). `geography.elevation.centroid_m`.
+- **Rainfall** — IMD climate band per state for all 594 (context); documented
+  anchors carry real mm (East Khasi Hills ~11,000; Jaisalmer ~210); precise
+  district normal = gap (IMD dynamic portal). `geography.rainfall`.
+
+**Still list/state-level:** dominant terrain (state physiography), state river
+systems (India-WRIS). **District gaps (never faked):** CRZ category (CZMP), annual
+flood ₹, sewage %, precise rainfall mm.
+
+**Map — geography facet sub-layers (checkboxes):** when "Flood & coast" is active,
+a facet selector recolours by constraint / coastal / flood / elevation / rainfall,
+each with its own legend (`geoFacetColor`, `ui.state.geoFacet`).
 
 **Change over the years (`timeline`)** uses **open, redistributable** sources only —
 JRC Global Surface Water (1984→now), ISRO Bhuvan LULC, Copernicus Sentinel-2.
@@ -186,12 +202,17 @@ NOT applied** — no open cadastral ownership layer exists for India — and tha
 exclusion is recorded in `india-glb-meta.json` + a page callout, not silently
 dropped. Height is a documented SUM of constraint flags, NOT a hindrance score.
 
-**Timeline + encroachment — REAL sourced pilot pinned** (not just schema): Kolkata
-East Kolkata Wetlands 65→41 km² (1991→2021, ~36% loss, range_note flags 36–63%
-spread); Chennai Pallikaranai 5,500 ha (1965)→593 ha (2002) + 2015 flood.
-Encroachment = documented NGT cases only (Kolkata 2017 'Temple of Knowledge'
-demolition, Sapui v. WB; Chennai NGT O.A.91/2023 Sep-2025 approval freeze + Jan-2024
-eviction/70 houses). Every point/case cites its source; other districts stay gaps.
+**Timeline + encroachment — 8 hotspots pinned** (web-verified, sourced; expanded
+2026-07-08): Kolkata (EKW 65→41 km²), Chennai (Pallikaranai 5,500→593 ha),
+Bengaluru (1,452→194 lakes), Mumbai (Mithi built-up 29→70%, 620 ha BKC), Hyderabad
+(lakes −61% NRSC, HYDRAA), Srinagar (Wular 89.59→15.73 km², 2014 flood), Delhi
+(Yamuna O-zone ~75% encroached, 2023 flood), Guwahati (Deepor Beel Ramsar). Each
+carries range_note + per-point source; encroachment = documented NGT/court/CAG/
+HYDRAA cases only (10 cases). Other 586 districts stay honest gaps.
+
+**Pipeline note:** run order is `add_geography_dimension.py` then
+`add_district_elevation.py`; geography rerun now PRESERVES an existing elevation
+block (was clobbering it).
 
 **Map + panel:** new "Flood & coast" district-layer toggle in app.js (`geoColor`/
 `dimGeoFor`/`geoClass`) recolours by constraint class (coast+flood > flood > coast
