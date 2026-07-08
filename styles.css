@@ -932,6 +932,8 @@ a:hover { border-color: var(--foreground); }
 .dim-geo-coast { color: oklch(0.78 0.13 200); } .dim-geo-flood { color: oklch(0.74 0.16 250); } .dim-geo-terrain { color: oklch(0.80 0.10 90); text-transform: capitalize; }
 .dim-row--note { border-bottom: none; padding-top: 0.15rem; }
 .dim-hinder { font-size: 10.5px; line-height: 1.5; color: var(--muted-foreground); font-style: italic; }
+.geo-stats { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
+.geo-stats b { color: oklch(0.84 0.12 200); font-weight: 600; }
 .geo-tl-subj { font-size: 10.5px; color: oklch(0.82 0.10 200); }
 .geo-tl-pt { font-family: var(--font-mono); font-size: 10px; }
 .geo-tl-arrow { color: var(--muted-foreground); margin: 0 4px; }
@@ -1278,6 +1280,14 @@ a:hover { border-color: var(--foreground); }
 .dmt-btn:hover:not(:disabled) { border-color: var(--border-strong); }
 .dmt-btn.on { background: oklch(0.78 0.16 70 / 0.18); border-color: oklch(0.78 0.16 70); color: oklch(0.85 0.16 75); }
 .dmt-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.dmt-facets { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0 4px; padding-top: 5px; border-top: 1px dashed var(--border); }
+.dmt-facet {
+  font-family: var(--font-mono); font-size: 9.5px; padding: 2px 7px; border-radius: 999px;
+  border: 1px solid var(--border); background: oklch(0.16 0.01 220); color: var(--muted-foreground);
+  cursor: pointer; transition: border-color .15s, background .15s, color .15s;
+}
+.dmt-facet:hover { border-color: var(--border-strong); }
+.dmt-facet.on { background: oklch(0.72 0.13 200 / 0.20); border-color: oklch(0.72 0.13 200); color: oklch(0.86 0.11 200); }
 .india-pc {
   background: oklch(0.17 0 0);
   border: 1px solid var(--border);

@@ -471,6 +471,37 @@
       'island': 'oklch(0.70 0.12 210)',
     })[c] || 'oklch(0.22 0 0)';
   }
+  // Individual geography facets (each is its own checkbox/sub-layer).
+  const GEO_FACETS = ['constraint', 'coastal', 'flood', 'elevation', 'rainfall'];
+  function geoFacetColor(g, facet) {
+    if (!g) return 'oklch(0.22 0 0)';
+    if (facet === 'constraint') return geoColor(g);
+    if (facet === 'coastal')
+      return g.on_coast ? 'oklch(0.72 0.13 200)' : 'oklch(0.24 0.01 200)';
+    if (facet === 'flood') {
+      const lv = g.flood_level;
+      if (lv === 'district-chronic') return 'oklch(0.60 0.20 25)';   // red
+      if (lv === 'state-flood-prone') return 'oklch(0.68 0.13 250)'; // blue
+      return 'oklch(0.26 0.01 250)';                                  // grey — not flagged
+    }
+    if (facet === 'elevation') {
+      const m = g.elevation?.centroid_m;
+      if (m == null) return 'oklch(0.22 0 0)';
+      // 0..3500 m -> light->dark seq
+      const t = Math.min(1, Math.max(0, m / 3500));
+      return seqColor(0.15 + 0.8 * t);
+    }
+    if (facet === 'rainfall') {
+      const band = g.rainfall?.band || '';
+      if (/very-high/.test(band)) return 'oklch(0.45 0.16 250)';
+      if (/high/.test(band)) return 'oklch(0.60 0.14 235)';
+      if (/moderate/.test(band)) return 'oklch(0.74 0.11 200)';
+      if (/semiarid/.test(band)) return 'oklch(0.80 0.12 90)';
+      if (/arid/.test(band)) return 'oklch(0.82 0.14 70)';
+      return 'oklch(0.24 0.01 200)';
+    }
+    return 'oklch(0.22 0 0)';
+  }
 
   function renderDistrictLayer(geo, stateName) {
     // Hide the state layer's other states by drastically reducing their opacity (keep selected state visible underneath as outline)
@@ -533,7 +564,8 @@
           return { className: 'india-state-path', color: 'oklch(0.985 0 0 / 0.35)', weight: 0.6, fillColor: alignColor(dimAlignFor(stateName, dn)), fillOpacity: 0.85 };
         }
         if (ui.state.districtMode === 'geography') {
-          return { className: 'india-state-path', color: 'oklch(0.985 0 0 / 0.35)', weight: 0.6, fillColor: geoColor(dimGeoFor(stateName, dn)), fillOpacity: 0.85 };
+          const facet = ui.state.geoFacet || 'constraint';
+          return { className: 'india-state-path', color: 'oklch(0.985 0 0 / 0.35)', weight: 0.6, fillColor: geoFacetColor(dimGeoFor(stateName, dn), facet), fillOpacity: 0.85 };
         }
         const pop = getDistrictPop(stateName, dn)?.population;
         const t = pop != null ? (pop - popMin) / Math.max(1, popMax - popMin) : 0;
@@ -637,13 +669,38 @@
         <span class="dmt-leg-item"><span class="dmt-chip" style="background:oklch(0.66 0.20 28)"></span>opposition to Union</span>
         <span class="dmt-leg-item"><span class="dmt-chip" style="background:oklch(0.60 0.05 250)"></span>UT-admin / other</span>
         <span class="dmt-leg-item dmt-leg-note">state govt alignment — shown beside money, not a causal claim</span></div>`;
-    else if (mode === 'geography') legend = `<div class="dmt-legend">
-        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoColor({on_coast:true,flood_prone:true})}"></span>coastal + flood-prone</span>
-        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoColor({flood_prone:true})}"></span>flood-prone (CWC/NDMA)</span>
-        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoColor({on_coast:true})}"></span>coastal — CRZ applies</span>
-        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoColor({terrain:'himalayan-hill'})}"></span>hill/mountain</span>
-        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoColor({terrain:'desert-arid'})}"></span>arid</span>
-        <span class="dmt-leg-item dmt-leg-note">physical constraint on development — state-level; district CRZ category &amp; flood ₹ are gaps</span></div>`;
+    else if (mode === 'geography') {
+      const facet = ui.state.geoFacet || 'constraint';
+      // facet sub-selector (the "checkboxes" for each sourced geography sub-layer)
+      const facetBtns = [
+        ['constraint', 'Constraint'], ['coastal', 'Coastal · CRZ'],
+        ['flood', 'Flood'], ['elevation', 'Elevation'], ['rainfall', 'Rainfall'],
+      ].map(([k, lbl]) => `<button class="dmt-facet ${facet === k ? 'on' : ''}" data-facet="${k}">${lbl}</button>`).join('');
+      let facetLegend = '';
+      if (facet === 'constraint') facetLegend = `
+        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoColor({on_coast:true,flood_prone:true})}"></span>coastal + flood</span>
+        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoColor({flood_prone:true})}"></span>flood-prone</span>
+        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoColor({on_coast:true})}"></span>coastal — CRZ</span>
+        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoColor({terrain:'himalayan-hill'})}"></span>hill/mountain</span>`;
+      else if (facet === 'coastal') facetLegend = `
+        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoFacetColor({on_coast:true},'coastal')}"></span>coastal — CRZ applies (district touches sea)</span>
+        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoFacetColor({on_coast:false},'coastal')}"></span>inland</span>`;
+      else if (facet === 'flood') facetLegend = `
+        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoFacetColor({flood_level:'district-chronic'},'flood')}"></span>district-chronic (CWC/NDMA list)</span>
+        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoFacetColor({flood_level:'state-flood-prone'},'flood')}"></span>state flood-prone (inherited)</span>
+        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoFacetColor({flood_level:'not-flagged'},'flood')}"></span>not flagged</span>`;
+      else if (facet === 'elevation') facetLegend = `
+        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoFacetColor({elevation:{centroid_m:50}},'elevation')}"></span>lowland</span>
+        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoFacetColor({elevation:{centroid_m:3200}},'elevation')}"></span>high mountain</span>
+        <span class="dmt-leg-item dmt-leg-note">centroid elevation (open SRTM)</span>`;
+      else if (facet === 'rainfall') facetLegend = `
+        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoFacetColor({rainfall:{band:'arid'}},'rainfall')}"></span>arid</span>
+        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoFacetColor({rainfall:{band:'moderate'}},'rainfall')}"></span>moderate</span>
+        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoFacetColor({rainfall:{band:'very-high'}},'rainfall')}"></span>very-high</span>
+        <span class="dmt-leg-item dmt-leg-note">IMD climate band; district mm = gap</span>`;
+      legend = `<div class="dmt-facets">${facetBtns}</div><div class="dmt-legend">${facetLegend}
+        <span class="dmt-leg-item dmt-leg-note">coastal &amp; flood are district-precise; rainfall mm &amp; CRZ category are gaps</span></div>`;
+    }
     bar.innerHTML = `
       <div class="dmt-row">
         <span class="dmt-label">Colour districts by</span>
@@ -657,6 +714,12 @@
     bar.querySelectorAll('.dmt-btn').forEach(b => b.addEventListener('click', () => {
       if (b.disabled) return;
       ui.state.districtMode = b.dataset.m;
+      const geo = districtGeoCache.get(stateName);
+      if (geo) renderDistrictLayer(geo, stateName);
+    }));
+    // geography facet sub-selector (each sourced sub-layer)
+    bar.querySelectorAll('.dmt-facet').forEach(b => b.addEventListener('click', () => {
+      ui.state.geoFacet = b.dataset.facet;
       const geo = districtGeoCache.get(stateName);
       if (geo) renderDistrictLayer(geo, stateName);
     }));
@@ -881,15 +944,24 @@
     const geo = dims.geography;
     if (geo) {
       const tags = [];
-      if (geo.on_coast) tags.push('<span class="dim-geo-tag dim-geo-coast" title="Coastal Regulation Zone (MoEFCC 2019) restricts near-shore construction">coastal · CRZ</span>');
-      if (geo.flood_prone) tags.push('<span class="dim-geo-tag dim-geo-flood" title="On the CWC/NDMA chronically flood-prone list">flood-prone</span>');
+      if (geo.on_coast) tags.push('<span class="dim-geo-tag dim-geo-coast" title="Coastal Regulation Zone (MoEFCC 2019) restricts near-shore construction — this district touches the sea">coastal · CRZ</span>');
+      if (geo.flood_level === 'district-chronic') tags.push('<span class="dim-geo-tag dim-geo-flood" title="Named in CWC/NDMA/state-DMA/Bhuvan Flood Hazard Atlas as repeatedly flooded">flood: chronic</span>');
+      else if (geo.flood_level === 'state-flood-prone') tags.push('<span class="dim-geo-tag dim-geo-flood" title="Inherits the state flood-prone flag; not confirmed at district level" style="opacity:0.8">flood: state-level</span>');
       if (geo.terrain) tags.push(`<span class="dim-geo-tag dim-geo-terrain">${esc((geo.terrain || '').replace(/-/g, ' '))}</span>`);
       const rivers = (geo.major_rivers || []).slice(0, 3).join(', ');
+      // real per-district stats: elevation (SRTM) + rainfall band (IMD)
+      const elev = geo.elevation?.centroid_m;
+      const rain = geo.rainfall;
+      const stats = [];
+      if (elev != null) stats.push(`<span title="District-centroid elevation, open SRTM">elev <b>${elev} m</b></span>`);
+      if (rain?.annual_normal_mm != null) stats.push(`<span title="${esc(rain.note || '')}">rain <b>${rain.annual_normal_mm} mm</b></span>`);
+      else if (rain?.band) stats.push(`<span title="IMD climate band; precise district mm is a gap (IMD portal)">rain: ${esc(rain.band)} <span class="dim-gap">(mm: gap)</span></span>`);
       rows.push(`
         <div class="dim-row">
           <span class="dim-key">Geography</span>
           <span class="dim-val">${tags.join(' ') || '—'}
             ${rivers ? `· rivers: ${esc(rivers)}` : ''}
+            ${stats.length ? `<br><span class="geo-stats">${stats.join(' · ')}</span>` : ''}
             · <span class="dim-gap">district CRZ category / flood ₹ / sewage %: gap</span></span>
         </div>`);
       // Change over the years (open satellite: JRC/Bhuvan/Sentinel — not Google Earth).
