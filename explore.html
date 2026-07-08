@@ -81,6 +81,7 @@
 
     <div class="ex-tabs" role="tablist">
       <button data-tab="rank" class="active">Rankings</button>
+      <button data-tab="geography">Geography</button>
       <button data-tab="states">By state</button>
       <button data-tab="schemes">By scheme</button>
       <button data-tab="stories">Stories &amp; news</button>
@@ -161,9 +162,79 @@
     function render(tab) {
       const p = document.getElementById("panel");
       if (tab === "rank") return renderRank(p);
+      if (tab === "geography") return renderGeography(p);
       if (tab === "states") return renderStates(p);
       if (tab === "schemes") return renderSchemes(p);
       if (tab === "stories") return renderStories(p);
+    }
+
+    // ---- Geography rankings: browse all 594 by the sourced physical layers ----
+    let GEO_ROWS = null;
+    function geoRows() {
+      if (GEO_ROWS) return GEO_ROWS;
+      GEO_ROWS = [];
+      for (const [sn, s] of Object.entries(LED.states || {}))
+        for (const [dn, dist] of Object.entries(s.districts || {})) {
+          const g = dist.dimensions?.geography;
+          if (!g) continue;
+          GEO_ROWS.push({
+            sn, dn, g,
+            elev: g.elevation?.centroid_m ?? null,
+            coastal: !!g.on_coast,
+            floodLevel: g.flood_level || "not-flagged",
+            rainBand: g.rainfall?.band || null,
+            rainMm: g.rainfall?.annual_normal_mm ?? null,
+            href: `index.html?state=${encodeURIComponent(sn)}&district=${encodeURIComponent(dn)}`,
+          });
+        }
+      return GEO_ROWS;
+    }
+
+    const GEO_VIEWS = {
+      highest: { label: "Highest (elevation, m)", metric: r => r.elev, unit: "m", dir: -1, note: "District-centroid elevation from open SRTM." },
+      lowest:  { label: "Lowest-lying (elevation, m)", metric: r => r.elev, unit: "m", dir: 1, note: "Lowest centroid elevation — flood-exposed coastal/deltaic plains sit near 0 m." },
+      flood:   { label: "Flood-chronic districts", metric: r => (r.floodLevel === "district-chronic" ? 2 : r.floodLevel === "state-flood-prone" ? 1 : 0), unit: "", dir: -1, note: "Named in CWC/NDMA/state-DMA/Bhuvan Flood Hazard Atlas as repeatedly affected.", tag: r => r.floodLevel },
+      coastal: { label: "Coastal (CRZ applies)", metric: r => (r.coastal ? 1 : 0), unit: "", dir: -1, note: "Districts that actually touch the sea — the CRZ Notification 2019 caps near-shore construction.", filter: r => r.coastal, tag: r => "coastal · CRZ" },
+      rain:    { label: "By rainfall band (IMD)", metric: r => ({ "very-high": 5, "high": 4, "moderate-to-high": 3.5, "moderate": 3, "semiarid-to-moderate": 2.5, "semiarid": 2, "arid-to-semiarid": 1.5, "arid": 1 }[r.rainBand] || 0), unit: "", dir: -1, note: "State IMD climate band (precise district mm is on the IMD portal — a gap).", tag: r => r.rainBand || "—" },
+    };
+
+    function renderGeography(p) {
+      const view = window.__geoView || "highest";
+      const V = GEO_VIEWS[view];
+      let rows = geoRows().filter(r => V.metric(r) != null);
+      if (V.filter) rows = rows.filter(V.filter);
+      rows = rows.filter(r => V.metric(r) != null && !(V.unit === "m" && r.elev == null));
+      rows.sort((a, b) => (V.dir === -1 ? V.metric(b) - V.metric(a) : V.metric(a) - V.metric(b)));
+      const top = rows.slice(0, 40);
+      const max = Math.max(...top.map(r => Math.abs(V.metric(r))), 1);
+
+      const chips = Object.entries(GEO_VIEWS).map(([k, v]) =>
+        `<a class="chip ${k === view ? "on" : ""}" data-geo="${k}">${esc(v.label)}</a>`).join("");
+
+      const showVal = r => {
+        if (V.unit === "m") return `${Math.round(V.metric(r)).toLocaleString("en-IN")} m`;
+        if (view === "rain") return esc(r.rainBand || "—");
+        if (view === "flood") return r.floodLevel === "district-chronic" ? "chronic" : r.floodLevel === "state-flood-prone" ? "state-level" : "—";
+        return V.tag ? esc(V.tag(r)) : "✓";
+      };
+      const rowsHtml = top.map((r, i) => `
+        <div class="rank-row">
+          <span class="rank-n">${i + 1}</span>
+          <span class="rank-name"><a href="${r.href}">${esc(r.dn)}</a>
+            <span class="rank-ctx">${esc(r.sn)}${r.coastal ? ` · <span style="color:oklch(0.78 0.13 200)">coastal</span>` : ""}${r.floodLevel === "district-chronic" ? ` · <span class="flag">⚑ flood</span>` : ""}</span></span>
+          <span class="rank-bar"><span class="rank-fill" style="width:${(Math.abs(V.metric(r)) / max * 100).toFixed(1)}%;background:${view === "lowest" ? "oklch(0.66 0.16 250)" : "oklch(0.74 0.16 70)"}"></span></span>
+          <span class="rank-val">${showVal(r)}</span>
+        </div>`).join("");
+
+      p.innerHTML = `
+        <div class="chips">${chips}</div>
+        <div class="ex-section-label">${esc(V.label)} — top ${top.length}</div>
+        ${rowsHtml || `<p class="ex-empty">No data for this view.</p>`}
+        <p class="ex-note">${esc(V.note)} Elevation is real per-district (open SRTM); coastal &amp; flood are district-precise; rainfall band is state-level (district mm = gap). Click a district to open its full page. See the <a href="terrain-3d.html" style="color:oklch(0.74 0.16 75)">3D relief</a> and the map's <a href="index.html" style="color:oklch(0.74 0.16 75)">Flood &amp; coast</a> layer.</p>`;
+
+      p.querySelectorAll(".chip[data-geo]").forEach(c => c.addEventListener("click", () => {
+        window.__geoView = c.dataset.geo; renderGeography(p);
+      }));
     }
 
     function renderRank(p) {
