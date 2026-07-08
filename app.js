@@ -771,9 +771,17 @@
       style: { className: 'india-subdistrict-path', color: 'oklch(0.85 0.10 200 / 0.55)', weight: 0.5, fillColor: 'oklch(0.6 0.08 200)', fillOpacity: 0.06 },
       onEachFeature: (feature, layer) => {
         const sd = feature.properties.SUBDISTRICT || 'sub-district';
-        layer.bindTooltip(sd, { sticky: true, className: 'subdistrict-tip', opacity: 0.95 });
+        const parent = feature.properties.DISTRICT;
+        const tip = parent ? `${sd} <span style="opacity:.65">· ${parent} dist.</span>` : sd;
+        layer.bindTooltip(tip, { sticky: true, className: 'subdistrict-tip', opacity: 0.95 });
         layer.on('mouseover', () => layer.setStyle({ weight: 1.4, color: 'oklch(0.95 0.06 200)', fillOpacity: 0.18 }));
         layer.on('mouseout', () => layer.setStyle({ weight: 0.5, color: 'oklch(0.85 0.10 200 / 0.55)', fillOpacity: 0.06 }));
+        // Click a taluk → open its parent district's full panel (everything).
+        layer.on('click', (e) => {
+          L.DomEvent.stopPropagation(e);
+          if (parent && ui.state.drillDistrict !== parent) selectDistrict(parent, stateName);
+          else if (parent) renderDistrictDetail(parent, stateName);
+        });
       }
     }).addTo(map);
   }
