@@ -139,7 +139,49 @@
   </section>
 
   <section class="refs-section">
-    <h2><span class="num">05</span>United States</h2>
+    <h2><span class="num">05</span>Geography — floods, coast, terrain &amp; elevation</h2>
+    <div class="sec-sub">The physical-constraint layer (terrain, flood-prone, coastal CRZ, rivers, rainfall, elevation, change-over-time, encroachment)</div>
+    <ul class="refs-list">
+      <li>
+        <span class="src-name">MoEFCC — Coastal Regulation Zone Notification 2019</span>
+        <span class="src-meta">Ministry of Environment, Forest &amp; Climate Change</span>
+        <div class="src-note">Defines the CRZ that legally restricts near-shore construction. We flag the 73 districts that actually touch the sea; the CRZ category (I/II/III/IV) per district needs the district Coastal Zone Management Plan (CZMP) — a gap. <a href="https://moef.gov.in/" target="_blank" rel="noopener">moef.gov.in</a></div>
+      </li>
+      <li>
+        <span class="src-name">CWC / NDMA / state DMAs — flood-prone areas</span>
+        <span class="src-meta">Central Water Commission, NDMA, Rashtriya Barh Ayog, ASDMA/FMISC, ISRO-Bhuvan Flood Hazard Atlas</span>
+        <div class="src-note">15 chronically flood-prone states; 87 districts named as repeatedly affected are marked "district-chronic", others inherit the state flag (labelled). Annual flood-damage ₹ per district needs state relief memoranda — a gap. <a href="https://ndma.gov.in/Natural-Hazards/Floods" target="_blank" rel="noopener">ndma.gov.in</a></div>
+      </li>
+      <li>
+        <span class="src-name">IMD — district rainfall &amp; India-WRIS — river basins</span>
+        <span class="src-meta">India Meteorological Department; India Water Resources Information System</span>
+        <div class="src-note">State climate band + documented rainfall anchors (precise district annual-normal mm is on the IMD dynamic portal — a gap). River systems per state from India-WRIS. <a href="https://mausam.imd.gov.in/" target="_blank" rel="noopener">mausam.imd.gov.in</a> · <a href="https://indiawris.gov.in/" target="_blank" rel="noopener">indiawris.gov.in</a></div>
+      </li>
+      <li>
+        <span class="src-name">Open SRTM elevation (metres above sea level)</span>
+        <span class="src-meta">NASA SRTM via open-elevation.com · per-point &amp; per-district centroid</span>
+        <div class="src-note">Every district's centroid elevation, and the live hover "m above sea level" readout, come from open SRTM. A single representative point, not a within-district mean. <a href="https://open-elevation.com/" target="_blank" rel="noopener">open-elevation.com</a></div>
+      </li>
+      <li>
+        <span class="src-name">Sub-district boundaries — geoBoundaries ADM3</span>
+        <span class="src-meta">geoBoundaries gbOpen IND ADM3 · ODbL 1.0 · derived from the govt Local Government Directory</span>
+        <div class="src-note">6,800 sub-district (taluk/tehsil/block) polygons, simplified for the web, that let you zoom below the district. Source: lgdirectory.gov.in via Pathways Data. <a href="https://www.geoboundaries.org/" target="_blank" rel="noopener">geoboundaries.org</a></div>
+      </li>
+      <li>
+        <span class="src-name">Basemap imagery — Esri, OpenTopoMap, Copernicus Sentinel-2</span>
+        <span class="src-meta">Esri World Imagery; OpenTopoMap (CC-BY-SA); EOX Sentinel-2 cloudless (ESA Copernicus, open)</span>
+        <div class="src-note">The satellite / terrain / recent-satellite basemaps are displayed under each provider's attribution. Google Earth imagery is licensed and is <em>not</em> used or redistributed; Sentinel-2 is the open near-real-time equivalent.</div>
+      </li>
+      <li>
+        <span class="src-name">Change-over-time &amp; encroachment — per-case citations</span>
+        <span class="src-meta">NGT / court / CAG / HYDRAA orders + peer-reviewed &amp; major-press studies</span>
+        <div class="src-note">Water-body-loss timelines and encroachment cases (Kolkata, Chennai, Bengaluru, Mumbai, Hyderabad, Srinagar, Delhi, Guwahati) each carry a specific source; 586 districts remain honest gaps rather than fabricated figures.</div>
+      </li>
+    </ul>
+  </section>
+
+  <section class="refs-section">
+    <h2><span class="num">08</span>United States</h2>
     <div class="sec-sub">Sources for the USA dashboard (<a href="usa.html">usa.html</a>)</div>
     <ul class="refs-list">
       <li>
@@ -176,13 +218,18 @@
   </section>
 
   <section class="refs-section">
-    <h2><span class="num">06</span>Block / taluk / tehsil (sub-district)</h2>
-    <div class="sec-sub">V1 pilot: Kerala, Goa, Sikkim. Other states on roadmap.</div>
+    <h2><span class="num">07</span>Block / taluk / tehsil (sub-district)</h2>
+    <div class="sec-sub">Sub-district <em>polygons</em> now ship for all India (see §05); names/population per block below.</div>
     <ul class="refs-list">
+      <li>
+        <span class="src-name">geoBoundaries ADM3 — sub-district polygons (all India)</span>
+        <span class="src-meta">geoBoundaries gbOpen IND ADM3 · ODbL 1.0 · from govt LGD</span>
+        <div class="src-note"><strong>Now shipped:</strong> 6,800 sub-district boundary polygons let you zoom below the district and hover a taluk/tehsil by name. Simplified for the web. Full source detail in §05 (Geography). <a href="https://www.geoboundaries.org/" target="_blank" rel="noopener">geoboundaries.org</a></div>
+      </li>
       <li>
         <span class="src-name">Census of India 2011 — Sub-District Directory</span>
         <span class="src-meta">Office of the Registrar General &amp; Census Commissioner</span>
-        <div class="src-note">Block / taluk / tehsil names + populations. <em>Not available as a single open CSV</em> — locked in per-state PDF tables on the official portal. V1 hand-encodes block names from these directories cross-checked with state revenue dept sites; populations deferred to V2. <a href="https://censusindia.gov.in" target="_blank" rel="noopener">censusindia.gov.in</a></div>
+        <div class="src-note">Block / taluk / tehsil names + populations. <em>Not available as a single open CSV</em> — locked in per-state PDF tables on the official portal. Block <em>names</em> hand-encoded from these directories cross-checked with state revenue dept sites; block <em>populations</em> still a gap. <a href="https://censusindia.gov.in" target="_blank" rel="noopener">censusindia.gov.in</a></div>
       </li>
       <li>
         <span class="src-name">LGD (Local Government Directory) — Ministry of Panchayati Raj</span>
@@ -203,18 +250,18 @@
   </section>
 
   <section class="refs-section">
-    <h2><span class="num">07</span>Geographic data</h2>
-    <div class="sec-sub">State boundaries</div>
+    <h2><span class="num">06</span>Geographic base data &amp; map tiles</h2>
+    <div class="sec-sub">Boundaries + basemap imagery layers</div>
     <ul class="refs-list">
       <li>
-        <span class="src-name">Datameet India — state boundaries (TopoJSON/GeoJSON)</span>
-        <span class="src-meta">datameet.org · open data</span>
-        <div class="src-note">Used as the source for the state polygon boundaries. Open-licensed civic data project. <a href="https://github.com/datameet/maps" target="_blank" rel="noopener">github.com/datameet/maps</a></div>
+        <span class="src-name">Datameet / GADM — state &amp; district boundaries</span>
+        <span class="src-meta">open data</span>
+        <div class="src-note">State polygons (Datameet) and district polygons (GADM level-2). Open-licensed civic data. <a href="https://github.com/datameet/maps" target="_blank" rel="noopener">github.com/datameet/maps</a></div>
       </li>
       <li>
-        <span class="src-name">CARTO basemaps — dark_nolabels tile layer</span>
-        <span class="src-meta">© OpenStreetMap, © CARTO</span>
-        <div class="src-note">Background tile layer (no labels) to keep the choropleth read clean. <a href="https://carto.com/attributions" target="_blank" rel="noopener">attribution</a></div>
+        <span class="src-name">Basemaps — CARTO / Esri / OpenTopoMap / Sentinel-2</span>
+        <span class="src-meta">© OSM &amp; CARTO; Esri World Imagery; OpenTopoMap CC-BY-SA; EOX Sentinel-2 cloudless (ESA Copernicus)</span>
+        <div class="src-note">Switchable basemaps: dark (default), satellite, terrain/relief, and recent open Sentinel-2 imagery — each shown under its provider's attribution. Google Earth imagery is licensed and <em>not</em> used. <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a> · <a href="https://www.esri.com/" target="_blank" rel="noopener">Esri</a> · <a href="https://opentopomap.org/about" target="_blank" rel="noopener">OpenTopoMap</a> · <a href="https://s2maps.eu/" target="_blank" rel="noopener">EOX/Sentinel-2</a></div>
       </li>
     </ul>
   </section>
