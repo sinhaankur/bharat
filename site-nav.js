@@ -72,6 +72,7 @@
       { href: "history.html", text: "History race" },
       { href: "global.html", text: "India vs world" },
       { href: "atlas-3d.html", text: "India in 3D" },
+      { href: "terrain-3d.html", text: "3D topography" },
     ]},
     { label: "Data", items: [
       { href: "data.html", text: "Data & API" },

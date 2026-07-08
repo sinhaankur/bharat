@@ -1902,7 +1902,17 @@
     const labels = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png', {
       subdomains: 'abcd', attribution: '', maxZoom: 20, opacity: 0.9,
     });
-    L.control.layers(basemaps, { 'Place labels': labels }, { position: 'topright', collapsed: true }).addTo(map);
+    // Topography overlays (open 30 m DEM — SRTM/CartoDEM class; NOT LIDAR, which
+    // has no open nationwide dataset for India). Hillshade = relief shading you can
+    // drape over any basemap so the terrain shape reads everywhere at once.
+    const hillshade = L.tileLayer('https://services.arcgisonline.com/arcgis/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Hillshade &copy; Esri, USGS, NASA SRTM (open 30 m DEM)', maxZoom: 16, opacity: 0.55,
+    });
+    L.control.layers(
+      basemaps,
+      { 'Topography (hillshade)': hillshade, 'Place labels': labels },
+      { position: 'topright', collapsed: true }
+    ).addTo(map);
     setupElevationReadout();
 
     geoLayer = L.geoJSON(GEO, {
