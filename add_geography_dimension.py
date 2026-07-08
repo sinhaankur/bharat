@@ -61,6 +61,50 @@ FLOOD_SRC = "https://cwc.gov.in/flood-forecasting"          # CWC flood forecast
 NDMA_SRC = "https://ndma.gov.in/Natural-Hazards/Floods"     # NDMA floods
 CPCB_SRC = "https://cpcb.nic.in/status-of-stps/"            # CPCB STP / sewage status
 WRIS_SRC = "https://indiawris.gov.in/wris/"                 # India-WRIS river basins
+# Open, license-free change-over-time sources (NOT Google Earth — that imagery is
+# licensed and cannot be redistributed). These CAN live in an open-data repo.
+JRC_SRC = "https://global-surface-water.appspot.com/"       # JRC Global Surface Water (1984-now)
+BHUVAN_SRC = "https://bhuvan.nrsc.gov.in/"                  # ISRO Bhuvan LULC change
+SENTINEL_SRC = "https://dataspace.copernicus.eu/"          # Copernicus Sentinel-2
+
+# ---------------------------------------------------------------------------
+# TIMELINE PILOT — a SMALL set of districts where water-body / built-up change is
+# actually documented in open sources. Every point carries year + metric + source.
+# This is a *pilot*, not a claim of completeness: every other district gets an
+# empty timeline flagged as a gap. Figures below are the published headline values
+# from the cited open sources; where a precise open figure isn't pinned, the field
+# stays null (gap) rather than being invented.
+# ---------------------------------------------------------------------------
+TIMELINE_PILOT = {
+    # East Kolkata Wetlands — Ramsar site, documented shrinkage under urban pressure.
+    ("West Bengal", "Kolkata"): {
+        "subject": "East Kolkata Wetlands (Ramsar site) — natural sewage-treatment"
+                   " + fishery belt under built-up encroachment pressure",
+        "points": [
+            {"year": 2002, "metric": "wetland_area_ha", "value": None,
+             "note": "Ramsar designation baseline; precise open ha not pinned here → gap",
+             "source": BHUVAN_SRC, "figure_gap": True},
+            {"year": 2020, "metric": "wetland_area_ha", "value": None,
+             "note": "documented shrinkage (multiple studies); open ha to be pinned",
+             "source": JRC_SRC, "figure_gap": True},
+        ],
+        "source": JRC_SRC,
+    },
+    # Chennai — 2015 flood widely linked to loss of lakes/marshland (Pallikaranai etc.).
+    ("Tamil Nadu", "Chennai"): {
+        "subject": "Loss of lakes/marshland (e.g. Pallikaranai) preceding the 2015 flood",
+        "points": [
+            {"year": 1990, "metric": "waterbody_area_ha", "value": None,
+             "note": "Pallikaranai marsh was far larger; exact open ha to pin → gap",
+             "source": JRC_SRC, "figure_gap": True},
+            {"year": 2015, "metric": "flood_event", "value": True,
+             "note": "Dec 2015 Chennai flood — CAG/CWC documented; loss of water"
+                     " bodies + drainage a cited factor",
+             "source": NDMA_SRC},
+        ],
+        "source": JRC_SRC,
+    },
+}
 
 # ---------------------------------------------------------------------------
 # Coastal states/UTs — CRZ (MoEFCC Coastal Regulation Zone Notification, 2019)
@@ -265,6 +309,7 @@ def main():
         for dname, dist in s.get("districts", {}).items():
             n_dist += 1
             dims = dist.setdefault("dimensions", {})
+            tl = TIMELINE_PILOT.get((sname, dname))
             dims["geography"] = {
                 "terrain": terrain,                  # state dominant type
                 "on_coast": coastal,                 # coastal state (district may be inland)
@@ -293,6 +338,45 @@ def main():
                             "flood; per-district figures need CPCB/municipal data.",
                     "source": CPCB_SRC,
                 },
+                # Illegal encroachment — flag + gap only (user 2026-07-08). No blanket
+                # per-district number is invented; specific cases get pinned later with
+                # an NGT/court/CAG citation. Encroachment on floodplains/water bodies/
+                # CRZ is the mechanism that turns rain into flood.
+                "encroachment": {
+                    "documented": None,              # bool once a case is pinned
+                    "cases": [],                     # [{type, water_body, order_ref, source, year}]
+                    "figure_gap": True,
+                    "note": "Floodplain / water-body / CRZ encroachment alters land + "
+                            "terrain and worsens flooding. Specific cases to be pinned "
+                            "from NGT orders / court judgments / CAG — not bulk-guessed.",
+                    "source": "https://greentribunal.gov.in/",
+                },
+                # Change over the years — OPEN satellite sources only (JRC Global
+                # Surface Water / ISRO Bhuvan / Copernicus Sentinel). NOT Google Earth
+                # imagery (licensed, non-redistributable). Pilot districts carry real
+                # documented change subjects; everyone else = empty timeline (gap).
+                "timeline": {
+                    "subject": tl["subject"] if tl else None,
+                    "points": tl["points"] if tl else [],
+                    "figure_gap": True,
+                    "note": "Water-body / built-up change from open satellite sources "
+                            "(JRC Global Surface Water 1984-now, ISRO Bhuvan LULC, "
+                            "Copernicus Sentinel-2). Google Earth imagery is licensed "
+                            "and NOT redistributed — we use open equivalents. Most "
+                            "districts have an empty timeline until a series is pinned.",
+                    "sources": {"jrc": JRC_SRC, "bhuvan": BHUVAN_SRC, "sentinel": SENTINEL_SRC},
+                },
+                # Civilian-vs-government land split (for a 'no govt land' 3D/GLB model)
+                # is NOT openly sourceable — per-state revenue/cadastral records, mostly
+                # not machine-readable. Logged honestly rather than faked.
+                "cadastral": {
+                    "civilian_vs_govt_land": None,
+                    "figure_gap": True,
+                    "note": "A civilian-only (no govt land) 3D/GLB model needs a "
+                            "cadastral ownership layer that isn't openly available "
+                            "(per-state revenue records). GLB deferred; gap logged.",
+                    "source": None,
+                },
                 "hinders_dev_note": note,
                 "level": "state-proxy",              # honesty: mostly the STATE's geography
                 "figure_gap": True,
@@ -304,6 +388,9 @@ def main():
                 "geography annual flood damage ₹ (state relief memo) unsourced",
                 "geography sewage/drainage gap % (CPCB city-level) unsourced",
                 "geography per-district terrain refinement (intra-state) unsourced",
+                "geography illegal-encroachment cases (NGT/court/CAG) unpinned",
+                "geography change-over-time series (JRC/Bhuvan/Sentinel) unpinned",
+                "geography civilian-vs-govt cadastral split (for GLB) unavailable openly",
             ]:
                 if g not in gaps:
                     gaps.append(g)
@@ -315,7 +402,9 @@ def main():
     print(f"  coastal states (CRZ applies): {len(COASTAL_STATES)}")
     print(f"  flood-prone states flagged:   {len(FLOOD_PRONE_STATES)}")
     print(f"  states missing terrain class: {sorted(missing_terrain) or 'none'}")
-    print("  district CRZ category / flood ₹ / sewage % left as gaps (no fabrication).")
+    print(f"  timeline pilot districts:     {len(TIMELINE_PILOT)} ({', '.join(d for _, d in TIMELINE_PILOT)})")
+    print("  district CRZ category / flood ₹ / sewage % / encroachment / timeline")
+    print("  left as gaps (no fabrication). GLB deferred: cadastral split not open.")
     return 0
 
 

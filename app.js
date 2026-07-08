@@ -892,6 +892,30 @@
             ${rivers ? `· rivers: ${esc(rivers)}` : ''}
             · <span class="dim-gap">district CRZ category / flood ₹ / sewage %: gap</span></span>
         </div>`);
+      // Change over the years (open satellite: JRC/Bhuvan/Sentinel — not Google Earth).
+      const tl = geo.timeline;
+      if (tl && (tl.subject || (tl.points || []).length)) {
+        const pts = (tl.points || []).map(p => {
+          const val = p.value === true ? '⚠ event' : (p.value != null ? `${p.value}` : '<span class="dim-gap">fig gap</span>');
+          return `<span class="geo-tl-pt"><b>${esc(String(p.year))}</b> ${val}</span>`;
+        }).join('<span class="geo-tl-arrow">→</span>');
+        rows.push(`
+        <div class="dim-row dim-row--note">
+          <span class="dim-key">Over time</span>
+          <span class="dim-val">${tl.subject ? `<span class="geo-tl-subj">${esc(tl.subject)}</span><br>` : ''}${pts}
+            <span class="dim-gap"> (open satellite — JRC/Bhuvan/Sentinel; not Google Earth)</span></span>
+        </div>`);
+      }
+      // Illegal encroachment — flag/gap; documented cases when pinned.
+      const enc = geo.encroachment;
+      if (enc && (enc.documented != null || (enc.cases || []).length)) {
+        const cases = (enc.cases || []).map(c => `${esc(c.type || 'encroachment')}${c.water_body ? ' · ' + esc(c.water_body) : ''}${c.order_ref ? ` (${esc(c.order_ref)})` : ''}`).join('; ');
+        rows.push(`
+        <div class="dim-row dim-row--note">
+          <span class="dim-key">Encroachment</span>
+          <span class="dim-val">${cases || '<span class="dim-gap">documented cases: gap (NGT/court/CAG)</span>'}</span>
+        </div>`);
+      }
       if (geo.hinders_dev_note) {
         rows.push(`
         <div class="dim-row dim-row--note">

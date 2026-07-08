@@ -141,6 +141,54 @@ Bias/economics angle: border/LWE/aspirational districts get special central fund
   are shown, causation is never asserted.
 - Census is 2011 (the latest full count) — always show the year; don't imply current.
 
+## 6. Geography — sources: MoEFCC CRZ Notification 2019, CWC/NDMA flood lists,
+India-WRIS river basins, physiography references, CPCB (sewage), JRC Global
+Surface Water / ISRO Bhuvan / Copernicus Sentinel (change-over-time)
+
+Added 2026-07-08 (`add_geography_dimension.py`, commit follows). The physical
+constraints on development — shown beside money so the reader sees the loop:
+**rain → floodplain/water-body encroachment + missing sewage/drainage +
+unplanned/CRZ-ignoring construction → floods → hinders further development.**
+
+```jsonc
+"geography": {
+  "terrain": "himalayan-hill|northeast-hill|plateau|indo-gangetic-plain|coastal-plain|desert-arid|island",
+  "on_coast": bool, "flood_prone": bool, "major_rivers": [ ... ],
+  "crz":       { "applies": bool, "category": null, "restricts_dev": bool },   // I/II/III/IV = district CZMP gap
+  "flood_risk":{ "state_flood_prone": bool, "flood_damage_cr": null },          // annual ₹ = state relief-memo gap
+  "urban_planning": { "sewage_treatment_gap_pct": null, "drainage_master_plan": null }, // CPCB city-level = gap
+  "encroachment":   { "documented": null, "cases": [] },  // flag+gap; pin cases w/ NGT/court/CAG citation
+  "timeline":  { "subject": null, "points": [ {year, metric, value, source} ] }, // OPEN satellite only
+  "cadastral": { "civilian_vs_govt_land": null },         // for a 'no govt land' GLB — NOT openly sourceable
+  "hinders_dev_note": "...", "level": "state-proxy", "source_tier": 2
+}
+```
+
+**Sourced now (list-level):** coastal states → CRZ applies (closed list, MoEFCC);
+flood-prone states (CWC/NDMA/Rashtriya Barh Ayog); dominant terrain per state
+physiography; state river systems (India-WRIS). **District gaps (never faked):**
+CRZ category (CZMP), annual flood ₹, sewage %, per-district terrain, encroachment
+cases, change-timeline series.
+
+**Change over the years (`timeline`)** uses **open, redistributable** sources only —
+JRC Global Surface Water (1984→now), ISRO Bhuvan LULC, Copernicus Sentinel-2.
+**Google Earth imagery is licensed and is NOT copied/redistributed;** we use open
+equivalents (or link out to Earth Engine if ever needed). Pilot districts: Kolkata
+(East Kolkata Wetlands shrinkage), Chennai (lake/marsh loss → 2015 flood). Exact
+open ha figures to be pinned; left as `figure_gap` until then.
+
+**3D GLB deferred (`cadastral`):** a "civilian-only, no govt land" 3D model needs a
+cadastral ownership layer that isn't openly available (per-state revenue records,
+mostly not machine-readable). Logged as a gap, not faked. Revisit if state cadastre
+opens.
+
+**Map + panel:** new "Flood & coast" district-layer toggle in app.js (`geoColor`/
+`dimGeoFor`/`geoClass`) recolours by constraint class (coast+flood > flood > coast
+> terrain); panel shows terrain/flood/CRZ tags + rivers + over-time points +
+encroachment + the hinders-dev note. Comparative, **no hindrance "score."**
+
+---
+
 Part of the project: see `officials-schema.md` (money ledger),
 `news-timeline-schema.md` (events), `project-thesis-pixels` framing,
 `_meta.protocol_layers` (governance).
