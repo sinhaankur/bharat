@@ -2004,6 +2004,7 @@
       <label class="mlp-check"><input type="checkbox" id="mlp-hill" ${hillOn ? 'checked' : ''}> Topography (hillshade)</label>
       <label class="mlp-check"><input type="checkbox" id="mlp-elev" ${elevOn ? 'checked' : ''}> Elevation tint (m above sea)</label>
       ${elevOn ? `<div class="mlp-elev-legend">${elevTintLegend()}</div>` : ''}
+      ${(elevOn || hillOn) && cur === 'Terrain' ? `<div class="mlp-tip">Tip: elevation tint / hillshade read best over the <b>Dark</b> or <b>Satellite</b> base (Terrain already shades relief).</div>` : ''}
       <label class="mlp-check"><input type="checkbox" id="mlp-labels" ${labelsOn ? 'checked' : ''}> Place labels</label>
       <label class="mlp-check"><input type="checkbox" id="mlp-sub" ${subOn ? 'checked' : ''} ${ui.state.drillDistrict ? '' : 'disabled'}> Sub-districts (taluk/tehsil)</label>
       ${dataSection}`;

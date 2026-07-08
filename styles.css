@@ -409,9 +409,9 @@ a:hover { border-color: var(--foreground); }
 .mlp {
   position: absolute; top: 12px; left: 12px; z-index: 600;
   background: oklch(0.15 0.005 240 / 0.94); border: 1px solid var(--border-strong);
-  border-radius: var(--radius); padding: 8px 9px; width: 208px; max-width: 62vw;
+  border-radius: var(--radius); padding: 9px 11px; width: 238px; max-width: 66vw;
   backdrop-filter: blur(4px); box-shadow: 0 4px 18px oklch(0 0 0 / 0.4);
-  font-size: 11px; color: var(--foreground); max-height: 78%; overflow-y: auto;
+  font-size: 11px; color: var(--foreground); max-height: 82%; overflow-y: auto;
 }
 .mlp-toggle {
   background: oklch(0.16 0.005 240 / 0.94); color: var(--foreground);
@@ -449,6 +449,9 @@ a:hover { border-color: var(--foreground); }
 .mlp-elev-legend { margin: 0 0 4px 22px; }
 .mlp-elev-bar { height: 8px; border-radius: 3px; border: 1px solid var(--border); }
 .mlp-elev-ticks { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 8px; color: var(--muted-foreground); margin-top: 1px; }
+.mlp-tip { font-size: 9px; line-height: 1.4; color: oklch(0.82 0.1 78); background: oklch(0.3 0.08 78 / 0.18); border-radius: 4px; padding: 3px 6px; margin: 2px 0 4px 22px; }
+.mlp-tip b { color: oklch(0.88 0.12 78); }
+.mlp-base { white-space: nowrap; }
 @media (max-width: 640px) { .mlp { width: 168px; top: 8px; left: 8px; padding: 6px 7px; } }
 
 /* metres-above-sea-level readout, bottom-left of the map */
