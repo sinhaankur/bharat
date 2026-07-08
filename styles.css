@@ -405,6 +405,49 @@ a:hover { border-color: var(--foreground); }
 .leaflet-control-layers-toggle { background-color: oklch(0.18 0 0) !important; border: 1px solid var(--border) !important; }
 .leaflet-control-layers label { color: var(--foreground) !important; margin: 2px 0 !important; }
 .leaflet-control-layers-separator { border-top: 1px solid var(--border) !important; }
+/* ── Unified LAYERS panel (top-left of the map) ───────────────────────────── */
+.mlp {
+  position: absolute; top: 12px; left: 12px; z-index: 600;
+  background: oklch(0.15 0.005 240 / 0.94); border: 1px solid var(--border-strong);
+  border-radius: var(--radius); padding: 8px 9px; width: 208px; max-width: 62vw;
+  backdrop-filter: blur(4px); box-shadow: 0 4px 18px oklch(0 0 0 / 0.4);
+  font-size: 11px; color: var(--foreground); max-height: 78%; overflow-y: auto;
+}
+.mlp-toggle {
+  background: oklch(0.16 0.005 240 / 0.94); color: var(--foreground);
+  border: 1px solid var(--border-strong); border-radius: var(--radius);
+  font-family: var(--font-mono); font-size: 11px; padding: 5px 10px; cursor: pointer;
+  backdrop-filter: blur(4px);
+}
+.mlp-toggle:hover { border-color: var(--warm); }
+.mlp-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+.mlp-title { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.84 0.12 78); }
+.mlp-collapse { background: none; border: none; color: var(--muted-foreground); cursor: pointer; font-size: 12px; line-height: 1; padding: 2px 4px; }
+.mlp-collapse:hover { color: var(--foreground); }
+.mlp-sec-h { font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted-foreground); margin: 8px 0 4px; }
+.mlp-bases, .mlp-data, .mlp-facets { display: flex; flex-wrap: wrap; gap: 3px; }
+.mlp-base, .mlp-data-btn, .mlp-facet {
+  font-family: var(--font-mono); font-size: 9.5px; padding: 3px 7px; border-radius: 5px;
+  border: 1px solid var(--border); background: oklch(0.19 0 0); color: var(--foreground);
+  cursor: pointer; transition: border-color .12s, background .12s, color .12s;
+}
+.mlp-base:hover, .mlp-data-btn:hover, .mlp-facet:hover { border-color: var(--border-strong); }
+.mlp-base.on, .mlp-data-btn.on { background: oklch(0.78 0.16 70 / 0.2); border-color: oklch(0.78 0.16 70); color: oklch(0.86 0.15 76); }
+.mlp-facet { font-size: 9px; padding: 2px 6px; border-radius: 999px; }
+.mlp-facet.on { background: oklch(0.72 0.13 200 / 0.22); border-color: oklch(0.72 0.13 200); color: oklch(0.86 0.11 200); }
+.mlp-facets { margin-top: 5px; }
+.mlp-check { display: flex; align-items: center; gap: 6px; font-size: 10.5px; color: var(--foreground); margin: 3px 0; cursor: pointer; }
+.mlp-check input { accent-color: oklch(0.74 0.16 70); }
+.mlp-check input:disabled { opacity: 0.4; }
+.mlp-check:has(input:disabled) { color: var(--muted-foreground); cursor: not-allowed; }
+.mlp-legend { display: flex; flex-wrap: wrap; gap: 3px 8px; margin-top: 6px; padding-top: 5px; border-top: 1px dashed var(--border); }
+.mlp-leg { display: flex; align-items: center; gap: 4px; font-size: 9.5px; color: var(--muted-foreground); font-family: var(--font-mono); }
+.mlp-chip { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+.mlp-chip-flag { background: oklch(0.65 0.22 25); }
+.mlp-leg-note { font-size: 9px; color: var(--muted-foreground); font-style: italic; }
+.mlp-hint { font-size: 9.5px; color: var(--muted-foreground); line-height: 1.45; margin-top: 6px; padding-top: 5px; border-top: 1px dashed var(--border); }
+@media (max-width: 640px) { .mlp { width: 168px; top: 8px; left: 8px; padding: 6px 7px; } }
+
 /* metres-above-sea-level readout, bottom-left of the map */
 .msl-readout {
   position: absolute; bottom: 12px; left: 12px; z-index: 500;

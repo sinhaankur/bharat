@@ -106,6 +106,7 @@
   let EVENTS = null, NEWS = null, BUBBLES = null;
   let newsBubbleLayer = null;
   let map = null, geoLayer = null, districtLayer = null;
+  let mapLayers = null;   // { basemaps, labels, hillshade, current } for the unified panel
   const pathByName = new Map();
   const districtPathByName = new Map();
   const districtGeoCache = new Map();
@@ -597,7 +598,7 @@
       }
     }).addTo(map);
 
-    renderDistrictModeToggle(stateName, moneyVals.length);
+    renderLayersPanel();   // refresh the unified panel (data modes + legend) for this state
 
     try { map.fitBounds(districtLayer.getBounds(), { padding: [30, 30] }); } catch (e) {}
   }
@@ -637,93 +638,7 @@
     valEl.style.fontSize = '12.5px';
   }
 
-  // Toggle: population view ↔ money-flow view for the district layer.
-  function renderDistrictModeToggle(stateName, moneyCount) {
-    const host = $ind('#india-detail');
-    if (!host) return;
-    let bar = $ind('#district-mode-toggle');
-    if (!bar) {
-      bar = document.createElement('div');
-      bar.id = 'district-mode-toggle';
-      bar.className = 'district-mode-toggle';
-      host.parentNode.insertBefore(bar, host);
-    }
-    const mode = ui.state.districtMode || 'population';
-    let legend = '';
-    if (mode === 'money' && moneyCount) legend = `
-      <div class="dmt-legend">
-        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${seqColor(0.3)}"></span>low</span>
-        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${seqColor(0.95)}"></span>high ₹ in <span class="dmt-leg-note">(log scale)</span></span>
-        <span class="dmt-leg-item"><span class="dmt-chip dmt-chip--flag"></span>⚠ fund freeze / non-delivery</span>
-        <span class="dmt-leg-item"><span class="dmt-chip" style="background:oklch(0.32 0.06 250);border:1.5px dashed oklch(0.72 0.13 250)"></span>data, no public ₹ figure</span>
-        <span class="dmt-leg-item"><span class="dmt-chip" style="background:oklch(0.2 0 0);border:1px solid oklch(0.985 0 0 / 0.2)"></span>no data yet</span>
-      </div>`;
-    else if (mode === 'language') {
-      // distinct languages present in this state's districts
-      const langs = [...new Set([...districtPathByName.keys()].map(dn => dimLangFor(stateName, dn)).filter(Boolean))];
-      legend = `<div class="dmt-legend">
-        ${langs.map(l => `<span class="dmt-leg-item"><span class="dmt-chip" style="background:${langColor(l)}"></span>${l}</span>`).join('')}
-        <span class="dmt-leg-item dmt-leg-note">official language (state); district mother-tongue = gap</span></div>`;
-    } else if (mode === 'politics') legend = `<div class="dmt-legend">
-        <span class="dmt-leg-item"><span class="dmt-chip" style="background:oklch(0.70 0.15 150)"></span>aligned with Union</span>
-        <span class="dmt-leg-item"><span class="dmt-chip" style="background:oklch(0.66 0.20 28)"></span>opposition to Union</span>
-        <span class="dmt-leg-item"><span class="dmt-chip" style="background:oklch(0.60 0.05 250)"></span>UT-admin / other</span>
-        <span class="dmt-leg-item dmt-leg-note">state govt alignment — shown beside money, not a causal claim</span></div>`;
-    else if (mode === 'geography') {
-      const facet = ui.state.geoFacet || 'constraint';
-      // facet sub-selector (the "checkboxes" for each sourced geography sub-layer)
-      const facetBtns = [
-        ['constraint', 'Constraint'], ['coastal', 'Coastal · CRZ'],
-        ['flood', 'Flood'], ['elevation', 'Elevation'], ['rainfall', 'Rainfall'],
-      ].map(([k, lbl]) => `<button class="dmt-facet ${facet === k ? 'on' : ''}" data-facet="${k}">${lbl}</button>`).join('');
-      let facetLegend = '';
-      if (facet === 'constraint') facetLegend = `
-        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoColor({on_coast:true,flood_prone:true})}"></span>coastal + flood</span>
-        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoColor({flood_prone:true})}"></span>flood-prone</span>
-        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoColor({on_coast:true})}"></span>coastal — CRZ</span>
-        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoColor({terrain:'himalayan-hill'})}"></span>hill/mountain</span>`;
-      else if (facet === 'coastal') facetLegend = `
-        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoFacetColor({on_coast:true},'coastal')}"></span>coastal — CRZ applies (district touches sea)</span>
-        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoFacetColor({on_coast:false},'coastal')}"></span>inland</span>`;
-      else if (facet === 'flood') facetLegend = `
-        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoFacetColor({flood_level:'district-chronic'},'flood')}"></span>district-chronic (CWC/NDMA list)</span>
-        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoFacetColor({flood_level:'state-flood-prone'},'flood')}"></span>state flood-prone (inherited)</span>
-        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoFacetColor({flood_level:'not-flagged'},'flood')}"></span>not flagged</span>`;
-      else if (facet === 'elevation') facetLegend = `
-        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoFacetColor({elevation:{centroid_m:50}},'elevation')}"></span>lowland</span>
-        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoFacetColor({elevation:{centroid_m:3200}},'elevation')}"></span>high mountain</span>
-        <span class="dmt-leg-item dmt-leg-note">centroid elevation (open SRTM)</span>`;
-      else if (facet === 'rainfall') facetLegend = `
-        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoFacetColor({rainfall:{band:'arid'}},'rainfall')}"></span>arid</span>
-        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoFacetColor({rainfall:{band:'moderate'}},'rainfall')}"></span>moderate</span>
-        <span class="dmt-leg-item"><span class="dmt-chip" style="background:${geoFacetColor({rainfall:{band:'very-high'}},'rainfall')}"></span>very-high</span>
-        <span class="dmt-leg-item dmt-leg-note">IMD climate band; district mm = gap</span>`;
-      legend = `<div class="dmt-facets">${facetBtns}</div><div class="dmt-legend">${facetLegend}
-        <span class="dmt-leg-item dmt-leg-note">coastal &amp; flood are district-precise; rainfall mm &amp; CRZ category are gaps</span></div>`;
-    }
-    bar.innerHTML = `
-      <div class="dmt-row">
-        <span class="dmt-label">Colour districts by</span>
-        <button class="dmt-btn ${mode === 'population' ? 'on' : ''}" data-m="population">Population</button>
-        <button class="dmt-btn ${mode === 'money' ? 'on' : ''}" data-m="money" ${moneyCount ? '' : 'disabled title="No district money data in this state yet"'}>Money flow ${moneyCount ? `· ${moneyCount}` : ''}</button>
-        <button class="dmt-btn ${mode === 'language' ? 'on' : ''}" data-m="language">Language</button>
-        <button class="dmt-btn ${mode === 'politics' ? 'on' : ''}" data-m="politics">Politics</button>
-        <button class="dmt-btn ${mode === 'geography' ? 'on' : ''}" data-m="geography" title="Terrain, flood-prone, coastal CRZ — the physical constraints on development">Flood &amp; coast</button>
-      </div>
-      ${legend}`;
-    bar.querySelectorAll('.dmt-btn').forEach(b => b.addEventListener('click', () => {
-      if (b.disabled) return;
-      ui.state.districtMode = b.dataset.m;
-      const geo = districtGeoCache.get(stateName);
-      if (geo) renderDistrictLayer(geo, stateName);
-    }));
-    // geography facet sub-selector (each sourced sub-layer)
-    bar.querySelectorAll('.dmt-facet').forEach(b => b.addEventListener('click', () => {
-      ui.state.geoFacet = b.dataset.facet;
-      const geo = districtGeoCache.get(stateName);
-      if (geo) renderDistrictLayer(geo, stateName);
-    }));
-  }
+  // (district colour-mode UI moved into the unified #map-layers-panel — see renderLayersPanel)
 
   function updateDistrictReadout(district, state, pop) {
     $ind('.readout-label').textContent = `District · ${state}`;
@@ -746,6 +661,7 @@
       try { map.fitBounds(selLayer.getBounds(), { padding: [40, 40], maxZoom: 11 }); } catch (e) {}
     }
     renderSubdistrictLayer(state);   // reveal taluk/tehsil polygons below the district
+    renderLayersPanel();             // enable the sub-districts checkbox
     renderDistrictDetail(district, state);
   }
 
@@ -1621,17 +1537,16 @@
     ui.state.mode = 'states';
     ui.state.drillState = null;
     ui.state.drillDistrict = null;
-    $ind('#district-mode-toggle')?.remove();
     if (subdistrictLayer) { subdistrictLayer.remove(); subdistrictLayer = null; }
     if (districtLayer) { districtLayer.remove(); districtLayer = null; districtPathByName.clear(); }
     // Restore state layer styling
     if (geoLayer) geoLayer.eachLayer(layer => layer.setStyle(fillStyle(layer.feature.properties.ST_NM)));
     if (stateName) selectState(stateName);
+    renderLayersPanel();   // drop the district data-modes now we're back at state level
     try { map.fitBounds(geoLayer.getBounds(), { padding: [10, 10] }); } catch (e) {}
   }
 
   function renderEmptyState() {
-    $ind('#district-mode-toggle')?.remove();
     const detail = $ind('#india-detail');
     const view = VIEWS[ui.state.view];
     detail.innerHTML = `
@@ -1908,11 +1823,9 @@
     const hillshade = L.tileLayer('https://services.arcgisonline.com/arcgis/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Hillshade &copy; Esri, USGS, NASA SRTM (open 30 m DEM)', maxZoom: 16, opacity: 0.55,
     });
-    L.control.layers(
-      basemaps,
-      { 'Topography (hillshade)': hillshade, 'Place labels': labels },
-      { position: 'topright', collapsed: true }
-    ).addTo(map);
+    // Stash for the unified layers panel (replaces the default Leaflet controls).
+    mapLayers = { basemaps, labels, hillshade, current: 'Dark map' };
+    buildLayersPanel();
     setupElevationReadout();
 
     geoLayer = L.geoJSON(GEO, {
@@ -1929,6 +1842,133 @@
     try { map.fitBounds(geoLayer.getBounds(), { padding: [10, 10] }); } catch (e) {}
 
     buildNewsBubbles();
+  }
+
+  // ---- Unified LAYERS panel: one intuitive control for basemap + overlays +
+  // "colour districts by". Always visible (top-left of the map), collapsible.
+  // Replaces the scattered Leaflet layer control + in-panel district-mode toggle.
+  function switchBasemap(name) {
+    if (!mapLayers || !mapLayers.basemaps[name]) return;
+    Object.values(mapLayers.basemaps).forEach(l => map.removeLayer(l));
+    mapLayers.basemaps[name].addTo(map);
+    mapLayers.current = name;
+    // labels + hillshade sit above the basemap — re-raise if on
+    if (map.hasLayer(mapLayers.labels)) mapLayers.labels.bringToFront();
+    if (map.hasLayer(mapLayers.hillshade)) mapLayers.hillshade.bringToFront();
+  }
+  function toggleOverlay(which, on) {
+    const layer = mapLayers[which];
+    if (!layer) return;
+    if (on) { layer.addTo(map); layer.bringToFront(); }
+    else map.removeLayer(layer);
+  }
+
+  function buildLayersPanel() {
+    const wrap = document.getElementById('india-map-wrap');
+    if (!wrap || document.getElementById('map-layers-panel')) return;
+    const panel = document.createElement('div');
+    panel.id = 'map-layers-panel';
+    panel.className = 'mlp';
+    wrap.appendChild(panel);
+    renderLayersPanel();
+  }
+
+  // Data overlays available depend on whether we've drilled into a state's districts.
+  function dataOverlayModes() {
+    const inDistricts = ui.state.drillState != null;
+    const base = [['population', 'Population'], ['money', 'Money flow']];
+    const dims = [['language', 'Language'], ['politics', 'Politics'], ['geography', 'Flood & coast']];
+    return inDistricts ? [...base, ...dims] : [];
+  }
+
+  function renderLayersPanel() {
+    const panel = document.getElementById('map-layers-panel');
+    if (!panel) return;
+    const collapsed = ui.state.layersCollapsed;
+    if (collapsed) {
+      panel.innerHTML = `<button class="mlp-toggle" id="mlp-open" title="Layers">▤ Layers</button>`;
+      panel.querySelector('#mlp-open').onclick = () => { ui.state.layersCollapsed = false; renderLayersPanel(); };
+      return;
+    }
+    const cur = mapLayers?.current || 'Dark map';
+    const baseBtns = Object.keys(mapLayers?.basemaps || {}).map(n =>
+      `<button class="mlp-base ${cur === n ? 'on' : ''}" data-base="${esc(n)}">${esc(n.replace(' map', '').replace('Recent satellite (Sentinel-2)', 'Recent (S2)'))}</button>`).join('');
+    const hillOn = mapLayers && map.hasLayer(mapLayers.hillshade);
+    const labelsOn = mapLayers && map.hasLayer(mapLayers.labels);
+    const subOn = subdistrictLayer != null;
+
+    const modes = dataOverlayModes();
+    const dataSection = modes.length ? `
+      <div class="mlp-sec-h">Colour districts by</div>
+      <div class="mlp-data">
+        ${modes.map(([k, lbl]) => `<button class="mlp-data-btn ${ui.state.districtMode === k ? 'on' : ''}" data-mode="${k}">${lbl}</button>`).join('')}
+      </div>
+      ${ui.state.districtMode === 'geography' ? geoFacetChooserHTML() : ''}
+      <div class="mlp-legend" id="mlp-legend">${activeOverlayLegend()}</div>` : `
+      <div class="mlp-hint">Click a state, then drill to districts to colour by money, flood, elevation…</div>`;
+
+    panel.innerHTML = `
+      <div class="mlp-head">
+        <span class="mlp-title">▤ Layers</span>
+        <button class="mlp-collapse" id="mlp-close" title="Collapse">✕</button>
+      </div>
+      <div class="mlp-sec-h">Base map</div>
+      <div class="mlp-bases">${baseBtns}</div>
+      <div class="mlp-sec-h">Overlays</div>
+      <label class="mlp-check"><input type="checkbox" id="mlp-hill" ${hillOn ? 'checked' : ''}> Topography (hillshade)</label>
+      <label class="mlp-check"><input type="checkbox" id="mlp-labels" ${labelsOn ? 'checked' : ''}> Place labels</label>
+      <label class="mlp-check"><input type="checkbox" id="mlp-sub" ${subOn ? 'checked' : ''} ${ui.state.drillDistrict ? '' : 'disabled'}> Sub-districts (taluk/tehsil)</label>
+      ${dataSection}`;
+
+    // wire base
+    panel.querySelectorAll('.mlp-base').forEach(b => b.onclick = () => { switchBasemap(b.dataset.base); renderLayersPanel(); });
+    // overlays
+    panel.querySelector('#mlp-hill').onchange = e => toggleOverlay('hillshade', e.target.checked);
+    panel.querySelector('#mlp-labels').onchange = e => toggleOverlay('labels', e.target.checked);
+    const subEl = panel.querySelector('#mlp-sub');
+    if (subEl) subEl.onchange = e => {
+      if (e.target.checked && ui.state.drillState) renderSubdistrictLayer(ui.state.drillState);
+      else if (subdistrictLayer) { subdistrictLayer.remove(); subdistrictLayer = null; }
+    };
+    // data mode
+    panel.querySelectorAll('.mlp-data-btn').forEach(b => b.onclick = () => {
+      ui.state.districtMode = b.dataset.mode;
+      const geo = districtGeoCache.get(ui.state.drillState);
+      if (geo) renderDistrictLayer(geo, ui.state.drillState);
+      renderLayersPanel();
+    });
+    // geography facet chooser
+    panel.querySelectorAll('.mlp-facet').forEach(b => b.onclick = () => {
+      ui.state.geoFacet = b.dataset.facet;
+      const geo = districtGeoCache.get(ui.state.drillState);
+      if (geo) renderDistrictLayer(geo, ui.state.drillState);
+      renderLayersPanel();
+    });
+    panel.querySelector('#mlp-close').onclick = () => { ui.state.layersCollapsed = true; renderLayersPanel(); };
+  }
+
+  function geoFacetChooserHTML() {
+    const facet = ui.state.geoFacet || 'constraint';
+    const facets = [['constraint', 'Constraint'], ['coastal', 'Coastal·CRZ'], ['flood', 'Flood'], ['elevation', 'Elevation'], ['rainfall', 'Rainfall']];
+    return `<div class="mlp-facets">${facets.map(([k, l]) => `<button class="mlp-facet ${facet === k ? 'on' : ''}" data-facet="${k}">${l}</button>`).join('')}</div>`;
+  }
+
+  // Legend for whatever data overlay is active (mirrors the old dmt legends).
+  function activeOverlayLegend() {
+    const mode = ui.state.districtMode;
+    const chip = (bg, txt) => `<span class="mlp-leg"><span class="mlp-chip" style="background:${bg}"></span>${txt}</span>`;
+    if (mode === 'money') return chip(seqColor(0.3), 'low') + chip(seqColor(0.95), 'high ₹ in') + `<span class="mlp-leg"><span class="mlp-chip mlp-chip-flag"></span>⚠ freeze/non-delivery</span>`;
+    if (mode === 'language') return `<span class="mlp-leg-note">official language per state; district mother-tongue = gap</span>`;
+    if (mode === 'politics') return chip('oklch(0.70 0.15 150)', 'aligned') + chip('oklch(0.66 0.20 28)', 'opposition') + chip('oklch(0.60 0.05 250)', 'UT/other');
+    if (mode === 'geography') {
+      const f = ui.state.geoFacet || 'constraint';
+      if (f === 'coastal') return chip(geoFacetColor({ on_coast: true }, 'coastal'), 'coastal · CRZ') + chip(geoFacetColor({ on_coast: false }, 'coastal'), 'inland');
+      if (f === 'flood') return chip(geoFacetColor({ flood_level: 'district-chronic' }, 'flood'), 'chronic (CWC/NDMA)') + chip(geoFacetColor({ flood_level: 'state-flood-prone' }, 'flood'), 'state-level') + chip(geoFacetColor({ flood_level: 'not-flagged' }, 'flood'), 'not flagged');
+      if (f === 'elevation') return chip(geoFacetColor({ elevation: { centroid_m: 50 } }, 'elevation'), 'lowland') + chip(geoFacetColor({ elevation: { centroid_m: 3200 } }, 'elevation'), 'high mountain') + `<span class="mlp-leg-note">SRTM centroid m</span>`;
+      if (f === 'rainfall') return chip(geoFacetColor({ rainfall: { band: 'arid' } }, 'rainfall'), 'arid') + chip(geoFacetColor({ rainfall: { band: 'moderate' } }, 'rainfall'), 'moderate') + chip(geoFacetColor({ rainfall: { band: 'very-high' } }, 'rainfall'), 'very-high');
+      return chip(geoColor({ on_coast: true, flood_prone: true }), 'coast+flood') + chip(geoColor({ flood_prone: true }), 'flood') + chip(geoColor({ on_coast: true }), 'coast') + chip(geoColor({ terrain: 'himalayan-hill' }), 'hill');
+    }
+    return `<span class="mlp-leg-note">population (Census 2011)</span>`;
   }
 
   // ---- Metres-above-sea-level readout: hover/click any point → its exact MSL
