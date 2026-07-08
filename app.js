@@ -1835,15 +1835,35 @@
       zoomControl: true,
       worldCopyJump: false,
       minZoom: 4,
-      maxZoom: 12,            // allow zoom down to town/locality level (was 7 — capped district drill-in)
+      maxZoom: 18,           // deep zoom for satellite/terrain imagery (was 12)
       scrollWheelZoom: true,
     }).setView([22.5, 80], 4.5);
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
-      subdomains: 'abcd',
-      attribution: '&copy; OSM, &copy; CARTO',
-      maxZoom: 20,           // tiles support deep zoom; map maxZoom is the real cap
-    }).addTo(map);
+    // ---- Basemaps: dark (default) + real landscape imagery, all free/attribution.
+    // The whole point of these is "zoom in and see the actual land" — imagery goes
+    // to sub-metre. Sentinel-2 is the closest to real-time that's redistributable
+    // (open ESA Copernicus); true live/today imagery is licensed and NOT used.
+    const basemaps = {
+      'Dark map': L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
+        subdomains: 'abcd', attribution: '&copy; OSM, &copy; CARTO', maxZoom: 20,
+      }),
+      'Satellite': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Imagery &copy; Esri, Maxar, Earthstar Geographics', maxZoom: 19,
+      }),
+      'Terrain': L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+        subdomains: 'abc', attribution: 'Map data: &copy; OpenTopoMap (CC-BY-SA), SRTM', maxZoom: 17,
+      }),
+      'Recent satellite (Sentinel-2)': L.tileLayer('https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2020_3857/default/g/{z}/{y}/{x}.jpg', {
+        attribution: 'Sentinel-2 cloudless &copy; EOX / ESA Copernicus (open)', maxZoom: 16,
+      }),
+    };
+    basemaps['Dark map'].addTo(map);      // default
+    // Labels overlay to keep place-names on imagery basemaps
+    const labels = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png', {
+      subdomains: 'abcd', attribution: '', maxZoom: 20, opacity: 0.9,
+    });
+    L.control.layers(basemaps, { 'Place labels': labels }, { position: 'topright', collapsed: true }).addTo(map);
+    setupElevationReadout();
 
     geoLayer = L.geoJSON(GEO, {
       style: f => fillStyle(f.properties.ST_NM),
@@ -1859,6 +1879,53 @@
     try { map.fitBounds(geoLayer.getBounds(), { padding: [10, 10] }); } catch (e) {}
 
     buildNewsBubbles();
+  }
+
+  // ---- Metres-above-sea-level readout: hover/click any point → its exact MSL
+  // from open SRTM (open-elevation API). Point-level, fully zoomable — not the
+  // district centroid. Debounced + cached so we don't hammer the free API.
+  const elevCache = new Map();          // "lat,lon" (rounded) -> metres
+  let elevTimer = null, elevBox = null;
+  function setupElevationReadout() {
+    elevBox = document.createElement('div');
+    elevBox.className = 'msl-readout';
+    elevBox.innerHTML = '<span class="msl-ico">⛰</span> hover the map for elevation';
+    const host = document.getElementById('india-map');
+    if (host) host.appendChild(elevBox);
+
+    const roundKey = (lat, lng) => `${lat.toFixed(3)},${lng.toFixed(3)}`;
+    async function lookup(lat, lng) {
+      const key = roundKey(lat, lng);
+      if (elevCache.has(key)) return elevCache.get(key);
+      try {
+        const r = await fetch(`https://api.open-elevation.com/api/v1/lookup?locations=${lat},${lng}`);
+        const j = await r.json();
+        const m = j?.results?.[0]?.elevation;
+        if (typeof m === 'number') { elevCache.set(key, m); return m; }
+      } catch (e) { /* API down → show coords only */ }
+      return null;
+    }
+    function show(lat, lng, m) {
+      const coord = `${lat.toFixed(3)}, ${lng.toFixed(3)}`;
+      elevBox.innerHTML = (m == null)
+        ? `<span class="msl-ico">⛰</span> ${coord} · <span class="msl-gap">elev…</span>`
+        : `<span class="msl-ico">⛰</span> ${coord} · <b>${Math.round(m)} m</b> above sea level <span class="msl-src">SRTM</span>`;
+    }
+    map.on('mousemove', (e) => {
+      const { lat, lng } = e.latlng;
+      show(lat, lng, elevCache.get(roundKey(lat, lng)) ?? null);
+      clearTimeout(elevTimer);
+      elevTimer = setTimeout(async () => {
+        const m = await lookup(lat, lng);
+        // only update if cursor hasn't moved far since
+        show(lat, lng, m);
+      }, 260);
+    });
+    map.on('click', async (e) => {
+      const { lat, lng } = e.latlng;
+      const m = await lookup(lat, lng);
+      show(lat, lng, m);
+    });
   }
 
   // News-bubble layer: one circle per district with news/fiscal activity.
