@@ -743,9 +743,39 @@
     });
     // Zoom into the individual district. maxZoom caps tiny districts (e.g. Kolkata) from over-zooming.
     if (selLayer && selLayer.getBounds) {
-      try { map.fitBounds(selLayer.getBounds(), { padding: [40, 40], maxZoom: 9 }); } catch (e) {}
+      try { map.fitBounds(selLayer.getBounds(), { padding: [40, 40], maxZoom: 11 }); } catch (e) {}
     }
+    renderSubdistrictLayer(state);   // reveal taluk/tehsil polygons below the district
     renderDistrictDetail(district, state);
+  }
+
+  // ---- Sub-district (taluk/tehsil/block) polygons — the zoom level BELOW district.
+  // Lazy per-state fetch from subdistricts/<State>.geojson (open geoBoundaries ADM3,
+  // ODbL, from the govt LGD). Mirrors the districts/ loading convention.
+  const subdistrictGeoCache = new Map();
+  let subdistrictLayer = null;
+  async function renderSubdistrictLayer(stateName) {
+    if (subdistrictLayer) { subdistrictLayer.remove(); subdistrictLayer = null; }
+    let geo = subdistrictGeoCache.get(stateName);
+    if (!geo) {
+      const fname = 'subdistricts/' + stateName.replace(/ /g, '_').replace(/&/g, 'and') + '.geojson';
+      try {
+        const res = await fetch(fname);
+        if (!res.ok) return;              // no file for this state — silently skip
+        geo = await res.json();
+        subdistrictGeoCache.set(stateName, geo);
+      } catch (e) { return; }
+    }
+    if (ui.state.drillState !== stateName && ui.state.drillDistrict == null) return;
+    subdistrictLayer = L.geoJSON(geo, {
+      style: { className: 'india-subdistrict-path', color: 'oklch(0.85 0.10 200 / 0.55)', weight: 0.5, fillColor: 'oklch(0.6 0.08 200)', fillOpacity: 0.06 },
+      onEachFeature: (feature, layer) => {
+        const sd = feature.properties.SUBDISTRICT || 'sub-district';
+        layer.bindTooltip(sd, { sticky: true, className: 'subdistrict-tip', opacity: 0.95 });
+        layer.on('mouseover', () => layer.setStyle({ weight: 1.4, color: 'oklch(0.95 0.06 200)', fillOpacity: 0.18 }));
+        layer.on('mouseout', () => layer.setStyle({ weight: 0.5, color: 'oklch(0.85 0.10 200 / 0.55)', fillOpacity: 0.06 }));
+      }
+    }).addTo(map);
   }
 
   function renderDistrictPanel(stateName, geo) {
@@ -839,6 +869,7 @@
     `;
     detail.querySelector('#india-back-to-districts')?.addEventListener('click', () => {
       ui.state.drillDistrict = null;
+      if (subdistrictLayer) { subdistrictLayer.remove(); subdistrictLayer = null; }
       const geo = districtGeoCache.get(state);
       if (geo) renderDistrictPanel(state, geo);
       districtPathByName.forEach(layer => layer.setStyle({ weight: 0.6, color: 'oklch(0.985 0 0 / 0.45)' }));
@@ -1583,6 +1614,7 @@
     ui.state.drillState = null;
     ui.state.drillDistrict = null;
     $ind('#district-mode-toggle')?.remove();
+    if (subdistrictLayer) { subdistrictLayer.remove(); subdistrictLayer = null; }
     if (districtLayer) { districtLayer.remove(); districtLayer = null; districtPathByName.clear(); }
     // Restore state layer styling
     if (geoLayer) geoLayer.eachLayer(layer => layer.setStyle(fillStyle(layer.feature.properties.ST_NM)));
