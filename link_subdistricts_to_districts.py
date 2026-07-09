@@ -21,50 +21,10 @@ import json
 import os
 import sys
 
+from geo_utils import bbox_of, centroid, point_in_geom
+
 SUBDIR = "subdistricts"
 DISTDIR = "districts"
-
-
-def rings_of(geom):
-    t, c = geom["type"], geom["coordinates"]
-    if t == "Polygon":
-        yield c[0]
-    elif t == "MultiPolygon":
-        for poly in c:
-            yield poly[0]
-
-
-def bbox_of(geom):
-    xs, ys = [], []
-    for ring in rings_of(geom):
-        for x, y in ring:
-            xs.append(x); ys.append(y)
-    return (min(xs), min(ys), max(xs), max(ys)) if xs else (0, 0, 0, 0)
-
-
-def centroid(geom):
-    xs = ys = n = 0
-    for ring in rings_of(geom):
-        for x, y in ring:
-            xs += x; ys += y; n += 1
-    return (xs / n, ys / n) if n else (None, None)
-
-
-def point_in_ring(x, y, ring):
-    inside = False
-    n = len(ring)
-    j = n - 1
-    for i in range(n):
-        xi, yi = ring[i]
-        xj, yj = ring[j]
-        if ((yi > y) != (yj > y)) and (x < (xj - xi) * (y - yi) / (yj - yi + 1e-15) + xi):
-            inside = not inside
-        j = i
-    return inside
-
-
-def point_in_geom(x, y, geom):
-    return any(point_in_ring(x, y, ring) for ring in rings_of(geom))
 
 
 def state_file(name):

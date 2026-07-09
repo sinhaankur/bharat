@@ -23,6 +23,8 @@ import json
 import os
 import sys
 
+from geo_utils import bbox_of, centroid, point_in_geom, rdp
+
 STATES_GEOJSON = "india-states.geojson"
 OUT_DIR = "subdistricts"
 DEFAULT_SRC = "/tmp/ind_adm3.geojson"
@@ -32,46 +34,6 @@ ATTRIB = ("geoBoundaries gbOpen IND ADM3 (ODbL 1.0); source: Local Government "
 
 SIMPLIFY_TOL = 0.004   # ~450 m — plenty for a web choropleth; shrinks files ~20x
 COORD_PREC = 4          # decimal places (~11 m) — round to shrink further
-
-
-def rings_of(geom):
-    """Yield outer rings for Polygon/MultiPolygon."""
-    t, c = geom["type"], geom["coordinates"]
-    if t == "Polygon":
-        yield c[0]
-    elif t == "MultiPolygon":
-        for poly in c:
-            yield poly[0]
-
-
-def _rdp(points, tol):
-    """Ramer–Douglas–Peucker simplification — ITERATIVE (rings can have 1000s of
-    points; recursion would blow the stack)."""
-    n = len(points)
-    if n < 3:
-        return points
-    keep = [False] * n
-    keep[0] = keep[n - 1] = True
-    stack = [(0, n - 1)]
-    while stack:
-        a, b = stack.pop()
-        if b <= a + 1:
-            continue
-        x0, y0 = points[a]
-        x1, y1 = points[b]
-        dx, dy = x1 - x0, y1 - y0
-        denom = (dx * dx + dy * dy) ** 0.5 or 1e-15
-        dmax, idx = 0.0, a
-        for i in range(a + 1, b):
-            px, py = points[i]
-            d = abs(dy * px - dx * py + x1 * y0 - y1 * x0) / denom
-            if d > dmax:
-                dmax, idx = d, i
-        if dmax > tol:
-            keep[idx] = True
-            stack.append((a, idx))
-            stack.append((idx, b))
-    return [points[i] for i in range(n) if keep[i]]
 
 
 def _round_ring(ring):
@@ -89,7 +51,7 @@ def _simplify_ring(ring):
     # the polygon instead of the (degenerate) seam, so it can't collapse to nothing.
     k = min(range(len(open_ring)), key=lambda i: open_ring[i][0])
     rot = open_ring[k:] + open_ring[:k]
-    s = _rdp(rot, SIMPLIFY_TOL)
+    s = rdp(rot, SIMPLIFY_TOL)
     if len(s) < 3:
         s = rot  # too small to simplify safely — keep as-is
     s = _round_ring(s)
@@ -116,43 +78,6 @@ def simplify_geom(geom):
         polys = [p for p in (do_poly(poly) for poly in c) if p]
         return {"type": "MultiPolygon", "coordinates": polys} if polys else None
     return geom
-
-
-def bbox_of(geom):
-    xs, ys = [], []
-    for ring in rings_of(geom):
-        for x, y in ring:
-            xs.append(x); ys.append(y)
-    return (min(xs), min(ys), max(xs), max(ys)) if xs else (0, 0, 0, 0)
-
-
-def centroid(geom):
-    xs = ys = n = 0
-    for ring in rings_of(geom):
-        for x, y in ring:
-            xs += x; ys += y; n += 1
-    return (xs / n, ys / n) if n else (None, None)
-
-
-def point_in_ring(x, y, ring):
-    """Ray-casting point-in-polygon for a single ring."""
-    inside = False
-    n = len(ring)
-    j = n - 1
-    for i in range(n):
-        xi, yi = ring[i]
-        xj, yj = ring[j]
-        if ((yi > y) != (yj > y)) and (x < (xj - xi) * (y - yi) / (yj - yi + 1e-15) + xi):
-            inside = not inside
-        j = i
-    return inside
-
-
-def point_in_geom(x, y, geom):
-    for ring in rings_of(geom):
-        if point_in_ring(x, y, ring):
-            return True
-    return False
 
 
 def main():

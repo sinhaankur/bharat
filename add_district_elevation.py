@@ -27,33 +27,14 @@ import sys
 import time
 import urllib.request
 
+from geo_utils import centroid   # shared: outer-ring vertex-average centroid
+
 LEDGER = "district-ledger.json"
 DISTRICTS_GLOB = "districts/*.geojson"
 ELEV_API = "https://api.open-elevation.com/api/v1/lookup"
 ELEV_SRC = "https://open-elevation.com/"  # open SRTM-derived DEM
 BATCH = 100          # points per POST
 TIMEOUT = 30
-
-
-def coords_iter(geom):
-    t = geom["type"]
-    c = geom["coordinates"]
-    if t == "Polygon":
-        for ring in c:
-            yield from ring
-    elif t == "MultiPolygon":
-        for poly in c:
-            for ring in poly:
-                yield from ring
-
-
-def centroid(geom):
-    xs = ys = n = 0
-    for x, y in coords_iter(geom):
-        xs += x
-        ys += y
-        n += 1
-    return (xs / n, ys / n) if n else (None, None)
 
 
 def elevation_band(m):

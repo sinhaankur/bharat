@@ -16,3 +16,4 @@ curation-export.json
 # Social auto-poster local state + secrets — NEVER commit keys.
 .social_posted.json
 .env
+__pycache__/
