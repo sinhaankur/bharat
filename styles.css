@@ -471,6 +471,16 @@ a:hover { border-color: var(--foreground); }
   backdrop-filter: blur(4px); box-shadow: 0 2px 8px oklch(0 0 0 / 0.4);
 }
 .map-home-btn:hover { border-color: var(--warm); color: oklch(0.86 0.15 78); }
+/* Deep-zoom honesty note — bottom-centre when past the source's real resolution */
+.deep-zoom-note {
+  position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+  z-index: 500; display: none; pointer-events: none;
+  background: oklch(0.16 0.03 60 / 0.92); color: oklch(0.86 0.11 78);
+  border: 1px solid oklch(0.5 0.12 70 / 0.6); border-radius: 999px;
+  padding: 4px 12px; font-family: var(--font-mono); font-size: 10px;
+  backdrop-filter: blur(4px); max-width: 90vw; text-align: center;
+}
+
 /* On-map search — jump to a place to view its topography/vulnerability */
 #map-search {
   position: absolute; top: 12px; left: 50%; transform: translateX(-50%);

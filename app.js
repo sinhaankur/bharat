@@ -1945,13 +1945,16 @@
     let lastFade = zoomFade();
     map.on('zoomend', () => {
       const f = zoomFade();
-      if (f === lastFade) return;
-      lastFade = f;
-      // restyle in place (Leaflet re-runs the style fn per feature) — no re-fit,
-      // so the user's zoom is preserved while the fill fades.
-      if (districtLayer && districtLayer.options.style) districtLayer.setStyle(districtLayer.options.style);
-      else if (geoLayer) geoLayer.eachLayer(l => l.setStyle(fillStyle(l.feature.properties.ST_NM)));
+      if (f !== lastFade) {
+        lastFade = f;
+        // restyle in place (Leaflet re-runs the style fn per feature) — no re-fit,
+        // so the user's zoom is preserved while the fill fades.
+        if (districtLayer && districtLayer.options.style) districtLayer.setStyle(districtLayer.options.style);
+        else if (geoLayer) geoLayer.eachLayer(l => l.setStyle(fillStyle(l.feature.properties.ST_NM)));
+      }
+      updateDeepZoomNote();
     });
+    updateDeepZoomNote();
 
     buildNewsBubbles();
   }
@@ -2050,6 +2053,7 @@
     // labels + hillshade sit above the basemap — re-raise if on
     if (map.hasLayer(mapLayers.labels)) mapLayers.labels.bringToFront();
     if (map.hasLayer(mapLayers.hillshade)) mapLayers.hillshade.bringToFront();
+    updateDeepZoomNote();   // native-max differs per basemap
   }
   function toggleOverlay(which, on) {
     const layer = mapLayers[which];
@@ -2346,6 +2350,27 @@
       if (wrap) {
         wrap.innerHTML = `<div style="padding:2rem;color:var(--muted-foreground);font-family:var(--font-mono);font-size:12px"><strong style="color:var(--foreground)">Bootstrap failed.</strong><br/><br/><code style="display:block;background:oklch(0.18 0 0);padding:0.5rem;border-radius:4px;color:oklch(0.7 0.18 30)">${esc(err.message)}</code><br/>If you're opening the HTML file directly (file://), serve it over HTTP instead:<br/><code>python3 -m http.server 8000</code></div>`;
       }
+    }
+  }
+
+  // Deep-zoom note: when zoomed past the active basemap's real resolution, tiles are
+  // upscaled — tell the user honestly (open data caps at ~30 m; finer needs LIDAR,
+  // which India doesn't publish openly + high-res is restricted by the 2021 rules).
+  function updateDeepZoomNote() {
+    if (!map || !mapLayers) return;
+    let el = document.getElementById('deep-zoom-note');
+    const active = mapLayers.basemaps[mapLayers.current];
+    const native = active?.options?.maxNativeZoom ?? 19;
+    const past = map.getZoom() > native;
+    if (past && !el) {
+      el = document.createElement('div');
+      el.id = 'deep-zoom-note';
+      el.className = 'deep-zoom-note';
+      document.getElementById('india-map-wrap')?.appendChild(el);
+    }
+    if (el) {
+      el.style.display = past ? 'block' : 'none';
+      if (past) el.innerHTML = `ⓘ max open detail (${mapLayers.current}) — image upscaled; finer needs LIDAR (not openly available for India)`;
     }
   }
 

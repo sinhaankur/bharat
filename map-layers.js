@@ -13,18 +13,21 @@
 
   // Switchable basemaps (name → Leaflet tileLayer). 'Dark map' is the default.
   function basemaps(L) {
+    // maxZoom lets the map keep zooming; maxNativeZoom = the source's real ceiling.
+    // Past native zoom Leaflet UPSCALES the last sharp tile instead of showing blanks
+    // — "as deep as allowed" without pretending to resolution that isn't there.
     return {
       'Dark map': L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
-        subdomains: 'abcd', attribution: '&copy; OSM, &copy; CARTO', maxZoom: 20,
+        subdomains: 'abcd', attribution: '&copy; OSM, &copy; CARTO', maxZoom: 19, maxNativeZoom: 19,
       }),
       'Satellite': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Imagery &copy; Esri, Maxar, Earthstar Geographics', maxZoom: 19,
+        attribution: 'Imagery &copy; Esri, Maxar, Earthstar Geographics', maxZoom: 19, maxNativeZoom: 19,
       }),
       'Terrain': L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-        subdomains: 'abc', attribution: 'Map data: &copy; OpenTopoMap (CC-BY-SA), SRTM', maxZoom: 17,
+        subdomains: 'abc', attribution: 'Map data: &copy; OpenTopoMap (CC-BY-SA), SRTM', maxZoom: 19, maxNativeZoom: 17,
       }),
       'Recent satellite (Sentinel-2)': L.tileLayer('https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2020_3857/default/g/{z}/{y}/{x}.jpg', {
-        attribution: 'Sentinel-2 cloudless &copy; EOX / ESA Copernicus (open)', maxZoom: 16,
+        attribution: 'Sentinel-2 cloudless &copy; EOX / ESA Copernicus (open, ~10 m)', maxZoom: 19, maxNativeZoom: 16,
       }),
     };
   }
@@ -32,14 +35,14 @@
   // Place-labels overlay (keeps names legible on imagery basemaps).
   function labels(L) {
     return L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png', {
-      subdomains: 'abcd', attribution: '', maxZoom: 20, opacity: 0.9,
+      subdomains: 'abcd', attribution: '', maxZoom: 19, maxNativeZoom: 19, opacity: 0.9,
     });
   }
 
   // Hillshade relief (open 30 m DEM — SRTM/CartoDEM class; NOT LIDAR).
   function hillshade(L) {
     return L.tileLayer('https://services.arcgisonline.com/arcgis/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Hillshade &copy; Esri, USGS, NASA SRTM (open 30 m DEM)', maxZoom: 16, opacity: 0.55,
+      attribution: 'Hillshade &copy; Esri, USGS, NASA SRTM (open 30 m DEM)', maxZoom: 19, maxNativeZoom: 15, opacity: 0.55,
     });
   }
 
