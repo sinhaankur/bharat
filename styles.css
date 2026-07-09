@@ -471,6 +471,39 @@ a:hover { border-color: var(--foreground); }
   backdrop-filter: blur(4px); box-shadow: 0 2px 8px oklch(0 0 0 / 0.4);
 }
 .map-home-btn:hover { border-color: var(--warm); color: oklch(0.86 0.15 78); }
+/* On-map search — jump to a place to view its topography/vulnerability */
+#map-search {
+  position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+  z-index: 650; width: min(420px, 60vw);
+}
+#map-search-input {
+  width: 100%; box-sizing: border-box;
+  background: oklch(0.15 0.005 240 / 0.94); color: var(--foreground);
+  border: 1px solid var(--border-strong); border-radius: 999px;
+  padding: 8px 15px; font-size: 12.5px; backdrop-filter: blur(6px);
+  box-shadow: 0 3px 14px oklch(0 0 0 / 0.4);
+}
+#map-search-input:focus { outline: none; border-color: var(--warm); }
+#map-search-input::placeholder { color: var(--muted-foreground); }
+#map-search-results {
+  margin-top: 5px; background: oklch(0.14 0.005 240 / 0.97); backdrop-filter: blur(8px);
+  border: 1px solid var(--border-strong); border-radius: 10px; overflow: hidden;
+  max-height: 46vh; overflow-y: auto; box-shadow: 0 6px 22px oklch(0 0 0 / 0.5);
+}
+.msr-item {
+  display: flex; align-items: baseline; gap: 8px; padding: 7px 13px; cursor: pointer;
+  border-bottom: 1px solid var(--border); font-size: 12.5px;
+}
+.msr-item:last-child { border-bottom: none; }
+.msr-item:hover, .msr-item.sel { background: oklch(0.2 0.02 250); }
+.msr-kind { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.05em; text-transform: uppercase; padding: 1px 6px; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
+.msr-kind.k-state { color: oklch(0.80 0.14 285); } .msr-kind.k-district { color: oklch(0.82 0.15 78); }
+.msr-name { color: var(--foreground); font-weight: 600; }
+.msr-ctx { color: var(--muted-foreground); font-family: var(--font-mono); font-size: 10px; margin-left: auto; }
+.msr-vuln { font-family: var(--font-mono); font-size: 9px; }
+.msr-empty { padding: 10px 13px; color: var(--muted-foreground); font-size: 12px; }
+@media (max-width: 640px) { #map-search { width: 74vw; top: 8px; } }
+
 /* Expand-map (immersive) toggle — top-right of the map */
 #map-expand-btn {
   position: absolute; top: 12px; right: 12px; z-index: 600;

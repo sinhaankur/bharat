@@ -2337,6 +2337,7 @@
       wireControls();
       buildMap();
       setupMapExpand();
+      setupMapSearch();
       repaint();
       await applyDeepLink();
     } catch (err) {
@@ -2346,6 +2347,71 @@
         wrap.innerHTML = `<div style="padding:2rem;color:var(--muted-foreground);font-family:var(--font-mono);font-size:12px"><strong style="color:var(--foreground)">Bootstrap failed.</strong><br/><br/><code style="display:block;background:oklch(0.18 0 0);padding:0.5rem;border-radius:4px;color:oklch(0.7 0.18 30)">${esc(err.message)}</code><br/>If you're opening the HTML file directly (file://), serve it over HTTP instead:<br/><code>python3 -m http.server 8000</code></div>`;
       }
     }
+  }
+
+  // ---- On-map search: type a district/state/place → jump there to view its
+  // topography + vulnerability. Reuses selectState/drillIntoDistricts/selectDistrict.
+  function setupMapSearch() {
+    const input = document.getElementById('map-search-input');
+    const box = document.getElementById('map-search-results');
+    if (!input || !box || !LEDGER?.states) return;
+
+    // lightweight index: every state + district, with its state for jump-to.
+    const IDX = [];
+    for (const [sn, sd] of Object.entries(LEDGER.states)) {
+      IDX.push({ kind: 'state', name: sn, ctx: `${Object.keys(sd.districts || {}).length} districts`, state: sn });
+      for (const dn of Object.keys(sd.districts || {}))
+        IDX.push({ kind: 'district', name: dn, ctx: sn, state: sn, district: dn });
+    }
+    let hits = [], sel = -1;
+
+    function vulnChip(item) {
+      const g = LEDGER.states[item.state]?.districts?.[item.district]?.dimensions?.geography;
+      if (!g || typeof Vuln === 'undefined') return '';
+      const c = Vuln.signals(g).count;
+      return c ? ` <span class="msr-vuln" style="color:${Vuln.color(c)}">⚠${c}</span>` : '';
+    }
+    function render() {
+      if (!hits.length) { box.hidden = false; box.innerHTML = `<div class="msr-empty">No match — try a district or state name.</div>`; return; }
+      box.hidden = false;
+      box.innerHTML = hits.map((h, i) => `
+        <div class="msr-item ${i === sel ? 'sel' : ''}" data-i="${i}">
+          <span class="msr-kind k-${h.kind}">${h.kind}</span>
+          <span class="msr-name">${esc(h.name)}</span>${h.kind === 'district' ? vulnChip(h) : ''}
+          <span class="msr-ctx">${esc(h.ctx)}</span>
+        </div>`).join('');
+      box.querySelectorAll('.msr-item').forEach(el => el.onclick = () => pick(hits[+el.dataset.i]));
+    }
+    async function pick(h) {
+      box.hidden = true; input.value = h.name; sel = -1;
+      // switch to the flood/terrain atlas so the user sees topography on arrival
+      ui.state.districtMode = 'geography';
+      if (!ui.state.geoFacet) ui.state.geoFacet = 'vulnerability';
+      selectState(h.state, true);
+      if (h.district) { await drillIntoDistricts(h.state); selectDistrict(h.district, h.state); }
+      restyleActiveLayer();
+      renderLayersPanel();
+    }
+    function search(t) {
+      t = t.trim().toLowerCase();
+      if (!t) { box.hidden = true; hits = []; return; }
+      // districts first (more specific), then states; prefix matches rank higher
+      hits = IDX.filter(x => x.name.toLowerCase().includes(t) || x.ctx.toLowerCase().includes(t))
+        .sort((a, b) => {
+          const ap = a.name.toLowerCase().startsWith(t) ? 0 : 1, bp = b.name.toLowerCase().startsWith(t) ? 0 : 1;
+          if (ap !== bp) return ap - bp;
+          return (a.kind === 'district' ? 0 : 1) - (b.kind === 'district' ? 0 : 1);
+        }).slice(0, 25);
+      sel = -1; render();
+    }
+    input.addEventListener('input', () => search(input.value));
+    input.addEventListener('keydown', e => {
+      if (e.key === 'ArrowDown') { sel = Math.min(sel + 1, hits.length - 1); render(); e.preventDefault(); }
+      else if (e.key === 'ArrowUp') { sel = Math.max(sel - 1, 0); render(); e.preventDefault(); }
+      else if (e.key === 'Enter' && hits[sel < 0 ? 0 : sel]) { pick(hits[sel < 0 ? 0 : sel]); }
+      else if (e.key === 'Escape') { box.hidden = true; input.blur(); }
+    });
+    document.addEventListener('click', e => { if (!e.target.closest('#map-search')) box.hidden = true; });
   }
 
   // "India in pixels" — expand the map to near-full-width (collapse the side panel).
