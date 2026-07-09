@@ -198,8 +198,56 @@
       rain:    { label: "By rainfall band (IMD)", metric: r => ({ "very-high": 5, "high": 4, "moderate-to-high": 3.5, "moderate": 3, "semiarid-to-moderate": 2.5, "semiarid": 2, "arid-to-semiarid": 1.5, "arid": 1 }[r.rainBand] || 0), unit: "", dir: -1, note: "State IMD climate band (precise district mm is on the IMD portal — a gap).", tag: r => r.rainBand || "—" },
     };
 
+    // The deeply-sourced water-body-loss / encroachment hotspots (pinned, cited).
+    function geoHotspots() {
+      const out = [];
+      for (const [sn, s] of Object.entries(LED.states || {}))
+        for (const [dn, dist] of Object.entries(s.districts || {})) {
+          const g = dist.dimensions?.geography;
+          const tl = g?.timeline, enc = g?.encroachment;
+          if (tl?.subject && (tl.points || []).length) {
+            out.push({ sn, dn, subject: tl.subject, range: tl.range_note,
+              cases: (enc?.cases || []).length,
+              href: `index.html?state=${encodeURIComponent(sn)}&district=${encodeURIComponent(dn)}` });
+          }
+        }
+      return out;
+    }
+
+    function renderGeoHotspots(p) {
+      const hs = geoHotspots();
+      const chips = geoChipsHTML("hotspots");
+      const cards = hs.map(h => `
+        <div class="rank-row" style="align-items:flex-start;padding:0.7rem 0.2rem">
+          <span class="rank-n">📍</span>
+          <span style="flex:1">
+            <a href="${h.href}" style="font-weight:600;color:var(--foreground);text-decoration:none">${esc(h.dn)}</a>
+            <span class="rank-ctx"> · ${esc(h.sn)}${h.cases ? ` · <span class="flag">${h.cases} NGT/court case${h.cases > 1 ? "s" : ""}</span>` : ""}</span>
+            <div style="font-size:0.85rem;color:var(--muted-foreground);line-height:1.5;margin-top:2px">${esc(h.subject)}</div>
+            ${h.range ? `<div style="font-family:var(--font-mono);font-size:9.5px;color:var(--muted-foreground);opacity:0.85;margin-top:3px">${esc(h.range)}</div>` : ""}
+          </span>
+        </div>`).join("");
+      p.innerHTML = `
+        <div class="chips">${chips}</div>
+        <div class="ex-section-label">Water-body loss &amp; encroachment hotspots — ${hs.length} documented</div>
+        ${cards}
+        <p class="ex-note">Each is pinned to published figures + specific NGT/court/CAG orders (the change-over-time timeline &amp; cases live on the district page). These are the rain→encroachment→flood stories; the other ${594 - hs.length} districts stay honest gaps rather than fabricated. Watch live rain over them with the map's <a href="index.html" style="color:oklch(0.74 0.16 75)">rain radar</a>.</p>`;
+      wireGeoChips(p);
+    }
+
+    function geoChipsHTML(active) {
+      const items = [["hotspots", "💧 Water-body loss"], ...Object.entries(GEO_VIEWS).map(([k, v]) => [k, v.label])];
+      return items.map(([k, lbl]) => `<a class="chip ${k === active ? "on" : ""}" data-geo="${k}">${esc(lbl)}</a>`).join("");
+    }
+    function wireGeoChips(p) {
+      p.querySelectorAll(".chip[data-geo]").forEach(c => c.addEventListener("click", () => {
+        window.__geoView = c.dataset.geo; renderGeography(document.getElementById("panel"));
+      }));
+    }
+
     function renderGeography(p) {
-      const view = window.__geoView || "highest";
+      const view = window.__geoView || "hotspots";
+      if (view === "hotspots") return renderGeoHotspots(p);
       const V = GEO_VIEWS[view];
       let rows = geoRows().filter(r => V.metric(r) != null);
       if (V.filter) rows = rows.filter(V.filter);
@@ -208,8 +256,7 @@
       const top = rows.slice(0, 40);
       const max = Math.max(...top.map(r => Math.abs(V.metric(r))), 1);
 
-      const chips = Object.entries(GEO_VIEWS).map(([k, v]) =>
-        `<a class="chip ${k === view ? "on" : ""}" data-geo="${k}">${esc(v.label)}</a>`).join("");
+      const chips = geoChipsHTML(view);
 
       const showVal = r => {
         if (V.unit === "m") return `${Math.round(V.metric(r)).toLocaleString("en-IN")} m`;
@@ -232,9 +279,7 @@
         ${rowsHtml || `<p class="ex-empty">No data for this view.</p>`}
         <p class="ex-note">${esc(V.note)} Elevation is real per-district (open SRTM); coastal &amp; flood are district-precise; rainfall band is state-level (district mm = gap). Click a district to open its full page. See the <a href="terrain-3d.html" style="color:oklch(0.74 0.16 75)">3D relief</a> and the map's <a href="index.html" style="color:oklch(0.74 0.16 75)">Flood &amp; coast</a> layer.</p>`;
 
-      p.querySelectorAll(".chip[data-geo]").forEach(c => c.addEventListener("click", () => {
-        window.__geoView = c.dataset.geo; renderGeography(p);
-      }));
+      wireGeoChips(p);
     }
 
     function renderRank(p) {
