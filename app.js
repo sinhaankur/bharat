@@ -195,13 +195,27 @@
                       (mapLayers.elevTint && map.hasLayer(mapLayers.elevTint));
     return baseTerrain || overlayOn;
   }
-  // Fill opacity + border for choropleth, adapting to whether terrain shows beneath.
-  // Over terrain we go MUCH lighter (~0.25) + brighter borders so the relief reads
-  // clearly through the data colour instead of being muddied by it.
+  // As the user zooms IN, fade the data-colour choropleth away so the land/terrain
+  // ("India in pixels") shows through. Full colour at country/state scale (z≤6),
+  // fully transparent fill by z≥10 — borders stay so districts remain legible.
+  function zoomFade() {
+    const z = map ? map.getZoom() : 4;
+    if (z <= 6) return 1;
+    if (z >= 10) return 0;
+    return (10 - z) / 4;                 // linear 1→0 across z6–z10
+  }
+
+  // Fill opacity + border for choropleth, adapting to terrain-beneath AND zoom.
+  // Over terrain we go lighter; as you zoom in the fill fades out entirely.
   function choroStyle(baseFill, baseBorder) {
-    return terrainActive()
-      ? { fillOpacity: Math.min(0.28, baseFill * 0.3), borderColor: 'oklch(0.99 0 0 / 0.9)', borderWeight: 1.2 }
-      : { fillOpacity: baseFill, borderColor: baseBorder, borderWeight: 0.6 };
+    const fade = zoomFade();
+    const terr = terrainActive();
+    const fill = terr ? Math.min(0.28, baseFill * 0.3) : baseFill;
+    return {
+      fillOpacity: fill * fade,
+      borderColor: (terr || fade < 1) ? 'oklch(0.99 0 0 / 0.9)' : baseBorder,
+      borderWeight: (terr || fade < 1) ? 1.2 : 0.6,
+    };
   }
 
   function fillStyle(name) {
@@ -558,7 +572,7 @@
     const showMoney = ui.state.districtMode === 'money' && moneyVals.length > 0;
 
     // Scale district fill opacity down (and brighten borders) when terrain shows through.
-    const fo = base => terrainActive() ? Math.min(0.32, base * 0.35) : base;
+    const fo = base => (terrainActive() ? Math.min(0.32, base * 0.35) : base) * zoomFade();
     const bc = base => terrainActive() ? 'oklch(0.99 0 0 / 0.75)' : base;
     districtLayer = L.geoJSON(geo, {
       style: f => {
@@ -1871,6 +1885,19 @@
       }
     });
     map.addControl(new HomeCtl());
+
+    // Fade the data choropleth in/out as the user zooms (see zoomFade). Restyle the
+    // active layer on zoom so the land shows through at deep zoom.
+    let lastFade = zoomFade();
+    map.on('zoomend', () => {
+      const f = zoomFade();
+      if (f === lastFade) return;
+      lastFade = f;
+      // restyle in place (Leaflet re-runs the style fn per feature) — no re-fit,
+      // so the user's zoom is preserved while the fill fades.
+      if (districtLayer && districtLayer.options.style) districtLayer.setStyle(districtLayer.options.style);
+      else if (geoLayer) geoLayer.eachLayer(l => l.setStyle(fillStyle(l.feature.properties.ST_NM)));
+    });
 
     buildNewsBubbles();
   }
