@@ -64,6 +64,7 @@
     </p>
   </main>
 
+  <script src="dem.js"></script>
   <script src="site-nav.js"></script>
   <script type="importmap">
     { "imports": {
@@ -81,22 +82,9 @@
     const TILE = 256;
     const status = document.getElementById('t3-status');
 
-    // Elevation colour ramp (metres). Blue→green→tan→brown→white.
-    const RAMP = [
-      [0,   [0.20, 0.35, 0.55]], [200, [0.25, 0.55, 0.40]], [600, [0.45, 0.62, 0.32]],
-      [1200,[0.72, 0.66, 0.40]], [2500,[0.60, 0.45, 0.32]], [4000,[0.80, 0.78, 0.75]],
-      [6000,[1.00, 1.00, 1.00]],
-    ];
-    function rampColor(m) {
-      for (let i = 1; i < RAMP.length; i++) {
-        if (m <= RAMP[i][0]) {
-          const [m0, c0] = RAMP[i - 1], [m1, c1] = RAMP[i];
-          const t = (m - m0) / (m1 - m0 || 1);
-          return c0.map((c, k) => c + (c1[k] - c) * t);
-        }
-      }
-      return RAMP[RAMP.length - 1][1];
-    }
+    // Elevation colour ramp + Terrarium decode: shared from dem.js (window.DEM),
+    // so the 3-D relief matches the 2-D map tint exactly. rampUnit → 0-1 for three.js.
+    const rampColor = m => window.DEM.rampUnit(m);
 
     function lon2tile(lon, z) { return (lon + 180) / 360 * Math.pow(2, z); }
     function lat2tile(lat, z) {
@@ -120,7 +108,7 @@
           const img = new Image(); img.crossOrigin = 'anonymous';
           img.onload = () => { ctx.drawImage(img, gx * TILE, gy * TILE); done++; status.textContent = `Loading elevation tiles… ${done}/${total}`; res(); };
           img.onerror = () => { done++; res(); };
-          img.src = `https://s3.amazonaws.com/elevation-tiles-prod/terrarium/${ZOOM}/${tx0 + gx}/${ty0 + gy}.png`;
+          img.src = window.DEM.tileUrl(ZOOM, tx0 + gx, ty0 + gy);
         });
       }));
 
@@ -132,8 +120,7 @@
       for (let y = 0; y < GH; y++) for (let x = 0; x < GW; x++) {
         const sx = Math.floor(x / GW * W), sy = Math.floor(y / GH * H);
         const p = (sy * W + sx) * 4;
-        // Terrarium decode: elev = (R*256 + G + B/256) - 32768
-        const m = (data[p] * 256 + data[p + 1] + data[p + 2] / 256) - 32768;
+        const m = window.DEM.decode(data[p], data[p + 1], data[p + 2]);   // shared decode
         const v = (m < -500 || m > 9000) ? 0 : m;   // clamp ocean/noise
         elev[y * GW + x] = v;
         if (v < min) min = v; if (v > max) max = v;

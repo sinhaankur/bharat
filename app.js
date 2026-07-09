@@ -1930,21 +1930,8 @@
     return mins <= 1 ? 'updated just now' : `updated ${mins} min ago`;
   }
 
-  // Elevation colour ramp (metres → rgb): blue lowland → green → tan → brown → white.
-  const ELEV_RAMP = [
-    [-50, [40, 60, 95]], [0, [50, 90, 130]], [200, [70, 130, 95]], [600, [120, 150, 80]],
-    [1200, [175, 160, 100]], [2500, [150, 115, 80]], [4000, [200, 195, 185]], [6000, [255, 255, 255]],
-  ];
-  function elevRampRGB(m) {
-    for (let i = 1; i < ELEV_RAMP.length; i++) {
-      if (m <= ELEV_RAMP[i][0]) {
-        const [m0, c0] = ELEV_RAMP[i - 1], [m1, c1] = ELEV_RAMP[i];
-        const t = (m - m0) / (m1 - m0 || 1);
-        return c0.map((c, k) => Math.round(c + (c1[k] - c) * t));
-      }
-    }
-    return [255, 255, 255];
-  }
+  // Elevation ramp + Terrarium decode live in dem.js (shared with terrain-3d.html).
+  const elevRampRGB = m => DEM.rampRGB(m);
 
   // Custom GridLayer: decode open Terrarium terrain-RGB → coloured elevation tint.
   function buildElevationTintLayer() {
@@ -1968,7 +1955,7 @@
           const out = ctx.createImageData(256, 256);
           const s = src.data, o = out.data;
           for (let i = 0; i < s.length; i += 4) {
-            const m = (s[i] * 256 + s[i + 1] + s[i + 2] / 256) - 32768;
+            const m = DEM.decode(s[i], s[i + 1], s[i + 2]);
             // Only tint LAND (above sea level). Ocean/bathymetry/nodata → transparent,
             // so the tint doesn't wash the seas green (fixes the global-view murk).
             if (m <= 2 || m > 9000) { o[i + 3] = 0; continue; }
@@ -1981,7 +1968,7 @@
         };
         img.onerror = () => doneCb(null, tile);
         const z = coords.z, x = coords.x, y = coords.y;
-        img.src = `https://s3.amazonaws.com/elevation-tiles-prod/terrarium/${z}/${x}/${y}.png`;
+        img.src = DEM.tileUrl(z, x, y);
         return tile;
       }
     });
