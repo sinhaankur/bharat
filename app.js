@@ -218,7 +218,61 @@
     };
   }
 
+  // Aggregate a state's geography to a single colour for the India-wide view, so the
+  // flood/terrain/vulnerability atlas is visible on first load (no drill needed).
+  // Uses the worst/dominant district signal per state (honest: it's a state summary).
+  function stateGeoColor(stateName, facet) {
+    const sd = LEDGER?.states?.[stateName];
+    if (!sd) return null;
+    const dists = Object.values(sd.districts || {});
+    const geos = dists.map(d => d.dimensions?.geography).filter(Boolean);
+    if (!geos.length) {
+      // fall back to the state-level geography block if districts lack dimensions
+      const g = sd.geography;
+      if (!g) return null;
+      if (facet === 'flood') return geoFacetColor({ flood_level: g.flood_prone ? 'state-flood-prone' : 'not-flagged' }, 'flood');
+      if (facet === 'coastal') return geoFacetColor({ on_coast: g.on_coast }, 'coastal');
+      return geoFacetColor(g, facet);
+    }
+    if (facet === 'vulnerability') {
+      const worst = Math.max(...geos.map(g => Vuln.signals(g).count));
+      return Vuln.color(worst);
+    }
+    if (facet === 'flood') {
+      const chronic = geos.some(g => g.flood_level === 'district-chronic');
+      const state = geos.some(g => g.flood_prone);
+      return geoFacetColor({ flood_level: chronic ? 'district-chronic' : state ? 'state-flood-prone' : 'not-flagged' }, 'flood');
+    }
+    if (facet === 'coastal') return geoFacetColor({ on_coast: geos.some(g => g.on_coast) }, 'coastal');
+    if (facet === 'elevation') {
+      const els = geos.map(g => g.elevation?.centroid_m).filter(m => typeof m === 'number');
+      const mean = els.length ? els.reduce((a, b) => a + b, 0) / els.length : null;
+      return geoFacetColor({ elevation: { centroid_m: mean } }, 'elevation');
+    }
+    if (facet === 'rainfall') return geoFacetColor(geos[0], 'rainfall');   // band is state-level
+    return geoFacetColor(geos[0], facet);
+  }
+
+  // Restyle whichever layer is active: the drilled district layer, else the India
+  // state layer. Used when the user changes the data mode / geography facet.
+  function restyleActiveLayer() {
+    if (ui.state.drillState) {
+      const geo = districtGeoCache.get(ui.state.drillState);
+      if (geo) renderDistrictLayer(geo, ui.state.drillState);
+    } else if (geoLayer) {
+      geoLayer.eachLayer(l => l.setStyle(fillStyle(l.feature.properties.ST_NM)));
+    }
+  }
+
   function fillStyle(name) {
+    // Geography atlas mode at the India level — colour states by flood/vulnerability/
+    // elevation/rainfall/coastal without drilling first.
+    if (ui.state.districtMode === 'geography') {
+      const facet = ui.state.geoFacet || 'vulnerability';
+      const fc = stateGeoColor(name, facet);
+      const cs = choroStyle(0.85, 'oklch(0.985 0 0 / 0.3)');
+      return { color: cs.borderColor, weight: cs.borderWeight, fillColor: fc || 'oklch(0.22 0 0)', fillOpacity: cs.fillOpacity, className: 'india-state-path' };
+    }
     const view = VIEWS[ui.state.view];
     const r = rowFor(name, ui.state.yearIdx);
     if (!r) return { color: 'oklch(0.985 0 0 / 0.18)', weight: 0.5, fillColor: 'oklch(0.22 0 0)', fillOpacity: terrainActive() ? 0.15 : 0.55, className: 'india-state-path no-data' };
@@ -2014,12 +2068,14 @@
     renderLayersPanel();
   }
 
-  // Data overlays available depend on whether we've drilled into a state's districts.
+  // Data overlays. Geography (flood/vulnerability/terrain) works at BOTH the India
+  // level (per-state summary) and drilled-in (per-district) — so the flood atlas is
+  // discoverable on first load. Money/population/language/politics need a state drill.
   function dataOverlayModes() {
     const inDistricts = ui.state.drillState != null;
-    const base = [['population', 'Population'], ['money', 'Money flow']];
-    const dims = [['language', 'Language'], ['politics', 'Politics'], ['geography', 'Flood & coast']];
-    return inDistricts ? [...base, ...dims] : [];
+    const geo = [['geography', 'Flood & terrain']];
+    const drilled = [['population', 'Population'], ['money', 'Money flow'], ['language', 'Language'], ['politics', 'Politics']];
+    return inDistricts ? [...drilled, ...geo] : geo;
   }
 
   function renderLayersPanel() {
@@ -2086,15 +2142,14 @@
     // data mode
     panel.querySelectorAll('.mlp-data-btn').forEach(b => b.onclick = () => {
       ui.state.districtMode = b.dataset.mode;
-      const geo = districtGeoCache.get(ui.state.drillState);
-      if (geo) renderDistrictLayer(geo, ui.state.drillState);
+      if (b.dataset.mode === 'geography' && !ui.state.geoFacet) ui.state.geoFacet = 'vulnerability';
+      restyleActiveLayer();
       renderLayersPanel();
     });
     // geography facet chooser
     panel.querySelectorAll('.mlp-facet').forEach(b => b.onclick = () => {
       ui.state.geoFacet = b.dataset.facet;
-      const geo = districtGeoCache.get(ui.state.drillState);
-      if (geo) renderDistrictLayer(geo, ui.state.drillState);
+      restyleActiveLayer();
       renderLayersPanel();
     });
     panel.querySelector('#mlp-close').onclick = () => { ui.state.layersCollapsed = true; renderLayersPanel(); };
