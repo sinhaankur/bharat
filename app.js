@@ -1814,47 +1814,14 @@
       scrollWheelZoom: true,
     }).setView([22.5, 80], 4.5);
 
-    // ---- Basemaps: dark (default) + real landscape imagery, all free/attribution.
-    // The whole point of these is "zoom in and see the actual land" — imagery goes
-    // to sub-metre. Sentinel-2 is the closest to real-time that's redistributable
-    // (open ESA Copernicus); true live/today imagery is licensed and NOT used.
-    const basemaps = {
-      'Dark map': L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
-        subdomains: 'abcd', attribution: '&copy; OSM, &copy; CARTO', maxZoom: 20,
-      }),
-      'Satellite': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Imagery &copy; Esri, Maxar, Earthstar Geographics', maxZoom: 19,
-      }),
-      'Terrain': L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-        subdomains: 'abc', attribution: 'Map data: &copy; OpenTopoMap (CC-BY-SA), SRTM', maxZoom: 17,
-      }),
-      'Recent satellite (Sentinel-2)': L.tileLayer('https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2020_3857/default/g/{z}/{y}/{x}.jpg', {
-        attribution: 'Sentinel-2 cloudless &copy; EOX / ESA Copernicus (open)', maxZoom: 16,
-      }),
-    };
+    // Tile-layer catalogue lives in map-layers.js (window.MapLayers). app.js keeps
+    // the wiring (active layer, panel, weather refresh) + the custom elevation tint.
+    const basemaps = MapLayers.basemaps(L);
     basemaps['Dark map'].addTo(map);      // default
-    // Labels overlay to keep place-names on imagery basemaps
-    const labels = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png', {
-      subdomains: 'abcd', attribution: '', maxZoom: 20, opacity: 0.9,
-    });
-    // Topography overlays (open 30 m DEM — SRTM/CartoDEM class; NOT LIDAR, which
-    // has no open nationwide dataset for India). Hillshade = relief shading you can
-    // drape over any basemap so the terrain shape reads everywhere at once.
-    const hillshade = L.tileLayer('https://services.arcgisonline.com/arcgis/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Hillshade &copy; Esri, USGS, NASA SRTM (open 30 m DEM)', maxZoom: 16, opacity: 0.55,
-    });
-    // Elevation TINT: a coloured metres-above-sea-level ramp, decoded per-pixel from
-    // open Terrarium terrain-RGB tiles (SRTM/NASADEM). Leaflet can't recolour those
-    // tiles natively, so we subclass GridLayer, fetch each terrarium tile, decode
-    // elevation per pixel and paint the ramp onto a canvas. Semi-transparent so the
-    // basemap reads through. 30 m open DEM — not LIDAR (no open nationwide LIDAR).
-    const elevTint = buildElevationTintLayer();
-    // LIVE rain radar (RainViewer — free, keyless, global, updates ~every 10 min).
-    // Real "is it raining/flooding right now" — ties to the flood story (Pune/Mumbai
-    // in the monsoon). Placeholder layer; the timestamped source is set once we fetch
-    // the latest frame index from RainViewer's JSON (setupWeatherLayer).
-    const rain = L.tileLayer('', { opacity: 0.6, maxZoom: 19, attribution: 'Rain radar &copy; RainViewer (live)', pane: 'overlayPane' });
-    const clouds = L.tileLayer('', { opacity: 0.5, maxZoom: 19, attribution: 'Clouds (infrared) &copy; RainViewer', pane: 'overlayPane' });
+    const labels = MapLayers.labels(L);
+    const hillshade = MapLayers.hillshade(L);
+    const elevTint = buildElevationTintLayer();   // custom GridLayer (uses DEM decode)
+    const { rain, clouds } = MapLayers.weather(L);
     // Stash for the unified layers panel (replaces the default Leaflet controls).
     mapLayers = { basemaps, labels, hillshade, elevTint, rain, clouds, current: 'Dark map' };
     buildLayersPanel();
