@@ -89,6 +89,12 @@ NRSC_HYD = "https://sandrp.in/2026/02/17/hyderabad-lakes-2025-degradation-contin
 CAG_DAL = "https://kashmirobserver.net/2026/04/10/cag-flags-over-10-shrinkage-in-dal-lakes-open-water-area/"
 SANDRP_YAMUNA = "https://sandrp.in/2024/07/04/yamuna-manthan-040724-a-year-after-historic-floods-where-is-river-governance/"
 WIKI_DEEPOR = "https://testbook.com/articles/deepor-beel"
+QOC_AHMEDABAD = "https://questionofcities.org/flooded-realities-of-smart-city-ahmedabad/"
+SANDRP_PUNE = "https://sandrp.in/2024/08/30/flood-lines-riverfront-development-and-citizen-heroes-story-of-pune-floods/"
+HITAVADA_BHOJ = "https://www.thehitavada.com/Encyc/2026/4/30/ngt-warns-bmc-over-silent-stance-on-bhoj-wetland-encroachments.html"
+SANDRP_VADODARA = "https://sandrp.in/2024/09/16/drp-nb-160924-urban-flood-lessons-from-vadodara-vijaywada/"
+WIKI_VIJAYAWADA = "https://en.wikipedia.org/wiki/2024_Vijayawada_floods"
+NGT_GURUGRAM = "https://questionofcities.org/gurugram-navigating-the-waters-between-urban-planning-and-floods/"
 
 TIMELINE_PILOT = {
     # East Kolkata Wetlands — Ramsar site (12,500 ha designated). Documented ~36%
@@ -249,6 +255,117 @@ TIMELINE_PILOT = {
         ],
         "source": WIKI_DEEPOR,
     },
+    # Ahmedabad — Sabarmati floodplain reclaimed for the riverfront; blue cover ~2.2%.
+    ("Gujarat", "Ahmadabad"): {
+        "subject": "Sabarmati floodplain reclaimed + lakes lost — the riverfront "
+                   "narrowed the channel; the lower promenade itself floods each monsoon",
+        "range_note": "Ahmedabad's 'blue' (water-body) cover down to ~2.2% of area; "
+                      "Sabarmati riverfront reclaimed floodplain and channelised the "
+                      "river; Vasna barrage opened (27 gates, >1.2 lakh cusecs) "
+                      "submerged the riverfront in 2025.",
+        "points": [
+            {"year": 2005, "metric": "riverfront_started", "value": True,
+             "note": "Sabarmati Riverfront construction began — embankments +"
+                     " floodplain reclamation", "source": QOC_AHMEDABAD},
+            {"year": 2025, "metric": "flood_event", "value": True,
+             "note": "riverfront lower promenade submerged; blocked drains + lost "
+                     "lakes (~2.2% blue cover) worsen urban flooding", "source": QOC_AHMEDABAD},
+        ],
+        "source": QOC_AHMEDABAD,
+    },
+    # Pune — Mula-Mutha red-line 46% encroached; 2024 flood at HALF the design flow.
+    ("Maharashtra", "Pune"): {
+        "subject": "Mula-Mutha floodplain — 46% of the red-line zone encroached and "
+                   "the river channelised for the riverfront; 2024 flood came at half "
+                   "the design discharge",
+        "range_note": "PRDP DMP: 437 ha (46%) of the red-line area encroached; river "
+                      "capacity down >50%. 2024 flood at ~35,570 cusecs — below the "
+                      "60,000-cusec blue line — where 67,000 (2014) & 90,000 (1997) "
+                      "hadn't flooded. Bombay HC (26 Jun) ordered scientific floodlines.",
+        "points": [
+            {"year": 1997, "metric": "safe_discharge_cusecs", "value": 90000,
+             "note": "90,000 cusecs passed without significant flooding (1997)",
+             "source": SANDRP_PUNE},
+            {"year": 2024, "metric": "flood_event", "value": True,
+             "note": "flooded at only ~35,570 cusecs — encroachment + riverfront "
+                     "channelisation cut capacity >50%; NGT/Bombay-HC litigated",
+             "source": SANDRP_PUNE},
+        ],
+        "source": SANDRP_PUNE,
+    },
+    # Bhopal — Upper Lake (Bhoj Wetland, Ramsar) catchment eaten by construction.
+    ("Madhya Pradesh", "Bhopal"): {
+        "subject": "Bhoj Wetland (Upper Lake, Ramsar) — 11th-century lake supplying "
+                   "40% of Bhopal's water, its catchment choked by illegal construction",
+        "range_note": "Upper Lake ~36 km² (361 km² catchment), supplies 40% of the "
+                      "city's water to ~1.8M people; ~125 ha of catchment lost to "
+                      "construction. NGT ordered demolition within 50 m of the FTL "
+                      "(Bhoj Wetland Rules); drives razed encroachments 2026.",
+        "points": [
+            {"year": 2002, "metric": "ramsar_designated", "value": True,
+             "note": "Bhoj Wetland designated a Ramsar site (Nov 2002)",
+             "source": HITAVADA_BHOJ},
+            {"year": 2026, "metric": "encroachment_ha", "value": 125,
+             "note": "~125 ha of Upper Lake catchment lost to construction; NGT-"
+                     "ordered demolitions within the 50 m FTL zone", "source": HITAVADA_BHOJ},
+        ],
+        "source": HITAVADA_BHOJ,
+    },
+    # Vadodara — Vishwamitri floodplain built over; 2024 flood + crocodiles in streets.
+    ("Gujarat", "Vadodara"): {
+        "subject": "Vishwamitri floodplain built over — the 2024 flood put 440+ "
+                   "crocodiles' river into the streets; NGT directive (2021) unactioned",
+        "range_note": "IIT-Gn: 2024 flooding driven by development in flood-prone "
+                      "areas + clogged drainage; the Vishwamitri hosts 440+ crocodiles "
+                      "(24 rescued from homes). Activist NGT case since 2016; 2021 NGT "
+                      "directive on encroachment not acted on (per petitioner).",
+        "points": [
+            {"year": 2016, "metric": "ngt_case_filed", "value": True,
+             "note": "Paryavaran Suraksha Samiti took VMC to NGT over choked "
+                     "drains / floodplain (2016)", "source": SANDRP_VADODARA},
+            {"year": 2024, "metric": "flood_event", "value": True,
+             "note": "Aug–Sep 2024 flood; floodplain encroachment + Ajwa dam release "
+                     "put 24 crocodiles into residential areas", "source": SANDRP_VADODARA},
+        ],
+        "source": SANDRP_VADODARA,
+    },
+    # Vijayawada (Krishna district) — Budameru floodplain settled; 2024 deluge.
+    ("Andhra Pradesh", "Krishna"): {
+        "subject": "Budameru rivulet ('Sorrow of Vijayawada') — floodplain settled by "
+                   "lakhs since 2011; the 2024 deluge killed 35 and hit 2.7 lakh people",
+        "range_note": "Budameru peaked at 990 m³/s vs the 200 m³/s diversion-canal "
+                      "capacity; ~lakhs settled on flood banks 2011–2024; Prakasam "
+                      "barrage discharged a record 1.18M cusecs. 'Operation Budameru' "
+                      "launched to clear encroachments (state lacks encroachment data).",
+        "points": [
+            {"year": 2011, "metric": "settlement_started", "value": True,
+             "note": "large-scale settlement of Budameru flood banks/plains began "
+                     "(2011 onward)", "source": WIKI_VIJAYAWADA},
+            {"year": 2024, "metric": "flood_event", "value": True,
+             "note": "Sep 2024 Budameru flood — 35 dead, ~2.7 lakh affected; canal "
+                     "capacity 200 m³/s vs 990 m³/s inflow; encroached floodplain",
+             "source": WIKI_VIJAYAWADA},
+        ],
+        "source": WIKI_VIJAYAWADA,
+    },
+    # Gurugram — 640 water bodies (1956) → 251; Ghata lake 370 ac → ~2 ac; 'Gurujam'.
+    ("Haryana", "Gurgaon"): {
+        "subject": "Gurugram's vanished lakes & drains — 389 water bodies lost since "
+                   "1956; Ghata lake 370 ac → ~2 ac; the natural drainage that never "
+                   "flooded now floods every monsoon",
+        "range_note": "Admin study to NGT: 640 water bodies (1956) → 251 today (389 "
+                      "lost). Ghata lake ~370 ac (to early 2000s) → ~2 ac; Basai "
+                      "wetland ~25% of original by 2022; Badshahpur storm-drain "
+                      "encroached. No floods reported till 1998; 'Gurujam' from 2016.",
+        "points": [
+            {"year": 1956, "metric": "water_bodies", "value": 640,
+             "note": "640 water bodies recorded (1956)", "source": NGT_GURUGRAM},
+            {"year": 2024, "metric": "water_bodies", "value": 251,
+             "note": "251 remain — 389 lost; Ghata lake 370 ac → ~2 ac; encroached "
+                     "Badshahpur drain → recurring 'Gurujam' floods", "source": NGT_GURUGRAM},
+        ],
+        "source": NGT_GURUGRAM,
+    },
 }
 
 # ---------------------------------------------------------------------------
@@ -353,6 +470,68 @@ ENCROACHMENT_CASES = {
                    "(Metro) admin banned community fishing/excavation/construction. "
                    "Municipal dumping at Boragaon + railway-corridor tree-felling.",
          "year": 2026, "status": "ESZ directed; activity banned", "source": WIKI_DEEPOR},
+    ],
+    ("Gujarat", "Ahmadabad"): [
+        {"type": "floodplain reclamation (riverfront)",
+         "water_body": "Sabarmati river / floodplain + city lakes",
+         "order_ref": "PIL/NGT critique of riverfront model (Paryavaran Suraksha Samiti)",
+         "detail": "Sabarmati Riverfront reclaimed floodplain and channelised the "
+                   "river; critics (who took Gujarat civic bodies to NGT) link "
+                   "narrowing + blocked drains + lost lakes (~2.2% blue cover) to "
+                   "worsening urban flooding; lower promenade submerged 2025.",
+         "year": 2025, "status": "contested; riverfront submerged", "source": QOC_AHMEDABAD},
+    ],
+    ("Maharashtra", "Pune"): [
+        {"type": "riverbed road / floodplain encroachment",
+         "water_body": "Mula-Mutha river",
+         "order_ref": "NGT Jul-2013 (+ Jan-2015 contempt); Bombay HC 26-Jun-2024",
+         "detail": "NGT ordered realignment of an illegal 2.3 km riverbed road (2013) "
+                   "and again its removal (2015 contempt). Bombay HC (Jun 2024) "
+                   "ordered scientific floodlines + removal of construction PMC "
+                   "permitted on the floodplain; RFD stayed on 8 of 11 stretches.",
+         "year": 2024, "status": "HC-ordered floodline redraw", "source": SANDRP_PUNE},
+    ],
+    ("Madhya Pradesh", "Bhopal"): [
+        {"type": "Ramsar catchment construction",
+         "water_body": "Bhoj Wetland — Upper Lake (Ramsar)",
+         "order_ref": "NGT (Bhoj Wetland Rules; 50 m FTL); demolition drives 2026",
+         "detail": "NGT warned BMC over inaction and ordered removal of construction "
+                   "within 50 m of the Upper Lake FTL (Bhoj Wetland Rules 2018 / "
+                   "Wetlands Rules). Drives razed encroachments (e.g. Lalghati: 63 "
+                   "identified, 44 private + 17 govt) 2026; focus now on Lower Lake.",
+         "year": 2026, "status": "demolitions ongoing", "source": HITAVADA_BHOJ},
+    ],
+    ("Gujarat", "Vadodara"): [
+        {"type": "river floodplain encroachment",
+         "water_body": "Vishwamitri river",
+         "order_ref": "NGT (2016 case; 2021 directive) — Paryavaran Suraksha Samiti",
+         "detail": "Paryavaran Suraksha Samiti took VMC to NGT (2016) over choked "
+                   "drains and floodplain encroachment; per the petitioner VMC did "
+                   "not act on the 2021 NGT directive. Mega-highways/bullet-train "
+                   "alignments also cited as obstructing the natural river system.",
+         "year": 2021, "status": "directive unactioned (per petitioner)", "source": SANDRP_VADODARA},
+    ],
+    ("Andhra Pradesh", "Krishna"): [
+        {"type": "floodplain settlement (Budameru)",
+         "water_body": "Budameru rivulet / Kolleru–Upputeru system",
+         "order_ref": "'Operation Budameru' (state); encroachment data still lacking",
+         "detail": "Lakhs settled on Budameru flood banks/plains (2011–2024), cutting "
+                   "capacity; Kolleru lake + the Upputeru outlet to the sea also "
+                   "encroached. After the 2024 deluge (35 dead) the state launched "
+                   "Operation Budameru to clear encroachments — but still lacks "
+                   "comprehensive encroachment data.",
+         "year": 2024, "status": "clearance launched; data gap", "source": WIKI_VIJAYAWADA},
+    ],
+    ("Haryana", "Gurgaon"): [
+        {"type": "water-body + storm-drain encroachment",
+         "water_body": "Ghata / Basai / Najafgarh jheel + Badshahpur drain",
+         "order_ref": "NGT (admin water-body study); SC/INTACH on Najafgarh (Jul-2023)",
+         "detail": "A Gurugram admin study to the NGT found 389 water bodies lost "
+                   "since 1956 (640→251); Ghata lake shrank ~370 ac → ~2 ac; Basai "
+                   "wetland ~25% of original by 2022; Badshahpur storm-drain "
+                   "encroached. INTACH moved the SC (Jul 2023) over the Najafgarh "
+                   "embankment; matter before the NGT.",
+         "year": 2023, "status": "before NGT/SC; ₹100 cr bundh revival", "source": NGT_GURUGRAM},
     ],
 }
 
