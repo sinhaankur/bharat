@@ -196,9 +196,11 @@
     return baseTerrain || overlayOn;
   }
   // Fill opacity + border for choropleth, adapting to whether terrain shows beneath.
+  // Over terrain we go MUCH lighter (~0.25) + brighter borders so the relief reads
+  // clearly through the data colour instead of being muddied by it.
   function choroStyle(baseFill, baseBorder) {
     return terrainActive()
-      ? { fillOpacity: baseFill * 0.45, borderColor: 'oklch(0.99 0 0 / 0.8)', borderWeight: 1.1 }
+      ? { fillOpacity: Math.min(0.28, baseFill * 0.3), borderColor: 'oklch(0.99 0 0 / 0.9)', borderWeight: 1.2 }
       : { fillOpacity: baseFill, borderColor: baseBorder, borderWeight: 0.6 };
   }
 
@@ -490,10 +492,11 @@
     })[c] || 'oklch(0.22 0 0)';
   }
   // Individual geography facets (each is its own checkbox/sub-layer).
-  const GEO_FACETS = ['constraint', 'coastal', 'flood', 'elevation', 'rainfall'];
+  const GEO_FACETS = ['constraint', 'vulnerability', 'coastal', 'flood', 'elevation', 'rainfall'];
   function geoFacetColor(g, facet) {
     if (!g) return 'oklch(0.22 0 0)';
     if (facet === 'constraint') return geoColor(g);
+    if (facet === 'vulnerability') return Vuln.color(Vuln.signals(g).count);   // signal stack, not a score
     if (facet === 'coastal')
       return g.on_coast ? 'oklch(0.72 0.13 200)' : 'oklch(0.24 0.01 200)';
     if (facet === 'flood') {
@@ -555,7 +558,7 @@
     const showMoney = ui.state.districtMode === 'money' && moneyVals.length > 0;
 
     // Scale district fill opacity down (and brighten borders) when terrain shows through.
-    const fo = base => terrainActive() ? Math.min(base, base * 0.5) : base;
+    const fo = base => terrainActive() ? Math.min(0.32, base * 0.35) : base;
     const bc = base => terrainActive() ? 'oklch(0.99 0 0 / 0.75)' : base;
     districtLayer = L.geoJSON(geo, {
       style: f => {
@@ -975,6 +978,19 @@
           <span class="dim-key">Encroachment</span>
           <span class="dim-val">${body}</span>
         </div>`);
+      }
+      // Vulnerability signal-stack — WHICH sourced risk signals overlap here.
+      if (typeof Vuln !== 'undefined') {
+        const vs = Vuln.signals(geo);
+        if (vs.count) {
+          const dots = '●'.repeat(vs.count) + '○'.repeat(4 - vs.count);
+          rows.push(`
+          <div class="dim-row dim-row--note">
+            <span class="dim-key">Vulnerability</span>
+            <span class="dim-val"><span style="color:${Vuln.color(vs.count)};font-family:var(--font-mono)">${dots}</span> ${vs.count}/4 risk signals
+              <div class="dim-hinder">${vs.active.map(k => esc(Vuln.LABELS[k])).join(' · ')} <span class="dim-gap">— overlapping sourced signals, not a score</span></div></span>
+          </div>`);
+        }
       }
       if (geo.hinders_dev_note) {
         rows.push(`
@@ -2069,7 +2085,7 @@
 
   function geoFacetChooserHTML() {
     const facet = ui.state.geoFacet || 'constraint';
-    const facets = [['constraint', 'Constraint'], ['coastal', 'Coastal·CRZ'], ['flood', 'Flood'], ['elevation', 'Elevation'], ['rainfall', 'Rainfall']];
+    const facets = [['constraint', 'Constraint'], ['vulnerability', '⚠ Vulnerability'], ['coastal', 'Coastal·CRZ'], ['flood', 'Flood'], ['elevation', 'Elevation'], ['rainfall', 'Rainfall']];
     return `<div class="mlp-facets">${facets.map(([k, l]) => `<button class="mlp-facet ${facet === k ? 'on' : ''}" data-facet="${k}">${l}</button>`).join('')}</div>`;
   }
 
@@ -2082,6 +2098,7 @@
     if (mode === 'politics') return chip('oklch(0.70 0.15 150)', 'aligned') + chip('oklch(0.66 0.20 28)', 'opposition') + chip('oklch(0.60 0.05 250)', 'UT/other');
     if (mode === 'geography') {
       const f = ui.state.geoFacet || 'constraint';
+      if (f === 'vulnerability') return chip(Vuln.color(1), '1') + chip(Vuln.color(2), '2') + chip(Vuln.color(3), '3') + chip(Vuln.color(4), '4 signals') + `<span class="mlp-leg-note">count of overlapping sourced risk signals (flood + low-lying + rain + encroachment) — not a score</span>`;
       if (f === 'coastal') return chip(geoFacetColor({ on_coast: true }, 'coastal'), 'coastal · CRZ') + chip(geoFacetColor({ on_coast: false }, 'coastal'), 'inland');
       if (f === 'flood') return chip(geoFacetColor({ flood_level: 'district-chronic' }, 'flood'), 'chronic (CWC/NDMA)') + chip(geoFacetColor({ flood_level: 'state-flood-prone' }, 'flood'), 'state-level') + chip(geoFacetColor({ flood_level: 'not-flagged' }, 'flood'), 'not flagged');
       if (f === 'elevation') return chip(geoFacetColor({ elevation: { centroid_m: 50 } }, 'elevation'), 'lowland') + chip(geoFacetColor({ elevation: { centroid_m: 3200 } }, 'elevation'), 'high mountain') + `<span class="mlp-leg-note">SRTM centroid m</span>`;
