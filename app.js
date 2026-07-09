@@ -2254,6 +2254,7 @@
       ui._domain = computeDomain(VIEWS[ui.state.view], ui.state.yearIdx);
       wireControls();
       buildMap();
+      setupMapExpand();
       repaint();
       await applyDeepLink();
     } catch (err) {
@@ -2263,6 +2264,21 @@
         wrap.innerHTML = `<div style="padding:2rem;color:var(--muted-foreground);font-family:var(--font-mono);font-size:12px"><strong style="color:var(--foreground)">Bootstrap failed.</strong><br/><br/><code style="display:block;background:oklch(0.18 0 0);padding:0.5rem;border-radius:4px;color:oklch(0.7 0.18 30)">${esc(err.message)}</code><br/>If you're opening the HTML file directly (file://), serve it over HTTP instead:<br/><code>python3 -m http.server 8000</code></div>`;
       }
     }
+  }
+
+  // "India in pixels" — expand the map to near-full-width (collapse the side panel).
+  // Leaflet needs invalidateSize after the container resizes so tiles fill the space.
+  function setupMapExpand() {
+    const btn = document.getElementById('map-expand-btn');
+    const shell = document.querySelector('.india-shell');
+    if (!btn || !shell) return;
+    btn.addEventListener('click', () => {
+      const expanded = shell.classList.toggle('map-expanded');
+      btn.textContent = expanded ? '⤢' : '⛶';
+      btn.title = expanded ? 'Restore panel' : 'Expand map (India in pixels)';
+      // let the CSS transition run, then tell Leaflet the container changed size
+      setTimeout(() => { if (map) map.invalidateSize({ animate: true }); }, 300);
+    });
   }
 
   // Deep-link: ?state=…&district=… (used by explore.html cross-links).
