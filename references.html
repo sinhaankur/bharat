@@ -140,7 +140,7 @@
 
   <section class="refs-section">
     <h2><span class="num">05</span>Geography — floods, coast, terrain &amp; elevation</h2>
-    <div class="sec-sub">The physical-constraint layer (terrain, flood-prone, coastal CRZ, rivers, rainfall, elevation, change-over-time, encroachment)</div>
+    <div class="sec-sub">The physical-constraint layer (terrain, flood-prone, coastal CRZ, rivers, rainfall, elevation, change-over-time, encroachment) + four official-data risk layers: palaeochannels, unsafe/no-development zones, monsoon inundation, encroachment zones</div>
     <ul class="refs-list">
       <li>
         <span class="src-name">MoEFCC — Coastal Regulation Zone Notification 2019</span>
@@ -186,6 +186,26 @@
         <span class="src-name">Change-over-time &amp; encroachment — per-case citations</span>
         <span class="src-meta">NGT / court / CAG / HYDRAA orders + peer-reviewed &amp; major-press studies</span>
         <div class="src-note">Water-body-loss timelines and encroachment cases (Kolkata, Chennai, Bengaluru, Mumbai, Hyderabad, Srinagar, Delhi, Guwahati) each carry a specific source; 586 districts remain honest gaps rather than fabricated figures.</div>
+      </li>
+      <li>
+        <span class="src-name">Palaeochannels — the river's natural old course</span>
+        <span class="src-meta">ISRO-Bhuvan / NGDR palaeochannel mapping · CGWB · Geological Survey of India + press</span>
+        <div class="src-note">Where a settlement sits on a river's former bed, floods reclaim it ("you built on the old bed"). Pinned for Gurugram (Sahibi/Najafgarh), Delhi (Yamuna migration + Najafgarh drain), Saharsa (Kosi fan, 2008 avulsion), Kurukshetra (buried Saraswati/Ghaggar-Hakra) and Chennai (Adyar/Cooum + Pallikaranai). The exact channel polygon stays a gap. <a href="https://bhuvan.nrsc.gov.in/ngdr/" target="_blank" rel="noopener">Bhuvan NGDR</a> · <a href="https://cgwb.gov.in/" target="_blank" rel="noopener">CGWB</a> · <a href="https://www.gsi.gov.in/" target="_blank" rel="noopener">GSI</a></div>
+      </li>
+      <li>
+        <span class="src-name">Official "unsafe for habitation" / no-development zones</span>
+        <span class="src-meta">DDA Master Plan (Yamuna Zone-O) · CWC/NDMA flood-hazard · state SDMA declarations · GSI landslide susceptibility</span>
+        <div class="src-note">The <em>official</em> do-not-build signal — much stronger than our derived &lt;100 m proxy. Pinned for Delhi (Yamuna Zone-O), Joshimath (Chamoli — declared unsafe/subsidence, 2023), Kedarnath valley (Rudra Prayag — flash-flood/GLOF hazard), Chennai (Pallikaranai + CRZ), Idukki (Western-Ghats landslide slopes). Per-district CZMP category (I/II/III/IV) stays a gap. <a href="https://cwc.gov.in/flood-hazard-atlas" target="_blank" rel="noopener">CWC flood-hazard</a> · <a href="https://dda.gov.in/planning" target="_blank" rel="noopener">DDA planning</a></div>
+      </li>
+      <li>
+        <span class="src-name">Monsoon / seasonal inundation</span>
+        <span class="src-meta">ISRO-Bhuvan flood-inundation (satellite seasonal extent) · IMD monsoon</span>
+        <div class="src-note">Which areas flood <em>specifically</em> in the monsoon — the recurring seasonal pattern behind the live rain radar. Pinned for Barpeta (Brahmaputra), Darbhanga (Kosi–Bagmati), Ballia (Ganga–Ghaghara), Kolkata (delta + tidal) and Puri (Mahanadi delta + cyclone). Precise seasonal area (ha) stays a gap. <a href="https://bhuvan-app1.nrsc.gov.in/disaster/disaster.php?id=flood" target="_blank" rel="noopener">Bhuvan flood</a> · <a href="https://mausam.imd.gov.in/" target="_blank" rel="noopener">IMD</a></div>
+      </li>
+      <li>
+        <span class="src-name">Encroachment ZONES — the delineated boundary (not just the case)</span>
+        <span class="src-meta">DDA Zone-O · Bombay-HC blue/red flood-lines (Pune) · lake FTL surveys (Hyderabad/Bengaluru) · district water-body registers (Gurugram)</span>
+        <div class="src-note">The actual encroached <em>zone</em> — floodplain / water-body / FTL / buffer line — where an authority has published the boundary. Pinned for Delhi (Zone-O), Pune (Mula-Mutha flood-lines), Hyderabad (lake FTL), Gurugram (640→251 water-body register) and Bengaluru (lake buffer + rajakaluve). <em>The machine-readable GIS polygon geometry is almost always a gap</em> — most cities lack open floodplain GIS.</div>
       </li>
     </ul>
   </section>

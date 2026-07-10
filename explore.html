@@ -235,8 +235,64 @@
       wireGeoChips(p);
     }
 
+    // The four OFFICIAL-DATA risk layers pinned per hotspot (2026-07): river
+    // palaeochannel, official unsafe/no-development zone, monsoon seasonal
+    // inundation, delineated encroachment zone. Each carries its own cited source.
+    const RISK_LAYERS = [
+      { key: "paleochannel", icon: "🌊", label: "River's old path",
+        title: g => g.paleochannel?.river, body: g => g.paleochannel?.old_course,
+        pick: g => g.paleochannel?.documented, src: g => g.paleochannel?.source,
+        blurb: "The river's natural course over centuries — floods reclaim the old bed (ISRO/Bhuvan/CGWB/GSI)." },
+      { key: "unsafe_zone", icon: "⛔", label: "Unsafe zones",
+        title: g => g.unsafe_zone?.zone, body: g => g.unsafe_zone?.basis,
+        pick: g => g.unsafe_zone?.documented, src: g => g.unsafe_zone?.source,
+        blurb: "Official 'do-not-build' zones — CRZ, flood-hazard, no-development O-zones, declared-unsafe/sinking areas." },
+      { key: "monsoon_inundation", icon: "🌧", label: "Monsoon floods",
+        title: g => g.monsoon_inundation?.season, body: g => g.monsoon_inundation?.pattern,
+        pick: g => g.monsoon_inundation?.documented, src: g => g.monsoon_inundation?.source,
+        blurb: "Which areas flood specifically in the monsoon (ISRO-Bhuvan seasonal extent + IMD)." },
+      { key: "encroachment_zone", icon: "🚧", label: "Encroached zones",
+        title: g => g.encroachment_zone?.zone_type, body: g => g.encroachment_zone?.delineation,
+        pick: g => g.encroachment_zone?.documented, src: g => g.encroachment_zone?.source,
+        blurb: "The delineated encroachment ZONE (floodplain/FTL/buffer line) — not just the NGT case; open GIS polygon stays a gap." },
+    ];
+
+    function renderGeoRiskLayers(p) {
+      const chips = geoChipsHTML("risk");
+      const sections = RISK_LAYERS.map(layer => {
+        const cards = [];
+        for (const [sn, s] of Object.entries(LED.states || {}))
+          for (const [dn, dist] of Object.entries(s.districts || {})) {
+            const g = dist.dimensions?.geography;
+            if (!g || !layer.pick(g)) continue;
+            const href = `index.html?state=${encodeURIComponent(sn)}&district=${encodeURIComponent(dn)}`;
+            const src = layer.src(g);
+            cards.push(`
+              <div class="rank-row" style="align-items:flex-start;padding:0.6rem 0.2rem">
+                <span class="rank-n">${layer.icon}</span>
+                <span style="flex:1">
+                  <a href="${href}" style="font-weight:600;color:var(--foreground);text-decoration:none">${esc(dn)}</a>
+                  <span class="rank-ctx"> · ${esc(sn)}</span>
+                  <div style="font-family:var(--font-mono);font-size:10px;color:oklch(0.80 0.12 210);margin-top:2px">${esc(layer.title(g) || "")}</div>
+                  <div style="font-size:0.85rem;color:var(--muted-foreground);line-height:1.5;margin-top:2px">${esc(layer.body(g) || "")}${src ? ` <a href="${esc(src)}" target="_blank" rel="noopener" style="color:oklch(0.72 0.13 250)">↗</a>` : ""}</div>
+                </span>
+              </div>`);
+          }
+        return `
+          <div class="ex-section-label">${layer.icon} ${esc(layer.label)} — ${cards.length} pinned</div>
+          <p class="ex-note" style="margin-top:0">${esc(layer.blurb)}</p>
+          ${cards.join("")}`;
+      }).join('<div style="height:0.6rem"></div>');
+
+      p.innerHTML = `
+        <div class="chips">${chips}</div>
+        ${sections}
+        <p class="ex-note">These are OFFICIAL-DATA risk layers, each pinned to a published gov/court source or left an honest gap — never a fabricated risk score. They feed the map's <a href="index.html" style="color:oklch(0.74 0.16 75)">vulnerability signal-stack</a>. Every other district stays a gap until a source is pinned.</p>`;
+      wireGeoChips(p);
+    }
+
     function geoChipsHTML(active) {
-      const items = [["hotspots", "💧 Water-body loss"], ...Object.entries(GEO_VIEWS).map(([k, v]) => [k, v.label])];
+      const items = [["hotspots", "💧 Water-body loss"], ["risk", "🗺 Risk layers"], ...Object.entries(GEO_VIEWS).map(([k, v]) => [k, v.label])];
       return items.map(([k, lbl]) => `<a class="chip ${k === active ? "on" : ""}" data-geo="${k}">${esc(lbl)}</a>`).join("");
     }
     function wireGeoChips(p) {
@@ -248,6 +304,7 @@
     function renderGeography(p) {
       const view = window.__geoView || "hotspots";
       if (view === "hotspots") return renderGeoHotspots(p);
+      if (view === "risk") return renderGeoRiskLayers(p);
       const V = GEO_VIEWS[view];
       let rows = geoRows().filter(r => V.metric(r) != null);
       if (V.filter) rows = rows.filter(V.filter);

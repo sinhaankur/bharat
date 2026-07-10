@@ -96,6 +96,28 @@ SANDRP_VADODARA = "https://sandrp.in/2024/09/16/drp-nb-160924-urban-flood-lesson
 WIKI_VIJAYAWADA = "https://en.wikipedia.org/wiki/2024_Vijayawada_floods"
 NGT_GURUGRAM = "https://questionofcities.org/gurugram-navigating-the-waters-between-urban-planning-and-floods/"
 
+# --- Sources for the four OFFICIAL-DATA risk layers added 2026-07-10 ---------
+# (paleochannels, "unsafe for habitation" zones, monsoon/seasonal inundation,
+#  encroachment-ZONE polygons). Each fact below cites its own source; these are
+#  the portal/study roots. Open, redistributable — no Google/licensed imagery.
+GSI_SRC = "https://www.gsi.gov.in/"                                  # Geological Survey of India
+BHUVAN_PALEO_SRC = "https://bhuvan.nrsc.gov.in/ngdr/"                # ISRO/NGDR geoscience data
+CGWB_SRC = "https://cgwb.gov.in/"                                    # Central Ground Water Board (paleochannel/aquifer)
+CWC_HAZARD_SRC = "https://cwc.gov.in/flood-hazard-atlas"            # CWC flood-hazard atlas
+BHUVAN_FLOOD_SRC = "https://bhuvan-app1.nrsc.gov.in/disaster/disaster.php?id=flood"  # Bhuvan flood-inundation
+IMD_MONSOON_SRC = "https://mausam.imd.gov.in/"                       # IMD monsoon / rainfall
+DDA_ZONAL_SRC = "https://dda.gov.in/planning"                       # DDA Master Plan / Zone-O (Yamuna)
+# Per-hotspot published sources for paleochannels / unsafe-zone / monsoon layers.
+PALEO_NAJAFGARH = "https://en.wikipedia.org/wiki/Sahibi_River"      # Sahibi/Najafgarh palaeochannel
+PALEO_SARASWATI = "https://en.wikipedia.org/wiki/Ghaggar-Hakra_River"  # Vedic Saraswati palaeochannel (ISRO/CGWB)
+PALEO_ALLAHABAD = "https://en.wikipedia.org/wiki/Prayagraj"         # Ganga-Yamuna doab shifting courses
+PALEO_KOSI = "https://en.wikipedia.org/wiki/Kosi_River"             # Kosi migratory fan / 2008 avulsion
+PALEO_CHENNAI = "https://en.wikipedia.org/wiki/Adyar_River"         # Chennai buried drainage / erstwhile courses
+DELHI_OZONE = "https://en.wikipedia.org/wiki/Yamuna"                # Delhi Zone-O no-development floodplain
+KEDARNATH_HAZARD = "https://en.wikipedia.org/wiki/2013_North_India_floods"  # unsafe Himalayan valley zone
+JOSHIMATH_HAZARD = "https://en.wikipedia.org/wiki/2023_Joshimath_subsidence"  # sinking-town unsafe zone
+BHUVAN_MONSOON = "https://bhuvan.nrsc.gov.in/"                       # Bhuvan seasonal flood extent
+
 TIMELINE_PILOT = {
     # East Kolkata Wetlands — Ramsar site (12,500 ha designated). Documented ~36%
     # areal loss over ~30 yrs; a Landsat/ML study reports a steeper 63% on a wider
@@ -535,6 +557,230 @@ ENCROACHMENT_CASES = {
     ],
 }
 
+# ===========================================================================
+# FOUR OFFICIAL-DATA RISK LAYERS (added 2026-07-10, user "all of the above")
+# Each is hotspot-keyed like ENCROACHMENT_CASES: a district gets a pinned,
+# cited entry or it stays a gap. NEVER a fabricated risk score — sourced-or-gap.
+# ===========================================================================
+
+# ---------------------------------------------------------------------------
+# (1) PALEOCHANNELS — the river's natural course over centuries/millennia. Floods
+# tend to reclaim the old bed: where a settlement sits on a former channel, water
+# "remembers" its path. Documented palaeochannels (ISRO/Bhuvan/CGWB/GSI + press).
+# Editorial line: "you built on the river's old bed."
+# ---------------------------------------------------------------------------
+PALEOCHANNELS = {
+    ("Haryana", "Gurgaon"): {
+        "river": "Sahibi / Najafgarh",
+        "old_course": "The Sahibi (Rajasthan→Delhi) once fed the Najafgarh jheel, a "
+                      "large seasonal lake straddling SW Delhi–Gurugram; its bed and "
+                      "the Badshahpur drain are the natural low line the monsoon still "
+                      "runs down. Gurugram's sectors sit across this palaeo-drainage.",
+        "why_it_floods": "Built-up sectors + choked Badshahpur drain block the Sahibi/"
+                         "Najafgarh natural line → the old lakebed re-floods (2016 "
+                         "'Gurujam', recurrent waterlogging).",
+        "source": PALEO_NAJAFGARH, "source2": NGT_GURUGRAM,
+    },
+    ("Delhi", "Delhi"): {
+        "river": "Yamuna (+ Sahibi/Najafgarh palaeochannel)",
+        "old_course": "The Yamuna has migrated east over centuries (old courses under "
+                      "the walled city / ISBT); the Sahibi palaeochannel enters via the "
+                      "Najafgarh drain. Colonies on the old floodplain flood when the "
+                      "river reclaims it.",
+        "why_it_floods": "July-2023 flood inundated areas built on the historic "
+                         "floodplain / Zone-O the river naturally occupies.",
+        "source": PALEO_NAJAFGARH, "source2": DELHI_OZONE,
+    },
+    ("Bihar", "Saharsa"): {
+        "river": "Kosi ('Sorrow of Bihar')",
+        "old_course": "The Kosi has shifted ~120 km westward over ~250 years across a "
+                      "giant alluvial fan; its 2008 avulsion near the Nepal barrage "
+                      "sent it down an abandoned easterly channel it had left ~a century "
+                      "earlier — drowning districts that thought they were 'safe'.",
+        "why_it_floods": "Embankments freeze a river that naturally roams its fan; when "
+                         "it breaches, it returns to a palaeochannel now full of villages "
+                         "(2008: ~3 million affected).",
+        "source": PALEO_KOSI,
+    },
+    ("Haryana", "Kurukshetra"): {
+        "river": "Saraswati / Ghaggar-Hakra palaeochannel",
+        "old_course": "ISRO/CGWB satellite + tubewell studies trace a wide buried "
+                      "palaeochannel of the 'lost' Vedic Saraswati (Ghaggar-Hakra system) "
+                      "across Haryana–Rajasthan; the Ghaggar still floods along this "
+                      "ancient low line in a heavy monsoon.",
+        "why_it_floods": "The buried channel is the region's natural drainage; the "
+                         "Ghaggar reactivates it, flooding fields/settlements built over it.",
+        "source": PALEO_SARASWATI, "source2": CGWB_SRC,
+    },
+    ("Tamil Nadu", "Chennai"): {
+        "river": "Adyar / Cooum + buried Pallikaranai drainage",
+        "old_course": "Chennai grew over a marsh-and-river drainage: the Pallikaranai "
+                      "wetland was the city's natural sink and the Adyar/Cooum + a web of "
+                      "erys (tanks) its overflow path. IT-corridor and OMR construction "
+                      "paved the historic low channels.",
+        "why_it_floods": "2015 deluge followed the erstwhile drainage — water pooled where "
+                         "the buried channels and the shrunken marsh used to carry it out.",
+        "source": PALEO_CHENNAI, "source2": WIKI_PALLIKARANAI,
+    },
+}
+
+# ---------------------------------------------------------------------------
+# (2) "UNSAFE FOR HUMAN HABITATION" ZONES — the OFFICIAL do-not-build signal.
+# CRZ no-development zones, CWC/NDMA flood-hazard zones, no-development O-zones
+# (Delhi Yamuna Zone-O), and gov-declared unsafe / sinking areas. Much stronger
+# than our derived <100 m proxy — this is a state/authority saying "not here".
+# ---------------------------------------------------------------------------
+UNSAFE_ZONES = {
+    ("Delhi", "Delhi"): {
+        "zone": "Yamuna floodplain — Zone-O (no-development)",
+        "authority": "DDA Master Plan / NGT",
+        "basis": "DDA's Master Plan designates the active Yamuna floodplain as Zone-O "
+                 "where permanent construction is barred; NGT repeatedly ordered its "
+                 "restoration and eviction of floodplain colonies after the 2023 flood.",
+        "kind": "no-development floodplain",
+        "source": DELHI_OZONE, "source2": DDA_ZONAL_SRC,
+    },
+    ("Uttarakhand", "Chamoli"): {
+        "zone": "Joshimath — declared unsafe / land-subsidence zone",
+        "authority": "Uttarakhand SDMA / NDMA (Jan 2023)",
+        "basis": "After widespread ground subsidence and cracked buildings (Jan 2023), "
+                 "authorities declared parts of Joshimath unsafe for habitation, "
+                 "demolished unsafe structures and evacuated families — a built-on-an-"
+                 "old-landslide-deposit town the ground can no longer hold.",
+        "kind": "sinking / landslide-unsafe",
+        "source": JOSHIMATH_HAZARD,
+    },
+    ("Uttarakhand", "Rudra Prayag"): {
+        "zone": "Kedarnath valley — high flash-flood / GLOF hazard",
+        "authority": "CWC / NDMA hazard mapping",
+        "basis": "The 2013 Kedarnath disaster (thousands dead) exposed the upper "
+                 "Mandakini valley as an extreme flash-flood / glacial-lake-outburst "
+                 "hazard corridor; reconstruction was pulled back from the river's "
+                 "natural flood path.",
+        "kind": "flash-flood / GLOF hazard",
+        "source": KEDARNATH_HAZARD,
+    },
+    ("Tamil Nadu", "Chennai"): {
+        "zone": "Pallikaranai marsh + CRZ coast — restricted",
+        "authority": "NGT (O.A. 91/2023) + MoEFCC CRZ",
+        "basis": "NGT froze all building approvals inside the Pallikaranai Ramsar "
+                 "boundary + 1-km influence zone (CMDA OO 07/2025); the coast is CRZ-"
+                 "regulated. Both are official 'do-not-build' lines the city grew past.",
+        "kind": "wetland + coastal no-build",
+        "source": WIKI_PALLIKARANAI, "source2": CRZ_SRC,
+    },
+    ("Kerala", "Idukki"): {
+        "zone": "Landslide-prone high ranges (post-2018/2019)",
+        "authority": "GSI landslide susceptibility + state relocation orders",
+        "basis": "GSI maps the Western-Ghats high ranges as high landslide "
+                 "susceptibility; after 2018–2021 disasters (and Wayanad 2024 nearby) "
+                 "the state moved to relocate settlements from declared unsafe slopes.",
+        "kind": "landslide-unsafe slope",
+        "source": GSI_SRC,
+    },
+}
+
+# ---------------------------------------------------------------------------
+# (3) MONSOON / SEASONALLY-INUNDATED AREAS — which places flood SPECIFICALLY in
+# the monsoon. Bhuvan flood-inundation (satellite seasonal extent) + IMD monsoon.
+# Complements the LIVE RainViewer radar with the recurring seasonal pattern.
+# ---------------------------------------------------------------------------
+MONSOON_INUNDATION = {
+    ("Assam", "Barpeta"): {
+        "season": "SW monsoon (Jun–Sep), Brahmaputra",
+        "pattern": "Lower-Assam char/riverine belt inundated most monsoons as the "
+                   "Brahmaputra + tributaries spill; among the districts most repeatedly "
+                   "flooded in ASDMA/Bhuvan seasonal maps.",
+        "source": BHUVAN_FLOOD_SRC, "source2": IMD_MONSOON_SRC,
+    },
+    ("Bihar", "Darbhanga"): {
+        "season": "SW monsoon, Kosi–Bagmati–Kamla",
+        "pattern": "North-Bihar Kosi/Bagmati plains sheet-flood every monsoon; standing "
+                   "water for weeks is the seasonal norm, not an exception.",
+        "source": BHUVAN_FLOOD_SRC, "source2": IMD_MONSOON_SRC,
+    },
+    ("Uttar Pradesh", "Ballia"): {
+        "season": "SW monsoon, Ganga–Ghaghara confluence",
+        "pattern": "Eastern-UP Ganga/Ghaghara belt inundates seasonally at the "
+                   "confluence; diara (river-island) farmland floods each monsoon.",
+        "source": BHUVAN_FLOOD_SRC, "source2": IMD_MONSOON_SRC,
+    },
+    ("West Bengal", "Kolkata"): {
+        "season": "SW monsoon + tidal, low-lying delta",
+        "pattern": "Bowl-shaped, near-sea-level city drains only by pumping; heavy "
+                   "monsoon spells + high tide waterlog the same low pockets each year "
+                   "(the East Kolkata Wetlands were the natural monsoon sink).",
+        "source": BHUVAN_FLOOD_SRC, "source2": IMD_MONSOON_SRC,
+    },
+    ("Odisha", "Puri"): {
+        "season": "SW monsoon + cyclone, Mahanadi delta",
+        "pattern": "Mahanadi delta floods in the monsoon and again in the "
+                   "Oct–Nov cyclone season; deltaic districts inundate seasonally per "
+                   "Bhuvan flood-hazard mapping.",
+        "source": BHUVAN_FLOOD_SRC, "source2": IMD_MONSOON_SRC,
+    },
+}
+
+# ---------------------------------------------------------------------------
+# (4) ENCROACHMENT-ZONE POLYGONS — not just the NGT *cases*, but the actual
+# encroached ZONE (floodplain / water-body / CRZ / FTL line) where it has been
+# officially delineated and PUBLISHED. Hard: most cities lack open GIS. We pin
+# the ones with a real published boundary (Delhi Zone-O, FTL/blue-red lines,
+# admin water-body inventories); the polygon geometry itself stays a gap.
+# ---------------------------------------------------------------------------
+ENCROACHMENT_ZONES = {
+    ("Delhi", "Delhi"): {
+        "zone_type": "Yamuna floodplain — Zone-O",
+        "delineation": "DDA Zone-O boundary + NGT-directed active-floodplain line",
+        "status": "officially delineated (Zone-O); encroachment mapped by DDA post-2023",
+        "polygon_gap": True,
+        "note": "The no-development zone is defined in the Master Plan and NGT orders; "
+                "an open machine-readable polygon of the encroached extent isn't "
+                "published — boundary known, geometry a gap.",
+        "source": DDA_ZONAL_SRC,
+    },
+    ("Maharashtra", "Pune"): {
+        "zone_type": "Mula-Mutha river blue/red flood lines",
+        "delineation": "Bombay HC-ordered scientific floodlines (blue = prohibitive, "
+                       "red = restrictive); ~46% of one riverfront stretch inside red line",
+        "status": "floodlines being redrawn on HC order (2024); RFD stayed on 8/11 stretches",
+        "polygon_gap": True,
+        "note": "The blue/red flood-line concept legally caps floodplain construction; "
+                "the finalised GIS line is contested/being redrawn — extent a gap.",
+        "source": SANDRP_PUNE,
+    },
+    ("Andhra Pradesh", "Hyderabad"): {
+        "zone_type": "Lake Full-Tank-Level (FTL) + buffer",
+        "delineation": "HYDRAA/Irrigation FTL survey of city lakes + 30 m buffer; "
+                       ">30,000 nala encroachments identified",
+        "status": "FTL demarcation + demolitions ongoing (HYDRAA, since Aug 2024)",
+        "polygon_gap": True,
+        "note": "FTL is the official water-body boundary; lake-wise FTL notifications "
+                "exist but a consolidated open polygon layer isn't published — gap.",
+        "source": NRSC_HYD,
+    },
+    ("Haryana", "Gurgaon"): {
+        "zone_type": "Water-body inventory (640→251 since 1956)",
+        "delineation": "Gurugram admin study to NGT: 389 water bodies lost, each mapped "
+                       "in the district water-body register",
+        "status": "inventory before NGT; revival plan (₹100 cr Najafgarh bundh)",
+        "polygon_gap": True,
+        "note": "An official count + register of lost water bodies exists; the per-body "
+                "encroached polygon isn't openly downloadable — gap.",
+        "source": NGT_GURUGRAM,
+    },
+    ("Karnataka", "Bangalore Urban"): {
+        "zone_type": "Lake buffer (75 m→30 m) + rajakaluve (storm-drain) alignment",
+        "delineation": "NGT/SC-set lake buffer + BBMP rajakaluve survey of encroached "
+                       "storm-water drains",
+        "status": "buffer set by SC (2017); rajakaluve encroachment survey/demolitions ongoing",
+        "polygon_gap": True,
+        "note": "Buffer widths + drain alignments are officially fixed; a complete open "
+                "GIS of encroached segments isn't published — geometry a gap.",
+        "source": WIKI_BELLANDUR,
+    },
+}
+
 # ---------------------------------------------------------------------------
 # Coastal states/UTs — CRZ (MoEFCC Coastal Regulation Zone Notification, 2019)
 # applies to every district with a sea coast. This is a closed, uncontested list.
@@ -875,6 +1121,10 @@ def main():
                 dist_flood, flood_level = False, "not-flagged"
             dims = dist.setdefault("dimensions", {})
             tl = TIMELINE_PILOT.get((sname, dname))
+            paleo = PALEOCHANNELS.get((sname, dname))
+            unsafe = UNSAFE_ZONES.get((sname, dname))
+            monsoon = MONSOON_INUNDATION.get((sname, dname))
+            enc_zone = ENCROACHMENT_ZONES.get((sname, dname))
             # Preserve the elevation block if add_district_elevation.py already ran —
             # it's expensive (live SRTM API) and independent of this generator.
             prev_elev = dims.get("geography", {}).get("elevation")
@@ -958,6 +1208,67 @@ def main():
                             "districts have an empty timeline until a series is pinned.",
                     "sources": {"jrc": JRC_SRC, "bhuvan": BHUVAN_SRC, "sentinel": SENTINEL_SRC},
                 },
+                # (1) Paleochannel — the river's natural historic course. Pinned where
+                # ISRO/Bhuvan/CGWB/GSI + press document an old bed under today's build.
+                "paleochannel": {
+                    "documented": bool(paleo),
+                    "river": paleo["river"] if paleo else None,
+                    "old_course": paleo["old_course"] if paleo else None,
+                    "why_it_floods": paleo.get("why_it_floods") if paleo else None,
+                    "figure_gap": not paleo,
+                    "note": "The river's natural course over centuries/millennia — floods "
+                            "reclaim the old bed. Pinned from ISRO/Bhuvan palaeochannel + "
+                            "CGWB/GSI + press; the exact channel polygon stays a gap.",
+                    "sources": {"gsi": GSI_SRC, "bhuvan": BHUVAN_PALEO_SRC, "cgwb": CGWB_SRC},
+                    "source": (paleo.get("source") if paleo else None),
+                    "source2": (paleo.get("source2") if paleo else None),
+                },
+                # (2) Official "unsafe for human habitation" zone — the do-not-build
+                # signal from an authority (CRZ / flood-hazard / Zone-O / sinking-town).
+                "unsafe_zone": {
+                    "documented": bool(unsafe),
+                    "zone": unsafe["zone"] if unsafe else None,
+                    "authority": unsafe.get("authority") if unsafe else None,
+                    "basis": unsafe.get("basis") if unsafe else None,
+                    "kind": unsafe.get("kind") if unsafe else None,
+                    "figure_gap": not unsafe,
+                    "note": "OFFICIAL 'do-not-build' zones — CRZ no-development, CWC/NDMA "
+                            "flood-hazard, no-development O-zones, gov-declared unsafe/"
+                            "sinking areas. Stronger than the derived <100 m proxy; "
+                            "per-district CZMP category stays a gap.",
+                    "source": (unsafe.get("source") if unsafe else CWC_HAZARD_SRC),
+                    "source2": (unsafe.get("source2") if unsafe else None),
+                },
+                # (3) Monsoon / seasonally-inundated — which areas flood SPECIFICALLY in
+                # the monsoon (Bhuvan seasonal extent + IMD). Complements the live radar.
+                "monsoon_inundation": {
+                    "documented": bool(monsoon),
+                    "season": monsoon.get("season") if monsoon else None,
+                    "pattern": monsoon.get("pattern") if monsoon else None,
+                    "figure_gap": not monsoon,
+                    "note": "Seasonal (monsoon) inundation from ISRO-Bhuvan flood-extent "
+                            "mapping + IMD monsoon data — the recurring pattern behind the "
+                            "live rain radar. Precise seasonal area (ha) stays a gap.",
+                    "sources": {"bhuvan": BHUVAN_FLOOD_SRC, "imd": IMD_MONSOON_SRC},
+                    "source": (monsoon.get("source") if monsoon else BHUVAN_FLOOD_SRC),
+                    "source2": (monsoon.get("source2") if monsoon else None),
+                },
+                # (4) Encroachment ZONE (the delineated boundary, not just NGT cases).
+                # Pinned where a floodplain/FTL/buffer line is officially published; the
+                # machine-readable polygon geometry almost always stays a gap.
+                "encroachment_zone": {
+                    "documented": bool(enc_zone),
+                    "zone_type": enc_zone.get("zone_type") if enc_zone else None,
+                    "delineation": enc_zone.get("delineation") if enc_zone else None,
+                    "status": enc_zone.get("status") if enc_zone else None,
+                    "polygon_gap": True,   # the geometry is a gap even where the boundary is known
+                    "figure_gap": not enc_zone,
+                    "note": (enc_zone.get("note") if enc_zone else
+                             "The encroached ZONE (floodplain/water-body/CRZ/FTL line), "
+                             "not just the NGT case. Pinned where an authority published "
+                             "the boundary; the open GIS polygon itself is a gap."),
+                    "source": (enc_zone.get("source") if enc_zone else None),
+                },
                 # Civilian-vs-government land split (for a 'no govt land' 3D/GLB model)
                 # is NOT openly sourceable — per-state revenue/cadastral records, mostly
                 # not machine-readable. Logged honestly rather than faked.
@@ -990,6 +1301,15 @@ def main():
             ]:
                 if g not in gaps:
                     gaps.append(g)
+            # Conditional gaps for the four new risk layers — only where NOT pinned.
+            for cond, g in [
+                (not paleo,   "geography palaeochannel (ISRO/Bhuvan/CGWB old course) unpinned"),
+                (not unsafe,  "geography official unsafe/no-development zone (CRZ/hazard/O-zone) unpinned"),
+                (not monsoon, "geography monsoon/seasonal-inundation extent (Bhuvan/IMD) unpinned"),
+                (True,        "geography encroachment-ZONE polygon geometry (floodplain/FTL GIS) unavailable openly"),
+            ]:
+                if cond and g not in gaps:
+                    gaps.append(g)
 
     with open(LEDGER, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
@@ -1000,6 +1320,10 @@ def main():
     print(f"  coastal DISTRICTS (per-district CRZ): {n_coastal_dist}")
     print(f"  flood-prone states flagged:   {len(FLOOD_PRONE_STATES)}")
     print(f"  chronic-flood DISTRICTS (per-district): {sum(len(v) for v in FLOOD_PRONE_DISTRICTS.values())}")
+    print(f"  palaeochannels pinned:        {len(PALEOCHANNELS)}")
+    print(f"  official unsafe zones pinned: {len(UNSAFE_ZONES)}")
+    print(f"  monsoon-inundation pinned:    {len(MONSOON_INUNDATION)}")
+    print(f"  encroachment-ZONES pinned:    {len(ENCROACHMENT_ZONES)}")
     print(f"  states missing terrain class: {sorted(missing_terrain) or 'none'}")
     print(f"  timeline pilot districts:     {len(TIMELINE_PILOT)} ({', '.join(d for _, d in TIMELINE_PILOT)})")
     print(f"  encroachment cases pinned:    {sum(len(v) for v in ENCROACHMENT_CASES.values())} "

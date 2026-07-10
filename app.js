@@ -1047,15 +1047,67 @@
           <span class="dim-val">${body}</span>
         </div>`);
       }
+      // (1) Paleochannel — the river's natural historic bed ("you built on the old bed").
+      const pal = geo.paleochannel;
+      if (pal && pal.documented) {
+        const s1 = pal.source ? `<a href="${esc(pal.source)}" target="_blank" rel="noopener">↗</a>` : '';
+        rows.push(`
+        <div class="dim-row dim-row--note">
+          <span class="dim-key">River's old path</span>
+          <span class="dim-val"><span class="geo-paleo-river">${esc(pal.river || '')}</span> ${s1}
+            <div class="geo-sub">${esc(pal.old_course || '')}</div>
+            ${pal.why_it_floods ? `<div class="geo-why">⚠ ${esc(pal.why_it_floods)}</div>` : ''}
+            <span class="dim-gap">palaeochannel — ISRO/Bhuvan/CGWB/GSI; exact channel polygon: gap</span></span>
+        </div>`);
+      }
+      // (2) Official "unsafe for habitation" / no-development zone.
+      const uz = geo.unsafe_zone;
+      if (uz && uz.documented) {
+        const s1 = uz.source ? `<a href="${esc(uz.source)}" target="_blank" rel="noopener">↗</a>` : '';
+        rows.push(`
+        <div class="dim-row dim-row--note">
+          <span class="dim-key">Unsafe zone</span>
+          <span class="dim-val"><span class="geo-unsafe-kind">${esc(uz.kind || 'no-development')}</span> · <b>${esc(uz.zone || '')}</b> ${s1}
+            ${uz.authority ? `<div class="geo-enc-status">${esc(uz.authority)}</div>` : ''}
+            <div class="geo-sub">${esc(uz.basis || '')}</div>
+            <span class="dim-gap">official 'do-not-build' line; district CZMP category: gap</span></span>
+        </div>`);
+      }
+      // (3) Monsoon / seasonal inundation — the recurring seasonal flood pattern.
+      const mi = geo.monsoon_inundation;
+      if (mi && mi.documented) {
+        const s1 = mi.source ? `<a href="${esc(mi.source)}" target="_blank" rel="noopener">↗</a>` : '';
+        rows.push(`
+        <div class="dim-row dim-row--note">
+          <span class="dim-key">Monsoon flood</span>
+          <span class="dim-val"><span class="geo-monsoon-season">${esc(mi.season || '')}</span> ${s1}
+            <div class="geo-sub">${esc(mi.pattern || '')}</div>
+            <span class="dim-gap">seasonal extent — ISRO-Bhuvan + IMD; precise area (ha): gap</span></span>
+        </div>`);
+      }
+      // (4) Encroachment ZONE — the delineated boundary (not just the NGT case).
+      const ez = geo.encroachment_zone;
+      if (ez && ez.documented) {
+        const s1 = ez.source ? `<a href="${esc(ez.source)}" target="_blank" rel="noopener">↗</a>` : '';
+        rows.push(`
+        <div class="dim-row dim-row--note">
+          <span class="dim-key">Encroached zone</span>
+          <span class="dim-val"><b>${esc(ez.zone_type || '')}</b> ${s1}
+            <div class="geo-sub">${esc(ez.delineation || '')}</div>
+            ${ez.status ? `<div class="geo-enc-status">${esc(ez.status)}</div>` : ''}
+            <span class="dim-gap">boundary official; open GIS polygon geometry: gap</span></span>
+        </div>`);
+      }
       // Vulnerability signal-stack — WHICH sourced risk signals overlap here.
       if (typeof Vuln !== 'undefined') {
         const vs = Vuln.signals(geo);
         if (vs.count) {
-          const dots = '●'.repeat(vs.count) + '○'.repeat(4 - vs.count);
+          const max = vs.max || 4;
+          const dots = '●'.repeat(vs.count) + '○'.repeat(Math.max(0, max - vs.count));
           rows.push(`
           <div class="dim-row dim-row--note">
             <span class="dim-key">Vulnerability</span>
-            <span class="dim-val"><span style="color:${Vuln.color(vs.count)};font-family:var(--font-mono)">${dots}</span> ${vs.count}/4 risk signals
+            <span class="dim-val"><span style="color:${Vuln.color(vs.count)};font-family:var(--font-mono)">${dots}</span> ${vs.count}/${max} risk signals
               <div class="dim-hinder">${vs.active.map(k => esc(Vuln.LABELS[k])).join(' · ')} <span class="dim-gap">— overlapping sourced signals, not a score</span></div></span>
           </div>`);
         }
@@ -2184,7 +2236,7 @@
     if (mode === 'politics') return chip('oklch(0.70 0.15 150)', 'aligned') + chip('oklch(0.66 0.20 28)', 'opposition') + chip('oklch(0.60 0.05 250)', 'UT/other');
     if (mode === 'geography') {
       const f = ui.state.geoFacet || 'constraint';
-      if (f === 'vulnerability') return chip(Vuln.color(1), '1') + chip(Vuln.color(2), '2') + chip(Vuln.color(3), '3') + chip(Vuln.color(4), '4 signals') + `<span class="mlp-leg-note">count of overlapping sourced risk signals (flood + low-lying + rain + encroachment) — not a score</span>`;
+      if (f === 'vulnerability') return chip(Vuln.color(1), '1') + chip(Vuln.color(2), '2') + chip(Vuln.color(4), '4') + chip(Vuln.color(6), '6') + chip(Vuln.color(Vuln.MAX || 8), `${Vuln.MAX || 8} signals`) + `<span class="mlp-leg-note">count of overlapping sourced risk signals (flood, low-lying, rain, encroachment, palaeochannel, unsafe-zone, monsoon, encroach-zone) — not a score</span>`;
       if (f === 'coastal') return chip(geoFacetColor({ on_coast: true }, 'coastal'), 'coastal · CRZ') + chip(geoFacetColor({ on_coast: false }, 'coastal'), 'inland');
       if (f === 'flood') return chip(geoFacetColor({ flood_level: 'district-chronic' }, 'flood'), 'chronic (CWC/NDMA)') + chip(geoFacetColor({ flood_level: 'state-flood-prone' }, 'flood'), 'state-level') + chip(geoFacetColor({ flood_level: 'not-flagged' }, 'flood'), 'not flagged');
       if (f === 'elevation') return chip(geoFacetColor({ elevation: { centroid_m: 50 } }, 'elevation'), 'lowland') + chip(geoFacetColor({ elevation: { centroid_m: 3200 } }, 'elevation'), 'high mountain') + `<span class="mlp-leg-note">SRTM centroid m</span>`;
