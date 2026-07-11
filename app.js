@@ -2583,6 +2583,7 @@
       buildMap();
       setupMapExpand();
       setupMapSearch();
+      setupTimeScrubber();
       repaint();
       await applyDeepLink();
     } catch (err) {
@@ -2595,6 +2596,53 @@
   }
 
   // (Deep-zoom note + zoom/scale readout now live in map-ui.js → MapUI.setup.)
+
+  // ---- Time scrubber: a "change over the years" slider (time-scrubber.js). As the
+  // user drags, we highlight timeline hotspots and label how far each water body /
+  // floodplain has shrunk BY that year. Ties change-over-time to the map.
+  let timeScrubber = null, timeScrubberYear = null, tsPulseLayer = null;
+  function setupTimeScrubber() {
+    if (typeof TimeScrubber === 'undefined' || !LEDGER) return;
+    timeScrubber = TimeScrubber.build(LEDGER, {
+      hostId: 'india-map-wrap',
+      onYear: (year, snaps) => { timeScrubberYear = year; renderScrubPulses(year, snaps); },
+    });
+  }
+
+  // Drop a soft pulse ring on each timeline hotspot sized to how much it has changed
+  // by `year` (bigger + redder = more loss). Uses news-bubble coords when available,
+  // else the state-centroid fallback via the india-states polygons.
+  function renderScrubPulses(year, snaps) {
+    if (!map) return;
+    if (tsPulseLayer) { tsPulseLayer.remove(); tsPulseLayer = null; }
+    if (!snaps || !snaps.length) return;
+    tsPulseLayer = L.layerGroup();
+    for (const s of snaps) {
+      const c = hotspotLatLon(s.state, s.district);
+      if (!c) continue;
+      const loss = s.pct != null ? Math.min(1, Math.abs(Math.min(0, s.pct)) / 60) : 0;   // 0..1 by up to 60% loss
+      const r = 8 + 22 * loss;
+      const col = loss > 0 ? `oklch(${0.68 - 0.18 * loss} ${0.14 + 0.1 * loss} ${45 - 25 * loss})` : 'oklch(0.72 0.10 200)';
+      const ring = L.circleMarker(c, { radius: r, color: col, weight: 2, fillColor: col, fillOpacity: 0.18, className: 'ts-pulse' });
+      ring.bindTooltip(
+        `<b>${esc(s.district)}</b> — ${esc((s.subject || '').split(' — ')[0])}<br>` +
+        `by <b>${year}</b>: ${s.at ? `${s.at.value} ${esc((s.at.metric || '').replace(/_/g, ' '))}` : '—'}` +
+        `${s.pct != null ? ` (<b>${s.pct > 0 ? '+' : ''}${s.pct.toFixed(0)}%</b> since ${s.first.year})` : ''}`,
+        { direction: 'top', className: 'haz-tip', opacity: 0.97 });
+      ring.on('click', () => { selectState(s.state, true); drillIntoDistricts(s.state).then(() => selectDistrict(s.district, s.state)); });
+      ring.addTo(tsPulseLayer);
+    }
+    tsPulseLayer.addTo(map);
+  }
+
+  // Best-effort lat/lon for a hotspot district: news-bubble coord → state polygon centroid.
+  function hotspotLatLon(state, district) {
+    const b = (BUBBLES?.bubbles || []).find(x => x.state === state && x.district === district);
+    if (b) return [b.lat, b.lon];
+    const path = pathByName.get(state);
+    if (path) { try { const c = path.getBounds().getCenter(); return [c.lat, c.lng]; } catch (e) {} }
+    return null;
+  }
 
   // ---- On-map search: type a district/state/place → jump there to view its
   // topography + vulnerability. Reuses selectState/drillIntoDistricts/selectDistrict.

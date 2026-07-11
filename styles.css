@@ -549,6 +549,38 @@ a:hover { border-color: var(--foreground); }
 .zoom-readout .zr-z--past { color: oklch(0.82 0.13 70); }   /* upscaled past native */
 @media (max-width: 640px) { .zoom-readout { bottom: 8px; } .deep-zoom-note { bottom: 56px; } }
 
+/* Time scrubber — "change over the years" slider (bottom-right of the map) */
+.time-scrubber { position: absolute; right: 12px; bottom: 12px; z-index: 610; font-size: 11px; }
+.time-scrubber .ts-toggle {
+  display: none; cursor: pointer; background: oklch(0.16 0.01 250 / 0.94); color: var(--foreground);
+  border: 1px solid var(--border-strong); border-radius: 999px; padding: 5px 12px;
+  font-size: 11px; backdrop-filter: blur(4px); box-shadow: 0 2px 10px oklch(0 0 0 / 0.4);
+}
+.time-scrubber .ts-toggle:hover { border-color: var(--warm); }
+.time-scrubber.collapsed .ts-toggle { display: block; }
+.time-scrubber.collapsed .ts-body { display: none; }
+.time-scrubber .ts-body {
+  width: min(340px, 74vw); background: oklch(0.14 0.008 250 / 0.95); backdrop-filter: blur(7px);
+  border: 1px solid var(--border-strong); border-radius: 10px; padding: 9px 11px;
+  box-shadow: 0 6px 22px oklch(0 0 0 / 0.5);
+}
+.time-scrubber .ts-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.time-scrubber .ts-title { font-weight: 600; color: var(--foreground); }
+.time-scrubber .ts-year { font-family: var(--font-mono); font-size: 13px; color: oklch(0.84 0.15 78); margin-left: auto; }
+.time-scrubber .ts-play, .time-scrubber .ts-close {
+  cursor: pointer; background: none; border: 1px solid var(--border-strong); border-radius: 5px;
+  color: var(--muted-foreground); width: 22px; height: 20px; font-size: 10px; padding: 0;
+}
+.time-scrubber .ts-play:hover, .time-scrubber .ts-close:hover { color: var(--foreground); border-color: var(--warm); }
+.time-scrubber #ts-range { width: 100%; accent-color: oklch(0.78 0.16 78); margin: 2px 0; }
+.time-scrubber .ts-caption { font-size: 10.5px; line-height: 1.5; color: var(--muted-foreground); margin-top: 4px; min-height: 1.5em; }
+.time-scrubber .ts-caption b { color: var(--foreground); }
+.time-scrubber .ts-delta.down { color: oklch(0.72 0.19 30); font-weight: 700; }
+.time-scrubber .ts-delta.up { color: oklch(0.78 0.15 150); font-weight: 700; }
+.time-scrubber .ts-since { opacity: 0.7; }
+.ts-pulse { animation: bubblePulse 2.4s ease-in-out infinite; }
+@media (max-width: 640px) { .time-scrubber { bottom: 44px; right: 8px; } }
+
 /* On-map search — jump to a place to view its topography/vulnerability */
 #map-search {
   position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
