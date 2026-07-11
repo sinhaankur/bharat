@@ -100,11 +100,12 @@
     population:     { name: 'Census of India 2011',   url: 'https://censusindia.gov.in' }
   };
 
-  const ui = { state: { view: 'ownTax', yearIdx: 9, selected: null, hover: null, mode: 'states', drillState: null, drillDistrict: null, districtMode: 'population', showNews: true } };
+  const ui = { state: { view: 'ownTax', yearIdx: 9, selected: null, hover: null, mode: 'states', drillState: null, drillDistrict: null, districtMode: 'population', showNews: true, showHazards: true } };
 
   let DATA = null, EXTRAS = null, GEO = null, DISTRICT_POP = null, BLOCKS = null, LEDGER = null, PAY = null;
   let EVENTS = null, NEWS = null, BUBBLES = null;
   let newsBubbleLayer = null;
+  let hazardLayer = null;   // clickable hazard/zoning markers at district centroids
   let map = null, geoLayer = null, districtLayer = null;
   let mapLayers = null;   // { basemaps, labels, hillshade, current } for the unified panel
   let mapUI = null;       // MapUI widget handle (deep-zoom note + zoom/scale readout)
@@ -488,6 +489,7 @@
       ui.state.mode = 'districts';
       ui.state.drillState = stateName;
       renderDistrictLayer(geo, stateName);
+      buildHazardMarkers(stateName, geo);   // annotate the map with pinned hazards
       renderDistrictPanel(stateName, geo);
     } catch (err) {
       console.error('District drill failed:', err);
@@ -1732,6 +1734,7 @@
     ui.state.drillState = null;
     ui.state.drillDistrict = null;
     if (subdistrictLayer) { subdistrictLayer.remove(); subdistrictLayer = null; }
+    if (hazardLayer) { hazardLayer.remove(); hazardLayer = null; }
     if (districtLayer) { districtLayer.remove(); districtLayer = null; districtPathByName.clear(); }
     // Restore state layer styling
     if (geoLayer) geoLayer.eachLayer(layer => layer.setStyle(fillStyle(layer.feature.properties.ST_NM)));
@@ -2283,6 +2286,7 @@
       ${elevOn ? `<div class="mlp-elev-legend">${elevTintLegend()}</div>` : ''}
       ${(elevOn || hillOn) && cur === 'Terrain' ? `<div class="mlp-tip">Tip: elevation tint / hillshade read best over the <b>Dark</b> or <b>Satellite</b> base (Terrain already shades relief).</div>` : ''}
       <label class="mlp-check"><input type="checkbox" id="mlp-labels" ${labelsOn ? 'checked' : ''}> Place labels</label>
+      <label class="mlp-check"><input type="checkbox" id="mlp-haz" ${ui.state.showHazards ? 'checked' : ''} ${ui.state.drillState ? '' : 'disabled'}> ⚠ Hazard &amp; zoning pins${ui.state.drillState ? '' : ' <span class="mlp-dim">(drill into a state)</span>'}</label>
       <label class="mlp-check"><input type="checkbox" id="mlp-sub" ${subOn ? 'checked' : ''} ${ui.state.drillDistrict ? '' : 'disabled'}> Sub-districts (taluk/tehsil)</label>
       <div class="mlp-sec-h">Live weather <span class="mlp-live">● live</span></div>
       <label class="mlp-check"><input type="checkbox" id="mlp-rain" ${rainOn ? 'checked' : ''}> Rain radar <span class="mlp-wx-time" id="mlp-wx-time">${esc(wxAgeLabel())}</span></label>
@@ -2298,6 +2302,12 @@
     panel.querySelector('#mlp-hill').onchange = e => toggleOverlay('hillshade', e.target.checked);
     panel.querySelector('#mlp-elev').onchange = e => { toggleOverlay('elevTint', e.target.checked); renderLayersPanel(); };
     panel.querySelector('#mlp-labels').onchange = e => toggleOverlay('labels', e.target.checked);
+    const hazEl = panel.querySelector('#mlp-haz');
+    if (hazEl) hazEl.onchange = e => {
+      ui.state.showHazards = e.target.checked;
+      if (!hazardLayer) return;
+      if (e.target.checked) hazardLayer.addTo(map); else hazardLayer.remove();
+    };
     panel.querySelector('#mlp-rain').onchange = e => toggleOverlay('rain', e.target.checked);
     panel.querySelector('#mlp-clouds').onchange = e => toggleOverlay('clouds', e.target.checked);
     const subEl = panel.querySelector('#mlp-sub');
@@ -2446,6 +2456,65 @@
     }
     if (ui.state.showNews) newsBubbleLayer.addTo(map);
     renderNewsToggle();
+  }
+
+  // Polygon centroid (average of the outer ring vertices) — good enough to place a
+  // marker inside a district. Handles Polygon + MultiPolygon (largest ring).
+  function featureCentroid(feature) {
+    const g = feature.geometry; if (!g) return null;
+    let ring = null;
+    if (g.type === 'Polygon') ring = g.coordinates[0];
+    else if (g.type === 'MultiPolygon') ring = g.coordinates.map(p => p[0]).sort((a, b) => b.length - a.length)[0];
+    if (!ring || !ring.length) return null;
+    let x = 0, y = 0; for (const [lon, lat] of ring) { x += lon; y += lat; }
+    return [y / ring.length, x / ring.length];   // [lat, lon]
+  }
+
+  // HAZARD & ZONING MARKERS — annotate the MAP itself (not just the panel) with the
+  // pinned risk data for the drilled state: legal zone (CRZ/unsafe), palaeochannel,
+  // encroachment case/zone, flood-chronic. Each marker's tooltip names the specific
+  // hazard + its legal note, so zooming into a place shows what's actually there.
+  function buildHazardMarkers(stateName, geo) {
+    if (hazardLayer) { hazardLayer.remove(); hazardLayer = null; }
+    hazardLayer = L.layerGroup();
+    let n = 0;
+    for (const f of geo.features) {
+      const dn = f.properties.DISTRICT;
+      const gd = dimGeoFor(stateName, dn);
+      if (!gd) continue;
+      const items = hazardItems(gd);
+      if (!items.length) continue;
+      const c = featureCentroid(f);
+      if (!c) continue;
+      const zone = zoningZone(gd);
+      const top = items[0];   // strongest icon drives the marker colour
+      const html = `<div class="haz-pin" style="--hc:${zone.color}">${top.icon}${items.length > 1 ? `<span class="haz-pin-n">${items.length}</span>` : ''}</div>`;
+      const mk = L.marker(c, {
+        icon: L.divIcon({ className: 'haz-divicon', html, iconSize: [26, 26], iconAnchor: [13, 13] }),
+      });
+      mk.bindTooltip(
+        `<b>${esc(dn)}</b> — <span style="color:${zone.color}">${esc(zone.label)}</span>` +
+        items.map(it => `<br>${it.icon} ${esc(it.text)}`).join(''),
+        { direction: 'top', className: 'haz-tip', opacity: 0.97 });
+      mk.on('click', () => selectDistrict(dn, stateName));
+      mk.addTo(hazardLayer);
+      n++;
+    }
+    if (ui.state.showHazards && n) hazardLayer.addTo(map);
+    return n;
+  }
+
+  // The concrete hazards pinned to a district → [{icon, text}], strongest first.
+  function hazardItems(g) {
+    const out = [];
+    if (g.unsafe_zone?.documented) out.push({ icon: '⛔', text: `Unsafe / no-development: ${g.unsafe_zone.zone || ''}` });
+    if (g.crz?.applies || g.on_coast) out.push({ icon: '🌊', text: 'Coastal Regulation Zone — near-shore construction legally capped (CRZ 2019)' });
+    if (g.flood_level === 'district-chronic') out.push({ icon: '💧', text: 'Flood-chronic (CWC/NDMA/Bhuvan)' });
+    if (g.paleochannel?.documented) out.push({ icon: '〰️', text: `On a river\'s old bed: ${g.paleochannel.river || 'palaeochannel'}` });
+    if (g.encroachment_zone?.documented) out.push({ icon: '🚧', text: `Encroachment zone: ${g.encroachment_zone.zone_type || ''}` });
+    else if (g.encroachment?.cases?.length) out.push({ icon: '🚧', text: `${g.encroachment.cases.length} documented encroachment case${g.encroachment.cases.length > 1 ? 's' : ''} (NGT/court)` });
+    if (g.monsoon_inundation?.documented) out.push({ icon: '🌧️', text: `Monsoon inundation: ${g.monsoon_inundation.season || ''}` });
+    return out;
   }
 
   function renderNewsToggle() {

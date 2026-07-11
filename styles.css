@@ -168,6 +168,31 @@ a:hover { border-color: var(--foreground); }
 .news-bubble-tip b { color: oklch(0.84 0.15 78); }
 .leaflet-tooltip.news-bubble-tip::before { display: none; }
 
+/* Hazard & zoning pins — annotate the map with pinned CRZ/unsafe/flood/channel data */
+.haz-divicon { background: none; border: none; }
+.haz-pin {
+  width: 26px; height: 26px; display: flex; align-items: center; justify-content: center;
+  font-size: 14px; line-height: 1; border-radius: 50%;
+  background: color-mix(in oklch, var(--hc) 30%, oklch(0.14 0.01 250)); color: #fff;
+  border: 2px solid var(--hc); box-shadow: 0 1px 6px oklch(0 0 0 / 0.55);
+  cursor: pointer; position: relative;
+}
+.haz-pin:hover { transform: scale(1.15); transition: transform .12s; }
+.haz-pin-n {
+  position: absolute; top: -5px; right: -5px; min-width: 13px; height: 13px; padding: 0 2px;
+  border-radius: 999px; background: var(--hc); color: #0c0c0c;
+  font-family: var(--font-mono); font-size: 8.5px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; box-sizing: border-box;
+}
+.haz-tip {
+  background: oklch(0.15 0.01 250); color: var(--foreground);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  font-family: var(--font-sans); font-size: 11px; line-height: 1.5; padding: 6px 9px; max-width: 260px;
+}
+.haz-tip b { color: var(--foreground); }
+.leaflet-tooltip.haz-tip::before { display: none; }
+.mlp-dim { color: var(--muted-foreground); font-size: 8.5px; }
+
 .country-pick {
   display: inline-flex; align-items: center; margin-left: 0.6rem;
   background: oklch(0.18 0 0); border: 1px solid var(--border-strong);
