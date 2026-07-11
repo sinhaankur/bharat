@@ -1143,6 +1143,19 @@ a:hover { border-color: var(--foreground); }
 
 /* ───────── District timeline / story chains (map-as-hub) ───────── */
 .dev-more { float: right; font-family: var(--font-mono); font-size: 9px; color: oklch(0.74 0.16 75); text-transform: none; letter-spacing: 0; }
+/* Location news panel — recent news for the selected place (news-feed.json) */
+.ln-count { font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); border: 1px solid var(--border-strong); border-radius: 999px; padding: 0 6px; margin-left: 4px; }
+.ln-list { display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.4rem; }
+.ln-item { display: block; text-decoration: none; padding: 0.45rem 0.6rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: oklch(0.16 0.005 250); transition: border-color .12s; }
+.ln-item:hover { border-color: var(--warm); }
+.ln-head { display: flex; align-items: center; gap: 0.4rem; margin-bottom: 2px; }
+.ln-outlet { font-family: var(--font-mono); font-size: 9.5px; color: oklch(0.82 0.06 230); letter-spacing: 0.02em; }
+.ln-lean { font-family: var(--font-mono); font-size: 8px; text-transform: uppercase; letter-spacing: 0.04em; padding: 0 5px; border-radius: 999px; border: 1px solid currentColor; }
+.ln-lean.lean-left { color: oklch(0.72 0.15 25); } .ln-lean.lean-right { color: oklch(0.70 0.14 250); }
+.ln-lean.lean-centre { color: oklch(0.78 0.10 130); } .ln-lean.lean-unknown { color: var(--muted-foreground); }
+.ln-date { margin-left: auto; font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); }
+.ln-title { font-size: 11.5px; line-height: 1.4; color: var(--foreground); }
+.ln-more { font-size: 9.5px; color: var(--muted-foreground); margin-top: 0.35rem; font-style: italic; }
 .dev-chain { border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 0.7rem 0.8rem; margin-bottom: 0.6rem; background: oklch(0.165 0 0); }
 .dev-chain-head { font-weight: 600; font-size: 12px; line-height: 1.3; }
 .dev-chain-status { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.05em; text-transform: uppercase; padding: 1px 6px; border-radius: 999px; border: 1px solid currentColor; margin-right: 0.3rem; }

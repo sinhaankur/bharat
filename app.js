@@ -100,12 +100,15 @@
     population:     { name: 'Census of India 2011',   url: 'https://censusindia.gov.in' }
   };
 
-  const ui = { state: { view: 'ownTax', yearIdx: 9, selected: null, hover: null, mode: 'states', drillState: null, drillDistrict: null, districtMode: 'population', showNews: true, showHazards: true } };
+  const ui = { state: { view: 'ownTax', yearIdx: 9, selected: null, hover: null, mode: 'states', drillState: null, drillDistrict: null, districtMode: 'population', showNews: true, showHazards: true, showHeat: false } };
 
   let DATA = null, EXTRAS = null, GEO = null, DISTRICT_POP = null, BLOCKS = null, LEDGER = null, PAY = null;
-  let EVENTS = null, NEWS = null, BUBBLES = null;
+  let EVENTS = null, NEWS = null, BUBBLES = null, NEWS_FEED = null;
+  const newsByState = new Map();      // "State" → [items]
+  const newsByDistrict = new Map();   // "State|District" → [items]
   let newsBubbleLayer = null;
   let hazardLayer = null;   // clickable hazard/zoning markers at district centroids
+  let eventHeatLayer = null;   // news/event density heatmap (event-heatmap.js)
   let map = null, geoLayer = null, districtLayer = null;
   let mapLayers = null;   // { basemaps, labels, hillshade, current } for the unified panel
   let mapUI = null;       // MapUI widget handle (deep-zoom note + zoom/scale readout)
@@ -908,6 +911,8 @@
 
       ${renderDistrictEvents(state, district)}
 
+      ${renderLocationNews(state, district)}
+
       ${renderBlockSection(state, district)}
 
       <div class="india-caveat">
@@ -1168,6 +1173,62 @@
       <div class="india-detail-section-title">District dimensions</div>
       <div class="dim-list">${rows.join('')}</div>
       <p class="india-caveat" style="margin-top:0.4rem">Dimensions are shown side-by-side with the money flow so patterns are visible; correlation is not causation, and no "bias score" is computed. State-level values are labelled as such.</p>`;
+  }
+
+  // Index the full news feed by location once, for the per-place news panel.
+  function indexNewsByLocation(feed) {
+    newsByState.clear(); newsByDistrict.clear();
+    for (const n of (feed.news_items || [])) {
+      const g = n.geo || {};
+      if (!g.state) continue;
+      const sArr = newsByState.get(g.state) || []; sArr.push(n); newsByState.set(g.state, sArr);
+      if (g.district) {
+        const k = g.state + '|' + g.district;
+        const dArr = newsByDistrict.get(k) || []; dArr.push(n); newsByDistrict.set(k, dArr);
+      }
+    }
+    const byDate = (a, b) => String(b.published_at || b.ingested_at || '').localeCompare(String(a.published_at || a.ingested_at || ''));
+    for (const arr of newsByState.values()) arr.sort(byDate);
+    for (const arr of newsByDistrict.values()) arr.sort(byDate);
+  }
+
+  // Outlet bias/lean → a small colour for the chip (third-party aggregation, labelled).
+  function leanClass(lean) {
+    const l = (lean || '').toLowerCase();
+    if (/left/.test(l)) return 'lean-left';
+    if (/right/.test(l)) return 'lean-right';
+    if (/centre|center/.test(l)) return 'lean-centre';
+    return 'lean-unknown';
+  }
+  function prettyDate(s) {
+    const d = s ? new Date(s) : null;
+    return (d && !isNaN(d)) ? d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+  }
+
+  // Location news panel — recent items for this place (district-specific first, then
+  // its state). Legal-safe: outlet + lean + date + LINK only, never republished text.
+  function renderLocationNews(state, district) {
+    if (!NEWS_FEED) return '';
+    let items = [];
+    if (district) items = (newsByDistrict.get(state + '|' + district) || []).slice();
+    // top up with state-level items (dedup by id)
+    const seen = new Set(items.map(i => i.id));
+    for (const it of (newsByState.get(state) || [])) { if (!seen.has(it.id)) { items.push(it); seen.add(it.id); } }
+    if (!items.length) return '';
+    const show = items.slice(0, 8);
+    const rows = show.map(n => {
+      const lean = n.outlet_lean ? `<span class="ln-lean ${leanClass(n.outlet_lean)}" title="Third-party media-bias classification, not our judgement">${esc(n.outlet_lean)}</span>` : '';
+      const d = prettyDate(n.published_at || n.ingested_at);
+      return `<a class="ln-item" href="${esc(n.url)}" target="_blank" rel="noopener">
+        <div class="ln-head"><span class="ln-outlet">${esc(n.outlet || 'source')}</span>${lean}${d ? `<span class="ln-date">${esc(d)}</span>` : ''}</div>
+        <div class="ln-title">${esc(n.headline || '')}</div>
+      </a>`;
+    }).join('');
+    const scope = district ? `${esc(district)} + ${esc(state)}` : esc(state);
+    return `
+      <div class="india-detail-section-title">📰 In the news · ${scope} <span class="ln-count">${items.length}</span></div>
+      <div class="ln-list">${rows}</div>
+      ${items.length > show.length ? `<div class="ln-more">+${items.length - show.length} more — headlines link out to the source (bias labels are third-party).</div>` : ''}`;
   }
 
   // Map-as-hub: a district's story-chain timeline + approved news, inline in the panel.
@@ -2290,6 +2351,7 @@
       ${(elevOn || hillOn) && cur === 'Terrain' ? `<div class="mlp-tip">Tip: elevation tint / hillshade read best over the <b>Dark</b> or <b>Satellite</b> base (Terrain already shades relief).</div>` : ''}
       <label class="mlp-check"><input type="checkbox" id="mlp-labels" ${labelsOn ? 'checked' : ''}> Place labels</label>
       <label class="mlp-check"><input type="checkbox" id="mlp-haz" ${ui.state.showHazards ? 'checked' : ''} ${ui.state.drillState ? '' : 'disabled'}> ⚠ Hazard &amp; zoning pins${ui.state.drillState ? '' : ' <span class="mlp-dim">(drill into a state)</span>'}</label>
+      <label class="mlp-check"><input type="checkbox" id="mlp-heat" ${ui.state.showHeat ? 'checked' : ''} ${eventHeatLayer ? '' : 'disabled'}> 🔥 News &amp; event heatmap${eventHeatLayer ? '' : ' <span class="mlp-dim">(loading…)</span>'}</label>
       <label class="mlp-check"><input type="checkbox" id="mlp-sub" ${subOn ? 'checked' : ''} ${ui.state.drillDistrict ? '' : 'disabled'}> Sub-districts (taluk/tehsil)</label>
       <div class="mlp-sec-h">Live weather <span class="mlp-live">● live</span></div>
       <label class="mlp-check"><input type="checkbox" id="mlp-rain" ${rainOn ? 'checked' : ''}> Rain radar <span class="mlp-wx-time" id="mlp-wx-time">${esc(wxAgeLabel())}</span></label>
@@ -2310,6 +2372,12 @@
       ui.state.showHazards = e.target.checked;
       if (!hazardLayer) return;
       if (e.target.checked) hazardLayer.addTo(map); else hazardLayer.remove();
+    };
+    const heatEl = panel.querySelector('#mlp-heat');
+    if (heatEl) heatEl.onchange = e => {
+      ui.state.showHeat = e.target.checked;
+      if (!eventHeatLayer) return;
+      if (e.target.checked) eventHeatLayer.addTo(map); else eventHeatLayer.remove();
     };
     panel.querySelector('#mlp-rain').onchange = e => toggleOverlay('rain', e.target.checked);
     panel.querySelector('#mlp-clouds').onchange = e => toggleOverlay('clouds', e.target.checked);
@@ -2454,11 +2522,23 @@
         `${b.top_title ? `<br><span style="opacity:.8">${esc(b.top_title)}</span>` : ''}`,
         { direction: 'top', className: 'news-bubble-tip' }
       );
-      m.on('click', () => { selectState(b.state, true); drillIntoDistricts(b.state).then(() => selectDistrict(b.district, b.state)); });
+      m.on('click', () => {
+        if (b.district) { selectState(b.state, true); drillIntoDistricts(b.state).then(() => selectDistrict(b.district, b.state)); }
+        else selectState(b.state, true);   // state-level news bubble
+      });
       m.addTo(newsBubbleLayer);
     }
     if (ui.state.showNews) newsBubbleLayer.addTo(map);
+    // Event heatmap (density of news+events), built from the same bubbles' weights.
+    if (typeof EventHeatmap !== 'undefined') {
+      const heatPts = BUBBLES.bubbles
+        .filter(b => typeof b.lat === 'number' && (b.weight || b.events || b.news))
+        .map(b => ({ lat: b.lat, lon: b.lon, weight: b.weight || (b.events * 1.5 + b.news) || 1 }));
+      eventHeatLayer = EventHeatmap.create(heatPts, { radius: 34, refZoom: 5, opacity: 0.7 });
+      if (ui.state.showHeat) eventHeatLayer.addTo(map);
+    }
     renderNewsToggle();
+    renderLayersPanel();   // reflect news/heat toggles now data's here
   }
 
   // Polygon centroid (average of the outer ring vertices) — good enough to place a
@@ -2598,9 +2678,10 @@
     if (_ledgerPromise) return _ledgerPromise;
     _ledgerPromise = (async () => {
       const grab = async (url, opt) => { try { const r = await fetch(url); return r.ok ? await r.json() : null; } catch (e) { return null; } };
-      const [ledger, blocks, pay, events, news, bubbles] = await Promise.all([
+      const [ledger, blocks, pay, events, news, bubbles, feed] = await Promise.all([
         grab('district-ledger.json'), grab('india-blocks.json'), grab('pay-scales.json'),
         grab('fiscal-events.json'), grab('approved-news.json'), grab('news-bubbles.json'),
+        grab('news-feed.json'),
       ]);
       if (ledger) LEDGER = ledger; else console.warn('district-ledger.json missing — money-flow ledger will be skipped');
       if (blocks) BLOCKS = blocks;
@@ -2608,6 +2689,7 @@
       if (events) EVENTS = events;
       if (news) NEWS = news;
       if (bubbles) BUBBLES = bubbles;
+      if (feed) { NEWS_FEED = feed; indexNewsByLocation(feed); }
       // Now-available features that need the ledger / bubbles:
       buildNewsBubbles();
       setupMapSearch();
