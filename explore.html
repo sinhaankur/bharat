@@ -80,6 +80,7 @@
     .q-tag.q-crz { color: oklch(0.78 0.13 210); border-color: currentColor; }
     .q-tag.q-unsafe, .q-tag.q-flag { color: oklch(0.76 0.18 28); border-color: currentColor; }
     .q-tag.q-flood { color: oklch(0.76 0.15 45); border-color: currentColor; }
+    .q-cov { font-family: var(--font-mono); font-size: 9.5px; font-weight: 600; margin-left: 4px; }
   </style>
 </head>
 <body>
@@ -121,6 +122,7 @@
   </main>
 
   <script src="vulnerability.js"></script>
+  <script src="coverage.js"></script>
   <script src="query-engine.js"></script>
   <script>
     const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -130,8 +132,16 @@
     Promise.all([
       fetch("district-ledger.json").then(r => r.json()),
       fetch("fiscal-events.json").then(r => r.ok ? r.json() : EVENTS).catch(() => EVENTS),
-    ]).then(([led, ev]) => { LED = led; EVENTS = ev; buildIndex(); initTabs(); render("rank"); })
-      .catch(e => document.getElementById("panel").innerHTML = `<p class="ex-empty">Load error: ${esc(e.message)}</p>`);
+      fetch("news-feed.json").then(r => r.ok ? r.json() : null).catch(() => null),
+    ]).then(([led, ev, feed]) => {
+      LED = led; EVENTS = ev;
+      // news-count map by "State|District" for the coverage facet
+      window.__newsCounts = {};
+      for (const n of ((feed && feed.news_items) || [])) {
+        const g = n.geo || {}; if (g.state && g.district) { const k = g.state + "|" + g.district; window.__newsCounts[k] = (window.__newsCounts[k] || 0) + 1; }
+      }
+      buildIndex(); initTabs(); render("rank");
+    }).catch(e => document.getElementById("panel").innerHTML = `<p class="ex-empty">Load error: ${esc(e.message)}</p>`);
 
     // ---- search index over districts / schemes / officials / stories ----
     function buildIndex() {
@@ -206,7 +216,11 @@
     const qState = { keys: new Set(), mode: "AND" };
     function renderQuery(p) {
       if (typeof QueryEngine === "undefined") { p.innerHTML = `<p class="ex-empty">Query engine not loaded.</p>`; return; }
-      if (!QE) QE = QueryEngine.build(LED);
+      if (!QE) {
+        // fold in a news-count map (for the coverage facet) if the feed is loadable
+        const nc = window.__newsCounts || {};
+        QE = QueryEngine.build(LED, { newsCounts: nc });
+      }
       // group facets for the picker
       const groups = {};
       for (const f of QE.facets) (groups[f.group] = groups[f.group] || []).push(f);
@@ -238,7 +252,7 @@
         return `<div class="rank-row">
           <span class="rank-name"><a href="index.html?state=${encodeURIComponent(r.state)}&district=${encodeURIComponent(r.district)}">${esc(r.district)}</a>
             <span class="rank-ctx">${esc(r.state)}</span></span>
-          <span style="flex:1">${tags.join(" ")}</span>
+          <span style="flex:1">${tags.join(" ")}${typeof Coverage !== "undefined" ? ` <span class="q-cov" title="source coverage — sourced vs gap" style="color:${Coverage.color(r.cov_pct)}">${r.cov_pct}%</span>` : ""}</span>
           <span class="rank-val" title="overlapping risk signals">⚠${r.vuln}/8${r.money != null ? ` · ₹${r.money >= 1000 ? (r.money / 1000).toFixed(1) + "k" : Math.round(r.money)} cr` : ""}</span>
         </div>`;
       }).join("");

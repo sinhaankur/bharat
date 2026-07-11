@@ -53,12 +53,16 @@
     return n;
   }
 
-  function build(ledger) {
+  function build(ledger, opts) {
+    opts = opts || {};
+    const newsCounts = opts.newsCounts || {};   // "State|District" → count (optional)
     const rows = [];
     for (const [sn, s] of Object.entries((ledger && ledger.states) || {})) {
       for (const [dn, dist] of Object.entries(s.districts || {})) {
         const g = (dist.dimensions && dist.dimensions.geography) || {};
         const elev = g.elevation && typeof g.elevation.centroid_m === 'number' ? g.elevation.centroid_m : null;
+        const covPct = (global.Coverage && typeof global.Coverage.score === 'function')
+          ? global.Coverage.score(dist, { newsCount: newsCounts[sn + '|' + dn] || 0 }).pct : 0;
         rows.push({
           state: sn, district: dn,
           crz: !!(g.crz && g.crz.applies) || !!g.on_coast,
@@ -75,6 +79,7 @@
           flagged: ledgerFlagged(dist),
           money: headlineMoney(dist),
           has_ledger: !!(dist.ledger && dist.ledger.length),
+          cov_pct: covPct,
           elev,
         });
       }
@@ -106,6 +111,10 @@
         describe: 'A frozen/lapsed/zero-completion row or freeze note in the ledger' },
       { key: 'has_ledger', group: 'Money', label: 'Has a money-flow ledger', test: r => r.has_ledger,
         describe: 'A deep-dive fiscal ledger is pinned for this district' },
+      { key: 'cov_deep', group: 'Source coverage', label: 'Well-sourced (deep/partial)', test: r => r.cov_pct >= 30,
+        describe: 'At least 30% of this district is pinned to sources (not a baseline skeleton)' },
+      { key: 'cov_thin', group: 'Source coverage', label: 'Thin / baseline (a gap-heavy)', test: r => r.cov_pct < 30,
+        describe: 'Under 30% sourced — mostly structure-only, figures still a gap' },
     ];
     const facetByKey = Object.fromEntries(facets.map(f => [f.key, f]));
 
