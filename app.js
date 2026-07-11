@@ -546,6 +546,13 @@
   function dimGeoFor(state, district) {
     return LEDGER?.states?.[state]?.districts?.[district]?.dimensions?.geography || null;
   }
+  // Fill colour for the "Data coverage" district mode (data density, not risk).
+  function coverageColorFor(state, district) {
+    if (typeof Coverage === 'undefined') return 'oklch(0.22 0 0)';
+    const dist = LEDGER?.states?.[state]?.districts?.[district];
+    if (!dist) return 'oklch(0.24 0.01 250)';
+    return Coverage.color(Coverage.score(dist, { newsCount: newsCountFor(state, district) }).pct);
+  }
   function geoClass(g) {
     if (!g) return null;
     if (g.on_coast && g.flood_prone) return 'coast-flood';
@@ -693,6 +700,9 @@
         if (ui.state.districtMode === 'geography') {
           const facet = ui.state.geoFacet || 'zoning';
           return { className: 'india-state-path', color: bc('oklch(0.985 0 0 / 0.35)'), weight: 0.6, fillColor: geoFacetColor(dimGeoFor(stateName, dn), facet), fillOpacity: fo(0.85) };
+        }
+        if (ui.state.districtMode === 'coverage') {
+          return { className: 'india-state-path', color: bc('oklch(0.985 0 0 / 0.35)'), weight: 0.6, fillColor: coverageColorFor(stateName, dn), fillOpacity: fo(0.85) };
         }
         const pop = getDistrictPop(stateName, dn)?.population;
         const t = pop != null ? (pop - popMin) / Math.max(1, popMax - popMin) : 0;
@@ -894,6 +904,7 @@
           <button class="india-back-btn" id="india-back-to-state">← ${esc(state)}</button>
         </div>
       </div>
+      ${renderCoverageMeter(state, district)}
       ${data ? `
       <div class="india-stat-grid">
         <div class="india-stat"><div class="label">Population (2011) ${src('population')}</div><div class="value">${data.population.toLocaleString('en-IN')}</div></div>
@@ -931,6 +942,13 @@
       }
     });
     detail.querySelector('#india-back-to-state')?.addEventListener('click', () => exitDrill(state));
+    const covT = detail.querySelector('#cov-toggle');
+    if (covT) covT.addEventListener('click', () => {
+      const dt = detail.querySelector('#cov-detail');
+      const open = dt.hidden;
+      dt.hidden = !open; covT.setAttribute('aria-expanded', String(open));
+      covT.textContent = open ? '▴' : '▾';
+    });
     bindBlockClicks(detail);
     bindLedgerCharts(detail, state, district);
   }
@@ -1173,6 +1191,41 @@
       <div class="india-detail-section-title">District dimensions</div>
       <div class="dim-list">${rows.join('')}</div>
       <p class="india-caveat" style="margin-top:0.4rem">Dimensions are shown side-by-side with the money flow so patterns are visible; correlation is not causation, and no "bias score" is computed. State-level values are labelled as such.</p>`;
+  }
+
+  // Count location news for a district (district-specific + its state), for coverage.
+  function newsCountFor(state, district) {
+    if (!NEWS_FEED) return 0;
+    let n = (newsByDistrict.get(state + '|' + district) || []).length;
+    if (!n) n = (newsByState.get(state) || []).length ? 1 : 0;   // state-level news = partial credit
+    return n;
+  }
+
+  // Source-coverage meter — makes the sourced-or-gap rule VISIBLE: how much of this
+  // district is actually pinned to sources vs. still a gap (a data-density read, not
+  // a quality judgement). Expandable to show the component breakdown.
+  function renderCoverageMeter(state, district) {
+    if (typeof Coverage === 'undefined') return '';
+    const dist = LEDGER?.states?.[state]?.districts?.[district];
+    if (!dist) return '';
+    const cov = Coverage.score(dist, { newsCount: newsCountFor(state, district) });
+    const col = Coverage.color(cov.pct);
+    const bars = cov.components.map(c => {
+      const on = c.got, tot = c.max;
+      const pips = Array.from({ length: tot }, (_, i) => `<span class="cov-pip ${i < on ? 'on' : ''}"></span>`).join('');
+      return `<div class="cov-comp"><span class="cov-comp-lbl">${esc(c.label)}</span><span class="cov-pips">${pips}</span><span class="cov-comp-note">${esc(c.note)}</span></div>`;
+    }).join('');
+    return `
+      <div class="cov-meter" title="How much of this district is pinned to sources vs. a gap — a data-density read, not a quality score.">
+        <div class="cov-top">
+          <span class="cov-badge" style="--cc:${col}">${cov.pct}% sourced · ${esc(cov.level)}</span>
+          <div class="cov-bar"><div class="cov-fill" style="width:${cov.pct}%;background:${col}"></div></div>
+          <button class="cov-toggle" id="cov-toggle" aria-expanded="false" title="Show what's sourced vs. gap">▾</button>
+        </div>
+        <div class="cov-detail" id="cov-detail" hidden>${bars}
+          <div class="cov-foot">Counts what's positively SOURCED (not gap length — deep districts track more explicit gaps). Sourced-or-gap throughout.</div>
+        </div>
+      </div>`;
   }
 
   // Index the full news feed by location once, for the per-place news panel.
@@ -2262,7 +2315,7 @@
   function dataOverlayModes() {
     const inDistricts = ui.state.drillState != null;
     const geo = [['geography', 'Flood & terrain']];
-    const drilled = [['population', 'Population'], ['money', 'Money flow'], ['language', 'Language'], ['politics', 'Politics']];
+    const drilled = [['population', 'Population'], ['money', 'Money flow'], ['language', 'Language'], ['politics', 'Politics'], ['coverage', '📊 Data coverage']];
     return inDistricts ? [...drilled, ...geo] : geo;
   }
 
@@ -2279,7 +2332,7 @@
         rainfall: 'Rainfall band', constraint: 'Physical constraint',
       })[f] || 'Geography';
     }
-    return ({ money: 'Money flow', population: 'Population', language: 'Language', politics: 'Politics' })[mode] || 'Map';
+    return ({ money: 'Money flow', population: 'Population', language: 'Language', politics: 'Politics', coverage: '📊 Data coverage — sourced vs gap' })[mode] || 'Map';
   }
 
   // Paint the always-visible "now showing" badge on the map (top-centre).
@@ -2425,6 +2478,7 @@
     if (mode === 'money') return chip(seqColor(0.3), 'low') + chip(seqColor(0.95), 'high ₹ in') + `<span class="mlp-leg"><span class="mlp-chip mlp-chip-flag"></span>⚠ freeze/non-delivery</span>`;
     if (mode === 'language') return `<span class="mlp-leg-note">official language per state; district mother-tongue = gap</span>`;
     if (mode === 'politics') return chip('oklch(0.70 0.15 150)', 'aligned') + chip('oklch(0.66 0.20 28)', 'opposition') + chip('oklch(0.60 0.05 250)', 'UT/other');
+    if (mode === 'coverage') return chip(Coverage.color(5), 'baseline') + chip(Coverage.color(20), 'thin') + chip(Coverage.color(45), 'partial') + chip(Coverage.color(75), 'deep') + `<span class="mlp-leg-note">how much of each district is pinned to sources vs. a gap — data density, NOT quality or risk</span>`;
     if (mode === 'geography') {
       const f = ui.state.geoFacet || 'zoning';
       if (f === 'zoning') {
