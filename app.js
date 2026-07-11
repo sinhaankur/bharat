@@ -477,6 +477,9 @@
 
   /* ───────── DISTRICT DRILL-DOWN ───────── */
   async function drillIntoDistricts(stateName) {
+    // The ledger loads in the background off the first-paint path; if the user drills
+    // before it's here, wait for it so the district panel + hazard pins have data.
+    if (!LEDGER && _ledgerPromise) { try { await _ledgerPromise; } catch (e) {} }
     const fname = 'districts/' + stateName.replace(/ /g, '_').replace(/&/g, 'and') + '.geojson';
     try {
       let geo = districtGeoCache.get(stateName);
@@ -2541,17 +2544,14 @@
 
   async function bootstrap() {
     try {
-      const [geoRes, dataRes, extrasRes, popRes, blocksRes, ledgerRes, payRes, eventsRes, newsRes, bubblesRes] = await Promise.all([
+      // CRITICAL PATH ONLY — the small files the first paint needs (map + states +
+      // fiscal year data). The heavy ~10 MB district-ledger.json is NOT awaited here;
+      // it loads in the background (loadLedger) so the map paints immediately.
+      const [geoRes, dataRes, extrasRes, popRes] = await Promise.all([
         fetch('india-states.geojson'),
         fetch('india-fiscal.json'),
         fetch('india-extras.json'),
         fetch('district-pop.json'),
-        fetch('india-blocks.json'),
-        fetch('district-ledger.json'),
-        fetch('pay-scales.json'),
-        fetch('fiscal-events.json').catch(() => null),
-        fetch('approved-news.json').catch(() => null),
-        fetch('news-bubbles.json').catch(() => null)
       ]);
       if (!geoRes.ok) throw new Error('GeoJSON HTTP ' + geoRes.status);
       if (!dataRes.ok) throw new Error('Fiscal JSON HTTP ' + dataRes.status);
@@ -2561,17 +2561,6 @@
       else console.warn('india-extras.json missing — proceeding without governance footprint');
       if (popRes.ok) DISTRICT_POP = await popRes.json();
       else console.warn('district-pop.json missing — district drill-down will show names only');
-      if (blocksRes.ok) BLOCKS = await blocksRes.json();
-      else console.warn('india-blocks.json missing — block list will be skipped');
-      if (ledgerRes.ok) LEDGER = await ledgerRes.json();
-      else console.warn('district-ledger.json missing — money-flow ledger will be skipped');
-      if (payRes.ok) PAY = await payRes.json();
-      else console.warn('pay-scales.json missing — cost-to-govt join will be skipped');
-      if (eventsRes && eventsRes.ok) EVENTS = await eventsRes.json();
-      else console.warn('fiscal-events.json missing — district timeline will be skipped');
-      if (bubblesRes && bubblesRes.ok) BUBBLES = await bubblesRes.json();
-      if (newsRes && newsRes.ok) NEWS = await newsRes.json();
-      else console.warn('approved-news.json missing — district news will be skipped');
 
       ui.state.yearIdx = DATA._meta.years.length - 1;
       // Compute the color domain BEFORE building the map: Leaflet's GeoJSON layer
@@ -2582,9 +2571,14 @@
       wireControls();
       buildMap();
       setupMapExpand();
-      setupMapSearch();
-      setupTimeScrubber();
       repaint();
+
+      // Background (non-blocking): the heavy ledger + secondary data. The map is
+      // already interactive; these light up news bubbles, search, scrubber, and the
+      // district drill when they arrive.
+      const ledgerReady = loadLedgerAndExtras();
+      // A deep-link may target a district (needs the ledger) — wait for it in that case.
+      if (/[?&](state|district)=/.test(location.search)) await ledgerReady;
       await applyDeepLink();
     } catch (err) {
       console.error('Bootstrap failed:', err);
@@ -2593,6 +2587,35 @@
         wrap.innerHTML = `<div style="padding:2rem;color:var(--muted-foreground);font-family:var(--font-mono);font-size:12px"><strong style="color:var(--foreground)">Bootstrap failed.</strong><br/><br/><code style="display:block;background:oklch(0.18 0 0);padding:0.5rem;border-radius:4px;color:oklch(0.7 0.18 30)">${esc(err.message)}</code><br/>If you're opening the HTML file directly (file://), serve it over HTTP instead:<br/><code>python3 -m http.server 8000</code></div>`;
       }
     }
+  }
+
+  // Background loader for the heavy ledger + secondary data. Kept OFF the first-paint
+  // critical path so the map is interactive immediately; wires up the features that
+  // depend on this data (news bubbles, search, time scrubber, block list) once ready.
+  // Returns a promise so a district deep-link can await it. Idempotent-ish (guarded).
+  let _ledgerPromise = null;
+  function loadLedgerAndExtras() {
+    if (_ledgerPromise) return _ledgerPromise;
+    _ledgerPromise = (async () => {
+      const grab = async (url, opt) => { try { const r = await fetch(url); return r.ok ? await r.json() : null; } catch (e) { return null; } };
+      const [ledger, blocks, pay, events, news, bubbles] = await Promise.all([
+        grab('district-ledger.json'), grab('india-blocks.json'), grab('pay-scales.json'),
+        grab('fiscal-events.json'), grab('approved-news.json'), grab('news-bubbles.json'),
+      ]);
+      if (ledger) LEDGER = ledger; else console.warn('district-ledger.json missing — money-flow ledger will be skipped');
+      if (blocks) BLOCKS = blocks;
+      if (pay) PAY = pay;
+      if (events) EVENTS = events;
+      if (news) NEWS = news;
+      if (bubbles) BUBBLES = bubbles;
+      // Now-available features that need the ledger / bubbles:
+      buildNewsBubbles();
+      setupMapSearch();
+      setupTimeScrubber();
+      // If a district panel is already open, re-render it now the ledger's here.
+      if (ui.state.drillState && ui.state.selected) renderDetail(ui.state.selected);
+    })();
+    return _ledgerPromise;
   }
 
   // (Deep-zoom note + zoom/scale readout now live in map-ui.js → MapUI.setup.)

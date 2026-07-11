@@ -78,6 +78,12 @@
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
         crossorigin="" />
   <link rel="stylesheet" href="styles.css" />
+  <!-- Perf: warm up tile + API hosts; prefetch the heavy ledger at low priority so it
+       arrives soon after first paint without blocking it. -->
+  <link rel="preconnect" href="https://basemaps.cartocdn.com" crossorigin />
+  <link rel="preconnect" href="https://server.arcgisonline.com" crossorigin />
+  <link rel="dns-prefetch" href="https://api.rainviewer.com" />
+  <link rel="prefetch" href="district-ledger.json" as="fetch" crossorigin />
 </head>
 <body>
 
