@@ -269,7 +269,7 @@
     // Geography atlas mode at the India level — colour states by flood/vulnerability/
     // elevation/rainfall/coastal without drilling first.
     if (ui.state.districtMode === 'geography') {
-      const facet = ui.state.geoFacet || 'vulnerability';
+      const facet = ui.state.geoFacet || 'zoning';
       const fc = stateGeoColor(name, facet);
       const cs = choroStyle(0.85, 'oklch(0.985 0 0 / 0.3)');
       return { color: cs.borderColor, weight: cs.borderWeight, fillColor: fc || 'oklch(0.22 0 0)', fillOpacity: cs.fillOpacity, className: 'india-state-path' };
@@ -561,9 +561,35 @@
     })[c] || 'oklch(0.22 0 0)';
   }
   // Individual geography facets (each is its own checkbox/sub-layer).
-  const GEO_FACETS = ['constraint', 'vulnerability', 'coastal', 'flood', 'elevation', 'rainfall'];
+  const GEO_FACETS = ['zoning', 'vulnerability', 'constraint', 'coastal', 'flood', 'elevation', 'rainfall'];
+
+  // Which LEGAL/regulatory zone governs a district — the "what can be built here"
+  // layer. Priority order = strongest legal restriction first, so the map answers
+  // "is this a regulated/danger zone?" at a glance. Returns { key, label, color, legal }.
+  function zoningZone(g) {
+    if (!g) return { key: 'none', label: '—', color: 'oklch(0.24 0.01 250)', legal: '' };
+    if (g.unsafe_zone?.documented)
+      return { key: 'unsafe', label: 'Declared unsafe / no-development', color: 'oklch(0.55 0.24 18)',
+        legal: 'An authority has declared this UNSAFE for habitation / no-development (CRZ no-dev, flood-hazard, O-zone, or a sinking/landslide zone). Building here is barred or being cleared.' };
+    if (g.crz?.applies || g.on_coast)
+      return { key: 'crz', label: 'Coastal Regulation Zone (CRZ)', color: 'oklch(0.66 0.15 210)',
+        legal: 'This district touches the sea, so the MoEFCC CRZ Notification 2019 LEGALLY caps near-shore construction. The exact CRZ category (I–IV) needs the district Coastal Zone Management Plan — a gap.' };
+    if (g.flood_level === 'district-chronic')
+      return { key: 'flood', label: 'Flood-hazard (chronic)', color: 'oklch(0.62 0.19 40)',
+        legal: 'Named in CWC/NDMA/state-DMA/Bhuvan as repeatedly flooded — construction on the floodplain here is a documented hazard.' };
+    if (g.paleochannel?.documented || g.encroachment_zone?.documented)
+      return { key: 'channel', label: 'On a river channel / encroached zone', color: 'oklch(0.72 0.14 75)',
+        legal: 'Built over a river\'s natural old bed (palaeochannel) or inside a delineated encroachment zone (floodplain / water-body / FTL line) — the water tends to reclaim it.' };
+    if (g.flood_level === 'state-flood-prone')
+      return { key: 'flood_state', label: 'Flood-prone (state-level)', color: 'oklch(0.60 0.09 250)',
+        legal: 'Inherits the state flood-prone flag (CWC/NDMA); not confirmed hazard at district level.' };
+    return { key: 'none', label: 'No flagged legal zone', color: 'oklch(0.30 0.015 250)',
+      legal: 'No coastal/flood/unsafe legal restriction is flagged from open sources for this district (absence of a flag is not a guarantee — it can be a gap).' };
+  }
+
   function geoFacetColor(g, facet) {
     if (!g) return 'oklch(0.22 0 0)';
+    if (facet === 'zoning') return zoningZone(g).color;
     if (facet === 'constraint') return geoColor(g);
     if (facet === 'vulnerability') return Vuln.color(Vuln.signals(g).count);   // signal stack, not a score
     if (facet === 'coastal')
@@ -657,7 +683,7 @@
           return { className: 'india-state-path', color: bc('oklch(0.985 0 0 / 0.35)'), weight: 0.6, fillColor: alignColor(dimAlignFor(stateName, dn)), fillOpacity: fo(0.85) };
         }
         if (ui.state.districtMode === 'geography') {
-          const facet = ui.state.geoFacet || 'constraint';
+          const facet = ui.state.geoFacet || 'zoning';
           return { className: 'india-state-path', color: bc('oklch(0.985 0 0 / 0.35)'), weight: 0.6, fillColor: geoFacetColor(dimGeoFor(stateName, dn), facet), fillOpacity: fo(0.85) };
         }
         const pop = getDistrictPop(stateName, dn)?.population;
@@ -990,6 +1016,17 @@
     }
     const geo = dims.geography;
     if (geo) {
+      // HEADLINE: the legal/regulatory zone — "what can be built here". This is the
+      // point of the tool (help people understand zoning + the law), so it leads.
+      const zone = zoningZone(geo);
+      rows.push(`
+        <div class="dim-row dim-row--zone">
+          <span class="dim-key">Legal zone</span>
+          <span class="dim-val">
+            <span class="zone-badge" style="--zc:${zone.color}">${esc(zone.label)}</span>
+            <div class="zone-legal">${esc(zone.legal)}</div>
+          </span>
+        </div>`);
       const tags = [];
       if (geo.on_coast) tags.push('<span class="dim-geo-tag dim-geo-coast" title="Coastal Regulation Zone (MoEFCC 2019) restricts near-shore construction — this district touches the sea">coastal · CRZ</span>');
       if (geo.flood_level === 'district-chronic') tags.push('<span class="dim-geo-tag dim-geo-flood" title="Named in CWC/NDMA/state-DMA/Bhuvan Flood Hazard Atlas as repeatedly flooded">flood: chronic</span>');
@@ -2162,9 +2199,42 @@
     return inDistricts ? [...drilled, ...geo] : geo;
   }
 
+  // Human label for the layer currently colouring the map — so the user always
+  // knows what they're looking at (answers "which layer shows CRZ / danger?").
+  function activeLayerLabel() {
+    const mode = ui.state.districtMode;
+    if (mode === 'geography') {
+      const f = ui.state.geoFacet || 'zoning';
+      return ({
+        zoning: '⚖ Zoning & legal — what can be built here',
+        vulnerability: '⚠ Vulnerability — overlapping risk signals',
+        flood: 'Flood risk', coastal: 'Coastal · CRZ', elevation: 'Elevation',
+        rainfall: 'Rainfall band', constraint: 'Physical constraint',
+      })[f] || 'Geography';
+    }
+    return ({ money: 'Money flow', population: 'Population', language: 'Language', politics: 'Politics' })[mode] || 'Map';
+  }
+
+  // Paint the always-visible "now showing" badge on the map (top-centre).
+  function renderActiveLayerBadge() {
+    const wrap = document.getElementById('india-map-wrap');
+    if (!wrap) return;
+    let el = document.getElementById('active-layer-badge');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'active-layer-badge';
+      el.className = 'active-layer-badge';
+      el.onclick = () => { ui.state.layersCollapsed = false; renderLayersPanel(); };
+      el.title = 'The layer currently colouring the map — click to open Layers';
+      wrap.appendChild(el);
+    }
+    el.innerHTML = `<span class="alb-dot"></span><span class="alb-txt">${esc(activeLayerLabel())}</span>`;
+  }
+
   function renderLayersPanel() {
     const panel = document.getElementById('map-layers-panel');
     if (!panel) return;
+    renderActiveLayerBadge();
     const collapsed = ui.state.layersCollapsed;
     if (collapsed) {
       panel.innerHTML = `<button class="mlp-toggle" id="mlp-open" title="Layers">▤ Layers</button>`;
@@ -2238,7 +2308,7 @@
     // data mode
     panel.querySelectorAll('.mlp-data-btn').forEach(b => b.onclick = () => {
       ui.state.districtMode = b.dataset.mode;
-      if (b.dataset.mode === 'geography' && !ui.state.geoFacet) ui.state.geoFacet = 'vulnerability';
+      if (b.dataset.mode === 'geography' && !ui.state.geoFacet) ui.state.geoFacet = 'zoning';
       restyleActiveLayer();
       renderLayersPanel();
     });
@@ -2262,8 +2332,8 @@
   }
 
   function geoFacetChooserHTML() {
-    const facet = ui.state.geoFacet || 'constraint';
-    const facets = [['constraint', 'Constraint'], ['vulnerability', '⚠ Vulnerability'], ['coastal', 'Coastal·CRZ'], ['flood', 'Flood'], ['elevation', 'Elevation'], ['rainfall', 'Rainfall']];
+    const facet = ui.state.geoFacet || 'zoning';
+    const facets = [['zoning', '⚖ Zoning & legal'], ['vulnerability', '⚠ Vulnerability'], ['flood', 'Flood'], ['coastal', 'Coastal·CRZ'], ['elevation', 'Elevation'], ['rainfall', 'Rainfall'], ['constraint', 'Constraint']];
     return `<div class="mlp-facets">${facets.map(([k, l]) => `<button class="mlp-facet ${facet === k ? 'on' : ''}" data-facet="${k}">${l}</button>`).join('')}</div>`;
   }
 
@@ -2275,7 +2345,17 @@
     if (mode === 'language') return `<span class="mlp-leg-note">official language per state; district mother-tongue = gap</span>`;
     if (mode === 'politics') return chip('oklch(0.70 0.15 150)', 'aligned') + chip('oklch(0.66 0.20 28)', 'opposition') + chip('oklch(0.60 0.05 250)', 'UT/other');
     if (mode === 'geography') {
-      const f = ui.state.geoFacet || 'constraint';
+      const f = ui.state.geoFacet || 'zoning';
+      if (f === 'zoning') {
+        const z = k => zoningZone(k);
+        return chip(z({ unsafe_zone: { documented: true } }).color, 'unsafe / no-development')
+          + chip(z({ on_coast: true }).color, 'CRZ (coastal)')
+          + chip(z({ flood_level: 'district-chronic' }).color, 'flood-hazard')
+          + chip(z({ paleochannel: { documented: true } }).color, 'river channel / encroached')
+          + chip(z({ flood_level: 'state-flood-prone' }).color, 'flood-prone (state)')
+          + chip(z({}).color, 'no flagged zone')
+          + `<span class="mlp-leg-note">the LEGAL/regulatory zone that governs what can be built here — click a district for the specific rule. Strongest restriction wins where several apply.</span>`;
+      }
       if (f === 'vulnerability') return chip(Vuln.color(1), '1') + chip(Vuln.color(2), '2') + chip(Vuln.color(4), '4') + chip(Vuln.color(6), '6') + chip(Vuln.color(Vuln.MAX || 8), `${Vuln.MAX || 8} signals`) + `<span class="mlp-leg-note">count of overlapping sourced risk signals (flood, low-lying, rain, encroachment, palaeochannel, unsafe-zone, monsoon, encroach-zone) — not a score</span>`;
       if (f === 'coastal') return chip(geoFacetColor({ on_coast: true }, 'coastal'), 'coastal · CRZ') + chip(geoFacetColor({ on_coast: false }, 'coastal'), 'inland');
       if (f === 'flood') return chip(geoFacetColor({ flood_level: 'district-chronic' }, 'flood'), 'chronic (CWC/NDMA)') + chip(geoFacetColor({ flood_level: 'state-flood-prone' }, 'flood'), 'state-level') + chip(geoFacetColor({ flood_level: 'not-flagged' }, 'flood'), 'not flagged');
@@ -2484,7 +2564,7 @@
       box.hidden = true; input.value = h.name; sel = -1;
       // switch to the flood/terrain atlas so the user sees topography on arrival
       ui.state.districtMode = 'geography';
-      if (!ui.state.geoFacet) ui.state.geoFacet = 'vulnerability';
+      if (!ui.state.geoFacet) ui.state.geoFacet = 'zoning';
       selectState(h.state, true);
       if (h.district) { await drillIntoDistricts(h.state); selectDistrict(h.district, h.state); }
       restyleActiveLayer();

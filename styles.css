@@ -488,6 +488,22 @@ a:hover { border-color: var(--foreground); }
   backdrop-filter: blur(4px); max-width: 90vw; text-align: center;
 }
 
+/* "Now showing" active-layer badge — top-centre, below the search box. Always tells
+   the user which layer is colouring the map (CRZ / flood / zoning / money…). */
+.active-layer-badge {
+  position: absolute; top: 54px; left: 50%; transform: translateX(-50%);
+  z-index: 620; cursor: pointer; display: flex; align-items: center; gap: 6px;
+  background: oklch(0.16 0.01 250 / 0.92); border: 1px solid var(--border-strong);
+  border-radius: 999px; padding: 3px 12px; backdrop-filter: blur(5px);
+  font-size: 11px; color: var(--foreground); box-shadow: 0 2px 10px oklch(0 0 0 / 0.35);
+  max-width: 82vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  transition: border-color .15s, color .15s;
+}
+.active-layer-badge:hover { border-color: var(--warm); }
+.active-layer-badge .alb-dot { width: 7px; height: 7px; border-radius: 50%; background: oklch(0.82 0.16 78); flex: none; box-shadow: 0 0 6px oklch(0.82 0.16 78 / 0.8); }
+.active-layer-badge .alb-txt { overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 640px) { .active-layer-badge { top: 46px; font-size: 10px; padding: 2px 9px; } }
+
 /* Zoom-level + approximate-scale readout, bottom-centre (above the deep-zoom note) */
 .zoom-readout {
   position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
@@ -1111,6 +1127,15 @@ a:hover { border-color: var(--foreground); }
 .dim-geo-coast { color: oklch(0.78 0.13 200); } .dim-geo-flood { color: oklch(0.74 0.16 250); } .dim-geo-terrain { color: oklch(0.80 0.10 90); text-transform: capitalize; }
 .dim-row--note { border-bottom: none; padding-top: 0.15rem; }
 .dim-hinder { font-size: 10.5px; line-height: 1.5; color: var(--muted-foreground); font-style: italic; }
+/* Legal-zone headline — "what can be built here" leads the geography section */
+.dim-row--zone { border-bottom: none; padding-bottom: 0.15rem; }
+.zone-badge {
+  display: inline-block; font-family: var(--font-mono); font-size: 10px; font-weight: 600;
+  letter-spacing: 0.02em; padding: 2px 9px; border-radius: 999px;
+  color: var(--zc); border: 1px solid var(--zc);
+  background: color-mix(in oklch, var(--zc) 16%, transparent);
+}
+.zone-legal { font-size: 10.5px; line-height: 1.5; color: var(--muted-foreground); margin-top: 3px; }
 .geo-stats { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
 .geo-stats b { color: oklch(0.84 0.12 200); font-weight: 600; }
 .geo-tl-subj { font-size: 10.5px; color: oklch(0.82 0.10 200); }
