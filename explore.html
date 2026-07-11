@@ -61,6 +61,25 @@
     .sec-list .muted { color: var(--muted-foreground); font-family: var(--font-mono); font-size: 9px; }
     .ex-note { color: var(--muted-foreground); font-size: 0.8rem; line-height: 1.55; margin-top: 0.6rem; }
     .ex-empty { color: var(--muted-foreground); padding: 2rem 0; text-align: center; }
+    /* Query/filter engine */
+    .q-wrap { display: grid; grid-template-columns: 260px 1fr; gap: 1.4rem; margin-top: 1rem; }
+    @media (max-width: 720px) { .q-wrap { grid-template-columns: 1fr; } }
+    .q-picker { border: 1px solid var(--border); border-radius: var(--radius); padding: 0.8rem; align-self: start; position: sticky; top: 0.5rem; }
+    .q-mode { font-size: 11px; color: var(--muted-foreground); margin-bottom: 0.8rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem; }
+    .q-mode-btn { background: transparent; color: var(--muted-foreground); border: 1px solid var(--border-strong); border-radius: 999px; padding: 2px 9px; font-family: var(--font-mono); font-size: 10px; cursor: pointer; }
+    .q-mode-btn.on { background: var(--warm); color: oklch(0.18 0 0); border-color: var(--warm); font-weight: 600; }
+    .q-clear { margin-left: auto; background: none; border: none; color: oklch(0.72 0.16 30); font-size: 10px; cursor: pointer; text-decoration: underline; }
+    .q-group { margin-bottom: 0.7rem; }
+    .q-group-h { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted-foreground); margin-bottom: 0.3rem; }
+    .q-facet { display: flex; align-items: center; gap: 0.4rem; font-size: 12px; padding: 3px 4px; border-radius: 5px; cursor: pointer; color: var(--foreground); }
+    .q-facet:hover { background: oklch(0.22 0.02 250); }
+    .q-facet.on { background: oklch(0.30 0.06 78 / 0.25); }
+    .q-facet-n { margin-left: auto; font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); }
+    .q-op { font-family: var(--font-mono); color: var(--warm); font-size: 0.85em; }
+    .q-tag { font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.03em; padding: 1px 6px; border-radius: 999px; border: 1px solid var(--border-strong); color: var(--muted-foreground); margin-right: 2px; }
+    .q-tag.q-crz { color: oklch(0.78 0.13 210); border-color: currentColor; }
+    .q-tag.q-unsafe, .q-tag.q-flag { color: oklch(0.76 0.18 28); border-color: currentColor; }
+    .q-tag.q-flood { color: oklch(0.76 0.15 45); border-color: currentColor; }
   </style>
 </head>
 <body>
@@ -91,6 +110,7 @@
 
     <div class="ex-tabs" role="tablist">
       <button data-tab="rank" class="active">Rankings</button>
+      <button data-tab="query">🔎 Query</button>
       <button data-tab="geography">Geography</button>
       <button data-tab="states">By state</button>
       <button data-tab="schemes">By scheme</button>
@@ -100,6 +120,8 @@
     <div class="ex-panel" id="panel"><p class="ex-empty">Loading…</p></div>
   </main>
 
+  <script src="vulnerability.js"></script>
+  <script src="query-engine.js"></script>
   <script>
     const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     const fmtCr = v => v == null ? "—" : `₹${Number(v).toLocaleString("en-IN")} cr`;
@@ -172,10 +194,81 @@
     function render(tab) {
       const p = document.getElementById("panel");
       if (tab === "rank") return renderRank(p);
+      if (tab === "query") return renderQuery(p);
       if (tab === "geography") return renderGeography(p);
       if (tab === "states") return renderStates(p);
       if (tab === "schemes") return renderSchemes(p);
       if (tab === "stories") return renderStories(p);
+    }
+
+    // ---- Query/filter engine: AND/OR facets across all 594 districts (no backend) ----
+    let QE = null;
+    const qState = { keys: new Set(), mode: "AND" };
+    function renderQuery(p) {
+      if (typeof QueryEngine === "undefined") { p.innerHTML = `<p class="ex-empty">Query engine not loaded.</p>`; return; }
+      if (!QE) QE = QueryEngine.build(LED);
+      // group facets for the picker
+      const groups = {};
+      for (const f of QE.facets) (groups[f.group] = groups[f.group] || []).push(f);
+      const groupHtml = Object.entries(groups).map(([g, fs]) => `
+        <div class="q-group">
+          <div class="q-group-h">${esc(g)}</div>
+          ${fs.map(f => `<label class="q-facet ${qState.keys.has(f.key) ? "on" : ""}" title="${esc(f.describe)}">
+            <input type="checkbox" data-fkey="${f.key}" ${qState.keys.has(f.key) ? "checked" : ""}>
+            ${esc(f.label)} <span class="q-facet-n">${QE.run([f.key], "AND").length}</span>
+          </label>`).join("")}
+        </div>`).join("");
+
+      const results = QE.run([...qState.keys], qState.mode);
+      results.sort((a, b) => (b.vuln - a.vuln) || ((b.money || 0) - (a.money || 0)));
+      const chips = [...qState.keys].map(k => esc(QE.facetByKey[k].label));
+      const summary = qState.keys.size
+        ? `<b>${results.length}</b> district${results.length === 1 ? "" : "s"} match <b>${chips.join(` <span class="q-op">${qState.mode}</span> `)}</b>`
+        : `Pick facets to filter all <b>${QE.rows.length}</b> districts. Combine with AND / OR.`;
+
+      const rowsHtml = results.slice(0, 200).map(r => {
+        const tags = [];
+        if (r.crz) tags.push('<span class="q-tag q-crz">CRZ</span>');
+        if (r.unsafe) tags.push('<span class="q-tag q-unsafe">unsafe</span>');
+        if (r.flood_chronic) tags.push('<span class="q-tag q-flood">flood</span>');
+        if (r.paleo) tags.push('<span class="q-tag">palaeo</span>');
+        if (r.enc_zone || r.encroach) tags.push('<span class="q-tag">encroach</span>');
+        if (r.monsoon) tags.push('<span class="q-tag">monsoon</span>');
+        if (r.flagged) tags.push('<span class="q-tag q-flag">⚠ freeze</span>');
+        return `<div class="rank-row">
+          <span class="rank-name"><a href="index.html?state=${encodeURIComponent(r.state)}&district=${encodeURIComponent(r.district)}">${esc(r.district)}</a>
+            <span class="rank-ctx">${esc(r.state)}</span></span>
+          <span style="flex:1">${tags.join(" ")}</span>
+          <span class="rank-val" title="overlapping risk signals">⚠${r.vuln}/8${r.money != null ? ` · ₹${r.money >= 1000 ? (r.money / 1000).toFixed(1) + "k" : Math.round(r.money)} cr` : ""}</span>
+        </div>`;
+      }).join("");
+
+      p.innerHTML = `
+        <div class="q-wrap">
+          <div class="q-picker">
+            <div class="q-mode">
+              Combine: <button class="q-mode-btn ${qState.mode === "AND" ? "on" : ""}" data-mode="AND">ALL (AND)</button>
+              <button class="q-mode-btn ${qState.mode === "OR" ? "on" : ""}" data-mode="OR">ANY (OR)</button>
+              ${qState.keys.size ? `<button class="q-clear" id="q-clear">clear</button>` : ""}
+            </div>
+            ${groupHtml}
+          </div>
+          <div class="q-results">
+            <div class="ex-section-label" style="margin-top:0">${summary}</div>
+            ${qState.keys.size && !results.length ? `<p class="ex-note">No district satisfies all of these together — an honest empty result, not a bug. Try <b>ANY (OR)</b>, or drop a facet. Deep money-ledgers exist for only 12 districts, so money+geography combos are naturally sparse.</p>` : ""}
+            ${rowsHtml}
+            ${results.length > 200 ? `<p class="ex-note">Showing first 200 of ${results.length}.</p>` : ""}
+            <p class="ex-note">Facets are TRUE only where a source is pinned; a district NOT matching can be a genuine gap, not a guarantee of safety. Counts beside each facet = districts flagged. Sourced-or-gap throughout.</p>
+          </div>
+        </div>`;
+
+      p.querySelectorAll("[data-fkey]").forEach(cb => cb.addEventListener("change", () => {
+        cb.checked ? qState.keys.add(cb.dataset.fkey) : qState.keys.delete(cb.dataset.fkey);
+        renderQuery(p);
+      }));
+      p.querySelectorAll(".q-mode-btn").forEach(b => b.addEventListener("click", () => { qState.mode = b.dataset.mode; renderQuery(p); }));
+      const clr = p.querySelector("#q-clear");
+      if (clr) clr.addEventListener("click", () => { qState.keys.clear(); renderQuery(p); });
     }
 
     // ---- Geography rankings: browse all 594 by the sourced physical layers ----
