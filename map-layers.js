@@ -11,38 +11,65 @@
 (function (global) {
   'use strict';
 
+  // How deep the map can zoom. Past a layer's maxNativeZoom, Leaflet UPSCALES the
+  // last sharp tile instead of showing blanks — "as deep as allowed" without
+  // pretending to resolution that isn't there (see deep-zoom research 2026-07-11:
+  // no OPEN sub-metre basemap exists for India, so beyond native = honest upscale).
+  const MAX_ZOOM = 21;
+
   // Switchable basemaps (name → Leaflet tileLayer). 'Dark map' is the default.
+  // maxZoom = MAX_ZOOM everywhere (lets you keep zooming); maxNativeZoom = the
+  // source's REAL ceiling (probed 2026-07-11 over India): CARTO 20, Esri 19,
+  // OpenTopo 17, Sentinel-2 16. Deep-zoom note fires when zoom > native.
   function basemaps(L) {
-    // maxZoom lets the map keep zooming; maxNativeZoom = the source's real ceiling.
-    // Past native zoom Leaflet UPSCALES the last sharp tile instead of showing blanks
-    // — "as deep as allowed" without pretending to resolution that isn't there.
     return {
       'Dark map': L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
-        subdomains: 'abcd', attribution: '&copy; OSM, &copy; CARTO', maxZoom: 19, maxNativeZoom: 19,
+        subdomains: 'abcd', attribution: '&copy; OSM, &copy; CARTO', maxZoom: MAX_ZOOM, maxNativeZoom: 20,
       }),
       'Satellite': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Imagery &copy; Esri, Maxar, Earthstar Geographics', maxZoom: 19, maxNativeZoom: 19,
+        attribution: 'Imagery &copy; Esri, Maxar, Earthstar Geographics', maxZoom: MAX_ZOOM, maxNativeZoom: 19,
       }),
       'Terrain': L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-        subdomains: 'abc', attribution: 'Map data: &copy; OpenTopoMap (CC-BY-SA), SRTM', maxZoom: 19, maxNativeZoom: 17,
+        subdomains: 'abc', attribution: 'Map data: &copy; OpenTopoMap (CC-BY-SA), SRTM', maxZoom: MAX_ZOOM, maxNativeZoom: 17,
       }),
       'Recent satellite (Sentinel-2)': L.tileLayer('https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2020_3857/default/g/{z}/{y}/{x}.jpg', {
-        attribution: 'Sentinel-2 cloudless &copy; EOX / ESA Copernicus (open, ~10 m)', maxZoom: 19, maxNativeZoom: 16,
+        attribution: 'Sentinel-2 cloudless &copy; EOX / ESA Copernicus (open, ~10 m)', maxZoom: MAX_ZOOM, maxNativeZoom: 16,
       }),
     };
+  }
+
+  // OPTIONAL "Satellite HD" — real 50 cm imagery to z21+ over India, but Mapbox is
+  // COMMERCIAL: it needs the USER's own access token. We ship NO key. Returns null
+  // unless a token is supplied (via ?mapbox_token=, localStorage, or window). The
+  // token stays on the user's device; nothing is committed to the repo.
+  function mapboxToken() {
+    try {
+      const qs = new URLSearchParams(location.search).get('mapbox_token');
+      if (qs) { localStorage.setItem('mapbox_token', qs); return qs; }
+      return localStorage.getItem('mapbox_token') || (global.MAPBOX_TOKEN || '') || '';
+    } catch (e) { return global.MAPBOX_TOKEN || ''; }
+  }
+  function satelliteHD(L, token) {
+    token = token || mapboxToken();
+    if (!token) return null;   // no key → layer simply isn't offered
+    return L.tileLayer(
+      `https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}@2x.jpg90?access_token=${token}`, {
+        attribution: 'Imagery &copy; Mapbox / Maxar (licensed — user-supplied token; ~50 cm in India)',
+        maxZoom: MAX_ZOOM, maxNativeZoom: 21, tileSize: 512, zoomOffset: -1,
+      });
   }
 
   // Place-labels overlay (keeps names legible on imagery basemaps).
   function labels(L) {
     return L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png', {
-      subdomains: 'abcd', attribution: '', maxZoom: 19, maxNativeZoom: 19, opacity: 0.9,
+      subdomains: 'abcd', attribution: '', maxZoom: MAX_ZOOM, maxNativeZoom: 20, opacity: 0.9,
     });
   }
 
   // Hillshade relief (open 30 m DEM — SRTM/CartoDEM class; NOT LIDAR).
   function hillshade(L) {
     return L.tileLayer('https://services.arcgisonline.com/arcgis/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Hillshade &copy; Esri, USGS, NASA SRTM (open 30 m DEM)', maxZoom: 19, maxNativeZoom: 15, opacity: 0.55,
+      attribution: 'Hillshade &copy; Esri, USGS, NASA SRTM (open 30 m DEM)', maxZoom: MAX_ZOOM, maxNativeZoom: 15, opacity: 0.55,
     });
   }
 
@@ -50,10 +77,10 @@
   // points them at the latest timestamped frame (free, keyless, ~10-min updates).
   function weather(L) {
     return {
-      rain: L.tileLayer('', { opacity: 0.6, maxZoom: 19, attribution: 'Rain radar &copy; RainViewer (live)', pane: 'overlayPane' }),
-      clouds: L.tileLayer('', { opacity: 0.5, maxZoom: 19, attribution: 'Clouds (infrared) &copy; RainViewer', pane: 'overlayPane' }),
+      rain: L.tileLayer('', { opacity: 0.6, maxZoom: MAX_ZOOM, attribution: 'Rain radar &copy; RainViewer (live)', pane: 'overlayPane' }),
+      clouds: L.tileLayer('', { opacity: 0.5, maxZoom: MAX_ZOOM, attribution: 'Clouds (infrared) &copy; RainViewer', pane: 'overlayPane' }),
     };
   }
 
-  global.MapLayers = { basemaps, labels, hillshade, weather };
+  global.MapLayers = { basemaps, labels, hillshade, weather, satelliteHD, mapboxToken, MAX_ZOOM };
 })(typeof window !== 'undefined' ? window : this);

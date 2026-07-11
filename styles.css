@@ -460,6 +460,13 @@ a:hover { border-color: var(--foreground); }
 .mlp-tip { font-size: 9px; line-height: 1.4; color: oklch(0.82 0.1 78); background: oklch(0.3 0.08 78 / 0.18); border-radius: 4px; padding: 3px 6px; margin: 2px 0 4px 22px; }
 .mlp-tip b { color: oklch(0.88 0.12 78); }
 .mlp-base { white-space: nowrap; }
+.mlp-hd-add {
+  margin-top: 4px; width: 100%; cursor: pointer; text-align: left;
+  background: oklch(0.22 0.03 250 / 0.5); color: oklch(0.78 0.09 230);
+  border: 1px dashed oklch(0.5 0.08 240 / 0.7); border-radius: 4px;
+  padding: 3px 7px; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.02em;
+}
+.mlp-hd-add:hover { border-color: var(--warm); color: oklch(0.86 0.13 210); }
 .mlp-live { font-family: var(--font-mono); font-size: 8px; color: oklch(0.72 0.2 25); letter-spacing: 0.05em; animation: mlp-pulse 2s ease-in-out infinite; }
 @keyframes mlp-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
 .mlp-wx-time { font-family: var(--font-mono); font-size: 8px; color: var(--muted-foreground); margin-left: auto; }
@@ -473,13 +480,33 @@ a:hover { border-color: var(--foreground); }
 .map-home-btn:hover { border-color: var(--warm); color: oklch(0.86 0.15 78); }
 /* Deep-zoom honesty note — bottom-centre when past the source's real resolution */
 .deep-zoom-note {
-  position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+  position: absolute; bottom: 62px; left: 50%; transform: translateX(-50%);
   z-index: 500; display: none; pointer-events: none;
   background: oklch(0.16 0.03 60 / 0.92); color: oklch(0.86 0.11 78);
   border: 1px solid oklch(0.5 0.12 70 / 0.6); border-radius: 999px;
   padding: 4px 12px; font-family: var(--font-mono); font-size: 10px;
   backdrop-filter: blur(4px); max-width: 90vw; text-align: center;
 }
+
+/* Zoom-level + approximate-scale readout, bottom-centre (above the deep-zoom note) */
+.zoom-readout {
+  position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+  z-index: 500; pointer-events: none; display: flex; align-items: center; gap: 9px;
+  background: oklch(0.15 0.01 240 / 0.9); border: 1px solid var(--border-strong);
+  border-radius: 999px; padding: 3px 11px; backdrop-filter: blur(4px);
+  font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground);
+}
+.zoom-readout .zr-scale { display: flex; flex-direction: column; align-items: center; gap: 1px; }
+.zoom-readout .zr-bar {
+  display: block; height: 3px; min-width: 18px;
+  background: oklch(0.82 0.02 240); border-radius: 2px;
+  border-left: 1px solid oklch(0.82 0.02 240); border-right: 1px solid oklch(0.82 0.02 240);
+  transition: width .15s ease;
+}
+.zoom-readout .zr-scale-lbl { font-size: 9px; color: var(--foreground); letter-spacing: 0.02em; }
+.zoom-readout .zr-z { color: oklch(0.80 0.02 240); }
+.zoom-readout .zr-z--past { color: oklch(0.82 0.13 70); }   /* upscaled past native */
+@media (max-width: 640px) { .zoom-readout { bottom: 8px; } .deep-zoom-note { bottom: 56px; } }
 
 /* On-map search — jump to a place to view its topography/vulnerability */
 #map-search {

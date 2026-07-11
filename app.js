@@ -107,6 +107,7 @@
   let newsBubbleLayer = null;
   let map = null, geoLayer = null, districtLayer = null;
   let mapLayers = null;   // { basemaps, labels, hillshade, current } for the unified panel
+  let mapUI = null;       // MapUI widget handle (deep-zoom note + zoom/scale readout)
   const pathByName = new Map();
   const districtPathByName = new Map();
   const districtGeoCache = new Map();
@@ -1946,13 +1947,20 @@
       zoomControl: true,
       worldCopyJump: true,
       minZoom: 2,            // zoom right out to the whole globe — no India lock
-      maxZoom: 19,           // deep zoom to locality / pixel detail (satellite/tint)
+      maxZoom: MapLayers.MAX_ZOOM,   // deep zoom to locality (honest upscale past native)
       scrollWheelZoom: true,
+      zoomSnap: 0.5,         // half-step zoom → smoother, more controllable deep zoom
+      zoomDelta: 0.5,
+      wheelPxPerZoomLevel: 120,      // gentler wheel so you can settle on a level
     }).setView([22.5, 80], 4.5);
 
     // Tile-layer catalogue lives in map-layers.js (window.MapLayers). app.js keeps
     // the wiring (active layer, panel, weather refresh) + the custom elevation tint.
     const basemaps = MapLayers.basemaps(L);
+    // OPTIONAL "Satellite HD" (real 50 cm z21 over India) — only if the user supplied
+    // a Mapbox token. Ships no key; licensed, so opt-in only. Added last in the list.
+    const hd = MapLayers.satelliteHD(L);
+    if (hd) basemaps['Satellite HD (your Mapbox key)'] = hd;
     basemaps['Dark map'].addTo(map);      // default
     const labels = MapLayers.labels(L);
     const hillshade = MapLayers.hillshade(L);
@@ -1960,6 +1968,9 @@
     const { rain, clouds } = MapLayers.weather(L);
     // Stash for the unified layers panel (replaces the default Leaflet controls).
     mapLayers = { basemaps, labels, hillshade, elevTint, rain, clouds, current: 'Dark map' };
+    // Deep-zoom note + zoom/scale readout (map-ui.js) — reads the active basemap's
+    // real resolution so it can flag upscaling.
+    mapUI = MapUI.setup(map, { getActiveBasemap: () => mapLayers.basemaps[mapLayers.current] });
     buildLayersPanel();
     setupElevationReadout();
     setupWeatherLayer();
@@ -2004,9 +2015,8 @@
         if (districtLayer && districtLayer.options.style) districtLayer.setStyle(districtLayer.options.style);
         else if (geoLayer) geoLayer.eachLayer(l => l.setStyle(fillStyle(l.feature.properties.ST_NM)));
       }
-      updateDeepZoomNote();
+      // map-ui.js refreshes the deep-zoom note + scale readout on its own zoom listener.
     });
-    updateDeepZoomNote();
 
     buildNewsBubbles();
   }
@@ -2092,7 +2102,7 @@
       }
     });
     return new TintLayer({
-      maxNativeZoom: 12, maxZoom: 18, opacity: 0.72, pane: 'overlayPane',
+      maxNativeZoom: 12, maxZoom: (window.MapLayers?.MAX_ZOOM ?? 21), opacity: 0.72, pane: 'overlayPane',
       attribution: 'Elevation tint: AWS Terrain Tiles (Terrarium, open SRTM/NASADEM)',
     });
   }
@@ -2105,8 +2115,26 @@
     // labels + hillshade sit above the basemap — re-raise if on
     if (map.hasLayer(mapLayers.labels)) mapLayers.labels.bringToFront();
     if (map.hasLayer(mapLayers.hillshade)) mapLayers.hillshade.bringToFront();
-    updateDeepZoomNote();   // native-max differs per basemap
+    if (mapUI) mapUI.refresh();   // native-max (→ deep-zoom note) differs per basemap
   }
+  // Add the optional "Satellite HD" basemap using the user's OWN Mapbox token.
+  // We ship no key; the token stays in their browser (localStorage via MapLayers).
+  // Real 50 cm imagery to z21 over India — the only way to beat open imagery's ~z19.
+  function addSatelliteHD() {
+    const existing = MapLayers.mapboxToken();
+    const token = (window.prompt(
+      'Paste your Mapbox access token for real 50 cm "Satellite HD" imagery.\n\n' +
+      'Mapbox imagery is licensed — this is opt-in, we store no key. Your token stays\n' +
+      'in this browser (localStorage). Get a free token at account.mapbox.com.',
+      existing || '') || '').trim();
+    if (!token) return;
+    const hd = MapLayers.satelliteHD(L, token);
+    if (!hd) return;
+    mapLayers.basemaps['Satellite HD (your Mapbox key)'] = hd;
+    switchBasemap('Satellite HD (your Mapbox key)');
+    renderLayersPanel();
+  }
+
   function toggleOverlay(which, on) {
     const layer = mapLayers[which];
     if (!layer) return;
@@ -2144,8 +2172,16 @@
       return;
     }
     const cur = mapLayers?.current || 'Dark map';
+    const shortBase = n => n.replace(' map', '')
+      .replace('Recent satellite (Sentinel-2)', 'Recent (S2)')
+      .replace('Satellite HD (your Mapbox key)', 'Satellite HD');
     const baseBtns = Object.keys(mapLayers?.basemaps || {}).map(n =>
-      `<button class="mlp-base ${cur === n ? 'on' : ''}" data-base="${esc(n)}">${esc(n.replace(' map', '').replace('Recent satellite (Sentinel-2)', 'Recent (S2)'))}</button>`).join('');
+      `<button class="mlp-base ${cur === n ? 'on' : ''}" data-base="${esc(n)}" title="${esc(n)}">${esc(shortBase(n))}</button>`).join('');
+    // Offer to add real sub-metre imagery via the user's OWN Mapbox token (opt-in;
+    // we ship no key). Only shown when no HD layer is loaded yet.
+    const hasHD = !!(mapLayers?.basemaps && mapLayers.basemaps['Satellite HD (your Mapbox key)']);
+    const hdHint = hasHD ? '' :
+      `<button class="mlp-hd-add" id="mlp-hd-add" title="Deep zoom over India tops out at ~z19 on open imagery. Paste your own Mapbox token for real 50 cm imagery (licensed; stays on your device).">＋ HD imagery (your key)</button>`;
     const hillOn = mapLayers && map.hasLayer(mapLayers.hillshade);
     const elevOn = mapLayers && mapLayers.elevTint && map.hasLayer(mapLayers.elevTint);
     const labelsOn = mapLayers && map.hasLayer(mapLayers.labels);
@@ -2170,6 +2206,7 @@
       </div>
       <div class="mlp-sec-h">Base map</div>
       <div class="mlp-bases">${baseBtns}</div>
+      ${hdHint}
       <div class="mlp-sec-h">Overlays</div>
       <label class="mlp-check"><input type="checkbox" id="mlp-hill" ${hillOn ? 'checked' : ''}> Topography (hillshade)</label>
       <label class="mlp-check"><input type="checkbox" id="mlp-elev" ${elevOn ? 'checked' : ''}> Elevation tint (m above sea)</label>
@@ -2184,6 +2221,9 @@
 
     // wire base
     panel.querySelectorAll('.mlp-base').forEach(b => b.onclick = () => { switchBasemap(b.dataset.base); renderLayersPanel(); });
+    // "＋ HD imagery" — take the user's own Mapbox token, add the HD layer, switch to it.
+    const hdBtn = panel.querySelector('#mlp-hd-add');
+    if (hdBtn) hdBtn.onclick = () => addSatelliteHD();
     // overlays
     panel.querySelector('#mlp-hill').onchange = e => toggleOverlay('hillshade', e.target.checked);
     panel.querySelector('#mlp-elev').onchange = e => { toggleOverlay('elevTint', e.target.checked); renderLayersPanel(); };
@@ -2405,26 +2445,7 @@
     }
   }
 
-  // Deep-zoom note: when zoomed past the active basemap's real resolution, tiles are
-  // upscaled — tell the user honestly (open data caps at ~30 m; finer needs LIDAR,
-  // which India doesn't publish openly + high-res is restricted by the 2021 rules).
-  function updateDeepZoomNote() {
-    if (!map || !mapLayers) return;
-    let el = document.getElementById('deep-zoom-note');
-    const active = mapLayers.basemaps[mapLayers.current];
-    const native = active?.options?.maxNativeZoom ?? 19;
-    const past = map.getZoom() > native;
-    if (past && !el) {
-      el = document.createElement('div');
-      el.id = 'deep-zoom-note';
-      el.className = 'deep-zoom-note';
-      document.getElementById('india-map-wrap')?.appendChild(el);
-    }
-    if (el) {
-      el.style.display = past ? 'block' : 'none';
-      if (past) el.innerHTML = `ⓘ max open detail (${mapLayers.current}) — image upscaled; finer needs LIDAR (not openly available for India)`;
-    }
-  }
+  // (Deep-zoom note + zoom/scale readout now live in map-ui.js → MapUI.setup.)
 
   // ---- On-map search: type a district/state/place → jump there to view its
   // topography + vulnerability. Reuses selectState/drillIntoDistricts/selectDistrict.
