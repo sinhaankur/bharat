@@ -2,8 +2,8 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- India Fiscal Map — public pages. Excludes curate.html (internal tool) and
        widget.html (embed target). Update lastmod when a page changes materially. -->
-  <url><loc>https://sinhaankur.github.io/india-fiscal-map/index.html</loc><changefreq>weekly</changefreq><priority>1.0</priority><lastmod>2026-06-25</lastmod></url>
-  <url><loc>https://sinhaankur.github.io/india-fiscal-map/explore.html</loc><changefreq>weekly</changefreq><priority>0.9</priority><lastmod>2026-06-25</lastmod></url>
+  <url><loc>https://sinhaankur.github.io/india-fiscal-map/index.html</loc><changefreq>weekly</changefreq><priority>1.0</priority><lastmod>2026-07-11</lastmod></url>
+  <url><loc>https://sinhaankur.github.io/india-fiscal-map/explore.html</loc><changefreq>weekly</changefreq><priority>0.9</priority><lastmod>2026-07-11</lastmod></url>
   <url><loc>https://sinhaankur.github.io/india-fiscal-map/timeline.html</loc><changefreq>weekly</changefreq><priority>0.8</priority><lastmod>2026-06-25</lastmod></url>
   <url><loc>https://sinhaankur.github.io/india-fiscal-map/articles.html</loc><changefreq>weekly</changefreq><priority>0.8</priority><lastmod>2026-06-25</lastmod></url>
   <url><loc>https://sinhaankur.github.io/india-fiscal-map/how-it-works.html</loc><changefreq>monthly</changefreq><priority>0.7</priority><lastmod>2026-06-25</lastmod></url>
