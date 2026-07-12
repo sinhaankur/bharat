@@ -726,9 +726,13 @@
         });
         layer.on('mouseout', () => {
           if (ui.state.drillDistrict !== dn) {
-            const m = showMoney ? moneyByDistrict.get(dn) : null;
-            if (m) layer.setStyle({ weight: m.flagged ? 2 : 1.2, color: m.flagged ? 'oklch(0.65 0.22 25)' : 'oklch(0.85 0.16 80)' });
-            else layer.setStyle({ weight: 0.6, color: showMoney ? 'oklch(0.985 0 0 / 0.2)' : 'oklch(0.985 0 0 / 0.45)' });
+            if (_queryMatchSet.has(dn)) {
+              layer.setStyle({ color: 'oklch(0.90 0.17 90)', weight: 2.4 });   // keep the query ring
+            } else {
+              const m = showMoney ? moneyByDistrict.get(dn) : null;
+              if (m) layer.setStyle({ weight: m.flagged ? 2 : 1.2, color: m.flagged ? 'oklch(0.65 0.22 25)' : 'oklch(0.85 0.16 80)' });
+              else layer.setStyle({ weight: 0.6, color: showMoney ? 'oklch(0.985 0 0 / 0.2)' : 'oklch(0.985 0 0 / 0.45)' });
+            }
           }
           updateReadout();
         });
@@ -738,8 +742,44 @@
 
     renderLayersPanel();   // refresh the unified panel (data modes + legend) for this state
 
+    highlightQueryDistricts(stateName);   // ring the districts matching an active query
+
     try { map.fitBounds(districtLayer.getBounds(), { padding: [30, 30] }); } catch (e) {}
   }
+
+  // District names matching the active map-query within one state (for the polygon
+  // highlight). Empty when no query is active.
+  function queryMatchDistricts(stateName) {
+    if (!QENGINE || !queryState.keys.size) return new Set();
+    return new Set(QENGINE.run([...queryState.keys], queryState.mode)
+      .filter(r => r.state === stateName).map(r => r.district));
+  }
+
+  // Ring the matching district polygons with a bright halo so the query result is
+  // visible at DISTRICT level after you drill in (survives hover via the flag below).
+  function highlightQueryDistricts(stateName) {
+    const matches = queryMatchDistricts(stateName);
+    _queryMatchSet = matches;   // read by the mouseout handler so the ring persists
+    districtPathByName.forEach((layer, dn) => {
+      if (matches.has(dn)) {
+        layer.setStyle({ color: 'oklch(0.90 0.17 90)', weight: 2.4, dashArray: null });
+        if (layer.bringToFront) layer.bringToFront();
+      }
+    });
+    if (matches.size) renderQueryHintBadge(stateName, matches.size);
+    else removeQueryHintBadge();
+  }
+  let _queryMatchSet = new Set();
+
+  // Small badge over the drilled state telling the user the query is filtering here.
+  function renderQueryHintBadge(stateName, n) {
+    const wrap = document.getElementById('india-map-wrap');
+    if (!wrap) return;
+    let b = document.getElementById('query-hint-badge');
+    if (!b) { b = document.createElement('div'); b.id = 'query-hint-badge'; b.className = 'query-hint-badge'; wrap.appendChild(b); }
+    b.innerHTML = `🔎 ${n} district${n === 1 ? '' : 's'} in ${esc(stateName)} match your query <span class="qhb-dot"></span>`;
+  }
+  function removeQueryHintBadge() { document.getElementById('query-hint-badge')?.remove(); }
 
   // Headline money figure for a district (the biggest ₹-in row in its ledger), or null.
   function districtMoneyHeadline(state, district) {
@@ -1855,10 +1895,13 @@
     if (subdistrictLayer) { subdistrictLayer.remove(); subdistrictLayer = null; }
     if (hazardLayer) { hazardLayer.remove(); hazardLayer = null; }
     if (districtLayer) { districtLayer.remove(); districtLayer = null; districtPathByName.clear(); }
+    _queryMatchSet = new Set(); removeQueryHintBadge();   // drop the per-district query ring
     // Restore state layer styling
     if (geoLayer) geoLayer.eachLayer(layer => layer.setStyle(fillStyle(layer.feature.properties.ST_NM)));
     if (stateName) selectState(stateName);
     renderLayersPanel();   // drop the district data-modes now we're back at state level
+    // Re-apply the India-level query glow if a query is still active.
+    if (typeof reapplyQueryGlow === 'function') setTimeout(reapplyQueryGlow, 0);
     try { map.fitBounds(geoLayer.getBounds(), { padding: [10, 10] }); } catch (e) {}
   }
 
@@ -2867,6 +2910,8 @@
   function runMapQuery() {
     syncMapQueryURL();
     if (queryMatchLayer) { queryMatchLayer.remove(); queryMatchLayer = null; }
+    // If drilled into a state, re-ring its matching district polygons live.
+    if (ui.state.mode === 'districts' && ui.state.drillState) highlightQueryDistricts(ui.state.drillState);
     if (!queryState.keys.size) { restyleQueryStateGlow(new Set()); return; }
     const matches = QENGINE.run([...queryState.keys], queryState.mode);
     // count matches per state

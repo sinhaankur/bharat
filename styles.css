@@ -586,6 +586,15 @@ a:hover { border-color: var(--foreground); }
 .mq-marker { animation: bubblePulse 2.4s ease-in-out infinite; }
 @media (max-width: 640px) { .map-query { top: 46px; right: 8px; } }
 
+/* Query hint badge — shown over a drilled state when the query matches districts there */
+.query-hint-badge {
+  position: absolute; bottom: 44px; left: 50%; transform: translateX(-50%); z-index: 560;
+  background: oklch(0.30 0.08 90 / 0.92); color: oklch(0.92 0.12 95); pointer-events: none;
+  border: 1px solid oklch(0.6 0.14 90 / 0.7); border-radius: 999px; padding: 4px 13px;
+  font-size: 11px; backdrop-filter: blur(4px); display: flex; align-items: center; gap: 6px;
+}
+.query-hint-badge .qhb-dot { width: 7px; height: 7px; border-radius: 50%; background: oklch(0.90 0.17 90); box-shadow: 0 0 6px oklch(0.90 0.17 90); }
+
 /* Time scrubber — "change over the years" slider (bottom-right of the map) */
 .time-scrubber { position: absolute; right: 12px; bottom: 12px; z-index: 610; font-size: 11px; }
 .time-scrubber .ts-toggle {
