@@ -350,6 +350,8 @@
     if (ui.state.selected) renderDetail(ui.state.selected);
     else renderEmptyState();
     updateYearMarker();
+    // If a map-query is active at the India level, keep the match-glow on top.
+    if (typeof reapplyQueryGlow === 'function') reapplyQueryGlow();
   }
 
   function updateYearMarker() {
@@ -2748,6 +2750,7 @@
       buildNewsBubbles();
       setupMapSearch();
       setupTimeScrubber();
+      setupMapQuery();
       // If a district panel is already open, re-render it now the ledger's here.
       if (ui.state.drillState && ui.state.selected) renderDetail(ui.state.selected);
     })();
@@ -2755,6 +2758,168 @@
   }
 
   // (Deep-zoom note + zoom/scale readout now live in map-ui.js → MapUI.setup.)
+
+  // ================= MAP QUERY — turn the map into a cross-India query surface.
+  // Pick facets (query-engine.js), AND/OR them, and matching districts light up
+  // across ALL states: their state glows, a marker sits at each match, a results
+  // tray lists them (click → deep dive into that district), and the query lives in
+  // a shareable ?q=crz,flood&mode=AND URL.
+  let QENGINE = null, queryMatchLayer = null;
+  const queryState = { keys: new Set(), mode: 'AND', open: false };
+
+  function setupMapQuery() {
+    if (typeof QueryEngine === 'undefined' || !LEDGER || QENGINE) return;
+    // news-count map so the coverage facet is accurate on the map too
+    const nc = {};
+    for (const [k, arr] of newsByDistrict) nc[k] = arr.length;
+    QENGINE = QueryEngine.build(LEDGER, { newsCounts: nc });
+    // restore a query from the URL (?q=crz,flood&mode=OR)
+    const qs = new URLSearchParams(location.search);
+    const q = qs.get('q');
+    if (q) {
+      q.split(',').map(s => s.trim()).filter(Boolean).forEach(k => { if (QENGINE.facetByKey[k]) queryState.keys.add(k); });
+      if ((qs.get('mode') || '').toUpperCase() === 'OR') queryState.mode = 'OR';
+      if (queryState.keys.size) queryState.open = true;
+    }
+    buildMapQueryPanel();
+    if (queryState.keys.size) runMapQuery();
+  }
+
+  function buildMapQueryPanel() {
+    const wrap = document.getElementById('india-map-wrap');
+    if (!wrap || document.getElementById('map-query')) return;
+    const el = document.createElement('div');
+    el.id = 'map-query';
+    el.className = 'map-query' + (queryState.open ? '' : ' collapsed');
+    wrap.appendChild(el);
+    renderMapQueryPanel();
+  }
+
+  function mapQueryFacetGroups() {
+    const groups = {};
+    for (const f of QENGINE.facets) (groups[f.group] = groups[f.group] || []).push(f);
+    return groups;
+  }
+
+  function renderMapQueryPanel() {
+    const el = document.getElementById('map-query');
+    if (!el) return;
+    if (!queryState.open) {
+      const n = queryState.keys.size;
+      el.className = 'map-query collapsed';
+      el.innerHTML = `<button class="mq-toggle" id="mq-open" title="Query the map — filter all 594 districts">🔎 Query${n ? ` · ${n}` : ''}</button>`;
+      el.querySelector('#mq-open').onclick = () => { queryState.open = true; renderMapQueryPanel(); };
+      return;
+    }
+    el.className = 'map-query';
+    const groups = mapQueryFacetGroups();
+    const groupHtml = Object.entries(groups).map(([g, fs]) => `
+      <div class="mq-group"><div class="mq-group-h">${esc(g)}</div>
+        ${fs.map(f => `<label class="mq-facet ${queryState.keys.has(f.key) ? 'on' : ''}" title="${esc(f.describe)}">
+          <input type="checkbox" data-fkey="${f.key}" ${queryState.keys.has(f.key) ? 'checked' : ''}> ${esc(f.label)}
+          <span class="mq-n">${QENGINE.run([f.key], 'AND').length}</span></label>`).join('')}
+      </div>`).join('');
+    const matches = QENGINE.run([...queryState.keys], queryState.mode);
+    el.innerHTML = `
+      <div class="mq-head">
+        <span class="mq-title">🔎 Query the map</span>
+        <button class="mq-x" id="mq-close" title="Collapse">✕</button>
+      </div>
+      <div class="mq-mode">
+        <button class="mq-mode-btn ${queryState.mode === 'AND' ? 'on' : ''}" data-mode="AND">ALL</button>
+        <button class="mq-mode-btn ${queryState.mode === 'OR' ? 'on' : ''}" data-mode="OR">ANY</button>
+        ${queryState.keys.size ? `<button class="mq-clear" id="mq-clear">clear</button><button class="mq-share" id="mq-share" title="Copy a shareable link to this query">🔗 share</button>` : ''}
+      </div>
+      <div class="mq-facets">${groupHtml}</div>
+      <div class="mq-result-h">${queryState.keys.size ? `<b>${matches.length}</b> match${matches.length === 1 ? '' : 'es'}` : `Pick facets to filter all ${QENGINE.rows.length} districts`}</div>
+      <div class="mq-results">${renderMapQueryResults(matches)}</div>`;
+
+    el.querySelectorAll('[data-fkey]').forEach(cb => cb.onchange = () => {
+      cb.checked ? queryState.keys.add(cb.dataset.fkey) : queryState.keys.delete(cb.dataset.fkey);
+      renderMapQueryPanel(); runMapQuery();
+    });
+    el.querySelectorAll('.mq-mode-btn').forEach(b => b.onclick = () => { queryState.mode = b.dataset.mode; renderMapQueryPanel(); runMapQuery(); });
+    const clr = el.querySelector('#mq-clear'); if (clr) clr.onclick = () => { queryState.keys.clear(); renderMapQueryPanel(); runMapQuery(); };
+    const shr = el.querySelector('#mq-share'); if (shr) shr.onclick = () => shareMapQuery(shr);
+    el.querySelector('#mq-close').onclick = () => { queryState.open = false; renderMapQueryPanel(); };
+    el.querySelectorAll('.mq-res').forEach(r => r.onclick = () => {
+      const { st, dn } = r.dataset;
+      selectState(st, true); drillIntoDistricts(st).then(() => selectDistrict(dn, st));
+    });
+  }
+
+  // Results tray — grouped by state, each district clickable for a deep dive.
+  function renderMapQueryResults(matches) {
+    if (!queryState.keys.size) return '';
+    if (!matches.length) return `<div class="mq-empty">No district satisfies all of these together — an honest empty result (try ANY, or drop a facet).</div>`;
+    const byState = {};
+    for (const r of matches) (byState[r.state] = byState[r.state] || []).push(r);
+    const cov = r => typeof Coverage !== 'undefined' ? `<span class="mq-cov" style="color:${Coverage.color(r.cov_pct)}">${r.cov_pct}%</span>` : '';
+    return Object.entries(byState).sort((a, b) => b[1].length - a[1].length).map(([st, rs]) => `
+      <div class="mq-state"><div class="mq-state-h">${esc(st)} <span class="mq-state-n">${rs.length}</span></div>
+        ${rs.slice(0, 30).map(r => `<div class="mq-res" data-st="${esc(st)}" data-dn="${esc(r.district)}">
+          <span class="mq-res-dn">${esc(r.district)}</span>
+          <span class="mq-res-meta">${r.flagged ? '⚠ ' : ''}⚠${r.vuln} ${cov(r)}</span></div>`).join('')}
+      </div>`).join('');
+  }
+
+  // Run the query: glow matching states, drop a marker at each match, sync the URL.
+  function runMapQuery() {
+    syncMapQueryURL();
+    if (queryMatchLayer) { queryMatchLayer.remove(); queryMatchLayer = null; }
+    if (!queryState.keys.size) { restyleQueryStateGlow(new Set()); return; }
+    const matches = QENGINE.run([...queryState.keys], queryState.mode);
+    // count matches per state
+    const perState = {};
+    for (const r of matches) perState[r.state] = (perState[r.state] || 0) + 1;
+    restyleQueryStateGlow(new Set(Object.keys(perState)));
+    const maxCount = Math.max(1, ...Object.values(perState));
+    // markers at state centroids sized by match count (India-level overview)
+    queryMatchLayer = L.layerGroup();
+    for (const [st, count] of Object.entries(perState)) {
+      const path = pathByName.get(st); if (!path) continue;
+      let c; try { c = path.getBounds().getCenter(); } catch (e) { continue; }
+      const r = 9 + 12 * Math.sqrt(count / maxCount);
+      const mk = L.circleMarker([c.lat, c.lng], { radius: r, color: 'oklch(0.82 0.16 78)', weight: 2, fillColor: 'oklch(0.82 0.16 78)', fillOpacity: 0.28, className: 'mq-marker' });
+      mk.bindTooltip(`<b>${esc(st)}</b> · ${count} match${count === 1 ? '' : 'es'}`, { direction: 'top', className: 'news-bubble-tip' });
+      mk.on('click', () => { selectState(st, true); drillIntoDistricts(st); });
+      mk.addTo(queryMatchLayer);
+    }
+    queryMatchLayer.addTo(map);
+  }
+
+  // Brighten states that contain a match, dim the rest (India-level spread view).
+  function restyleQueryStateGlow(matchStates) {
+    if (!geoLayer) return;
+    const active = queryState.keys.size > 0;
+    geoLayer.eachLayer(layer => {
+      const nm = layer.feature.properties.ST_NM;
+      if (!active) { layer.setStyle(fillStyle(nm)); return; }
+      const hit = matchStates.has(nm);
+      layer.setStyle({ fillOpacity: hit ? 0.55 : 0.06, weight: hit ? 1.6 : 0.4, color: hit ? 'oklch(0.86 0.16 78)' : 'oklch(0.985 0 0 / 0.12)' });
+    });
+  }
+
+  // Re-apply the query glow after a repaint (only meaningful at the India/states level).
+  function reapplyQueryGlow() {
+    if (!QENGINE || !queryState.keys.size || ui.state.mode === 'districts') return;
+    const matches = QENGINE.run([...queryState.keys], queryState.mode);
+    restyleQueryStateGlow(new Set(matches.map(r => r.state)));
+  }
+
+  function syncMapQueryURL() {
+    const u = new URL(location.href);
+    if (queryState.keys.size) { u.searchParams.set('q', [...queryState.keys].join(',')); u.searchParams.set('mode', queryState.mode); }
+    else { u.searchParams.delete('q'); u.searchParams.delete('mode'); }
+    history.replaceState(null, '', u);
+  }
+
+  function shareMapQuery(btn) {
+    syncMapQueryURL();
+    const url = location.href;
+    const done = () => { const t = btn.textContent; btn.textContent = '✓ copied'; setTimeout(() => btn.textContent = t, 1400); };
+    if (navigator.clipboard) navigator.clipboard.writeText(url).then(done, done); else done();
+  }
 
   // ---- Time scrubber: a "change over the years" slider (time-scrubber.js). As the
   // user drags, we highlight timeline hotspots and label how far each water body /

@@ -549,6 +549,43 @@ a:hover { border-color: var(--foreground); }
 .zoom-readout .zr-z--past { color: oklch(0.82 0.13 70); }   /* upscaled past native */
 @media (max-width: 640px) { .zoom-readout { bottom: 8px; } .deep-zoom-note { bottom: 56px; } }
 
+/* Map query — cross-India facet filter (top-right of the map) */
+.map-query { position: absolute; top: 54px; right: 12px; z-index: 615; font-size: 11px; width: min(280px, 76vw); }
+.map-query.collapsed { width: auto; }
+.map-query .mq-toggle { cursor: pointer; background: oklch(0.16 0.01 250 / 0.94); color: var(--foreground); border: 1px solid var(--border-strong); border-radius: 999px; padding: 5px 12px; font-size: 11px; backdrop-filter: blur(4px); box-shadow: 0 2px 10px oklch(0 0 0 / 0.4); }
+.map-query .mq-toggle:hover { border-color: var(--warm); }
+.map-query:not(.collapsed) { background: oklch(0.13 0.008 250 / 0.96); border: 1px solid var(--border-strong); border-radius: 10px; padding: 9px 10px; backdrop-filter: blur(8px); box-shadow: 0 6px 24px oklch(0 0 0 / 0.55); max-height: min(76vh, 620px); overflow-y: auto; }
+.mq-head { display: flex; align-items: center; margin-bottom: 6px; }
+.mq-title { font-weight: 600; color: var(--foreground); }
+.mq-x { margin-left: auto; background: none; border: 1px solid var(--border-strong); border-radius: 5px; color: var(--muted-foreground); width: 22px; height: 20px; font-size: 10px; cursor: pointer; }
+.mq-x:hover { color: var(--foreground); border-color: var(--warm); }
+.mq-mode { display: flex; align-items: center; gap: 5px; margin-bottom: 8px; }
+.mq-mode-btn { background: transparent; color: var(--muted-foreground); border: 1px solid var(--border-strong); border-radius: 999px; padding: 2px 10px; font-family: var(--font-mono); font-size: 10px; cursor: pointer; }
+.mq-mode-btn.on { background: var(--warm); color: oklch(0.18 0 0); border-color: var(--warm); font-weight: 600; }
+.mq-clear { margin-left: auto; background: none; border: none; color: oklch(0.72 0.16 30); font-size: 10px; cursor: pointer; text-decoration: underline; }
+.mq-share { background: none; border: 1px solid var(--border-strong); border-radius: 999px; color: var(--muted-foreground); font-size: 9.5px; padding: 1px 8px; cursor: pointer; }
+.mq-share:hover { color: var(--foreground); border-color: var(--warm); }
+.mq-group { margin-bottom: 6px; }
+.mq-group-h { font-family: var(--font-mono); font-size: 8px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted-foreground); margin-bottom: 2px; }
+.mq-facet { display: flex; align-items: center; gap: 5px; font-size: 11px; padding: 2px 3px; border-radius: 4px; cursor: pointer; color: var(--foreground); }
+.mq-facet:hover { background: oklch(0.22 0.02 250); }
+.mq-facet.on { background: oklch(0.30 0.06 78 / 0.22); }
+.mq-facet .mq-n { margin-left: auto; font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); }
+.mq-result-h { font-size: 11px; color: var(--muted-foreground); border-top: 1px solid var(--border); padding-top: 6px; margin-top: 4px; }
+.mq-result-h b { color: oklch(0.86 0.15 78); }
+.mq-results { margin-top: 5px; }
+.mq-empty { font-size: 10px; color: var(--muted-foreground); font-style: italic; line-height: 1.5; }
+.mq-state { margin-bottom: 5px; }
+.mq-state-h { font-size: 10px; font-weight: 600; color: oklch(0.82 0.06 230); }
+.mq-state-n { font-family: var(--font-mono); font-size: 8.5px; color: var(--muted-foreground); }
+.mq-res { display: flex; align-items: center; gap: 6px; padding: 2px 4px 2px 8px; cursor: pointer; border-radius: 4px; }
+.mq-res:hover { background: oklch(0.24 0.02 250); }
+.mq-res-dn { font-size: 11px; color: var(--foreground); }
+.mq-res-meta { margin-left: auto; font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); }
+.mq-cov { font-weight: 600; }
+.mq-marker { animation: bubblePulse 2.4s ease-in-out infinite; }
+@media (max-width: 640px) { .map-query { top: 46px; right: 8px; } }
+
 /* Time scrubber — "change over the years" slider (bottom-right of the map) */
 .time-scrubber { position: absolute; right: 12px; bottom: 12px; z-index: 610; font-size: 11px; }
 .time-scrubber .ts-toggle {
