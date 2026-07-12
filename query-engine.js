@@ -63,6 +63,8 @@
         const elev = g.elevation && typeof g.elevation.centroid_m === 'number' ? g.elevation.centroid_m : null;
         const covPct = (global.Coverage && typeof global.Coverage.score === 'function')
           ? global.Coverage.score(dist, { newsCount: newsCounts[sn + '|' + dn] || 0 }).pct : 0;
+        const health = (dist.dimensions && dist.dimensions.health) || {};
+        const economy = (dist.dimensions && dist.dimensions.economy) || {};
         rows.push({
           state: sn, district: dn,
           crz: !!(g.crz && g.crz.applies) || !!g.on_coast,
@@ -80,6 +82,10 @@
           money: headlineMoney(dist),
           has_ledger: !!(dist.ledger && dist.ledger.length),
           cov_pct: covPct,
+          imr: typeof health.imr === 'number' ? health.imr : null,
+          stunting: typeof health.stunting_u5_pct === 'number' ? health.stunting_u5_pct : null,
+          income: typeof economy.percapita_nsdp_inr === 'number' ? economy.percapita_nsdp_inr : null,
+          income_tier: economy.income_tier || null,
           elev,
         });
       }
@@ -115,6 +121,12 @@
         describe: 'At least 30% of this district is pinned to sources (not a baseline skeleton)' },
       { key: 'cov_thin', group: 'Source coverage', label: 'Thin / baseline (a gap-heavy)', test: r => r.cov_pct < 30,
         describe: 'Under 30% sourced — mostly structure-only, figures still a gap' },
+      { key: 'high_imr', group: 'Health & wealth', label: 'High infant mortality (IMR ≥ 35)', test: r => r.imr != null && r.imr >= 35,
+        describe: "State IMR ≥ 35 / 1,000 (NFHS-5) — the worse-health end" },
+      { key: 'high_stunting', group: 'Health & wealth', label: 'High child stunting (≥ 35%)', test: r => r.stunting != null && r.stunting >= 35,
+        describe: 'State under-5 stunting ≥ 35% (NFHS-5)' },
+      { key: 'low_income', group: 'Health & wealth', label: 'Lower-income state (per-capita)', test: r => r.income_tier === 'low' || r.income_tier === 'lower-middle',
+        describe: 'State per-capita NSDP in the low / lower-middle tier (RBI)' },
     ];
     const facetByKey = Object.fromEntries(facets.map(f => [f.key, f]));
 

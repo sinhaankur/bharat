@@ -548,6 +548,22 @@
   function dimGeoFor(state, district) {
     return LEDGER?.states?.[state]?.districts?.[district]?.dimensions?.geography || null;
   }
+  // Health facet: colour by IMR (infant mortality) — lower is better (green→red).
+  function healthColorFor(state) {
+    const h = LEDGER?.states?.[state]?.health;
+    if (!h || h.imr == null) return 'oklch(0.24 0.01 250)';
+    const t = Math.min(1, Math.max(0, (h.imr - 4) / (50 - 4)));   // 4..50 → 0..1
+    // green (low IMR) → amber → red (high IMR)
+    return `oklch(${0.74 - 0.12 * t} ${0.13 + 0.08 * t} ${150 - 130 * t})`;
+  }
+  // Economy facet: colour by per-capita income tier (low→high).
+  function economyColorFor(state) {
+    const e = LEDGER?.states?.[state]?.economy;
+    if (!e || e.percapita_nsdp_inr == null) return 'oklch(0.24 0.01 250)';
+    const v = e.percapita_nsdp_inr;
+    const t = Math.min(1, Math.max(0, (v - 50000) / (500000 - 50000)));
+    return seqColor(0.18 + 0.75 * t);
+  }
   // Fill colour for the "Data coverage" district mode (data density, not risk).
   function coverageColorFor(state, district) {
     if (typeof Coverage === 'undefined') return 'oklch(0.22 0 0)';
@@ -705,6 +721,12 @@
         }
         if (ui.state.districtMode === 'coverage') {
           return { className: 'india-state-path', color: bc('oklch(0.985 0 0 / 0.35)'), weight: 0.6, fillColor: coverageColorFor(stateName, dn), fillOpacity: fo(0.85) };
+        }
+        if (ui.state.districtMode === 'health') {
+          return { className: 'india-state-path', color: bc('oklch(0.985 0 0 / 0.35)'), weight: 0.6, fillColor: healthColorFor(stateName), fillOpacity: fo(0.85) };
+        }
+        if (ui.state.districtMode === 'economy') {
+          return { className: 'india-state-path', color: bc('oklch(0.985 0 0 / 0.35)'), weight: 0.6, fillColor: economyColorFor(stateName), fillOpacity: fo(0.85) };
         }
         const pop = getDistrictPop(stateName, dn)?.population;
         const t = pop != null ? (pop - popMin) / Math.max(1, popMax - popMin) : 0;
@@ -1227,6 +1249,34 @@
           <span class="dim-val dim-hinder">${esc(geo.hinders_dev_note)}</span>
         </div>`);
       }
+    }
+    // HEALTH (NFHS-5, state-level) — the "health" half of wealth-and-health.
+    const health = dims.health;
+    if (health && health.imr != null) {
+      const stats = [
+        `IMR <b>${health.imr}</b><span class="dim-unit">/1k</span>`,
+        health.stunting_u5_pct != null ? `stunting <b>${health.stunting_u5_pct}%</b>` : '',
+        health.institutional_births_pct != null ? `inst. births <b>${health.institutional_births_pct}%</b>` : '',
+        health.full_immunisation_pct != null ? `immunised <b>${health.full_immunisation_pct}%</b>` : '',
+      ].filter(Boolean).join(' · ');
+      rows.push(`
+        <div class="dim-row">
+          <span class="dim-key">Health</span>
+          <span class="dim-val">${stats}
+            <br><span class="dim-gap">NFHS-5 (2019-21), state-level · per-district: gap</span></span>
+        </div>`);
+    }
+    // ECONOMY (RBI, state-level) — the "wealth" half.
+    const econ = dims.economy;
+    if (econ && econ.percapita_nsdp_inr != null) {
+      const cr = econ.percapita_nsdp_inr;
+      const tier = econ.income_tier ? `<span class="dim-tier dim-tier--${esc(econ.income_tier)}">${esc(econ.income_tier.replace(/-/g, ' '))}</span>` : '';
+      rows.push(`
+        <div class="dim-row">
+          <span class="dim-key">Economy</span>
+          <span class="dim-val">per-capita income <b>₹${cr.toLocaleString('en-IN')}</b>/yr ${tier}
+            <br><span class="dim-gap">RBI Handbook (NSDP), state-level · per-district: gap</span></span>
+        </div>`);
     }
     if (!rows.length) return '';
     return `
@@ -2360,7 +2410,7 @@
   function dataOverlayModes() {
     const inDistricts = ui.state.drillState != null;
     const geo = [['geography', 'Flood & terrain']];
-    const drilled = [['population', 'Population'], ['money', 'Money flow'], ['language', 'Language'], ['politics', 'Politics'], ['coverage', '📊 Data coverage']];
+    const drilled = [['population', 'Population'], ['money', 'Money flow'], ['language', 'Language'], ['politics', 'Politics'], ['health', '🩺 Health'], ['economy', '₹ Wealth'], ['coverage', '📊 Data coverage']];
     return inDistricts ? [...drilled, ...geo] : geo;
   }
 
@@ -2377,7 +2427,7 @@
         rainfall: 'Rainfall band', constraint: 'Physical constraint',
       })[f] || 'Geography';
     }
-    return ({ money: 'Money flow', population: 'Population', language: 'Language', politics: 'Politics', coverage: '📊 Data coverage — sourced vs gap' })[mode] || 'Map';
+    return ({ money: 'Money flow', population: 'Population', language: 'Language', politics: 'Politics', health: '🩺 Health — infant mortality (NFHS-5)', economy: '₹ Wealth — per-capita income', coverage: '📊 Data coverage — sourced vs gap' })[mode] || 'Map';
   }
 
   // Paint the always-visible "now showing" badge on the map (top-centre).
@@ -2524,6 +2574,8 @@
     if (mode === 'language') return `<span class="mlp-leg-note">official language per state; district mother-tongue = gap</span>`;
     if (mode === 'politics') return chip('oklch(0.70 0.15 150)', 'aligned') + chip('oklch(0.66 0.20 28)', 'opposition') + chip('oklch(0.60 0.05 250)', 'UT/other');
     if (mode === 'coverage') return chip(Coverage.color(5), 'baseline') + chip(Coverage.color(20), 'thin') + chip(Coverage.color(45), 'partial') + chip(Coverage.color(75), 'deep') + `<span class="mlp-leg-note">how much of each district is pinned to sources vs. a gap — data density, NOT quality or risk</span>`;
+    if (mode === 'health') return chip(healthColorFor('Kerala'), 'low IMR (better)') + chip(healthColorFor('Assam'), 'mid') + chip(healthColorFor('Uttar Pradesh'), 'high IMR') + `<span class="mlp-leg-note">infant mortality per 1,000 (NFHS-5, state-level) — juxtaposed, not a verdict</span>`;
+    if (mode === 'economy') return chip(economyColorFor('Bihar'), 'lower income') + chip(economyColorFor('Rajasthan'), 'middle') + chip(economyColorFor('Goa'), 'high income') + `<span class="mlp-leg-note">per-capita NSDP (RBI Handbook, state-level) — the 'wealth' axis</span>`;
     if (mode === 'geography') {
       const f = ui.state.geoFacet || 'zoning';
       if (f === 'zoning') {

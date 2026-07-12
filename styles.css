@@ -1260,6 +1260,11 @@ a:hover { border-color: var(--foreground); }
 .dim-geo-coast { color: oklch(0.78 0.13 200); } .dim-geo-flood { color: oklch(0.74 0.16 250); } .dim-geo-terrain { color: oklch(0.80 0.10 90); text-transform: capitalize; }
 .dim-row--note { border-bottom: none; padding-top: 0.15rem; }
 .dim-hinder { font-size: 10.5px; line-height: 1.5; color: var(--muted-foreground); font-style: italic; }
+.dim-unit { font-size: 8.5px; color: var(--muted-foreground); margin-left: 1px; }
+.dim-tier { font-family: var(--font-mono); font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.03em; padding: 1px 6px; border-radius: 999px; border: 1px solid currentColor; margin-left: 3px; }
+.dim-tier--high { color: oklch(0.80 0.15 150); } .dim-tier--upper-middle { color: oklch(0.80 0.12 175); }
+.dim-tier--middle { color: oklch(0.80 0.12 90); } .dim-tier--lower-middle { color: oklch(0.80 0.13 60); }
+.dim-tier--low { color: oklch(0.76 0.16 30); }
 /* Legal-zone headline — "what can be built here" leads the geography section */
 .dim-row--zone { border-bottom: none; padding-bottom: 0.15rem; }
 .zone-badge {
