@@ -103,11 +103,14 @@
         const label = esc(other.label);
         return `<li><span class="mx-kind">${esc(kind)}</span>${oh ? `<a href="${oh}">${label}</a>` : label}</li>`;
       }).join("");
+      const moneyMeta = (n.type === "money" && n.meta) ?
+        `<div class="mx-kind">₹${Number(n.meta.amount_cr).toLocaleString("en-IN")} cr${n.meta.scope ? ` · ${esc(n.meta.scope)}-wide` : ""}${n.meta.per_capita != null ? ` · ₹${Number(n.meta.per_capita).toLocaleString("en-IN")}/resident` : ""} · sourced</div>` : "";
       side.innerHTML = `
         <h2>Selection</h2>
         <span class="mx-sel-type" style="color:${t.color}">${esc(t.label || n.type)}</span>
         <div class="mx-sel-name">${esc(n.label)}</div>
         ${n.meta && n.meta.service ? `<div class="mx-kind">${esc(n.meta.service)}</div>` : ""}
+        ${moneyMeta}
         <ul class="mx-links">${links || '<li class="mx-empty">No links.</li>'}</ul>
         ${href ? `<a class="mx-open" href="${href}">Open →</a>` : ""}`;
     }

@@ -14,6 +14,7 @@
     official: { color: '#5bb3e8', r: 6, label: 'Official' },
     scheme:   { color: '#7de0a3', r: 6, label: 'Scheme' },
     chain:    { color: '#e07d9a', r: 8, label: 'Story chain' },
+    money:    { color: '#f2c14e', r: 7, label: 'Money (sourced ₹)' },
   };
 
   // Build nodes + edges from the data. Only real relationships become edges.
@@ -43,6 +44,18 @@
         const sid = 's:' + c.scheme_ref;
         node(sid, 'scheme', c.scheme_ref.replace(/^_/, '').replace(/_/g, ' '), {});
         link(cid, sid, 'scheme');
+      }
+      // Money node — ONLY where the chain carries a sourced actual_cost. Labelled
+      // with the human per-capita figure; sized by the crore amount.
+      const ac = c.actual_cost;
+      if (ac && typeof ac.amount_cr === 'number' && !ac.figure_gap) {
+        const mid = 'm:' + c.id;
+        const label = ac.per_capita_inr != null
+          ? '₹' + ac.per_capita_inr.toLocaleString('en-IN') + '/resident'
+          : '₹' + ac.amount_cr.toLocaleString('en-IN') + ' cr';
+        node(mid, 'money', label, { amount_cr: ac.amount_cr, per_capita: ac.per_capita_inr, scope: ac.scope, href: 'story.html?chain=' + encodeURIComponent(c.id) });
+        link(cid, mid, ac.scope === 'district' ? 'cost (district)' : 'cost (state-wide)');
+        if (c.geo && c.geo.district) link(mid, distId(c.geo.state, c.geo.district), 'per resident');
       }
     }
     // Officials → district, and issue → chain
@@ -130,7 +143,10 @@
       // nodes
       for (const n of nodes) {
         const t = TYPE[n.type] || TYPE.district;
-        const r = t.r + Math.min(6, n.deg);
+        // money nodes are sized by the ₹ crore amount (sqrt scale); others by degree.
+        const r = n.type === 'money'
+          ? 6 + Math.min(12, Math.sqrt((n.meta.amount_cr || 0)) * 0.18)
+          : t.r + Math.min(6, n.deg);
         const dim = sel && sel.id !== n.id && !edges.some(e => (e.a === sel.id && e.b === n.id) || (e.b === sel.id && e.a === n.id));
         ctx.globalAlpha = dim ? 0.28 : 1;
         ctx.fillStyle = t.color;
