@@ -308,6 +308,7 @@
               <span class="chain-meta">${esc(c.geo?.district||"")}${c.geo?.state?", "+esc(c.geo.state):""} · ${esc(c.scheme_ref||"")} · ${evs.length} events</span>
             </div>
             ${c.one_line ? `<p class="chain-oneline">${esc(c.one_line)}</p>` : ""}
+            ${(typeof AccountabilityArc!=="undefined")?AccountabilityArc.render(c):""}
             ${politicsHtml}
             <div class="rail">${rail}</div>
             ${relatedHtml}
@@ -345,6 +346,7 @@
         <span class="pl-caveat">shown beside the money for context — not a causal claim</span></div>`;
     }
   </script>
+  <script src="accountability-arc.js"></script>
   <script src="site-nav.js"></script>
 </body>
 </html>

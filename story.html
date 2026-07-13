@@ -118,6 +118,7 @@
         <a class="sy-back" href="timeline.html">← Timeline</a>
         <h1 class="sy-title">${esc(c.title)}</h1>
         <p class="sy-sub">${esc(c.one_line||"")}</p>
+        ${(typeof AccountabilityArc!=="undefined")?AccountabilityArc.render(c):""}
         <ul class="sy-bullets">${bullets}</ul>
         <div class="sy-tabs">
           ${["all","left","centre","right"].map(b=>`<button class="sy-tab ${TAB===b?"on":""}" data-tab="${b}">${b==="all"?"All":b[0].toUpperCase()+b.slice(1)} ${tabCount(b)}</button>`).join("")}
@@ -162,6 +163,7 @@
 
     function fmtDate(d){ if(!d) return ""; const x=new Date(d); return isNaN(x)?d:x.toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"}); }
   </script>
+  <script src="accountability-arc.js"></script>
   <script src="site-nav.js"></script>
 </body>
 </html>

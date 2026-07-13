@@ -1240,6 +1240,13 @@ a:hover { border-color: var(--foreground); }
 .acc-total { font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); }
 .acc-note { font-size: 9px; color: var(--muted-foreground); font-style: italic; }
 .acc-row--impact .acc-val { font-style: italic; }
+.acc-src { font-family: var(--font-mono); font-size: 8.5px; color: oklch(0.72 0.10 230); text-decoration: none;
+  border: 1px solid currentColor; border-radius: 3px; padding: 0 3px; white-space: nowrap; }
+.acc-src:hover { color: oklch(0.85 0.13 230); }
+.acc-conf { font-family: var(--font-mono); font-size: 8px; text-transform: uppercase; letter-spacing: 0.04em;
+  padding: 0 4px; border-radius: 999px; border: 1px solid currentColor; }
+.acc-conf--pos { color: oklch(0.80 0.16 150); } .acc-conf--warm { color: oklch(0.80 0.14 75); } .acc-conf--bad { color: oklch(0.72 0.18 25); }
+.acc-gap { font-family: var(--font-mono); font-size: 9px; color: oklch(0.78 0.16 70); font-style: italic; }
 .dev-rail { border-left: 2px solid var(--border-strong); padding-left: 0.7rem; display: flex; flex-direction: column; gap: 0.55rem; }
 .dev-ev { position: relative; }
 .dev-ev::before { content: ""; position: absolute; left: calc(-0.7rem - 5px); top: 4px; width: 7px; height: 7px; border-radius: 50%; background: currentColor; box-shadow: 0 0 0 3px oklch(0.165 0 0); }
