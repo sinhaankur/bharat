@@ -744,7 +744,7 @@
         layer.on('mouseover', () => {
           layer.setStyle({ weight: 1.6, color: 'oklch(0.985 0 0)' });
           if (showMoney) updateDistrictMoneyReadout(dn, stateName, moneyByDistrict.get(dn));
-          else updateDistrictReadout(dn, stateName, getDistrictPop(stateName, dn)?.population);
+          else updateDistrictFacetReadout(dn, stateName);
         });
         layer.on('mouseout', () => {
           if (ui.state.drillDistrict !== dn) {
@@ -847,6 +847,70 @@
     valEl.textContent = pop != null ? `Pop ${pop.toLocaleString('en-IN')} (Census 2011)` : 'Population data pending';
     valEl.style.color = 'oklch(0.78 0.16 70)';
     valEl.style.fontSize = '12.5px';
+  }
+
+  // Facet-aware hover readout: tell the user the value they're seeing coloured on
+  // the map, not always population. Falls back to population for the default facet.
+  // '(state)' marks a state-level figure shown on a district (health / economy).
+  function updateDistrictFacetReadout(district, state) {
+    const mode = ui.state.districtMode;
+    let text = null, color = 'oklch(0.78 0.16 70)';
+    if (mode === 'health') {
+      const h = LEDGER?.states?.[state]?.health;
+      if (h && h.imr != null) { text = `IMR ${h.imr}/1k${h.stunting_u5_pct != null ? ` · stunting ${h.stunting_u5_pct}%` : ''} (state, NFHS-5)`; color = healthColorFor(state); }
+      else text = 'Health: gap';
+    } else if (mode === 'economy') {
+      const e = LEDGER?.states?.[state]?.economy;
+      if (e && e.percapita_nsdp_inr != null) { text = `₹${e.percapita_nsdp_inr.toLocaleString('en-IN')}/yr${e.income_tier ? ` · ${e.income_tier.replace(/-/g, ' ')}` : ''} (state, RBI)`; color = economyColorFor(state); }
+      else text = 'Per-capita income: gap';
+    } else if (mode === 'language') {
+      const lang = dimLangFor(state, district);
+      text = lang ? `Language: ${lang}` : 'Language: gap';
+      if (lang) color = langColor(lang);
+    } else if (mode === 'politics') {
+      const a = dimAlignFor(state, district);
+      text = a ? a : 'Political alignment: gap';
+      if (a) color = alignColor(a);
+    } else if (mode === 'coverage' && typeof Coverage !== 'undefined') {
+      const dist = LEDGER?.states?.[state]?.districts?.[district];
+      if (dist) { const pct = Coverage.score(dist, { newsCount: newsCountFor(state, district) }).pct; text = `Data coverage ${pct}% (sourced vs gap)`; color = Coverage.color(pct); }
+    } else if (mode === 'geography') {
+      const g = dimGeoFor(state, district);
+      const facet = ui.state.geoFacet || 'zoning';
+      if (g) { text = geoReadoutText(g, facet); color = geoFacetColor(g, facet); }
+      else text = 'Geography: gap';
+    }
+    if (text == null) return updateDistrictReadout(district, state, getDistrictPop(state, district)?.population);
+    $ind('.readout-label').textContent = `District · ${state}`;
+    $ind('.readout-name').textContent = district;
+    const valEl = $ind('.readout-value');
+    valEl.textContent = text;
+    valEl.style.color = color;
+    valEl.style.fontSize = '12.5px';
+  }
+
+  // Short human summary of a district's geography for the active facet. Reads the
+  // same fields the colour logic (geoFacetColor / zoningZone) reads, so the badge
+  // and the map agree.
+  function geoReadoutText(g, facet) {
+    if (facet === 'zoning') return zoningZone(g).label;
+    if (facet === 'vulnerability') {
+      const n = (typeof Vuln !== 'undefined') ? Vuln.signals(g).count : 0;
+      return n ? `${n} overlapping risk signal${n > 1 ? 's' : ''}` : 'No stacked risk signals';
+    }
+    if (facet === 'coastal') return g.crz?.applies || g.on_coast ? 'Coastal · CRZ applies' : 'Not on coast';
+    if (facet === 'flood') {
+      if (g.flood_level === 'district-chronic') return 'Flood-hazard (chronic)';
+      if (g.flood_level === 'state-flood-prone') return 'Flood-prone (state-level)';
+      return 'Not flagged flood-prone';
+    }
+    if (facet === 'elevation') {
+      const m = g.elevation?.centroid_m;
+      return m != null ? `Elevation ${m} m${g.elevation?.terrain_band ? ` · ${g.elevation.terrain_band}` : ''}` : 'Elevation: gap';
+    }
+    if (facet === 'rainfall') return g.rainfall?.band ? `Rainfall band: ${g.rainfall.band}` : 'Rainfall band: gap';
+    if (facet === 'constraint') return zoningZone(g).label;
+    return 'Geography';
   }
 
   function selectDistrict(district, state) {
