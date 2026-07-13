@@ -3,10 +3,19 @@
     "as_of": "2026-07",
     "purpose": "Officials accountability layer — sourced posting history + cited issues attached to the OFFICE, per the five iron rules in officials-dataset-schema.md.",
     "rules_ref": "officials-dataset-schema.md",
-    "source_tiers": {"1": "gov_pdf", "2": "gov_html", "3": "wikipedia", "4": "news"},
-    "confidence_vocab": ["documented", "reported", "alleged"],
+    "source_tiers": {
+      "1": "gov_pdf",
+      "2": "gov_html",
+      "3": "wikipedia",
+      "4": "news"
+    },
+    "confidence_vocab": [
+      "documented",
+      "reported",
+      "alleged"
+    ],
     "disclaimer": "A factual, sourced record of public office-holders and their postings. 'Issues' are quoted from and cited to the naming authority (CAG / court / PIB / government order) and are attached to the OFFICE held, not asserted as personal wrongdoing. Nothing here states that a named individual is corrupt or caused a loss. Corrections and right of reply: see about.html.",
-    "coverage": "1 seed exemplar (fully sourced). Grows from the 26 officials already named + sourced in the district-ledger roster."
+    "coverage": "26 officials (1 curated w/ sourced issue + 25 posting-only from the ledger roster). Grows as more roster names are sourced."
   },
   "officials": [
     {
@@ -17,8 +26,8 @@
         "post": "District Magistrate & Collector",
         "place": "Birbhum",
         "state": "West Bengal",
-        "as_of": "2023",
-        "source": "https://birbhum.gov.in/",
+        "as_of": "2026-05",
+        "source": "https://birbhum.gov.in/whos-who/",
         "source_tier": 2
       },
       "postings": [
@@ -28,10 +37,10 @@
           "state": "West Bengal",
           "from": "2023",
           "to": null,
-          "order_ref": "West Bengal IAS posting (district administration listing)",
-          "source": "https://birbhum.gov.in/",
+          "order_ref": "West Bengal district administration listing",
+          "source": "https://birbhum.gov.in/whos-who/",
           "source_tier": 2,
-          "note": "Posting as listed on the district administration portal. Earlier postings are a gap here (not yet pinned to a transfer order)."
+          "note": "Posting as listed on the district administration portal. Earlier postings are a gap."
         }
       ],
       "issues": [
@@ -51,12 +60,940 @@
         }
       ],
       "district_refs": [
-        {"state": "West Bengal", "district": "Birbhum"}
+        {
+          "state": "West Bengal",
+          "district": "Birbhum"
+        }
       ],
       "_gaps": [
         "postings before 2023 (transfer orders) unsourced",
         "cadre / batch year unsourced",
-        "office-specific (Birbhum) MGNREGS unspent figure — only the state-wide dues are sourced"
+        "office-specific (Birbhum) MGNREGS unspent figure — only state-wide dues are sourced"
+      ]
+    },
+    {
+      "id": "off_a_amalraj_chennai",
+      "name": "A. Amalraj",
+      "service": "IPS",
+      "current_post": {
+        "post": "Commissioner of Greater Chennai Police",
+        "place": "Chennai",
+        "state": "Tamil Nadu",
+        "as_of": "2026-05",
+        "source": "https://www.thenewsminute.com/tamil-nadu/a-amalraj-appointed-as-chennai-police-commissioner",
+        "source_tier": 4
+      },
+      "postings": [
+        {
+          "post": "Commissioner of Greater Chennai Police",
+          "place": "Chennai",
+          "state": "Tamil Nadu",
+          "from": "2026-05",
+          "to": null,
+          "order_ref": "district administration / roster listing",
+          "source": "https://www.thenewsminute.com/tamil-nadu/a-amalraj-appointed-as-chennai-police-commissioner",
+          "source_tier": 4
+        }
+      ],
+      "issues": [],
+      "district_refs": [
+        {
+          "state": "Tamil Nadu",
+          "district": "Chennai"
+        }
+      ],
+      "_gaps": [
+        "earlier postings (transfer history) unsourced",
+        "cadre / batch year unsourced",
+        "no issue pinned — office-level accountability data is a gap"
+      ]
+    },
+    {
+      "id": "off_ajay_kumar_nand_kolkata",
+      "name": "Ajay Kumar Nand",
+      "service": "IPS",
+      "current_post": {
+        "post": "Commissioner of Police, Kolkata",
+        "place": "Kolkata",
+        "state": "West Bengal",
+        "as_of": "2026-06",
+        "source": "https://en.wikipedia.org/wiki/Kolkata",
+        "source_tier": 3
+      },
+      "postings": [
+        {
+          "post": "Commissioner of Police, Kolkata",
+          "place": "Kolkata",
+          "state": "West Bengal",
+          "from": "2026-06",
+          "to": null,
+          "order_ref": "district administration / roster listing",
+          "source": "https://en.wikipedia.org/wiki/Kolkata",
+          "source_tier": 3
+        }
+      ],
+      "issues": [],
+      "district_refs": [
+        {
+          "state": "West Bengal",
+          "district": "Kolkata"
+        }
+      ],
+      "_gaps": [
+        "earlier postings (transfer history) unsourced",
+        "cadre / batch year unsourced",
+        "no issue pinned — office-level accountability data is a gap"
+      ]
+    },
+    {
+      "id": "off_amandeep_birbhum",
+      "name": "Amandeep",
+      "service": "IPS",
+      "current_post": {
+        "post": "Superintendent of Police",
+        "place": "Birbhum",
+        "state": "West Bengal",
+        "as_of": "2025-11",
+        "source": "https://www.indianbureaucracy.com/dhaval-jain-ias-appointed-as-collector-and-executive-magistrate-birbhum-west-bengal/",
+        "source_tier": 4
+      },
+      "postings": [
+        {
+          "post": "Superintendent of Police",
+          "place": "Birbhum",
+          "state": "West Bengal",
+          "from": "2025-11",
+          "to": null,
+          "order_ref": "district administration / roster listing",
+          "source": "https://www.indianbureaucracy.com/dhaval-jain-ias-appointed-as-collector-and-executive-magistrate-birbhum-west-bengal/",
+          "source_tier": 4
+        }
+      ],
+      "issues": [],
+      "district_refs": [
+        {
+          "state": "West Bengal",
+          "district": "Birbhum"
+        }
+      ],
+      "_gaps": [
+        "earlier postings (transfer history) unsourced",
+        "cadre / batch year unsourced",
+        "no issue pinned — office-level accountability data is a gap"
+      ]
+    },
+    {
+      "id": "off_animesh_kanti_manna_birbhum",
+      "name": "Animesh Kanti Manna",
+      "service": "WBCS",
+      "current_post": {
+        "post": "Sub-Divisional Officer, Bolpur",
+        "place": "Birbhum",
+        "state": "West Bengal",
+        "as_of": "2026-05",
+        "source": "https://birbhum.gov.in/whos-who/",
+        "source_tier": 2
+      },
+      "postings": [
+        {
+          "post": "Sub-Divisional Officer, Bolpur",
+          "place": "Birbhum",
+          "state": "West Bengal",
+          "from": "2026-05",
+          "to": null,
+          "order_ref": "district administration / roster listing",
+          "source": "https://birbhum.gov.in/whos-who/",
+          "source_tier": 2
+        }
+      ],
+      "issues": [],
+      "district_refs": [
+        {
+          "state": "West Bengal",
+          "district": "Birbhum"
+        }
+      ],
+      "_gaps": [
+        "earlier postings (transfer history) unsourced",
+        "cadre / batch year unsourced",
+        "no issue pinned — office-level accountability data is a gap"
+      ]
+    },
+    {
+      "id": "off_arvind_kumar_verma_munger",
+      "name": "Arvind Kumar Verma",
+      "service": "IAS",
+      "current_post": {
+        "post": "District Magistrate & Collector",
+        "place": "Munger",
+        "state": "Bihar",
+        "as_of": "2026",
+        "source": "https://munger.nic.in/collector-district-magistrate/",
+        "source_tier": 2
+      },
+      "postings": [
+        {
+          "post": "District Magistrate & Collector",
+          "place": "Munger",
+          "state": "Bihar",
+          "from": "2026",
+          "to": null,
+          "order_ref": "district administration / roster listing",
+          "source": "https://munger.nic.in/collector-district-magistrate/",
+          "source_tier": 2
+        }
+      ],
+      "issues": [],
+      "district_refs": [
+        {
+          "state": "Bihar",
+          "district": "Munger"
+        }
+      ],
+      "_gaps": [
+        "earlier postings (transfer history) unsourced",
+        "cadre / batch year unsourced",
+        "no issue pinned — office-level accountability data is a gap"
+      ]
+    },
+    {
+      "id": "off_atin_ghosh_kolkata",
+      "name": "Atin Ghosh",
+      "service": "Political",
+      "current_post": {
+        "post": "Deputy Mayor, KMC",
+        "place": "Kolkata",
+        "state": "West Bengal",
+        "as_of": "2026-06",
+        "source": "https://en.wikipedia.org/wiki/Kolkata",
+        "source_tier": 3
+      },
+      "postings": [
+        {
+          "post": "Deputy Mayor, KMC",
+          "place": "Kolkata",
+          "state": "West Bengal",
+          "from": "2026-06",
+          "to": null,
+          "order_ref": "district administration / roster listing",
+          "source": "https://en.wikipedia.org/wiki/Kolkata",
+          "source_tier": 3
+        }
+      ],
+      "issues": [],
+      "district_refs": [
+        {
+          "state": "West Bengal",
+          "district": "Kolkata"
+        }
+      ],
+      "_gaps": [
+        "earlier postings (transfer history) unsourced",
+        "cadre / batch year unsourced",
+        "no issue pinned — office-level accountability data is a gap"
+      ]
+    },
+    {
+      "id": "off_bhushan_gagrani_greater_bombay",
+      "name": "Bhushan Gagrani",
+      "service": "IAS",
+      "current_post": {
+        "post": "Municipal Commissioner & Administrator, BMC",
+        "place": "Greater Bombay",
+        "state": "Maharashtra",
+        "as_of": "2025",
+        "source": "https://en.wikipedia.org/wiki/Brihanmumbai_Municipal_Corporation",
+        "source_tier": 3
+      },
+      "postings": [
+        {
+          "post": "Municipal Commissioner & Administrator, BMC",
+          "place": "Greater Bombay",
+          "state": "Maharashtra",
+          "from": "2025",
+          "to": null,
+          "order_ref": "district administration / roster listing",
+          "source": "https://en.wikipedia.org/wiki/Brihanmumbai_Municipal_Corporation",
+          "source_tier": 3
+        }
+      ],
+      "issues": [],
+      "district_refs": [
+        {
+          "state": "Maharashtra",
+          "district": "Greater Bombay"
+        }
+      ],
+      "_gaps": [
+        "earlier postings (transfer history) unsourced",
+        "cadre / batch year unsourced",
+        "no issue pinned — office-level accountability data is a gap"
+      ]
+    },
+    {
+      "id": "off_g_priyanka_ernakulam",
+      "name": "G. Priyanka",
+      "service": "IAS",
+      "current_post": {
+        "post": "District Collector & Magistrate",
+        "place": "Ernakulam",
+        "state": "Kerala",
+        "as_of": "2025-08",
+        "source": "https://ernakulam.nic.in/en/district_collector/",
+        "source_tier": 2
+      },
+      "postings": [
+        {
+          "post": "District Collector & Magistrate",
+          "place": "Ernakulam",
+          "state": "Kerala",
+          "from": "2025-08",
+          "to": null,
+          "order_ref": "district administration / roster listing",
+          "source": "https://ernakulam.nic.in/en/district_collector/",
+          "source_tier": 2
+        }
+      ],
+      "issues": [],
+      "district_refs": [
+        {
+          "state": "Kerala",
+          "district": "Ernakulam"
+        }
+      ],
+      "_gaps": [
+        "earlier postings (transfer history) unsourced",
+        "cadre / batch year unsourced",
+        "no issue pinned — office-level accountability data is a gap"
+      ]
+    },
+    {
+      "id": "off_himanshu_jain_ludhiana",
+      "name": "Himanshu Jain",
+      "service": "IAS",
+      "current_post": {
+        "post": "Deputy Commissioner cum District Magistrate",
+        "place": "Ludhiana",
+        "state": "Punjab",
+        "as_of": "2026",
+        "source": "https://ludhiana.nic.in/whoswho/deputy-commissioner-ludhiana/",
+        "source_tier": 2
+      },
+      "postings": [
+        {
+          "post": "Deputy Commissioner cum District Magistrate",
+          "place": "Ludhiana",
+          "state": "Punjab",
+          "from": "2026",
+          "to": null,
+          "order_ref": "district administration / roster listing",
+          "source": "https://ludhiana.nic.in/whoswho/deputy-commissioner-ludhiana/",
+          "source_tier": 2
+        }
+      ],
+      "issues": [],
+      "district_refs": [
+        {
+          "state": "Punjab",
+          "district": "Ludhiana"
+        }
+      ],
+      "_gaps": [
+        "earlier postings (transfer history) unsourced",
+        "cadre / batch year unsourced",
+        "no issue pinned — office-level accountability data is a gap"
+      ]
+    },
+    {
+      "id": "off_maneesh_begusarai",
+      "name": "Maneesh",
+      "service": "IPS",
+      "current_post": {
+        "post": "Superintendent of Police",
+        "place": "Begusarai",
+        "state": "Bihar",
+        "as_of": "2026",
+        "source": "https://begusarai.nic.in/directory/",
+        "source_tier": 2
+      },
+      "postings": [
+        {
+          "post": "Superintendent of Police",
+          "place": "Begusarai",
+          "state": "Bihar",
+          "from": "2026",
+          "to": null,
+          "order_ref": "district administration / roster listing",
+          "source": "https://begusarai.nic.in/directory/",
+          "source_tier": 2
+        }
+      ],
+      "issues": [],
+      "district_refs": [
+        {
+          "state": "Bihar",
+          "district": "Begusarai"
+        }
+      ],
+      "_gaps": [
+        "earlier postings (transfer history) unsourced",
+        "cadre / batch year unsourced",
+        "no issue pinned — office-level accountability data is a gap"
+      ]
+    },
+    {
+      "id": "off_megha_nidhi_dahal_kamrup",
+      "name": "Megha Nidhi Dahal",
+      "service": "IAS",
+      "current_post": {
+        "post": "Commissioner, Guwahati Municipal Corporation",
+        "place": "Kamrup",
+        "state": "Assam",
+        "as_of": "2026",
+        "source": "https://gmc.assam.gov.in/",
+        "source_tier": 2
+      },
+      "postings": [
+        {
+          "post": "Commissioner, Guwahati Municipal Corporation",
+          "place": "Kamrup",
+          "state": "Assam",
+          "from": "2026",
+          "to": null,
+          "order_ref": "district administration / roster listing",
+          "source": "https://gmc.assam.gov.in/",
+          "source_tier": 2
+        }
+      ],
+      "issues": [],
+      "district_refs": [
+        {
+          "state": "Assam",
+          "district": "Kamrup"
+        }
+      ],
+      "_gaps": [
+        "earlier postings (transfer history) unsourced",
+        "cadre / batch year unsourced",
+        "no issue pinned — office-level accountability data is a gap"
+      ]
+    },
+    {
+      "id": "off_mrigen_sarania_kamrup",
+      "name": "Mrigen Sarania",
+      "service": "Political",
+      "current_post": {
+        "post": "Mayor, GMC",
+        "place": "Kamrup",
+        "state": "Assam",
+        "as_of": "2026",
+        "source": "https://en.wikipedia.org/wiki/Guwahati_Municipal_Corporation",
+        "source_tier": 3
+      },
+      "postings": [
+        {
+          "post": "Mayor, GMC",
+          "place": "Kamrup",
+          "state": "Assam",
+          "from": "2026",
+          "to": null,
+          "order_ref": "district administration / roster listing",
+          "source": "https://en.wikipedia.org/wiki/Guwahati_Municipal_Corporation",
+          "source_tier": 3
+        }
+      ],
+      "issues": [],
+      "district_refs": [
+        {
+          "state": "Assam",
+          "district": "Kamrup"
+        }
+      ],
+      "_gaps": [
+        "earlier postings (transfer history) unsourced",
+        "cadre / batch year unsourced",
+        "no issue pinned — office-level accountability data is a gap"
+      ]
+    },
+    {
+      "id": "off_nagendra_paswan_purba_singhbhum",
+      "name": "Nagendra Paswan",
+      "service": "State",
+      "current_post": {
+        "post": "Administrator, Jamshedpur Industrial Area Committee (Dy Development Commissioner)",
+        "place": "Purba Singhbhum",
+        "state": "Jharkhand",
+        "as_of": "2025",
+        "source": "https://uditvani.in/english-news/jamshedpur-municipality-new-body-2025/",
+        "source_tier": 4
+      },
+      "postings": [
+        {
+          "post": "Administrator, Jamshedpur Industrial Area Committee (Dy Development Commissioner)",
+          "place": "Purba Singhbhum",
+          "state": "Jharkhand",
+          "from": "2025",
+          "to": null,
+          "order_ref": "district administration / roster listing",
+          "source": "https://uditvani.in/english-news/jamshedpur-municipality-new-body-2025/",
+          "source_tier": 4
+        }
+      ],
+      "issues": [],
+      "district_refs": [
+        {
+          "state": "Jharkhand",
+          "district": "Purba Singhbhum"
+        }
+      ],
+      "_gaps": [
+        "earlier postings (transfer history) unsourced",
+        "cadre / batch year unsourced",
+        "no issue pinned — office-level accountability data is a gap"
+      ]
+    },
+    {
+      "id": "off_om_prakash_kasera_jaipur",
+      "name": "Om Prakash Kasera",
+      "service": "IAS",
+      "current_post": {
+        "post": "Commissioner, Jaipur Municipal Corporation",
+        "place": "Jaipur",
+        "state": "Rajasthan",
+        "as_of": "2026",
+        "source": "https://en.wikipedia.org/wiki/Jaipur_Municipal_Corporation",
+        "source_tier": 3
+      },
+      "postings": [
+        {
+          "post": "Commissioner, Jaipur Municipal Corporation",
+          "place": "Jaipur",
+          "state": "Rajasthan",
+          "from": "2026",
+          "to": null,
+          "order_ref": "district administration / roster listing",
+          "source": "https://en.wikipedia.org/wiki/Jaipur_Municipal_Corporation",
+          "source_tier": 3
+        }
+      ],
+      "issues": [],
+      "district_refs": [
+        {
+          "state": "Rajasthan",
+          "district": "Jaipur"
+        }
+      ],
+      "_gaps": [
+        "earlier postings (transfer history) unsourced",
+        "cadre / batch year unsourced",
+        "no issue pinned — office-level accountability data is a gap"
+      ]
+    },
+    {
+      "id": "off_putta_vimaladitya_ernakulam",
+      "name": "Putta Vimaladitya",
+      "service": "IPS",
+      "current_post": {
+        "post": "Commissioner of Police, Kochi City",
+        "place": "Ernakulam",
+        "state": "Kerala",
+        "as_of": "2026",
+        "source": "https://en.wikipedia.org/wiki/Ernakulam_district",
+        "source_tier": 3
+      },
+      "postings": [
+        {
+          "post": "Commissioner of Police, Kochi City",
+          "place": "Ernakulam",
+          "state": "Kerala",
+          "from": "2026",
+          "to": null,
+          "order_ref": "district administration / roster listing",
+          "source": "https://en.wikipedia.org/wiki/Ernakulam_district",
+          "source_tier": 3
+        }
+      ],
+      "issues": [],
+      "district_refs": [
+        {
+          "state": "Kerala",
+          "district": "Ernakulam"
+        }
+      ],
+      "_gaps": [
+        "earlier postings (transfer history) unsourced",
+        "cadre / batch year unsourced",
+        "no issue pinned — office-level accountability data is a gap"
+      ]
+    },
+    {
+      "id": "off_r_priya_chennai",
+      "name": "R. Priya",
+      "service": "Political",
+      "current_post": {
+        "post": "Mayor, Greater Chennai Corporation",
+        "place": "Chennai",
+        "state": "Tamil Nadu",
+        "as_of": "2026",
+        "source": "https://www.thenewsminute.com/tamil-nadu/chennai-corporation-budget-2025-26-focus-remains-on-swds-roads-infrastructure",
+        "source_tier": 4
+      },
+      "postings": [
+        {
+          "post": "Mayor, Greater Chennai Corporation",
+          "place": "Chennai",
+          "state": "Tamil Nadu",
+          "from": "2026",
+          "to": null,
+          "order_ref": "district administration / roster listing",
+          "source": "https://www.thenewsminute.com/tamil-nadu/chennai-corporation-budget-2025-26-focus-remains-on-swds-roads-infrastructure",
+          "source_tier": 4
+        }
+      ],
+      "issues": [],
+      "district_refs": [
+        {
+          "state": "Tamil Nadu",
+          "district": "Chennai"
+        }
+      ],
+      "_gaps": [
+        "earlier postings (transfer history) unsourced",
+        "cadre / batch year unsourced",
+        "no issue pinned — office-level accountability data is a gap"
+      ]
+    },
+    {
+      "id": "off_rajiv_ranjan_purba_singhbhum",
+      "name": "Rajiv Ranjan",
+      "service": "IAS",
+      "current_post": {
+        "post": "Deputy Commissioner cum District Magistrate",
+        "place": "Purba Singhbhum",
+        "state": "Jharkhand",
+        "as_of": "2026-04",
+        "source": "https://jamshedpur.nic.in/deputy-commissioner-east-singhbhum-2/",
+        "source_tier": 2
+      },
+      "postings": [
+        {
+          "post": "Deputy Commissioner cum District Magistrate",
+          "place": "Purba Singhbhum",
+          "state": "Jharkhand",
+          "from": "2026-04",
+          "to": null,
+          "order_ref": "district administration / roster listing",
+          "source": "https://jamshedpur.nic.in/deputy-commissioner-east-singhbhum-2/",
+          "source_tier": 2
+        }
+      ],
+      "issues": [],
+      "district_refs": [
+        {
+          "state": "Jharkhand",
+          "district": "Purba Singhbhum"
+        }
+      ],
+      "_gaps": [
+        "earlier postings (transfer history) unsourced",
+        "cadre / batch year unsourced",
+        "no issue pinned — office-level accountability data is a gap"
+      ]
+    },
+    {
+      "id": "off_sandesh_nayak_jaipur",
+      "name": "Sandesh Nayak",
+      "service": "IAS",
+      "current_post": {
+        "post": "District Collector & Magistrate, Jaipur",
+        "place": "Jaipur",
+        "state": "Rajasthan",
+        "as_of": "2026-04",
+        "source": "https://en.wikipedia.org/wiki/Jaipur_district",
+        "source_tier": 3
+      },
+      "postings": [
+        {
+          "post": "District Collector & Magistrate, Jaipur",
+          "place": "Jaipur",
+          "state": "Rajasthan",
+          "from": "2026-04",
+          "to": null,
+          "order_ref": "district administration / roster listing",
+          "source": "https://en.wikipedia.org/wiki/Jaipur_district",
+          "source_tier": 3
+        }
+      ],
+      "issues": [],
+      "district_refs": [
+        {
+          "state": "Rajasthan",
+          "district": "Jaipur"
+        }
+      ],
+      "_gaps": [
+        "earlier postings (transfer history) unsourced",
+        "cadre / batch year unsourced",
+        "no issue pinned — office-level accountability data is a gap"
+      ]
+    },
+    {
+      "id": "off_shalini_agarwal_surat",
+      "name": "Shalini Agarwal",
+      "service": "IAS",
+      "current_post": {
+        "post": "Municipal Commissioner, SMC",
+        "place": "Surat",
+        "state": "Gujarat",
+        "as_of": "2025",
+        "source": "https://www.suratmunicipal.gov.in/",
+        "source_tier": 2
+      },
+      "postings": [
+        {
+          "post": "Municipal Commissioner, SMC",
+          "place": "Surat",
+          "state": "Gujarat",
+          "from": "2025",
+          "to": null,
+          "order_ref": "district administration / roster listing",
+          "source": "https://www.suratmunicipal.gov.in/",
+          "source_tier": 2
+        }
+      ],
+      "issues": [],
+      "district_refs": [
+        {
+          "state": "Gujarat",
+          "district": "Surat"
+        }
+      ],
+      "_gaps": [
+        "earlier postings (transfer history) unsourced",
+        "cadre / batch year unsourced",
+        "no issue pinned — office-level accountability data is a gap"
+      ]
+    },
+    {
+      "id": "off_shrikant_shastri_begusarai",
+      "name": "Shrikant Shastri",
+      "service": "IAS",
+      "current_post": {
+        "post": "District Magistrate & Collector",
+        "place": "Begusarai",
+        "state": "Bihar",
+        "as_of": "2026-02",
+        "source": "https://begusarai.nic.in/whoswho/dm-begusarai/",
+        "source_tier": 2
+      },
+      "postings": [
+        {
+          "post": "District Magistrate & Collector",
+          "place": "Begusarai",
+          "state": "Bihar",
+          "from": "2026-02",
+          "to": null,
+          "order_ref": "district administration / roster listing",
+          "source": "https://begusarai.nic.in/whoswho/dm-begusarai/",
+          "source_tier": 2
+        }
+      ],
+      "issues": [],
+      "district_refs": [
+        {
+          "state": "Bihar",
+          "district": "Begusarai"
+        }
+      ],
+      "_gaps": [
+        "earlier postings (transfer history) unsourced",
+        "cadre / batch year unsourced",
+        "no issue pinned — office-level accountability data is a gap"
+      ]
+    },
+    {
+      "id": "off_shubham_aggarwal_birbhum",
+      "name": "Shubham Aggarwal",
+      "service": "IAS",
+      "current_post": {
+        "post": "Additional District Magistrate (Land Records)",
+        "place": "Birbhum",
+        "state": "West Bengal",
+        "as_of": "2026-05",
+        "source": "https://birbhum.gov.in/whos-who/",
+        "source_tier": 2
+      },
+      "postings": [
+        {
+          "post": "Additional District Magistrate (Land Records)",
+          "place": "Birbhum",
+          "state": "West Bengal",
+          "from": "2026-05",
+          "to": null,
+          "order_ref": "district administration / roster listing",
+          "source": "https://birbhum.gov.in/whos-who/",
+          "source_tier": 2
+        }
+      ],
+      "issues": [],
+      "district_refs": [
+        {
+          "state": "West Bengal",
+          "district": "Birbhum"
+        }
+      ],
+      "_gaps": [
+        "earlier postings (transfer history) unsourced",
+        "cadre / batch year unsourced",
+        "no issue pinned — office-level accountability data is a gap"
+      ]
+    },
+    {
+      "id": "off_swapnil_paul_kamrup",
+      "name": "Swapnil Paul",
+      "service": "IAS",
+      "current_post": {
+        "post": "District Commissioner (DC), Kamrup Metropolitan",
+        "place": "Kamrup",
+        "state": "Assam",
+        "as_of": "2026-01",
+        "source": "https://kamrupmetro.assam.gov.in/district-commissioner-profile",
+        "source_tier": 2
+      },
+      "postings": [
+        {
+          "post": "District Commissioner (DC), Kamrup Metropolitan",
+          "place": "Kamrup",
+          "state": "Assam",
+          "from": "2026-01",
+          "to": null,
+          "order_ref": "district administration / roster listing",
+          "source": "https://kamrupmetro.assam.gov.in/district-commissioner-profile",
+          "source_tier": 2
+        }
+      ],
+      "issues": [],
+      "district_refs": [
+        {
+          "state": "Assam",
+          "district": "Kamrup"
+        }
+      ],
+      "_gaps": [
+        "earlier postings (transfer history) unsourced",
+        "cadre / batch year unsourced",
+        "no issue pinned — office-level accountability data is a gap"
+      ]
+    },
+    {
+      "id": "off_syed_imran_masood_munger",
+      "name": "Syed Imran Masood",
+      "service": "IPS",
+      "current_post": {
+        "post": "Superintendent of Police",
+        "place": "Munger",
+        "state": "Bihar",
+        "as_of": "2026",
+        "source": "https://munger.nic.in/superintendent-of-police/",
+        "source_tier": 2
+      },
+      "postings": [
+        {
+          "post": "Superintendent of Police",
+          "place": "Munger",
+          "state": "Bihar",
+          "from": "2026",
+          "to": null,
+          "order_ref": "district administration / roster listing",
+          "source": "https://munger.nic.in/superintendent-of-police/",
+          "source_tier": 2
+        }
+      ],
+      "issues": [],
+      "district_refs": [
+        {
+          "state": "Bihar",
+          "district": "Munger"
+        }
+      ],
+      "_gaps": [
+        "earlier postings (transfer history) unsourced",
+        "cadre / batch year unsourced",
+        "no issue pinned — office-level accountability data is a gap"
+      ]
+    },
+    {
+      "id": "off_tejas_parmar_surat",
+      "name": "Tejas Parmar",
+      "service": "IAS",
+      "current_post": {
+        "post": "District Collector & Magistrate",
+        "place": "Surat",
+        "state": "Gujarat",
+        "as_of": "2026-05",
+        "source": "https://surat.nic.in/whoswho/",
+        "source_tier": 2
+      },
+      "postings": [
+        {
+          "post": "District Collector & Magistrate",
+          "place": "Surat",
+          "state": "Gujarat",
+          "from": "2026-05",
+          "to": null,
+          "order_ref": "district administration / roster listing",
+          "source": "https://surat.nic.in/whoswho/",
+          "source_tier": 2
+        }
+      ],
+      "issues": [],
+      "district_refs": [
+        {
+          "state": "Gujarat",
+          "district": "Surat"
+        }
+      ],
+      "_gaps": [
+        "earlier postings (transfer history) unsourced",
+        "cadre / batch year unsourced",
+        "no issue pinned — office-level accountability data is a gap"
+      ]
+    },
+    {
+      "id": "off_vishak_g_iyer_lucknow",
+      "name": "Vishak G Iyer",
+      "service": "IAS",
+      "current_post": {
+        "post": "District Magistrate, Lucknow",
+        "place": "Lucknow",
+        "state": "Uttar Pradesh",
+        "as_of": "2025-01",
+        "source": "https://lucknow.nic.in/dm-profile/vishak-g/",
+        "source_tier": 2
+      },
+      "postings": [
+        {
+          "post": "District Magistrate, Lucknow",
+          "place": "Lucknow",
+          "state": "Uttar Pradesh",
+          "from": "2025-01",
+          "to": null,
+          "order_ref": "district administration / roster listing",
+          "source": "https://lucknow.nic.in/dm-profile/vishak-g/",
+          "source_tier": 2
+        }
+      ],
+      "issues": [],
+      "district_refs": [
+        {
+          "state": "Uttar Pradesh",
+          "district": "Lucknow"
+        }
+      ],
+      "_gaps": [
+        "earlier postings (transfer history) unsourced",
+        "cadre / batch year unsourced",
+        "no issue pinned — office-level accountability data is a gap"
       ]
     }
   ]
