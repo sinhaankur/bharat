@@ -81,7 +81,11 @@
     const GROUP_ICON = { Explore: "🧭", Understand: "🧩", Data: "🗄", About: "ℹ️" };
     // Planned pages surfaced in the sitemap so the roadmap is visible (marked planned).
     const PLANNED = {
-      Explore: [{ text: "Officials & accountability", d: "Named officials by post — transfers, money flagged under their office, and linked CAG/court cases. Sourced facts only, cited — never an accusation." }],
+      Data: [{ text: "Infrastructure layers", d: "Waterways vs water connections, sewage management, pipelines — dug up and clearly marked, sourced-or-gap. Coming as district dimensions." }],
+    };
+    // Live-but-inside-another-page links worth surfacing directly.
+    const EXTRA = {
+      Data: [{ href: "knowledge.html#officials", text: "Officials accountability", d: "Named officials by office — sourced postings + issues cited to the naming authority, never an accusation. A young, growing dataset." }],
     };
 
     function render() {
@@ -97,12 +101,14 @@
             <span class="t">${esc(i.text)}${ext ? ' <span class="ar">↗</span>' : ""}</span>
             ${d ? `<span class="d">${esc(d)}</span>` : ""}</a>`;
         }).join("");
+        const extra = (EXTRA[g.label] || []).map(e =>
+          `<a class="sm-link" href="${esc(e.href)}"><span class="t">${esc(e.text)}</span><span class="d">${esc(e.d)}</span></a>`).join("");
         const planned = (PLANNED[g.label] || []).map(p =>
           `<div class="sm-link sm-planned"><span class="t">${esc(p.text)}</span><span class="d">${esc(p.d)}</span></div>`).join("");
         return `<section class="sm-group">
           <h2>${GROUP_ICON[g.label] || ""} ${esc(g.label)}</h2>
           <p class="sm-gsub">${esc(GROUP_SUB[g.label] || "")}</p>
-          ${links}${planned}</section>`;
+          ${links}${extra}${planned}</section>`;
       }).join("");
     }
     // site-nav.js runs on DOMContentLoaded and defines window.SiteNav; render after.
