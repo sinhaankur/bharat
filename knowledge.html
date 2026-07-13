@@ -104,7 +104,7 @@
       fetch("fiscal-events.json").then(r => r.ok ? r.json() : {story_chains:[]}).catch(() => ({story_chains:[]})),
       fetch("officials.json").then(r => r.ok ? r.json() : {officials:[]}).catch(() => ({officials:[]})),
     ]).then(([led, ev, off]) => {
-      StatsBar?.mount?.("stats-bar", { ledger: led, events: ev, updated: led?._meta?.as_of });
+      StatsBar?.mount?.("stats-bar", { ledger: led, events: ev, officials: off, updated: led?._meta?.as_of });
       render(led, ev, off);
       wireSearch();
     }).catch(e => document.getElementById("kb-body").innerHTML = `<p class="kb-empty">Load error: ${esc(e.message)}</p>`);

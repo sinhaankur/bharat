@@ -19,7 +19,7 @@
   }
   const fmt = n => Number(n || 0).toLocaleString('en-IN');
 
-  function compute(ledger, events, news) {
+  function compute(ledger, events, news, officials) {
     const states = (ledger && ledger.states) || {};
     let nStates = 0, nDist = 0, deep = 0, blocks = 0, sourced = 0, gaps = 0;
     const dims = new Set();
@@ -42,10 +42,11 @@
     const chains = ((events && events.story_chains) || []).length;
     const evCount = ((events && events.fiscal_events) || []).length;
     const newsCount = ((news && (news.news_items || news)) || []).length || 0;
+    const officialsCount = ((officials && officials.officials) || []).length;
     // sourced-density: share of dimension blocks that carry a source with a real figure
     const density = blocks ? Math.round((sourced / blocks) * 100) : 0;
     return { nStates, nDist, nDims: dims.size, blocks, sourced, gaps, deep,
-             chains, evCount, newsCount, density };
+             chains, evCount, newsCount, officialsCount, density };
   }
 
   // Ordered stat definitions → chips. `hint` explains the number on hover.
@@ -60,6 +61,7 @@
       ['Gaps logged', fmt(st.gaps), 'Unsourced figures recorded as explicit gaps — never fabricated. This number is the discipline, made visible.'],
       ['Deep ledgers', fmt(st.deep), 'Districts with a full money-flow accountability ledger'],
       ['Story chains', fmt(st.chains), 'Promise → result → per-capita cost → human-impact accountability chains'],
+      ['Officials', fmt(st.officialsCount), 'Named office-holders with sourced postings — facts only, never an accusation'],
       ['News tracked', fmt(st.newsCount), 'Aggregated, attributed, link-only news items'],
     ];
     const body = chips.map(([label, val, hint]) =>
@@ -76,7 +78,7 @@
   function mount(elId, data) {
     const el = typeof elId === 'string' ? document.getElementById(elId) : elId;
     if (!el) return null;
-    const st = compute(data.ledger, data.events, data.news);
+    const st = compute(data.ledger, data.events, data.news, data.officials);
     el.innerHTML = render(st, { updated: data.updated });
     return st;
   }

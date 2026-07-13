@@ -3111,7 +3111,7 @@
       // Live stats + source-transparency bar (WorldMonitor-style) — computed from
       // the real loaded data, so the sourced-or-gap discipline is visible up top.
       if (typeof StatsBar !== 'undefined' && document.getElementById('stats-bar')) {
-        StatsBar.mount('stats-bar', { ledger: LEDGER, events: EVENTS, news: NEWS_FEED, updated: (LEDGER && LEDGER._meta && LEDGER._meta.as_of) || null });
+        StatsBar.mount('stats-bar', { ledger: LEDGER, events: EVENTS, news: NEWS_FEED, officials: OFFICIALS, updated: (LEDGER && LEDGER._meta && LEDGER._meta.as_of) || null });
       }
       // Now-available features that need the ledger / bubbles:
       buildNewsBubbles();

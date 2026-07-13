@@ -20,7 +20,7 @@
       "reported",
       "alleged"
     ],
-    "coverage": "2 seed story chains (Birbhum MGNREGS freeze; Kolkata KMC grant dependency). Built to be extended by ingest_news.py + human anchoring.",
+    "coverage": "4 story chains (Birbhum MGNREGS freeze; Kolkata KMC grant dependency; West Bengal DA salary arrears; Punjab pension arrears). Each carries the full promise→result→per-capita-cost→human-impact arc. Extended by ingest_news.py + human anchoring.",
     "scheme_ref_note": "scheme_ref resolves against district-ledger.json _meta.scheme_registry / scheme_aliases. official_ref resolves against the district roster role keys + _meta.authority_map.",
     "accountability_chain": "Each story_chain can carry the full accountability arc: promise -> result -> actual_cost -> human_impact. This is the 'source vs bias vs stated promise vs result vs actual (per-capita) cost' unit. Rules that keep it defensible:",
     "accountability_rules": {
