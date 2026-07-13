@@ -1252,6 +1252,8 @@ a:hover { border-color: var(--foreground); }
 .dim-key { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted-foreground); min-width: 4.5rem; }
 .dim-val { color: var(--foreground); line-height: 1.5; }
 .dim-val b { font-weight: 600; }
+/* An explicit "no figure" value — muted so a gap reads as absent, not as data. */
+.dim-val--gap { color: var(--muted-foreground); font-style: italic; }
 .dim-gap { font-family: var(--font-mono); font-size: 9px; color: oklch(0.78 0.16 70); font-style: italic; }
 .dim-src { color: var(--muted-foreground); cursor: help; font-size: 10px; margin-left: 2px; }
 .dim-align { font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.03em; padding: 1px 6px; border-radius: 999px; border: 1px solid currentColor; cursor: help; }

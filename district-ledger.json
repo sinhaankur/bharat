@@ -55823,7 +55823,7 @@
               "figure_gap": true,
               "source": "https://www.rbi.org.in/Scripts/AnnualPublications.aspx?head=Handbook+of+Statistics+on+Indian+States",
               "source_tier": 2,
-              "note": "State per-capita NSDP shown; per-district income is a gap (no official district series)."
+              "note": "No published per-capita NSDP for this UT, so no state figure to proxy either — an explicit gap."
             }
           }
         }
@@ -55879,7 +55879,7 @@
         "figure_gap": true,
         "source": "https://www.rbi.org.in/Scripts/AnnualPublications.aspx?head=Handbook+of+Statistics+on+Indian+States",
         "source_tier": 2,
-        "note": "Per-capita Net State Domestic Product (RBI Handbook, current prices). The 'wealth' axis beside the money flow — not a verdict. Per-district income is a gap (no bulk official series)."
+        "note": "No official per-capita NSDP series is published for this UT (small UTs like Lakshadweep / Daman & Diu / Dadra & Nagar Haveli are absent from the RBI Handbook state series) — an explicit gap, not fabricated."
       }
     },
     "Daman and Diu": {
@@ -56247,7 +56247,7 @@
               "figure_gap": true,
               "source": "https://www.rbi.org.in/Scripts/AnnualPublications.aspx?head=Handbook+of+Statistics+on+Indian+States",
               "source_tier": 2,
-              "note": "State per-capita NSDP shown; per-district income is a gap (no official district series)."
+              "note": "No published per-capita NSDP for this UT, so no state figure to proxy either — an explicit gap."
             }
           }
         },
@@ -56584,7 +56584,7 @@
               "figure_gap": true,
               "source": "https://www.rbi.org.in/Scripts/AnnualPublications.aspx?head=Handbook+of+Statistics+on+Indian+States",
               "source_tier": 2,
-              "note": "State per-capita NSDP shown; per-district income is a gap (no official district series)."
+              "note": "No published per-capita NSDP for this UT, so no state figure to proxy either — an explicit gap."
             }
           }
         }
@@ -56640,7 +56640,7 @@
         "figure_gap": true,
         "source": "https://www.rbi.org.in/Scripts/AnnualPublications.aspx?head=Handbook+of+Statistics+on+Indian+States",
         "source_tier": 2,
-        "note": "Per-capita Net State Domestic Product (RBI Handbook, current prices). The 'wealth' axis beside the money flow — not a verdict. Per-district income is a gap (no bulk official series)."
+        "note": "No official per-capita NSDP series is published for this UT (small UTs like Lakshadweep / Daman & Diu / Dadra & Nagar Haveli are absent from the RBI Handbook state series) — an explicit gap, not fabricated."
       }
     },
     "Delhi": {
@@ -96699,7 +96699,7 @@
               "figure_gap": true,
               "source": "https://www.rbi.org.in/Scripts/AnnualPublications.aspx?head=Handbook+of+Statistics+on+Indian+States",
               "source_tier": 2,
-              "note": "State per-capita NSDP shown; per-district income is a gap (no official district series)."
+              "note": "No published per-capita NSDP for this UT, so no state figure to proxy either — an explicit gap."
             }
           }
         }
@@ -96753,7 +96753,7 @@
         "figure_gap": true,
         "source": "https://www.rbi.org.in/Scripts/AnnualPublications.aspx?head=Handbook+of+Statistics+on+Indian+States",
         "source_tier": 2,
-        "note": "Per-capita Net State Domestic Product (RBI Handbook, current prices). The 'wealth' axis beside the money flow — not a verdict. Per-district income is a gap (no bulk official series)."
+        "note": "No official per-capita NSDP series is published for this UT (small UTs like Lakshadweep / Daman & Diu / Dadra & Nagar Haveli are absent from the RBI Handbook state series) — an explicit gap, not fabricated."
       }
     },
     "Madhya Pradesh": {

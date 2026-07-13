@@ -153,6 +153,14 @@ def main():
         if pc is None:
             missing_econ.add(sname)
 
+        health_note = (
+            "NFHS-5 (2019-21) state fact-sheet values. Shown to juxtapose "
+            "'health' beside the money flow — not a wellbeing verdict. "
+            "Per-district NFHS exists as separate fact-sheet PDFs (a gap here)."
+            if h else
+            "No NFHS-5 fact-sheet figure for this state/UT — an explicit gap, "
+            "not fabricated."
+        )
         health_block = {
             "imr": h[0] if h else None,
             "institutional_births_pct": h[1] if h else None,
@@ -163,10 +171,18 @@ def main():
             "figure_gap": h is None,
             "source": NFHS_SRC,
             "source_tier": 1,
-            "note": "NFHS-5 (2019-21) state fact-sheet values. Shown to juxtapose "
-                    "'health' beside the money flow — not a wellbeing verdict. "
-                    "Per-district NFHS exists as separate fact-sheet PDFs (a gap here).",
+            "note": health_note,
         }
+        econ_note = (
+            "Per-capita Net State Domestic Product (RBI Handbook, current "
+            "prices). The 'wealth' axis beside the money flow — not a verdict. "
+            "Per-district income is a gap (no bulk official series)."
+            if pc is not None else
+            "No official per-capita NSDP series is published for this UT "
+            "(small UTs like Lakshadweep / Daman & Diu / Dadra & Nagar Haveli "
+            "are absent from the RBI Handbook state series) — an explicit gap, "
+            "not fabricated."
+        )
         economy_block = {
             "percapita_nsdp_inr": pc,
             "income_tier": income_tier(pc),
@@ -175,9 +191,7 @@ def main():
             "figure_gap": pc is None,
             "source": RBI_SRC,
             "source_tier": 2,
-            "note": "Per-capita Net State Domestic Product (RBI Handbook, current "
-                    "prices). The 'wealth' axis beside the money flow — not a verdict. "
-                    "Per-district income is a gap (no bulk official series).",
+            "note": econ_note,
         }
         s["health"] = health_block
         s["economy"] = economy_block
@@ -188,11 +202,15 @@ def main():
             n_dist += 1
             dims = dist.setdefault("dimensions", {})
             dims["health"] = dict(health_block, level="state-proxy",
-                                  note="State-level NFHS-5 shown; per-district figures "
-                                       "are a gap (district NFHS fact-sheet PDFs).")
+                                  note=("State-level NFHS-5 shown; per-district figures "
+                                        "are a gap (district NFHS fact-sheet PDFs)." if h
+                                        else "No NFHS-5 figure for this state/UT; per-district "
+                                             "is a gap too — not fabricated."))
             dims["economy"] = dict(economy_block, level="state-proxy",
-                                   note="State per-capita NSDP shown; per-district "
-                                        "income is a gap (no official district series).")
+                                   note=("State per-capita NSDP shown; per-district "
+                                         "income is a gap (no official district series)." if pc is not None
+                                         else "No published per-capita NSDP for this UT, so no "
+                                              "state figure to proxy either — an explicit gap."))
             gaps = dist.setdefault("_gaps", [])
             for g in [
                 "health per-district NFHS indicators (district fact-sheet PDFs) unsourced",

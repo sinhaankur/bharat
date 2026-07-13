@@ -1316,31 +1316,52 @@
     }
     // HEALTH (NFHS-5, state-level) — the "health" half of wealth-and-health.
     const health = dims.health;
-    if (health && health.imr != null) {
-      const stats = [
-        `IMR <b>${health.imr}</b><span class="dim-unit">/1k</span>`,
-        health.stunting_u5_pct != null ? `stunting <b>${health.stunting_u5_pct}%</b>` : '',
-        health.institutional_births_pct != null ? `inst. births <b>${health.institutional_births_pct}%</b>` : '',
-        health.full_immunisation_pct != null ? `immunised <b>${health.full_immunisation_pct}%</b>` : '',
-      ].filter(Boolean).join(' · ');
-      rows.push(`
+    if (health) {
+      if (health.imr != null) {
+        const stats = [
+          `IMR <b>${health.imr}</b><span class="dim-unit">/1k</span>`,
+          health.stunting_u5_pct != null ? `stunting <b>${health.stunting_u5_pct}%</b>` : '',
+          health.institutional_births_pct != null ? `inst. births <b>${health.institutional_births_pct}%</b>` : '',
+          health.full_immunisation_pct != null ? `immunised <b>${health.full_immunisation_pct}%</b>` : '',
+        ].filter(Boolean).join(' · ');
+        rows.push(`
         <div class="dim-row">
           <span class="dim-key">Health</span>
           <span class="dim-val">${stats}
             <br><span class="dim-gap">NFHS-5 (2019-21), state-level · per-district: gap</span></span>
         </div>`);
+      } else {
+        // Health block exists but no figure — show it as an explicit gap, not silence.
+        rows.push(`
+        <div class="dim-row">
+          <span class="dim-key">Health</span>
+          <span class="dim-val dim-val--gap">no NFHS-5 figure for this state/UT
+            <br><span class="dim-gap">sourced-or-gap: not fabricated</span></span>
+        </div>`);
+      }
     }
     // ECONOMY (RBI, state-level) — the "wealth" half.
     const econ = dims.economy;
-    if (econ && econ.percapita_nsdp_inr != null) {
-      const cr = econ.percapita_nsdp_inr;
-      const tier = econ.income_tier ? `<span class="dim-tier dim-tier--${esc(econ.income_tier)}">${esc(econ.income_tier.replace(/-/g, ' '))}</span>` : '';
-      rows.push(`
+    if (econ) {
+      if (econ.percapita_nsdp_inr != null) {
+        const cr = econ.percapita_nsdp_inr;
+        const tier = econ.income_tier ? `<span class="dim-tier dim-tier--${esc(econ.income_tier)}">${esc(econ.income_tier.replace(/-/g, ' '))}</span>` : '';
+        rows.push(`
         <div class="dim-row">
           <span class="dim-key">Economy</span>
           <span class="dim-val">per-capita income <b>₹${cr.toLocaleString('en-IN')}</b>/yr ${tier}
             <br><span class="dim-gap">RBI Handbook (NSDP), state-level · per-district: gap</span></span>
         </div>`);
+      } else {
+        // Small UTs (Lakshadweep, Daman & Diu, D&NH) have no published NSDP series —
+        // show the dimension as an explicit gap rather than omitting it silently.
+        rows.push(`
+        <div class="dim-row">
+          <span class="dim-key">Economy</span>
+          <span class="dim-val dim-val--gap">no official per-capita NSDP series for this UT
+            <br><span class="dim-gap">RBI Handbook has no figure · sourced-or-gap, not fabricated</span></span>
+        </div>`);
+      }
     }
     if (!rows.length) return '';
     return `
