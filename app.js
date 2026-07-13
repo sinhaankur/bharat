@@ -1403,6 +1403,19 @@
             <br><span class="dim-gap">AAI/DGCA${av.passengers_annual == null ? ' · traffic: gap' : ''}</span></span>
         </div>`);
     }
+    // HOUSING — shown when an official index (RBI HPI / NHB RESIDEX) tracks the
+    // district's city; the value itself is a gap (no fabricated price).
+    const hou = dims.housing;
+    if (hou && hou.tracked) {
+      const idx = (hou.indices || []).map(i => `<span class="dim-tier">${esc(i)}</span>`).join(' ');
+      const val = hou.index_value != null ? ` · index <b>${esc(String(hou.index_value))}</b>` : '';
+      rows.push(`
+        <div class="dim-row">
+          <span class="dim-key">Housing</span>
+          <span class="dim-val">tracked by ${idx}${val}
+            <br><span class="dim-gap">official house-price index (city-level)${hou.index_value == null ? ' · value: gap' : ''}</span></span>
+        </div>`);
+    }
     if (!rows.length) return '';
     return `
       <div class="india-detail-section-title">District dimensions</div>

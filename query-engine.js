@@ -67,6 +67,7 @@
         const economy = (dist.dimensions && dist.dimensions.economy) || {};
         const vehicles = (dist.dimensions && dist.dimensions.vehicles) || {};
         const aviation = (dist.dimensions && dist.dimensions.aviation) || {};
+        const housing = (dist.dimensions && dist.dimensions.housing) || {};
         rows.push({
           state: sn, district: dn,
           crz: !!(g.crz && g.crz.applies) || !!g.on_coast,
@@ -92,6 +93,7 @@
           plate_prefix: vehicles.plate_prefix || null,
           has_airport: aviation.has_airport === true,
           intl_airport: aviation.has_airport === true && aviation.category === 'international',
+          housing_tracked: housing.tracked === true,
           elev,
         });
       }
@@ -141,6 +143,10 @@
         describe: 'An AAI/DGCA operational airport is in this district' },
       { key: 'intl_airport', group: 'Civic', label: 'International airport', test: r => r.intl_airport,
         describe: 'The district airport is an international gateway (AAI)' },
+      { key: 'housing_tracked', group: 'Civic', label: 'In an official house-price index', test: r => r.housing_tracked,
+        describe: 'City tracked by RBI HPI or NHB RESIDEX' },
+      { key: 'housing_untracked', group: 'Civic', label: 'No official house-price index', test: r => !r.housing_tracked,
+        describe: "No RBI HPI / NHB RESIDEX coverage — why a per-district 'housing bubble' can't be measured officially" },
     ];
     const facetByKey = Object.fromEntries(facets.map(f => [f.key, f]));
 
