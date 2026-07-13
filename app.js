@@ -2719,15 +2719,29 @@
   }
 
   // Legend for whatever data overlay is active (mirrors the old dmt legends).
+  // A continuous gradient legend: a colour bar sampled from `colorAt(t)` (t 0→1)
+  // with a low/high label under each end — so the legend MATCHES the smooth
+  // choropleth instead of faking it with a few discrete chips.
+  function gradientLegend(colorAt, lowLbl, highLbl, note) {
+    const stops = [];
+    for (let i = 0; i <= 8; i++) { const t = i / 8; stops.push(`${colorAt(t)} ${Math.round(t * 100)}%`); }
+    return `<div class="mlp-grad-wrap">
+      <span class="mlp-grad" style="background:linear-gradient(90deg,${stops.join(',')})"></span>
+      <div class="mlp-grad-ends"><span>${esc(lowLbl)}</span><span>${esc(highLbl)}</span></div>
+    </div>${note ? `<span class="mlp-leg-note">${note}</span>` : ''}`;
+  }
+
   function activeOverlayLegend() {
     const mode = ui.state.districtMode;
     const chip = (bg, txt) => `<span class="mlp-leg"><span class="mlp-chip" style="background:${bg}"></span>${txt}</span>`;
-    if (mode === 'money') return chip(seqColor(0.3), 'low') + chip(seqColor(0.95), 'high ₹ in') + `<span class="mlp-leg"><span class="mlp-chip mlp-chip-flag"></span>⚠ freeze/non-delivery</span>`;
-    if (mode === 'language') return `<span class="mlp-leg-note">official language per state; district mother-tongue = gap</span>`;
-    if (mode === 'politics') return chip('oklch(0.70 0.15 150)', 'aligned') + chip('oklch(0.66 0.20 28)', 'opposition') + chip('oklch(0.60 0.05 250)', 'UT/other');
-    if (mode === 'coverage') return chip(Coverage.color(5), 'baseline') + chip(Coverage.color(20), 'thin') + chip(Coverage.color(45), 'partial') + chip(Coverage.color(75), 'deep') + `<span class="mlp-leg-note">how much of each district is pinned to sources vs. a gap — data density, NOT quality or risk</span>`;
-    if (mode === 'health') return chip(healthColorFor('Kerala'), 'low IMR (better)') + chip(healthColorFor('Assam'), 'mid') + chip(healthColorFor('Uttar Pradesh'), 'high IMR') + `<span class="mlp-leg-note">infant mortality per 1,000 (NFHS-5, state-level) — juxtaposed, not a verdict</span>`;
-    if (mode === 'economy') return chip(economyColorFor('Bihar'), 'lower income') + chip(economyColorFor('Rajasthan'), 'middle') + chip(economyColorFor('Goa'), 'high income') + `<span class="mlp-leg-note">per-capita NSDP (RBI Handbook, state-level) — the 'wealth' axis</span>`;
+    if (mode === 'money') return gradientLegend(t => seqColor(0.2 + 0.75 * t), 'low ₹ in', 'high ₹ in')
+      + `<span class="mlp-leg"><span class="mlp-chip mlp-chip-flag"></span>⚠ freeze / non-delivery</span>`
+      + `<span class="mlp-leg-note">headline money into each district's deep ledger (log scale)</span>`;
+    if (mode === 'language') return `<span class="mlp-leg-note">a colour per dominant language · official language per state; district mother-tongue = gap</span>`;
+    if (mode === 'politics') return chip('oklch(0.70 0.15 150)', 'aligned w/ Union') + chip('oklch(0.66 0.20 28)', 'opposition') + chip('oklch(0.60 0.05 250)', 'UT / other') + `<span class="mlp-leg-note">state govt's alignment with the Union — factual (ECI), not a verdict</span>`;
+    if (mode === 'coverage') return gradientLegend(t => Coverage.color(t * 100), '0% · a gap', '100% · deep', 'how much of each district is pinned to sources vs. a gap — data density, NOT quality or risk');
+    if (mode === 'health') return gradientLegend(t => `oklch(${0.74 - 0.12 * t} ${0.13 + 0.08 * t} ${150 - 130 * t})`, 'low IMR (better)', 'high IMR', 'infant mortality / 1,000 (NFHS-5, state-level) — juxtaposed, not a verdict');
+    if (mode === 'economy') return gradientLegend(t => seqColor(0.18 + 0.75 * t), 'lower income', 'high income', "per-capita NSDP (RBI Handbook, state-level) — the 'wealth' axis");
     if (mode === 'geography') {
       const f = ui.state.geoFacet || 'zoning';
       if (f === 'zoning') {
