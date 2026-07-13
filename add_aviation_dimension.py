@@ -170,7 +170,7 @@ def main():
                     gaps.append(g)
 
     with open(LEDGER, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+        json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
 
     print(f"aviation dimension attached: {n_dist} districts")
     print(f"  airports pinned: {n_airport}  (intl {by_cat['international']} / "

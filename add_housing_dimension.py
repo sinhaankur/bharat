@@ -121,7 +121,7 @@ def main():
                     gaps.append(g)
 
     with open(LEDGER, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+        json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
 
     print(f"housing dimension attached: {n_dist} districts")
     print(f"  tracked by an official index: {n_tracked}  (RBI HPI {n_rbi} / RESIDEX {n_residex})")

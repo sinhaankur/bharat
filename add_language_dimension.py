@@ -108,7 +108,7 @@ def main():
                 gaps.append(gnote)
 
     with open(LEDGER, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+        json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
 
     print(f"language dimension attached to {n_dist} districts")
     print(f"  with state-official language : {n_with_official}")

@@ -208,7 +208,7 @@ def main():
                     gaps.append(g)
 
     with open(LEDGER, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+        json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
 
     print(f"vehicles / RTO dimension attached: {n_state} states + {n_dist} districts")
     print(f"  district-level RTO pinned: {n_district_rto}")

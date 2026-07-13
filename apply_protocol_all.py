@@ -197,7 +197,7 @@ def main():
                     n_baseline_enriched += 1
 
     with open(LEDGER, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+        json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
 
     # --- report ------------------------------------------------------------
     print(f"applied protocol structure across {n_dist} districts")

@@ -1312,7 +1312,7 @@ def main():
                     gaps.append(g)
 
     with open(LEDGER, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+        json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
 
     n_coastal_dist = sum(len(v) for v in COASTAL_DISTRICTS.values())
     print(f"geography dimension attached: {n_state} states + {n_dist} districts")

@@ -164,7 +164,7 @@ def main():
               f"{state_count} state files -> {len(states)} states, {total_districts} districts total")
         return
 
-    json.dump(led, open(LEDGER, "w"), indent=2, ensure_ascii=False)
+    json.dump(led, open(LEDGER, "w"), ensure_ascii=False, separators=(",", ":"))
     print(f"Wrote {LEDGER}: +{added} baselines, {preserved} preserved, "
           f"{total_districts} districts across {len(states)} states ({deep} deep).")
 

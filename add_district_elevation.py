@@ -118,7 +118,7 @@ def main():
                 if gtxt not in gaps:
                     gaps.append(gtxt)
 
-    json.dump(data, open(LEDGER, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+    json.dump(data, open(LEDGER, "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
     print(f"elevation written for {n_ok}/{len(keys)} districts "
           f"({len(keys)-n_ok} stayed gaps).")
     return 0

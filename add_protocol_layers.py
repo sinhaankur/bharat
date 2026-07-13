@@ -428,7 +428,7 @@ def main():
     meta["protocol_render_note"] = RENDER_NOTE
 
     with open(LEDGER, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+        json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
 
     # --- coverage report: does every scheme in the data resolve? -----------
     referenced = set()

@@ -134,7 +134,7 @@ def main():
                 gaps.append(gnote)
 
     with open(LEDGER, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+        json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
 
     print(f"politics dimension attached: {n_state} states + {n_dist} districts")
     print(f"  states missing from table: {sorted(missing) or 'none'}")
