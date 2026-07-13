@@ -1798,3 +1798,42 @@ a:hover { border-color: var(--foreground); }
   .sb-num, .sb-density { font-size: 11.5px; }
   .sb-density { margin-left: 0; }
 }
+
+/* ============ Command palette (⌘K / Ctrl-K) ============ */
+.cp-overlay {
+  position: fixed; inset: 0; z-index: 3000; display: flex; justify-content: center;
+  align-items: flex-start; padding-top: 12vh;
+  background: oklch(0.1 0 0 / 0.55); backdrop-filter: blur(3px);
+}
+.cp-box {
+  width: min(620px, 92vw); max-height: 66vh; display: flex; flex-direction: column;
+  background: oklch(0.16 0 0); border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg); box-shadow: 0 24px 70px oklch(0 0 0 / 0.6); overflow: hidden;
+}
+.cp-input {
+  border: 0; border-bottom: 1px solid var(--border-strong); background: transparent;
+  color: var(--foreground); font-family: var(--font-sans); font-size: 1rem;
+  padding: 1rem 1.1rem; outline: none;
+}
+.cp-input::placeholder { color: var(--muted-foreground); }
+.cp-list { list-style: none; margin: 0; padding: 0.35rem; overflow-y: auto; }
+.cp-item {
+  display: flex; align-items: center; gap: 0.65rem; padding: 0.55rem 0.7rem;
+  border-radius: var(--radius-sm); cursor: pointer;
+}
+.cp-item.is-active { background: oklch(0.24 0.02 260); }
+.cp-ic { font-size: 13px; width: 18px; text-align: center; flex: none; }
+.cp-label { font-size: 0.9rem; color: var(--foreground); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cp-hint {
+  font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--muted-foreground); flex: none;
+}
+.cp-empty { padding: 1.2rem; color: var(--muted-foreground); font-size: 0.9rem; text-align: center; }
+.cp-foot {
+  display: flex; gap: 1rem; align-items: center; padding: 0.5rem 0.9rem;
+  border-top: 1px solid var(--border); font-family: var(--font-mono); font-size: 9.5px;
+  color: var(--muted-foreground);
+}
+.cp-foot b { color: var(--foreground); font-weight: 600; }
+.cp-brand { margin-left: auto; color: var(--warm); }
+@media (max-width: 640px) { .cp-overlay { padding-top: 6vh; } .cp-foot { display: none; } }

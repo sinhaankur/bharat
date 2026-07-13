@@ -3313,5 +3313,41 @@
     } catch (e) { console.warn('Deep-link failed:', e); }
   }
 
+  // ---- Public API (for the command palette + any external control) -----------
+  // A tiny, stable surface so command-palette.js can drive navigation without
+  // reaching into internals. Reuses the same sequences the UI + deep-link use.
+  window.AtlasAPI = {
+    // Jump to a state (and optionally a district), mirroring applyDeepLink.
+    async goTo(state, district) {
+      if (!LEDGER?.states?.[state]) return false;
+      selectState(state, true);
+      if (district && LEDGER.states[state].districts?.[district]) {
+        await drillIntoDistricts(state);
+        selectDistrict(district, state);
+      }
+      return true;
+    },
+    // Switch the district colour layer (money/health/economy/geography/…).
+    setLayer(mode) {
+      if (!mode) return false;
+      ui.state.districtMode = mode;
+      if (mode === 'geography' && !ui.state.geoFacet) ui.state.geoFacet = 'zoning';
+      restyleActiveLayer();
+      renderLayersPanel();
+      return true;
+    },
+    // Data the palette indexes: every state→district pair + the ledger handle.
+    listPlaces() {
+      const out = [];
+      for (const [sn, s] of Object.entries(LEDGER?.states || {})) {
+        out.push({ type: 'state', state: sn });
+        for (const dn of Object.keys(s.districts || {})) out.push({ type: 'district', state: sn, district: dn });
+      }
+      return out;
+    },
+    getLedger() { return LEDGER; },
+    getEvents() { return EVENTS; },
+  };
+
   bootstrap();
 })();
