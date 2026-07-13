@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Site map — everything on the India District Atlas</title>
+  <meta name="description" content="A human-friendly map of the whole site: the interactive atlas, the query engine, the knowledge base, story chains, data & API, methodology and more — grouped and described." />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .sm-wrap { max-width: 980px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; }
+    .sm-head h1 { margin: 0.3rem 0 0.5rem; font-size: clamp(1.7rem, 4vw, 2.6rem); }
+    .sm-head p { color: var(--muted-foreground); font-size: 0.96rem; line-height: 1.6; max-width: 76ch; }
+    .sm-groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.2rem; margin-top: 1.6rem; }
+    .sm-group { border: 1px solid var(--border-strong); border-radius: var(--radius); background: oklch(0.16 0 0); padding: 1.1rem 1.2rem; }
+    .sm-group h2 { margin: 0 0 0.2rem; font-size: 1.05rem; display: flex; align-items: center; gap: 0.5rem; }
+    .sm-group > .sm-gsub { font-size: 0.8rem; color: var(--muted-foreground); margin: 0 0 0.8rem; }
+    .sm-link { display: block; text-decoration: none; padding: 0.5rem 0.6rem; border-radius: var(--radius-sm); margin: 0 -0.3rem; }
+    .sm-link:hover { background: oklch(0.22 0.02 260); }
+    .sm-link .t { font-size: 0.92rem; color: var(--foreground); font-weight: 500; }
+    .sm-link .t .ar { color: var(--muted-foreground); font-size: 0.8em; }
+    .sm-link .d { font-size: 0.8rem; color: var(--muted-foreground); line-height: 1.45; margin-top: 1px; }
+    .sm-tip { margin: 1.8rem 0 0; padding: 0.9rem 1rem; border: 1px dashed var(--border-strong); border-radius: var(--radius); font-size: 0.86rem; color: var(--muted-foreground); line-height: 1.6; }
+    .sm-tip kbd { font-family: var(--font-mono); font-size: 11px; background: oklch(0.24 0 0); border: 1px solid var(--border-strong); border-radius: 4px; padding: 1px 6px; color: var(--foreground); }
+    .sm-planned { opacity: 0.6; }
+    .sm-planned .t::after { content: " · planned"; font-family: var(--font-mono); font-size: 9px; color: var(--warm); text-transform: uppercase; letter-spacing: 0.05em; }
+  </style>
+</head>
+<body>
+  <div id="site-nav"></div>
+
+  <main class="sm-wrap">
+    <header class="sm-head">
+      <div class="eyebrow">Directory · find anything</div>
+      <h1 class="display">Site map</h1>
+      <p>Everything on the atlas, grouped and described. The site is organised into four areas —
+      <b>Explore</b> (see the data), <b>Understand</b> (how it works), <b>Data</b> (get + reference it),
+      and <b>About</b>. New accountability layers are being added over time; planned ones are marked.</p>
+    </header>
+
+    <div class="sm-groups" id="sm-groups"><p style="color:var(--muted-foreground)">Loading the map of the site…</p></div>
+
+    <p class="sm-tip">💡 <b>Tip:</b> press <kbd>⌘K</kbd> / <kbd>Ctrl-K</kbd> anywhere to jump straight to any
+    district, map layer, story or page. On the map, use the layer buttons to switch between money, health,
+    wealth, vehicles, aviation, housing, geography and data-coverage views — drill into a district to see
+    how deep the data goes.</p>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="site-nav.js"></script>
+  <script>
+    // One-line descriptions + group subtitles, keyed by href. The STRUCTURE comes
+    // from site-nav.js (window.SiteNav.NAV) so there's a single source of truth.
+    const DESC = {
+      "feed.html": "A curated stream of fiscal stories & headlines — money-driven and general.",
+      "index.html": "The interactive map: 594 districts, switchable layers (money · land · health · wealth · civic · coverage).",
+      "explore.html": "Ask cross-cutting questions of all 594 districts — AND/OR facet queries, no backend.",
+      "timeline.html": "Fund-lifecycle story chains on a timeline: promise → result → per-capita cost → human impact.",
+      "articles.html": "Long-form analysis grounded in the sourced data.",
+      "share.html": "Turn any story into ready-to-post social copy — with the human per-capita hook.",
+      "how-it-works.html": "How the atlas is built and what the sourced-or-gap rule means.",
+      "command-chain.html": "Who is accountable at each level — the federal/state/union chain of command.",
+      "history.html": "The Finance-Commission-by-Commission race + land-revenue history.",
+      "global.html": "India vs the world — GDP, income and industry comparisons.",
+      "atlas-3d.html": "India extruded in 3D by physical-constraint index.",
+      "terrain-3d.html": "3D topography — terrain, elevation and flood context.",
+      "knowledge.html": "The full auto-generated data catalog: every district, dimension, source and gap.",
+      "data.html": "Download the data + the (static) API surface.",
+      "for-organisations.html": "Licensing, embeds and commissioned deep-dives.",
+      "references.html": "Every source, by tier — gov PDF, gov HTML, and flagged upgrades.",
+      "about.html": "Methodology, disclaimer and the editorial posture.",
+      "privacy-policy.html": "Privacy, cookies/ads disclosure and editorial policy.",
+      "usa.html": "The US map, kept only as a federal-structure comparison.",
+    };
+    const GROUP_SUB = {
+      Explore: "See the data — map, query, timeline, feed.",
+      Understand: "How it works and how India's money & governance are structured.",
+      Data: "Get the data, reference the sources.",
+      About: "Methodology, policy and the project itself.",
+    };
+    const GROUP_ICON = { Explore: "🧭", Understand: "🧩", Data: "🗄", About: "ℹ️" };
+    // Planned pages surfaced in the sitemap so the roadmap is visible (marked planned).
+    const PLANNED = {
+      Explore: [{ text: "Officials & accountability", d: "Named officials by post — transfers, money flagged under their office, and linked CAG/court cases. Sourced facts only, cited — never an accusation." }],
+    };
+
+    function render() {
+      const NAV = (window.SiteNav && window.SiteNav.NAV) || [];
+      const host = document.getElementById("sm-groups");
+      if (!NAV.length) { host.innerHTML = '<p style="color:var(--muted-foreground)">Navigation not available.</p>'; return; }
+      const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      host.innerHTML = NAV.map(g => {
+        const links = g.items.map(i => {
+          const ext = /^https?:/.test(i.href);
+          const d = DESC[i.href] || "";
+          return `<a class="sm-link" href="${esc(i.href)}"${ext ? ' target="_blank" rel="noopener"' : ""}>
+            <span class="t">${esc(i.text)}${ext ? ' <span class="ar">↗</span>' : ""}</span>
+            ${d ? `<span class="d">${esc(d)}</span>` : ""}</a>`;
+        }).join("");
+        const planned = (PLANNED[g.label] || []).map(p =>
+          `<div class="sm-link sm-planned"><span class="t">${esc(p.text)}</span><span class="d">${esc(p.d)}</span></div>`).join("");
+        return `<section class="sm-group">
+          <h2>${GROUP_ICON[g.label] || ""} ${esc(g.label)}</h2>
+          <p class="sm-gsub">${esc(GROUP_SUB[g.label] || "")}</p>
+          ${links}${planned}</section>`;
+      }).join("");
+    }
+    // site-nav.js runs on DOMContentLoaded and defines window.SiteNav; render after.
+    if (window.SiteNav) render(); else window.addEventListener("DOMContentLoaded", render);
+  </script>
+</body>
+</html>

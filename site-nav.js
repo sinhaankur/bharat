@@ -83,6 +83,7 @@
     { label: "About", items: [
       { href: "about.html", text: "Methodology & disclaimer" },
       { href: "privacy-policy.html", text: "Privacy & policy" },
+      { href: "sitemap.html", text: "Site map" },
       { href: "usa.html", text: "Compare: US" },
       { href: "https://github.com/sinhaankur/india-fiscal-map", text: "GitHub ↗", ext: true },
     ]},
@@ -182,6 +183,10 @@
       if (!e.target.closest(".snav-group")) document.querySelectorAll(".snav-group.open").forEach(x => x.classList.remove("open"));
     });
   }
+
+  // Expose the IA so sitemap.html (and anything else) can render the SAME structure
+  // without duplicating it — single source of truth for the site's information map.
+  window.SiteNav = { NAV, SITE };
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", mount);
   else mount();
