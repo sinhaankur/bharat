@@ -42,6 +42,21 @@
     .kb-hide { display: none !important; }
     .kb-empty { color: var(--muted-foreground); font-size: 0.9rem; padding: 1rem 0; }
     a.kb-src { color: oklch(0.75 0.12 220); word-break: break-all; font-size: 0.8rem; }
+    /* Officials accountability cards */
+    .kb-off { grid-column: 1 / -1; }
+    .kb-mono { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
+    .kb-off-post { margin: 0 0 0.5rem; font-size: 0.85rem; color: var(--foreground); }
+    .kb-off-h { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-foreground); margin: 0.6rem 0 0.3rem; }
+    .kb-off-list { margin: 0 0 0.3rem; padding-left: 1.1rem; font-size: 0.83rem; line-height: 1.6; color: var(--foreground); }
+    .kb-issue { border-left: 2px solid var(--border-strong); padding: 0.3rem 0 0.3rem 0.7rem; margin: 0.4rem 0; }
+    .kb-issue p { margin: 0.2rem 0 0; font-size: 0.83rem; line-height: 1.5; color: var(--foreground); }
+    .kb-issue-meta { color: var(--muted-foreground) !important; font-size: 0.78rem !important; }
+    .kb-issue-kind { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--warm); margin-left: 0.4rem; }
+    .conf-documented { color: oklch(0.80 0.16 150); } .conf-reported { color: oklch(0.80 0.13 90); } .conf-alleged { color: oklch(0.76 0.16 40); }
+    .kb-off-refs { margin-top: 0.5rem; display: flex; flex-wrap: wrap; gap: 0.3rem; }
+    .kb-dchip { font-family: var(--font-mono); font-size: 10px; padding: 2px 8px; border: 1px solid var(--border-strong); border-radius: 999px; color: var(--foreground); text-decoration: none; }
+    .kb-dchip:hover { border-color: var(--warm); }
+    .kb-src2 { color: oklch(0.72 0.12 220); text-decoration: none; font-size: 0.9rem; }
   </style>
 </head>
 <body>
@@ -62,6 +77,7 @@
     <div class="kb-search"><input id="kb-q" type="search" placeholder="Filter the whole catalog — a district, state, dimension, source…" aria-label="Filter catalog" /></div>
     <nav class="kb-toc">
       <a href="#dimensions">Dimensions</a>
+      <a href="#officials">Officials</a>
       <a href="#sources">Sources</a>
       <a href="#chains">Story chains</a>
       <a href="#places">All 594 districts</a>
@@ -86,15 +102,49 @@
     Promise.all([
       fetch("district-ledger.json").then(r => r.json()),
       fetch("fiscal-events.json").then(r => r.ok ? r.json() : {story_chains:[]}).catch(() => ({story_chains:[]})),
-    ]).then(([led, ev]) => {
+      fetch("officials.json").then(r => r.ok ? r.json() : {officials:[]}).catch(() => ({officials:[]})),
+    ]).then(([led, ev, off]) => {
       StatsBar?.mount?.("stats-bar", { ledger: led, events: ev, updated: led?._meta?.as_of });
-      render(led, ev);
+      render(led, ev, off);
       wireSearch();
     }).catch(e => document.getElementById("kb-body").innerHTML = `<p class="kb-empty">Load error: ${esc(e.message)}</p>`);
 
-    function render(led, ev) {
+    function render(led, ev, off) {
       document.getElementById("kb-body").innerHTML =
-        dimensionsSection(led) + sourcesSection(led) + chainsSection(ev) + placesSection(led);
+        dimensionsSection(led) + officialsSection(off) + sourcesSection(led) + chainsSection(ev) + placesSection(led);
+    }
+
+    // Officials accountability — sourced posting history + cited issues attached to
+    // the OFFICE. Confidence-labelled, source-linked; nothing asserts wrongdoing.
+    function officialsSection(off) {
+      const list = (off && off.officials) || [];
+      const CONF = { documented: "conf-documented", reported: "conf-reported", alleged: "conf-alleged" };
+      const cards = list.map(o => {
+        const postings = (o.postings || []).map(p =>
+          `<li>${esc(p.post)}${p.place ? " · " + esc(p.place) : ""} <span class="kb-mono">${esc(p.from || "?")}–${esc(p.to || "present")}</span>${srcLink(p)}</li>`).join("");
+        const issues = (o.issues || []).map(i =>
+          `<div class="kb-issue">
+            <span class="kb-tier ${CONF[i.confidence] || ""}">${esc(i.confidence || "")}</span>
+            <span class="kb-issue-kind">${esc((i.kind || "").replace(/_/g, " "))}</span>
+            <p>${esc(i.statement)}</p>
+            <p class="kb-issue-meta">under: <b>${esc(i.office || "")}</b>${i.naming_authority ? " · per " + esc(i.naming_authority) : ""}${srcLink(i)}</p>
+          </div>`).join("");
+        const dref = (o.district_refs || []).map(d =>
+          `<a class="kb-dchip" href="index.html?state=${encodeURIComponent(d.state)}&district=${encodeURIComponent(d.district)}">${esc(d.district)} →</a>`).join("");
+        return `<div class="kb-card kb-off kb-row" data-k="${esc(o.name + " " + (o.service||"") + " " + (o.district_refs||[]).map(d=>d.district).join(" "))}">
+          <h3>${esc(o.name)} <span class="kb-mono">${esc(o.service || "")}</span></h3>
+          ${o.current_post ? `<p class="kb-off-post">${esc(o.current_post.post || "")}${o.current_post.place ? " · " + esc(o.current_post.place) : ""}${srcLink(o.current_post)}</p>` : ""}
+          ${postings ? `<div class="kb-off-h">Postings (transfers)</div><ul class="kb-off-list">${postings}</ul>` : ""}
+          ${issues ? `<div class="kb-off-h">Issues flagged under the office</div>${issues}` : ""}
+          ${dref ? `<div class="kb-off-refs">${dref}</div>` : ""}
+        </div>`;
+      }).join("");
+      return `<section class="kb-sec" id="officials"><h2>Officials accountability (${list.length})</h2>
+        <p class="kb-empty" style="padding:0 0 0.6rem">Sourced posting history + issues quoted from and cited to the naming authority, attached to the <b>office</b> — never an accusation against the person. Confidence: documented (gov/court doc) · reported (news) · alleged (a claim, not a finding). This is a young dataset; most fields are honest gaps.</p>
+        ${cards || '<p class="kb-empty">No officials pinned yet.</p>'}</section>`;
+    }
+    function srcLink(o) {
+      return o && o.source ? ` <a class="kb-src2" href="${esc(o.source)}" target="_blank" rel="noopener" title="tier ${esc(o.source_tier || "?")}">⧉</a>` : "";
     }
 
     // 1. Dimensions reference (what each layer is)
