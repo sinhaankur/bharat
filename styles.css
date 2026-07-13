@@ -1841,3 +1841,15 @@ a:hover { border-color: var(--foreground); }
 .cp-foot b { color: var(--foreground); font-weight: 600; }
 .cp-brand { margin-left: auto; color: var(--warm); }
 @media (max-width: 640px) { .cp-overlay { padding-top: 6vh; } .cp-foot { display: none; } }
+
+/* ============ District officials section (accountability layer) ============ */
+.doff-list { display: flex; flex-direction: column; gap: 0.5rem; }
+.doff-card { border: 1px solid var(--border); border-radius: var(--radius-sm); background: oklch(0.165 0 0); padding: 0.6rem 0.75rem; }
+.doff-head { display: flex; align-items: baseline; gap: 0.5rem; }
+.doff-name { font-weight: 600; font-size: 0.9rem; color: var(--foreground); }
+.doff-svc { font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); text-transform: uppercase; letter-spacing: 0.04em; }
+.doff-post { font-size: 0.82rem; color: var(--muted-foreground); margin-top: 2px; }
+.doff-issue { border-left: 2px solid var(--border-strong); padding: 0.3rem 0 0.2rem 0.6rem; margin-top: 0.45rem; }
+.doff-kind { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--warm); margin-left: 0.35rem; }
+.doff-stmt { font-size: 0.82rem; line-height: 1.5; color: var(--foreground); margin-top: 0.25rem; }
+.doff-meta { font-size: 0.76rem; color: var(--muted-foreground); margin-top: 0.2rem; }

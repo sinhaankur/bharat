@@ -103,7 +103,7 @@
   const ui = { state: { view: 'ownTax', yearIdx: 9, selected: null, hover: null, mode: 'states', drillState: null, drillDistrict: null, districtMode: 'population', showNews: true, showHazards: true, showHeat: false } };
 
   let DATA = null, EXTRAS = null, GEO = null, DISTRICT_POP = null, BLOCKS = null, LEDGER = null, PAY = null;
-  let EVENTS = null, NEWS = null, BUBBLES = null, NEWS_FEED = null;
+  let EVENTS = null, NEWS = null, BUBBLES = null, NEWS_FEED = null, OFFICIALS = null;
   const newsByState = new Map();      // "State" → [items]
   const newsByDistrict = new Map();   // "State|District" → [items]
   let newsBubbleLayer = null;
@@ -1103,6 +1103,8 @@
 
       ${renderLedgerSection(state, district)}
 
+      ${renderDistrictOfficials(state, district)}
+
       ${renderDistrictEvents(state, district)}
 
       ${renderLocationNews(state, district)}
@@ -1575,6 +1577,36 @@
   // (also used by story.html + timeline.html). Thin delegator here.
   function renderAccountabilityArc(c) {
     return (typeof AccountabilityArc !== 'undefined') ? AccountabilityArc.render(c) : '';
+  }
+
+  // Officials serving THIS district — sourced posting(s) + any hand-cited issue,
+  // attached to the office, never an accusation (officials-dataset-schema.md).
+  function renderDistrictOfficials(state, district) {
+    if (!OFFICIALS || !Array.isArray(OFFICIALS.officials)) return '';
+    const here = OFFICIALS.officials.filter(o =>
+      (o.district_refs || []).some(d => d.state === state && d.district === district));
+    if (!here.length) return '';
+    const confCls = c => ({ documented: 'pos', reported: 'warm', alleged: 'bad' }[c] || 'warm');
+    const cards = here.map(o => {
+      const post = o.current_post || {};
+      const issues = (o.issues || []).map(i => `
+        <div class="doff-issue">
+          <span class="dev-conf dev-conf--${confCls(i.confidence)}">${esc(i.confidence || '')}</span>
+          <span class="doff-kind">${esc((i.kind || '').replace(/_/g, ' '))}</span>
+          <div class="doff-stmt">${esc(i.statement)}</div>
+          <div class="doff-meta">under <b>${esc(i.office || '')}</b>${i.naming_authority ? ` · per ${esc(i.naming_authority)}` : ''}${i.source ? srcFootnote(i.source, i.source_tier) : ''}</div>
+        </div>`).join('');
+      return `
+        <div class="doff-card">
+          <div class="doff-head"><span class="doff-name">${esc(o.name)}</span> <span class="doff-svc">${esc(o.service || '')}</span></div>
+          <div class="doff-post">${esc(post.post || '')}${post.as_of ? ` · as of ${esc(post.as_of)}` : ''}${post.source ? srcFootnote(post.source, post.source_tier) : ''}</div>
+          ${issues}
+        </div>`;
+    }).join('');
+    return `
+      <div class="india-detail-section-title">Officials · this district <a class="dev-more" href="knowledge.html#officials">all officials ↗</a></div>
+      <div class="doff-list">${cards}</div>
+      <p class="india-caveat" style="margin-top:0.4rem">Sourced office-holders + postings; any issue is quoted from and cited to the naming authority and attached to the <b>office</b> — never an accusation against the person. Names rotate; snapshots are dated.</p>`;
   }
 
   // Legal-safe by construction: news shows link + snippet + attribution + confidence
@@ -3063,10 +3095,10 @@
     if (_ledgerPromise) return _ledgerPromise;
     _ledgerPromise = (async () => {
       const grab = async (url, opt) => { try { const r = await fetch(url); return r.ok ? await r.json() : null; } catch (e) { return null; } };
-      const [ledger, blocks, pay, events, news, bubbles, feed] = await Promise.all([
+      const [ledger, blocks, pay, events, news, bubbles, feed, officials] = await Promise.all([
         grab('district-ledger.json'), grab('india-blocks.json'), grab('pay-scales.json'),
         grab('fiscal-events.json'), grab('approved-news.json'), grab('news-bubbles.json'),
-        grab('news-feed.json'),
+        grab('news-feed.json'), grab('officials.json'),
       ]);
       if (ledger) LEDGER = ledger; else console.warn('district-ledger.json missing — money-flow ledger will be skipped');
       if (blocks) BLOCKS = blocks;
@@ -3075,6 +3107,7 @@
       if (news) NEWS = news;
       if (bubbles) BUBBLES = bubbles;
       if (feed) { NEWS_FEED = feed; indexNewsByLocation(feed); }
+      if (officials) OFFICIALS = officials;
       // Live stats + source-transparency bar (WorldMonitor-style) — computed from
       // the real loaded data, so the sourced-or-gap discipline is visible up top.
       if (typeof StatsBar !== 'undefined' && document.getElementById('stats-bar')) {
