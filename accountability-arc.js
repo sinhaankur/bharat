@@ -43,11 +43,16 @@
     }
     if (c.actual_cost) {
       const ac = c.actual_cost;
+      // Lead with the per-capita ₹ if sourced; else the affected headcount if that's
+      // sourced (the documented human scale); else an explicit gap.
       const pc = ac.per_capita_inr != null
         ? `<span class="acc-percap">₹${num(ac.per_capita_inr)}<span class="acc-percap-unit">/${esc(ac.per_capita_unit || 'resident')}</span></span>`
-        : (ac.figure_gap ? '<span class="acc-gap">per-capita: gap</span>' : '');
+        : (ac.affected_people != null
+            ? `<span class="acc-percap">${num(ac.affected_people)}<span class="acc-percap-unit"> people affected</span></span>`
+            : (ac.figure_gap ? '<span class="acc-gap">per-capita: gap</span>' : ''));
       const tot = ac.amount_cr != null
-        ? `<span class="acc-total">(₹${num(ac.amount_cr)} cr${ac.scope ? `, ${esc(ac.scope)}-wide` : ''})</span>` : '';
+        ? `<span class="acc-total">(₹${num(ac.amount_cr)} cr${ac.scope ? `, ${esc(ac.scope)}-wide` : ''})</span>`
+        : (ac.figure_gap ? '<span class="acc-total">(₹ total: a gap)</span>' : '');
       rows.push(`<div class="acc-row acc-row--cost">
         <span class="acc-key">Actual cost</span>
         <span class="acc-val">${pc} ${tot}${srcFoot(ac.source)}${ac.per_capita_note ? `<br><span class="acc-note">${esc(ac.per_capita_note)}</span>` : ''}</span></div>`);

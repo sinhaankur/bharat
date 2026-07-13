@@ -185,6 +185,57 @@
       },
       "human_impact": "About 20 lakh West Bengal government employees went years without DA at central rates — on the order of ₹50,000 of delayed pay each — until the Supreme Court's Feb 2026 judgment made the arrears legally due and set up a monitored payout.",
       "social_line": "The Supreme Court has ordered West Bengal to clear ~11 years of DA arrears — about ₹10,000 cr, ~₹50,000 of delayed pay per employee — for ~20 lakh state employees. [SC judgment, Feb 2026]"
+    },
+    {
+      "id": "sc_punjab_pension_arrears",
+      "title": "Punjab's pension arrears: age-staggered payout struck down, full release ordered",
+      "geo": {
+        "state": "Punjab",
+        "district": "Ludhiana"
+      },
+      "scheme_ref": "_STATE_PENSION",
+      "status": "open",
+      "event_ids": [
+        "fe_pb_pension_plan_2025",
+        "fe_pb_pension_hc_2026",
+        "fe_pb_pension_pending_2026"
+      ],
+      "started_at": "2025-02-18",
+      "last_event_at": "2026-06-30",
+      "one_line": "Punjab tried to pay pension arrears in age-based instalments; the Punjab & Haryana High Court quashed that plan as arbitrary (Article 14) and ordered pending DA/DR released to ~4 lakh pensioners (and ~3.5 lakh employees) at central rates by 30 Jun 2026 — implementation reportedly still pending.",
+      "promise": {
+        "entity": "Government of Punjab",
+        "stated": "Punjab accepted payment of DA/DR to its pensioners and employees on the Central Government pattern (per the 6th Punjab Pay Commission).",
+        "kind": "policy_commitment",
+        "source": {
+          "type": "news",
+          "title": "Punjab & Haryana High Court quashes staggered pension arrears plan, directs Punjab to release pending DA/DR",
+          "url": "https://www.livelaw.in/high-court/punjab-and-haryana-high-court/punjab-haryana-high-court-quashes-staggered-pension-arrears-plan-directs-punjab-to-release-pending-dadr-531973",
+          "source_tier": 4
+        }
+      },
+      "result": {
+        "stated": "Punjab delayed the DA/DR citing financial constraints and issued a Feb 2025 plan staggering arrears by age. The High Court struck that down as arbitrary and violative of Article 14, and directed release to all employees & pensioners at the All-India-Service rate by 30 Jun 2026, with the Chief Secretary to report compliance. Reports say implementation remained pending.",
+        "outcome": "delayed_court_ordered_release_pending",
+        "confidence": "documented"
+      },
+      "actual_cost": {
+        "amount_cr": null,
+        "amount_note": "No single clean sourced rupee total for the Punjab pension arrears — left an explicit gap. The DOCUMENTED scale is the headcount: ~4 lakh pensioners (and ~3.5 lakh employees), ~7.5 lakh people awaiting their legal dues.",
+        "scope": "state",
+        "affected_people": 750000,
+        "affected_note": "~7.5 lakh serving employees + pensioners across Punjab (of which ~4 lakh pensioners), per reporting on the case.",
+        "per_capita_inr": null,
+        "figure_gap": true,
+        "source": {
+          "type": "news",
+          "title": "Punjab pending DA dispute: 7.5 lakh employees and pensioners waiting for their legal due",
+          "url": "https://www.oneindia.com/india/punjab-pending-da-dispute-7-5-lakh-employees-and-pensioners-waiting-for-their-legal-due-court-call-8144015.html",
+          "source_tier": 4
+        }
+      },
+      "human_impact": "About 4 lakh Punjab pensioners (with ~3.5 lakh serving employees, ~7.5 lakh in all) were kept waiting for DA/DR they were legally owed — while All-India-Service officers drew full benefits from the same Consolidated Fund, a disparity the High Court flagged. The exact rupee arrears per pensioner is a gap; the documented fact is the delay and its scale.",
+      "social_line": "A court struck down Punjab's plan to pay pension arrears in age-based instalments as arbitrary — ~4 lakh pensioners (7.5 lakh in all) are owed DA/DR at central rates, ordered released by 30 Jun 2026. [P&H High Court]"
     }
   ],
   "fiscal_events": [
@@ -452,6 +503,81 @@
       "corroborating_news": [],
       "confidence": "documented",
       "figure_gap": false,
+      "needs_pdf_upgrade": true
+    },
+    {
+      "id": "fe_pb_pension_plan_2025",
+      "date": "2025-02-18",
+      "date_precision": "day",
+      "stage": "delay",
+      "title": "Punjab issues a plan to pay pension arrears in age-based instalments",
+      "summary": "Citing financial constraints, Punjab issued a 'Liquidation Plan' dated 18 Feb 2025 that staggered payment of pension DA/DR arrears based on the pensioner's age — deferring dues the state had accepted on the Central Government pattern.",
+      "geo": { "state": "Punjab", "district": "Ludhiana" },
+      "scheme_ref": "_STATE_PENSION",
+      "official_ref": "chief_secretary",
+      "ledger_row_ref": null,
+      "amount_cr": null,
+      "chain_id": "sc_punjab_pension_arrears",
+      "chain_seq": 1,
+      "primary_source": {
+        "type": "news",
+        "title": "Punjab & Haryana High Court quashes staggered pension arrears plan",
+        "url": "https://www.livelaw.in/high-court/punjab-and-haryana-high-court/punjab-haryana-high-court-quashes-staggered-pension-arrears-plan-directs-punjab-to-release-pending-dadr-531973",
+        "source_tier": 4
+      },
+      "corroborating_news": [],
+      "confidence": "reported",
+      "figure_gap": true,
+      "needs_pdf_upgrade": true
+    },
+    {
+      "id": "fe_pb_pension_hc_2026",
+      "date": "2026-02-01",
+      "date_precision": "month",
+      "stage": "action",
+      "title": "High Court quashes the age-staggered plan, orders full release",
+      "summary": "The Punjab & Haryana High Court struck down the age-based staggering as arbitrary and violative of Article 14, directing the state and its corporations to release all pending DA/DR to employees and pensioners at the All-India-Service (central) rate by 30 Jun 2026, with the Chief Secretary to file a compliance report.",
+      "geo": { "state": "Punjab", "district": "Ludhiana" },
+      "scheme_ref": "_STATE_PENSION",
+      "official_ref": "chief_secretary",
+      "ledger_row_ref": null,
+      "amount_cr": null,
+      "chain_id": "sc_punjab_pension_arrears",
+      "chain_seq": 2,
+      "primary_source": {
+        "type": "news",
+        "title": "Punjab & Haryana High Court directs Punjab to release pending DA/DR",
+        "url": "https://www.livelaw.in/high-court/punjab-and-haryana-high-court/punjab-haryana-high-court-quashes-staggered-pension-arrears-plan-directs-punjab-to-release-pending-dadr-531973",
+        "source_tier": 4
+      },
+      "corroborating_news": [],
+      "confidence": "documented",
+      "figure_gap": true,
+      "needs_pdf_upgrade": true
+    },
+    {
+      "id": "fe_pb_pension_pending_2026",
+      "date": "2026-06-30",
+      "date_precision": "day",
+      "stage": "shortfall",
+      "title": "Deadline arrives; implementation reportedly still pending",
+      "summary": "As of the court-set 30 Jun 2026 deadline, reporting indicated Punjab had yet to implement the revised DA/DR for its ~3.5 lakh employees and ~4 lakh pensioners, again citing fiscal constraints — leaving ~7.5 lakh people awaiting their legally-affirmed dues.",
+      "geo": { "state": "Punjab", "district": "Ludhiana" },
+      "scheme_ref": "_STATE_PENSION",
+      "official_ref": "chief_secretary",
+      "ledger_row_ref": null,
+      "amount_cr": null,
+      "chain_id": "sc_punjab_pension_arrears",
+      "chain_seq": 3,
+      "primary_source": {
+        "type": "news",
+        "title": "Punjab pending DA dispute: 7.5 lakh employees and pensioners waiting for their legal due",
+        "url": "https://www.oneindia.com/india/punjab-pending-da-dispute-7-5-lakh-employees-and-pensioners-waiting-for-their-legal-due-court-call-8144015.html",
+        "source_tier": 4
+      },
+      "corroborating_news": [],
+      "confidence": "reported",
+      "figure_gap": true,
       "needs_pdf_upgrade": true
     }
   ]
