@@ -133,6 +133,58 @@
       },
       "human_impact": "For every Kolkata resident, about ₹6,443 of the year's civic spending depends on grant money flowing down from the Centre and State — so local services are exposed to how reliably that upstream money arrives.",
       "social_line": "52% of Kolkata's ₹5,525 cr civic budget is grant, not locally raised — ~₹6,443 per resident depends on money flowing down from above. [KMC BE 2025-26, gov PDF]"
+    },
+    {
+      "id": "sc_wb_da_arrears",
+      "title": "West Bengal's DA arrears: 11 years of delayed pay, settled by the Supreme Court",
+      "geo": {
+        "state": "West Bengal",
+        "district": "Kolkata"
+      },
+      "scheme_ref": "_STATE_ESTABLISHMENT",
+      "status": "resolved",
+      "event_ids": [
+        "fe_wb_da_hc_2022",
+        "fe_wb_da_sc_interim_2025",
+        "fe_wb_da_sc_final_2026"
+      ],
+      "started_at": "2022-05-20",
+      "last_event_at": "2026-02-05",
+      "one_line": "State employees' dearness allowance fell years behind central rates; after a 2022 Calcutta HC order the Supreme Court finally ruled (5 Feb 2026) that WB must clear ~11 years of DA arrears (2009–2019, ~₹10,000 cr under the 5th Pay Commission) to ~20 lakh employees.",
+      "promise": {
+        "entity": "Government of West Bengal (as employer)",
+        "stated": "Dearness Allowance is a legally enforceable component of a government employee's pay, payable to compensate for inflation.",
+        "kind": "statute_court",
+        "source": {
+          "type": "news",
+          "title": "Supreme Court orders West Bengal to pay 11 years of DA arrears to employees",
+          "url": "https://thenewsmill.com/2026/02/supreme-court-orders-west-bengal-to-pay-11-years-of-da-arrears-to-employees/",
+          "source_tier": 4
+        }
+      },
+      "result": {
+        "stated": "DA disbursal lagged central rates for years; the Supreme Court's 5 Feb 2026 judgment upheld the employees' entitlement and directed WB to clear arrears for 2009–2019, with a court-monitored committee (chaired by Justice Indu Malhotra) fixing the instalment schedule.",
+        "outcome": "delayed_then_court_ordered_payment",
+        "confidence": "documented"
+      },
+      "actual_cost": {
+        "amount_cr": 10000,
+        "amount_note": "Approx. DA arrears for 2009–2019 under the 5th Pay Commission, as reported around the Supreme Court proceedings. A court-appointed committee is fixing the exact figure and schedule.",
+        "scope": "state",
+        "population": 2000000,
+        "per_capita_inr": 50000,
+        "per_capita_unit": "employee",
+        "per_capita_note": "≈₹10,000 cr ÷ ~20 lakh WB state employees ≈ ₹50,000 of delayed pay per employee (order of magnitude; the committee is fixing exact per-employee dues). Population here is the ~20 lakh AFFECTED EMPLOYEES, not state residents — labelled as such.",
+        "figure_gap": false,
+        "source": {
+          "type": "news",
+          "title": "DA outstanding of ₹10,000 crore to be cleared under 5th Pay Commission: SC orders",
+          "url": "https://www.angelone.in/news/market-updates/da-outstanding-of-10-000-crore-to-be-cleared-under-5th-pay-commission-sc-orders",
+          "source_tier": 4
+        }
+      },
+      "human_impact": "About 20 lakh West Bengal government employees went years without DA at central rates — on the order of ₹50,000 of delayed pay each — until the Supreme Court's Feb 2026 judgment made the arrears legally due and set up a monitored payout.",
+      "social_line": "The Supreme Court has ordered West Bengal to clear ~11 years of DA arrears — about ₹10,000 cr, ~₹50,000 of delayed pay per employee — for ~20 lakh state employees. [SC judgment, Feb 2026]"
     }
   ],
   "fiscal_events": [
@@ -325,6 +377,82 @@
         "basis": "₹2897 cr → money 4/4; state → people 4/4; stage 'release' → governance 0/4",
         "components_sourced": true
       }
+    },
+    {
+      "id": "fe_wb_da_hc_2022",
+      "date": "2022-05-20",
+      "date_precision": "day",
+      "stage": "audit_flag",
+      "title": "Calcutta High Court orders WB to pay DA at central rates",
+      "summary": "The Calcutta High Court ruled that West Bengal must align its dearness-allowance disbursal with central government rates, treating DA as an enforceable entitlement of state employees. The state challenged the order in the Supreme Court.",
+      "geo": { "state": "West Bengal", "district": "Kolkata" },
+      "scheme_ref": "_STATE_ESTABLISHMENT",
+      "official_ref": "chief_secretary",
+      "ledger_row_ref": null,
+      "amount_cr": null,
+      "chain_id": "sc_wb_da_arrears",
+      "chain_seq": 1,
+      "primary_source": {
+        "type": "news",
+        "title": "Supreme Court orders West Bengal to pay 11 years of DA arrears to employees",
+        "url": "https://thenewsmill.com/2026/02/supreme-court-orders-west-bengal-to-pay-11-years-of-da-arrears-to-employees/",
+        "source_tier": 4
+      },
+      "corroborating_news": [],
+      "confidence": "reported",
+      "figure_gap": true,
+      "needs_pdf_upgrade": true
+    },
+    {
+      "id": "fe_wb_da_sc_interim_2025",
+      "date": "2025-05-16",
+      "date_precision": "day",
+      "stage": "delay",
+      "title": "Supreme Court interim order: WB to pay 25% of DA arrears in 6 weeks",
+      "summary": "The Supreme Court directed West Bengal to pay 25% of the outstanding DA arrears (accumulated 2009–2019 under the 5th Pay Commission, ~₹10,000 cr) to its employees within six weeks — an interim step while the balance was worked out.",
+      "geo": { "state": "West Bengal", "district": "Kolkata" },
+      "scheme_ref": "_STATE_ESTABLISHMENT",
+      "official_ref": "chief_secretary",
+      "ledger_row_ref": null,
+      "amount_cr": 10000,
+      "amount_note": "≈₹10,000 cr total 2009–2019 DA arrears (the 25% interim is a portion); figure as reported around the proceedings.",
+      "chain_id": "sc_wb_da_arrears",
+      "chain_seq": 2,
+      "primary_source": {
+        "type": "news",
+        "title": "DA outstanding of ₹10,000 crore to be cleared under 5th Pay Commission: SC orders",
+        "url": "https://www.angelone.in/news/market-updates/da-outstanding-of-10-000-crore-to-be-cleared-under-5th-pay-commission-sc-orders",
+        "source_tier": 4
+      },
+      "corroborating_news": [],
+      "confidence": "reported",
+      "figure_gap": false,
+      "needs_pdf_upgrade": true
+    },
+    {
+      "id": "fe_wb_da_sc_final_2026",
+      "date": "2026-02-05",
+      "date_precision": "day",
+      "stage": "action",
+      "title": "Supreme Court final judgment: WB must clear ~11 years of DA arrears",
+      "summary": "On 5 Feb 2026 the Supreme Court upheld employees' entitlement and directed West Bengal to clear DA arrears for 2009–2019 for ~20 lakh employees, with a court-appointed committee (chaired by former Justice Indu Malhotra, with the CAG or a nominee) fixing the exact amount and instalment schedule. Amounts paid are not to be recovered even if the law later changes.",
+      "geo": { "state": "West Bengal", "district": "Kolkata" },
+      "scheme_ref": "_STATE_ESTABLISHMENT",
+      "official_ref": "chief_secretary",
+      "ledger_row_ref": null,
+      "amount_cr": 10000,
+      "chain_id": "sc_wb_da_arrears",
+      "chain_seq": 3,
+      "primary_source": {
+        "type": "news",
+        "title": "SC orders West Bengal to release DA arrears to employees (verdict)",
+        "url": "https://www.newsonair.gov.in/sc-to-deliver-verdict-on-west-bengal-state-employees-central-rate-da-case-today/",
+        "source_tier": 4
+      },
+      "corroborating_news": [],
+      "confidence": "documented",
+      "figure_gap": false,
+      "needs_pdf_upgrade": true
     }
   ]
 }

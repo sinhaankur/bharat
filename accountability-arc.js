@@ -44,7 +44,7 @@
     if (c.actual_cost) {
       const ac = c.actual_cost;
       const pc = ac.per_capita_inr != null
-        ? `<span class="acc-percap">₹${num(ac.per_capita_inr)}<span class="acc-percap-unit">/resident</span></span>`
+        ? `<span class="acc-percap">₹${num(ac.per_capita_inr)}<span class="acc-percap-unit">/${esc(ac.per_capita_unit || 'resident')}</span></span>`
         : (ac.figure_gap ? '<span class="acc-gap">per-capita: gap</span>' : '');
       const tot = ac.amount_cr != null
         ? `<span class="acc-total">(₹${num(ac.amount_cr)} cr${ac.scope ? `, ${esc(ac.scope)}-wide` : ''})</span>` : '';

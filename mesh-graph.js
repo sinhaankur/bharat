@@ -50,10 +50,11 @@
       const ac = c.actual_cost;
       if (ac && typeof ac.amount_cr === 'number' && !ac.figure_gap) {
         const mid = 'm:' + c.id;
+        const unit = ac.per_capita_unit || 'resident';
         const label = ac.per_capita_inr != null
-          ? '₹' + ac.per_capita_inr.toLocaleString('en-IN') + '/resident'
+          ? '₹' + ac.per_capita_inr.toLocaleString('en-IN') + '/' + unit
           : '₹' + ac.amount_cr.toLocaleString('en-IN') + ' cr';
-        node(mid, 'money', label, { amount_cr: ac.amount_cr, per_capita: ac.per_capita_inr, scope: ac.scope, href: 'story.html?chain=' + encodeURIComponent(c.id) });
+        node(mid, 'money', label, { amount_cr: ac.amount_cr, per_capita: ac.per_capita_inr, per_capita_unit: unit, scope: ac.scope, href: 'story.html?chain=' + encodeURIComponent(c.id) });
         link(cid, mid, ac.scope === 'district' ? 'cost (district)' : 'cost (state-wide)');
         if (c.geo && c.geo.district) link(mid, distId(c.geo.state, c.geo.district), 'per resident');
       }
