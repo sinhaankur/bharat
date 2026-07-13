@@ -65,6 +65,7 @@
           ? global.Coverage.score(dist, { newsCount: newsCounts[sn + '|' + dn] || 0 }).pct : 0;
         const health = (dist.dimensions && dist.dimensions.health) || {};
         const economy = (dist.dimensions && dist.dimensions.economy) || {};
+        const vehicles = (dist.dimensions && dist.dimensions.vehicles) || {};
         rows.push({
           state: sn, district: dn,
           crz: !!(g.crz && g.crz.applies) || !!g.on_coast,
@@ -86,6 +87,8 @@
           stunting: typeof health.stunting_u5_pct === 'number' ? health.stunting_u5_pct : null,
           income: typeof economy.percapita_nsdp_inr === 'number' ? economy.percapita_nsdp_inr : null,
           income_tier: economy.income_tier || null,
+          has_rto: Array.isArray(vehicles.rto_codes) && vehicles.rto_codes.length > 0,
+          plate_prefix: vehicles.plate_prefix || null,
           elev,
         });
       }
@@ -129,6 +132,8 @@
         describe: 'State per-capita NSDP in the low / lower-middle tier (RBI)' },
       { key: 'income_gap', group: 'Health & wealth', label: 'Income figure is a gap', test: r => r.income == null,
         describe: 'No published per-capita NSDP (small UTs absent from the RBI Handbook) — a gap, not zero' },
+      { key: 'has_rto', group: 'Civic', label: 'Has a pinned district RTO', test: r => r.has_rto,
+        describe: 'A district-level Regional Transport Office code + office is pinned (MoRTH/Vahan)' },
     ];
     const facetByKey = Object.fromEntries(facets.map(f => [f.key, f]));
 

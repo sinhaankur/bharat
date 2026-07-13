@@ -1267,6 +1267,10 @@ a:hover { border-color: var(--foreground); }
 .dim-tier--high { color: oklch(0.80 0.15 150); } .dim-tier--upper-middle { color: oklch(0.80 0.12 175); }
 .dim-tier--middle { color: oklch(0.80 0.12 90); } .dim-tier--lower-middle { color: oklch(0.80 0.13 60); }
 .dim-tier--low { color: oklch(0.76 0.16 30); }
+/* Number-plate chip for the vehicles / RTO dimension. */
+.dim-plate { font-family: var(--font-mono); font-size: 9.5px; font-weight: 600; letter-spacing: 0.04em;
+  color: oklch(0.16 0 0); background: oklch(0.92 0.02 110); padding: 1px 5px; border-radius: 3px;
+  border: 1px solid oklch(0.16 0 0); margin: 0 2px 2px 0; display: inline-block; }
 /* Legal-zone headline — "what can be built here" leads the geography section */
 .dim-row--zone { border-bottom: none; padding-bottom: 0.15rem; }
 .zone-badge {

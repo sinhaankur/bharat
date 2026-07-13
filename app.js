@@ -1363,6 +1363,31 @@
         </div>`);
       }
     }
+    // VEHICLES / RTO — the number-plate + Regional Transport Office segment.
+    const veh = dims.vehicles;
+    if (veh && (veh.rto_codes || veh.plate_prefix)) {
+      if (veh.rto_codes && veh.rto_codes.length) {
+        const codes = veh.rto_codes.map(c => `<span class="dim-plate">${esc(c)}</span>`).join(' ');
+        const count = veh.registered_vehicles != null
+          ? ` · <b>${veh.registered_vehicles.toLocaleString('en-IN')}</b> vehicles`
+          : '';
+        rows.push(`
+        <div class="dim-row">
+          <span class="dim-key">Vehicles</span>
+          <span class="dim-val">${codes}${count}
+            ${veh.rto_office ? `<br><span class="dim-hinder">${esc(veh.rto_office)}</span>` : ''}
+            <br><span class="dim-gap">RTO code(s) · MoRTH/Vahan${veh.registered_vehicles == null ? ' · count: gap' : ''}</span></span>
+        </div>`);
+      } else {
+        // Fallback: only the state plate prefix is known for this district.
+        rows.push(`
+        <div class="dim-row">
+          <span class="dim-key">Vehicles</span>
+          <span class="dim-val">plates start <span class="dim-plate">${esc(veh.plate_prefix)}</span>
+            <br><span class="dim-gap">state prefix · district RTO code + count: gap</span></span>
+        </div>`);
+      }
+    }
     if (!rows.length) return '';
     return `
       <div class="india-detail-section-title">District dimensions</div>
