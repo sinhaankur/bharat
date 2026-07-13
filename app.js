@@ -1388,6 +1388,21 @@
         </div>`);
       }
     }
+    // AVIATION — only shown when the district actually has an airport (a false is
+    // the norm and would be noise on ~558 districts).
+    const av = dims.aviation;
+    if (av && av.has_airport) {
+      const catCls = av.category ? ` dim-air--${esc(av.category)}` : '';
+      const pax = av.passengers_annual != null
+        ? ` · <b>${av.passengers_annual.toLocaleString('en-IN')}</b> pax/yr` : '';
+      rows.push(`
+        <div class="dim-row">
+          <span class="dim-key">Aviation</span>
+          <span class="dim-val">${esc(av.airport_name || 'airport')}
+            ${av.category ? `<span class="dim-air${catCls}">${esc(av.category)}</span>` : ''}${pax}
+            <br><span class="dim-gap">AAI/DGCA${av.passengers_annual == null ? ' · traffic: gap' : ''}</span></span>
+        </div>`);
+    }
     if (!rows.length) return '';
     return `
       <div class="india-detail-section-title">District dimensions</div>

@@ -66,6 +66,7 @@
         const health = (dist.dimensions && dist.dimensions.health) || {};
         const economy = (dist.dimensions && dist.dimensions.economy) || {};
         const vehicles = (dist.dimensions && dist.dimensions.vehicles) || {};
+        const aviation = (dist.dimensions && dist.dimensions.aviation) || {};
         rows.push({
           state: sn, district: dn,
           crz: !!(g.crz && g.crz.applies) || !!g.on_coast,
@@ -89,6 +90,8 @@
           income_tier: economy.income_tier || null,
           has_rto: Array.isArray(vehicles.rto_codes) && vehicles.rto_codes.length > 0,
           plate_prefix: vehicles.plate_prefix || null,
+          has_airport: aviation.has_airport === true,
+          intl_airport: aviation.has_airport === true && aviation.category === 'international',
           elev,
         });
       }
@@ -134,6 +137,10 @@
         describe: 'No published per-capita NSDP (small UTs absent from the RBI Handbook) — a gap, not zero' },
       { key: 'has_rto', group: 'Civic', label: 'Has a pinned district RTO', test: r => r.has_rto,
         describe: 'A district-level Regional Transport Office code + office is pinned (MoRTH/Vahan)' },
+      { key: 'has_airport', group: 'Civic', label: 'Has an operational airport', test: r => r.has_airport,
+        describe: 'An AAI/DGCA operational airport is in this district' },
+      { key: 'intl_airport', group: 'Civic', label: 'International airport', test: r => r.intl_airport,
+        describe: 'The district airport is an international gateway (AAI)' },
     ];
     const facetByKey = Object.fromEntries(facets.map(f => [f.key, f]));
 
