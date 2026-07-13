@@ -2341,6 +2341,8 @@
 
   function buildMap() {
     map = L.map('india-map', {
+      preferCanvas: true,   // render the 594 district polygons on canvas, not SVG —
+                            // the single biggest pan/zoom/hover smoothness win here.
       attributionControl: true,
       zoomControl: true,
       worldCopyJump: true,
@@ -2373,7 +2375,11 @@
     setupElevationReadout();
     setupWeatherLayer();
 
+    // The state choropleth (36 polygons) stays on an SVG renderer so its
+    // ._path-based CSS hover highlight keeps working under preferCanvas; the heavy
+    // 594 district polygons use the map's canvas default where the smoothness win is.
     geoLayer = L.geoJSON(GEO, {
+      renderer: L.svg(),
       style: f => fillStyle(f.properties.ST_NM),
       onEachFeature: (feature, layer) => {
         const name = feature.properties.ST_NM;
@@ -2774,13 +2780,23 @@
         ? `<span class="msl-ico">⛰</span> ${coord} · <span class="msl-gap">elev…</span>`
         : `<span class="msl-ico">⛰</span> ${coord} · <b>${Math.round(m)} m</b> above sea level <span class="msl-src">SRTM</span>`;
     }
+    // Throttle the immediate readout to one update per animation frame — a raw
+    // mousemove handler firing DOM writes on every event is the main source of
+    // map jank while hovering/panning. The API lookup stays debounced separately.
+    let rafPending = false, lastLL = null;
     map.on('mousemove', (e) => {
-      const { lat, lng } = e.latlng;
-      show(lat, lng, elevCache.get(roundKey(lat, lng)) ?? null);
+      lastLL = e.latlng;
+      if (!rafPending) {
+        rafPending = true;
+        requestAnimationFrame(() => {
+          rafPending = false;
+          if (lastLL) show(lastLL.lat, lastLL.lng, elevCache.get(roundKey(lastLL.lat, lastLL.lng)) ?? null);
+        });
+      }
       clearTimeout(elevTimer);
+      const { lat, lng } = e.latlng;
       elevTimer = setTimeout(async () => {
         const m = await lookup(lat, lng);
-        // only update if cursor hasn't moved far since
         show(lat, lng, m);
       }, 260);
     });
