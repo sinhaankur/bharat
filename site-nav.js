@@ -75,6 +75,7 @@
       { href: "terrain-3d.html", text: "3D topography" },
     ]},
     { label: "Data", items: [
+      { href: "knowledge.html", text: "Knowledge base" },
       { href: "data.html", text: "Data & API" },
       { href: "for-organisations.html", text: "For organisations" },
       { href: "references.html", text: "Sources" },

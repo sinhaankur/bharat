@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Knowledge base — every district, dimension, source & gap | India District Atlas</title>
+  <meta name="description" content="The full auto-generated data catalog: every one of India's 594 districts, all 8 data dimensions, every source and every logged gap, plus the accountability story chains. Always in sync with the data. Sourced-or-gap." />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .kb-wrap { max-width: 1100px; margin: 0 auto; padding: 1.4rem var(--pad-x) 5rem; }
+    .kb-head h1 { margin: 0.3rem 0 0.5rem; font-size: clamp(1.7rem, 4vw, 2.6rem); }
+    .kb-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.6; max-width: 78ch; }
+    .kb-search { position: sticky; top: 0; z-index: 10; background: var(--background); padding: 0.9rem 0; margin: 1rem 0 0.5rem; }
+    .kb-search input { width: 100%; background: oklch(0.17 0 0); color: var(--foreground); border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 0.75rem 1rem; font-size: 1rem; outline: none; }
+    .kb-search input:focus { border-color: var(--warm); }
+    .kb-toc { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.4rem 0 1.4rem; }
+    .kb-toc a { font-family: var(--font-mono); font-size: 11px; padding: 0.3rem 0.7rem; border: 1px solid var(--border-strong); border-radius: 999px; color: var(--muted-foreground); text-decoration: none; }
+    .kb-toc a:hover { border-color: var(--warm); color: var(--foreground); }
+    .kb-sec { margin: 2.2rem 0; scroll-margin-top: 5rem; }
+    .kb-sec > h2 { font-size: 1.3rem; border-bottom: 1px solid var(--border-strong); padding-bottom: 0.4rem; }
+    .kb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.7rem; }
+    .kb-card { border: 1px solid var(--border); border-radius: var(--radius-sm); background: oklch(0.165 0 0); padding: 0.7rem 0.85rem; }
+    .kb-card h3 { margin: 0 0 0.35rem; font-size: 0.95rem; }
+    .kb-card p { margin: 0; font-size: 0.82rem; color: var(--muted-foreground); line-height: 1.5; }
+    .kb-tier { font-family: var(--font-mono); font-size: 9px; padding: 1px 6px; border-radius: 999px; border: 1px solid currentColor; }
+    .kb-t1 { color: oklch(0.80 0.16 150); } .kb-t2 { color: oklch(0.80 0.13 200); } .kb-t3 { color: oklch(0.80 0.13 90); } .kb-t4 { color: oklch(0.76 0.16 40); }
+    .kb-state { border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 0.5rem; background: oklch(0.15 0 0); }
+    .kb-state > summary { cursor: pointer; padding: 0.6rem 0.9rem; font-weight: 600; font-size: 0.92rem; list-style: none; display: flex; align-items: center; gap: 0.6rem; }
+    .kb-state > summary::-webkit-details-marker { display: none; }
+    .kb-state > summary::before { content: "▸"; color: var(--muted-foreground); }
+    .kb-state[open] > summary::before { content: "▾"; }
+    .kb-state .kb-count { margin-left: auto; font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
+    .kb-dists { padding: 0.2rem 0.9rem 0.8rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.35rem; }
+    .kb-dist { display: flex; align-items: baseline; gap: 0.4rem; font-size: 0.83rem; padding: 0.25rem 0.4rem; border-radius: 4px; text-decoration: none; color: var(--foreground); }
+    .kb-dist:hover { background: oklch(0.22 0.02 260); }
+    .kb-dist .kb-dim { font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); margin-left: auto; }
+    .kb-dist .kb-deep { color: var(--warm); font-family: var(--font-mono); font-size: 9px; }
+    .kb-chain { border-left: 2px solid var(--border-strong); padding: 0.3rem 0 0.3rem 0.8rem; margin-bottom: 0.7rem; }
+    .kb-chain h3 { margin: 0 0 0.2rem; font-size: 0.92rem; }
+    .kb-chain p { margin: 0; font-size: 0.82rem; color: var(--muted-foreground); line-height: 1.5; }
+    .kb-chain a { color: var(--warm); font-size: 0.8rem; }
+    .kb-hide { display: none !important; }
+    .kb-empty { color: var(--muted-foreground); font-size: 0.9rem; padding: 1rem 0; }
+    a.kb-src { color: oklch(0.75 0.12 220); word-break: break-all; font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+  <div id="site-nav"></div>
+  <div id="stats-bar" aria-live="polite"></div>
+
+  <main class="kb-wrap">
+    <header class="kb-head">
+      <div class="eyebrow">Reference · auto-generated from the data</div>
+      <h1 class="display">Knowledge base</h1>
+      <p>Everything the atlas knows, in one browsable catalog — every state and district, all eight data
+      dimensions, every source and every logged gap, and the accountability story chains. This page is
+      generated live from <code>district-ledger.json</code> and <code>fiscal-events.json</code>, so it is
+      always in sync with the data. Nothing here is written prose about the data — it <em>is</em> the data.
+      Press <b>⌘K</b> / <b>Ctrl-K</b> to jump anywhere.</p>
+    </header>
+
+    <div class="kb-search"><input id="kb-q" type="search" placeholder="Filter the whole catalog — a district, state, dimension, source…" aria-label="Filter catalog" /></div>
+    <nav class="kb-toc">
+      <a href="#dimensions">Dimensions</a>
+      <a href="#sources">Sources</a>
+      <a href="#chains">Story chains</a>
+      <a href="#places">All 594 districts</a>
+    </nav>
+
+    <div id="kb-body"><p class="kb-empty">Loading the catalog…</p></div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="stats-bar.js"></script>
+  <script>
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const DIM_LABELS = {
+      money: "💰 Money flow — the fiscal ledger", geography: "⚖ Geography & zoning — CRZ, flood, terrain, hazards",
+      health: "🩺 Health — NFHS-5 (IMR, stunting, immunisation)", economy: "₹ Wealth — per-capita income (RBI)",
+      language: "🗣 Language — dominant mother tongue (Census)", politics: "🏛 Politics — alignment with the Union",
+      vehicles: "🚗 Vehicles / RTOs — number-plate & transport office", aviation: "✈ Aviation — AAI airports",
+      housing: "🏠 Housing — RBI HPI / NHB RESIDEX coverage",
+    };
+
+    Promise.all([
+      fetch("district-ledger.json").then(r => r.json()),
+      fetch("fiscal-events.json").then(r => r.ok ? r.json() : {story_chains:[]}).catch(() => ({story_chains:[]})),
+    ]).then(([led, ev]) => {
+      StatsBar?.mount?.("stats-bar", { ledger: led, events: ev, updated: led?._meta?.as_of });
+      render(led, ev);
+      wireSearch();
+    }).catch(e => document.getElementById("kb-body").innerHTML = `<p class="kb-empty">Load error: ${esc(e.message)}</p>`);
+
+    function render(led, ev) {
+      document.getElementById("kb-body").innerHTML =
+        dimensionsSection(led) + sourcesSection(led) + chainsSection(ev) + placesSection(led);
+    }
+
+    // 1. Dimensions reference (what each layer is)
+    function dimensionsSection(led) {
+      const cards = Object.entries(DIM_LABELS).map(([k, label]) => {
+        const [emoji, ...rest] = label.split(" ");
+        return `<div class="kb-card kb-row" data-k="${esc(k + ' ' + label)}">
+          <h3>${esc(emoji)} ${esc(k)}</h3><p>${esc(rest.join(" ").replace(/^[—-]\s*/, ""))}</p></div>`;
+      }).join("");
+      return `<section class="kb-sec" id="dimensions"><h2>Data dimensions <span class="kb-count-lbl"></span></h2>
+        <div class="kb-grid">${cards}</div></section>`;
+    }
+
+    // 2. Sources index — every distinct source URL + its tier, across the data
+    function sourcesSection(led) {
+      const srcs = new Map();   // url -> {tier, uses}
+      for (const s of Object.values(led.states || {})) {
+        for (const d of Object.values(s.districts || {})) {
+          for (const dim of Object.values(d.dimensions || {})) {
+            if (dim && typeof dim.source === "string") {
+              const cur = srcs.get(dim.source) || { tier: dim.source_tier, uses: 0 };
+              cur.uses++; if (dim.source_tier) cur.tier = dim.source_tier; srcs.set(dim.source, cur);
+            }
+          }
+        }
+      }
+      const rows = [...srcs.entries()].sort((a, b) => b[1].uses - a[1].uses).map(([url, m]) => {
+        const t = m.tier ? `<span class="kb-tier kb-t${m.tier}">tier ${m.tier}</span>` : `<span class="kb-tier">tier —</span>`;
+        return `<div class="kb-card kb-row" data-k="${esc(url)}"><h3>${t} ${(m.uses).toLocaleString("en-IN")} uses</h3>
+          <p><a class="kb-src" href="${esc(url)}" target="_blank" rel="noopener">${esc(url)}</a></p></div>`;
+      }).join("");
+      return `<section class="kb-sec" id="sources"><h2>Sources (${srcs.size})</h2>
+        <p class="kb-empty" style="padding:0 0 0.6rem">Every distinct source cited across the dimension data, by how many district-blocks rely on it. Tiers: 1 gov PDF · 2 gov HTML · 3 Wikipedia · 4 news.</p>
+        <div class="kb-grid">${rows || '<p class="kb-empty">No sources indexed.</p>'}</div></section>`;
+    }
+
+    // 3. Story chains — the accountability records
+    function chainsSection(ev) {
+      const chains = (ev.story_chains || []).map(c => {
+        const ac = c.actual_cost || {};
+        const pc = ac.per_capita_inr != null ? ` · ₹${Number(ac.per_capita_inr).toLocaleString("en-IN")}/resident` : "";
+        return `<div class="kb-chain kb-row" data-k="${esc(c.title + ' ' + (c.geo?.district||'') + ' ' + (c.scheme_ref||''))}">
+          <h3>${esc(c.title)}</h3>
+          <p>${esc(c.geo?.district || "")}${c.geo?.state ? ", " + esc(c.geo.state) : ""} · ${esc(c.scheme_ref || "")}${pc}</p>
+          <p>${esc(c.one_line || "")}</p>
+          <a href="story.html?chain=${encodeURIComponent(c.id)}">Open the accountability chain →</a>
+        </div>`;
+      }).join("");
+      return `<section class="kb-sec" id="chains"><h2>Accountability story chains (${(ev.story_chains||[]).length})</h2>
+        <p class="kb-empty" style="padding:0 0 0.6rem">Promise → result → per-capita cost → human impact, each sourced.</p>
+        ${chains || '<p class="kb-empty">No chains yet.</p>'}</section>`;
+    }
+
+    // 4. All 594 districts — browsable state→district tree, each linking into the map
+    function placesSection(led) {
+      const states = Object.entries(led.states || {}).sort((a, b) => a[0].localeCompare(b[0]));
+      const blocks = states.map(([sn, s]) => {
+        const dists = Object.entries(s.districts || {}).sort((a, b) => a[0].localeCompare(b[0]));
+        const items = dists.map(([dn, d]) => {
+          const nDim = Object.keys(d.dimensions || {}).length;
+          const deep = Array.isArray(d.ledger) && d.ledger.length ? `<span class="kb-deep">deep</span>` : "";
+          const url = `index.html?state=${encodeURIComponent(sn)}&district=${encodeURIComponent(dn)}`;
+          return `<a class="kb-dist kb-row" data-k="${esc(dn + ' ' + sn)}" href="${url}">
+            ${esc(dn)} ${deep}<span class="kb-dim">${nDim}d</span></a>`;
+        }).join("");
+        return `<details class="kb-state kb-statewrap" data-k="${esc(sn)}">
+          <summary>${esc(sn)} <span class="kb-count">${dists.length} districts</span></summary>
+          <div class="kb-dists">${items}</div></details>`;
+      }).join("");
+      return `<section class="kb-sec" id="places"><h2>All districts (${states.reduce((n, [, s]) => n + Object.keys(s.districts||{}).length, 0)})</h2>
+        <p class="kb-empty" style="padding:0 0 0.6rem">Every district, its dimension count (of 8), and whether a deep money-flow ledger is pinned. Click to open it on the map.</p>
+        ${blocks}</section>`;
+    }
+
+    // Live filter across every catalog row (cards, chains, districts, states)
+    function wireSearch() {
+      const q = document.getElementById("kb-q");
+      q.addEventListener("input", () => {
+        const v = q.value.trim().toLowerCase();
+        document.querySelectorAll(".kb-row").forEach(el => {
+          const hay = (el.dataset.k || el.textContent).toLowerCase();
+          el.classList.toggle("kb-hide", v && !hay.includes(v));
+        });
+        // reveal/collapse state groups: open a state if it has visible districts during a search
+        document.querySelectorAll(".kb-statewrap").forEach(st => {
+          const anyVisible = [...st.querySelectorAll(".kb-dist")].some(d => !d.classList.contains("kb-hide"));
+          const stateMatches = !v || (st.dataset.k || "").toLowerCase().includes(v);
+          st.classList.toggle("kb-hide", v && !anyVisible && !stateMatches);
+          if (v && anyVisible) st.open = true; else if (!v) st.open = false;
+        });
+      });
+    }
+  </script>
+  <script src="command-palette.js"></script>
+  <script src="site-nav.js"></script>
+</body>
+</html>
