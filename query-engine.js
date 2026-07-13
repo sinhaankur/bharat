@@ -127,6 +127,8 @@
         describe: 'State under-5 stunting ≥ 35% (NFHS-5)' },
       { key: 'low_income', group: 'Health & wealth', label: 'Lower-income state (per-capita)', test: r => r.income_tier === 'low' || r.income_tier === 'lower-middle',
         describe: 'State per-capita NSDP in the low / lower-middle tier (RBI)' },
+      { key: 'income_gap', group: 'Health & wealth', label: 'Income figure is a gap', test: r => r.income == null,
+        describe: 'No published per-capita NSDP (small UTs absent from the RBI Handbook) — a gap, not zero' },
     ];
     const facetByKey = Object.fromEntries(facets.map(f => [f.key, f]));
 
