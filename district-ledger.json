@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "as_of": "2026-06",
+    "as_of": "2026-07-12",
     "goal": "Money flow to each district over time + who is responsible + how the system functions/dysfunctions. Pilot district: Kolkata.",
     "rules": "PDF-cited or it's a gap. Every fact carries source + source_tier. Gaps recorded in _gaps, never guessed. Footnotes in UI point to the public record.",
     "source_tiers": {
@@ -366,7 +366,18 @@
         "tier": 5
       }
     },
-    "protocol_render_note": "Panel render hook: in renderDistrictPanel, for each department.schemes[] and ledger[].scheme, look up _meta.scheme_registry (resolving via _meta.scheme_aliases) to badge it with its constitutional list (union/state/concurrent/local_body), ministry, and funding pattern. For each roster role, look up _meta.authority_map to badge who APPOINTS that post (Union/State/elected) — surfacing the dual-control tension. _meta.protocol_layers holds the four-layer explainer for a 'How the system works' section. This layer is STRUCTURAL (authority/route), carries no money figures, so it does not touch the PDF-cited figure-gap rules."
+    "protocol_render_note": "Panel render hook: in renderDistrictPanel, for each department.schemes[] and ledger[].scheme, look up _meta.scheme_registry (resolving via _meta.scheme_aliases) to badge it with its constitutional list (union/state/concurrent/local_body), ministry, and funding pattern. For each roster role, look up _meta.authority_map to badge who APPOINTS that post (Union/State/elected) — surfacing the dual-control tension. _meta.protocol_layers holds the four-layer explainer for a 'How the system works' section. This layer is STRUCTURAL (authority/route), carries no money figures, so it does not touch the PDF-cited figure-gap rules.",
+    "dimensions": [
+      "money",
+      "geography",
+      "health",
+      "economy",
+      "language",
+      "politics",
+      "vehicles",
+      "aviation",
+      "housing"
+    ]
   },
   "states": {
     "West Bengal": {
