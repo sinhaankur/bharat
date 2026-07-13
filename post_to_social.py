@@ -72,8 +72,13 @@ def compose_x(ev_doc, c):
     amt = top_amount(ev_doc, c)
     url = f"{BASE}/story.html?chain={c['id']}"
     tags = "#IndiaFiscalMap #PublicMoney"
-    bits = [c.get("one_line") or c.get("title")]
+    # Prefer the hand-vetted, defensible social_line; else the neutral one_line.
+    bits = [c.get("social_line") or c.get("one_line") or c.get("title")]
     line2 = []
+    # Human per-capita hook leads the metric line when present.
+    pc = (c.get("actual_cost") or {}).get("per_capita_inr")
+    if isinstance(pc, (int, float)):
+        line2.append(f"🧍 ₹{int(pc):,}/resident")
     if amt:
         line2.append(f"💰 ₹{int(amt):,} cr")
     if sev:

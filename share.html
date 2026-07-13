@@ -94,16 +94,22 @@
       const url = `${BASE}/story.html?chain=${encodeURIComponent(c.id)}`;
       const sevTxt = sev ? `${sev.band.toUpperCase()} (${sev.score}/12 scale-of-problem)` : "";
       const amtTxt = amt ? `₹${Number(amt).toLocaleString("en-IN")} cr` : "";
+      // The human per-capita hook (₹ per resident) — the most shareable number.
+      const ac = c.actual_cost || {};
+      const pcTxt = ac.per_capita_inr != null
+        ? `₹${Number(ac.per_capita_inr).toLocaleString("en-IN")}/resident${ac.scope ? " (" + ac.scope + "-wide)" : ""}` : "";
+      // Prefer the hand-vetted, defensible social_line as the lead sentence.
+      const lead = c.social_line || c.one_line || c.title;
       const tags = ["#IndiaFiscalMap", c.scheme_ref && !c.scheme_ref.startsWith("_") ? "#" + c.scheme_ref.replace(/[^A-Za-z0-9]/g, "") : "", c.geo?.state ? "#" + c.geo.state.replace(/[^A-Za-z0-9]/g, "") : "", "#PublicMoney"].filter(Boolean);
 
-      // Twitter/X — tight, hook-first, <=280
-      const x = `${c.one_line || c.title}\n\n${amtTxt ? "💰 " + amtTxt + "  " : ""}${sevTxt ? "⚠ " + sevTxt : ""}\n📍 ${loc}\n\n${tags.slice(0, 3).join(" ")}\n${url}`;
+      // Twitter/X — tight, hook-first, <=280. Per-capita leads the metric line.
+      const x = `${lead}\n\n${pcTxt ? "🧍 " + pcTxt + "  " : ""}${amtTxt ? "💰 " + amtTxt + "  " : ""}${sevTxt ? "⚠ " + sevTxt : ""}\n📍 ${loc}\n\n${tags.slice(0, 3).join(" ")}\n${url}`;
 
       // Facebook — a touch longer, context ok
-      const fb = `${c.title}\n\n${c.one_line || ""}\n\n${amtTxt ? "Funds in question: " + amtTxt + "\n" : ""}${sevTxt ? "Scale of the problem: " + sevTxt + "\n" : ""}Where: ${loc}\n\nEvery figure is government-sourced or flagged as a gap. See the full source-and-bias breakdown:\n${url}\n\n${tags.join(" ")}`;
+      const fb = `${c.title}\n\n${lead}\n\n${pcTxt ? "Human cost: " + pcTxt + "\n" : ""}${amtTxt ? "Funds in question: " + amtTxt + "\n" : ""}${sevTxt ? "Scale of the problem: " + sevTxt + "\n" : ""}Where: ${loc}\n\nEvery figure is government-sourced or flagged as a gap. See the full source-and-bias breakdown:\n${url}\n\n${tags.join(" ")}`;
 
       // Instagram — caption style, hashtag block, no clickable link (put in bio)
-      const ig = `${c.title} 🇮🇳\n\n${c.one_line || ""}\n${amtTxt ? "\n💰 " + amtTxt : ""}${sevTxt ? "\n⚠ " + sevTxt : ""}\n📍 ${loc}\n\nSourced data, not opinion. Link in bio.\n\n${[...tags, "#dataviz", "#accountability", "#governance"].join(" ")}`;
+      const ig = `${c.title} 🇮🇳\n\n${lead}\n${pcTxt ? "\n🧍 " + pcTxt : ""}${amtTxt ? "\n💰 " + amtTxt : ""}${sevTxt ? "\n⚠ " + sevTxt : ""}\n📍 ${loc}\n\nSourced data, not opinion. Link in bio.\n\n${[...tags, "#dataviz", "#accountability", "#governance"].join(" ")}`;
 
       return { x, fb, ig, url };
     }
