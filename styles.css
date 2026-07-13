@@ -1224,6 +1224,22 @@ a:hover { border-color: var(--foreground); }
 .dev-chain-status { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.05em; text-transform: uppercase; padding: 1px 6px; border-radius: 999px; border: 1px solid currentColor; margin-right: 0.3rem; }
 .dev-chain-status--open { color: oklch(0.80 0.14 60); } .dev-chain-status--resolved { color: oklch(0.80 0.16 150); } .dev-chain-status--dormant { color: var(--muted-foreground); }
 .dev-chain-line { font-size: 10.5px; color: var(--muted-foreground); line-height: 1.5; margin: 0.35rem 0 0.6rem; }
+/* Accountability arc: promise -> result -> actual per-capita cost -> human impact. */
+.acc-arc { display: flex; flex-direction: column; gap: 0.4rem; margin: 0 0 0.7rem; padding: 0.55rem 0.6rem;
+  border-radius: var(--radius-sm); background: oklch(0.185 0.01 260); border: 1px solid var(--border-strong); }
+.acc-row { display: grid; grid-template-columns: 66px 1fr; gap: 0.5rem; font-size: 10.5px; line-height: 1.45; }
+.acc-key { font-family: var(--font-mono); font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--muted-foreground); padding-top: 1px; }
+.acc-row--promise .acc-key { color: oklch(0.78 0.12 250); }
+.acc-row--result .acc-key { color: oklch(0.80 0.12 90); }
+.acc-row--cost .acc-key { color: oklch(0.82 0.16 75); }
+.acc-row--impact .acc-key { color: oklch(0.80 0.15 150); }
+.acc-val { color: var(--foreground); }
+.acc-percap { font-family: var(--font-mono); font-weight: 700; font-size: 14px; color: oklch(0.86 0.17 75); }
+.acc-percap-unit { font-size: 8.5px; font-weight: 400; color: var(--muted-foreground); margin-left: 1px; }
+.acc-total { font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); }
+.acc-note { font-size: 9px; color: var(--muted-foreground); font-style: italic; }
+.acc-row--impact .acc-val { font-style: italic; }
 .dev-rail { border-left: 2px solid var(--border-strong); padding-left: 0.7rem; display: flex; flex-direction: column; gap: 0.55rem; }
 .dev-ev { position: relative; }
 .dev-ev::before { content: ""; position: absolute; left: calc(-0.7rem - 5px); top: 4px; width: 7px; height: 7px; border-radius: 50%; background: currentColor; box-shadow: 0 0 0 3px oklch(0.165 0 0); }

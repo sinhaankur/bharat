@@ -21,7 +21,16 @@
       "alleged"
     ],
     "coverage": "2 seed story chains (Birbhum MGNREGS freeze; Kolkata KMC grant dependency). Built to be extended by ingest_news.py + human anchoring.",
-    "scheme_ref_note": "scheme_ref resolves against district-ledger.json _meta.scheme_registry / scheme_aliases. official_ref resolves against the district roster role keys + _meta.authority_map."
+    "scheme_ref_note": "scheme_ref resolves against district-ledger.json _meta.scheme_registry / scheme_aliases. official_ref resolves against the district roster role keys + _meta.authority_map.",
+    "accountability_chain": "Each story_chain can carry the full accountability arc: promise -> result -> actual_cost -> human_impact. This is the 'source vs bias vs stated promise vs result vs actual (per-capita) cost' unit. Rules that keep it defensible:",
+    "accountability_rules": {
+      "promise": "The political entity's OWN stated commitment ONLY (manifesto / budget speech / scheme launch / official release), QUOTED with a source URL. We never infer motive or 'agenda' — we quote what was promised and cite it. entity = the body that made the promise (govt/ministry/party as stated in the source), never an accusation.",
+      "result": "What is documented to have happened, sourced. Factual (delivered / delayed / withheld / lapsed), never a verdict.",
+      "actual_cost": "Total amount_cr AND per_capita_inr, EACH cited. per_capita = amount / Census-2011 population at the stated scope (district or state). scope MUST be labelled — never pass a state figure off as per-district. figure_gap=true until the amount is sourced.",
+      "human_impact": "Plain-language, factual statement of what this meant for residents (what was denied or delivered) — 'human value, not economic contribution'. No adjectives of blame; state the concrete effect.",
+      "social_line": "A ready-to-post one-liner (<=200 chars) for auto social posting (share.html / post_to_social.py). Facts + figure + source-implied, never an accusation."
+    },
+    "per_capita_note": "per_capita_inr is rupees per resident (amount_cr * 1e7 / population). Population from district-pop.json (Census 2011). Scope 'state' uses the summed state population; 'district' uses the district population. Shown to make cost HUMAN and comparable, not to assert contribution."
   },
   "story_chains": [
     {
@@ -41,7 +50,40 @@
       ],
       "started_at": "2022-03-09",
       "last_event_at": "2026-06-01",
-      "one_line": "Centre froze WB's MGNREGS funds under Sec 27 (Mar 2022); ₹3,038 cr dues piled up; resumed Jun 2026 after Supreme Court intervention. Dysfunction = money WITHHELD upstream, not misspent."
+      "one_line": "Centre froze WB's MGNREGS funds under Sec 27 (Mar 2022); ₹3,038 cr dues piled up; resumed Jun 2026 after Supreme Court intervention. Dysfunction = money WITHHELD upstream, not misspent.",
+      "promise": {
+        "entity": "Government of India (MGNREGA statutory guarantee)",
+        "stated": "MGNREGA guarantees at least 100 days of wage employment in a financial year to every rural household whose adults volunteer to do unskilled manual work.",
+        "kind": "statute",
+        "source": {
+          "type": "gov_pdf",
+          "title": "The Mahatma Gandhi NREGA, 2005 — Section 3",
+          "url": "https://nrega.nic.in/amendments/original_act_MGNREGA.pdf",
+          "source_tier": 1
+        }
+      },
+      "result": {
+        "stated": "Fund release to West Bengal was frozen from 9 Mar 2022 under Sec 27; no MGNREGS wages flowed to WB districts for ~4 years until a June 2026 resumption after Supreme Court intervention.",
+        "outcome": "withheld_then_resumed",
+        "confidence": "reported"
+      },
+      "actual_cost": {
+        "amount_cr": 3038,
+        "amount_note": "Centre-stated pending MGNREGS dues to WB (Rajya Sabha, 2025) — the withheld amount, not district-split.",
+        "scope": "state",
+        "population": 91276115,
+        "per_capita_inr": 333,
+        "per_capita_note": "₹3,038 cr ÷ WB Census-2011 population — ₹333 of guaranteed-wage money withheld per WB resident (state scope; NOT Birbhum-specific).",
+        "figure_gap": false,
+        "source": {
+          "type": "news",
+          "title": "Centre owes ₹3,000 crore MGNREGA dues to Bengal (Rajya Sabha)",
+          "url": "https://www.business-standard.com/india-news/centre-owes-3-000-crore-mgnrega-dues-to-bengal-govt-in-rajya-sabha-125080101525_1.html",
+          "source_tier": 4
+        }
+      },
+      "human_impact": "The statutory job guarantee stopped functioning in WB's rural districts: households that would have earned MGNREGS wages did not, unbuilt assets and reported distress migration followed. ~₹333 of guaranteed-wage money per resident sat withheld upstream.",
+      "social_line": "West Bengal's MGNREGS job-guarantee funds were frozen by the Centre for ~4 years — ₹3,038 cr in dues, ~₹333 per resident withheld — until the Supreme Court pushed a June 2026 restart. [sourced]"
     },
     {
       "id": "sc_kolkata_kmc_grant",
@@ -57,7 +99,40 @@
       ],
       "started_at": "2025-04-01",
       "last_event_at": "2025-04-01",
-      "one_line": "KMC's BE 2025-26 shows ₹2,897 cr of ₹5,525 cr receipts are Central+State grant — 52% grant-dependent, budget in deficit."
+      "one_line": "KMC's BE 2025-26 shows ₹2,897 cr of ₹5,525 cr receipts are Central+State grant — 52% grant-dependent, budget in deficit.",
+      "promise": {
+        "entity": "Kolkata Municipal Corporation (Budget Estimate 2025-26)",
+        "stated": "KMC's Budget Estimate 2025-26 projects total receipts of ₹5,524.84 cr to fund the city's civic services for the year.",
+        "kind": "budget",
+        "source": {
+          "type": "gov_pdf",
+          "title": "KMC Budget English 2025-2026",
+          "url": "https://www.kmcgov.in/KMCPortal/downloads/Budget_English_2025_2026.pdf",
+          "source_tier": 1
+        }
+      },
+      "result": {
+        "stated": "Of ₹5,524.84 cr total receipts, ₹2,897 cr (~52%) is Central + State Grant-in-Aid rather than locally raised revenue; the budget is in deficit.",
+        "outcome": "grant_dependent",
+        "confidence": "documented"
+      },
+      "actual_cost": {
+        "amount_cr": 2897,
+        "amount_note": "Central + State grant component of KMC's BE 2025-26 receipts (the money that flows DOWN rather than being raised locally).",
+        "scope": "district",
+        "population": 4496694,
+        "per_capita_inr": 6443,
+        "per_capita_note": "₹2,897 cr ÷ Kolkata Census-2011 population — ₹6,443 of the city's per-resident civic money comes from grant, not local revenue.",
+        "figure_gap": false,
+        "source": {
+          "type": "gov_pdf",
+          "title": "KMC Budget English 2025-2026",
+          "url": "https://www.kmcgov.in/KMCPortal/downloads/Budget_English_2025_2026.pdf",
+          "source_tier": 1
+        }
+      },
+      "human_impact": "For every Kolkata resident, about ₹6,443 of the year's civic spending depends on grant money flowing down from the Centre and State — so local services are exposed to how reliably that upstream money arrives.",
+      "social_line": "52% of Kolkata's ₹5,525 cr civic budget is grant, not locally raised — ~₹6,443 per resident depends on money flowing down from above. [KMC BE 2025-26, gov PDF]"
     }
   ],
   "fiscal_events": [

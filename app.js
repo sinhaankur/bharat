@@ -1515,6 +1515,45 @@
   }
 
   // Map-as-hub: a district's story-chain timeline + approved news, inline in the panel.
+  // The accountability arc for a story chain: what was PROMISED (quoted + cited) →
+  // the documented RESULT → the ACTUAL per-capita COST → the HUMAN IMPACT. This is
+  // the "source vs stated-promise vs result vs actual (per-capita) cost" unit — a
+  // structured, sourced record, distinct from a news channel's claims. Defensible
+  // by construction: promise is the entity's OWN words + source; nothing asserts
+  // motive; cost scope (district/state) is always labelled.
+  function renderAccountabilityArc(c) {
+    if (!c || !(c.promise || c.result || c.actual_cost || c.human_impact)) return '';
+    const src = s => (s && s.url) ? srcFootnote(s.url, s.source_tier) : '';
+    const rows = [];
+    if (c.promise) {
+      rows.push(`<div class="acc-row acc-row--promise">
+        <span class="acc-key">Promised</span>
+        <span class="acc-val">${c.promise.entity ? `<b>${esc(c.promise.entity)}</b>: ` : ''}${esc(c.promise.stated || '')} ${src(c.promise.source)}</span></div>`);
+    }
+    if (c.result) {
+      rows.push(`<div class="acc-row acc-row--result">
+        <span class="acc-key">Result</span>
+        <span class="acc-val">${esc(c.result.stated || '')}${c.result.confidence ? ` <span class="dev-conf dev-conf--${({documented:'pos',reported:'warm',alleged:'bad'}[c.result.confidence]||'warm')}">${esc(c.result.confidence)}</span>` : ''}</span></div>`);
+    }
+    if (c.actual_cost) {
+      const ac = c.actual_cost;
+      const pc = ac.per_capita_inr != null
+        ? `<span class="acc-percap">₹${Number(ac.per_capita_inr).toLocaleString('en-IN')}<span class="acc-percap-unit">/resident</span></span>`
+        : (ac.figure_gap ? '<span class="ev-gap">per-capita: gap</span>' : '');
+      const tot = ac.amount_cr != null ? `₹${Number(ac.amount_cr).toLocaleString('en-IN')} cr` : '';
+      rows.push(`<div class="acc-row acc-row--cost">
+        <span class="acc-key">Actual cost</span>
+        <span class="acc-val">${pc}${tot ? ` <span class="acc-total">(${tot}${ac.scope ? `, ${esc(ac.scope)}-wide` : ''})</span>` : ''} ${src(ac.source)}
+        ${ac.per_capita_note ? `<br><span class="acc-note">${esc(ac.per_capita_note)}</span>` : ''}</span></div>`);
+    }
+    if (c.human_impact) {
+      rows.push(`<div class="acc-row acc-row--impact">
+        <span class="acc-key">For people</span>
+        <span class="acc-val">${esc(c.human_impact)}</span></div>`);
+    }
+    return `<div class="acc-arc">${rows.join('')}</div>`;
+  }
+
   // Legal-safe by construction: news shows link + snippet + attribution + confidence
   // label only — never republished text, never an unsourced claim.
   function renderDistrictEvents(state, district) {
@@ -1548,6 +1587,7 @@
         <div class="dev-chain">
           <div class="dev-chain-head"><span class="dev-chain-status dev-chain-status--${esc(c.status)}">${esc(c.status)}</span> ${esc(c.title)}</div>
           ${c.one_line ? `<div class="dev-chain-line">${esc(c.one_line)}</div>` : ''}
+          ${renderAccountabilityArc(c)}
           <div class="dev-rail">${rail}</div>
         </div>`;
     }).join('');
