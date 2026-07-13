@@ -564,6 +564,37 @@
     const t = Math.min(1, Math.max(0, (v - 50000) / (500000 - 50000)));
     return seqColor(0.18 + 0.75 * t);
   }
+  // Civic dimension helper: fetch a district's dimension block.
+  function dimFor(state, district, key) {
+    return LEDGER?.states?.[state]?.districts?.[district]?.dimensions?.[key] || null;
+  }
+  // Vehicles/RTO facet: a district with a pinned RTO code stands out (warm) vs a
+  // district known only by its state plate prefix (muted). Shows "how deep the data
+  // goes" per district — the drill-in payoff.
+  function vehiclesColorFor(state, district) {
+    const v = dimFor(state, district, 'vehicles');
+    if (!v) return 'oklch(0.22 0 0)';
+    if (v.registered_vehicles != null) return 'oklch(0.72 0.17 40)';  // count pinned — richest
+    if (Array.isArray(v.rto_codes) && v.rto_codes.length) return 'oklch(0.66 0.14 70)'; // RTO pinned
+    if (v.plate_prefix) return 'oklch(0.34 0.03 250)';                // prefix only (partial)
+    return 'oklch(0.22 0 0)';
+  }
+  // Aviation facet: colour by airport class; districts with no airport stay muted.
+  function aviationColorFor(state, district) {
+    const a = dimFor(state, district, 'aviation');
+    if (!a || !a.has_airport) return 'oklch(0.22 0 0)';
+    return ({ international: 'oklch(0.70 0.15 210)', customs: 'oklch(0.72 0.14 160)',
+              domestic: 'oklch(0.76 0.12 90)' })[a.category] || 'oklch(0.70 0.12 250)';
+  }
+  // Housing facet: tracked by an official house-price index (warm) vs not (muted) —
+  // makes the coverage gap visible (why a per-district 'bubble' can't be measured).
+  function housingColorFor(state, district) {
+    const h = dimFor(state, district, 'housing');
+    if (!h) return 'oklch(0.22 0 0)';
+    if (h.rbi_hpi) return 'oklch(0.74 0.16 300)';       // RBI HPI (10-city) — richest
+    if (h.nhb_residex) return 'oklch(0.64 0.13 320)';   // NHB RESIDEX (~50-city)
+    return 'oklch(0.26 0.01 320)';                       // no official index — the gap
+  }
   // Fill colour for the "Data coverage" district mode (data density, not risk).
   function coverageColorFor(state, district) {
     if (typeof Coverage === 'undefined') return 'oklch(0.22 0 0)';
@@ -728,6 +759,15 @@
         if (ui.state.districtMode === 'economy') {
           return { className: 'india-state-path', color: bc('oklch(0.985 0 0 / 0.35)'), weight: 0.6, fillColor: economyColorFor(stateName), fillOpacity: fo(0.85) };
         }
+        if (ui.state.districtMode === 'vehicles') {
+          return { className: 'india-state-path', color: bc('oklch(0.985 0 0 / 0.35)'), weight: 0.6, fillColor: vehiclesColorFor(stateName, dn), fillOpacity: fo(0.85) };
+        }
+        if (ui.state.districtMode === 'aviation') {
+          return { className: 'india-state-path', color: bc('oklch(0.985 0 0 / 0.35)'), weight: 0.6, fillColor: aviationColorFor(stateName, dn), fillOpacity: fo(0.85) };
+        }
+        if (ui.state.districtMode === 'housing') {
+          return { className: 'india-state-path', color: bc('oklch(0.985 0 0 / 0.35)'), weight: 0.6, fillColor: housingColorFor(stateName, dn), fillOpacity: fo(0.85) };
+        }
         const pop = getDistrictPop(stateName, dn)?.population;
         const t = pop != null ? (pop - popMin) / Math.max(1, popMax - popMin) : 0;
         return {
@@ -871,6 +911,21 @@
       const a = dimAlignFor(state, district);
       text = a ? a : 'Political alignment: gap';
       if (a) color = alignColor(a);
+    } else if (mode === 'vehicles') {
+      const v = dimFor(state, district, 'vehicles');
+      if (v && Array.isArray(v.rto_codes) && v.rto_codes.length) {
+        text = `${v.rto_codes.slice(0, 3).join(', ')}${v.rto_codes.length > 3 ? '…' : ''}${v.registered_vehicles != null ? ` · ${v.registered_vehicles.toLocaleString('en-IN')} veh` : ''}`;
+        color = vehiclesColorFor(state, district);
+      } else if (v && v.plate_prefix) { text = `plates ${v.plate_prefix}·· · district RTO: gap`; color = vehiclesColorFor(state, district); }
+      else text = 'Vehicles: gap';
+    } else if (mode === 'aviation') {
+      const a = dimFor(state, district, 'aviation');
+      if (a && a.has_airport) { text = `${a.airport_name || 'airport'}${a.category ? ` · ${a.category}` : ''}`; color = aviationColorFor(state, district); }
+      else text = 'No airport in this district';
+    } else if (mode === 'housing') {
+      const h = dimFor(state, district, 'housing');
+      if (h && h.tracked) { text = `tracked by ${(h.indices || []).join(' + ')}`; color = housingColorFor(state, district); }
+      else text = 'No official house-price index (gap)';
     } else if (mode === 'coverage' && typeof Coverage !== 'undefined') {
       const dist = LEDGER?.states?.[state]?.districts?.[district];
       if (dist) { const pct = Coverage.score(dist, { newsCount: newsCountFor(state, district) }).pct; text = `Data coverage ${pct}% (sourced vs gap)`; color = Coverage.color(pct); }
@@ -2562,7 +2617,7 @@
   function dataOverlayModes() {
     const inDistricts = ui.state.drillState != null;
     const geo = [['geography', 'Flood & terrain']];
-    const drilled = [['population', 'Population'], ['money', 'Money flow'], ['language', 'Language'], ['politics', 'Politics'], ['health', '🩺 Health'], ['economy', '₹ Wealth'], ['coverage', '📊 Data coverage']];
+    const drilled = [['population', 'Population'], ['money', 'Money flow'], ['language', 'Language'], ['politics', 'Politics'], ['health', '🩺 Health'], ['economy', '₹ Wealth'], ['vehicles', '🚗 Vehicles'], ['aviation', '✈ Aviation'], ['housing', '🏠 Housing'], ['coverage', '📊 Data coverage']];
     return inDistricts ? [...drilled, ...geo] : geo;
   }
 
@@ -2579,7 +2634,7 @@
         rainfall: 'Rainfall band', constraint: 'Physical constraint',
       })[f] || 'Geography';
     }
-    return ({ money: 'Money flow', population: 'Population', language: 'Language', politics: 'Politics', health: '🩺 Health — infant mortality (NFHS-5)', economy: '₹ Wealth — per-capita income', coverage: '📊 Data coverage — sourced vs gap' })[mode] || 'Map';
+    return ({ money: 'Money flow', population: 'Population', language: 'Language', politics: 'Politics', health: '🩺 Health — infant mortality (NFHS-5)', economy: '₹ Wealth — per-capita income', vehicles: '🚗 Vehicles / RTO — number-plate & transport office', aviation: '✈ Aviation — AAI airports by class', housing: '🏠 Housing — RBI HPI / NHB RESIDEX coverage', coverage: '📊 Data coverage — sourced vs gap' })[mode] || 'Map';
   }
 
   // Paint the always-visible "now showing" badge on the map (top-centre).
@@ -2742,6 +2797,9 @@
     if (mode === 'coverage') return gradientLegend(t => Coverage.color(t * 100), '0% · a gap', '100% · deep', 'how much of each district is pinned to sources vs. a gap — data density, NOT quality or risk');
     if (mode === 'health') return gradientLegend(t => `oklch(${0.74 - 0.12 * t} ${0.13 + 0.08 * t} ${150 - 130 * t})`, 'low IMR (better)', 'high IMR', 'infant mortality / 1,000 (NFHS-5, state-level) — juxtaposed, not a verdict');
     if (mode === 'economy') return gradientLegend(t => seqColor(0.18 + 0.75 * t), 'lower income', 'high income', "per-capita NSDP (RBI Handbook, state-level) — the 'wealth' axis");
+    if (mode === 'vehicles') return chip('oklch(0.72 0.17 40)', 'RTO + vehicle count') + chip('oklch(0.66 0.14 70)', 'RTO code pinned') + chip('oklch(0.34 0.03 250)', 'state prefix only') + `<span class="mlp-leg-note">how deep the vehicle data goes per district — RTO code(s) + office (MoRTH/Vahan); counts are a gap. Drill in for the plate codes.</span>`;
+    if (mode === 'aviation') return chip('oklch(0.70 0.15 210)', 'international') + chip('oklch(0.72 0.14 160)', 'customs') + chip('oklch(0.76 0.12 90)', 'domestic') + chip('oklch(0.22 0 0)', 'no airport') + `<span class="mlp-leg-note">AAI/DGCA operational airports by class; 'no airport' is asserted, not a gap. Drill in for the airport name.</span>`;
+    if (mode === 'housing') return chip('oklch(0.74 0.16 300)', 'RBI HPI (10-city)') + chip('oklch(0.64 0.13 320)', 'NHB RESIDEX') + chip('oklch(0.26 0.01 320)', 'no official index') + `<span class="mlp-leg-note">which cities have an official house-price index — the 'no index' grey is WHY a per-district housing bubble can't be measured officially.</span>`;
     if (mode === 'geography') {
       const f = ui.state.geoFacet || 'zoning';
       if (f === 'zoning') {
