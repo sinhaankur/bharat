@@ -74,6 +74,7 @@
       { href: "global.html", text: "India vs world" },
       { href: "atlas-3d.html", text: "India in 3D" },
       { href: "terrain-3d.html", text: "3D topography" },
+      { href: "flood-3d.html", text: "Flood explorer (3D)" },
     ]},
     { label: "Data", items: [
       { href: "knowledge.html", text: "Knowledge base" },
