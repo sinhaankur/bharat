@@ -1,0 +1,102 @@
+{
+  "_meta": {
+    "as_of": "2026-07-13",
+    "source": "official .nic.in / .gov.in district portals (Who's Who) — tier 2",
+    "rules": "Only real extracted names recorded, each cited to the page URL. No match → a gap. Portal URLs auto-derived (override map for non-standard). Nothing fabricated.",
+    "source_tier": 2,
+    "coverage": {
+      "tried": 6,
+      "portal_found": 6,
+      "any_official": 5,
+      "officials": 10
+    }
+  },
+  "districts": {
+    "West Bengal|Birbhum": {
+      "portal": "https://birbhum.nic.in",
+      "whoswho_url": "https://birbhum.nic.in/whos-who/",
+      "officials": {
+        "collector": {
+          "name": "Dhaval Jain",
+          "post_text": "District Magistrate",
+          "service": "IAS"
+        },
+        "sdo": {
+          "name": "Rathod Ashwin Babusingh",
+          "post_text": "Sub-Divisional Officer, Rampurhat",
+          "service": "IAS"
+        }
+      }
+    },
+    "Bihar|Munger": {
+      "portal": "https://munger.nic.in",
+      "whoswho_url": "https://munger.nic.in/whos-who/",
+      "officials": {
+        "collector": {
+          "name": "Nikhil Dhanraj Nippanikar",
+          "post_text": "District Magistrate",
+          "service": "IAS"
+        },
+        "adm": {
+          "name": "Manoj Kumar",
+          "post_text": "ADM",
+          "service": "IAS"
+        },
+        "sp": {
+          "name": "SYED IMRAN MASOOD",
+          "post_text": "Superintendent of Police",
+          "service": "IPS"
+        }
+      }
+    },
+    "Gujarat|Surat": {
+      "portal": "https://surat.nic.in",
+      "whoswho_url": "https://surat.nic.in/whos-who/",
+      "officials": {
+        "collector": {
+          "name": "Tejas Parmar",
+          "post_text": "Collector & District Magistrate",
+          "service": "IAS"
+        }
+      }
+    },
+    "Madhya Pradesh|Indore": {
+      "portal": "https://indore.nic.in",
+      "whoswho_url": "https://indore.nic.in/en/about-district/whos-who/",
+      "officials": {
+        "collector": {
+          "name": "Shivam Verma",
+          "post_text": "District Collector Indore",
+          "service": "IAS"
+        },
+        "zp_ceo": {
+          "name": "Siddharth Jain",
+          "post_text": "CEO,ZP Indore",
+          "service": "IAS"
+        }
+      }
+    },
+    "Maharashtra|Nagpur": {
+      "portal": "https://nagpur.nic.in",
+      "whoswho_url": "https://nagpur.gov.in/",
+      "officials": {},
+      "_gap": "portal reachable, no officials parsed"
+    },
+    "Punjab|Ludhiana": {
+      "portal": "https://ludhiana.nic.in",
+      "whoswho_url": "https://ludhiana.nic.in/about-district/whos-who/",
+      "officials": {
+        "collector": {
+          "name": "Himanshu Jain",
+          "post_text": "Deputy Commissioner Ludhiana",
+          "service": "IAS"
+        },
+        "sdo": {
+          "name": "Swati Tiwana",
+          "post_text": "sdm[dot]khanna[at]punjab[dot]gov[dot]in",
+          "service": "State"
+        }
+      }
+    }
+  }
+}
