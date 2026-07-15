@@ -481,6 +481,10 @@ a:hover { border-color: var(--foreground); }
 .mlp-check input { accent-color: oklch(0.74 0.16 70); }
 .mlp-check input:disabled { opacity: 0.4; }
 .mlp-check:has(input:disabled) { color: var(--muted-foreground); cursor: not-allowed; }
+/* Colour-strength dial — one slider scaling every data-colour fill vs the basemap */
+.mlp-alpha { display: flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); margin: 5px 0 2px; cursor: pointer; }
+.mlp-alpha input { flex: 1; min-width: 60px; accent-color: oklch(0.74 0.16 70); }
+.mlp-alpha #mlp-alpha-val { color: var(--foreground); min-width: 3.5ch; text-align: right; }
 .mlp-legend { display: flex; flex-wrap: wrap; gap: 3px 8px; margin-top: 6px; padding-top: 5px; border-top: 1px dashed var(--border); }
 .mlp-leg { display: flex; align-items: center; gap: 4px; font-size: 9.5px; color: var(--muted-foreground); font-family: var(--font-mono); }
 .mlp-chip { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
