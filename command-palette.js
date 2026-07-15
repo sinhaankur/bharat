@@ -20,6 +20,8 @@
     ['economy', '₹ Wealth'], ['language', 'Language'], ['politics', 'Politics'],
     ['coverage', '📊 Data coverage'],
   ];
+  // Fallback page list + richer labels. The ACTUAL list comes from SiteNav.NAV
+  // (the one place the site's pages are declared) so new pages appear here for free.
   const PAGES = [
     ['index.html', 'Map — the atlas'], ['explore.html', 'Explore / query all districts'],
     ['knowledge.html', 'Knowledge base'], ['timeline.html', 'Timeline & story chains'],
@@ -29,6 +31,20 @@
     ['references.html', 'Sources'], ['about.html', 'Methodology & disclaimer'],
     ['global.html', 'India vs world'],
   ];
+  function sitePages() {
+    const nav = global.SiteNav && global.SiteNav.NAV;
+    if (!nav) return PAGES;
+    const labels = Object.fromEntries(PAGES);
+    const out = [];
+    for (const g of nav) for (const i of g.items) {
+      if (i.ext || /^https?:/.test(i.href)) continue;   // palette jumps stay on-site
+      out.push([i.href, labels[i.href] || i.text]);
+    }
+    // pages the palette knows but the nav doesn't surface (e.g. story.html)
+    const seen = new Set(out.map(p => p[0]));
+    for (const p of PAGES) if (!seen.has(p[0])) out.push(p);
+    return out.length ? out : PAGES;
+  }
 
   let items = [];         // the searchable index: {label, hint, kind, run()}
   let root, input, list;  // DOM
@@ -70,7 +86,7 @@
         run: () => { location.href = 'story.html?chain=' + encodeURIComponent(c.id); } });
     }
     // Pages (always available)
-    for (const [href, label] of PAGES)
+    for (const [href, label] of sitePages())
       out.push({ label, hint: 'page', kind: 'page', key: 'page ' + label,
         run: () => { location.href = href; } });
 

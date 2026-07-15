@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>District flood explorer — rising water on real terrain (open DEM)</title>
+  <meta name="description" content="Interactive 3D flood-exposure view for every Indian district: raise the water level over the district's real open-DEM terrain and watch which ground goes under. A transparent bathtub model — not a hydrological forecast.">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .f3-wrap { max-width: 1060px; margin: 0 auto; padding: 18px 16px 40px; }
+    .f3-head p { color: var(--muted-foreground, #9aa); max-width: 70ch; }
+    .f3-controls { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin: 10px 0;
+      font-family: var(--font-mono, monospace); font-size: 12px; }
+    .f3-controls label { display: flex; align-items: center; gap: 6px; }
+    .f3-controls select { background: #16181d; color: inherit; border: 1px solid #333; border-radius: 6px; padding: 3px 6px; font: inherit; }
+    #f3-canvas { width: 100%; height: 560px; display: block; border-radius: 10px; background: #0b0d10; }
+    #f3-status { font-family: var(--font-mono, monospace); font-size: 11.5px; color: var(--muted-foreground, #9aa); margin: 8px 0; }
+    .f3-readout { font-family: var(--font-mono, monospace); font-size: 13px; margin: 10px 0;
+      display: flex; flex-wrap: wrap; gap: 16px; align-items: baseline; }
+    .f3-readout b { font-size: 18px; color: #6db8ff; }
+    .f3-note { font-size: 12px; color: var(--muted-foreground, #9aa); max-width: 78ch; }
+    .f3-gap { background: #1a1c22; border: 1px solid #333; border-radius: 8px; padding: 10px 12px; font-size: 12.5px; max-width: 78ch; margin: 12px 0; }
+    button.f3-btn { font-family: var(--font-mono, monospace); font-size: 11px; padding: 4px 10px; border-radius: 6px;
+      border: 1px solid #444; background: #1d2028; color: inherit; cursor: pointer; }
+    button.f3-btn:hover { border-color: #6db8ff; }
+  </style>
+</head>
+<body>
+  <div id="site-nav"></div>
+  <main class="f3-wrap">
+    <header class="f3-head">
+      <div class="eyebrow">Geography layer · flood explorer · all 594 districts</div>
+      <h1 class="display">Raise the water over <em id="f3-title">a district</em></h1>
+      <p>The district's <strong>real terrain</strong> from open 30 m elevation data, in 3D.
+      Drag the water slider and watch which ground goes under — the live percentage uses
+      the same open-DEM raster method as the map's <strong>Low-lying %</strong> layer.
+      Drag to orbit, scroll to zoom.</p>
+    </header>
+
+    <div class="f3-controls">
+      <label>State <select id="f3-state"></select></label>
+      <label>District <select id="f3-district"></select></label>
+      <label>Water level <input type="range" id="f3-water" min="0" max="15" value="0" step="0.5" style="width:180px"> <span id="f3-water-val">0 m</span></label>
+      <button class="f3-btn" id="f3-play">▶ monsoon rise</button>
+      <label>Vertical exaggeration <input type="range" id="f3-exag" min="1" max="12" value="6" step="1"> <span id="f3-exag-val"></span></label>
+    </div>
+    <div id="f3-status">Pick a district…</div>
+    <div class="f3-readout">
+      <span>under water: <b id="f3-pct">–</b></span>
+      <span id="f3-elevband"></span>
+    </div>
+    <canvas id="f3-canvas"></canvas>
+
+    <div class="f3-gap" style="margin-top:12px">
+      <strong>Bathtub model, not a flood forecast.</strong> Every cell below the water level
+      counts as "wet" — real floods depend on rainfall, river flow, drainage, pumping and
+      embankments, none of which are modelled here. It answers one honest question:
+      <em>how much of this district's ground sits below a given water height?</em>
+      Same source and method as the map's Low-lying % layer. For a full fluid-dynamics
+      simulation on Kolkata's terrain, see <a href="terrain-3d.html#flood-sim">the flood simulation ↗</a>.
+    </div>
+    <p class="f3-note">
+      Elevation: <a href="https://registry.opendata.aws/terrain-tiles/" target="_blank" rel="noopener">AWS Terrain Tiles</a>
+      (SRTM-derived, open, ~30 m) decoded in your browser — nothing stored or redistributed.
+      District boundaries: repo geojson (Census 2011 — Telangana isn't listed separately;
+      undivided Andhra Pradesh covers it). Terrain colour = metres above sea level; grey = outside
+      the district. Vertical scale is exaggerated for legibility (true factor shown at the slider).
+      Back to the <a href="index.html">main map</a> · <a href="terrain-3d.html">all-India relief ↗</a>.
+    </p>
+  </main>
+
+  <script src="dem.js"></script>
+  <script src="command-palette.js"></script>
+  <script src="site-nav.js"></script>
+  <script type="importmap">
+    { "imports": {
+      "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+    } }
+  </script>
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    // Matches districts/*.geojson (Census-2011 boundaries — no separate Telangana;
+    // undivided Andhra Pradesh covers it). Same 35 states/UTs as the ledger.
+    const STATES = ['Andaman & Nicobar','Andhra Pradesh','Arunachal Pradesh','Assam','Bihar','Chandigarh','Chhattisgarh','Dadra and Nagar Haveli','Daman and Diu','Delhi','Goa','Gujarat','Haryana','Himachal Pradesh','Jammu & Kashmir','Jharkhand','Karnataka','Kerala','Lakshadweep','Madhya Pradesh','Maharashtra','Manipur','Meghalaya','Mizoram','Nagaland','Odisha','Puducherry','Punjab','Rajasthan','Sikkim','Tamil Nadu','Tripura','Uttar Pradesh','Uttarakhand','West Bengal'];
+    const TILE = 256, GW_MAX = 280;
+    const $ = id => document.getElementById(id);
+    const status = $('f3-status');
+    const params = new URLSearchParams(location.search);
+
+    function lon2tile(lon, z) { return (lon + 180) / 360 * Math.pow(2, z); }
+    function lat2tile(lat, z) {
+      const r = lat * Math.PI / 180;
+      return (1 - Math.log(Math.tan(r) + 1 / Math.cos(r)) / Math.PI) / 2 * Math.pow(2, z);
+    }
+    const geoCache = new Map();
+    async function stateGeo(state) {
+      if (geoCache.has(state)) return geoCache.get(state);
+      const f = 'districts/' + state.replace(/ /g, '_').replace(/&/g, 'and') + '.geojson';
+      const geo = await (await fetch(f)).json();
+      geoCache.set(state, geo);
+      return geo;
+    }
+    function ringsOf(geom) {
+      return geom.type === 'Polygon' ? [geom.coordinates] : geom.type === 'MultiPolygon' ? geom.coordinates : [];
+    }
+    // ray-cast point-in-polygon (with holes) — same rule as the offline raster scripts
+    function inside(lon, lat, polys) {
+      let ins = false;
+      for (const poly of polys) {
+        for (let r = 0; r < poly.length; r++) {
+          const ring = poly[r];
+          let hit = false;
+          for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+            const xi = ring[i][0], yi = ring[i][1], xj = ring[j][0], yj = ring[j][1];
+            if (((yi > lat) !== (yj > lat)) && (lon < (xj - xi) * (lat - yi) / (yj - yi) + xi)) hit = !hit;
+          }
+          if (r === 0 && hit) ins = true;
+          if (r > 0 && hit) { ins = false; break; }   // inside a hole
+        }
+        if (ins) return true;
+      }
+      return ins;
+    }
+
+    async function loadDistrict(state, district) {
+      status.textContent = 'Loading boundary…';
+      const geo = await stateGeo(state);
+      const feat = geo.features.find(f => f.properties.DISTRICT === district);
+      if (!feat) { status.textContent = 'No boundary for ' + district; return null; }
+      const polys = ringsOf(feat.geometry);
+      const pts = polys.flat(2);
+      const lon0 = Math.min(...pts.map(p => p[0])), lon1 = Math.max(...pts.map(p => p[0]));
+      const lat0 = Math.min(...pts.map(p => p[1])), lat1 = Math.max(...pts.map(p => p[1]));
+      // pad the bbox a touch so the district doesn't touch the frame edge
+      const padX = (lon1 - lon0) * 0.06 || 0.02, padY = (lat1 - lat0) * 0.06 || 0.02;
+      const b = { lon0: lon0 - padX, lon1: lon1 + padX, lat0: lat0 - padY, lat1: lat1 + padY };
+      // zoom: ~3.5 tiles across the bbox, clamped (small metro → z13, huge desert district → z8)
+      const z = Math.max(8, Math.min(13, Math.floor(Math.log2(1260 / (b.lon1 - b.lon0)))));
+      const tx0 = Math.floor(lon2tile(b.lon0, z)), tx1 = Math.floor(lon2tile(b.lon1, z));
+      const ty0 = Math.floor(lat2tile(b.lat1, z)), ty1 = Math.floor(lat2tile(b.lat0, z));
+      const nx = tx1 - tx0 + 1, ny = ty1 - ty0 + 1;
+      const cvs = document.createElement('canvas'); cvs.width = nx * TILE; cvs.height = ny * TILE;
+      const ctx = cvs.getContext('2d', { willReadFrequently: true });
+      let done = 0; const total = nx * ny;
+      await Promise.all(Array.from({ length: total }, (_, i) => {
+        const gx = i % nx, gy = (i / nx) | 0;
+        return new Promise(res => {
+          const img = new Image(); img.crossOrigin = 'anonymous';
+          img.onload = () => { ctx.drawImage(img, gx * TILE, gy * TILE); done++; status.textContent = `Loading elevation tiles… ${done}/${total} (z${z})`; res(); };
+          img.onerror = () => { done++; res(); };
+          img.src = window.DEM.tileUrl(z, tx0 + gx, ty0 + gy);
+        });
+      }));
+      // crop the mosaic to the padded bbox
+      const px0 = (lon2tile(b.lon0, z) - tx0) * TILE, px1 = (lon2tile(b.lon1, z) - tx0) * TILE;
+      const py0 = (lat2tile(b.lat1, z) - ty0) * TILE, py1 = (lat2tile(b.lat0, z) - ty0) * TILE;
+      const W = Math.max(2, Math.round(px1 - px0)), H = Math.max(2, Math.round(py1 - py0));
+      const data = ctx.getImageData(Math.round(px0), Math.round(py0), W, H).data;
+      const GW = Math.min(GW_MAX, W), GH = Math.max(2, Math.round(GW * H / W));
+      status.textContent = 'Building terrain…';
+      const elev = new Float32Array(GW * GH);
+      const mask = new Uint8Array(GW * GH);
+      let min = Infinity, max = -Infinity;
+      const vals = [];
+      for (let y = 0; y < GH; y++) {
+        const lat = b.lat1 + (b.lat0 - b.lat1) * (y / (GH - 1));
+        for (let x = 0; x < GW; x++) {
+          const lon = b.lon0 + (b.lon1 - b.lon0) * (x / (GW - 1));
+          const sx = Math.floor(x / GW * W), sy = Math.floor(y / GH * H);
+          const p = (sy * W + sx) * 4;
+          let m = window.DEM.decode(data[p], data[p + 1], data[p + 2]);
+          if (m < -3 || m > 9000) m = Math.max(-3, Math.min(9000, m));   // clamp ocean/void noise
+          elev[y * GW + x] = m;
+          const ins = inside(lon, lat, polys);
+          mask[y * GW + x] = ins ? 1 : 0;
+          if (ins) { vals.push(m); if (m < min) min = m; if (m > max) max = m; }
+        }
+      }
+      vals.sort((a, b2) => a - b2);
+      const q = f => vals.length ? vals[Math.min(vals.length - 1, Math.floor(f * vals.length))] : 0;
+      return { elev, mask, GW, GH, min, max, p50: q(0.5), p95: q(0.95), nIn: vals.length, bbox: b, feat };
+    }
+
+    // --- three.js scene ---
+    const canvas = $('f3-canvas');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, 2, 0.1, 400);
+    camera.position.set(0, 24, 30);
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    scene.add(new THREE.AmbientLight(0xffffff, 0.75));
+    const sun = new THREE.DirectionalLight(0xffffff, 1.1); sun.position.set(-8, 18, 10); scene.add(sun);
+    const controls = new OrbitControls(camera, canvas);
+    controls.enableDamping = true; controls.maxPolarAngle = Math.PI * 0.49;
+
+    let grid = null, mesh = null, water = null, baseZ = null, scaleH = 1, exag = 6, level = 0;
+    const SCENE_W = 30;
+
+    function clearScene() {
+      if (mesh) { scene.remove(mesh); mesh.geometry.dispose(); mesh = null; }
+      if (water) { scene.remove(water); water.geometry.dispose(); water = null; }
+    }
+    function buildMesh() {
+      clearScene();
+      const { elev, mask, GW, GH, max } = grid;
+      const H = SCENE_W * GH / GW;
+      const geo = new THREE.PlaneGeometry(SCENE_W, H, GW - 1, GH - 1);
+      const pos = geo.attributes.position;
+      const colors = new Float32Array(pos.count * 3);
+      baseZ = new Float32Array(pos.count);
+      scaleH = 5 / Math.max(3, max - Math.min(0, grid.min));   // relief fills ~5 units at 6x
+      for (let i = 0; i < pos.count; i++) {
+        const gx = i % GW, gy = (i / GW) | 0, k = gy * GW + gx;
+        const m = elev[k];
+        baseZ[i] = (m - Math.min(0, grid.min)) * scaleH;
+        pos.setZ(i, baseZ[i] * (exag / 6));
+        const c = window.DEM.rampUnit(m);
+        const dim = mask[k] ? 1 : 0.28;   // grey-out outside the district
+        colors[i * 3] = c[0] * dim; colors[i * 3 + 1] = c[1] * dim; colors[i * 3 + 2] = c[2] * dim;
+      }
+      geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+      geo.computeVertexNormals();
+      mesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.95, metalness: 0 }));
+      mesh.rotation.x = -Math.PI / 2;
+      scene.add(mesh);
+      const wgeo = new THREE.PlaneGeometry(SCENE_W * 1.001, H * 1.001);
+      water = new THREE.Mesh(wgeo, new THREE.MeshStandardMaterial({
+        color: 0x2a7fd4, transparent: true, opacity: 0.55, roughness: 0.25, metalness: 0.1, depthWrite: false,
+      }));
+      water.rotation.x = -Math.PI / 2;
+      scene.add(water);
+      applyWater();
+    }
+    function applyExag(v) {
+      exag = v;
+      if (!mesh) return;
+      const pos = mesh.geometry.attributes.position;
+      for (let i = 0; i < pos.count; i++) pos.setZ(i, baseZ[i] * (exag / 6));
+      pos.needsUpdate = true;
+      mesh.geometry.computeVertexNormals();
+      applyWater();
+      updateExagLabel();
+    }
+    function updateExagLabel() {
+      if (!grid) return;
+      // true vertical exaggeration: scene metres-per-unit horizontally vs vertically
+      const bboxWm = (grid.bbox.lon1 - grid.bbox.lon0) * 111320 * Math.cos((grid.bbox.lat0 + grid.bbox.lat1) / 2 * Math.PI / 180);
+      const horiz = bboxWm / SCENE_W;                    // m per scene unit (horizontal)
+      const vert = 1 / (scaleH * (exag / 6));            // m per scene unit (vertical)
+      $('f3-exag-val').textContent = `true ≈ ${Math.round(horiz / vert)}×`;
+    }
+    function applyWater() {
+      if (!water || !grid) return;
+      water.position.y = (level - Math.min(0, grid.min)) * scaleH * (exag / 6) + 0.001;
+      // live % under water — same rule as the flood_exposure raster (mask-only cells)
+      let wet = 0;
+      const { elev, mask } = grid;
+      for (let k = 0; k < elev.length; k++) if (mask[k] && elev[k] <= level) wet++;
+      const pct = grid.nIn ? (wet / grid.nIn * 100) : 0;
+      $('f3-pct').textContent = pct.toFixed(1) + '%';
+      $('f3-water-val').textContent = (Math.round(level * 10) / 10) + ' m';
+    }
+
+    let loadSeq = 0;   // guards against out-of-order tile loads when switching fast
+    async function show(state, district) {
+      const seq = ++loadSeq;
+      stopPlay();
+      $('f3-title').textContent = district + ' (' + state + ')';
+      document.title = district + ' flood explorer — rising water on real terrain';
+      const g = await loadDistrict(state, district);
+      if (!g || seq !== loadSeq) return;
+      grid = g;
+      // slider range: cover the district's real relief (min 12 m so flat deltas still move)
+      const top = Math.max(12, Math.min(60, Math.ceil(grid.p95 + 2)));
+      const w = $('f3-water'); w.max = top; if (level > top) level = 0;
+      $('f3-elevband').textContent = `terrain ${Math.round(grid.min)}–${Math.round(grid.max)} m (median ${Math.round(grid.p50)} m) · slider to ${top} m`;
+      buildMesh();
+      updateExagLabel();
+      status.textContent = `${grid.nIn.toLocaleString()} in-district cells · open DEM · grey = outside ${district}`;
+      const u = new URL(location); u.searchParams.set('state', state); u.searchParams.set('district', district);
+      history.replaceState(null, '', u);
+    }
+
+    // --- pickers ---
+    const stSel = $('f3-state'), dSel = $('f3-district');
+    stSel.innerHTML = STATES.map(s => `<option>${s}</option>`).join('');
+    async function fillDistricts(state, pick) {
+      const geo = await stateGeo(state).catch(() => null);
+      if (!geo) { dSel.innerHTML = ''; return; }
+      const names = geo.features.map(f => f.properties.DISTRICT).sort();
+      dSel.innerHTML = names.map(n => `<option>${n}</option>`).join('');
+      if (pick && names.includes(pick)) dSel.value = pick;
+    }
+    stSel.onchange = async () => { await fillDistricts(stSel.value); show(stSel.value, dSel.value); };
+    dSel.onchange = () => show(stSel.value, dSel.value);
+
+    // --- controls ---
+    $('f3-water').oninput = e => { level = parseFloat(e.target.value); applyWater(); };
+    $('f3-exag').oninput = e => { applyExag(parseInt(e.target.value, 10)); };
+    let playing = null;
+    function stopPlay() {
+      if (playing) { clearInterval(playing); playing = null; }
+      $('f3-play').textContent = '▶ monsoon rise';
+    }
+    $('f3-play').onclick = () => {
+      if (playing) { stopPlay(); return; }
+      const w = $('f3-water');
+      const top = parseFloat(w.max);
+      level = 0;
+      $('f3-play').textContent = '⏸ pause';
+      // ~10 s bottom-to-top whatever the range (no step-rounding — a 12 m range
+      // rounded to 0.5 m steps used to freeze the water at 0 forever)
+      playing = setInterval(() => {
+        level = Math.min(top, level + top / 120);
+        if (level >= top) stopPlay();
+        w.value = level; applyWater();
+      }, 80);
+    };
+
+    function resize() {
+      const r = canvas.getBoundingClientRect();
+      renderer.setSize(r.width, r.height, false);
+      camera.aspect = r.width / r.height; camera.updateProjectionMatrix();
+    }
+    addEventListener('resize', resize); resize();
+    (function loop() { requestAnimationFrame(loop); controls.update(); renderer.render(scene, camera); })();
+
+    // --- boot ---
+    const st = params.get('state') || 'West Bengal';
+    const dn = params.get('district') || 'Kolkata';
+    stSel.value = STATES.includes(st) ? st : 'West Bengal';
+    fillDistricts(stSel.value, dn).then(() => show(stSel.value, dSel.value || dn));
+  </script>
+</body>
+</html>
