@@ -53,6 +53,42 @@
       LIDAR relief isn't available to show; 30 m open DEM is the honest best.
     </div>
 
+    <section class="t3-flood" id="flood-sim">
+      <div class="eyebrow">Geography layer · flood simulation</div>
+      <h2 class="display">Water over Kolkata's <em>real</em> terrain</h2>
+      <p>A GPU fluid simulation (lattice-Boltzmann, free surface) of a flood surge
+      from the <strong>Hooghly edge</strong> across Kolkata district's actual
+      elevation — the same open DEM as the relief above (~33 m/pixel for this
+      scene). The white surface is the district's terrain; blue is water.</p>
+      <video src="kolkata-flood-hero.mp4" poster="kolkata-flood-poster.jpg"
+             controls muted loop playsinline preload="metadata"
+             style="width:100%;border-radius:8px;display:block"></video>
+      <details style="margin-top:8px">
+        <summary>Top-down view — the flood spreading across the district footprint</summary>
+        <video src="kolkata-flood-top.mp4" controls muted loop playsinline preload="metadata"
+               style="width:100%;border-radius:8px;display:block;margin-top:8px"></video>
+      </details>
+      <div class="t3-gap" style="margin-top:10px">
+        <strong>Illustrative physics, not a forecast.</strong> Real fluid dynamics on
+        real open-DEM terrain, but <em>not</em> a calibrated hydrological model: the
+        vertical scale is exaggerated ~33× (Kolkata's true relief is only ~0–19 m
+        across 14 km — unexaggerated it would be a flat sheet), the surge volume is
+        chosen for legibility, and drainage/pumping isn't modelled. For the sourced
+        flood-risk record per district, use the <a href="index.html">main map</a>'s
+        <strong>Flood</strong> and <strong>Low-lying %</strong> facets — the latter is
+        computed from this same open DEM for <strong>all 594 districts</strong>. And for
+        ANY district, the <a href="flood-3d.html">interactive 3D flood explorer ↗</a>
+        lets you raise the water yourself over its real terrain.
+      </div>
+      <p class="t3-note">
+        Terrain: <a href="https://registry.opendata.aws/terrain-tiles/" target="_blank" rel="noopener">AWS Terrain Tiles</a>
+        (SRTM-derived, open), Kolkata district bbox 88.271–88.407 E, 22.495–22.630 N.
+        Simulated offline with <a href="https://github.com/ProjectPhysX/FluidX3D" target="_blank" rel="noopener">FluidX3D</a>
+        (© Dr. Moritz Lehmann, free for non-commercial use) — D3Q19 LBM, free-surface,
+        39 M cells on an Apple M1 Max. Only the rendered video ships to your browser.
+      </p>
+    </section>
+
     <p class="t3-note">
       Elevation tiles: <a href="https://registry.opendata.aws/terrain-tiles/" target="_blank" rel="noopener">AWS Terrain Tiles (Terrarium, open)</a>,
       encoding SRTM / NASADEM / other open sources. Rendered client-side with
