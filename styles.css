@@ -459,6 +459,14 @@ a:hover { border-color: var(--foreground); }
 .mlp-collapse:hover { color: var(--foreground); }
 .mlp-sec-h { font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted-foreground); margin: 8px 0 4px; }
 .mlp-bases, .mlp-data, .mlp-facets { display: flex; flex-wrap: wrap; gap: 3px; }
+.mlp-presets { display: flex; flex-wrap: wrap; gap: 4px; }
+.mlp-preset {
+  font-family: var(--font-mono); font-size: 9.5px; padding: 3px 8px; border-radius: 999px;
+  border: 1px solid var(--border); background: oklch(0.22 0.01 250); color: var(--foreground);
+  cursor: pointer; transition: border-color .12s, background .12s, color .12s;
+}
+.mlp-preset:hover { border-color: var(--border-strong); }
+.mlp-preset.on { background: oklch(0.66 0.16 250 / 0.25); border-color: oklch(0.66 0.16 250); color: oklch(0.85 0.10 250); }
 .mlp-base, .mlp-data-btn, .mlp-facet {
   font-family: var(--font-mono); font-size: 9.5px; padding: 3px 7px; border-radius: 5px;
   border: 1px solid var(--border); background: oklch(0.19 0 0); color: var(--foreground);
@@ -1853,3 +1861,41 @@ a:hover { border-color: var(--foreground); }
 .doff-kind { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--warm); margin-left: 0.35rem; }
 .doff-stmt { font-size: 0.82rem; line-height: 1.5; color: var(--foreground); margin-top: 0.25rem; }
 .doff-meta { font-size: 0.76rem; color: var(--muted-foreground); margin-top: 0.2rem; }
+
+/* Sub-district (taluk) click popup — per-taluk open-DEM details, sourced-or-gap */
+.sd-popup .leaflet-popup-content-wrapper { background: oklch(0.17 0.005 250); color: var(--foreground); border: 1px solid var(--border-strong); border-radius: 8px; box-shadow: 0 8px 24px oklch(0 0 0 / 0.5); }
+.sd-popup .leaflet-popup-tip { background: oklch(0.17 0.005 250); border: 1px solid var(--border-strong); }
+.sd-popup .leaflet-popup-content { margin: 10px 12px; }
+.sd-pop-name { font-weight: 650; font-size: 13px; }
+.sd-pop-sub { font-family: var(--font-mono); font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-foreground); margin: 2px 0 6px; }
+.sd-pop-stats { display: flex; flex-direction: column; gap: 2px; font-size: 11px; margin-bottom: 6px; }
+.sd-pop-dim { opacity: 0.6; }
+.sd-pop-btn { font-family: var(--font-mono); font-size: 10px; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border-strong); background: oklch(0.22 0.01 250); color: var(--foreground); cursor: pointer; }
+.sd-pop-btn:hover { border-color: oklch(0.66 0.16 250); color: oklch(0.85 0.10 250); }
+.sd-pop-src { font-size: 9px; color: var(--muted-foreground); margin-top: 6px; }
+
+/* Map breadcrumb — always-visible "India › State › District" trail on the map */
+#map-crumb { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); z-index: 800;
+  display: flex; align-items: center; gap: 4px; padding: 4px 8px; border-radius: 999px;
+  background: oklch(0.15 0.005 250 / 0.85); border: 1px solid var(--border-strong);
+  backdrop-filter: blur(4px); font-family: var(--font-mono); font-size: 10.5px; }
+#map-crumb .crumb { border: none; background: none; color: var(--muted-foreground); cursor: pointer;
+  padding: 2px 6px; border-radius: 999px; font: inherit; transition: color .12s, background .12s; }
+#map-crumb .crumb:hover { color: var(--foreground); background: oklch(0.25 0.01 250); }
+#map-crumb .crumb-here { color: oklch(0.86 0.15 76); cursor: default; }
+#map-crumb .crumb-here:hover { background: none; }
+#map-crumb .crumb-sep { color: var(--muted-foreground); opacity: 0.6; }
+
+/* Layer story — the side panel's explainer + ranking for whatever the map is colouring by */
+.layer-story { background: oklch(0.17 0.008 250); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; margin: 10px 0; }
+.layer-story .ls-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; }
+.layer-story .ls-head b { font-size: 13px; color: oklch(0.85 0.10 250); }
+.layer-story .ls-desc { font-size: 11.5px; color: var(--muted-foreground); line-height: 1.45; }
+.layer-story .ls-top { margin: 8px 0 4px; padding-left: 1.4em; font-size: 12px; }
+.layer-story .ls-top li { margin: 2px 0; display: flex; align-items: baseline; gap: 6px; }
+.layer-story .ls-go { border: none; background: none; padding: 0; color: var(--foreground); cursor: pointer; font: inherit; text-decoration: underline dotted; text-underline-offset: 2px; }
+.layer-story .ls-go:hover { color: oklch(0.85 0.10 250); }
+.layer-story .ls-st { font-size: 10px; color: var(--muted-foreground); }
+.layer-story .ls-val { margin-left: auto; font-family: var(--font-mono); font-size: 10.5px; color: oklch(0.80 0.12 220); }
+.layer-story .ls-count { font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); margin-top: 2px; }
+.layer-story .ls-src { font-size: 9.5px; color: var(--muted-foreground); opacity: 0.8; margin-top: 6px; }
