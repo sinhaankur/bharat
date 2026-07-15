@@ -254,6 +254,11 @@
       const mean = els.length ? els.reduce((a, b) => a + b, 0) / els.length : null;
       return geoFacetColor({ elevation: { centroid_m: mean } }, 'elevation');
     }
+    if (facet === 'lowlying') {
+      const ps = geos.map(g => g.flood_exposure?.pct_area_below_10m).filter(p => typeof p === 'number');
+      const mean = ps.length ? ps.reduce((a, b) => a + b, 0) / ps.length : null;
+      return geoFacetColor({ flood_exposure: { pct_area_below_10m: mean } }, 'lowlying');
+    }
     if (facet === 'rainfall') return geoFacetColor(geos[0], 'rainfall');   // band is state-level
     return geoFacetColor(geos[0], facet);
   }
@@ -267,6 +272,7 @@
     } else if (geoLayer) {
       geoLayer.eachLayer(l => l.setStyle(fillStyle(l.feature.properties.ST_NM)));
     }
+    if (subdistrictLayer) subdistrictLayer.setStyle(f => subdistrictStyle(f)); // taluks follow the facet too
   }
 
   function fillStyle(name) {
@@ -499,6 +505,7 @@
       renderDistrictLayer(geo, stateName);
       buildHazardMarkers(stateName, geo);   // annotate the map with pinned hazards
       renderDistrictPanel(stateName, geo);
+      renderMapCrumb();
     } catch (err) {
       console.error('District drill failed:', err);
       $ind('#india-detail').insertAdjacentHTML('afterbegin',
@@ -625,7 +632,7 @@
     })[c] || 'oklch(0.22 0 0)';
   }
   // Individual geography facets (each is its own checkbox/sub-layer).
-  const GEO_FACETS = ['zoning', 'vulnerability', 'constraint', 'coastal', 'flood', 'elevation', 'rainfall'];
+  const GEO_FACETS = ['zoning', 'vulnerability', 'constraint', 'coastal', 'flood', 'lowlying', 'elevation', 'rainfall'];
 
   // Which LEGAL/regulatory zone governs a district — the "what can be built here"
   // layer. Priority order = strongest legal restriction first, so the map answers
@@ -663,6 +670,12 @@
       if (lv === 'district-chronic') return 'oklch(0.60 0.20 25)';   // red
       if (lv === 'state-flood-prone') return 'oklch(0.68 0.13 250)'; // blue
       return 'oklch(0.26 0.01 250)';                                  // grey — not flagged
+    }
+    if (facet === 'lowlying') {
+      const p = g.flood_exposure?.pct_area_below_10m;
+      if (p == null) return 'oklch(0.22 0 0)';
+      const t = Math.min(1, Math.max(0, p / 100));
+      return `oklch(${(0.80 - 0.42 * t).toFixed(3)} ${(0.05 + 0.13 * t).toFixed(3)} 250)`; // pale → deep blue
     }
     if (facet === 'elevation') {
       const m = g.elevation?.centroid_m;
@@ -781,8 +794,10 @@
       onEachFeature: (feature, layer) => {
         const dn = feature.properties.DISTRICT;
         districtPathByName.set(dn, layer);
+        layer.bindTooltip(dn, { sticky: true, className: 'subdistrict-tip', opacity: 0.95 });
         layer.on('mouseover', () => {
           layer.setStyle({ weight: 1.6, color: 'oklch(0.985 0 0)' });
+          map.getContainer().style.cursor = 'pointer';   // canvas paths don't get CSS :hover
           if (showMoney) updateDistrictMoneyReadout(dn, stateName, moneyByDistrict.get(dn));
           else updateDistrictFacetReadout(dn, stateName);
         });
@@ -796,6 +811,7 @@
               else layer.setStyle({ weight: 0.6, color: showMoney ? 'oklch(0.985 0 0 / 0.2)' : 'oklch(0.985 0 0 / 0.45)' });
             }
           }
+          map.getContainer().style.cursor = '';
           updateReadout();
         });
         layer.on('click', () => selectDistrict(dn, stateName));
@@ -963,6 +979,10 @@
       const m = g.elevation?.centroid_m;
       return m != null ? `Elevation ${m} m${g.elevation?.terrain_band ? ` · ${g.elevation.terrain_band}` : ''}` : 'Elevation: gap';
     }
+    if (facet === 'lowlying') {
+      const e = g.flood_exposure;
+      return e && !e.figure_gap ? `Low-lying: ${e.pct_area_below_10m}% below 10 m · ${e.pct_area_below_5m}% below 5 m (open DEM raster)` : 'Low-lying share: gap';
+    }
     if (facet === 'rainfall') return g.rainfall?.band ? `Rainfall band: ${g.rainfall.band}` : 'Rainfall band: gap';
     if (facet === 'constraint') return zoningZone(g).label;
     return 'Geography';
@@ -970,6 +990,7 @@
 
   function selectDistrict(district, state) {
     ui.state.drillDistrict = district;
+    renderMapCrumb();
     const selLayer = districtPathByName.get(district);
     districtPathByName.forEach((layer, n) => {
       if (n === district) layer.setStyle({ weight: 2, color: 'oklch(0.985 0 0)' });
@@ -989,6 +1010,24 @@
   // ODbL, from the govt LGD). Mirrors the districts/ loading convention.
   const subdistrictGeoCache = new Map();
   let subdistrictLayer = null;
+  // Taluk fill follows the active geography facet where per-taluk data exists
+  // (open-DEM raster stats embedded in subdistricts/*.geojson properties) — the
+  // same layer story continues below district level instead of a flat wash.
+  function subdistrictStyle(feature) {
+    const base = { className: 'india-subdistrict-path', color: 'oklch(0.85 0.10 200 / 0.55)', weight: 0.5, fillColor: 'oklch(0.6 0.08 200)', fillOpacity: 0.06 };
+    const p = feature?.properties || {};
+    if (ui.state.districtMode === 'geography' && ui.state.geoFacet === 'lowlying' && typeof p.PCT_BELOW_10M === 'number') {
+      const t = Math.min(1, Math.max(0, p.PCT_BELOW_10M / 100));
+      base.fillColor = `oklch(${(0.80 - 0.42 * t).toFixed(3)} ${(0.05 + 0.13 * t).toFixed(3)} 250)`;
+      base.fillOpacity = 0.55;
+    } else if (ui.state.districtMode === 'geography' && ui.state.geoFacet === 'elevation' && typeof p.ELEV_MEAN_M === 'number') {
+      const t = Math.min(1, Math.max(0, p.ELEV_MEAN_M / 3500));
+      base.fillColor = seqColor(0.15 + 0.8 * t);
+      base.fillOpacity = 0.5;
+    }
+    return base;
+  }
+
   async function renderSubdistrictLayer(stateName) {
     if (subdistrictLayer) { subdistrictLayer.remove(); subdistrictLayer = null; }
     let geo = subdistrictGeoCache.get(stateName);
@@ -1003,19 +1042,40 @@
     }
     if (ui.state.drillState !== stateName && ui.state.drillDistrict == null) return;
     subdistrictLayer = L.geoJSON(geo, {
-      style: { className: 'india-subdistrict-path', color: 'oklch(0.85 0.10 200 / 0.55)', weight: 0.5, fillColor: 'oklch(0.6 0.08 200)', fillOpacity: 0.06 },
+      style: f => subdistrictStyle(f),
       onEachFeature: (feature, layer) => {
-        const sd = feature.properties.SUBDISTRICT || 'sub-district';
-        const parent = feature.properties.DISTRICT;
-        const tip = parent ? `${sd} <span style="opacity:.65">· ${parent} dist.</span>` : sd;
+        const p = feature.properties;
+        const sd = p.SUBDISTRICT || 'sub-district';
+        const parent = p.DISTRICT;
+        const hasStats = typeof p.ELEV_MEAN_M === 'number';
+        const statLine = hasStats ? `<br><span style="opacity:.75">elev ~${p.ELEV_MEAN_M} m${p.PCT_BELOW_10M > 0 ? ` · ${p.PCT_BELOW_10M}% below 10 m` : ''}</span>` : '';
+        const tip = (parent ? `${sd} <span style="opacity:.65">· ${parent} dist.</span>` : sd) + statLine;
         layer.bindTooltip(tip, { sticky: true, className: 'subdistrict-tip', opacity: 0.95 });
-        layer.on('mouseover', () => layer.setStyle({ weight: 1.4, color: 'oklch(0.95 0.06 200)', fillOpacity: 0.18 }));
-        layer.on('mouseout', () => layer.setStyle({ weight: 0.5, color: 'oklch(0.85 0.10 200 / 0.55)', fillOpacity: 0.06 }));
-        // Click a taluk → open its parent district's full panel (everything).
+        layer.on('mouseover', () => { layer.setStyle({ weight: 1.4, color: 'oklch(0.95 0.06 200)', fillOpacity: 0.3 }); map.getContainer().style.cursor = 'pointer'; });
+        layer.on('mouseout', () => { layer.setStyle(subdistrictStyle(feature)); map.getContainer().style.cursor = ''; });
+        // Click a taluk → ITS OWN details popup (per-taluk open-DEM stats,
+        // sourced-or-gap), with a jump to the parent district's full panel.
         layer.on('click', (e) => {
           L.DomEvent.stopPropagation(e);
-          if (parent && ui.state.drillDistrict !== parent) selectDistrict(parent, stateName);
-          else if (parent) renderDistrictDetail(parent, stateName);
+          const stats = hasStats ? `
+            <div class="sd-pop-stats">
+              <span title="Mean / min–max elevation from open terrain tiles (~140 m/px), polygon-masked">elev <b>${p.ELEV_MEAN_M} m</b> <span class="sd-pop-dim">(${p.ELEV_MIN_M}–${p.ELEV_MAX_M} m)</span></span>
+              <span title="Share of taluk area below 10 m / 5 m elevation — exposure proxy, not a flood model">low-lying <b>${p.PCT_BELOW_10M}%</b> &lt;10 m · ${p.PCT_BELOW_5M}% &lt;5 m</span>
+            </div>` : `<div class="sd-pop-stats sd-pop-dim">elevation stats: gap (raster unfetched for this taluk)</div>`;
+          const div = document.createElement('div');
+          div.className = 'sd-pop';
+          div.innerHTML = `
+            <div class="sd-pop-name">${esc(sd)}</div>
+            <div class="sd-pop-sub">taluk/tehsil · ${parent ? esc(parent) + ' district' : '<span class="sd-pop-dim">district link: gap</span>'} · ${esc(stateName)}</div>
+            ${stats}
+            ${parent ? `<button class="sd-pop-btn">Open ${esc(parent)} district panel →</button>` : ''}
+            <div class="sd-pop-src">boundaries: geoBoundaries/LGD ADM3 (ODbL) · elevation: open AWS terrain tiles</div>`;
+          div.querySelector('.sd-pop-btn')?.addEventListener('click', () => {
+            map.closePopup();
+            if (ui.state.drillDistrict !== parent) selectDistrict(parent, stateName);
+            else renderDistrictDetail(parent, stateName);
+          });
+          L.popup({ className: 'sd-popup', maxWidth: 280 }).setLatLng(e.latlng).setContent(div).openOn(map);
         });
       }
     }).addTo(map);
@@ -1048,6 +1108,7 @@
       <div class="india-caveat" style="margin-bottom:0.6rem">
         Every district is headed by <strong style="color:var(--foreground)">one IAS Collector / District Magistrate</strong> ${src('ias')} — not a varying count. The rest of the state's IAS cadre sits at the state secretariat, on Central deputation, in PSUs, on training, or vacant. Population from Census 2011 ${src('population')} — Census 2021 was deferred; some post-2011 newer districts not in this dataset.
       </div>
+      ${layerStoryHTML()}
 
       <div class="india-detail-section-title">Districts by population</div>
       <div class="district-list">
@@ -1065,6 +1126,7 @@
       row.addEventListener('click', () => selectDistrict(row.dataset.district, stateName));
     });
     $ind('#india-back-to-state')?.addEventListener('click', () => exitDrill(stateName));
+    bindLayerStory(detail);
   }
 
   function renderDistrictDetail(district, state) {
@@ -1251,6 +1313,13 @@
       const rain = geo.rainfall;
       const stats = [];
       if (elev != null) stats.push(`<span title="District-centroid elevation, open SRTM">elev <b>${elev} m</b></span>`);
+      const fx = geo.flood_exposure;
+      if (fx && !fx.figure_gap) stats.push(`<span title="Share of district area below 10 m / 5 m elevation — open terrain-tiles raster (~${fx.res_m || 300} m/px), polygon-masked. Exposure proxy, NOT a flood model.">low-lying <b>${fx.pct_area_below_10m}%</b> &lt;10 m · ${fx.pct_area_below_5m}% &lt;5 m</span>`);
+      // EVERY district gets the interactive 3D flood explorer (client-side bathtub
+      // model on real open DEM); curated FluidX3D hero sims are extra where they exist.
+      stats.push(`<a href="flood-3d.html?state=${encodeURIComponent(state)}&district=${encodeURIComponent(district)}" title="Interactive 3D: raise the water level over this district's real terrain and watch which ground goes under (bathtub model, open DEM)">flood view ▶</a>`);
+      const FLOOD_SIMS = { 'Kolkata': 'terrain-3d.html#flood-sim' };
+      if (FLOOD_SIMS[district]) stats.push(`<a href="${FLOOD_SIMS[district]}" title="GPU fluid simulation of a flood surge over this district's real terrain (illustrative)">flood simulation ▶</a>`);
       if (rain?.annual_normal_mm != null) stats.push(`<span title="${esc(rain.note || '')}">rain <b>${rain.annual_normal_mm} mm</b></span>`);
       else if (rain?.band) stats.push(`<span title="IMD climate band; precise district mm is a gap (IMD portal)">rain: ${esc(rain.band)} <span class="dim-gap">(mm: gap)</span></span>`);
       rows.push(`
@@ -2171,6 +2240,29 @@
     detail.querySelector('#block-back-to-state')?.addEventListener('click', () => exitDrill(state));
   }
 
+  // Breadcrumb ON the map — you always see where you are (India → state →
+  // district) and every level is one click away. Canvas layers have no DOM to
+  // inspect, so this is the primary "where am I" affordance.
+  function buildMapCrumb() {
+    if (document.getElementById('map-crumb')) return;
+    const el = document.createElement('div');
+    el.id = 'map-crumb';
+    map.getContainer().appendChild(el);
+    L.DomEvent.disableClickPropagation(el);
+    renderMapCrumb();
+  }
+  function renderMapCrumb() {
+    const el = document.getElementById('map-crumb');
+    if (!el) return;
+    const parts = [`<button class="crumb ${ui.state.drillState ? '' : 'crumb-here'}" data-lvl="india">India</button>`];
+    if (ui.state.drillState) parts.push(`<button class="crumb ${ui.state.drillDistrict ? '' : 'crumb-here'}" data-lvl="state">${esc(ui.state.drillState)}</button>`);
+    if (ui.state.drillDistrict) parts.push(`<button class="crumb crumb-here" data-lvl="district">${esc(ui.state.drillDistrict)}</button>`);
+    el.innerHTML = parts.join('<span class="crumb-sep">›</span>');
+    el.querySelector('[data-lvl="india"]').onclick = () => { if (ui.state.drillState) exitDrill(null); deselectState(); try { map.fitBounds(geoLayer.getBounds(), { padding: [10, 10] }); } catch (e) {} };
+    const st = el.querySelector('[data-lvl="state"]');
+    if (st) st.onclick = () => { if (ui.state.drillDistrict) { ui.state.drillDistrict = null; drillIntoDistricts(ui.state.drillState); } };
+  }
+
   function exitDrill(stateName) {
     ui.state.mode = 'states';
     ui.state.drillState = null;
@@ -2183,9 +2275,116 @@
     if (geoLayer) geoLayer.eachLayer(layer => layer.setStyle(fillStyle(layer.feature.properties.ST_NM)));
     if (stateName) selectState(stateName);
     renderLayersPanel();   // drop the district data-modes now we're back at state level
+    renderMapCrumb();
     // Re-apply the India-level query glow if a query is still active.
     if (typeof reapplyQueryGlow === 'function') setTimeout(reapplyQueryGlow, 0);
     try { map.fitBounds(geoLayer.getBounds(), { padding: [10, 10] }); } catch (e) {}
+  }
+
+  // LAYER ↔ SIDE-PANEL COHERENCE: whatever the map is colouring by, the side panel
+  // explains it and ranks the top districts for it — the layer choice is never a
+  // disconnected wash of colour. Rankings come straight from the ledger (sourced-or-gap).
+  const LAYER_STORY = {
+    lowlying: {
+      label: 'Low-lying %',
+      desc: 'Share of each district\'s area below 10 m elevation, from an open-DEM raster (~300 m/px). An exposure proxy — how much ground sits low — NOT a flood forecast.',
+      src: 'open AWS terrain tiles · exposure proxy, not a hydrological model',
+      val: g => g?.flood_exposure?.figure_gap ? null : g?.flood_exposure?.pct_area_below_10m,
+      fmt: v => `${v.toFixed(1)}% <10 m`,
+    },
+    elevation: {
+      label: 'Elevation',
+      desc: 'District-centroid elevation from open SRTM — separates the Himalayan wall, the plateau, the plains and the deltas.',
+      src: 'open SRTM (centroid; single representative point)',
+      val: g => (typeof g?.elevation?.centroid_m === 'number' ? g.elevation.centroid_m : null),
+      fmt: v => `${Math.round(v).toLocaleString('en-IN')} m`,
+    },
+    vulnerability: {
+      label: 'Vulnerability signals',
+      desc: 'Count of overlapping sourced risk signals (flood-chronic, low-lying, high rain, encroachment, palaeochannel, unsafe zone, monsoon inundation, encroachment zone). A transparent count — NOT a score; a low count can mean "not yet pinned", never "safe".',
+      src: 'each signal cites its own source; see a district\'s panel',
+      val: g => (g && typeof Vuln !== 'undefined' ? Vuln.signals(g).count : null),
+      fmt: v => `${v} signal${v === 1 ? '' : 's'}`,
+    },
+    flood: {
+      label: 'Flood risk (CWC/NDMA)',
+      desc: 'district-chronic = named in CWC/NDMA/state-DMA/Bhuvan as repeatedly flooded; state-flood-prone = inherits only the state flag; not-flagged = neither.',
+      src: 'CWC flood forecasting · NDMA · Bhuvan Flood Hazard Atlas',
+      val: g => g?.flood_level === 'district-chronic' ? 2 : g?.flood_level === 'state-flood-prone' ? 1 : 0,
+      fmt: v => ['not flagged', 'state-level', 'chronic'][v],
+      onlyPositive: true,
+    },
+    rainfall: {
+      label: 'Rainfall band (IMD)',
+      desc: 'IMD climate band per state — arid to very-high. Precise district mm remains a gap (IMD portal).',
+      src: 'IMD climate normals (band level)',
+      val: g => ({ 'very-high': 4, 'high': 3, 'moderate': 2, 'semiarid': 1, 'arid': 0 })[g?.rainfall?.band] ?? null,
+      fmt: v => ['arid', 'semi-arid', 'moderate', 'high', 'very-high'][v],
+      onlyPositive: true,
+    },
+    coastal: {
+      label: 'Coastal · CRZ',
+      desc: '73 districts touch the sea — the Coastal Regulation Zone (MoEFCC 2019) restricts near-shore construction there.',
+      src: 'MoEFCC CRZ Notification 2019 (closed list)',
+      val: g => g?.on_coast ? 1 : 0,
+      fmt: () => 'coastal · CRZ',
+      onlyPositive: true,
+    },
+    zoning: {
+      label: 'Zoning & legal',
+      desc: 'The strongest LEGAL restriction that governs what can be built in each district — unsafe/no-development zones, chronic flood hazard, palaeochannel/encroachment zones, CRZ, or no special restriction. Click any district for the specific rule.',
+      src: 'each zone badge cites its declaring authority',
+    },
+    constraint: {
+      label: 'Physical constraint',
+      desc: 'Physical development constraints stacked: coast+flood, flood-prone, coastal, hill terrain. Click a district for details.',
+      src: 'CWC/NDMA · MoEFCC · physiography',
+    },
+  };
+  function layerStoryHTML() {
+    if (ui.state.districtMode !== 'geography' || !LEDGER?.states) return '';
+    const M = LAYER_STORY[ui.state.geoFacet || 'zoning'];
+    if (!M) return '';
+    const inState = ui.state.drillState;
+    let list = '';
+    if (M.val) {
+      const rows = [];
+      for (const [st, sd] of Object.entries(LEDGER.states)) {
+        if (inState && st !== inState) continue;
+        for (const [dn, d] of Object.entries(sd.districts || {})) {
+          const v = M.val(d.dimensions?.geography);
+          if (typeof v === 'number' && isFinite(v) && !(M.onlyPositive && v <= 0)) rows.push({ st, dn, v });
+        }
+      }
+      rows.sort((a, b) => b.v - a.v || a.dn.localeCompare(b.dn));
+      const top = rows.slice(0, 8);
+      if (top.length) list = `<ol class="ls-top">${top.map(r => `
+        <li><button class="ls-go" data-st="${esc(r.st)}" data-dn="${esc(r.dn)}">${esc(r.dn)}</button>${inState ? '' : ` <span class="ls-st">${esc(r.st)}</span>`}<span class="ls-val">${M.fmt(r.v)}</span></li>`).join('')}</ol>
+        <div class="ls-count">${rows.length.toLocaleString('en-IN')} district${rows.length === 1 ? '' : 's'} ${M.onlyPositive ? 'flagged' : 'measured'}${inState ? ` in ${esc(inState)}` : ''} · click one to open it</div>`;
+    }
+    return `<div class="layer-story">
+      <div class="ls-head"><span class="eyebrow">map is colouring by</span><b>${M.label}</b></div>
+      <div class="ls-desc">${M.desc}</div>
+      ${list}
+      <div class="ls-src">${esc(M.src)}</div>
+    </div>`;
+  }
+  function bindLayerStory(root) {
+    root.querySelectorAll('.ls-go').forEach(b => b.onclick = () => {
+      const st = b.dataset.st, dn = b.dataset.dn;
+      selectState(st, true);
+      drillIntoDistricts(st).then(() => selectDistrict(dn, st));
+    });
+  }
+  // Re-render whichever side panel is showing so it reflects a layer/facet change.
+  function refreshLayerStory() {
+    if (ui.state.drillDistrict) return;   // a district's own panel stays put
+    if (ui.state.drillState) {
+      const geo = districtGeoCache.get(ui.state.drillState);
+      if (geo) renderDistrictPanel(ui.state.drillState, geo);
+    } else if (!ui.state.selected) {
+      renderEmptyState();
+    }
   }
 
   function renderEmptyState() {
@@ -2195,10 +2394,12 @@
       <div class="india-detail-empty">
         <div class="eyebrow">Active view: ${esc(view.shortLabel)} · ${esc(DATA._meta.yearLabels[ui.state.yearIdx])}</div>
         <p class="india-detail-empty-body">Click any state for its 10-year history, governance footprint (IAS · employees · bribe-paid %), departments split (back-office vs public-facing), and structural pros / cons.</p>
+        ${layerStoryHTML()}
         ${renderFeaturedDistricts()}
         <div id="india-summary" class="india-summary-inline"></div>
       </div>`;
     bindFeaturedDistricts(detail);
+    bindLayerStory(detail);
     renderSummary();
   }
 
@@ -2300,6 +2501,7 @@
     ui.state.selected = null;
     pathByName.forEach(layer => layer._path?.classList.remove('selected'));
     renderEmptyState();
+    renderMapCrumb();
   }
 
   function drawSpark(s, yearIdx) {
@@ -2473,9 +2675,13 @@
         pathByName.set(name, layer);
         layer.on('mouseover', () => setHover(name));
         layer.on('mouseout', () => setHover(null));
-        layer.on('click', () => selectState(name));
+        // One click = straight into the districts (the old select-then-find-the-
+        // drill-button two-step was the top "map feels dead" complaint).
+        layer.on('click', () => { selectState(name); drillIntoDistricts(name); });
       }
     }).addTo(map);
+
+    buildMapCrumb();
 
     try { map.fitBounds(geoLayer.getBounds(), { padding: [10, 10] }); } catch (e) {}
 
@@ -2662,7 +2868,7 @@
       return ({
         zoning: '⚖ Zoning & legal — what can be built here',
         vulnerability: '⚠ Vulnerability — overlapping risk signals',
-        flood: 'Flood risk', coastal: 'Coastal · CRZ', elevation: 'Elevation',
+        flood: 'Flood risk', lowlying: 'Low-lying % — share of area below 10 m', coastal: 'Coastal · CRZ', elevation: 'Elevation',
         rainfall: 'Rainfall band', constraint: 'Physical constraint',
       })[f] || 'Geography';
     }
@@ -2683,6 +2889,42 @@
       wrap.appendChild(el);
     }
     el.innerHTML = `<span class="alb-dot"></span><span class="alb-txt">${esc(activeLayerLabel())}</span>`;
+  }
+
+  // One-click VIEWS: intelligent layer combinations — each preset sets the base map,
+  // overlays and colour facet TOGETHER so the layers tell one story instead of the
+  // user hand-assembling them. Same honesty rules as the individual layers.
+  const MAP_PRESETS = {
+    flood: { label: '🌊 Flood', base: 'Dark map', overlays: { hillshade: false, elevTint: false, rain: true, clouds: false }, mode: 'geography', facet: 'lowlying',
+      title: 'Low-lying share (open DEM raster) + LIVE rain radar — where water would sit, and where it is raining right now' },
+    zoning: { label: '⚖ Zoning', base: 'Satellite', overlays: { hillshade: false, elevTint: false, labels: true, rain: false, clouds: false }, mode: 'geography', facet: 'zoning',
+      title: 'Legal zone over real satellite imagery — what may be built vs what is actually built' },
+    risk: { label: '⚠ Risk stack', base: 'Dark map', overlays: { hillshade: false, elevTint: false, rain: false, clouds: false }, mode: 'geography', facet: 'vulnerability', hazards: true,
+      title: 'Overlapping sourced risk signals (count, not a score) + hazard & zoning pins when drilled' },
+    relief: { label: '🏔 Relief', base: 'Dark map', overlays: { hillshade: true, elevTint: true, rain: false, clouds: false }, mode: 'geography', facet: 'elevation',
+      title: 'Hillshade + per-pixel elevation tint + elevation facet — the physical terrain in one view' },
+    money: { label: '₹ Money', base: 'Dark map', overlays: { hillshade: false, elevTint: false, rain: false, clouds: false }, mode: 'money',
+      title: 'Per-district money flow (drill into a state first)' },
+  };
+  function applyMapPreset(key) {
+    const p = MAP_PRESETS[key];
+    if (!p) return;
+    ui.state.mapPreset = key;
+    if (p.base && mapLayers?.basemaps?.[p.base]) switchBasemap(p.base);
+    for (const [which, on] of Object.entries(p.overlays || {})) toggleOverlay(which, on);
+    if (p.hazards != null && hazardLayer) {
+      ui.state.showHazards = p.hazards;
+      if (p.hazards && ui.state.drillState) hazardLayer.addTo(map); else hazardLayer.remove();
+    }
+    if (p.mode) {
+      // money/population etc. only exist once drilled; geography works at both levels
+      const available = dataOverlayModes().some(([k]) => k === p.mode);
+      ui.state.districtMode = available ? p.mode : 'geography';
+    }
+    if (p.facet) ui.state.geoFacet = p.facet;
+    restyleActiveLayer();
+    renderLayersPanel();
+    refreshLayerStory();   // presets change the layer → side panel follows
   }
 
   function renderLayersPanel() {
@@ -2728,6 +2970,10 @@
         <span class="mlp-title">▤ Layers</span>
         <button class="mlp-collapse" id="mlp-close" title="Collapse">✕</button>
       </div>
+      <div class="mlp-sec-h">Views <span class="mlp-dim">(one-click combos)</span></div>
+      <div class="mlp-presets">
+        ${Object.entries(MAP_PRESETS).map(([k, p]) => `<button class="mlp-preset ${ui.state.mapPreset === k ? 'on' : ''}" data-preset="${k}" title="${esc(p.title)}">${p.label}</button>`).join('')}
+      </div>
       <div class="mlp-sec-h">Base map</div>
       <div class="mlp-bases">${baseBtns}</div>
       ${hdHint}
@@ -2745,7 +2991,9 @@
       <label class="mlp-check"><input type="checkbox" id="mlp-clouds" ${cloudsOn ? 'checked' : ''}> Clouds (infrared)</label>
       ${dataSection}`;
 
-    // wire base
+    // wire presets
+    panel.querySelectorAll('.mlp-preset').forEach(b => b.onclick = () => applyMapPreset(b.dataset.preset));
+    // wire base (manual base/overlay changes leave the preset highlight — it's a starting point, not a lock)
     panel.querySelectorAll('.mlp-base').forEach(b => b.onclick = () => { switchBasemap(b.dataset.base); renderLayersPanel(); });
     // "＋ HD imagery" — take the user's own Mapbox token, add the HD layer, switch to it.
     const hdBtn = panel.querySelector('#mlp-hd-add');
@@ -2779,12 +3027,14 @@
       if (b.dataset.mode === 'geography' && !ui.state.geoFacet) ui.state.geoFacet = 'zoning';
       restyleActiveLayer();
       renderLayersPanel();
+      refreshLayerStory();   // the side panel follows the layer
     });
     // geography facet chooser
     panel.querySelectorAll('.mlp-facet').forEach(b => b.onclick = () => {
       ui.state.geoFacet = b.dataset.facet;
       restyleActiveLayer();
       renderLayersPanel();
+      refreshLayerStory();   // the side panel follows the facet
     });
     panel.querySelector('#mlp-close').onclick = () => { ui.state.layersCollapsed = true; renderLayersPanel(); };
   }
@@ -2801,7 +3051,7 @@
 
   function geoFacetChooserHTML() {
     const facet = ui.state.geoFacet || 'zoning';
-    const facets = [['zoning', '⚖ Zoning & legal'], ['vulnerability', '⚠ Vulnerability'], ['flood', 'Flood'], ['coastal', 'Coastal·CRZ'], ['elevation', 'Elevation'], ['rainfall', 'Rainfall'], ['constraint', 'Constraint']];
+    const facets = [['zoning', '⚖ Zoning & legal'], ['vulnerability', '⚠ Vulnerability'], ['flood', 'Flood'], ['lowlying', 'Low-lying %'], ['coastal', 'Coastal·CRZ'], ['elevation', 'Elevation'], ['rainfall', 'Rainfall'], ['constraint', 'Constraint']];
     return `<div class="mlp-facets">${facets.map(([k, l]) => `<button class="mlp-facet ${facet === k ? 'on' : ''}" data-facet="${k}">${l}</button>`).join('')}</div>`;
   }
 
@@ -2848,6 +3098,7 @@
       if (f === 'coastal') return chip(geoFacetColor({ on_coast: true }, 'coastal'), 'coastal · CRZ') + chip(geoFacetColor({ on_coast: false }, 'coastal'), 'inland');
       if (f === 'flood') return chip(geoFacetColor({ flood_level: 'district-chronic' }, 'flood'), 'chronic (CWC/NDMA)') + chip(geoFacetColor({ flood_level: 'state-flood-prone' }, 'flood'), 'state-level') + chip(geoFacetColor({ flood_level: 'not-flagged' }, 'flood'), 'not flagged');
       if (f === 'elevation') return chip(geoFacetColor({ elevation: { centroid_m: 50 } }, 'elevation'), 'lowland') + chip(geoFacetColor({ elevation: { centroid_m: 3200 } }, 'elevation'), 'high mountain') + `<span class="mlp-leg-note">SRTM centroid m</span>`;
+      if (f === 'lowlying') return chip(geoFacetColor({ flood_exposure: { pct_area_below_10m: 5 } }, 'lowlying'), '5%') + chip(geoFacetColor({ flood_exposure: { pct_area_below_10m: 50 } }, 'lowlying'), '50%') + chip(geoFacetColor({ flood_exposure: { pct_area_below_10m: 95 } }, 'lowlying'), '95%') + `<span class="mlp-leg-note">share of district area below 10 m elevation (open terrain-tiles raster ≈300 m/px) — exposure proxy, not a flood model</span>`;
       if (f === 'rainfall') return chip(geoFacetColor({ rainfall: { band: 'arid' } }, 'rainfall'), 'arid') + chip(geoFacetColor({ rainfall: { band: 'moderate' } }, 'rainfall'), 'moderate') + chip(geoFacetColor({ rainfall: { band: 'very-high' } }, 'rainfall'), 'very-high');
       return chip(geoColor({ on_coast: true, flood_prone: true }), 'coast+flood') + chip(geoColor({ flood_prone: true }), 'flood') + chip(geoColor({ on_coast: true }), 'coast') + chip(geoColor({ terrain: 'himalayan-hill' }), 'hill');
     }
