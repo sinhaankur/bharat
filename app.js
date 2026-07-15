@@ -100,7 +100,7 @@
     population:     { name: 'Census of India 2011',   url: 'https://censusindia.gov.in' }
   };
 
-  const ui = { state: { view: 'ownTax', yearIdx: 9, selected: null, hover: null, mode: 'states', drillState: null, drillDistrict: null, districtMode: 'population', showNews: true, showHazards: true, showHeat: false } };
+  const ui = { state: { view: 'ownTax', yearIdx: 9, selected: null, hover: null, mode: 'states', drillState: null, drillDistrict: null, districtMode: 'population', showNews: true, showHazards: true, showHeat: false, fillAlpha: 1 } };
 
   let DATA = null, EXTRAS = null, GEO = null, DISTRICT_POP = null, BLOCKS = null, LEDGER = null, PAY = null;
   let EVENTS = null, NEWS = null, BUBBLES = null, NEWS_FEED = null, OFFICIALS = null;
@@ -210,6 +210,10 @@
     return (10 - z) / 4;                 // linear 1→0 across z6–z10
   }
 
+  // User-set colour strength (layers panel slider): one dial that scales EVERY
+  // data-colour fill, so the choropleth can be dialled against imagery/terrain.
+  function fillAlpha() { return ui.state.fillAlpha ?? 1; }
+
   // Fill opacity + border for choropleth, adapting to terrain-beneath AND zoom.
   // Over terrain we go lighter; as you zoom in the fill fades out entirely.
   function choroStyle(baseFill, baseBorder) {
@@ -217,7 +221,7 @@
     const terr = terrainActive();
     const fill = terr ? Math.min(0.28, baseFill * 0.3) : baseFill;
     return {
-      fillOpacity: fill * fade,
+      fillOpacity: fill * fade * fillAlpha(),
       borderColor: (terr || fade < 1) ? 'oklch(0.99 0 0 / 0.9)' : baseBorder,
       borderWeight: (terr || fade < 1) ? 1.2 : 0.6,
     };
@@ -286,7 +290,7 @@
     }
     const view = VIEWS[ui.state.view];
     const r = rowFor(name, ui.state.yearIdx);
-    if (!r) return { color: 'oklch(0.985 0 0 / 0.18)', weight: 0.5, fillColor: 'oklch(0.22 0 0)', fillOpacity: terrainActive() ? 0.15 : 0.55, className: 'india-state-path no-data' };
+    if (!r) return { color: 'oklch(0.985 0 0 / 0.18)', weight: 0.5, fillColor: 'oklch(0.22 0 0)', fillOpacity: (terrainActive() ? 0.15 : 0.55) * fillAlpha(), className: 'india-state-path no-data' };
     const v = view.compute(r, extFor(name));
     const cs = choroStyle(0.92, 'oklch(0.985 0 0 / 0.22)');
     return {
@@ -730,7 +734,7 @@
     const showMoney = ui.state.districtMode === 'money' && moneyVals.length > 0;
 
     // Scale district fill opacity down (and brighten borders) when terrain shows through.
-    const fo = base => (terrainActive() ? Math.min(0.32, base * 0.35) : base) * zoomFade();
+    const fo = base => (terrainActive() ? Math.min(0.32, base * 0.35) : base) * zoomFade() * fillAlpha();
     const bc = base => terrainActive() ? 'oklch(0.99 0 0 / 0.75)' : base;
     districtLayer = L.geoJSON(geo, {
       style: f => {
@@ -1019,11 +1023,11 @@
     if (ui.state.districtMode === 'geography' && ui.state.geoFacet === 'lowlying' && typeof p.PCT_BELOW_10M === 'number') {
       const t = Math.min(1, Math.max(0, p.PCT_BELOW_10M / 100));
       base.fillColor = `oklch(${(0.80 - 0.42 * t).toFixed(3)} ${(0.05 + 0.13 * t).toFixed(3)} 250)`;
-      base.fillOpacity = 0.55;
+      base.fillOpacity = 0.55 * fillAlpha();
     } else if (ui.state.districtMode === 'geography' && ui.state.geoFacet === 'elevation' && typeof p.ELEV_MEAN_M === 'number') {
       const t = Math.min(1, Math.max(0, p.ELEV_MEAN_M / 3500));
       base.fillColor = seqColor(0.15 + 0.8 * t);
-      base.fillOpacity = 0.5;
+      base.fillOpacity = 0.5 * fillAlpha();
     }
     return base;
   }
@@ -2643,6 +2647,16 @@
       wheelPxPerZoomLevel: 120,      // gentler wheel so you can settle on a level
     }).setView([22.5, 80], 4.5);
 
+    // Deliberate layer stack, bottom → top: basemap (tilePane 200) < terrain shading
+    // (hillshade + elevation tint) < district/taluk data colours (overlayPane 400) <
+    // live weather < place labels (kept under marker pins at 600). Without these
+    // panes the tint/rain/labels all competed on DOM insertion order — live rain
+    // could paint UNDER the very choropleth it's meant to fall on.
+    map.createPane('terrainPane').style.zIndex = 350;
+    map.createPane('weatherPane').style.zIndex = 450;
+    map.createPane('labelsPane').style.zIndex = 590;
+    ['terrainPane', 'weatherPane', 'labelsPane'].forEach(p => { map.getPane(p).style.pointerEvents = 'none'; });
+
     // Tile-layer catalogue lives in map-layers.js (window.MapLayers). app.js keeps
     // the wiring (active layer, panel, weather refresh) + the custom elevation tint.
     const basemaps = MapLayers.basemaps(L);
@@ -2799,7 +2813,7 @@
       }
     });
     return new TintLayer({
-      maxNativeZoom: 12, maxZoom: (window.MapLayers?.MAX_ZOOM ?? 21), opacity: 0.72, pane: 'overlayPane',
+      maxNativeZoom: 12, maxZoom: (window.MapLayers?.MAX_ZOOM ?? 21), opacity: 0.72, pane: 'terrainPane',
       attribution: 'Elevation tint: AWS Terrain Tiles (Terrarium, open SRTM/NASADEM)',
     });
   }
@@ -2809,9 +2823,7 @@
     Object.values(mapLayers.basemaps).forEach(l => map.removeLayer(l));
     mapLayers.basemaps[name].addTo(map);
     mapLayers.current = name;
-    // labels + hillshade sit above the basemap — re-raise if on
-    if (map.hasLayer(mapLayers.labels)) mapLayers.labels.bringToFront();
-    if (map.hasLayer(mapLayers.hillshade)) mapLayers.hillshade.bringToFront();
+    // labels/hillshade/weather live in their own panes — no re-raising needed
     if (mapUI) mapUI.refresh();   // native-max (→ deep-zoom note) differs per basemap
   }
   // Add the optional "Satellite HD" basemap using the user's OWN Mapbox token.
@@ -2926,6 +2938,13 @@
     renderLayersPanel();
     refreshLayerStory();   // presets change the layer → side panel follows
   }
+  // Any MANUAL layer change means the map no longer shows the preset — drop the
+  // highlight so the buttons never lie (each stays a one-click restore point).
+  function clearPreset() {
+    if (ui.state.mapPreset == null) return;
+    ui.state.mapPreset = null;
+    document.querySelectorAll('.mlp-preset.on').forEach(b => b.classList.remove('on'));
+  }
 
   function renderLayersPanel() {
     const panel = document.getElementById('map-layers-panel');
@@ -2956,12 +2975,16 @@
     const subOn = subdistrictLayer != null;
 
     const modes = dataOverlayModes();
+    const alphaPct = Math.round((ui.state.fillAlpha ?? 1) * 100);
     const dataSection = modes.length ? `
       <div class="mlp-sec-h">Colour districts by</div>
       <div class="mlp-data">
         ${modes.map(([k, lbl]) => `<button class="mlp-data-btn ${ui.state.districtMode === k ? 'on' : ''}" data-mode="${k}">${lbl}</button>`).join('')}
       </div>
       ${ui.state.districtMode === 'geography' ? geoFacetChooserHTML() : ''}
+      <label class="mlp-alpha" title="How strongly the data colours paint over the base map — turn it down to read satellite/terrain through the choropleth">
+        Colour strength <input type="range" id="mlp-alpha" min="15" max="100" step="5" value="${alphaPct}"> <span id="mlp-alpha-val">${alphaPct}%</span>
+      </label>
       <div class="mlp-legend" id="mlp-legend">${activeOverlayLegend()}</div>` : `
       <div class="mlp-hint">Click a state, then drill to districts to colour by money, flood, elevation…</div>`;
 
@@ -2974,6 +2997,7 @@
       <div class="mlp-presets">
         ${Object.entries(MAP_PRESETS).map(([k, p]) => `<button class="mlp-preset ${ui.state.mapPreset === k ? 'on' : ''}" data-preset="${k}" title="${esc(p.title)}">${p.label}</button>`).join('')}
       </div>
+      ${dataSection}
       <div class="mlp-sec-h">Base map</div>
       <div class="mlp-bases">${baseBtns}</div>
       ${hdHint}
@@ -2988,22 +3012,30 @@
       <label class="mlp-check"><input type="checkbox" id="mlp-sub" ${subOn ? 'checked' : ''} ${ui.state.drillDistrict ? '' : 'disabled'}> Sub-districts (taluk/tehsil)</label>
       <div class="mlp-sec-h">Live weather <span class="mlp-live">● live</span></div>
       <label class="mlp-check"><input type="checkbox" id="mlp-rain" ${rainOn ? 'checked' : ''}> Rain radar <span class="mlp-wx-time" id="mlp-wx-time">${esc(wxAgeLabel())}</span></label>
-      <label class="mlp-check"><input type="checkbox" id="mlp-clouds" ${cloudsOn ? 'checked' : ''}> Clouds (infrared)</label>
-      ${dataSection}`;
+      <label class="mlp-check"><input type="checkbox" id="mlp-clouds" ${cloudsOn ? 'checked' : ''}> Clouds (infrared)</label>`;
 
     // wire presets
     panel.querySelectorAll('.mlp-preset').forEach(b => b.onclick = () => applyMapPreset(b.dataset.preset));
-    // wire base (manual base/overlay changes leave the preset highlight — it's a starting point, not a lock)
-    panel.querySelectorAll('.mlp-base').forEach(b => b.onclick = () => { switchBasemap(b.dataset.base); renderLayersPanel(); });
+    // wire base (any manual change clears the preset highlight — see clearPreset)
+    panel.querySelectorAll('.mlp-base').forEach(b => b.onclick = () => { clearPreset(); switchBasemap(b.dataset.base); restyleActiveLayer(); renderLayersPanel(); });
     // "＋ HD imagery" — take the user's own Mapbox token, add the HD layer, switch to it.
     const hdBtn = panel.querySelector('#mlp-hd-add');
     if (hdBtn) hdBtn.onclick = () => addSatelliteHD();
+    // colour strength — restyle live while dragging; no full panel re-render
+    const alphaEl = panel.querySelector('#mlp-alpha');
+    if (alphaEl) alphaEl.oninput = e => {
+      ui.state.fillAlpha = parseInt(e.target.value, 10) / 100;
+      const lbl = panel.querySelector('#mlp-alpha-val');
+      if (lbl) lbl.textContent = e.target.value + '%';
+      restyleActiveLayer();
+    };
     // overlays
-    panel.querySelector('#mlp-hill').onchange = e => toggleOverlay('hillshade', e.target.checked);
-    panel.querySelector('#mlp-elev').onchange = e => { toggleOverlay('elevTint', e.target.checked); renderLayersPanel(); };
-    panel.querySelector('#mlp-labels').onchange = e => toggleOverlay('labels', e.target.checked);
+    panel.querySelector('#mlp-hill').onchange = e => { clearPreset(); toggleOverlay('hillshade', e.target.checked); restyleActiveLayer(); };
+    panel.querySelector('#mlp-elev').onchange = e => { clearPreset(); toggleOverlay('elevTint', e.target.checked); restyleActiveLayer(); renderLayersPanel(); };
+    panel.querySelector('#mlp-labels').onchange = e => { clearPreset(); toggleOverlay('labels', e.target.checked); };
     const hazEl = panel.querySelector('#mlp-haz');
     if (hazEl) hazEl.onchange = e => {
+      clearPreset();
       ui.state.showHazards = e.target.checked;
       if (!hazardLayer) return;
       if (e.target.checked) hazardLayer.addTo(map); else hazardLayer.remove();
@@ -3014,8 +3046,8 @@
       if (!eventHeatLayer) return;
       if (e.target.checked) eventHeatLayer.addTo(map); else eventHeatLayer.remove();
     };
-    panel.querySelector('#mlp-rain').onchange = e => toggleOverlay('rain', e.target.checked);
-    panel.querySelector('#mlp-clouds').onchange = e => toggleOverlay('clouds', e.target.checked);
+    panel.querySelector('#mlp-rain').onchange = e => { clearPreset(); toggleOverlay('rain', e.target.checked); };
+    panel.querySelector('#mlp-clouds').onchange = e => { clearPreset(); toggleOverlay('clouds', e.target.checked); };
     const subEl = panel.querySelector('#mlp-sub');
     if (subEl) subEl.onchange = e => {
       if (e.target.checked && ui.state.drillState) renderSubdistrictLayer(ui.state.drillState);
@@ -3023,6 +3055,7 @@
     };
     // data mode
     panel.querySelectorAll('.mlp-data-btn').forEach(b => b.onclick = () => {
+      clearPreset();
       ui.state.districtMode = b.dataset.mode;
       if (b.dataset.mode === 'geography' && !ui.state.geoFacet) ui.state.geoFacet = 'zoning';
       restyleActiveLayer();
@@ -3031,6 +3064,7 @@
     });
     // geography facet chooser
     panel.querySelectorAll('.mlp-facet').forEach(b => b.onclick = () => {
+      clearPreset();
       ui.state.geoFacet = b.dataset.facet;
       restyleActiveLayer();
       renderLayersPanel();
@@ -3097,8 +3131,8 @@
       if (f === 'vulnerability') return chip(Vuln.color(1), '1') + chip(Vuln.color(2), '2') + chip(Vuln.color(4), '4') + chip(Vuln.color(6), '6') + chip(Vuln.color(Vuln.MAX || 8), `${Vuln.MAX || 8} signals`) + `<span class="mlp-leg-note">count of overlapping sourced risk signals (flood, low-lying, rain, encroachment, palaeochannel, unsafe-zone, monsoon, encroach-zone) — not a score</span>`;
       if (f === 'coastal') return chip(geoFacetColor({ on_coast: true }, 'coastal'), 'coastal · CRZ') + chip(geoFacetColor({ on_coast: false }, 'coastal'), 'inland');
       if (f === 'flood') return chip(geoFacetColor({ flood_level: 'district-chronic' }, 'flood'), 'chronic (CWC/NDMA)') + chip(geoFacetColor({ flood_level: 'state-flood-prone' }, 'flood'), 'state-level') + chip(geoFacetColor({ flood_level: 'not-flagged' }, 'flood'), 'not flagged');
-      if (f === 'elevation') return chip(geoFacetColor({ elevation: { centroid_m: 50 } }, 'elevation'), 'lowland') + chip(geoFacetColor({ elevation: { centroid_m: 3200 } }, 'elevation'), 'high mountain') + `<span class="mlp-leg-note">SRTM centroid m</span>`;
-      if (f === 'lowlying') return chip(geoFacetColor({ flood_exposure: { pct_area_below_10m: 5 } }, 'lowlying'), '5%') + chip(geoFacetColor({ flood_exposure: { pct_area_below_10m: 50 } }, 'lowlying'), '50%') + chip(geoFacetColor({ flood_exposure: { pct_area_below_10m: 95 } }, 'lowlying'), '95%') + `<span class="mlp-leg-note">share of district area below 10 m elevation (open terrain-tiles raster ≈300 m/px) — exposure proxy, not a flood model</span>`;
+      if (f === 'elevation') return gradientLegend(t => geoFacetColor({ elevation: { centroid_m: t * 3500 } }, 'elevation'), '0 m', '3,500 m+', 'SRTM centroid metres above sea level');
+      if (f === 'lowlying') return gradientLegend(t => geoFacetColor({ flood_exposure: { pct_area_below_10m: t * 100 } }, 'lowlying'), '0% below 10 m', '100%', 'share of district area below 10 m elevation (open terrain-tiles raster ≈300 m/px) — exposure proxy, not a flood model');
       if (f === 'rainfall') return chip(geoFacetColor({ rainfall: { band: 'arid' } }, 'rainfall'), 'arid') + chip(geoFacetColor({ rainfall: { band: 'moderate' } }, 'rainfall'), 'moderate') + chip(geoFacetColor({ rainfall: { band: 'very-high' } }, 'rainfall'), 'very-high');
       return chip(geoColor({ on_coast: true, flood_prone: true }), 'coast+flood') + chip(geoColor({ flood_prone: true }), 'flood') + chip(geoColor({ on_coast: true }), 'coast') + chip(geoColor({ terrain: 'himalayan-hill' }), 'hill');
     }

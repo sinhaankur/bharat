@@ -59,17 +59,21 @@
       });
   }
 
+  // Panes: index.html's buildMap creates terrainPane (350, under the data colours),
+  // weatherPane (450, over them) and labelsPane (590, under marker pins) so the
+  // stack is deterministic. These layers name their pane here.
+
   // Place-labels overlay (keeps names legible on imagery basemaps).
   function labels(L) {
     return L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png', {
-      subdomains: 'abcd', attribution: '', maxZoom: MAX_ZOOM, maxNativeZoom: 20, opacity: 0.9,
+      subdomains: 'abcd', attribution: '', maxZoom: MAX_ZOOM, maxNativeZoom: 20, opacity: 0.9, pane: 'labelsPane',
     });
   }
 
   // Hillshade relief (open 30 m DEM — SRTM/CartoDEM class; NOT LIDAR).
   function hillshade(L) {
     return L.tileLayer('https://services.arcgisonline.com/arcgis/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Hillshade &copy; Esri, USGS, NASA SRTM (open 30 m DEM)', maxZoom: MAX_ZOOM, maxNativeZoom: 15, opacity: 0.55,
+      attribution: 'Hillshade &copy; Esri, USGS, NASA SRTM (open 30 m DEM)', maxZoom: MAX_ZOOM, maxNativeZoom: 15, opacity: 0.55, pane: 'terrainPane',
     });
   }
 
@@ -77,8 +81,8 @@
   // points them at the latest timestamped frame (free, keyless, ~10-min updates).
   function weather(L) {
     return {
-      rain: L.tileLayer('', { opacity: 0.6, maxZoom: MAX_ZOOM, attribution: 'Rain radar &copy; RainViewer (live)', pane: 'overlayPane' }),
-      clouds: L.tileLayer('', { opacity: 0.5, maxZoom: MAX_ZOOM, attribution: 'Clouds (infrared) &copy; RainViewer', pane: 'overlayPane' }),
+      rain: L.tileLayer('', { opacity: 0.6, maxZoom: MAX_ZOOM, attribution: 'Rain radar &copy; RainViewer (live)', pane: 'weatherPane' }),
+      clouds: L.tileLayer('', { opacity: 0.5, maxZoom: MAX_ZOOM, attribution: 'Clouds (infrared) &copy; RainViewer', pane: 'weatherPane' }),
     };
   }
 
