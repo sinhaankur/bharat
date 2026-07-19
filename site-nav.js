@@ -68,6 +68,7 @@
     ]},
     { label: "Understand", items: [
       { href: "how-it-works.html", text: "How it works" },
+      { href: "engines.html", text: "The engines" },
       { href: "mesh.html", text: "The mesh" },
       { href: "command-chain.html", text: "Chain of command" },
       { href: "history.html", text: "History race" },
