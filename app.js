@@ -3671,7 +3671,7 @@
     // news-count map so the coverage facet is accurate on the map too
     const nc = {};
     for (const [k, arr] of newsByDistrict) nc[k] = arr.length;
-    QENGINE = QueryEngine.build(LEDGER, { newsCounts: nc });
+    QENGINE = QueryEngine.build(LEDGER, { newsCounts: nc, safety: SAFETY });
     // restore a query from the URL (?q=crz,flood&mode=OR)
     const qs = new URLSearchParams(location.search);
     const q = qs.get('q');

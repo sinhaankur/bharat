@@ -56,8 +56,10 @@
   function build(ledger, opts) {
     opts = opts || {};
     const newsCounts = opts.newsCounts || {};   // "State|District" → count (optional)
+    const safety = (opts.safety && opts.safety.states) || {};   // state → safety block (safety.json)
     const rows = [];
     for (const [sn, s] of Object.entries((ledger && ledger.states) || {})) {
+      const sf = safety[sn] || null;   // NCRB crime/prisons + unrest, state-level
       for (const [dn, dist] of Object.entries(s.districts || {})) {
         const g = (dist.dimensions && dist.dimensions.geography) || {};
         const elev = g.elevation && typeof g.elevation.centroid_m === 'number' ? g.elevation.centroid_m : null;
@@ -95,6 +97,13 @@
           intl_airport: aviation.has_airport === true && aviation.category === 'international',
           housing_tracked: housing.tracked === true,
           elev,
+          // State-level safety/justice (NCRB) stamped onto each district row.
+          crime_rate: sf && sf.crime && sf.crime.rate_per_lakh != null ? sf.crime.rate_per_lakh : null,
+          crime_gap: !sf || !sf.crime || sf.crime.rate_per_lakh == null,
+          prison_occ: sf && sf.prisons && sf.prisons.occupancy_pct != null ? sf.prisons.occupancy_pct : null,
+          prison_jails: sf && sf.prisons && sf.prisons.jails != null ? sf.prisons.jails : null,
+          unrest_n: sf && sf.unrest ? (sf.unrest.news_mentions || 0) : 0,
+          density: sf && sf.density && sf.density.per_km2 != null ? sf.density.per_km2 : null,
         });
       }
     }
@@ -137,6 +146,18 @@
         describe: 'State per-capita NSDP in the low / lower-middle tier (RBI)' },
       { key: 'income_gap', group: 'Health & wealth', label: 'Income figure is a gap', test: r => r.income == null,
         describe: 'No published per-capita NSDP (small UTs absent from the RBI Handbook) — a gap, not zero' },
+      { key: 'high_crime', group: 'Safety & justice', label: 'High crime rate (> 500 / lakh)', test: r => r.crime_rate != null && r.crime_rate > 500,
+        describe: "State NCRB total cognizable crime rate above 500 / lakh (2023). A higher rate can mean fuller reporting, not only more crime." },
+      { key: 'low_crime', group: 'Safety & justice', label: 'Lower crime rate (< 250 / lakh)', test: r => r.crime_rate != null && r.crime_rate < 250,
+        describe: 'State NCRB crime rate under 250 / lakh — low rates can also mask under-reporting.' },
+      { key: 'crime_gap', group: 'Safety & justice', label: 'Crime figure is a gap', test: r => r.crime_gap,
+        describe: 'No NCRB crime rate transcribed for this state yet — a gap, not zero.' },
+      { key: 'prison_overcrowded', group: 'Safety & justice', label: 'Overcrowded prisons (> 100%)', test: r => r.prison_occ != null && r.prison_occ > 100,
+        describe: 'NCRB prison occupancy above sanctioned capacity (sparse coverage — most states are a gap).' },
+      { key: 'unrest_active', group: 'Safety & justice', label: 'Recent protest / unrest in the news', test: r => r.unrest_n > 0,
+        describe: 'At least one protest/strike/clash item anchored to the state in the news feed (tier-3 signal, not an official count).' },
+      { key: 'dense', group: 'Safety & justice', label: 'High population density (> 1,000 / km²)', test: r => r.density != null && r.density > 1000,
+        describe: 'State population density above 1,000 people / km² (Census area ÷ population).' },
       { key: 'has_rto', group: 'Civic', label: 'Has a pinned district RTO', test: r => r.has_rto,
         describe: 'A district-level Regional Transport Office code + office is pinned (MoRTH/Vahan)' },
       { key: 'has_airport', group: 'Civic', label: 'Has an operational airport', test: r => r.has_airport,
