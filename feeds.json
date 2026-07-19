@@ -1,7 +1,7 @@
 {
   "_meta": {
     "purpose": "Registry of news sources for the fiscal-news aggregation layer. The ingestion script (ingest_news.py) reads this, fetches each feed, and writes link+snippet-only news_items to news-feed.json. Nothing here republishes article text.",
-    "as_of": "2026-06-24",
+    "as_of": "2026-07-19",
     "rules": {
       "tos": "Only RSS/official APIs that permit aggregation. Record ingest_source for auditability.",
       "lean": "outlet_lean must come from a published, citable media-bias assessment (lean_source). Where none exists, use 'unknown'. Lean is the aggregation of third-party assessments, never our editorial verdict.",
@@ -23,6 +23,17 @@
       "note": "Official scheme launches, fund-release announcements. Tier-1/2 anchor for the 'sanction'/'release' end of a chain."
     },
     {
+      "id": "dd_news_national",
+      "outlet": "DD News (Doordarshan)",
+      "url": "https://ddnews.gov.in/en/category/national/feed/",
+      "outlet_type": "tv",
+      "outlet_lean": "state_media",
+      "lean_source": "Prasar Bharati / Doordarshan is India's public-service broadcaster (government-owned) — categorised as state communication, like PIB, not independent media.",
+      "language": "en",
+      "cadence": "frequent",
+      "verified": "2026-07-19 — 200, RSS 2.0, ~10 items"
+    },
+    {
       "id": "the_hindu_national",
       "outlet": "The Hindu",
       "url": "https://www.thehindu.com/news/national/feeder/default.rss",
@@ -31,6 +42,72 @@
       "lean_source": "Multiple published India media-bias assessments classify The Hindu as centre-left; recorded as third-party aggregation, not our judgement.",
       "language": "en",
       "cadence": "hourly"
+    },
+    {
+      "id": "ndtv_india_en",
+      "outlet": "NDTV",
+      "url": "https://feeds.feedburner.com/ndtvnews-india-news",
+      "outlet_type": "tv",
+      "outlet_lean": "centre-left",
+      "lean_source": "Third-party India media-bias aggregations broadly place NDTV's English edition centre-left; recorded as aggregation, not our judgement.",
+      "language": "en",
+      "cadence": "frequent",
+      "verified": "2026-07-19 — 200, RSS 2.0, ~20 items"
+    },
+    {
+      "id": "news18_india",
+      "outlet": "News18",
+      "url": "https://www.news18.com/rss/india.xml",
+      "outlet_type": "tv",
+      "outlet_lean": "centre-right",
+      "lean_source": "Third-party media-bias aggregations broadly place Network18/News18 centre-right; recorded as aggregation, not our judgement.",
+      "language": "en",
+      "cadence": "frequent",
+      "verified": "2026-07-19 — 200, RSS 2.0, ~200 items"
+    },
+    {
+      "id": "zee_news_india",
+      "outlet": "Zee News",
+      "url": "https://zeenews.india.com/rss/india-national-news.xml",
+      "outlet_type": "tv",
+      "outlet_lean": "right",
+      "lean_source": "Third-party media-bias aggregations broadly place Zee News on the right; recorded as aggregation, not our judgement.",
+      "language": "en",
+      "cadence": "frequent",
+      "verified": "2026-07-19 — 200, RSS 2.0, ~20 items"
+    },
+    {
+      "id": "livemint_news",
+      "outlet": "Mint",
+      "url": "https://www.livemint.com/rss/news",
+      "outlet_type": "national",
+      "outlet_lean": "centre",
+      "lean_source": "Business daily; third-party aggregations place it around centre / centre-right on economics. Recorded as aggregation.",
+      "language": "en",
+      "cadence": "frequent",
+      "verified": "2026-07-19 — 200, RSS 2.0, ~35 items"
+    },
+    {
+      "id": "opindia_feed",
+      "outlet": "OpIndia",
+      "url": "https://www.opindia.com/feed/",
+      "outlet_type": "digital",
+      "outlet_lean": "right",
+      "lean_source": "Third-party media-bias aggregations classify OpIndia on the right; recorded as aggregation. Included for spectrum balance / blindspot detection, not endorsement.",
+      "language": "en",
+      "cadence": "frequent",
+      "verified": "2026-07-19 — 200, RSS 2.0, ~10 items"
+    },
+    {
+      "id": "swarajya_feed",
+      "outlet": "Swarajya",
+      "url": "https://swarajyamag.com/feed",
+      "outlet_type": "digital",
+      "outlet_lean": "right",
+      "lean_source": "Third-party media-bias aggregations classify Swarajya on the right; recorded as aggregation. Included for spectrum balance / blindspot detection.",
+      "language": "en",
+      "cadence": "daily",
+      "verified": "2026-07-19 — 200, RSS 2.0"
     },
     {
       "id": "indian_express",
@@ -43,24 +120,14 @@
       "cadence": "hourly"
     },
     {
-      "id": "pti_feed",
-      "outlet": "Press Trust of India",
-      "url": "https://www.ptinews.com/rss",
-      "outlet_type": "wire",
+      "id": "the_hindu_business",
+      "outlet": "The Hindu · BusinessLine",
+      "url": "https://www.thehindubusinessline.com/economy/feeder/default.rss",
+      "outlet_type": "national",
       "outlet_lean": "centre",
-      "lean_source": "Wire service; treated as centre/neutral by convention. Marked aggregation.",
+      "lean_source": "Business daily of The Hindu group; economics coverage treated around centre by third-party aggregations. Marked aggregation.",
       "language": "en",
-      "cadence": "frequent"
-    },
-    {
-      "id": "down_to_earth",
-      "outlet": "Down To Earth",
-      "url": "https://www.downtoearth.org.in/rss",
-      "outlet_type": "digital",
-      "outlet_lean": "unknown",
-      "lean_source": "No widely-cited bias assessment found; left as unknown rather than guessed. Strong on scheme/rural-development reporting (MGNREGS, water).",
-      "language": "en",
-      "cadence": "daily"
+      "cadence": "hourly"
     },
 
     {
