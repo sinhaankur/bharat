@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>India Fiscal — The Engines</title>
+  <meta name="description" content="Seven engines map India into pixels of money and a chain of command — from the Survey of India that first drew the lines, to the development, climate, land-zoning, corruption and news engines that read them today. Sourced, or it's a gap." />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .eng-wrap { max-width: 1080px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
+    .eng-wrap h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(2rem, 3.4vw, 2.8rem); line-height: 1.05; margin: 0 0 0.6rem; letter-spacing: -0.015em; }
+    .eng-wrap h1 em { font-family: var(--font-italic); font-style: italic; }
+    .eng-wrap > .lede { font-size: 15px; color: var(--muted-foreground); line-height: 1.65; margin-bottom: 1rem; max-width: 780px; }
+    .eng-wrap > .lede b { color: var(--foreground); font-weight: 500; }
+    .eng-back { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted-foreground); display: inline-block; margin-bottom: 1.5rem; border: 1px solid var(--border-strong); padding: 5px 12px; border-radius: 999px; }
+    .eng-back:hover { color: var(--foreground); border-color: var(--foreground); }
+
+    .eng-thesis { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.02em; color: var(--muted-foreground); border-left: 2px solid oklch(0.72 0.15 155); padding: 0.35rem 0 0.35rem 0.9rem; margin: 1.5rem 0 2.5rem; line-height: 1.7; max-width: 760px; }
+    .eng-thesis b { color: oklch(0.82 0.15 155); font-weight: 600; }
+
+    .eng-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1rem; }
+    .eng-card { position: relative; border: 1px solid var(--border); border-radius: var(--radius-sm); background: oklch(0.145 0 0); padding: 1.3rem 1.35rem 1.2rem; overflow: hidden; display: flex; flex-direction: column; }
+    .eng-card::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 3px; background: var(--eng-accent, oklch(0.7 0.1 200)); }
+    .eng-card:hover { border-color: var(--border-strong); }
+    .eng-num { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.1em; color: var(--muted-foreground); }
+    .eng-icon { font-size: 22px; line-height: 1; margin-bottom: 0.5rem; display: block; }
+    .eng-name { font-family: var(--font-sans); font-weight: 600; font-size: 17px; letter-spacing: -0.01em; color: var(--foreground); margin: 0.1rem 0 0.15rem; }
+    .eng-name em { color: var(--eng-accent, oklch(0.8 0.12 200)); font-style: normal; }
+    .eng-tagline { font-family: var(--font-italic); font-style: italic; font-size: 13px; color: var(--muted-foreground); margin: 0 0 0.75rem; }
+    .eng-desc { font-size: 13px; line-height: 1.6; color: oklch(0.86 0 0); margin: 0 0 0.9rem; }
+    .eng-maps { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.02em; color: var(--muted-foreground); margin: 0 0 0.9rem; line-height: 1.6; }
+    .eng-maps b { color: var(--foreground); font-weight: 500; }
+    .eng-links { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: auto; }
+    .eng-links a { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.02em; color: var(--foreground); border: 1px solid var(--border-strong); border-radius: 999px; padding: 4px 10px; text-decoration: none; }
+    .eng-links a:hover { border-color: var(--eng-accent, var(--foreground)); color: var(--eng-accent, var(--foreground)); }
+    .eng-src { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted-foreground); margin-top: 0.9rem; padding-top: 0.7rem; border-top: 1px dashed oklch(0.985 0 0 / 0.08); }
+    .eng-src.warn { color: oklch(0.8 0.14 60); }
+
+    .eng-origin { grid-column: 1 / -1; border-color: oklch(0.6 0.09 60 / 0.5); background: linear-gradient(180deg, oklch(0.16 0.01 60) 0%, oklch(0.145 0 0) 100%); }
+    .eng-origin .eng-name em { color: oklch(0.82 0.13 65); }
+
+    .eng-note { background: oklch(0.16 0 0); border: 1px solid var(--border); border-left: 3px solid oklch(0.7 0.18 30); border-radius: var(--radius-sm); padding: 1rem 1.2rem; margin-top: 2.5rem; }
+    .eng-note h3 { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted-foreground); margin: 0 0 0.5rem; }
+    .eng-note p { font-size: 13px; line-height: 1.6; color: var(--foreground); margin: 0 0 0.6rem; }
+    .eng-note p:last-child { margin: 0; }
+    .eng-note em { font-family: var(--font-italic); font-style: italic; }
+    .eng-note a { color: oklch(0.78 0.16 70); border-bottom-color: oklch(0.78 0.16 70 / 0.4); }
+  </style>
+</head>
+<body>
+
+<div class="eng-wrap">
+  <a class="eng-back" href="index.html#map">← Back to map</a>
+
+  <h1>The <em>engines</em></h1>
+  <p class="lede">
+    This atlas breaks India into <b>pixels of money</b> and a <b>chain of command</b>.
+    It runs on a handful of engines — each one reads the same country through a
+    different lens, and they <b>mix</b>. One number can belong to several at once: a
+    flood-prone ward (Climate) that's a no-build coastal zone (Land Zoning) where a
+    civic budget was still spent (Development) and an audit later flagged it
+    (Corruption), reported the next morning (News).
+  </p>
+
+  <p class="eng-thesis">
+    The first engine wasn't ours. The <b>Great Trigonometrical Survey of India</b>
+    spent seventy years (1802–1871) triangulating the subcontinent into measurable
+    lines — the original apparatus that mapped this land <b>in order to tax and
+    govern it</b>. We point the same instrument the other way: mapping the country
+    to hold that apparatus <b>accountable</b>.
+  </p>
+
+  <div class="eng-grid" id="grid"></div>
+
+  <div class="eng-note">
+    <h3>The rule every engine obeys</h3>
+    <p><em>Sourced, or it's a gap.</em> No engine invents a number. A figure is
+    pinned to a government source or it's recorded as an explicit gap — you can audit
+    every one of them on the <a href="provenance.html">Provenance ledger</a>.</p>
+    <p>The <em>Corruption</em> engine is the one we wish we didn't need. It never calls
+    a person corrupt. It only surfaces what an audit, a court, or an RTI reply has
+    <em>already</em> established — a CAG paragraph, a court-ordered pay arrear, a
+    prison over its sanctioned capacity — and lets the sourced record speak. Facts,
+    never accusations.</p>
+  </div>
+</div>
+
+<script>
+const ENGINES = [
+  {
+    origin: true, icon: "📐", accent: "oklch(0.82 0.13 65)",
+    num: "ENGINE 00 · ORIGIN",
+    name: "The Survey <em>Engine</em>",
+    tagline: "The known British engine that actually mapped and created this.",
+    desc: "The Survey of India and its Great Trigonometrical Survey drew the subcontinent into lines first — triangulation towers, the Everest arc, the baseline that fixed every district boundary we still use. It measured the land to own it. This whole atlas is the descendant instrument, turned toward accountability. Its heirs — Survey of India area figures, open DEM terrain, geoBoundaries polygons — still power the map.",
+    maps: "Powers: <b>district & taluk boundaries</b> · <b>elevation (SRTM/open DEM)</b> · <b>Survey-of-India area → density</b>",
+    links: [["atlas-3d.html", "India in 3D"], ["terrain-3d.html", "3D topography"], ["how-it-works.html", "How it works"]],
+    src: "Survey of India · SRTM open DEM · geoBoundaries", tier: 1
+  },
+  {
+    icon: "🏛️", accent: "oklch(0.72 0.12 265)",
+    num: "ENGINE 01",
+    name: "The Country <em>Engine</em>",
+    tagline: "How India is constituted — who answers to whom.",
+    desc: "What actually makes a country: the 4-layer decode of Union vs State vs UT vs local body, which List a power sits on, who appoints each officer, and how sanction flows down the chain. The scaffolding every rupee moves through.",
+    maps: "Powers: <b>chain of command</b> · <b>protocol layers</b> · <b>politics dimension</b> · <b>the mesh</b>",
+    links: [["command-chain.html", "Chain of command"], ["mesh.html", "The mesh"], ["explore.html", "Explore"]],
+    src: "Constitution (Seventh Schedule) · IndiaCode · ECI", tier: 1
+  },
+  {
+    icon: "🏗️", accent: "oklch(0.72 0.15 155)",
+    num: "ENGINE 02",
+    name: "The Development <em>Engine</em>",
+    tagline: "Money in → what it was for → what got built.",
+    desc: "The money-flow ledger: civic budgets, devolution, own-tax and grants routed to a district, tagged with what they were intended to do. Plus the economic base — income, vehicles, aviation, housing — that says what a place actually runs on.",
+    maps: "Powers: <b>money-flow ledger</b> · <b>own-tax / GSDP / devolution map views</b> · <b>economy · vehicles · aviation · housing</b>",
+    links: [["index.html#map", "Money map"], ["explore.html", "Explore"], ["timeline.html", "Timeline"]],
+    src: "Municipal budgets · RBI Handbook · Finance Commission · MoRTH · AAI", tier: 1
+  },
+  {
+    icon: "🌊", accent: "oklch(0.7 0.13 220)",
+    num: "ENGINE 03",
+    name: "The Climate <em>Engine</em>",
+    tagline: "Where the water goes, and what it takes.",
+    desc: "Physical exposure per district and taluk: flood-prone terrain, monsoon inundation, coastal-regulation zones, palaeochannels and low-lying wards — raised over the real open DEM in 3D. Not a forecast; a record of where the ground is already at risk.",
+    maps: "Powers: <b>flood explorer (3D)</b> · <b>geography: flood / monsoon / low-lying</b> · <b>terrain</b>",
+    links: [["flood-3d.html", "Flood explorer (3D)"], ["terrain-3d.html", "3D topography"], ["index.html#map", "Map facets"]],
+    src: "Open DEM (SRTM) · Bhuvan / NRSC flood · IMD · CWC", tier: 1
+  },
+  {
+    icon: "🗺️", accent: "oklch(0.78 0.14 45)",
+    num: "ENGINE 04",
+    name: "The Land-Zoning <em>Engine</em>",
+    tagline: "What can legally be built here.",
+    desc: "The legal skin over the land: coastal-regulation categories, encroachment zones, cadastral status and unsafe low-lying areas — the difference between what a place is and what the law lets it become. Zoning is the default map facet for a reason.",
+    maps: "Powers: <b>zoning map facet</b> · <b>geography: CRZ / encroachment / cadastral / unsafe-zone</b>",
+    links: [["index.html#map", "Zoning facet"], ["terrain-3d.html", "3D topography"], ["explore.html", "Explore"]],
+    src: "CRZ Notification 2019 (MoEF) · state town-planning acts · Bhuvan", tier: 1
+  },
+  {
+    icon: "⚖️", accent: "oklch(0.72 0.17 30)",
+    num: "ENGINE 05",
+    name: "The Corruption <em>Engine</em>",
+    tagline: "The one we wish we didn't need — facts, never accusations.",
+    desc: "Officers in position are sometimes corrupt; the record sometimes proves it. This engine surfaces only what an audit, court or RTI has ALREADY established — CAG paragraphs, court-ordered pay/pension arrears, prisons over sanctioned capacity, the promise-vs-result chain. It never labels a person; it shows the sourced trail and stops there.",
+    maps: "Powers: <b>accountability arc (promise→result→cost→impact)</b> · <b>delayed-pay / pension chains</b> · <b>prison overcrowding</b> · <b>officials record</b>",
+    links: [["index.html#map", "Accountability"], ["story.html", "Story chains"], ["provenance.html", "Provenance"]],
+    src: "CAG audit reports · court orders · NCRB PSI · RTI replies", tier: 1
+  },
+  {
+    icon: "📰", accent: "oklch(0.8 0.15 72)",
+    num: "ENGINE 06",
+    name: "The News <em>Engine</em>",
+    tagline: "What's being said, anchored to where and to what money.",
+    desc: "The moderated, attribution-only news feed — every headline linked back to its outlet (with a third-party lean label), and where possible anchored to a district, a scheme, or a fiscal event. It's the live layer over the static record, and it feeds the 'What's new' strip on the map.",
+    maps: "Powers: <b>the feed</b> · <b>'What's new' strip</b> · <b>news-anchored districts</b> · <b>timeline</b>",
+    links: [["feed.html", "The feed"], ["timeline.html", "Timeline"], ["index.html#map", "On the map"]],
+    src: "RSS aggregation (link-only) · human moderation · published bias assessments", tier: 3
+  },
+];
+
+const TIER_SRC = { 1: "eng-src", 3: "eng-src warn" };
+
+document.getElementById("grid").innerHTML = ENGINES.map(e => {
+  const links = e.links.map(([h, t]) => `<a href="${h}">${t} →</a>`).join("");
+  return `<article class="eng-card${e.origin ? " eng-origin" : ""}" style="--eng-accent:${e.accent}">
+    <span class="eng-num">${e.num}</span>
+    <span class="eng-icon">${e.icon}</span>
+    <h2 class="eng-name">${e.name}</h2>
+    <p class="eng-tagline">${e.tagline}</p>
+    <p class="eng-desc">${e.desc}</p>
+    <p class="eng-maps">${e.maps}</p>
+    <div class="eng-links">${links}</div>
+    <div class="${TIER_SRC[e.tier] || "eng-src"}">Source: ${e.src}</div>
+  </article>`;
+}).join("");
+</script>
+
+<script src="command-palette.js"></script>
+<script src="site-nav.js"></script>
+</body>
+</html>
