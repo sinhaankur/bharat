@@ -30,6 +30,15 @@
     ['history.html', 'History race'], ['data.html', 'Data & API'],
     ['references.html', 'Sources'], ['about.html', 'Methodology & disclaimer'],
     ['global.html', 'India vs world'],
+    // the engines: hub + 7 deep pages
+    ['engines.html', 'The engines — all 7'],
+    ['engine-survey.html', 'Engine: Survey (origin — the map that mapped India)'],
+    ['engine-country.html', 'Engine: Country (how India is constituted)'],
+    ['engine-development.html', 'Engine: Development (money in → what got built)'],
+    ['engine-climate.html', 'Engine: Climate (flood / exposure)'],
+    ['engine-zoning.html', 'Engine: Land-Zoning (what can be built here)'],
+    ['engine-corruption.html', 'Engine: Corruption (sourced facts, no accusations)'],
+    ['engine-news.html', 'Engine: News (moderated, attributed feed)'],
   ];
   function sitePages() {
     const nav = global.SiteNav && global.SiteNav.NAV;
