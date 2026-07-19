@@ -64,6 +64,15 @@
       for (const [mode, label] of LAYERS)
         out.push({ label, hint: 'layer', kind: 'layer', key: 'layer ' + label,
           run: () => { global.AtlasAPI.setLayer(mode); close(); } });
+      // State lenses (VIEWS): fiscal + safety/justice (crime, jails, unrest, …).
+      if (typeof global.AtlasAPI.listViews === 'function') {
+        try {
+          for (const v of global.AtlasAPI.listViews())
+            out.push({ label: 'Lens: ' + v.label, hint: v.group === 'safety' ? 'safety lens' : 'state lens',
+              kind: 'layer', key: 'lens ' + v.label + ' ' + v.key,
+              run: () => { global.AtlasAPI.setView(v.key); close(); } });
+        } catch (e) {}
+      }
     }
     // States + districts
     let places = [];

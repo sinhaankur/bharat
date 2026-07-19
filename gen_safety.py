@@ -108,6 +108,37 @@ PRISON_NATIONAL = {
     "note": "As on 01-12-2023 (PSI 2022). Occupancy climbed to ~130% by 2021; 120.8% by 2023.",
 }
 
+# ── NCRB occupancy BANDS, all states/UTs (India Justice Report 2022 · PSI, Dec 2021) ──
+# The IJR maps every state/UT to a UNODC-style band. Exact per-state % isn't public
+# in a clean table, but the band IS — so we carry the band for ALL states (full
+# coverage) and layer the few exact figures (Delhi) on top. UNODC: >120% "critical",
+# >150% "extreme". band → (label, representative midpoint % for colouring).
+OCC_BANDS = {
+    "within":  ("Within limits (≤100%)", 90),
+    "high":    ("High (100–120%)", 110),
+    "veryhigh":("Very high (120–150%)", 135),
+    "severe":  ("Severe (150–185%)", 168),
+}
+OCC_BAND_BY_STATE = {
+    # Within limits (≤100%)
+    "Andaman & Nicobar": "within", "Andhra Pradesh": "within", "Arunachal Pradesh": "within",
+    "Chandigarh": "within", "Goa": "within", "Kerala": "within", "Lakshadweep": "within",
+    "Manipur": "within", "Mizoram": "within", "Nagaland": "within", "Odisha": "within",
+    "Puducherry": "within", "Punjab": "within", "Tamil Nadu": "within", "Tripura": "within",
+    # (Ladakh, Telangana also "within" but aren't ledger states here)
+    # High (100–120%)
+    "Assam": "high", "Dadra and Nagar Haveli": "high", "Daman and Diu": "high",
+    "Gujarat": "high", "Himachal Pradesh": "high", "Karnataka": "high",
+    "Rajasthan": "high", "West Bengal": "high",
+    # Very high (120–150%)
+    "Bihar": "veryhigh", "Chhattisgarh": "veryhigh", "Haryana": "veryhigh",
+    "Jammu & Kashmir": "veryhigh", "Jharkhand": "veryhigh", "Maharashtra": "veryhigh",
+    # Severe (150–185%)
+    "Delhi": "severe", "Madhya Pradesh": "severe", "Meghalaya": "severe",
+    "Sikkim": "severe", "Uttar Pradesh": "severe", "Uttarakhand": "severe",
+}
+OCC_SOURCE = "https://indiajusticereport.org"
+
 
 # ── State geographic area (km²) — for population-density patterns ─────────────
 # Surveyor General of India / Census figures (well-established, stable). Density is
@@ -192,6 +223,7 @@ def main():
     for st in states:
         rate = CRIME_RATE_2023.get(st)
         pr = PRISON_2022.get(st)
+        bandkey = OCC_BAND_BY_STATE.get(st)
         u = unrest.get(st, [])
         area = AREA_KM2.get(st)
         pop = pop_cr.get(st)
@@ -212,12 +244,19 @@ def main():
                 "jails": (pr[0] if pr else None),
                 "occupancy_pct": (pr[1] if pr else None),
                 "undertrials": (pr[2] if pr else None),
+                # Full-coverage NCRB occupancy band (IJR/PSI Dec-2021) for every state.
+                "occupancy_band": bandkey,
+                "occupancy_band_label": (OCC_BANDS[bandkey][0] if bandkey else None),
+                "occupancy_band_mid": (OCC_BANDS[bandkey][1] if bandkey else None),
                 "note": (pr[3] if pr else None),
-                "gap": pr is None or all(v is None for v in (pr[0], pr[1], pr[2])),
+                # gap only when we have NEITHER an exact figure NOR a band.
+                "gap": (pr is None or all(v is None for v in (pr[0], pr[1], pr[2]))) and not bandkey,
                 "year": 2022,
+                "band_year": 2021,
                 "source": NCRB_PRISON,
                 "source_pdf": NCRB_PRISON_PDF,
-                "source_name": "NCRB · Prison Statistics India 2022",
+                "band_source": OCC_SOURCE,
+                "source_name": "NCRB · Prison Statistics India (occupancy band: India Justice Report 2022)",
                 "source_tier": 1,
             },
             "unrest": {

@@ -77,6 +77,7 @@
     <div class="kb-search"><input id="kb-q" type="search" placeholder="Filter the whole catalog — a district, state, dimension, source…" aria-label="Filter catalog" /></div>
     <nav class="kb-toc">
       <a href="#dimensions">Dimensions</a>
+      <a href="#safety">Safety &amp; justice</a>
       <a href="#officials">Officials</a>
       <a href="#sources">Sources</a>
       <a href="#chains">Story chains</a>
@@ -103,15 +104,39 @@
       fetch("district-ledger.json").then(r => r.json()),
       fetch("fiscal-events.json").then(r => r.ok ? r.json() : {story_chains:[]}).catch(() => ({story_chains:[]})),
       fetch("officials.json").then(r => r.ok ? r.json() : {officials:[]}).catch(() => ({officials:[]})),
-    ]).then(([led, ev, off]) => {
+      fetch("safety.json").then(r => r.ok ? r.json() : null).catch(() => null),
+    ]).then(([led, ev, off, safety]) => {
       StatsBar?.mount?.("stats-bar", { ledger: led, events: ev, officials: off, updated: led?._meta?.as_of });
-      render(led, ev, off);
+      render(led, ev, off, safety);
       wireSearch();
     }).catch(e => document.getElementById("kb-body").innerHTML = `<p class="kb-empty">Load error: ${esc(e.message)}</p>`);
 
-    function render(led, ev, off) {
+    function render(led, ev, off, safety) {
       document.getElementById("kb-body").innerHTML =
-        dimensionsSection(led) + officialsSection(off) + sourcesSection(led) + chainsSection(ev) + placesSection(led);
+        dimensionsSection(led) + safetySection(safety) + officialsSection(off) + sourcesSection(led) + chainsSection(ev) + placesSection(led);
+    }
+
+    // Safety & justice catalog — NCRB crime + prison occupancy band + unrest, per
+    // state, each source-linked. Sourced-or-gap: a gap cell says so.
+    function safetySection(safety) {
+      if (!safety || !safety.states) return `<section class="kb-sec" id="safety"><h2>Safety &amp; justice</h2><p class="kb-empty">safety.json not loaded.</p></section>`;
+      const cov = safety._meta?.coverage || {};
+      const rows = Object.entries(safety.states).sort((a,b)=>a[0].localeCompare(b[0])).map(([sn, s]) => {
+        const cr = s.crime || {}, pr = s.prisons || {}, un = s.unrest || {};
+        const crime = cr.rate_per_lakh != null ? `${Math.round(cr.rate_per_lakh).toLocaleString("en-IN")}/lakh` : `<span class="kb-mono">gap</span>`;
+        const occ = pr.occupancy_pct != null ? `${pr.occupancy_pct.toFixed(0)}%` : (pr.occupancy_band_label || `<span class="kb-mono">gap</span>`);
+        const unr = un.news_mentions ? `${un.news_mentions} unrest item${un.news_mentions===1?"":"s"}` : "quiet";
+        const src = cr.source ? ` <a class="kb-src2" href="${esc(cr.source)}" target="_blank" rel="noopener" title="NCRB Crime in India">⧉</a>` : "";
+        const psrc = pr.source ? ` <a class="kb-src2" href="${esc(pr.source)}" target="_blank" rel="noopener" title="NCRB Prison Statistics">⧉</a>` : "";
+        return `<div class="kb-card kb-row" data-k="${esc(sn + " crime prison jail unrest safety")}">
+          <h3>${esc(sn)}</h3>
+          <p>🚨 Crime: <b>${crime}</b>${src}<br>
+          ⛓ Prisons: <b>${occ}</b>${psrc}<br>
+          ✊ Unrest: <b>${esc(unr)}</b></p></div>`;
+      }).join("");
+      return `<section class="kb-sec" id="safety"><h2>Safety &amp; justice (${Object.keys(safety.states).length} states)</h2>
+        <p class="kb-empty" style="padding:0 0 0.6rem">NCRB crime rate (Crime in India 2023) + prison occupancy (Prison Statistics India; band from India Justice Report where the exact % isn't public) + a news-derived unrest signal. Coverage: crime ${cov.crime_sourced||0}, prisons ${cov.prisons_sourced||0}. Unrest is tier-3 news attention, not an official count.</p>
+        <div class="kb-grid">${rows}</div></section>`;
     }
 
     // Officials accountability — sourced posting history + cited issues attached to

@@ -95,9 +95,10 @@
       shortLabel: '⛓ Jails',
       diverging: false,
       group: 'safety',
-      compute: (d) => safetyFor(d.stateName)?.prisons?.occupancy_pct ?? null,
+      // Prefer the exact figure; else the NCRB occupancy-band midpoint (full coverage).
+      compute: (d) => { const p = safetyFor(d.stateName)?.prisons; return p ? (p.occupancy_pct ?? p.occupancy_band_mid ?? null) : null; },
       fmt: v => v == null ? '—' : v.toFixed(0) + '%',
-      help: 'NCRB Prison Statistics India — prisoners lodged ÷ sanctioned capacity. Above 100% = overcrowded. Sparse per-state coverage (a gap where NCRB per-state occupancy is not yet transcribed).'
+      help: 'NCRB Prison Statistics India — prisoners lodged ÷ sanctioned capacity. Above 100% = overcrowded (UNODC: >120% critical, >150% extreme). Every state carries a sourced occupancy band; exact % shown where transcribed.'
     },
     unrest: {
       label: 'Protest / unrest — news mentions',
@@ -430,7 +431,11 @@
     const crimeVal = cr.rate_per_lakh != null
       ? `${Math.round(cr.rate_per_lakh).toLocaleString('en-IN')}<span class="sf-unit">/lakh</span>` : gapTag;
     const occVal = pr.occupancy_pct != null ? `${pr.occupancy_pct.toFixed(0)}%`
-      : (pr.jails != null ? `${pr.jails}<span class="sf-unit"> jails</span>` : gapTag);
+      : (pr.occupancy_band_mid != null ? `~${pr.occupancy_band_mid}%<span class="sf-unit"> band</span>`
+      : (pr.jails != null ? `${pr.jails}<span class="sf-unit"> jails</span>` : gapTag));
+    const occSub = pr.occupancy_pct != null ? 'occupancy of capacity'
+      : (pr.occupancy_band_label ? esc(pr.occupancy_band_label)
+      : (pr.jails != null ? 'facilities' : ''));
     const utVal = pr.undertrials != null ? `${(pr.undertrials / 1000).toFixed(0)}k<span class="sf-unit"> undertrials</span>` : '';
     const sp = leanSpread(un.recent);
     const unVal = un.news_mentions ? `${un.news_mentions}<span class="sf-unit"> item${un.news_mentions === 1 ? '' : 's'}</span>` : '<span class="sf-quiet">quiet</span>';
@@ -442,10 +447,10 @@
           <div class="value">${crimeVal}</div>
           <div class="sub">total cognizable / lakh</div>
         </div>
-        <div class="sf-cell ${(pr.occupancy_pct != null || pr.jails != null) ? '' : 'is-gap'}">
+        <div class="sf-cell ${(pr.occupancy_pct != null || pr.occupancy_band_mid != null || pr.jails != null) ? '' : 'is-gap'}">
           <div class="label">⛓ Prisons ${srcTag(pr)}</div>
           <div class="value">${occVal}</div>
-          <div class="sub">${pr.occupancy_pct != null ? 'occupancy of capacity' : (utVal ? utVal.replace(/<[^>]+>/g, ' ').trim() : 'facilities')}</div>
+          <div class="sub">${occSub}${pr.undertrials != null ? ` · ${utVal}` : ''}</div>
         </div>
         <div class="sf-cell ${un.news_mentions ? 'is-unrest' : ''}">
           <div class="label">✊ Unrest <span class="sf-tier">news</span></div>
@@ -3989,6 +3994,20 @@
       renderLayersPanel();
       return true;
     },
+    // Switch the India-level state lens (ownTax/crime/prisons/unrest/gsdp/…) — the
+    // VIEWS choropleth. Picking unrest also drops the hotspot pins (as the UI does).
+    setView(view) {
+      if (!view || !VIEWS[view]) return false;
+      ui.state.view = view;
+      root.querySelectorAll('.ind-btn').forEach(b => b.classList.toggle('active', b.dataset.view === view));
+      if (view === 'unrest' && unrestLayer && !ui.state.showUnrest) {
+        ui.state.showUnrest = true; unrestLayer.addTo(map); renderLayersPanel();
+      }
+      repaint();
+      return true;
+    },
+    // The available state lenses, for the command palette to index.
+    listViews() { return Object.entries(VIEWS).map(([key, v]) => ({ key, label: v.shortLabel || v.label, group: v.group || 'fiscal' })); },
     // Data the palette indexes: every state→district pair + the ledger handle.
     listPlaces() {
       const out = [];
