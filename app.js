@@ -3650,6 +3650,14 @@
       if (typeof StatsBar !== 'undefined' && document.getElementById('stats-bar')) {
         StatsBar.mount('stats-bar', { ledger: LEDGER, events: EVENTS, news: NEWS_FEED, officials: OFFICIALS, updated: (LEDGER && LEDGER._meta && LEDGER._meta.as_of) || null });
       }
+      // What's new: merge sourced data-updates (updates.json, fetched by the module)
+      // with the already-loaded moderated news into one time-sorted strip up top.
+      if (typeof WhatsNew !== 'undefined' && document.getElementById('whats-new')) {
+        try {
+          const upd = await grab('updates.json');
+          WhatsNew.mount('whats-new', { updates: upd, news: NEWS_FEED, max: 24 });
+        } catch (e) { /* strip is optional — never block the map */ }
+      }
       // Now-available features that need the ledger / bubbles:
       buildNewsBubbles();
       setupMapSearch();
