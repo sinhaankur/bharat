@@ -1903,3 +1903,71 @@ a:hover { border-color: var(--foreground); }
 .layer-story .ls-val { margin-left: auto; font-family: var(--font-mono); font-size: 10.5px; color: oklch(0.80 0.12 220); }
 .layer-story .ls-count { font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); margin-top: 2px; }
 .layer-story .ls-src { font-size: 9.5px; color: var(--muted-foreground); opacity: 0.8; margin-top: 6px; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   MONITOR LAYER — safety/justice (NCRB crime + prisons) + protest/unrest.
+   Ground-News-style lean spread bars, hotspot pins, and the view-group split.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* View-button group separator + the safety-lens buttons (red-tinted so the
+   "risk" lenses read distinctly from the fiscal ones). */
+.ind-group-sep { width: 1px; align-self: stretch; margin: 2px 3px; background: var(--border-strong); flex: none; }
+.ind-btn--safety.active { background: oklch(0.62 0.20 25); border-color: oklch(0.62 0.20 25); color: oklch(0.99 0 0); }
+.ind-btn--safety:not(.active) { border-color: oklch(0.45 0.10 25 / 0.6); color: oklch(0.80 0.09 32); }
+.ind-btn--safety:not(.active):hover { border-color: oklch(0.62 0.18 25); color: oklch(0.86 0.12 32); }
+
+/* Safety & justice strip in the state detail — mirrors .india-gov-strip. */
+.india-safety-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4rem; margin-bottom: 0.6rem; }
+.sf-cell { background: oklch(0.18 0 0); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.45rem 0.6rem; position: relative; }
+.sf-cell.is-gap { border-style: dashed; opacity: 0.82; }
+.sf-cell.is-unrest { border-color: oklch(0.55 0.16 30 / 0.7); background: oklch(0.20 0.03 30); }
+.sf-cell .label { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted-foreground); margin-bottom: 1px; display: flex; align-items: center; gap: 4px; }
+.sf-cell .value { font-family: var(--font-mono); font-size: 17px; font-weight: 600; color: var(--foreground); line-height: 1.1; }
+.sf-cell .sub { font-size: 9px; color: var(--muted-foreground); margin-top: 2px; display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+.sf-unit { font-size: 10px; font-weight: 400; color: var(--muted-foreground); }
+.sf-quiet { color: oklch(0.68 0.10 150); font-size: 14px; }
+.sf-gap { font-family: var(--font-mono); font-size: 11px; color: oklch(0.62 0.14 60); border: 1px dashed oklch(0.5 0.10 60); border-radius: 4px; padding: 0 5px; }
+.sf-year, .sf-tier { font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.05em; color: var(--muted-foreground); text-transform: none; }
+.sf-tier { border: 1px solid var(--border-strong); border-radius: 999px; padding: 0 5px; }
+.sf-spread { font-family: var(--font-mono); font-size: 8.5px; color: var(--muted-foreground); }
+.sf-note { margin-top: 0 !important; }
+
+/* Ground-News-style lean spread bar (left / centre / right / gov / unknown). */
+.lean-bar { display: inline-flex; width: 62px; height: 6px; border-radius: 3px; overflow: hidden; border: 1px solid oklch(1 0 0 / 0.12); vertical-align: middle; }
+.lean-bar .lb-seg { display: block; height: 100%; }
+.lb-left { background: oklch(0.62 0.17 25); }        /* red-left convention (India) */
+.lb-centre { background: oklch(0.72 0.02 250); }     /* grey */
+.lb-right { background: oklch(0.62 0.15 250); }       /* blue-right */
+.lb-gov { background: oklch(0.70 0.15 90); }          /* amber = state media */
+.lb-unknown { background: oklch(0.35 0.01 250); }
+
+/* Unrest hotspot pins + their tooltip. */
+.unrest-pin { animation: unrestPulse 2.4s ease-in-out infinite; }
+@keyframes unrestPulse { 0%,100% { stroke-opacity: 0.9; } 50% { stroke-opacity: 0.35; } }
+.leaflet-tooltip.unrest-tip { background: oklch(0.15 0.01 30 / 0.97); border: 1px solid oklch(0.5 0.14 30); color: var(--foreground); font-size: 11px; max-width: 260px; padding: 7px 9px; border-radius: 6px; box-shadow: 0 6px 20px oklch(0 0 0 / 0.5); }
+.leaflet-tooltip.unrest-tip::before { display: none; }
+.unrest-tip-h { font-weight: 600; color: oklch(0.84 0.13 40); margin-bottom: 4px; }
+.unrest-tip-spread { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
+.up-legend { font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); }
+.up-item { display: flex; align-items: flex-start; gap: 5px; font-size: 10px; color: oklch(0.86 0.01 250); line-height: 1.35; margin: 2px 0; }
+.up-lean { width: 8px; height: 8px; border-radius: 2px; flex: none; margin-top: 3px; }
+.up-left { background: oklch(0.62 0.17 25); } .up-centre { background: oklch(0.72 0.02 250); }
+.up-right { background: oklch(0.62 0.15 250); } .up-gov { background: oklch(0.70 0.15 90); }
+.up-unknown { background: oklch(0.4 0.01 250); }
+.up-foot { font-size: 8.5px; color: var(--muted-foreground); margin-top: 5px; font-style: italic; }
+
+/* Layers-panel: source micro-link + a hotspots section accent. */
+.mlp-src { margin-left: auto; font-size: 8px; }
+.mlp-src a { color: oklch(0.66 0.12 40); text-decoration: none; border-bottom: 1px dotted; }
+.mlp-src a:hover { color: oklch(0.80 0.13 40); }
+
+/* Patterns / relation block — wealth × crime × density percentile bars. */
+.india-pattern { display: flex; flex-direction: column; gap: 5px; margin-bottom: 0.4rem; }
+.pat-row { display: grid; grid-template-columns: 78px 1fr auto; align-items: center; gap: 8px; }
+.pat-lbl { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
+.pat-track { height: 9px; background: oklch(0.20 0.005 250); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; position: relative; }
+.pat-fill { height: 100%; border-radius: 999px; transition: width .3s ease; }
+.pat-gap { position: absolute; left: 6px; top: -3px; font-size: 9px; color: var(--muted-foreground); }
+.pat-val { font-family: var(--font-mono); font-size: 10.5px; color: var(--foreground); white-space: nowrap; text-align: right; }
+.pat-rank { color: var(--muted-foreground); font-size: 9px; }
+.pat-insight { font-size: 11px; line-height: 1.45; color: oklch(0.84 0.05 60); background: oklch(0.22 0.03 60 / 0.35); border-left: 2px solid oklch(0.66 0.13 60); border-radius: 0 4px 4px 0; padding: 5px 8px; margin: 4px 0 6px; }

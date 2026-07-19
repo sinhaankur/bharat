@@ -79,8 +79,45 @@
       compute: (d, ext) => d.fcShare,
       fmt: v => v.toFixed(2) + '%',
       help: 'Percent of the divisible pool allocated to this state under the active Finance Commission.'
+    },
+    // ── SAFETY / JUSTICE facets (state-level, from safety.json → NCRB) ──────────
+    crime: {
+      label: 'Crime rate (per lakh · NCRB 2023)',
+      shortLabel: '🚨 Crime',
+      diverging: false,
+      group: 'safety',
+      compute: (d) => safetyFor(d.stateName)?.crime?.rate_per_lakh ?? null,
+      fmt: v => v == null ? '—' : Math.round(v).toLocaleString('en-IN') + ' /lakh',
+      help: 'NCRB Crime in India 2023 — total cognizable crimes registered per lakh population. Higher can mean more crime OR better reporting; read alongside chargesheeting rates.'
+    },
+    prisons: {
+      label: 'Prison occupancy (% of capacity · NCRB)',
+      shortLabel: '⛓ Jails',
+      diverging: false,
+      group: 'safety',
+      compute: (d) => safetyFor(d.stateName)?.prisons?.occupancy_pct ?? null,
+      fmt: v => v == null ? '—' : v.toFixed(0) + '%',
+      help: 'NCRB Prison Statistics India — prisoners lodged ÷ sanctioned capacity. Above 100% = overcrowded. Sparse per-state coverage (a gap where NCRB per-state occupancy is not yet transcribed).'
+    },
+    unrest: {
+      label: 'Protest / unrest — news mentions',
+      shortLabel: '✊ Unrest',
+      diverging: false,
+      group: 'safety',
+      compute: (d) => { const n = safetyFor(d.stateName)?.unrest?.news_mentions; return n ? n : null; },
+      fmt: v => v == null ? '—' : v + (v === 1 ? ' item' : ' items'),
+      help: 'Recent protest/strike/clash items anchored to the state in our aggregated news feed. A NEWS-ATTENTION signal (tier-3), not an official incident count.'
     }
   };
+  // State-level safety block (NCRB crime + prisons + derived unrest). Null-safe.
+  function safetyFor(name) { return SAFETY?.states?.[name] || null; }
+  // safety.json loads async (off the first-paint path); when it lands, repaint if a
+  // safety facet is already selected and refresh any open detail + the unrest pins.
+  function refreshSafetyView() {
+    if (VIEWS[ui.state.view]?.group === 'safety') { try { repaint(); } catch (e) {} }
+    if (ui.state.selected && !ui.state.drillState) { try { renderDetail(ui.state.selected); } catch (e) {} }
+    try { buildUnrestHotspots(); } catch (e) {}
+  }
 
   // Source-of-truth registry — surfaced as `↗ Source` links next to each metric.
   const SOURCES = {
@@ -97,17 +134,21 @@
     ias:            { name: 'DoPT Civil List',        url: 'https://dopt.gov.in/' },
     employees:      { name: 'State finance reports',  url: 'https://doe.gov.in/' },
     districts:      { name: 'Datameet · Census 2011 boundaries', url: 'https://github.com/geohacker/india' },
-    population:     { name: 'Census of India 2011',   url: 'https://censusindia.gov.in' }
+    population:     { name: 'Census of India 2011',   url: 'https://censusindia.gov.in' },
+    crime:          { name: 'NCRB · Crime in India 2023', url: 'https://www.ncrb.gov.in/en/crime-in-india' },
+    prisons:        { name: 'NCRB · Prison Statistics India', url: 'https://www.ncrb.gov.in/en/prison-statistics-india' },
+    unrest:         { name: 'Derived from the aggregated news feed (tier-3)', url: 'references.html' }
   };
 
-  const ui = { state: { view: 'ownTax', yearIdx: 9, selected: null, hover: null, mode: 'states', drillState: null, drillDistrict: null, districtMode: 'population', showNews: true, showHazards: true, showHeat: false, fillAlpha: 1 } };
+  const ui = { state: { view: 'ownTax', yearIdx: 9, selected: null, hover: null, mode: 'states', drillState: null, drillDistrict: null, districtMode: 'population', showNews: true, showHazards: true, showHeat: false, showUnrest: false, fillAlpha: 1 } };
 
   let DATA = null, EXTRAS = null, GEO = null, DISTRICT_POP = null, BLOCKS = null, LEDGER = null, PAY = null;
-  let EVENTS = null, NEWS = null, BUBBLES = null, NEWS_FEED = null, OFFICIALS = null;
+  let EVENTS = null, NEWS = null, BUBBLES = null, NEWS_FEED = null, OFFICIALS = null, SAFETY = null;
   const newsByState = new Map();      // "State" → [items]
   const newsByDistrict = new Map();   // "State|District" → [items]
   let newsBubbleLayer = null;
   let hazardLayer = null;   // clickable hazard/zoning markers at district centroids
+  let unrestLayer = null;   // protest/unrest hotspot pins (per state, from safety.json)
   let eventHeatLayer = null;   // news/event density heatmap (event-heatmap.js)
   let map = null, geoLayer = null, districtLayer = null;
   let mapLayers = null;   // { basemaps, labels, hillshade, current } for the unified panel
@@ -377,6 +418,107 @@
     return v.toFixed(1);
   }
 
+  // Safety / justice strip for the state detail — NCRB crime + prisons + a live
+  // unrest read with its Ground-News-style lean spread. Gap-honest: a missing
+  // NCRB figure shows "—" with a "gap" tag, never a guess.
+  function renderSafetyStrip(name) {
+    const sf = safetyFor(name);
+    if (!sf) return '';
+    const srcTag = (o) => o?.source ? `<a class="src-link" href="${esc(o.source)}" target="_blank" rel="noopener" title="Source: ${esc(o.source_name || 'source')}">↗</a>` : '';
+    const gapTag = '<span class="sf-gap" title="No NCRB figure transcribed for this state yet — an honest gap, not zero">gap</span>';
+    const cr = sf.crime || {}, pr = sf.prisons || {}, un = sf.unrest || {};
+    const crimeVal = cr.rate_per_lakh != null
+      ? `${Math.round(cr.rate_per_lakh).toLocaleString('en-IN')}<span class="sf-unit">/lakh</span>` : gapTag;
+    const occVal = pr.occupancy_pct != null ? `${pr.occupancy_pct.toFixed(0)}%`
+      : (pr.jails != null ? `${pr.jails}<span class="sf-unit"> jails</span>` : gapTag);
+    const utVal = pr.undertrials != null ? `${(pr.undertrials / 1000).toFixed(0)}k<span class="sf-unit"> undertrials</span>` : '';
+    const sp = leanSpread(un.recent);
+    const unVal = un.news_mentions ? `${un.news_mentions}<span class="sf-unit"> item${un.news_mentions === 1 ? '' : 's'}</span>` : '<span class="sf-quiet">quiet</span>';
+    return `
+      <div class="india-detail-section-title">🛡 Safety &amp; justice <span class="sf-year">NCRB 2023 · unrest live</span></div>
+      <div class="india-safety-strip">
+        <div class="sf-cell ${cr.rate_per_lakh != null ? '' : 'is-gap'}">
+          <div class="label">🚨 Crime rate ${srcTag(cr)}</div>
+          <div class="value">${crimeVal}</div>
+          <div class="sub">total cognizable / lakh</div>
+        </div>
+        <div class="sf-cell ${(pr.occupancy_pct != null || pr.jails != null) ? '' : 'is-gap'}">
+          <div class="label">⛓ Prisons ${srcTag(pr)}</div>
+          <div class="value">${occVal}</div>
+          <div class="sub">${pr.occupancy_pct != null ? 'occupancy of capacity' : (utVal ? utVal.replace(/<[^>]+>/g, ' ').trim() : 'facilities')}</div>
+        </div>
+        <div class="sf-cell ${un.news_mentions ? 'is-unrest' : ''}">
+          <div class="label">✊ Unrest <span class="sf-tier">news</span></div>
+          <div class="value">${unVal}</div>
+          <div class="sub">${sp.total ? `${leanBarHTML(sp)} <span class="sf-spread">${sp.left}L·${sp.centre}C·${sp.right}R${sp.gov ? `·${sp.gov}gov` : ''}</span>` : 'no recent protest news'}</div>
+        </div>
+      </div>
+      ${cr.note ? `<p class="india-caveat sf-note">${esc(cr.note)}</p>` : ''}`;
+  }
+
+  // PATTERN / RELATION view — where this state sits on wealth × crime × density,
+  // ranked among all states, with a one-line read of the pattern. Uses safety.json
+  // (income, crime, density). Honest: a metric with a gap is shown as "—".
+  function renderPatternBlock(name) {
+    if (!SAFETY) return '';
+    const rows = Object.entries(SAFETY.states || {});
+    // percentile rank (0=lowest, 1=highest) of `val` among all non-null values.
+    const pctRank = (val, pick) => {
+      if (val == null) return null;
+      const vals = rows.map(([, s]) => pick(s)).filter(v => v != null).sort((a, b) => a - b);
+      if (!vals.length) return null;
+      const below = vals.filter(v => v < val).length;
+      return below / (vals.length - 1 || 1);
+    };
+    const sf = safetyFor(name);
+    if (!sf) return '';
+    const income = sf.wealth?.percapita_income_inr;
+    const crime = sf.crime?.rate_per_lakh;
+    const density = sf.density?.per_km2;
+    const dims = [
+      { key: 'wealth', label: '₹ Wealth', val: income, fmt: v => '₹' + (v / 1000).toFixed(0) + 'k', pick: s => s.wealth?.percapita_income_inr, hue: 150, hint: 'per-capita income' },
+      { key: 'crime', label: '🚨 Crime', val: crime, fmt: v => Math.round(v).toLocaleString('en-IN'), pick: s => s.crime?.rate_per_lakh, hue: 25, hint: 'per lakh' },
+      { key: 'density', label: '👥 Density', val: density, fmt: v => Math.round(v).toLocaleString('en-IN'), pick: s => s.density?.per_km2, hue: 260, hint: 'people / km²' },
+    ];
+    const bars = dims.map(d => {
+      const p = pctRank(d.val, d.pick);
+      const pct = p == null ? 0 : Math.round(p * 100);
+      const col = `oklch(0.70 0.15 ${d.hue})`;
+      return `
+        <div class="pat-row">
+          <div class="pat-lbl">${d.label}</div>
+          <div class="pat-track">${d.val == null ? '<span class="pat-gap">—</span>' :
+            `<div class="pat-fill" style="width:${pct}%;background:${col}"></div>`}</div>
+          <div class="pat-val">${d.val == null ? '<span class="sf-gap">gap</span>' : d.fmt(d.val)}<span class="pat-rank">${p == null ? '' : ' · ' + ordinalPct(p)}</span></div>
+        </div>`;
+    }).join('');
+    // One-line pattern read: contrast wealth vs crime vs density percentiles.
+    const insight = patternInsight(name, pctRank(income, s => s.wealth?.percapita_income_inr),
+      pctRank(crime, s => s.crime?.rate_per_lakh), pctRank(density, s => s.density?.per_km2));
+    return `
+      <div class="india-detail-section-title">📐 Patterns <span class="sf-year">rank among states</span></div>
+      <div class="india-pattern">${bars}</div>
+      ${insight ? `<p class="pat-insight">${esc(insight)}</p>` : ''}
+      <p class="india-caveat sf-note">Bars = percentile rank across states (right = highest). Wealth/crime/density are independent axes — high crime rate can reflect fuller reporting, not only more crime.</p>`;
+  }
+  function ordinalPct(p) {
+    const pc = Math.round(p * 100);
+    if (pc >= 80) return 'top ' + (100 - pc) + '%';
+    if (pc <= 20) return 'bottom ' + pc + '%';
+    return pc + 'th pct';
+  }
+  // A careful, non-accusatory one-liner about the wealth/crime/density combo.
+  function patternInsight(name, w, c, d) {
+    if (w == null && c == null) return '';
+    const hi = x => x != null && x >= 0.7, lo = x => x != null && x <= 0.3;
+    if (hi(w) && hi(c)) return `${name}: high income AND high recorded crime rate — often a sign of stronger reporting/urbanisation, not simply "more crime".`;
+    if (lo(w) && lo(c)) return `${name}: both low income and low recorded crime — low rates can mask under-reporting, so read with care.`;
+    if (hi(d) && hi(c)) return `${name}: dense and high recorded crime — density and reporting infrastructure both tend to lift the rate.`;
+    if (hi(w) && lo(c)) return `${name}: relatively wealthy with a lower recorded crime rate among states.`;
+    if (lo(w) && hi(c)) return `${name}: lower income but a higher recorded crime rate — worth reading against chargesheeting rates.`;
+    return '';
+  }
+
   function renderDetail(name) {
     const detail = $ind('#india-detail');
     const r = rowFor(name, ui.state.yearIdx);
@@ -479,11 +621,17 @@
 
       ${deptBlock}
 
+      ${renderSafetyStrip(name)}
+
+      ${renderPatternBlock(name)}
+
       <div class="india-detail-section-title">Pros &amp; Cons</div>
       <div class="india-proscons">
         <div class="india-pc pros"><h4>Pros</h4><ul>${s.pros.map(p => `<li>${esc(p)}</li>`).join('')}</ul></div>
         <div class="india-pc cons"><h4>Cons</h4><ul>${s.cons.map(p => `<li>${esc(p)}</li>`).join('')}</ul></div>
       </div>
+
+      ${renderLocationNews(name, null)}
     `;
     drawSpark(s, ui.state.yearIdx);
     $ind('#india-back')?.addEventListener('click', deselectState);
@@ -2612,6 +2760,11 @@
         $$ind('.ind-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         ui.state.view = btn.dataset.view;
+        // Picking the Unrest lens auto-drops the hotspot pins on the map so the
+        // colour choropleth and the point hotspots reinforce each other.
+        if (ui.state.view === 'unrest' && unrestLayer && !ui.state.showUnrest) {
+          ui.state.showUnrest = true; unrestLayer.addTo(map); renderLayersPanel();
+        }
         repaint();
       });
     });
@@ -2917,6 +3070,8 @@
       title: 'Hillshade + per-pixel elevation tint + elevation facet — the physical terrain in one view' },
     money: { label: '₹ Money', base: 'Dark map', overlays: { hillshade: false, elevTint: false, rain: false, clouds: false }, mode: 'money',
       title: 'Per-district money flow (drill into a state first)' },
+    safety: { label: '🚨 Safety', base: 'Dark map', overlays: { hillshade: false, elevTint: false, rain: false, clouds: false }, stateView: 'crime', unrest: true,
+      title: 'NCRB crime rate colouring every state + live protest/unrest hotspot pins (Ground-News-style lean spread on each)' },
   };
   function applyMapPreset(key) {
     const p = MAP_PRESETS[key];
@@ -2927,6 +3082,16 @@
     if (p.hazards != null && hazardLayer) {
       ui.state.showHazards = p.hazards;
       if (p.hazards && ui.state.drillState) hazardLayer.addTo(map); else hazardLayer.remove();
+    }
+    // Safety-style presets drive the India-level VIEW (state choropleth) + hotspots.
+    if (p.stateView && VIEWS[p.stateView]) {
+      ui.state.view = p.stateView;
+      root.querySelectorAll('.ind-btn').forEach(b => b.classList.toggle('active', b.dataset.view === p.stateView));
+      repaint();
+    }
+    if (p.unrest != null && unrestLayer) {
+      ui.state.showUnrest = p.unrest;
+      if (p.unrest) unrestLayer.addTo(map); else unrestLayer.remove();
     }
     if (p.mode) {
       // money/population etc. only exist once drilled; geography works at both levels
@@ -3001,15 +3166,18 @@
       <div class="mlp-sec-h">Base map</div>
       <div class="mlp-bases">${baseBtns}</div>
       ${hdHint}
-      <div class="mlp-sec-h">Overlays</div>
+      <div class="mlp-sec-h">Hotspots &amp; pins</div>
+      <label class="mlp-check"><input type="checkbox" id="mlp-news" ${ui.state.showNews ? 'checked' : ''} ${newsBubbleLayer ? '' : 'disabled'}> 📰 News bubbles${newsBubbleLayer ? '' : ' <span class="mlp-dim">(loading…)</span>'}</label>
+      <label class="mlp-check"><input type="checkbox" id="mlp-unrest" ${ui.state.showUnrest ? 'checked' : ''} ${unrestLayer ? '' : 'disabled'}> ✊ Protest / unrest hotspots${unrestLayer ? ' <span class="mlp-src"><a href="references.html" title="Derived from the aggregated news feed (tier-3)">news</a></span>' : ' <span class="mlp-dim">(loading…)</span>'}</label>
+      <label class="mlp-check"><input type="checkbox" id="mlp-heat" ${ui.state.showHeat ? 'checked' : ''} ${eventHeatLayer ? '' : 'disabled'}> 🔥 News &amp; event heatmap${eventHeatLayer ? '' : ' <span class="mlp-dim">(loading…)</span>'}</label>
+      <label class="mlp-check"><input type="checkbox" id="mlp-haz" ${ui.state.showHazards ? 'checked' : ''} ${ui.state.drillState ? '' : 'disabled'}> ⚠ Hazard &amp; zoning pins${ui.state.drillState ? '' : ' <span class="mlp-dim">(drill into a state)</span>'}</label>
+      <label class="mlp-check"><input type="checkbox" id="mlp-sub" ${subOn ? 'checked' : ''} ${ui.state.drillDistrict ? '' : 'disabled'}> Sub-districts (taluk/tehsil)</label>
+      <div class="mlp-sec-h">Terrain &amp; labels</div>
       <label class="mlp-check"><input type="checkbox" id="mlp-hill" ${hillOn ? 'checked' : ''}> Topography (hillshade)</label>
       <label class="mlp-check"><input type="checkbox" id="mlp-elev" ${elevOn ? 'checked' : ''}> Elevation tint (m above sea)</label>
       ${elevOn ? `<div class="mlp-elev-legend">${elevTintLegend()}</div>` : ''}
       ${(elevOn || hillOn) && cur === 'Terrain' ? `<div class="mlp-tip">Tip: elevation tint / hillshade read best over the <b>Dark</b> or <b>Satellite</b> base (Terrain already shades relief).</div>` : ''}
       <label class="mlp-check"><input type="checkbox" id="mlp-labels" ${labelsOn ? 'checked' : ''}> Place labels</label>
-      <label class="mlp-check"><input type="checkbox" id="mlp-haz" ${ui.state.showHazards ? 'checked' : ''} ${ui.state.drillState ? '' : 'disabled'}> ⚠ Hazard &amp; zoning pins${ui.state.drillState ? '' : ' <span class="mlp-dim">(drill into a state)</span>'}</label>
-      <label class="mlp-check"><input type="checkbox" id="mlp-heat" ${ui.state.showHeat ? 'checked' : ''} ${eventHeatLayer ? '' : 'disabled'}> 🔥 News &amp; event heatmap${eventHeatLayer ? '' : ' <span class="mlp-dim">(loading…)</span>'}</label>
-      <label class="mlp-check"><input type="checkbox" id="mlp-sub" ${subOn ? 'checked' : ''} ${ui.state.drillDistrict ? '' : 'disabled'}> Sub-districts (taluk/tehsil)</label>
       <div class="mlp-sec-h">Live weather <span class="mlp-live">● live</span></div>
       <label class="mlp-check"><input type="checkbox" id="mlp-rain" ${rainOn ? 'checked' : ''}> Rain radar <span class="mlp-wx-time" id="mlp-wx-time">${esc(wxAgeLabel())}</span></label>
       <label class="mlp-check"><input type="checkbox" id="mlp-clouds" ${cloudsOn ? 'checked' : ''}> Clouds (infrared)</label>`;
@@ -3045,6 +3213,19 @@
       ui.state.showHeat = e.target.checked;
       if (!eventHeatLayer) return;
       if (e.target.checked) eventHeatLayer.addTo(map); else eventHeatLayer.remove();
+    };
+    const unrestEl = panel.querySelector('#mlp-unrest');
+    if (unrestEl) unrestEl.onchange = e => {
+      ui.state.showUnrest = e.target.checked;
+      if (!unrestLayer) return;
+      if (e.target.checked) unrestLayer.addTo(map); else unrestLayer.remove();
+    };
+    const newsEl = panel.querySelector('#mlp-news');
+    if (newsEl) newsEl.onchange = e => {
+      ui.state.showNews = e.target.checked;
+      if (!newsBubbleLayer) return;
+      if (e.target.checked) newsBubbleLayer.addTo(map); else newsBubbleLayer.remove();
+      renderNewsToggle();   // keep the standalone 📰 button in sync
     };
     panel.querySelector('#mlp-rain').onchange = e => { clearPreset(); toggleOverlay('rain', e.target.checked); };
     panel.querySelector('#mlp-clouds').onchange = e => { clearPreset(); toggleOverlay('clouds', e.target.checked); };
@@ -3243,6 +3424,71 @@
     renderLayersPanel();   // reflect news/heat toggles now data's here
   }
 
+  // Ground-News-style lean bucketing: collapse the fine lean vocab to L / C / R / gov
+  // so a story's coverage spread reads at a glance. state_media → its own bucket.
+  function leanBucket(lean) {
+    if (!lean) return 'unknown';
+    if (lean === 'state_media') return 'gov';
+    if (lean === 'left' || lean === 'centre-left') return 'left';
+    if (lean === 'right' || lean === 'centre-right') return 'right';
+    if (lean === 'centre') return 'centre';
+    return 'unknown';
+  }
+  // Count a set of news items into a lean spread {left,centre,right,gov,unknown,total}.
+  function leanSpread(items) {
+    const s = { left: 0, centre: 0, right: 0, gov: 0, unknown: 0, total: 0 };
+    for (const it of items || []) { s[leanBucket(it.outlet_lean)]++; s.total++; }
+    return s;
+  }
+  // A tiny inline L/C/R bar (Ground-News-style) for a lean spread. Returns HTML.
+  function leanBarHTML(sp, { height = 6 } = {}) {
+    if (!sp || !sp.total) return '';
+    const seg = (n, cls) => n ? `<span class="lb-seg lb-${cls}" style="flex:${n}" title="${n} ${cls}"></span>` : '';
+    return `<span class="lean-bar" style="height:${height}px">${seg(sp.left, 'left')}${seg(sp.centre, 'centre')}${seg(sp.right, 'right')}${seg(sp.gov, 'gov')}${seg(sp.unknown, 'unknown')}</span>`;
+  }
+
+  // UNREST HOTSPOTS — protest/strike/clash pins per state, from safety.json (derived
+  // from the news feed). Pin size = mention count; colour = intensity; the tooltip
+  // shows the Ground-News-style L/C/R coverage spread so bias is visible on the map.
+  // Placed at the state polygon's centre (from pathByName) so they show at India level.
+  function buildUnrestHotspots() {
+    if (unrestLayer) { unrestLayer.remove(); unrestLayer = null; }
+    if (!map || !SAFETY) return;
+    unrestLayer = L.layerGroup();
+    const entries = Object.entries(SAFETY.states || {})
+      .map(([st, s]) => [st, s.unrest]).filter(([, u]) => u && u.news_mentions > 0);
+    if (!entries.length) { renderLayersPanel(); return; }
+    const maxN = Math.max(...entries.map(([, u]) => u.news_mentions), 1);
+    for (const [st, u] of entries) {
+      const layer = pathByName.get(st);
+      let c = null;
+      try { c = layer && layer.getBounds ? layer.getBounds().getCenter() : null; } catch (e) {}
+      if (!c) continue;
+      const t = u.news_mentions / maxN;
+      const r = 8 + 16 * Math.sqrt(t);
+      const col = `oklch(${0.72 - 0.10 * t} ${0.16 + 0.06 * t} ${40 - 15 * t})`;  // amber→red
+      const sp = leanSpread(u.recent);
+      const m = L.circleMarker([c.lat, c.lng], {
+        radius: r, color: col, weight: 1.5, fillColor: col, fillOpacity: 0.32,
+        className: 'unrest-pin', pane: 'markerPane',
+      });
+      const topItems = (u.recent || []).slice(0, 3).map(n =>
+        `<div class="up-item"><span class="up-lean up-${leanBucket(n.outlet_lean)}"></span>${esc((n.headline || '').slice(0, 70))}</div>`).join('');
+      m.bindTooltip(
+        `<div class="unrest-tip-h">✊ ${esc(st)} — ${u.news_mentions} unrest mention${u.news_mentions === 1 ? '' : 's'}</div>` +
+        `<div class="unrest-tip-spread">${leanBarHTML(sp, { height: 7 })}` +
+        `<span class="up-legend">${sp.left}L · ${sp.centre}C · ${sp.right}R${sp.gov ? ` · ${sp.gov} gov` : ''}</span></div>` +
+        topItems +
+        `<div class="up-foot">news-attention signal (tier-3) · click to open the state</div>`,
+        { direction: 'top', className: 'unrest-tip', sticky: false }
+      );
+      m.on('click', () => selectState(st, true));
+      m.addTo(unrestLayer);
+    }
+    if (ui.state.showUnrest) unrestLayer.addTo(map);
+    renderLayersPanel();
+  }
+
   // Polygon centroid (average of the outer ring vertices) — good enough to place a
   // marker inside a district. Handles Polygon + MultiPolygon (largest ring).
   function featureCentroid(feature) {
@@ -3380,10 +3626,10 @@
     if (_ledgerPromise) return _ledgerPromise;
     _ledgerPromise = (async () => {
       const grab = async (url, opt) => { try { const r = await fetch(url); return r.ok ? await r.json() : null; } catch (e) { return null; } };
-      const [ledger, blocks, pay, events, news, bubbles, feed, officials] = await Promise.all([
+      const [ledger, blocks, pay, events, news, bubbles, feed, officials, safety] = await Promise.all([
         grab('district-ledger.json'), grab('india-blocks.json'), grab('pay-scales.json'),
         grab('fiscal-events.json'), grab('approved-news.json'), grab('news-bubbles.json'),
-        grab('news-feed.json'), grab('officials.json'),
+        grab('news-feed.json'), grab('officials.json'), grab('safety.json'),
       ]);
       if (ledger) LEDGER = ledger; else console.warn('district-ledger.json missing — money-flow ledger will be skipped');
       if (blocks) BLOCKS = blocks;
@@ -3393,6 +3639,7 @@
       if (bubbles) BUBBLES = bubbles;
       if (feed) { NEWS_FEED = feed; indexNewsByLocation(feed); }
       if (officials) OFFICIALS = officials;
+      if (safety) { SAFETY = safety; refreshSafetyView(); }   // crime/prisons/unrest state facets
       // Live stats + source-transparency bar (WorldMonitor-style) — computed from
       // the real loaded data, so the sourced-or-gap discipline is visible up top.
       if (typeof StatsBar !== 'undefined' && document.getElementById('stats-bar')) {

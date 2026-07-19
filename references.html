@@ -296,6 +296,45 @@
     </ul>
   </section>
 
+  <section class="refs-section">
+    <h2><span class="num">09</span>Safety &amp; justice — crime, prisons &amp; unrest</h2>
+    <div class="sec-sub">NCRB state figures (sourced-or-gap) + a news-derived unrest signal</div>
+    <ul class="refs-list">
+      <li>
+        <span class="src-name">NCRB — Crime in India 2023</span>
+        <span class="src-meta">National Crime Records Bureau · Ministry of Home Affairs · annual</span>
+        <div class="src-note">State/UT total cognizable crime rate per lakh population (the "🚨 Crime" lens). A higher rate can reflect fuller reporting as much as more crime — read alongside chargesheeting rates. States with no NCRB figure transcribed are shown as an explicit gap, never guessed. <a href="https://www.ncrb.gov.in/en/crime-in-india" target="_blank" rel="noopener">ncrb.gov.in</a> · <a href="https://www.data.gov.in/catalog/crime-india-2022" target="_blank" rel="noopener">data.gov.in</a></div>
+      </li>
+      <li>
+        <span class="src-name">NCRB — Prison Statistics India (PSI) 2022</span>
+        <span class="src-meta">National Crime Records Bureau · annual</span>
+        <div class="src-note">Number of jails, occupancy (% of sanctioned capacity), and undertrial counts (the "⛓ Jails" lens). National: ~5.7 lakh prisoners, 131% occupancy, &gt;75% undertrials. Per-state occupancy is only partly transcribed — the rest is a gap to top up from the NCRB PDF / OGD CSV. <a href="https://www.ncrb.gov.in/en/prison-statistics-india" target="_blank" rel="noopener">ncrb.gov.in</a> · <a href="https://www.data.gov.in/catalog/prison-statistics-india-psi-2022" target="_blank" rel="noopener">data.gov.in</a></div>
+      </li>
+      <li>
+        <span class="src-name">Protest / unrest hotspots — derived signal</span>
+        <span class="src-meta">this repo's aggregated news feed · tier-3</span>
+        <div class="src-note">The "✊ Unrest" pins count recent protest/strike/clash items anchored to each state in our news feed, and show a Ground-News-style left/centre/right coverage spread. This is a <em>news-attention</em> signal, <strong>not</strong> an official incident count. Population density (people/km²) uses Survey of India / Census areas ÷ Census-based population. <a href="https://surveyofindia.gov.in" target="_blank" rel="noopener">surveyofindia.gov.in</a></div>
+      </li>
+    </ul>
+  </section>
+
+  <section class="refs-section">
+    <h2><span class="num">10</span>News aggregation &amp; media-bias labels</h2>
+    <div class="sec-sub">Link-don't-republish · third-party lean, never our verdict</div>
+    <ul class="refs-list">
+      <li>
+        <span class="src-name">Aggregated RSS / public feeds</span>
+        <span class="src-meta">PIB, DD News (Doordarshan), The Hindu, Indian Express, NDTV, News18, Zee News, Mint, OpIndia, Swarajya + regional-language editions</span>
+        <div class="src-note">We store a <em>link + short snippet + attribution</em> only — never full article text. Feeds span state media, centre-left, centre, centre-right and right so the coverage spread is legible. Every source's endpoint is recorded in <code>feeds.json</code> with a verification date. <a href="https://github.com/sinhaankur/india-fiscal-map/blob/main/feeds.json" target="_blank" rel="noopener">feeds.json</a></div>
+      </li>
+      <li>
+        <span class="src-name">Media-bias / lean labels</span>
+        <span class="src-meta">third-party aggregation · <code>lean_source</code> recorded per outlet</span>
+        <div class="src-note">Each outlet's left/centre/right label is an aggregation of published third-party media-bias assessments (with the reasoning recorded in <code>lean_source</code>), <strong>not</strong> our editorial judgement. Government broadcasters (PIB, DD News) are labelled <em>state media</em>. Inclusion is for spectrum balance and blindspot detection, never endorsement.</div>
+      </li>
+    </ul>
+  </section>
+
   <div class="refs-caveats">
     <h3>Caveats &amp; methodology</h3>
     <p><em>Per-state per-year figures are approximations within ±10%</em> for GSDP, own tax, devolution, grants, and contribution. They are smoothed for year-on-year readability rather than reported to the exact rupee. Finance Commission horizontal shares are exact, sourced directly from the FC final reports.</p>

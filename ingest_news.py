@@ -32,7 +32,10 @@ LEDGER = "district-ledger.json"
 SCRIPT_ALIASES = "script-aliases.json"
 OUT = "news-feed.json"
 SNIPPET_WORDS = 40
-USER_AGENT = "india-fiscal-map news aggregator (+https://github.com/sinhaankur/india-fiscal-map)"
+# Some government feeds (PIB) 403 a bare bot UA, so present as a normal browser while
+# still declaring the project in a comment-style suffix for auditability/politeness.
+USER_AGENT = ("Mozilla/5.0 (compatible; india-fiscal-map news aggregator/1.0; "
+              "+https://github.com/sinhaankur/india-fiscal-map)")
 
 
 def load_json(path, default=None):
@@ -132,9 +135,32 @@ def fetch(url):
         return r.read()
 
 
+def _clean_xml_bytes(raw):
+    """Some real-world feeds have a BOM or stray whitespace/newlines before the
+    `<?xml …?>` declaration (e.g. DD News ships a leading CRLF), which strict
+    ElementTree rejects. Trim to the first '<' so the declaration/root is at the
+    start of the entity. Returns bytes."""
+    if isinstance(raw, bytes):
+        raw = raw.lstrip(b"\xef\xbb\xbf").lstrip()  # strip UTF-8 BOM + whitespace
+        i = raw.find(b"<")
+        return raw[i:] if i > 0 else raw
+    raw = raw.lstrip("﻿").lstrip()
+    i = raw.find("<")
+    return raw[i:] if i > 0 else raw
+
+
 def parse_rss(raw):
-    """Yield (title, link, description, pubdate) from RSS or Atom."""
-    root = ET.fromstring(raw)
+    """Yield (title, link, description, pubdate) from RSS or Atom.
+
+    Tolerant of leading BOM/whitespace. If strict XML parsing fails (a few feeds
+    ship malformed markup), fall back to a permissive item-level regex extractor
+    so one bad feed doesn't drop the whole run."""
+    raw = _clean_xml_bytes(raw)
+    try:
+        root = ET.fromstring(raw)
+    except ET.ParseError:
+        yield from _parse_rss_lenient(raw)
+        return
     # RSS 2.0
     for item in root.iter("item"):
         yield (
@@ -153,6 +179,38 @@ def parse_rss(raw):
             (link or "").strip(),
             entry.findtext(ns + "summary") or "",
             (entry.findtext(ns + "updated") or "").strip(),
+        )
+
+
+def _field(block, *tags):
+    """First matching tag's inner text from an item/entry block (any of *tags)."""
+    for tag in tags:
+        m = re.search(rf"<{tag}[^>]*>(.*?)</{tag}>", block, re.S | re.I)
+        if m:
+            txt = m.group(1)
+            cd = re.search(r"<!\[CDATA\[(.*?)\]\]>", txt, re.S)
+            return (cd.group(1) if cd else txt).strip()
+    return ""
+
+
+def _parse_rss_lenient(raw):
+    """Permissive fallback for feeds whose XML is malformed enough to break
+    ElementTree (unescaped ampersands, a stray tag, etc.). We only ever pull
+    title/link/description/date, so a regex over each <item>…</item> block is
+    safe and can't execute anything. Best-effort — skips items with no link."""
+    text = raw.decode("utf-8", "replace") if isinstance(raw, bytes) else raw
+    blocks = re.findall(r"<item[^>]*>(.*?)</item>", text, re.S | re.I) \
+        or re.findall(r"<entry[^>]*>(.*?)</entry>", text, re.S | re.I)
+    for block in blocks:
+        link = _field(block, "link", "guid")
+        if not link:
+            m = re.search(r'<link[^>]*href="([^"]+)"', block, re.I)  # Atom-style
+            link = m.group(1).strip() if m else ""
+        yield (
+            _field(block, "title"),
+            link,
+            _field(block, "description", "summary", "content:encoded"),
+            _field(block, "pubDate", "updated", "published"),
         )
 
 
