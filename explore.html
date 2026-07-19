@@ -127,14 +127,15 @@
   <script>
     const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     const fmtCr = v => v == null ? "—" : `₹${Number(v).toLocaleString("en-IN")} cr`;
-    let LED = null, EVENTS = { story_chains: [], fiscal_events: [] }, IDX = [];
+    let LED = null, EVENTS = { story_chains: [], fiscal_events: [] }, IDX = [], SAFETY = null;
 
     Promise.all([
       fetch("district-ledger.json").then(r => r.json()),
       fetch("fiscal-events.json").then(r => r.ok ? r.json() : EVENTS).catch(() => EVENTS),
       fetch("news-feed.json").then(r => r.ok ? r.json() : null).catch(() => null),
-    ]).then(([led, ev, feed]) => {
-      LED = led; EVENTS = ev;
+      fetch("safety.json").then(r => r.ok ? r.json() : null).catch(() => null),
+    ]).then(([led, ev, feed, safety]) => {
+      LED = led; EVENTS = ev; SAFETY = safety;
       // news-count map by "State|District" for the coverage facet
       window.__newsCounts = {};
       for (const n of ((feed && feed.news_items) || [])) {
@@ -219,7 +220,7 @@
       if (!QE) {
         // fold in a news-count map (for the coverage facet) if the feed is loadable
         const nc = window.__newsCounts || {};
-        QE = QueryEngine.build(LED, { newsCounts: nc });
+        QE = QueryEngine.build(LED, { newsCounts: nc, safety: SAFETY });
       }
       // group facets for the picker
       const groups = {};
