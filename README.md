@@ -41,6 +41,24 @@ Facets span legal/zoning (CRZ, unsafe, encroachment zone), flood & water (flood-
 
 ---
 
+## The engines
+
+The whole atlas is framed as a set of composable **engines** — each reads the same country through one lens, and they *mix*. This is a framing layer over data that already exists; it invents nothing. See **[ENGINES.md](ENGINES.md)** for the architecture, and **[engines.html](engines.html)** for the hub (each card has a *Deep dive →* into `engine-<slug>.html`).
+
+| # | Engine | Reads |
+|---|--------|-------|
+| 00 | **Survey** (origin) | The Great Trigonometrical Survey that first mapped India — its heirs (boundaries, DEM, area) still power the map. Mapped the land to tax it; we turn the instrument toward accountability. |
+| 01 | **Country** | How India is constituted — Union/State/UT/local, who answers to whom. |
+| 02 | **Development** | Money in → what it was for → what got built. |
+| 03 | **Climate** | Flood / monsoon / low-lying exposure over the real open DEM. |
+| 04 | **Land-Zoning** | What can legally be built here (CRZ, encroachment, cadastral). |
+| 05 | **Corruption** | Established findings only — CAG paras, court-ordered arrears, prison overcrowding. **Facts, never accusations.** |
+| 06 | **News** | The moderated, attributed feed + the homepage "What's new" strip. |
+
+**One source of truth:** `engines-data.js` describes all seven once; `engine.js` renders each deep page; `engines.html` renders the hub — both read the same data, so editing an engine updates everywhere.
+
+---
+
 ## The state-revenue dashboard
 
 The original layer: a state choropleth of **revenue, corruption, and GSDP** across India's states + UTs, FY15 → FY24, with a 10-year time slider straddling the 13th, 14th, and 15th Finance Commission periods.
@@ -135,6 +153,15 @@ india-fiscal-map/
 ├── map-layers.js/map-ui.js # Basemaps + deep-zoom scale readout
 ├── time-scrubber.js        # Year scrubber (water-body / floodplain timelines)
 ├── site-nav.js             # Shared header + footer + SEO (edit nav in ONE place)
+├── whats-new.js            # Homepage "What's new" strip (data-updates + news)
+│
+├── engines.html            # The engines hub (grid of 7 cards)
+├── engine-*.html × 7       # Deep pages — thin shells (see ENGINES.md)
+├── engines-data.js         # THE source of truth: all 7 engines described once
+├── engine.js               # Shared deep-page renderer (reads a slug)
+│
+├── provenance.html         # Auditable "every figure → its citation" (from gen_provenance.py)
+├── updates.json            # Curated data-change changelog (feeds the What's-new strip)
 │
 ├── district-ledger.json    # The atlas: 594 districts × {ledger, dimensions, _gaps, ...}
 ├── india-fiscal.json       # State × 10 years fiscal series
