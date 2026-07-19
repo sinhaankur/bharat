@@ -33,6 +33,8 @@
     .eng-links { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: auto; }
     .eng-links a { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.02em; color: var(--foreground); border: 1px solid var(--border-strong); border-radius: 999px; padding: 4px 10px; text-decoration: none; }
     .eng-links a:hover { border-color: var(--eng-accent, var(--foreground)); color: var(--eng-accent, var(--foreground)); }
+    .eng-links a.eng-deep { color: var(--background); background: var(--eng-accent, oklch(0.8 0.12 200)); border-color: var(--eng-accent, oklch(0.8 0.12 200)); font-weight: 600; }
+    .eng-links a.eng-deep:hover { filter: brightness(1.1); color: var(--background); }
     .eng-src { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted-foreground); margin-top: 0.9rem; padding-top: 0.7rem; border-top: 1px dashed oklch(0.985 0 0 / 0.08); }
     .eng-src.warn { color: oklch(0.8 0.14 60); }
 
@@ -85,93 +87,31 @@
   </div>
 </div>
 
+<script src="engines-data.js"></script>
 <script>
-const ENGINES = [
-  {
-    origin: true, icon: "📐", accent: "oklch(0.82 0.13 65)",
-    num: "ENGINE 00 · ORIGIN",
-    name: "The Survey <em>Engine</em>",
-    tagline: "The known British engine that actually mapped and created this.",
-    desc: "The Survey of India and its Great Trigonometrical Survey drew the subcontinent into lines first — triangulation towers, the Everest arc, the baseline that fixed every district boundary we still use. It measured the land to own it. This whole atlas is the descendant instrument, turned toward accountability. Its heirs — Survey of India area figures, open DEM terrain, geoBoundaries polygons — still power the map.",
-    maps: "Powers: <b>district & taluk boundaries</b> · <b>elevation (SRTM/open DEM)</b> · <b>Survey-of-India area → density</b>",
-    links: [["atlas-3d.html", "India in 3D"], ["terrain-3d.html", "3D topography"], ["how-it-works.html", "How it works"]],
-    src: "Survey of India · SRTM open DEM · geoBoundaries", tier: 1
-  },
-  {
-    icon: "🏛️", accent: "oklch(0.72 0.12 265)",
-    num: "ENGINE 01",
-    name: "The Country <em>Engine</em>",
-    tagline: "How India is constituted — who answers to whom.",
-    desc: "What actually makes a country: the 4-layer decode of Union vs State vs UT vs local body, which List a power sits on, who appoints each officer, and how sanction flows down the chain. The scaffolding every rupee moves through.",
-    maps: "Powers: <b>chain of command</b> · <b>protocol layers</b> · <b>politics dimension</b> · <b>the mesh</b>",
-    links: [["command-chain.html", "Chain of command"], ["mesh.html", "The mesh"], ["explore.html", "Explore"]],
-    src: "Constitution (Seventh Schedule) · IndiaCode · ECI", tier: 1
-  },
-  {
-    icon: "🏗️", accent: "oklch(0.72 0.15 155)",
-    num: "ENGINE 02",
-    name: "The Development <em>Engine</em>",
-    tagline: "Money in → what it was for → what got built.",
-    desc: "The money-flow ledger: civic budgets, devolution, own-tax and grants routed to a district, tagged with what they were intended to do. Plus the economic base — income, vehicles, aviation, housing — that says what a place actually runs on.",
-    maps: "Powers: <b>money-flow ledger</b> · <b>own-tax / GSDP / devolution map views</b> · <b>economy · vehicles · aviation · housing</b>",
-    links: [["index.html#map", "Money map"], ["explore.html", "Explore"], ["timeline.html", "Timeline"]],
-    src: "Municipal budgets · RBI Handbook · Finance Commission · MoRTH · AAI", tier: 1
-  },
-  {
-    icon: "🌊", accent: "oklch(0.7 0.13 220)",
-    num: "ENGINE 03",
-    name: "The Climate <em>Engine</em>",
-    tagline: "Where the water goes, and what it takes.",
-    desc: "Physical exposure per district and taluk: flood-prone terrain, monsoon inundation, coastal-regulation zones, palaeochannels and low-lying wards — raised over the real open DEM in 3D. Not a forecast; a record of where the ground is already at risk.",
-    maps: "Powers: <b>flood explorer (3D)</b> · <b>geography: flood / monsoon / low-lying</b> · <b>terrain</b>",
-    links: [["flood-3d.html", "Flood explorer (3D)"], ["terrain-3d.html", "3D topography"], ["index.html#map", "Map facets"]],
-    src: "Open DEM (SRTM) · Bhuvan / NRSC flood · IMD · CWC", tier: 1
-  },
-  {
-    icon: "🗺️", accent: "oklch(0.78 0.14 45)",
-    num: "ENGINE 04",
-    name: "The Land-Zoning <em>Engine</em>",
-    tagline: "What can legally be built here.",
-    desc: "The legal skin over the land: coastal-regulation categories, encroachment zones, cadastral status and unsafe low-lying areas — the difference between what a place is and what the law lets it become. Zoning is the default map facet for a reason.",
-    maps: "Powers: <b>zoning map facet</b> · <b>geography: CRZ / encroachment / cadastral / unsafe-zone</b>",
-    links: [["index.html#map", "Zoning facet"], ["terrain-3d.html", "3D topography"], ["explore.html", "Explore"]],
-    src: "CRZ Notification 2019 (MoEF) · state town-planning acts · Bhuvan", tier: 1
-  },
-  {
-    icon: "⚖️", accent: "oklch(0.72 0.17 30)",
-    num: "ENGINE 05",
-    name: "The Corruption <em>Engine</em>",
-    tagline: "The one we wish we didn't need — facts, never accusations.",
-    desc: "Officers in position are sometimes corrupt; the record sometimes proves it. This engine surfaces only what an audit, court or RTI has ALREADY established — CAG paragraphs, court-ordered pay/pension arrears, prisons over sanctioned capacity, the promise-vs-result chain. It never labels a person; it shows the sourced trail and stops there.",
-    maps: "Powers: <b>accountability arc (promise→result→cost→impact)</b> · <b>delayed-pay / pension chains</b> · <b>prison overcrowding</b> · <b>officials record</b>",
-    links: [["index.html#map", "Accountability"], ["story.html", "Story chains"], ["provenance.html", "Provenance"]],
-    src: "CAG audit reports · court orders · NCRB PSI · RTI replies", tier: 1
-  },
-  {
-    icon: "📰", accent: "oklch(0.8 0.15 72)",
-    num: "ENGINE 06",
-    name: "The News <em>Engine</em>",
-    tagline: "What's being said, anchored to where and to what money.",
-    desc: "The moderated, attribution-only news feed — every headline linked back to its outlet (with a third-party lean label), and where possible anchored to a district, a scheme, or a fiscal event. It's the live layer over the static record, and it feeds the 'What's new' strip on the map.",
-    maps: "Powers: <b>the feed</b> · <b>'What's new' strip</b> · <b>news-anchored districts</b> · <b>timeline</b>",
-    links: [["feed.html", "The feed"], ["timeline.html", "Timeline"], ["index.html#map", "On the map"]],
-    src: "RSS aggregation (link-only) · human moderation · published bias assessments", tier: 3
-  },
-];
+// The hub renders from engines-data.js — the SAME source of truth the deep pages use.
+const TIER_SRC = { 1: "eng-src", 3: "eng-src warn", 2: "eng-src", 4: "eng-src warn" };
+// engine names carry an intentional <em> from engines-data.js (our own
+// controlled content, not user input) — pass it through verbatim.
+const rich = s => String(s == null ? "" : s);
 
-const TIER_SRC = { 1: "eng-src", 3: "eng-src warn" };
-
-document.getElementById("grid").innerHTML = ENGINES.map(e => {
-  const links = e.links.map(([h, t]) => `<a href="${h}">${t} →</a>`).join("");
+document.getElementById("grid").innerHTML = ENGINES_DATA.ENGINES.map(e => {
+  const num = `ENGINE ${e.num}${e.origin ? " · ORIGIN" : ""}`;
+  const mapsInline = "Powers: " + e.maps.map(m => `<b>${m.label}</b>`).join(" · ");
+  // links: the deep-dive first (the point of this build), then a couple of views
+  const links = [`<a class="eng-deep" href="engine-${e.slug}.html">Deep dive →</a>`]
+    .concat(e.views.slice(0, 2).map(v => `<a href="${v.href}">${v.text} →</a>`)).join("");
+  const src = e.sources.map(s => s.name).join(" · ");
+  const tier = Math.min.apply(null, e.sources.map(s => s.tier));
   return `<article class="eng-card${e.origin ? " eng-origin" : ""}" style="--eng-accent:${e.accent}">
-    <span class="eng-num">${e.num}</span>
+    <span class="eng-num">${num}</span>
     <span class="eng-icon">${e.icon}</span>
-    <h2 class="eng-name">${e.name}</h2>
+    <h2 class="eng-name">${rich(e.name)}</h2>
     <p class="eng-tagline">${e.tagline}</p>
-    <p class="eng-desc">${e.desc}</p>
-    <p class="eng-maps">${e.maps}</p>
+    <p class="eng-desc">${e.lede}</p>
+    <p class="eng-maps">${mapsInline}</p>
     <div class="eng-links">${links}</div>
-    <div class="${TIER_SRC[e.tier] || "eng-src"}">Source: ${e.src}</div>
+    <div class="${TIER_SRC[tier] || "eng-src"}">Source: ${src}</div>
   </article>`;
 }).join("");
 </script>
