@@ -56,35 +56,47 @@
     }
   }
 
-  // ---- Information Architecture: 4 groups -------------------------------
+  // ---- Information Architecture: engines-led, 4 groups ------------------
+  // The atlas is framed as composable ENGINES (see engines.html / ENGINES.md), so
+  // the engines are the nav SPINE — first group, the 7 lenses + the hub. The other
+  // groups stay pragmatic: Explore (the views/tools), Data (get it + audit it),
+  // About (the project). No page is orphaned; the old "Understand" group dissolved
+  // into the engines (its conceptual pages) + Explore (its 3D/comparison views).
   const NAV = [
+    { label: "Engines", items: [
+      { href: "engines.html", text: "All engines" },
+      { href: "engine-survey.html", text: "Survey · origin" },
+      { href: "engine-country.html", text: "Country" },
+      { href: "engine-development.html", text: "Development" },
+      { href: "engine-climate.html", text: "Climate" },
+      { href: "engine-zoning.html", text: "Land-Zoning" },
+      { href: "engine-corruption.html", text: "Corruption" },
+      { href: "engine-news.html", text: "News" },
+    ]},
     { label: "Explore", items: [
-      { href: "feed.html", text: "The feed" },
       { href: "index.html", text: "Map" },
-      { href: "explore.html", text: "Explore" },
+      { href: "explore.html", text: "Explore / query" },
+      { href: "feed.html", text: "The feed" },
       { href: "timeline.html", text: "Timeline" },
       { href: "articles.html", text: "Analysis" },
-      { href: "share.html", text: "Share" },
-    ]},
-    { label: "Understand", items: [
-      { href: "how-it-works.html", text: "How it works" },
-      { href: "engines.html", text: "The engines" },
       { href: "mesh.html", text: "The mesh" },
       { href: "command-chain.html", text: "Chain of command" },
-      { href: "history.html", text: "History race" },
-      { href: "global.html", text: "India vs world" },
       { href: "atlas-3d.html", text: "India in 3D" },
       { href: "terrain-3d.html", text: "3D topography" },
       { href: "flood-3d.html", text: "Flood explorer (3D)" },
+      { href: "history.html", text: "History race" },
+      { href: "global.html", text: "India vs world" },
+      { href: "share.html", text: "Share" },
     ]},
     { label: "Data", items: [
       { href: "knowledge.html", text: "Knowledge base" },
       { href: "data.html", text: "Data & API" },
-      { href: "for-organisations.html", text: "For organisations" },
       { href: "references.html", text: "Sources" },
       { href: "provenance.html", text: "Provenance ledger" },
+      { href: "for-organisations.html", text: "For organisations" },
     ]},
     { label: "About", items: [
+      { href: "how-it-works.html", text: "How it works" },
       { href: "about.html", text: "Methodology & disclaimer" },
       { href: "privacy-policy.html", text: "Privacy & policy" },
       { href: "sitemap.html", text: "Site map" },
