@@ -1,0 +1,40 @@
+{
+  "_meta": {
+    "purpose": "Hand-curated changelog of SOURCED data-changes to the atlas — what the project newly knows, cited, or corrected. Merged with the moderated news feed into the homepage 'What's new' stream by whats-new.js. This is the DATA-update stream; news-feed.json is the news stream.",
+    "honesty": "Every entry links to what backs the change (a source, a page, or a commit). Data-updates are OUR record of what we added; they are labelled distinctly from press news so the two are never confused.",
+    "how_to_add": "Prepend a new object to `updates` (newest first). Keep it one accountability-relevant fact per entry. `kind`: data | source | correction | feature.",
+    "updated_at": "2026-07-19"
+  },
+  "updates": [
+    {
+      "id": "u_2026_07_19_bengaluru_bbmp",
+      "date": "2026-07-19",
+      "kind": "data",
+      "scope": "Karnataka · Bangalore Urban",
+      "title": "Bengaluru's BBMP budget pinned: ₹19,931 cr — India's 2nd-largest civic budget",
+      "detail": "Added a deep, sourced money-flow row for the Bruhat Bengaluru Mahanagara Palike (2025-26): ₹19,930.64 cr receipts, own-source ₹11,149 cr + grants ₹8,779 cr. Notes the 5th straight budget with no elected council and the reorganisation under the new Greater Bengaluru Authority (GBA).",
+      "source": "https://www.business-standard.com/india-news/bengaluru-municipal-body-unveils-rs-19-930-crore-budget-for-2025-26-125032900496_1.html",
+      "link": "index.html#map"
+    },
+    {
+      "id": "u_2026_07_19_chennai_source",
+      "date": "2026-07-19",
+      "kind": "source",
+      "scope": "Tamil Nadu · Chennai",
+      "title": "Chennai budget citation upgraded to the GCC's own portal",
+      "detail": "Moved the Greater Chennai Corporation civic-budget figure from a news link to the corporation's official budget portal (source tier 4 → 2), and clarified that the reported ₹5,146 cr is the revenue budget (total outlay incl. capex ~₹8,400 cr).",
+      "source": "https://chennaicorporation.gov.in/gcc/budget/",
+      "link": "index.html#map"
+    },
+    {
+      "id": "u_2026_07_19_provenance_ledger",
+      "date": "2026-07-19",
+      "kind": "feature",
+      "scope": "Whole atlas",
+      "title": "New: the Provenance ledger — every figure traced to its exact citation",
+      "detail": "A generated, auditable index of all 4,900+ claims in the atlas and the source that backs each: 1,328 pinned, 3,581 declared gaps, 0 unattributed. Proof the sourced-or-gap rule holds everywhere.",
+      "source": null,
+      "link": "provenance.html"
+    }
+  ]
+}
