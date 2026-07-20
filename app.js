@@ -141,7 +141,10 @@
     unrest:         { name: 'Derived from the aggregated news feed (tier-3)', url: 'references.html' }
   };
 
-  const ui = { state: { view: 'ownTax', yearIdx: 9, selected: null, hover: null, mode: 'states', drillState: null, drillDistrict: null, districtMode: 'population', showNews: true, showHazards: true, showHeat: false, showUnrest: false, fillAlpha: 1 } };
+  // On phones the Layers panel starts COLLAPSED (just a ▤ button) so the map — the
+  // whole point of the page — is visible on first paint, not buried under controls.
+  const _isNarrow = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(max-width: 720px)').matches;
+  const ui = { state: { view: 'ownTax', yearIdx: 9, selected: null, hover: null, mode: 'states', drillState: null, drillDistrict: null, districtMode: 'population', showNews: true, showHazards: true, showHeat: false, showUnrest: false, fillAlpha: 1, layersCollapsed: _isNarrow } };
 
   let DATA = null, EXTRAS = null, GEO = null, DISTRICT_POP = null, BLOCKS = null, LEDGER = null, PAY = null;
   let EVENTS = null, NEWS = null, BUBBLES = null, NEWS_FEED = null, OFFICIALS = null, SAFETY = null;
@@ -369,6 +372,10 @@
     const labelEl = $ind('.readout-label');
     const nameEl = $ind('.readout-name');
     const valEl = $ind('.readout-value');
+    // mark idle (nothing hovered/selected) so mobile can hide the empty "Hover a state"
+    // prompt — it only clutters the first paint on touch, where there's no hover.
+    const readoutEl = document.getElementById('india-map-readout');
+    if (readoutEl) readoutEl.toggleAttribute('data-idle', !name);
     if (!name) {
       labelEl.textContent = 'Hover a state';
       nameEl.textContent = '—';
