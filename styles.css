@@ -1339,6 +1339,17 @@ a:hover { border-color: var(--foreground); }
 .geo-enc-status { font-family: var(--font-mono); font-size: 8.5px; color: oklch(0.80 0.12 150); margin-left: 4px; }
 .geo-enc-ref { font-size: 9.5px; color: var(--muted-foreground); margin-top: 1px; }
 .geo-enc-ref a { color: oklch(0.72 0.13 250); }
+/* Prominent "built where water returns" encroachment cases */
+.dim-row--enc .dim-key { color: oklch(0.80 0.15 35); }
+.geo-enc-case--rich { margin: 0.45rem 0; padding: 0.5rem 0.6rem; border-left: 3px solid oklch(0.62 0.19 32); border-radius: 0 6px 6px 0; background: oklch(0.22 0.05 32 / 0.28); }
+.geo-enc-top { line-height: 1.35; margin-bottom: 0.2rem; }
+.geo-enc-case--rich .geo-enc-type { font-size: 10px; }
+.geo-enc-wb { font-size: 0.82rem; font-weight: 600; color: oklch(0.86 0.10 220); }
+.geo-enc-yr { font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); }
+.geo-enc-detail { font-size: 0.82rem; line-height: 1.5; color: var(--foreground); margin: 0.15rem 0 0.3rem; }
+.geo-enc-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.7rem; }
+.geo-enc-case--rich .geo-enc-ref { font-size: 9.5px; margin-top: 0; }
+.geo-enc-why { font-size: 0.76rem; font-style: italic; line-height: 1.5; color: oklch(0.80 0.10 220); margin-top: 0.45rem; padding-top: 0.4rem; border-top: 1px dashed oklch(0.5 0.06 220 / 0.4); }
 /* Four official-data risk layers (paleochannel / unsafe-zone / monsoon / encroach-zone) */
 .geo-sub { font-size: 9.5px; line-height: 1.45; color: var(--muted-foreground); margin: 1px 0; }
 .geo-why { font-size: 9.5px; line-height: 1.45; color: oklch(0.80 0.13 40); margin-top: 1px; }
