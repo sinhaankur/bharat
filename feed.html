@@ -94,6 +94,14 @@
     .fd-fund-key span { font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); display: inline-flex; align-items: center; gap: 0.3rem; }
     .fd-fund-key i { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
     .fd-owners { font-size: 0.74rem; color: var(--muted-foreground); margin-top: 0.35rem; line-height: 1.45; }
+    /* blindspot flags — the side of the story NOT being told */
+    .fd-blind { margin: 0.55rem 0 0.2rem; display: flex; flex-direction: column; gap: 0.35rem; }
+    .fd-blind-row { display: flex; align-items: flex-start; gap: 0.45rem; padding: 0.4rem 0.55rem; border-radius: var(--radius); background: oklch(0.20 0.05 30 / 0.35); border: 1px solid oklch(0.5 0.14 30 / 0.5); }
+    .fd-blind-row.fund { background: oklch(0.20 0.05 300 / 0.3); border-color: oklch(0.5 0.12 300 / 0.5); }
+    .fd-blind-row .ic { font-size: 0.9rem; line-height: 1.2; }
+    .fd-blind-row .bd { font-size: 0.78rem; line-height: 1.4; }
+    .fd-blind-row .bd b { color: oklch(0.85 0.14 45); }
+    .fd-blind-row.fund .bd b { color: oklch(0.82 0.11 300); }
 
     /* top story */
     .fd-top { display: block; text-decoration: none; margin-top: 0.3rem; }
@@ -152,6 +160,7 @@
           <button class="fd-chip" data-f="state">States</button>
           <button class="fd-chip" data-f="split">Both sides covered</button>
           <button class="fd-chip" data-f="oneside">One-sided</button>
+          <button class="fd-chip" data-f="blindspot">🚫 Blindspots</button>
           <button class="fd-chip" data-f="conglomerate">Conglomerate-dominated</button>
         </div>
         <label class="fd-sort">sort
@@ -333,8 +342,30 @@
         const [domLean, domLN] = lEntries[0] || ["unknown", 0];
         c.domLean = domLean;
         c.domLeanPct = total ? Math.round(domLN / total * 100) : 0;
+        c.blind = blindspots(c, { left, right, known, total });
         return c;
       });
+    }
+
+    // Blindspot = a side of the story that ISN'T being told here. Two kinds, both honest:
+    //  • partisan lean blindspot — ≥3 known-lean items, all on ONE partisan side (L-only or
+    //    R-only), so the opposing side's telling is absent.
+    //  • funding blindspot — one ownership bloc is ≥80% of coverage, so one kind of owner
+    //    dominates who narrates this place.
+    // "history is written by the winner" — this names the winner and the missing voice.
+    function blindspots(c, s) {
+      const out = [];
+      if (s.known >= 3) {
+        if (s.left > 0 && s.right === 0) out.push({ kind: "lean", missing: "right", label: "No right-of-centre voice", detail: "All partisan coverage here leans left — the right's telling is missing." });
+        else if (s.right > 0 && s.left === 0) out.push({ kind: "lean", missing: "left", label: "No left-of-centre voice", detail: "All partisan coverage here leans right — the left's telling is missing." });
+      }
+      const fEntries = Object.entries(c.funds).sort((a, b) => b[1] - a[1]);
+      const [domFund, domN] = fEntries[0] || ["unknown", 0];
+      if (domFund !== "unknown" && s.total >= 3 && domN / s.total >= 0.8) {
+        const fl = FUND_BY[domFund] || FUND_BY.unknown;
+        out.push({ kind: "fund", bloc: domFund, label: `${fl.short}-owned monopoly`, detail: `${Math.round(domN / s.total * 100)}% of coverage here is ${fl.short.toLowerCase()}-funded — one kind of owner narrates this place.` });
+      }
+      return out;
     }
 
     // Story count per day over the trailing SPARK_DAYS window (index 0 = oldest, last = newest).
@@ -425,6 +456,7 @@
         if (FILTER === "district" || FILTER === "state") return c.level === FILTER;
         if (FILTER === "split") return c.bothSides;
         if (FILTER === "oneside") return c.oneSided;
+        if (FILTER === "blindspot") return c.blind && c.blind.length > 0;
         if (FILTER === "conglomerate") return c.domFund === "corporate_conglomerate" && c.domFundPct >= 50;
         return true;
       });
@@ -458,14 +490,22 @@
       }));
     }
 
-    // ---- map view: one bubble per place, size = volume, colour = lean skew -----
-    let FMAP = null, MARKERS = null;
+    // ---- map view: one bubble per place, size = volume, colour = lean skew OR funding ----
+    let FMAP = null, MARKERS = null, MAPCOLOR = "lean";
     // Skew colour: balanced (both sides) → green; leaning → amber; one-sided → red.
     function skewColor(c) {
       if (c.bothSides && c.skew < 0.5) return "oklch(0.72 0.14 145)";
       if (c.oneSided || c.skew >= 0.8) return "oklch(0.66 0.20 30)";
       return "oklch(0.80 0.14 75)";
     }
+    // Funding colour: the dominant ownership bloc's colour (who owns the megaphone here).
+    const FUND_COLOR = {
+      corporate_conglomerate: "oklch(0.66 0.19 20)", corporate_media: "oklch(0.70 0.15 40)",
+      private_family: "oklch(0.72 0.11 90)", private_digital: "oklch(0.70 0.12 140)",
+      state_public: "oklch(0.62 0.13 300)", unknown: "oklch(0.45 0 0)",
+    };
+    function fundColor(c) { return FUND_COLOR[c.domFund] || FUND_COLOR.unknown; }
+    function markerColor(c) { return MAPCOLOR === "fund" ? fundColor(c) : skewColor(c); }
     function renderMap(places) {
       if (typeof L === "undefined") { document.getElementById("fd-map").innerHTML = '<p class="fd-empty">Map library did not load.</p>'; return; }
       if (!FMAP) {
@@ -498,8 +538,9 @@
           pos = [ll[0] + jy, ll[1] + jx];
         }
         const radius = Math.max(6, Math.min(30, 5 + Math.sqrt(c.items.length) * 4));
+        const col = markerColor(c);
         const m = L.circleMarker(pos, {
-          radius, color: skewColor(c), weight: 1.5, fillColor: skewColor(c), fillOpacity: 0.45,
+          radius, color: col, weight: 1.5, fillColor: col, fillOpacity: 0.45,
         });
         m.bindPopup(mapPopup(c), { maxWidth: 300 });
         m.addTo(MARKERS);
@@ -574,7 +615,18 @@
         <div class="fd-lean-key">${leanKey}</div>${note}
         <div class="fd-lbl">Who funds the coverage — ownership</div>
         <div class="fd-fund">${fundSeg}</div>
-        <div class="fd-fund-key">${fundKey}</div>${owners}`;
+        <div class="fd-fund-key">${fundKey}</div>${owners}
+        ${blindBlock(c)}`;
+    }
+
+    // The blindspot flags — the side of the story that isn't being told here.
+    function blindBlock(c) {
+      if (!c.blind || !c.blind.length) return "";
+      const rows = c.blind.map(b => `<div class="fd-blind-row ${b.kind === "fund" ? "fund" : ""}">
+        <span class="ic">${b.kind === "fund" ? "◑" : "🚫"}</span>
+        <span class="bd"><b>Blindspot — ${esc(b.label)}.</b> ${esc(b.detail)}</span>
+      </div>`).join("");
+      return `<div class="fd-blind">${rows}</div>`;
     }
 
     function storyLink(it, small) {
