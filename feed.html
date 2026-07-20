@@ -186,7 +186,7 @@
     const LEAN_BY = Object.fromEntries(LEANS.map(l => [l.key, l]));
 
     let PLACES = [], FILTER = "all", SORT = "volume", VIEW = "cards";
-    let LED = null, SAFETY = null, POP = null, CENTROIDS = null;
+    let LED = null, SAFETY = null, POP = null, CENTROIDS = null, DCENT = {};
 
     Promise.all([
       fetch("news-feed.json").then(r => r.ok ? r.json() : { news_items: [] }).catch(() => ({ news_items: [] })),
@@ -194,9 +194,12 @@
       fetch("safety.json").then(r => r.ok ? r.json() : null).catch(() => null),
       fetch("district-pop.json").then(r => r.ok ? r.json() : null).catch(() => null),
       fetch("india-states.geojson").then(r => r.ok ? r.json() : null).catch(() => null),
-    ]).then(([feed, led, safety, pop, geo]) => {
+      fetch("district-centroids.json").then(r => r.ok ? r.json() : null).catch(() => null),
+    ]).then(([feed, led, safety, pop, geo, dcent]) => {
       LED = led; SAFETY = safety; POP = pop;
       CENTROIDS = geo ? stateCentroids(geo) : {};
+      // district centroids keyed lower-case "state|district" for case-insensitive lookup
+      if (dcent && dcent.centroids) for (const [k, v] of Object.entries(dcent.centroids)) DCENT[k.toLowerCase()] = v;
       cluster(feed.news_items || []);
       document.querySelectorAll(".fd-chip").forEach(b => b.addEventListener("click", () => {
         FILTER = b.dataset.f;
@@ -383,13 +386,22 @@
       MARKERS.clearLayers();
       const bounds = [];
       for (const c of places) {
-        const ll = CENTROIDS[(c.state || "").toLowerCase()];
-        if (!ll) continue;                    // no centroid → can't place honestly; skip
-        // jitter district bubbles slightly so several districts in one state don't fully overlap
-        const seed = [...c.name].reduce((a, ch) => a + ch.charCodeAt(0), 0);
-        const jx = c.district ? ((seed % 7) - 3) * 0.12 : 0;
-        const jy = c.district ? (((seed >> 3) % 7) - 3) * 0.12 : 0;
-        const pos = [ll[0] + jy, ll[1] + jx];
+        let pos = null;
+        // Prefer the real district centroid; else fall back to the state centroid (jittered so
+        // several districts of one state don't fully overlap on the state's centre).
+        if (c.district) {
+          const dc = DCENT[(c.state + "|" + c.district).toLowerCase()] || DCENT["|" + c.district.toLowerCase()]
+            || Object.entries(DCENT).find(([k]) => k.endsWith("|" + c.district.toLowerCase()))?.[1];
+          if (dc) pos = [dc[0], dc[1]];
+        }
+        if (!pos) {
+          const ll = CENTROIDS[(c.state || "").toLowerCase()];
+          if (!ll) continue;                  // no centroid at all → can't place honestly; skip
+          const seed = [...c.name].reduce((a, ch) => a + ch.charCodeAt(0), 0);
+          const jx = c.district ? ((seed % 7) - 3) * 0.12 : 0;
+          const jy = c.district ? (((seed >> 3) % 7) - 3) * 0.12 : 0;
+          pos = [ll[0] + jy, ll[1] + jx];
+        }
         const radius = Math.max(6, Math.min(30, 5 + Math.sqrt(c.items.length) * 4));
         const m = L.circleMarker(pos, {
           radius, color: skewColor(c), weight: 1.5, fillColor: skewColor(c), fillOpacity: 0.45,
