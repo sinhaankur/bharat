@@ -84,6 +84,7 @@
       { href: "atlas-3d.html", text: "India in 3D" },
       { href: "terrain-3d.html", text: "3D topography" },
       { href: "flood-3d.html", text: "Flood explorer (3D)" },
+      { href: "encroachment-atlas.html", text: "Built where water returns" },
       { href: "history.html", text: "History race" },
       { href: "global.html", text: "India vs world" },
       { href: "share.html", text: "Share" },

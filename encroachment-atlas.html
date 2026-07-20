@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Built where the water returns — India's encroachment cases | India District Atlas</title>
+  <meta name="description" content="Documented cases where construction sits on land the water reclaims — floodplains, lakebeds and wetlands — each ruled on by the NGT, a court or CAG. Bengaluru's Bellandur, Delhi's Yamuna O-zone, Chennai's Pallikaranai, Mumbai's Mithi and more, sourced or marked a gap." />
+  <meta name="keywords" content="encroachment India, floodplain construction, lakebed encroachment, NGT demolition, wetland fill, why cities flood, Bellandur, Yamuna floodplain, Pallikaranai" />
+  <link rel="canonical" href="https://sinhaankur.github.io/india-fiscal-map/encroachment-atlas.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="India District Atlas" />
+  <meta property="og:title" content="Built where the water returns — India's encroachment cases" />
+  <meta property="og:description" content="Where construction sits on land the water reclaims — floodplains, lakebeds, wetlands — each ruled on by the NGT, a court or CAG. Sourced or marked a gap." />
+  <meta property="og:url" content="https://sinhaankur.github.io/india-fiscal-map/encroachment-atlas.html" />
+  <meta property="og:image" content="https://sinhaankur.github.io/india-fiscal-map/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://sinhaankur.github.io/india-fiscal-map/og-image.png" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .ea-wrap { max-width: 1080px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; }
+    .ea-head h1 { margin: 0.3rem 0 0.4rem; font-size: clamp(1.7rem, 3.6vw, 2.6rem); }
+    .ea-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.55; max-width: 70ch; }
+    .ea-thesis { border-left: 2px solid oklch(0.62 0.19 32); padding: 0.2rem 0 0.2rem 0.8rem; margin: 0.9rem 0 0; color: oklch(0.84 0.10 40); font-size: 0.92rem; line-height: 1.5; font-style: italic; max-width: 62ch; }
+    .ea-stats { display: flex; flex-wrap: wrap; gap: 1.4rem; margin: 1.3rem 0 0.2rem; }
+    .ea-stat b { font-family: var(--font-mono); font-size: 1.5rem; color: oklch(0.82 0.15 45); display: block; line-height: 1; }
+    .ea-stat span { font-size: 0.78rem; color: var(--muted-foreground); }
+
+    #ea-map { height: 440px; border: 1px solid var(--border); border-radius: var(--radius); margin: 1.3rem 0 0.5rem; background: oklch(0.13 0 0); }
+    .leaflet-container { background: oklch(0.13 0 0); font-family: inherit; }
+    .leaflet-popup-content-wrapper, .leaflet-popup-tip { background: oklch(0.16 0 0); color: var(--foreground); border: 1px solid var(--border-strong); }
+    .leaflet-popup-content { margin: 0.65rem 0.8rem; min-width: 200px; }
+    .ea-pop-t { font-weight: 700; color: oklch(0.84 0.13 45); }
+    .ea-pop-wb { font-size: 0.82rem; color: oklch(0.86 0.10 220); margin: 2px 0; }
+    .ea-pop-open { display: inline-block; margin-top: 5px; font-family: var(--font-mono); font-size: 9.5px; color: oklch(0.74 0.16 75); text-decoration: none; }
+
+    .ea-controls { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin: 1rem 0 0.2rem; }
+    .ea-chip { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.03em; padding: 4px 11px; border-radius: 999px; border: 1px solid var(--border-strong); color: var(--muted-foreground); background: transparent; cursor: pointer; }
+    .ea-chip.on { border-color: oklch(0.66 0.19 32); color: oklch(0.16 0 0); background: oklch(0.7 0.17 40); font-weight: 600; }
+    .ea-count { margin-left: auto; font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
+
+    .ea-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 1rem; margin-top: 1rem; }
+    .ea-card { border: 1px solid var(--border); border-left: 3px solid oklch(0.62 0.19 32); border-radius: 0 var(--radius) var(--radius) 0; padding: 0.9rem 1rem; background: oklch(0.155 0 0); }
+    .ea-card-h { display: flex; align-items: baseline; gap: 0.5rem; }
+    .ea-place { font-weight: 700; font-size: 1.05rem; color: var(--foreground); text-decoration: none; }
+    .ea-place:hover { color: oklch(0.84 0.15 45); }
+    .ea-place .st { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; color: var(--muted-foreground); margin-left: 0.3rem; }
+    .ea-yr { margin-left: auto; font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
+    .ea-type { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.03em; color: oklch(0.82 0.14 40); margin: 0.35rem 0 0.1rem; }
+    .ea-wb { font-size: 0.9rem; font-weight: 600; color: oklch(0.86 0.10 220); }
+    .ea-detail { font-size: 0.85rem; line-height: 1.5; color: var(--foreground); margin: 0.4rem 0; }
+    .ea-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.6rem; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px dashed var(--border); }
+    .ea-order { font-size: 0.76rem; color: var(--muted-foreground); }
+    .ea-order a { color: oklch(0.72 0.13 250); }
+    .ea-status { font-family: var(--font-mono); font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.03em; padding: 1px 7px; border-radius: 999px; border: 1px solid oklch(0.55 0.12 150); color: oklch(0.80 0.13 150); }
+    .ea-empty { grid-column: 1/-1; color: var(--muted-foreground); text-align: center; padding: 2rem 0; }
+    .ea-note { font-size: 0.78rem; color: var(--muted-foreground); line-height: 1.55; margin-top: 1.8rem; }
+    .ea-note a { color: oklch(0.74 0.16 75); }
+  </style>
+</head>
+<body>
+  <div id="site-nav"></div>
+
+  <main class="ea-wrap">
+    <header class="ea-head">
+      <div class="eyebrow">Geography · accountability · sourced</div>
+      <h1 class="display">Built where the <em>water returns</em></h1>
+      <p>Where construction sits on land the water reclaims — floodplains, lakebeds and wetlands.
+      Every case here has been ruled on by the National Green Tribunal, a court, or flagged by CAG.
+      This is why the ground floods: it was always water.</p>
+      <p class="ea-thesis">The floodplain doesn't forget. A lakebed filled for real estate, a
+      riverfront reclaimed, a marsh built over — the water comes back to where it always was.</p>
+      <div class="ea-stats" id="stats"></div>
+    </header>
+
+    <div id="ea-map"></div>
+
+    <div class="ea-controls">
+      <div id="filters" style="display:flex;flex-wrap:wrap;gap:0.5rem">
+        <button class="ea-chip on" data-f="all">All cases</button>
+        <button class="ea-chip" data-f="wetland">Wetland / Ramsar</button>
+        <button class="ea-chip" data-f="lake">Lake / lakebed</button>
+        <button class="ea-chip" data-f="floodplain">River floodplain</button>
+      </div>
+      <span class="ea-count" id="count"></span>
+    </div>
+
+    <div class="ea-list" id="list"><p class="ea-empty">Loading cases…</p></div>
+
+    <p class="ea-note">
+      Cases are generated from the district ledger's geography dimension (documented NGT / court /
+      CAG matters only — sourced or a gap, never invented). Map markers sit on the
+      <b>district centroid</b>, an approximate placement, not the exact site. Open any place on the
+      <a href="index.html">atlas map</a> for its full geography panel, or audit every figure on the
+      <a href="provenance.html">provenance ledger</a>.
+    </p>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="map-layers.js"></script>
+  <script>
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    let CASES = [], FILTER = "all", MAP = null, MARKERS = null;
+
+    fetch("encroachment-cases.json").then(r => r.ok ? r.json() : { cases: [] }).catch(() => ({ cases: [] }))
+      .then(d => {
+        CASES = d.cases || [];
+        renderStats(d._meta || {});
+        document.querySelectorAll(".ea-chip").forEach(b => b.addEventListener("click", () => {
+          FILTER = b.dataset.f;
+          document.querySelectorAll(".ea-chip").forEach(x => x.classList.toggle("on", x === b));
+          render();
+        }));
+        initMap();
+        render();
+      }).catch(e => document.getElementById("list").innerHTML = `<p class="ea-empty">Load error: ${esc(e.message)}</p>`);
+
+    // classify a case for filtering, from its type + water-body text
+    function bucket(c) {
+      const t = ((c.type || "") + " " + (c.water_body || "")).toLowerCase();
+      if (/wetland|ramsar|marsh|beel/.test(t)) return "wetland";
+      if (/lake|jheel|sagar|lakebed|tank/.test(t)) return "lake";
+      return "floodplain";
+    }
+
+    function renderStats(meta) {
+      document.getElementById("stats").innerHTML = `
+        <div class="ea-stat"><b>${meta.count ?? CASES.length}</b><span>documented cases</span></div>
+        <div class="ea-stat"><b>${meta.districts ?? new Set(CASES.map(c => c.state + c.district)).size}</b><span>districts</span></div>
+        <div class="ea-stat"><b>${CASES.filter(c => bucket(c) === "wetland").length}</b><span>wetland / Ramsar</span></div>
+        <div class="ea-stat"><b>NGT / court</b><span>every case ruled on</span></div>`;
+    }
+
+    function filtered() {
+      return FILTER === "all" ? CASES : CASES.filter(c => bucket(c) === FILTER);
+    }
+
+    function render() {
+      const list = document.getElementById("list");
+      const cs = filtered();
+      document.getElementById("count").textContent = `${cs.length} of ${CASES.length} shown`;
+      list.innerHTML = cs.length ? cs.map(card).join("") : `<p class="ea-empty">No cases in this category.</p>`;
+      drawMarkers(cs);
+    }
+
+    function card(c) {
+      const href = `index.html?state=${encodeURIComponent(c.state)}&district=${encodeURIComponent(c.district)}`;
+      return `<article class="ea-card">
+        <div class="ea-card-h">
+          <a class="ea-place" href="${href}">${esc(c.district)}<span class="st">${esc(c.state)}</span></a>
+          ${c.year ? `<span class="ea-yr">${esc(String(c.year))}</span>` : ""}
+        </div>
+        <div class="ea-type">🏗️ ${esc(c.type || "encroachment")}</div>
+        ${c.water_body ? `<div class="ea-wb">on ${esc(c.water_body)}</div>` : ""}
+        ${c.detail ? `<div class="ea-detail">${esc(c.detail)}</div>` : ""}
+        <div class="ea-foot">
+          ${c.order_ref ? `<span class="ea-order">⚖️ ${esc(c.order_ref)}${c.source ? ` <a href="${esc(c.source)}" target="_blank" rel="noopener">↗ source</a>` : ""}</span>` : ""}
+          ${c.status ? `<span class="ea-status">${esc(c.status)}</span>` : ""}
+        </div>
+      </article>`;
+    }
+
+    function initMap() {
+      if (typeof L === "undefined") return;
+      MAP = L.map("ea-map", { scrollWheelZoom: true }).setView([22.6, 80], 5);
+      const base = (window.MapLayers && MapLayers.basemaps)
+        ? MapLayers.basemaps(L)["Dark map"]
+        : L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png", { subdomains: "abcd", attribution: "&copy; OSM, &copy; CARTO" });
+      base.addTo(MAP);
+      MARKERS = L.layerGroup().addTo(MAP);
+    }
+
+    function drawMarkers(cs) {
+      if (!MAP || !MARKERS) return;
+      MARKERS.clearLayers();
+      const bounds = [];
+      // group by district so multiple cases in one place don't stack invisibly
+      const byPlace = {};
+      for (const c of cs) {
+        if (!c.latlng) continue;
+        const k = c.state + "|" + c.district;
+        (byPlace[k] = byPlace[k] || { latlng: c.latlng, state: c.state, district: c.district, cases: [] }).cases.push(c);
+      }
+      for (const g of Object.values(byPlace)) {
+        const m = L.circleMarker(g.latlng, { radius: 6 + Math.min(8, g.cases.length * 3), color: "oklch(0.66 0.20 32)", weight: 1.5, fillColor: "oklch(0.7 0.19 38)", fillOpacity: 0.5 });
+        const href = `index.html?state=${encodeURIComponent(g.state)}&district=${encodeURIComponent(g.district)}`;
+        m.bindPopup(`<div class="ea-pop-t">${esc(g.district)}</div>`
+          + g.cases.map(c => `<div class="ea-pop-wb">🏗️ ${esc(c.water_body || c.type || "")}</div>`).join("")
+          + `<a class="ea-pop-open" href="${href}">open on the atlas →</a>`);
+        m.addTo(MARKERS);
+        bounds.push(g.latlng);
+      }
+      if (bounds.length) try { MAP.fitBounds(bounds, { padding: [40, 40], maxZoom: 7 }); } catch (e) {}
+    }
+  </script>
+  <script src="command-palette.js"></script>
+  <script src="site-nav.js"></script>
+</body>
+</html>
