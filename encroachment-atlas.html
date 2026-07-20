@@ -62,6 +62,9 @@
     .ea-order { font-size: 0.76rem; color: var(--muted-foreground); }
     .ea-order a { color: oklch(0.72 0.13 250); }
     .ea-status { font-family: var(--font-mono); font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.03em; padding: 1px 7px; border-radius: 999px; border: 1px solid oklch(0.55 0.12 150); color: oklch(0.80 0.13 150); }
+    .ea-share { margin-left: auto; background: none; border: 1px solid var(--border-strong); color: var(--muted-foreground); font-family: var(--font-mono); font-size: 9px; padding: 2px 8px; border-radius: 999px; cursor: pointer; }
+    .ea-share:hover { border-color: oklch(0.7 0.17 40); color: oklch(0.82 0.15 45); }
+    .ea-card--hl { border-color: oklch(0.7 0.17 40); box-shadow: 0 0 0 2px oklch(0.66 0.19 32 / 0.4); }
     .ea-empty { grid-column: 1/-1; color: var(--muted-foreground); text-align: center; padding: 2rem 0; }
     .ea-note { font-size: 0.78rem; color: var(--muted-foreground); line-height: 1.55; margin-top: 1.8rem; }
     .ea-note a { color: oklch(0.74 0.16 75); }
@@ -157,7 +160,29 @@
       const cs = filtered();
       document.getElementById("count").textContent = `${cs.length} of ${CASES.length} shown`;
       list.innerHTML = cs.length ? cs.map(card).join("") : `<p class="ea-empty">No cases in this category.</p>`;
+      // wire share buttons
+      list.querySelectorAll(".ea-share").forEach(btn => btn.addEventListener("click", () => {
+        const c = CASES.find(x => caseId(x) === btn.dataset.id);
+        if (c) shareCase(c, btn);
+      }));
       drawMarkers(cs);
+      // deep-link ?case=… → scroll to + highlight that card
+      const want = new URLSearchParams(location.search).get("case");
+      if (want) {
+        const btn = list.querySelector(`.ea-share[data-id="${CSS.escape(want)}"]`);
+        const cardEl = btn && btn.closest(".ea-card");
+        if (cardEl) { cardEl.scrollIntoView({ behavior: "smooth", block: "center" }); cardEl.classList.add("ea-card--hl"); }
+      }
+    }
+
+    async function shareCase(c, btn) {
+      const url = location.origin + location.pathname + "?case=" + encodeURIComponent(caseId(c));
+      const text = shareText(c);
+      try {
+        if (navigator.share) { await navigator.share({ title: "Built where the water returns", text, url }); return; }
+        await navigator.clipboard.writeText(text + " " + url);
+        const old = btn.textContent; btn.textContent = "✓ copied"; setTimeout(() => btn.textContent = old, 1600);
+      } catch (e) { /* user dismissed share — no-op */ }
     }
 
     // "…and this is why it floods" — the consequence half. Low-lying % only where it's
@@ -204,8 +229,22 @@
         <div class="ea-foot">
           ${c.order_ref ? `<span class="ea-order">⚖️ ${esc(c.order_ref)}${c.source ? ` <a href="${esc(c.source)}" target="_blank" rel="noopener">↗ source</a>` : ""}</span>` : ""}
           ${c.status ? `<span class="ea-status">${esc(c.status)}</span>` : ""}
+          <button class="ea-share" data-id="${esc(caseId(c))}" title="Share this case">↗ share</button>
         </div>
       </article>`;
+    }
+
+    // A stable per-case id for deep-linking + sharing.
+    function caseId(c) {
+      return (c.district + "-" + (c.water_body || c.type || "")).toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60);
+    }
+
+    // Build a one-line, copy-pasteable summary of a case for sharing.
+    function shareText(c) {
+      const L = c.loss;
+      const lost = (L && typeof L.pct === "number") ? ` — ${L.label} ${L.pct < 0 ? "down " + Math.abs(L.pct) + "%" : "up " + L.pct + "%"} (${L.from_year}→${L.to_year})` : "";
+      return `Built where the water returns: ${c.type} on ${c.water_body}, ${c.district}${lost}. Ruled on by ${c.order_ref || "NGT/court"}. — India District Atlas`;
     }
 
     function initMap() {
