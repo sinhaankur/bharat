@@ -1,0 +1,147 @@
+{
+  "_meta": {
+    "purpose": "Outlet registry — for each news outlet in the feed: its editorial lean (third-party aggregation, mirrored from news-feed.json outlet_lean) plus its OWNER / parent group and a funding_type, each cited. Lets a reader weigh who is telling a story and who funds them. Facts only: ownership + funding structure, not motive.",
+    "funding_types": {
+      "private_family": "Privately held, family / founder-controlled",
+      "corporate_conglomerate": "Owned by a large diversified corporate group (cross-sector interests)",
+      "corporate_media": "Owned by a listed / corporate media house (media-primary)",
+      "state_public": "State-owned / public broadcaster (government funded)",
+      "private_digital": "Privately held digital-first publisher"
+    },
+    "lean_scale": ["left", "centre-left", "centre", "centre-right", "right", "state_media", "unknown"],
+    "note": "owner / funding are matters of public record (company filings, investor disclosures, reporting). lean is third-party media-bias aggregation, recorded as aggregation — not the project's own judgement. Where a fact isn't citable it is left an explicit gap, never guessed."
+  },
+  "outlets": {
+    "The Indian Express": {
+      "lean": "centre",
+      "owner": "The Indian Express Group (Indian Express Pvt Ltd)",
+      "controlling_interest": "Viveck Goenka / Goenka family",
+      "funding_type": "private_family",
+      "source": "https://en.wikipedia.org/wiki/The_Indian_Express",
+      "source_name": "Company record — Indian Express Group",
+      "source_tier": 3
+    },
+    "The Hindu": {
+      "lean": "centre-left",
+      "owner": "The Hindu Group (Kasturi & Sons Ltd)",
+      "controlling_interest": "Kasturi family",
+      "funding_type": "private_family",
+      "source": "https://en.wikipedia.org/wiki/Kasturi_and_Sons",
+      "source_name": "Company record — Kasturi & Sons",
+      "source_tier": 3
+    },
+    "The Hindu · BusinessLine": {
+      "lean": "centre",
+      "owner": "The Hindu Group (Kasturi & Sons Ltd)",
+      "controlling_interest": "Kasturi family",
+      "funding_type": "private_family",
+      "source": "https://en.wikipedia.org/wiki/Kasturi_and_Sons",
+      "source_name": "Company record — Kasturi & Sons (BusinessLine is the group's business daily)",
+      "source_tier": 3
+    },
+    "News18": {
+      "lean": "centre-right",
+      "owner": "Network18 Media & Investments Ltd → Reliance Industries",
+      "controlling_interest": "Reliance Industries (via Independent Media Trust)",
+      "funding_type": "corporate_conglomerate",
+      "source": "https://en.wikipedia.org/wiki/Network18",
+      "source_name": "Investor disclosure — Network18 / Reliance",
+      "source_tier": 3
+    },
+    "NDTV": {
+      "lean": "centre-left",
+      "owner": "New Delhi Television Ltd → AMG Media Networks (Adani Group)",
+      "controlling_interest": "Adani Group (majority stake since 2022–23)",
+      "funding_type": "corporate_conglomerate",
+      "source": "https://en.wikipedia.org/wiki/NDTV",
+      "source_name": "Investor disclosure — Adani / AMG Media acquisition of NDTV",
+      "source_tier": 3
+    },
+    "NDTV Khabar": {
+      "lean": "unknown",
+      "owner": "New Delhi Television Ltd → AMG Media Networks (Adani Group)",
+      "controlling_interest": "Adani Group (majority stake since 2022–23)",
+      "funding_type": "corporate_conglomerate",
+      "source": "https://en.wikipedia.org/wiki/NDTV",
+      "source_name": "Investor disclosure — Adani / AMG Media (NDTV Khabar is NDTV's Hindi service)",
+      "source_tier": 3,
+      "lean_note": "Hindi service — no separate citable bias assessment; lean left unknown (for cross-language blindspot detection)."
+    },
+    "Mint": {
+      "lean": "centre",
+      "owner": "HT Media Ltd",
+      "controlling_interest": "KK Birla group / Shobhana Bhartia family",
+      "funding_type": "corporate_media",
+      "source": "https://en.wikipedia.org/wiki/Mint_(newspaper)",
+      "source_name": "Company record — HT Media / Mint",
+      "source_tier": 3
+    },
+    "Zee News": {
+      "lean": "right",
+      "owner": "Zee Media Corporation Ltd (Essel Group)",
+      "controlling_interest": "Subhash Chandra / Essel Group family",
+      "funding_type": "corporate_conglomerate",
+      "source": "https://en.wikipedia.org/wiki/Zee_News",
+      "source_name": "Company record — Zee Media / Essel Group",
+      "source_tier": 3
+    },
+    "DD News (Doordarshan)": {
+      "lean": "state_media",
+      "owner": "Prasar Bharati (Government of India)",
+      "controlling_interest": "Government of India (statutory public broadcaster)",
+      "funding_type": "state_public",
+      "source": "https://prasarbharati.gov.in/",
+      "source_name": "Prasar Bharati — statutory public broadcaster",
+      "source_tier": 1
+    },
+    "OpIndia": {
+      "lean": "right",
+      "owner": "Aadhyaasi Media And Content Services Pvt Ltd",
+      "controlling_interest": "Privately held (Rahul Roushan / founders)",
+      "funding_type": "private_digital",
+      "source": "https://en.wikipedia.org/wiki/OpIndia",
+      "source_name": "Company record — OpIndia / Aadhyaasi Media",
+      "source_tier": 3
+    },
+    "ABP Ananda (Bengali)": {
+      "lean": "unknown",
+      "owner": "ABP Group (ABP Pvt Ltd)",
+      "controlling_interest": "Sarkar family (Ananda Bazar Patrika group)",
+      "funding_type": "private_family",
+      "source": "https://en.wikipedia.org/wiki/ABP_Group",
+      "source_name": "Company record — ABP Group",
+      "source_tier": 3,
+      "lean_note": "Regional-language edition — no separate citable bias assessment; lean left unknown."
+    },
+    "ABP Desam (Telugu)": {
+      "lean": "unknown",
+      "owner": "ABP Group (ABP Pvt Ltd)",
+      "controlling_interest": "Sarkar family (Ananda Bazar Patrika group)",
+      "funding_type": "private_family",
+      "source": "https://en.wikipedia.org/wiki/ABP_Group",
+      "source_name": "Company record — ABP Group",
+      "source_tier": 3,
+      "lean_note": "Regional-language edition — no separate citable bias assessment; lean left unknown."
+    },
+    "ABP Nadu (Tamil)": {
+      "lean": "unknown",
+      "owner": "ABP Group (ABP Pvt Ltd)",
+      "controlling_interest": "Sarkar family (Ananda Bazar Patrika group)",
+      "funding_type": "private_family",
+      "source": "https://en.wikipedia.org/wiki/ABP_Group",
+      "source_name": "Company record — ABP Group",
+      "source_tier": 3,
+      "lean_note": "Regional-language edition — no separate citable bias assessment; lean left unknown."
+    },
+    "ABP Majha (Marathi)": {
+      "lean": "unknown",
+      "owner": "ABP Group (ABP Pvt Ltd)",
+      "controlling_interest": "Sarkar family (Ananda Bazar Patrika group)",
+      "funding_type": "private_family",
+      "source": "https://en.wikipedia.org/wiki/ABP_Group",
+      "source_name": "Company record — ABP Group",
+      "source_tier": 3,
+      "lean_note": "Regional-language edition — no separate citable bias assessment; lean left unknown."
+    }
+  }
+}
