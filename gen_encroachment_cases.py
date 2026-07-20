@@ -17,6 +17,29 @@ LEDGER = "district-ledger.json"
 CENTROIDS = "district-centroids.json"
 OUT = "encroachment-cases.json"
 
+# Curated coordinates of the ACTUAL water body / floodplain each case sits on — public,
+# well-known named features (lake / marsh / river reach). Keyed by "State|District".
+# Approximate to the feature centre (not a survey point), but far tighter than the district
+# centroid. Placement only — no factual claim beyond "this is roughly where that water is".
+SITE_COORDS = {
+    "West Bengal|Kolkata": [22.5510, 88.4300],          # East Kolkata Wetlands (E of the city)
+    "Karnataka|Bangalore Urban": [12.9350, 77.6700],    # Bellandur lake
+    "Tamil Nadu|Chennai": [12.9400, 80.2100],           # Pallikaranai marsh
+    "Delhi|Delhi": [28.6300, 77.2600],                  # Yamuna floodplain (Delhi stretch)
+    "Maharashtra|Greater Bombay": [19.0600, 72.8600],   # Mithi river / BKC
+    "Andhra Pradesh|Hyderabad": [17.4240, 78.4730],     # Hussain Sagar (ledger files Hyderabad under AP)
+    "Assam|Kamrup": [26.1300, 91.6500],                 # Deepor Beel (W of Guwahati)
+    "Madhya Pradesh|Bhopal": [23.2600, 77.3300],        # Bhoj Upper Lake
+    "Gujarat|Ahmadabad": [23.0300, 72.5800],            # Sabarmati riverfront
+    "Gujarat|Vadodara": [22.3000, 73.2000],             # Vishwamitri river
+    "Maharashtra|Pune": [18.5200, 73.8500],             # Mula-Mutha confluence
+    "Haryana|Gurgaon": [28.4200, 77.0700],              # Najafgarh jheel / Basai wetland
+    "Jammu & Kashmir|Srinagar": [34.1200, 74.8600],     # Dal Lake
+    "Jammu and Kashmir|Srinagar": [34.1200, 74.8600],
+    "Andhra Pradesh|Krishna": [16.6500, 80.9000],       # Budameru near Vijayawada
+}
+SITE_SOURCE = "Curated centre of the named water body / floodplain (public geography) — approximate placement, not a survey point"
+
 
 def main():
     led = json.load(open(LEDGER))
@@ -31,7 +54,11 @@ def main():
             g = (d.get("dimensions") or {}).get("geography") or {}
             enc = g.get("encroachment") or {}
             for c in (enc.get("cases") or []):
-                ll = cent.get(f"{state}|{district}")
+                key = f"{state}|{district}"
+                centroid = cent.get(key)
+                site = SITE_COORDS.get(key)
+                # best available position: the curated site if we have one, else the centroid
+                latlng = site or centroid
                 cases.append({
                     "state": state,
                     "district": district,
@@ -42,7 +69,10 @@ def main():
                     "order_ref": c.get("order_ref"),
                     "status": c.get("status"),
                     "source": c.get("source"),
-                    "latlng": ll,   # district centroid — approximate, not the exact site
+                    "latlng": latlng,               # best available (site if known)
+                    "site_latlng": site,            # curated water-body centre, or null
+                    "centroid_latlng": centroid,    # district centroid fallback
+                    "placement": "site" if site else ("district" if centroid else None),
                 })
 
     # newest first, then by state for a stable order
@@ -53,10 +83,13 @@ def main():
             "purpose": "Documented cases of construction on land the water reclaims "
                        "(floodplain / lakebed / wetland), each ruled on by NGT / a court / "
                        "CAG. Generated from the district ledger's geography dimension — "
-                       "documented-only, sourced-or-gap; latlng is the district centroid "
-                       "(approximate placement, not the exact site).",
+                       "documented-only, sourced-or-gap. latlng = best available position: "
+                       "the curated water-body centre (placement='site') where known, else "
+                       "the district centroid (placement='district'). Neither is a survey point.",
+            "site_source": SITE_SOURCE,
             "count": len(cases),
             "districts": len({(c["state"], c["district"]) for c in cases}),
+            "sited": sum(1 for c in cases if c["placement"] == "site"),
         },
         "cases": cases,
     }
