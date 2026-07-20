@@ -81,6 +81,34 @@
     .q-tag.q-unsafe, .q-tag.q-flag { color: oklch(0.76 0.18 28); border-color: currentColor; }
     .q-tag.q-flood { color: oklch(0.76 0.15 45); border-color: currentColor; }
     .q-cov { font-family: var(--font-mono); font-size: 9.5px; font-weight: 600; margin-left: 4px; }
+    /* Compare mode */
+    .cmp-add { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin: 0.4rem 0 0.2rem; }
+    .cmp-add input { flex: 1; min-width: 200px; background: oklch(0.18 0 0); color: var(--foreground); border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 0.55rem 0.8rem; font-size: 0.9rem; }
+    .cmp-add .cmp-count { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); white-space: nowrap; }
+    .cmp-suggest { position: relative; }
+    .cmp-drop { position: absolute; z-index: 20; left: 0; right: 0; top: calc(100% + 3px); background: oklch(0.16 0 0); border: 1px solid var(--border-strong); border-radius: var(--radius); max-height: 260px; overflow-y: auto; box-shadow: 0 8px 24px oklch(0 0 0 / 0.5); }
+    .cmp-drop a { display: flex; align-items: baseline; gap: 0.5rem; padding: 0.45rem 0.7rem; cursor: pointer; text-decoration: none; border-bottom: 1px solid var(--border); }
+    .cmp-drop a:hover, .cmp-drop a.hl { background: oklch(0.24 0.03 250); }
+    .cmp-drop .name { color: var(--foreground); font-weight: 600; font-size: 0.86rem; }
+    .cmp-drop .ctx { font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); margin-left: auto; }
+    .cmp-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.7rem 0 0.3rem; }
+    .cmp-pill { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 12px; padding: 3px 4px 3px 10px; border-radius: 999px; border: 1px solid var(--warm); color: oklch(0.86 0.14 78); }
+    .cmp-pill button { background: none; border: none; color: currentColor; cursor: pointer; font-size: 13px; line-height: 1; padding: 0 5px; opacity: 0.7; }
+    .cmp-pill button:hover { opacity: 1; }
+    .cmp-scroll { overflow-x: auto; margin-top: 1rem; border: 1px solid var(--border); border-radius: var(--radius); }
+    table.cmp { border-collapse: collapse; width: 100%; font-size: 0.86rem; }
+    table.cmp th, table.cmp td { padding: 0.5rem 0.75rem; text-align: right; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    table.cmp thead th { position: sticky; top: 0; background: oklch(0.17 0 0); z-index: 2; }
+    table.cmp th.metric, table.cmp td.metric { text-align: left; position: sticky; left: 0; background: oklch(0.15 0 0); z-index: 1; color: var(--muted-foreground); font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.02em; text-transform: uppercase; }
+    table.cmp thead th.metric { z-index: 3; }
+    table.cmp thead .dcol { color: var(--foreground); }
+    table.cmp thead .dcol a { color: oklch(0.84 0.15 78); text-decoration: none; }
+    table.cmp thead .dcol .sub { display: block; font-family: var(--font-mono); font-size: 9px; font-weight: 400; color: var(--muted-foreground); text-transform: none; letter-spacing: 0; }
+    table.cmp .grp td { background: oklch(0.19 0.02 250); color: var(--muted-foreground); font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase; text-align: left; padding: 0.35rem 0.75rem; }
+    table.cmp td.best { color: oklch(0.84 0.17 145); font-weight: 600; }
+    table.cmp td.gap { color: oklch(0.55 0.02 250); font-style: italic; }
+    .cmp-legend { font-size: 0.78rem; color: var(--muted-foreground); margin-top: 0.7rem; line-height: 1.5; }
+    .cmp-legend .g { color: oklch(0.84 0.17 145); }
   </style>
 </head>
 <body>
@@ -102,6 +130,7 @@
     <div class="ex-tabs" role="tablist">
       <button data-tab="rank" class="active">Rankings</button>
       <button data-tab="query">🔎 Query</button>
+      <button data-tab="compare">⚖ Compare</button>
       <button data-tab="geography">Geography</button>
       <button data-tab="states">By state</button>
       <button data-tab="schemes">By scheme</button>
@@ -196,14 +225,153 @@
       const p = document.getElementById("panel");
       if (tab === "rank") return renderRank(p);
       if (tab === "query") return renderQuery(p);
+      if (tab === "compare") return renderCompare(p);
       if (tab === "geography") return renderGeography(p);
       if (tab === "states") return renderStates(p);
       if (tab === "schemes") return renderSchemes(p);
       if (tab === "stories") return renderStories(p);
     }
 
-    // ---- Query/filter engine: AND/OR facets across all 594 districts (no backend) ----
+    // ---- Compare: side-by-side districts across money, health, wealth, risk & safety ----
+    // Reuses QE.rows (the same flattened, sourced-or-gap district rows as Query) so the two
+    // views can never disagree. Gaps render as an italic "—", never as a misleading 0.
     let QE = null;
+    const cmpState = { picks: [] };   // array of "State|District" keys, order = column order
+
+    // Metric catalogue — {label, group, get(row), fmt, better}. better:'high'|'low'|null decides
+    // which cell wins the green "best" highlight; null = no winner (categorical / not rankable).
+    const CMP_METRICS = [
+      { g: "Money" },
+      { label: "Headline money flow", get: r => r.money, fmt: v => `₹${v >= 1000 ? (v / 1000).toFixed(1) + "k" : Math.round(v)} cr`, better: "high" },
+      { label: "Deep money-ledger", get: r => r.has_ledger ? 1 : 0, fmt: v => v ? "yes" : "no", better: null, bool: true },
+      { label: "Fund freeze / audit flag", get: r => r.flagged ? 1 : 0, fmt: v => v ? "⚠ flagged" : "none", better: "low", bool: true },
+      { g: "Health & wealth" },
+      { label: "Infant mortality (IMR)", get: r => r.imr, fmt: v => `${v} /1k`, better: "low" },
+      { label: "Child stunting (u5)", get: r => r.stunting, fmt: v => `${v}%`, better: "low" },
+      { label: "Per-capita income (NSDP)", get: r => r.income, fmt: v => `₹${Number(v).toLocaleString("en-IN")}`, better: "high" },
+      { label: "Income tier", get: r => r.income_tier, fmt: v => v, better: null, cat: true },
+      { g: "Risk & terrain" },
+      { label: "Risk-signal stack", get: r => r.vuln, fmt: v => `⚠ ${v}/8`, better: "low" },
+      { label: "Elevation (centroid)", get: r => r.elev, fmt: v => `${Math.round(v)} m`, better: null },
+      { label: "Coastal (CRZ)", get: r => r.crz ? 1 : 0, fmt: v => v ? "yes" : "no", better: null, bool: true },
+      { label: "Flood-chronic", get: r => r.flood_chronic ? 1 : 0, fmt: v => v ? "yes" : "no", better: "low", bool: true },
+      { g: "Safety & justice (state-level NCRB)" },
+      { label: "Crime rate /lakh", get: r => r.crime_rate, fmt: v => Math.round(v), better: "low" },
+      { label: "Prison occupancy", get: r => r.prison_occ, fmt: v => `${Math.round(v)}%`, better: "low" },
+      { label: "Pop. density /km²", get: r => r.density, fmt: v => Math.round(v).toLocaleString("en-IN"), better: null },
+      { g: "Source honesty" },
+      { label: "Source coverage", get: r => r.cov_pct, fmt: v => `${v}%`, better: "high" },
+    ];
+
+    function cmpRowFor(key) {
+      const [state, district] = key.split("|");
+      return (QE.rows || []).find(r => r.state === state && r.district === district) || null;
+    }
+
+    function renderCompare(p) {
+      if (typeof QueryEngine === "undefined") { p.innerHTML = `<p class="ex-empty">Compare engine not loaded.</p>`; return; }
+      if (!QE) QE = QueryEngine.build(LED, { newsCounts: window.__newsCounts || {}, safety: SAFETY });
+
+      const picks = cmpState.picks;
+      const pillsHtml = picks.map(k => {
+        const [st, dn] = k.split("|");
+        return `<span class="cmp-pill">${esc(dn)} <span style="opacity:.6;font-size:9px">${esc(st)}</span><button data-rm="${esc(k)}" title="remove">×</button></span>`;
+      }).join("");
+
+      // Build the comparison table only once 2+ districts are chosen.
+      let tableHtml = "";
+      if (picks.length >= 2) {
+        const rows = picks.map(cmpRowFor);
+        const head = `<tr><th class="metric">Metric</th>${picks.map((k, i) => {
+          const [st, dn] = k.split("|");
+          return `<th class="dcol"><a href="index.html?state=${encodeURIComponent(st)}&district=${encodeURIComponent(dn)}">${esc(dn)}</a><span class="sub">${esc(st)}</span></th>`;
+        }).join("")}</tr>`;
+
+        const body = CMP_METRICS.map(m => {
+          if (m.g) return `<tr class="grp"><td colspan="${picks.length + 1}">${esc(m.g)}</td></tr>`;
+          const raw = rows.map(r => r ? m.get(r) : null);
+          // Decide the winning column(s) for the green highlight — only for numeric, rankable metrics.
+          let bestIdx = new Set();
+          if (m.better && !m.cat) {
+            const nums = raw.map((v, i) => ({ v: typeof v === "number" ? v : null, i })).filter(x => x.v != null);
+            if (nums.length) {
+              const target = m.better === "high" ? Math.max(...nums.map(x => x.v)) : Math.min(...nums.map(x => x.v));
+              nums.forEach(x => { if (x.v === target) bestIdx.add(x.i); });
+            }
+          }
+          const cells = raw.map((v, i) => {
+            const isGap = v == null || (m.cat && !v);
+            if (isGap) return `<td class="gap" title="no published figure — a gap, not zero">—</td>`;
+            const cls = bestIdx.has(i) ? " best" : "";
+            return `<td class="${cls.trim()}">${esc(m.fmt(v))}</td>`;
+          }).join("");
+          return `<tr><td class="metric">${esc(m.label)}</td>${cells}</tr>`;
+        }).join("");
+
+        tableHtml = `
+          <div class="cmp-scroll">
+            <table class="cmp"><thead>${head}</thead><tbody>${body}</tbody></table>
+          </div>
+          <p class="cmp-legend"><span class="g">Green</span> = best of the compared set for that metric (lower IMR/crime/risk, higher income/money/coverage). An italic <b>—</b> is a declared <b>gap</b> (no published figure), never a zero. Safety, health &amp; income figures are <b>state-level</b> — the whole state shares them. Click a district name to open its full page.</p>`;
+      }
+
+      p.innerHTML = `
+        <div class="ex-section-label" style="margin-top:0">Compare districts side by side</div>
+        <p class="ex-note" style="margin-top:0">Add two or more districts to line up their money, health, wealth, risk and safety — every figure sourced-or-gap, same data as Query.</p>
+        <div class="cmp-suggest">
+          <div class="cmp-add">
+            <input id="cmp-in" type="search" placeholder="Add a district to compare…  (e.g. Kolkata, Bengaluru, Munger)" autocomplete="off" />
+            <span class="cmp-count">${picks.length} selected${picks.length ? " · max 6" : ""}</span>
+          </div>
+          <div id="cmp-drop" class="cmp-drop" hidden></div>
+        </div>
+        ${pillsHtml ? `<div class="cmp-pills">${pillsHtml}</div>` : ""}
+        ${picks.length < 2 ? `<p class="ex-note">Pick at least two districts. Try a contrast — e.g. <b>Kerala vs Bihar</b> health, or a metro civic budget vs a small town.</p>` : tableHtml}
+      `;
+
+      // wire the remove buttons
+      p.querySelectorAll("[data-rm]").forEach(b => b.addEventListener("click", () => {
+        cmpState.picks = cmpState.picks.filter(k => k !== b.dataset.rm); renderCompare(p);
+      }));
+      wireCompareInput(p);
+    }
+
+    // District-only autocomplete for the compare picker (reuses the search IDX districts).
+    function wireCompareInput(p) {
+      const inp = p.querySelector("#cmp-in");
+      const drop = p.querySelector("#cmp-drop");
+      if (!inp) return;
+      const districtIdx = IDX.filter(x => x.kind === "district");
+      let hl = -1, current = [];
+      const close = () => { drop.hidden = true; drop.innerHTML = ""; hl = -1; current = []; };
+      const add = key => {
+        if (cmpState.picks.includes(key)) { inp.value = ""; close(); return; }
+        if (cmpState.picks.length >= 6) return;
+        cmpState.picks.push(key); inp.value = ""; renderCompare(p);
+      };
+      inp.addEventListener("input", () => {
+        const t = inp.value.trim().toLowerCase();
+        if (!t) { close(); return; }
+        current = districtIdx.filter(x => x.name.toLowerCase().includes(t) || (x.ctx || "").toLowerCase().includes(t))
+          .filter(x => !cmpState.picks.includes(x.ctx + "|" + x.name)).slice(0, 12);
+        hl = -1;
+        drop.hidden = current.length === 0;
+        drop.innerHTML = current.map((x, i) => `<a data-key="${esc(x.ctx + "|" + x.name)}"><span class="name">${esc(x.name)}</span>${x.deep ? `<span class="ex-deep">deep</span>` : ""}<span class="ctx">${esc(x.ctx)}</span></a>`).join("");
+        drop.querySelectorAll("a").forEach(a => a.addEventListener("mousedown", e => { e.preventDefault(); add(a.dataset.key); }));
+      });
+      inp.addEventListener("keydown", e => {
+        if (drop.hidden) return;
+        const items = [...drop.querySelectorAll("a")];
+        if (e.key === "ArrowDown") { e.preventDefault(); hl = Math.min(hl + 1, items.length - 1); }
+        else if (e.key === "ArrowUp") { e.preventDefault(); hl = Math.max(hl - 1, 0); }
+        else if (e.key === "Enter") { e.preventDefault(); if (items[hl]) add(items[hl].dataset.key); else if (items[0]) add(items[0].dataset.key); return; }
+        else if (e.key === "Escape") { close(); return; }
+        items.forEach((a, i) => a.classList.toggle("hl", i === hl));
+      });
+      inp.addEventListener("blur", () => setTimeout(close, 150));
+    }
+
+    // ---- Query/filter engine: AND/OR facets across all 594 districts (no backend) ----
     const qState = { keys: new Set(), mode: "AND" };
     function renderQuery(p) {
       if (typeof QueryEngine === "undefined") { p.innerHTML = `<p class="ex-empty">Query engine not loaded.</p>`; return; }
