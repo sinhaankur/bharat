@@ -52,6 +52,12 @@
     .ea-detail { font-size: 0.85rem; line-height: 1.5; color: var(--foreground); margin: 0.4rem 0; }
     .ea-flood { font-size: 0.82rem; line-height: 1.45; color: oklch(0.82 0.10 220); background: oklch(0.20 0.05 220 / 0.3); border-radius: 6px; padding: 0.35rem 0.55rem; margin: 0.4rem 0; }
     .ea-flood b { color: oklch(0.88 0.13 210); }
+    .ea-loss { margin: 0.5rem 0 0.3rem; }
+    .ea-loss-hd { font-size: 0.82rem; line-height: 1.4; color: var(--foreground); }
+    .ea-loss-hd b { font-family: var(--font-mono); font-size: 0.95rem; color: oklch(0.82 0.16 40); }
+    .ea-loss-yr { font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); }
+    .ea-loss-bar { height: 6px; background: var(--muted); border-radius: 999px; overflow: hidden; margin-top: 0.3rem; }
+    .ea-loss-bar i { display: block; height: 100%; border-radius: 999px; }
     .ea-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.6rem; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px dashed var(--border); }
     .ea-order { font-size: 0.76rem; color: var(--muted-foreground); }
     .ea-order a { color: oklch(0.72 0.13 250); }
@@ -96,6 +102,11 @@
       <b>centre of the named water body</b> (lake / marsh / river reach) — an approximate placement,
       not a survey point. Open any place on the <a href="index.html">atlas map</a> for its full
       geography panel, or audit every figure on the <a href="provenance.html">provenance ledger</a>.
+      <br><b>What it cost to clean up</b> — the public money spent on drainage, relief and desilting
+      after these floods — is a <b>declared gap</b>: no per-district flood-spend figure is published
+      in a form we can source, so we don't invent one. Where a court fine or revival budget IS on
+      record (e.g. Bengaluru's ₹139 cr fines, Gurgaon's ₹100 cr bundh revival) it appears in the
+      case detail.
     </p>
   </main>
 
@@ -163,6 +174,21 @@
       return `<div class="ea-flood">🌊 …and the water returns: ${bits.join(" · ")}</div>`;
     }
 
+    // What was lost, over time — a sourced before→after with a "then vs now" bar.
+    function lossLine(c) {
+      const L = c.loss;
+      if (!L || typeof L.pct !== "number") return "";
+      const shrunk = L.pct < 0;
+      const mag = Math.min(100, Math.abs(L.pct));
+      // bar shows the surviving share for a shrink, or the growth for built-up
+      const remain = shrunk ? Math.max(4, 100 + L.pct) : 100;
+      const fmt = v => `${v}${esc(L.unit || "")}`;
+      return `<div class="ea-loss">
+        <div class="ea-loss-hd"><b>${shrunk ? "▼" : "▲"} ${Math.abs(L.pct)}%</b> ${esc(L.label)} — ${fmt(L.from)} <span class="ea-loss-yr">${L.from_year}</span> → ${fmt(L.to)} <span class="ea-loss-yr">${L.to_year}</span></div>
+        <div class="ea-loss-bar"><i style="width:${shrunk ? remain : mag}%;background:${shrunk ? "oklch(0.6 0.13 200)" : "oklch(0.66 0.19 32)"}"></i></div>
+      </div>`;
+    }
+
     function card(c) {
       const href = `index.html?state=${encodeURIComponent(c.state)}&district=${encodeURIComponent(c.district)}`;
       return `<article class="ea-card">
@@ -172,6 +198,7 @@
         </div>
         <div class="ea-type">🏗️ ${esc(c.type || "encroachment")}</div>
         ${c.water_body ? `<div class="ea-wb">on ${esc(c.water_body)}</div>` : ""}
+        ${lossLine(c)}
         ${c.detail ? `<div class="ea-detail">${esc(c.detail)}</div>` : ""}
         ${floodLine(c)}
         <div class="ea-foot">

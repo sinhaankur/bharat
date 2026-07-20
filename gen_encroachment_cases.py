@@ -41,6 +41,42 @@ SITE_COORDS = {
 SITE_SOURCE = "Curated centre of the named water body / floodplain (public geography) — approximate placement, not a survey point"
 
 
+# Human labels + unit for the timeline metrics we surface as a before→after loss.
+LOSS_LABEL = {
+    "wular_openwater_km2": ("Wular open water", "km²"),
+    "marsh_area_ha": ("marsh area", "ha"),
+    "lake_extent_index": ("lake extent", " (1979=100)"),
+    "water_bodies": ("water bodies", ""),
+    "wetland_area_km2": ("wetland area", "km²"),
+    "lake_count": ("lakes", ""),
+    "builtup_pct": ("built-up in the catchment", "%"),
+    "dal_openwater_km2": ("Dal open water", "km²"),
+}
+
+
+def loss_from_timeline(tl):
+    """Earliest vs latest numeric point of the same metric → a before→after loss dict."""
+    pts = [p for p in (tl.get("points") or [])
+           if isinstance(p.get("value"), (int, float)) and not isinstance(p.get("value"), bool)]
+    by_metric = {}
+    for p in pts:
+        by_metric.setdefault(p["metric"], []).append(p)
+    best = None
+    for metric, ps in by_metric.items():
+        if len(ps) < 2:
+            continue
+        ps = sorted(ps, key=lambda x: x["year"])
+        a, b = ps[0], ps[-1]
+        label, unit = LOSS_LABEL.get(metric, (metric.replace("_", " "), ""))
+        pct = round((b["value"] - a["value"]) / a["value"] * 100) if a["value"] else None
+        best = {
+            "metric": metric, "label": label, "unit": unit,
+            "from": a["value"], "from_year": a["year"],
+            "to": b["value"], "to_year": b["year"], "pct": pct,
+        }
+    return best, (tl.get("range_note") or None)
+
+
 def main():
     led = json.load(open(LEDGER))
     try:
@@ -58,6 +94,10 @@ def main():
             low_pct = fe.get("pct_area_below_10m") if not fe.get("figure_gap") else None
             flood_level = g.get("flood_level")
             rivers = g.get("major_rivers") or []
+
+            # what was lost, over time — the earliest vs latest numeric point of the same
+            # metric in the district's water-body timeline. A real before→after, sourced.
+            loss, loss_note = loss_from_timeline(g.get("timeline") or {})
 
             for c in (enc.get("cases") or []):
                 key = f"{state}|{district}"
@@ -83,6 +123,8 @@ def main():
                     "low_lying_pct": low_pct,       # % of district < 10 m (DEM); null where a gap
                     "flood_level": flood_level,     # district-chronic / state-flood-prone / not-flagged
                     "rivers": rivers[:3],           # the rivers whose plain this sits on
+                    "loss": loss,                   # {metric, from, to, from_year, to_year, pct} or null
+                    "loss_note": loss_note,         # the timeline range_note (story fallback)
                 })
 
     # newest first, then by state for a stable order
