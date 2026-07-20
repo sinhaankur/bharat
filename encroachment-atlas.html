@@ -50,6 +50,8 @@
     .ea-type { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.03em; color: oklch(0.82 0.14 40); margin: 0.35rem 0 0.1rem; }
     .ea-wb { font-size: 0.9rem; font-weight: 600; color: oklch(0.86 0.10 220); }
     .ea-detail { font-size: 0.85rem; line-height: 1.5; color: var(--foreground); margin: 0.4rem 0; }
+    .ea-flood { font-size: 0.82rem; line-height: 1.45; color: oklch(0.82 0.10 220); background: oklch(0.20 0.05 220 / 0.3); border-radius: 6px; padding: 0.35rem 0.55rem; margin: 0.4rem 0; }
+    .ea-flood b { color: oklch(0.88 0.13 210); }
     .ea-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.6rem; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px dashed var(--border); }
     .ea-order { font-size: 0.76rem; color: var(--muted-foreground); }
     .ea-order a { color: oklch(0.72 0.13 250); }
@@ -147,6 +149,20 @@
       drawMarkers(cs);
     }
 
+    // "…and this is why it floods" — the consequence half. Low-lying % only where it's
+    // meaningful (>0 — inland plateau cases read 0 because <10 m SEA level is the wrong metric
+    // there); otherwise the CWC/NDMA flood flag + the river whose plain it sits on.
+    const FLOOD_LABEL = { "district-chronic": "flood-chronic (CWC/NDMA)", "state-flood-prone": "in a flood-prone state (CWC/NDMA)" };
+    function floodLine(c) {
+      const bits = [];
+      if (typeof c.low_lying_pct === "number" && c.low_lying_pct >= 1)
+        bits.push(`<b>${c.low_lying_pct.toFixed(0)}%</b> of the district lies below 10 m`);
+      if (FLOOD_LABEL[c.flood_level]) bits.push(FLOOD_LABEL[c.flood_level]);
+      if (c.rivers && c.rivers.length) bits.push(`on the ${esc(c.rivers[0])} plain`);
+      if (!bits.length) return "";
+      return `<div class="ea-flood">🌊 …and the water returns: ${bits.join(" · ")}</div>`;
+    }
+
     function card(c) {
       const href = `index.html?state=${encodeURIComponent(c.state)}&district=${encodeURIComponent(c.district)}`;
       return `<article class="ea-card">
@@ -157,6 +173,7 @@
         <div class="ea-type">🏗️ ${esc(c.type || "encroachment")}</div>
         ${c.water_body ? `<div class="ea-wb">on ${esc(c.water_body)}</div>` : ""}
         ${c.detail ? `<div class="ea-detail">${esc(c.detail)}</div>` : ""}
+        ${floodLine(c)}
         <div class="ea-foot">
           ${c.order_ref ? `<span class="ea-order">⚖️ ${esc(c.order_ref)}${c.source ? ` <a href="${esc(c.source)}" target="_blank" rel="noopener">↗ source</a>` : ""}</span>` : ""}
           ${c.status ? `<span class="ea-status">${esc(c.status)}</span>` : ""}

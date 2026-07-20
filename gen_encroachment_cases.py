@@ -53,6 +53,12 @@ def main():
         for district, d in (s.get("districts") or {}).items():
             g = (d.get("dimensions") or {}).get("geography") or {}
             enc = g.get("encroachment") or {}
+            # flood-consequence figures for this district (the "and this is why it floods" half)
+            fe = g.get("flood_exposure") or {}
+            low_pct = fe.get("pct_area_below_10m") if not fe.get("figure_gap") else None
+            flood_level = g.get("flood_level")
+            rivers = g.get("major_rivers") or []
+
             for c in (enc.get("cases") or []):
                 key = f"{state}|{district}"
                 centroid = cent.get(key)
@@ -73,6 +79,10 @@ def main():
                     "site_latlng": site,            # curated water-body centre, or null
                     "centroid_latlng": centroid,    # district centroid fallback
                     "placement": "site" if site else ("district" if centroid else None),
+                    # flood consequence — the "and this is why it floods" half of the story
+                    "low_lying_pct": low_pct,       # % of district < 10 m (DEM); null where a gap
+                    "flood_level": flood_level,     # district-chronic / state-flood-prone / not-flagged
+                    "rivers": rivers[:3],           # the rivers whose plain this sits on
                 })
 
     # newest first, then by state for a stable order
