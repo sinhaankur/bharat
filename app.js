@@ -101,8 +101,8 @@
       help: 'NCRB Prison Statistics India — prisoners lodged ÷ sanctioned capacity. Above 100% = overcrowded (UNODC: >120% critical, >150% extreme). Every state carries a sourced occupancy band; exact % shown where transcribed.'
     },
     unrest: {
-      label: 'Protest / unrest — news mentions',
-      shortLabel: '✊ Unrest',
+      label: 'News attention — items flagged',
+      shortLabel: '📰 News attention',
       diverging: false,
       group: 'safety',
       compute: (d) => { const n = safetyFor(d.stateName)?.unrest?.news_mentions; return n ? n : null; },
@@ -453,7 +453,7 @@
           <div class="sub">${occSub}${pr.undertrials != null ? ` · ${utVal}` : ''}</div>
         </div>
         <div class="sf-cell ${un.news_mentions ? 'is-unrest' : ''}">
-          <div class="label">✊ Unrest <span class="sf-tier">news</span></div>
+          <div class="label">📰 News attention <span class="sf-tier">news</span></div>
           <div class="value">${unVal}</div>
           <div class="sub">${sp.total ? `${leanBarHTML(sp)} <span class="sf-spread">${sp.left}L·${sp.centre}C·${sp.right}R${sp.gov ? `·${sp.gov}gov` : ''}</span>` : 'no recent protest news'}</div>
         </div>
@@ -3173,7 +3173,7 @@
       ${hdHint}
       <div class="mlp-sec-h">Hotspots &amp; pins</div>
       <label class="mlp-check"><input type="checkbox" id="mlp-news" ${ui.state.showNews ? 'checked' : ''} ${newsBubbleLayer ? '' : 'disabled'}> 📰 News bubbles${newsBubbleLayer ? '' : ' <span class="mlp-dim">(loading…)</span>'}</label>
-      <label class="mlp-check"><input type="checkbox" id="mlp-unrest" ${ui.state.showUnrest ? 'checked' : ''} ${unrestLayer ? '' : 'disabled'}> ✊ Protest / unrest hotspots${unrestLayer ? ' <span class="mlp-src"><a href="references.html" title="Derived from the aggregated news feed (tier-3)">news</a></span>' : ' <span class="mlp-dim">(loading…)</span>'}</label>
+      <label class="mlp-check"><input type="checkbox" id="mlp-unrest" ${ui.state.showUnrest ? 'checked' : ''} ${unrestLayer ? '' : 'disabled'}> 📰 News-attention pins${unrestLayer ? ' <span class="mlp-src"><a href="references.html" title="Derived from the aggregated news feed (tier-3)">news</a></span>' : ' <span class="mlp-dim">(loading…)</span>'}</label>
       <label class="mlp-check"><input type="checkbox" id="mlp-heat" ${ui.state.showHeat ? 'checked' : ''} ${eventHeatLayer ? '' : 'disabled'}> 🔥 News &amp; event heatmap${eventHeatLayer ? '' : ' <span class="mlp-dim">(loading…)</span>'}</label>
       <label class="mlp-check"><input type="checkbox" id="mlp-haz" ${ui.state.showHazards ? 'checked' : ''} ${ui.state.drillState ? '' : 'disabled'}> ⚠ Hazard &amp; zoning pins${ui.state.drillState ? '' : ' <span class="mlp-dim">(drill into a state)</span>'}</label>
       <label class="mlp-check"><input type="checkbox" id="mlp-sub" ${subOn ? 'checked' : ''} ${ui.state.drillDistrict ? '' : 'disabled'}> Sub-districts (taluk/tehsil)</label>
@@ -3470,21 +3470,22 @@
       try { c = layer && layer.getBounds ? layer.getBounds().getCenter() : null; } catch (e) {}
       if (!c) continue;
       const t = u.news_mentions / maxN;
-      const r = 8 + 16 * Math.sqrt(t);
-      const col = `oklch(${0.72 - 0.10 * t} ${0.16 + 0.06 * t} ${40 - 15 * t})`;  // amber→red
+      // Restrained markers: smaller + fainter so the overlay reads as a light signal, not a red wash.
+      const r = 5 + 9 * Math.sqrt(t);
+      const col = `oklch(${0.74 - 0.06 * t} ${0.12 + 0.04 * t} ${55 - 10 * t})`;  // soft amber, not hot red
       const sp = leanSpread(u.recent);
       const m = L.circleMarker([c.lat, c.lng], {
-        radius: r, color: col, weight: 1.5, fillColor: col, fillOpacity: 0.32,
+        radius: r, color: col, weight: 1, fillColor: col, fillOpacity: 0.16,
         className: 'unrest-pin', pane: 'markerPane',
       });
-      const topItems = (u.recent || []).slice(0, 3).map(n =>
-        `<div class="up-item"><span class="up-lean up-${leanBucket(n.outlet_lean)}"></span>${esc((n.headline || '').slice(0, 70))}</div>`).join('');
+      // Tooltip shows only a neutral, clearly tier-3 attention count + who's covering it (lean
+      // spread) — NOT raw headlines. Surfacing specific headlines on a state pin is an
+      // accusation-by-association risk; the count + spread is the honest, defensible signal.
       m.bindTooltip(
-        `<div class="unrest-tip-h">✊ ${esc(st)} — ${u.news_mentions} unrest mention${u.news_mentions === 1 ? '' : 's'}</div>` +
+        `<div class="unrest-tip-h">📰 ${esc(st)} — ${u.news_mentions} news item${u.news_mentions === 1 ? '' : 's'} flagged</div>` +
         `<div class="unrest-tip-spread">${leanBarHTML(sp, { height: 7 })}` +
         `<span class="up-legend">${sp.left}L · ${sp.centre}C · ${sp.right}R${sp.gov ? ` · ${sp.gov} gov` : ''}</span></div>` +
-        topItems +
-        `<div class="up-foot">news-attention signal (tier-3) · click to open the state</div>`,
+        `<div class="up-foot">news-attention signal (tier-3, not a verified event count) · click to open the state</div>`,
         { direction: 'top', className: 'unrest-tip', sticky: false }
       );
       m.on('click', () => selectState(st, true));
