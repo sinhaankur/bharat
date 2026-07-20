@@ -91,9 +91,9 @@
     <p class="ea-note">
       Cases are generated from the district ledger's geography dimension (documented NGT / court /
       CAG matters only — sourced or a gap, never invented). Map markers sit on the
-      <b>district centroid</b>, an approximate placement, not the exact site. Open any place on the
-      <a href="index.html">atlas map</a> for its full geography panel, or audit every figure on the
-      <a href="provenance.html">provenance ledger</a>.
+      <b>centre of the named water body</b> (lake / marsh / river reach) — an approximate placement,
+      not a survey point. Open any place on the <a href="index.html">atlas map</a> for its full
+      geography panel, or audit every figure on the <a href="provenance.html">provenance ledger</a>.
     </p>
   </main>
 
@@ -194,7 +194,7 @@
         m.addTo(MARKERS);
         bounds.push(g.latlng);
       }
-      if (bounds.length) try { MAP.fitBounds(bounds, { padding: [40, 40], maxZoom: 7 }); } catch (e) {}
+      if (bounds.length) try { MAP.fitBounds(bounds, { padding: [40, 40], maxZoom: 8 }); } catch (e) {}
     }
   </script>
   <script src="command-palette.js"></script>
