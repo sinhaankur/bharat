@@ -1509,19 +1509,26 @@
         </div>`);
       }
       // Illegal encroachment — documented NGT/court cases only; gap otherwise.
+      // Promoted to a prominent "built where the water returns" block: developers on
+      // floodplains / lakebeds / wetlands, with the full case detail + the court order +
+      // the flood-return logic. This is the accountability point the terrain view makes
+      // concrete — the land floods because it was always water.
       const enc = geo.encroachment;
       if (enc && (enc.documented != null || (enc.cases || []).length)) {
         const cases = (enc.cases || []);
         const body = cases.length ? cases.map(c => `
-          <div class="geo-enc-case">
-            <span class="geo-enc-type">${esc(c.type || 'encroachment')}</span>${c.water_body ? ` · <b>${esc(c.water_body)}</b>` : ''}
-            ${c.status ? `<span class="geo-enc-status">${esc(c.status)}</span>` : ''}
-            ${c.order_ref ? `<div class="geo-enc-ref">${esc(c.order_ref)}${c.source ? ` <a href="${esc(c.source)}" target="_blank" rel="noopener">↗</a>` : ''}</div>` : ''}
+          <div class="geo-enc-case geo-enc-case--rich">
+            <div class="geo-enc-top"><span class="geo-enc-type">🏗️ ${esc(c.type || 'encroachment')}</span>${c.water_body ? ` <span class="geo-enc-wb">on ${esc(c.water_body)}</span>` : ''}${c.year ? ` <span class="geo-enc-yr">${esc(String(c.year))}</span>` : ''}</div>
+            ${c.detail ? `<div class="geo-enc-detail">${esc(c.detail)}</div>` : ''}
+            <div class="geo-enc-foot">
+              ${c.order_ref ? `<span class="geo-enc-ref">⚖️ ${esc(c.order_ref)}${c.source ? ` <a href="${esc(c.source)}" target="_blank" rel="noopener">↗</a>` : ''}</span>` : ''}
+              ${c.status ? `<span class="geo-enc-status">${esc(c.status)}</span>` : ''}
+            </div>
           </div>`).join('') : '<span class="dim-gap">documented cases: gap (NGT/court/CAG)</span>';
         rows.push(`
-        <div class="dim-row dim-row--note">
-          <span class="dim-key">Encroachment</span>
-          <span class="dim-val">${body}</span>
+        <div class="dim-row dim-row--note dim-row--enc">
+          <span class="dim-key">Built where<br>water returns</span>
+          <span class="dim-val">${body}${cases.length ? `<div class="geo-enc-why">The floodplain / lakebed doesn't forget — construction here sits on land the water periodically reclaims, which is why it floods.</div>` : ''}</span>
         </div>`);
       }
       // (1) Paleochannel — the river's natural historic bed ("you built on the old bed").
