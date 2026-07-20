@@ -15,6 +15,8 @@
   <meta property="og:image" content="https://sinhaankur.github.io/india-fiscal-map/og-image.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://sinhaankur.github.io/india-fiscal-map/og-image.png" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <link rel="stylesheet" href="styles.css" />
   <style>
     .fd-wrap { max-width: 1080px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; }
@@ -28,6 +30,28 @@
     .fd-chip.on { border-color: var(--warm); color: oklch(0.18 0 0); background: var(--warm); font-weight: 600; }
     .fd-sort { margin-left: auto; font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); display: flex; align-items: center; gap: 0.4rem; }
     .fd-sort select { background: oklch(0.18 0 0); color: var(--foreground); border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 3px 8px; font-family: var(--font-mono); font-size: 10px; }
+
+    /* view toggle: Cards ⇄ Map */
+    .fd-view { display: inline-flex; border: 1px solid var(--border-strong); border-radius: 999px; overflow: hidden; }
+    .fd-view button { background: transparent; color: var(--muted-foreground); border: none; padding: 4px 12px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.03em; cursor: pointer; }
+    .fd-view button.on { background: var(--warm); color: oklch(0.18 0 0); font-weight: 600; }
+
+    /* map view */
+    #fd-map { height: 560px; border: 1px solid var(--border); border-radius: var(--radius); margin-top: 1.1rem; background: oklch(0.13 0 0); }
+    #fd-map.hidden, .fd-grid.hidden { display: none; }
+    .leaflet-container { background: oklch(0.13 0 0); font-family: inherit; }
+    .leaflet-popup-content-wrapper, .leaflet-popup-tip { background: oklch(0.16 0 0); color: var(--foreground); border: 1px solid var(--border-strong); box-shadow: 0 8px 28px oklch(0 0 0 / 0.55); }
+    .leaflet-popup-content { margin: 0.7rem 0.85rem; min-width: 220px; }
+    .fd-pop-h { font-weight: 700; font-size: 1rem; color: var(--foreground); text-decoration: none; }
+    .fd-pop-h:hover { color: oklch(0.84 0.15 78); }
+    .fd-pop-h .lvl { font-family: var(--font-mono); font-size: 8px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-foreground); margin-left: 0.3rem; }
+    .fd-pop-sub { font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); margin: 0.15rem 0 0.5rem; }
+    .fd-pop-open { display: inline-block; margin-top: 0.55rem; font-family: var(--font-mono); font-size: 9.5px; color: oklch(0.74 0.16 75); text-decoration: none; }
+    .fd-pop-open:hover { text-decoration: underline; }
+    .fd-maplegend { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; margin-top: 0.6rem; font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); align-items: center; }
+    .fd-maplegend b { color: var(--foreground); font-weight: 600; }
+    .fd-maplegend .sw { display: inline-flex; align-items: center; gap: 0.3rem; }
+    .fd-maplegend .sw i { width: 11px; height: 11px; border-radius: 50%; display: inline-block; opacity: 0.85; }
 
     /* place cluster cards */
     .fd-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1rem; margin-top: 1.1rem; }
@@ -96,6 +120,10 @@
       <p class="fd-thesis">History is written by the winner, and a "fact" can be disputable depending
       on who won. So we separate the two: the coverage is contested; the numbers underneath are not.</p>
       <div class="fd-controls">
+        <div class="fd-view" id="view">
+          <button data-v="cards" class="on">▦ Cards</button>
+          <button data-v="map">🗺 Map</button>
+        </div>
         <div class="fd-filters" id="filters">
           <button class="fd-chip on" data-f="all">All places</button>
           <button class="fd-chip" data-f="district">Districts</button>
@@ -113,6 +141,15 @@
       </div>
     </header>
 
+    <div id="fd-map" class="hidden"></div>
+    <div class="fd-maplegend hidden" id="maplegend">
+      <span><b>Size</b> = stories here</span>
+      <span class="sw"><i style="background:oklch(0.72 0.14 145)"></i> both sides cover it</span>
+      <span class="sw"><i style="background:oklch(0.80 0.14 75)"></i> leaning</span>
+      <span class="sw"><i style="background:oklch(0.66 0.20 30)"></i> one-sided</span>
+      <span>· state centroids (open geojson); click a bubble for the breakdown</span>
+    </div>
+
     <div class="fd-grid" id="grid"><p class="fd-empty">Loading the feed…</p></div>
 
     <p class="fd-note">
@@ -127,6 +164,9 @@
 
   <div id="site-footer"></div>
 
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="map-layers.js"></script>
   <script>
     const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     const fmtDate = d => { if (!d) return ""; const x = new Date(d); return isNaN(x) ? d : x.toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"}); };
@@ -145,16 +185,18 @@
     ];
     const LEAN_BY = Object.fromEntries(LEANS.map(l => [l.key, l]));
 
-    let PLACES = [], FILTER = "all", SORT = "volume";
-    let LED = null, SAFETY = null, POP = null;
+    let PLACES = [], FILTER = "all", SORT = "volume", VIEW = "cards";
+    let LED = null, SAFETY = null, POP = null, CENTROIDS = null;
 
     Promise.all([
       fetch("news-feed.json").then(r => r.ok ? r.json() : { news_items: [] }).catch(() => ({ news_items: [] })),
       fetch("district-ledger.json").then(r => r.ok ? r.json() : null).catch(() => null),
       fetch("safety.json").then(r => r.ok ? r.json() : null).catch(() => null),
       fetch("district-pop.json").then(r => r.ok ? r.json() : null).catch(() => null),
-    ]).then(([feed, led, safety, pop]) => {
+      fetch("india-states.geojson").then(r => r.ok ? r.json() : null).catch(() => null),
+    ]).then(([feed, led, safety, pop, geo]) => {
       LED = led; SAFETY = safety; POP = pop;
+      CENTROIDS = geo ? stateCentroids(geo) : {};
       cluster(feed.news_items || []);
       document.querySelectorAll(".fd-chip").forEach(b => b.addEventListener("click", () => {
         FILTER = b.dataset.f;
@@ -162,8 +204,32 @@
         render();
       }));
       document.getElementById("sort").addEventListener("change", e => { SORT = e.target.value; render(); });
+      document.querySelectorAll("#view button").forEach(b => b.addEventListener("click", () => {
+        VIEW = b.dataset.v;
+        document.querySelectorAll("#view button").forEach(x => x.classList.toggle("on", x === b));
+        render();
+      }));
       render();
     }).catch(e => document.getElementById("grid").innerHTML = `<p class="fd-empty">Load error: ${esc(e.message)}</p>`);
+
+    // Compute [lat,lng] centroid per state from the open boundary geojson (title-case ST_NM
+    // matches the feed's geo.state). Simple average of ring vertices — good enough to place a bubble.
+    function stateCentroids(geo) {
+      const out = {};
+      for (const f of (geo.features || [])) {
+        const nm = f.properties && f.properties.ST_NM;
+        if (!nm) continue;
+        let sx = 0, sy = 0, n = 0;
+        const eat = coords => coords.forEach(c => {
+          if (typeof c[0] === "number" && typeof c[1] === "number") { sx += c[0]; sy += c[1]; n++; }
+          else eat(c);
+        });
+        const g = f.geometry; if (!g) continue;
+        eat(g.coordinates);
+        if (n) out[nm.toLowerCase()] = [sy / n, sx / n];   // Leaflet wants [lat, lng]
+      }
+      return out;
+    }
 
     // ---- group news items into place clusters ----------------------------------
     function cluster(items) {
@@ -256,7 +322,7 @@
     }
 
     // ---- render ----------------------------------------------------------------
-    function render() {
+    function filteredPlaces() {
       let places = PLACES.filter(c => {
         if (FILTER === "all") return true;
         if (FILTER === "district" || FILTER === "state") return c.level === FILTER;
@@ -267,17 +333,91 @@
       if (SORT === "volume") places.sort((a, b) => b.items.length - a.items.length);
       else if (SORT === "recent") places.sort((a, b) => new Date(b.lastAt || 0) - new Date(a.lastAt || 0));
       else if (SORT === "skew") places.sort((a, b) => b.skew - a.skew || b.items.length - a.items.length);
+      return places;
+    }
 
+    function render() {
+      const places = filteredPlaces();
       const grid = document.getElementById("grid");
+      const mapEl = document.getElementById("fd-map");
+      const legend = document.getElementById("maplegend");
+      const isMap = VIEW === "map";
+      grid.classList.toggle("hidden", isMap);
+      mapEl.classList.toggle("hidden", !isMap);
+      legend.classList.toggle("hidden", !isMap);
+      if (isMap) return renderMap(places);
+      renderCards(places, grid);
+    }
+
+    function renderCards(places, grid) {
       if (!places.length) { grid.innerHTML = `<p class="fd-empty">No places match this filter yet.</p>`; return; }
       grid.innerHTML = places.map(card).join("");
-
       // wire "show more" toggles
       grid.querySelectorAll(".fd-more").forEach(btn => btn.addEventListener("click", () => {
         const box = btn.nextElementSibling;
         const open = box.classList.toggle("open");
         btn.textContent = open ? "− show less" : `+ ${box.dataset.n} more stor${box.dataset.n === "1" ? "y" : "ies"} here`;
       }));
+    }
+
+    // ---- map view: one bubble per place, size = volume, colour = lean skew -----
+    let FMAP = null, MARKERS = null;
+    // Skew colour: balanced (both sides) → green; leaning → amber; one-sided → red.
+    function skewColor(c) {
+      if (c.bothSides && c.skew < 0.5) return "oklch(0.72 0.14 145)";
+      if (c.oneSided || c.skew >= 0.8) return "oklch(0.66 0.20 30)";
+      return "oklch(0.80 0.14 75)";
+    }
+    function renderMap(places) {
+      if (typeof L === "undefined") { document.getElementById("fd-map").innerHTML = '<p class="fd-empty">Map library did not load.</p>'; return; }
+      if (!FMAP) {
+        FMAP = L.map("fd-map", { scrollWheelZoom: true, attributionControl: true }).setView([22.6, 80], 5);
+        const base = (window.MapLayers && MapLayers.basemaps)
+          ? MapLayers.basemaps(L)["Dark map"]
+          : L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png", { subdomains: "abcd", attribution: "&copy; OSM, &copy; CARTO" });
+        base.addTo(FMAP);
+        MARKERS = L.layerGroup().addTo(FMAP);
+      }
+      // Leaflet needs a size recalc when its container was display:none until now.
+      setTimeout(() => FMAP.invalidateSize(), 60);
+      MARKERS.clearLayers();
+      const bounds = [];
+      for (const c of places) {
+        const ll = CENTROIDS[(c.state || "").toLowerCase()];
+        if (!ll) continue;                    // no centroid → can't place honestly; skip
+        // jitter district bubbles slightly so several districts in one state don't fully overlap
+        const seed = [...c.name].reduce((a, ch) => a + ch.charCodeAt(0), 0);
+        const jx = c.district ? ((seed % 7) - 3) * 0.12 : 0;
+        const jy = c.district ? (((seed >> 3) % 7) - 3) * 0.12 : 0;
+        const pos = [ll[0] + jy, ll[1] + jx];
+        const radius = Math.max(6, Math.min(30, 5 + Math.sqrt(c.items.length) * 4));
+        const m = L.circleMarker(pos, {
+          radius, color: skewColor(c), weight: 1.5, fillColor: skewColor(c), fillOpacity: 0.45,
+        });
+        m.bindPopup(mapPopup(c), { maxWidth: 300 });
+        m.addTo(MARKERS);
+        bounds.push(pos);
+      }
+      if (bounds.length) try { FMAP.fitBounds(bounds, { padding: [40, 40], maxZoom: 7 }); } catch (e) {}
+    }
+
+    function mapPopup(c) {
+      const href = `index.html?state=${encodeURIComponent(c.state)}${c.district ? "&district=" + encodeURIComponent(c.district) : ""}`;
+      const total = c.items.length;
+      const seg = LEANS.filter(l => c.leans[l.key]).map(l =>
+        `<i class="${l.cls}" style="width:${(c.leans[l.key] / total * 100).toFixed(1)}%"></i>`).join("");
+      const r = c.reality;
+      const bits = [];
+      if (r.pop) bits.push(`${fmtN(r.pop.n)} people${r.pop.level === "state" ? " (state)" : ""}`);
+      if (r.perCap != null) bits.push(`₹${Math.round(r.perCap).toLocaleString("en-IN")}/head`);
+      if (r.crime != null) bits.push(`crime ${Math.round(r.crime)}/lakh`);
+      const note = c.oneSided ? '<div style="color:oklch(0.76 0.17 45);font-size:11px;margin-top:4px">⚠ one-sided coverage</div>'
+        : c.bothSides ? '<div style="color:oklch(0.74 0.14 145);font-size:11px;margin-top:4px">✓ both sides cover it</div>' : "";
+      return `<a class="fd-pop-h" href="${href}">${esc(c.name)}<span class="lvl">${c.level}</span></a>
+        <div class="fd-pop-sub">${total} stor${total === 1 ? "y" : "ies"}${c.district ? " · " + esc(c.state) : ""}</div>
+        <div class="fd-lean" style="height:8px">${seg}</div>${note}
+        <div class="fd-pop-sub" style="margin-top:6px">${bits.length ? esc(bits.join(" · ")) : "reality figures a gap here"}</div>
+        <a class="fd-pop-open" href="${href}">open on the atlas →</a>`;
     }
 
     function leanBar(c) {
