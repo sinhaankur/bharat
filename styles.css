@@ -178,6 +178,9 @@ a:hover { border-color: var(--foreground); }
   cursor: pointer; position: relative;
 }
 .haz-pin:hover { transform: scale(1.15); transition: transform .12s; }
+/* "built where water returns" pins pulse gently so the developer-on-floodplain story stands out */
+.haz-pin--enc { background: color-mix(in oklch, var(--hc) 45%, oklch(0.14 0.01 250)); animation: hazEncPulse 2.4s ease-in-out infinite; }
+@keyframes hazEncPulse { 0%,100% { box-shadow: 0 1px 6px oklch(0 0 0 / 0.55); } 50% { box-shadow: 0 1px 6px oklch(0 0 0 / 0.55), 0 0 0 5px oklch(0.66 0.20 32 / 0.22); } }
 .haz-pin-n {
   position: absolute; top: -5px; right: -5px; min-width: 13px; height: 13px; padding: 0 2px;
   border-radius: 999px; background: var(--hc); color: #0c0c0c;

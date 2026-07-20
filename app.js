@@ -3532,7 +3532,11 @@
       if (!c) continue;
       const zone = zoningZone(gd);
       const top = items[0];   // strongest icon drives the marker colour
-      const html = `<div class="haz-pin" style="--hc:${zone.color}">${top.icon}${items.length > 1 ? `<span class="haz-pin-n">${items.length}</span>` : ''}</div>`;
+      // encroachment "built where water returns" pins get a distinct hot colour + class so
+      // the developer-on-a-floodplain story pops out from the general zoning pins.
+      const encLed = top.enc === true;
+      const hc = encLed ? 'oklch(0.66 0.20 32)' : zone.color;
+      const html = `<div class="haz-pin${encLed ? ' haz-pin--enc' : ''}" style="--hc:${hc}">${top.icon}${items.length > 1 ? `<span class="haz-pin-n">${items.length}</span>` : ''}</div>`;
       const mk = L.marker(c, {
         icon: L.divIcon({ className: 'haz-divicon', html, iconSize: [26, 26], iconAnchor: [13, 13] }),
       });
@@ -3551,12 +3555,20 @@
   // The concrete hazards pinned to a district → [{icon, text}], strongest first.
   function hazardItems(g) {
     const out = [];
+    // "Built where the water returns" leads — a documented case of construction on land the
+    // water reclaims (floodplain / lakebed / wetland) is the sharpest accountability signal,
+    // so it drives the map pin's icon. Name the actual water body per case, not just a count.
+    if (g.encroachment?.cases?.length) {
+      for (const cse of g.encroachment.cases) {
+        const wb = cse.water_body ? ` on ${cse.water_body}` : '';
+        out.push({ icon: '🏗️', text: `Built where water returns — ${cse.type || 'encroachment'}${wb} (NGT/court)`, enc: true });
+      }
+    }
     if (g.unsafe_zone?.documented) out.push({ icon: '⛔', text: `Unsafe / no-development: ${g.unsafe_zone.zone || ''}` });
     if (g.crz?.applies || g.on_coast) out.push({ icon: '🌊', text: 'Coastal Regulation Zone — near-shore construction legally capped (CRZ 2019)' });
     if (g.flood_level === 'district-chronic') out.push({ icon: '💧', text: 'Flood-chronic (CWC/NDMA/Bhuvan)' });
     if (g.paleochannel?.documented) out.push({ icon: '〰️', text: `On a river\'s old bed: ${g.paleochannel.river || 'palaeochannel'}` });
     if (g.encroachment_zone?.documented) out.push({ icon: '🚧', text: `Encroachment zone: ${g.encroachment_zone.zone_type || ''}` });
-    else if (g.encroachment?.cases?.length) out.push({ icon: '🚧', text: `${g.encroachment.cases.length} documented encroachment case${g.encroachment.cases.length > 1 ? 's' : ''} (NGT/court)` });
     if (g.monsoon_inundation?.documented) out.push({ icon: '🌧️', text: `Monsoon inundation: ${g.monsoon_inundation.season || ''}` });
     return out;
   }
