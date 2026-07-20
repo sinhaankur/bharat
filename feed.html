@@ -48,6 +48,9 @@
     .fd-pop-sub { font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); margin: 0.15rem 0 0.5rem; }
     .fd-pop-open { display: inline-block; margin-top: 0.55rem; font-family: var(--font-mono); font-size: 9.5px; color: oklch(0.74 0.16 75); text-decoration: none; }
     .fd-pop-open:hover { text-decoration: underline; }
+    .fd-mapbar { display: flex; align-items: center; gap: 0.6rem; margin-top: 1.1rem; }
+    .fd-mapbar.hidden { display: none; }
+    .fd-mapbar-lbl { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.03em; color: var(--muted-foreground); }
     .fd-maplegend { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; margin-top: 0.6rem; font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); align-items: center; }
     .fd-maplegend b { color: var(--foreground); font-weight: 600; }
     .fd-maplegend .sw { display: inline-flex; align-items: center; gap: 0.3rem; }
@@ -173,14 +176,15 @@
       </div>
     </header>
 
-    <div id="fd-map" class="hidden"></div>
-    <div class="fd-maplegend hidden" id="maplegend">
-      <span><b>Size</b> = stories here</span>
-      <span class="sw"><i style="background:oklch(0.72 0.14 145)"></i> both sides cover it</span>
-      <span class="sw"><i style="background:oklch(0.80 0.14 75)"></i> leaning</span>
-      <span class="sw"><i style="background:oklch(0.66 0.20 30)"></i> one-sided</span>
-      <span>· state centroids (open geojson); click a bubble for the breakdown</span>
+    <div class="fd-mapbar hidden" id="mapbar">
+      <span class="fd-mapbar-lbl">Colour bubbles by</span>
+      <div class="fd-view" id="mapcolor">
+        <button data-c="lean" class="on">Media lean</button>
+        <button data-c="fund">Who funds it</button>
+      </div>
     </div>
+    <div id="fd-map" class="hidden"></div>
+    <div class="fd-maplegend hidden" id="maplegend"></div>
 
     <div class="fd-grid" id="grid"><p class="fd-empty">Loading the feed…</p></div>
 
@@ -258,6 +262,11 @@
         VIEW = b.dataset.v;
         history.replaceState(null, "", VIEW === "map" ? "#map" : location.pathname);
         document.querySelectorAll("#view button").forEach(x => x.classList.toggle("on", x === b));
+        render();
+      }));
+      document.querySelectorAll("#mapcolor button").forEach(b => b.addEventListener("click", () => {
+        MAPCOLOR = b.dataset.c;
+        document.querySelectorAll("#mapcolor button").forEach(x => x.classList.toggle("on", x === b));
         render();
       }));
       // Deep-link: feed.html#map opens straight into the map view (used by the News engine page).
@@ -471,12 +480,29 @@
       const grid = document.getElementById("grid");
       const mapEl = document.getElementById("fd-map");
       const legend = document.getElementById("maplegend");
+      const mapbar = document.getElementById("mapbar");
       const isMap = VIEW === "map";
       grid.classList.toggle("hidden", isMap);
       mapEl.classList.toggle("hidden", !isMap);
       legend.classList.toggle("hidden", !isMap);
-      if (isMap) return renderMap(places);
+      mapbar.classList.toggle("hidden", !isMap);
+      if (isMap) { legend.innerHTML = legendHtml(); return renderMap(places); }
       renderCards(places, grid);
+    }
+
+    // Legend swaps with the colour mode: lean-skew classes vs the funding blocs.
+    function legendHtml() {
+      const size = `<span><b>Size</b> = stories here</span>`;
+      const foot = `<span>· click a bubble for the breakdown</span>`;
+      if (MAPCOLOR === "fund") {
+        const sw = FUNDING.filter(f => f.key !== "unknown").map(f =>
+          `<span class="sw"><i style="background:${FUND_COLOR[f.key]}"></i> ${esc(f.short)}</span>`).join("");
+        return `${size}<span><b>Colour</b> = who owns most of the coverage</span>${sw}${foot}`;
+      }
+      return `${size}
+        <span class="sw"><i style="background:oklch(0.72 0.14 145)"></i> both sides cover it</span>
+        <span class="sw"><i style="background:oklch(0.80 0.14 75)"></i> leaning</span>
+        <span class="sw"><i style="background:oklch(0.66 0.20 30)"></i> one-sided</span>${foot}`;
     }
 
     function renderCards(places, grid) {
