@@ -259,31 +259,32 @@
       slug: "news", num: "06", icon: "📰",
       accent: "oklch(0.8 0.15 72)",
       name: "The News <em>Engine</em>",
-      tagline: "What's being said, anchored to where and to what money.",
-      lede: "The moderated, attribution-only news feed — every headline linked back to its " +
-        "outlet (with a third-party lean label recorded as aggregation, not our judgement), " +
-        "and where possible anchored to a district, a scheme, or a fiscal event. It is the " +
-        "live layer over the static record, and it feeds the 'What's new' strip on the map.",
+      tagline: "Who's telling it, where — against the spin-proof numbers.",
+      lede: "News clustered by place, split by who's covering it (a third-party left→right lean, " +
+        "recorded as aggregation, not our judgement) and set beside the reality that doesn't move " +
+        "with the spin — population, per-capita money, crime. History is written by the winner; a " +
+        "fact is disputable by who won. So the coverage is shown as contested, and the numbers " +
+        "underneath as not. It's the live layer over the static record, feeding the map's 'What's new' strip.",
       maps: [
-        { label: "The feed", note: "Aggregated, link-only news items — headline, outlet, lean, language, geo/scheme anchor." },
-        { label: "'What's new' strip", note: "Sourced data-updates merged with anchored news at the top of the map." },
-        { label: "News-anchored districts", note: "Items resolved to a place surface on that district's panel and on the map." },
-        { label: "Timeline", note: "Fiscal events and story chains laid on a scrubber." },
+        { label: "Place clusters", note: "Every district/state gathers the news covering it — with a coverage-trend sparkline of when it flared up." },
+        { label: "Bias bar", note: "A left→right media-lean split per place: is it being covered from all sides, or one?" },
+        { label: "Bias vs reality", note: "Beside the coverage: Census population, per-capita money from the ledger, NCRB crime/prisons — sourced or an honest gap." },
+        { label: "News map", note: "Bubbles on real district centroids, sized by volume and coloured by lean-skew — bias made spatial." },
       ],
       how: [
         { h: "Link-only, always attributed", p: "We never reproduce article text. We store a headline, a link, and the outlet — a discovery layer that points back to the source, never a replacement for it." },
-        { h: "Lean is third-party, not ours", p: "Where an outlet carries a left/centre/right lean it's from published bias assessments, explicitly recorded as aggregation — the project makes no political judgement of its own." },
-        { h: "Anchored beats loud", p: "The homepage strip prefers items that anchor to a place, scheme or fiscal event. Unanchored national noise stays off the front door." },
+        { h: "Lean is third-party, not ours", p: "The left/centre/right lean is from published bias assessments, explicitly recorded as aggregation. We flag where a place is covered one-sidedly, but make no political judgement of our own." },
+        { h: "The number is the tie-breaker", p: "Every place card sets the contested coverage against a spin-proof reality panel — per-capita money, crime, population — each figure sourced or shown as a gap, never invented. That's the part that doesn't depend on who won." },
       ],
       example: {
-        title: "A headline, tied to a rupee",
-        body: "An audit-row story anchors to the scheme it names and the district it hit, so a reader moves from the news, to the money, to the accountability chain — the three engines meeting on one item."
+        title: "Kolkata — coverage vs the rupee",
+        body: "Eleven stories cluster on Kolkata, split across the lean bar. Beside them: 44.9 lakh people, the KMC's ₹2,897 cr civic budget (with its audit flag), ₹6,443 per head, crime 182/lakh — the numbers the coverage talks around, sourced or marked a gap."
       },
-      stat: { value: "1,200+", label: "moderated, attributed news items tracked" },
+      stat: { value: "1,200+", label: "moderated items, clustered across 84 places" },
       views: [
-        { href: "feed.html", text: "The feed" },
+        { href: "feed.html", text: "The feed — place by place" },
+        { href: "feed.html#map", text: "The news map (bias, spatial)" },
         { href: "timeline.html", text: "Timeline" },
-        { href: "index.html#map", text: "On the map" },
       ],
       sources: [
         { name: "RSS aggregation (link-only)", tier: 3 },

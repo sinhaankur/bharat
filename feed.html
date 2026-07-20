@@ -215,9 +215,15 @@
       document.getElementById("sort").addEventListener("change", e => { SORT = e.target.value; render(); });
       document.querySelectorAll("#view button").forEach(b => b.addEventListener("click", () => {
         VIEW = b.dataset.v;
+        history.replaceState(null, "", VIEW === "map" ? "#map" : location.pathname);
         document.querySelectorAll("#view button").forEach(x => x.classList.toggle("on", x === b));
         render();
       }));
+      // Deep-link: feed.html#map opens straight into the map view (used by the News engine page).
+      if ((location.hash || "").toLowerCase() === "#map") {
+        VIEW = "map";
+        document.querySelectorAll("#view button").forEach(x => x.classList.toggle("on", x.dataset.v === "map"));
+      }
       render();
     }).catch(e => document.getElementById("grid").innerHTML = `<p class="fd-empty">Load error: ${esc(e.message)}</p>`);
 
