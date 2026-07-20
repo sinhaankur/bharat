@@ -715,6 +715,7 @@ a:hover { border-color: var(--foreground); }
 #india-map-readout {
   position: absolute;
   top: 14px; left: 14px;
+  transition: opacity .2s;
   background: oklch(0.145 0 0 / 0.92);
   backdrop-filter: blur(10px);
   border: 1px solid var(--border);
@@ -732,6 +733,11 @@ a:hover { border-color: var(--foreground); }
   text-transform: uppercase;
   color: var(--muted-foreground);
   margin-bottom: 2px;
+}
+/* On phones there's no hover — hide the idle "Hover a state" prompt so it doesn't
+   clutter the first paint over the search bar; it appears once a state is tapped. */
+@media (max-width: 720px) {
+  #india-map-readout[data-idle] { opacity: 0; pointer-events: none; }
 }
 .readout-name {
   font-family: var(--font-sans);
