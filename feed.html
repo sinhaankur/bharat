@@ -3,34 +3,83 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Feed — just the news, no noise</title>
-  <meta name="description" content="A clean, curated stream of India's public-money news — original analysis, fund story-chains, and sourced headlines. No clutter, no clickbait." />
+  <title>News, place by place — bias vs reality | India District Atlas</title>
+  <meta name="description" content="India's public-money news clustered by place. Each place shows WHO is covering it (media lean, left/centre/right) against the spin-proof reality — population, per-capita money, crime and prison figures. History is written by the winner; the numbers aren't." />
+  <meta name="keywords" content="India news bias, media lean India, Ground News India, news by district, public money accountability, population vs administration" />
+  <link rel="canonical" href="https://sinhaankur.github.io/india-fiscal-map/feed.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="India District Atlas" />
+  <meta property="og:title" content="News, place by place — bias vs reality" />
+  <meta property="og:description" content="Every place: who's covering it (media lean) vs the spin-proof reality — population, per-capita money, crime, prisons. Sourced or marked a gap." />
+  <meta property="og:url" content="https://sinhaankur.github.io/india-fiscal-map/feed.html" />
+  <meta property="og:image" content="https://sinhaankur.github.io/india-fiscal-map/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://sinhaankur.github.io/india-fiscal-map/og-image.png" />
   <link rel="stylesheet" href="styles.css" />
   <style>
-    .fd-wrap { max-width: 760px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; }
+    .fd-wrap { max-width: 1080px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; }
     .fd-head h1 { margin: 0.3rem 0 0.4rem; font-size: clamp(1.6rem, 3.5vw, 2.4rem); }
-    .fd-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.55; max-width: 64ch; }
-    .fd-filters { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 1.2rem 0; }
+    .fd-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.55; max-width: 68ch; }
+    .fd-thesis { border-left: 2px solid var(--warm); padding: 0.2rem 0 0.2rem 0.8rem; margin: 0.9rem 0 0; color: oklch(0.82 0.06 78); font-size: 0.9rem; line-height: 1.5; font-style: italic; max-width: 60ch; }
+
+    .fd-controls { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; margin: 1.3rem 0 0.4rem; }
+    .fd-filters { display: flex; flex-wrap: wrap; gap: 0.4rem; }
     .fd-chip { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.03em; padding: 4px 11px; border-radius: 999px; border: 1px solid var(--border-strong); color: var(--muted-foreground); background: transparent; cursor: pointer; }
     .fd-chip.on { border-color: var(--warm); color: oklch(0.18 0 0); background: var(--warm); font-weight: 600; }
-    .fd-list { display: flex; flex-direction: column; gap: 0; }
-    .fd-item { display: block; text-decoration: none; padding: 1rem 0; border-bottom: 1px solid var(--border); }
-    .fd-item:hover .fd-title { color: oklch(0.84 0.15 78); }
-    .fd-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem; }
-    .fd-kind { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.05em; text-transform: uppercase; padding: 1px 7px; border-radius: 999px; border: 1px solid currentColor; }
-    .k-analysis { color: oklch(0.80 0.14 285); }
-    .k-story { color: oklch(0.80 0.16 75); }
-    .k-headline { color: oklch(0.74 0.16 200); }
-    .fd-type { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted-foreground); }
-    .fd-type.money { color: oklch(0.82 0.16 78); }
-    .fd-date { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); margin-left: auto; }
-    .fd-sev { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.04em; text-transform: uppercase; padding: 1px 6px; border-radius: 999px; border: 1px solid currentColor; font-weight: 600; }
-    .sev-low{color:oklch(0.72 0.10 150)} .sev-moderate{color:oklch(0.80 0.14 75)} .sev-high{color:oklch(0.76 0.17 45)} .sev-severe{color:oklch(0.66 0.22 25)}
-    .fd-title { font-size: 1.08rem; font-weight: 600; line-height: 1.3; color: var(--foreground); margin: 0 0 0.25rem; }
-    .fd-dek { font-size: 0.88rem; color: var(--muted-foreground); line-height: 1.5; }
-    .fd-loc { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); margin-top: 0.35rem; }
-    .fd-empty { color: var(--muted-foreground); padding: 2rem 0; text-align: center; }
-    .fd-note { font-size: 0.78rem; color: var(--muted-foreground); line-height: 1.5; margin-top: 1.6rem; }
+    .fd-sort { margin-left: auto; font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); display: flex; align-items: center; gap: 0.4rem; }
+    .fd-sort select { background: oklch(0.18 0 0); color: var(--foreground); border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 3px 8px; font-family: var(--font-mono); font-size: 10px; }
+
+    /* place cluster cards */
+    .fd-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1rem; margin-top: 1.1rem; }
+    .fd-card { border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1rem 0.9rem; background: oklch(0.155 0 0); display: flex; flex-direction: column; }
+    .fd-card-h { display: flex; align-items: baseline; gap: 0.5rem; margin-bottom: 0.7rem; }
+    .fd-place { font-weight: 700; font-size: 1.12rem; color: var(--foreground); text-decoration: none; }
+    .fd-place:hover { color: oklch(0.84 0.15 78); }
+    .fd-place .lvl { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted-foreground); margin-left: 0.3rem; vertical-align: middle; }
+    .fd-count { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); margin-left: auto; white-space: nowrap; }
+
+    .fd-lbl { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted-foreground); margin: 0.7rem 0 0.35rem; }
+    /* lean bar */
+    .fd-lean { display: flex; height: 8px; border-radius: 999px; overflow: hidden; background: var(--muted); }
+    .fd-lean i { display: block; height: 100%; }
+    .lean-left{background:oklch(0.62 0.17 250)} .lean-cleft{background:oklch(0.68 0.12 220)}
+    .lean-centre{background:oklch(0.72 0.03 250)} .lean-cright{background:oklch(0.74 0.13 55)}
+    .lean-right{background:oklch(0.66 0.20 30)} .lean-state{background:oklch(0.60 0.10 300)} .lean-unknown{background:oklch(0.35 0 0)}
+    .fd-lean-key { display: flex; flex-wrap: wrap; gap: 0.5rem 0.7rem; margin-top: 0.35rem; }
+    .fd-lean-key span { font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); display: inline-flex; align-items: center; gap: 0.3rem; }
+    .fd-lean-key i { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
+    .fd-oneside { font-size: 0.78rem; color: oklch(0.80 0.14 60); margin-top: 0.4rem; line-height: 1.45; }
+
+    /* top story */
+    .fd-top { display: block; text-decoration: none; margin-top: 0.3rem; }
+    .fd-top .t { font-size: 0.95rem; font-weight: 600; line-height: 1.32; color: var(--foreground); }
+    .fd-top:hover .t { color: oklch(0.84 0.15 78); }
+    .fd-top .m { font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); margin-top: 0.25rem; }
+    .fd-more { font-family: var(--font-mono); font-size: 9.5px; color: oklch(0.74 0.16 75); background: none; border: none; padding: 0.35rem 0; cursor: pointer; text-align: left; }
+    .fd-more:hover { text-decoration: underline; }
+    .fd-extra { display: none; }
+    .fd-extra.open { display: block; }
+    .fd-extra a { display: block; text-decoration: none; padding: 0.4rem 0 0.35rem; border-top: 1px dashed var(--border); }
+    .fd-extra a .t { font-size: 0.86rem; font-weight: 500; color: var(--foreground); line-height: 1.3; }
+    .fd-extra a:hover .t { color: oklch(0.84 0.15 78); }
+    .fd-extra a .m { font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); }
+
+    /* policy + reality split */
+    .fd-split { margin-top: 0.85rem; border-top: 1px solid var(--border); padding-top: 0.7rem; }
+    .fd-policy { font-size: 0.85rem; color: var(--foreground); line-height: 1.4; }
+    .fd-policy .amt { color: oklch(0.84 0.16 78); font-weight: 600; }
+    .fd-tier { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted-foreground); border: 1px solid var(--border-strong); border-radius: 999px; padding: 0 5px; margin-left: 0.3rem; }
+    .fd-reality { margin-top: 0.7rem; background: oklch(0.13 0 0); border: 1px solid var(--border); border-radius: var(--radius); padding: 0.6rem 0.7rem; }
+    .fd-reality .rl-h { font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.74 0.14 145); margin-bottom: 0.45rem; }
+    .rl-row { display: flex; align-items: baseline; gap: 0.5rem; padding: 0.18rem 0; font-size: 0.84rem; }
+    .rl-row .k { color: var(--muted-foreground); }
+    .rl-row .v { margin-left: auto; font-family: var(--font-mono); color: var(--foreground); font-weight: 600; }
+    .rl-row .v.gap { color: oklch(0.55 0.02 250); font-weight: 400; font-style: italic; }
+    .rl-row .v.warn { color: oklch(0.76 0.17 45); }
+    .rl-foot { font-size: 0.74rem; color: var(--muted-foreground); line-height: 1.45; margin-top: 0.45rem; }
+
+    .fd-empty { color: var(--muted-foreground); padding: 2rem 0; text-align: center; grid-column: 1 / -1; }
+    .fd-note { font-size: 0.78rem; color: var(--muted-foreground); line-height: 1.55; margin-top: 1.8rem; }
     .fd-note a { color: oklch(0.74 0.16 75); }
   </style>
 </head>
@@ -39,25 +88,40 @@
 
   <main class="fd-wrap">
     <header class="fd-head">
-      <div class="eyebrow">The feed · curated, no noise</div>
-      <h1 class="display">Just the <em>news</em></h1>
-      <p>One clean stream of India's public-money story — original analysis, fund timelines, and
-      sourced headlines. Newest first. Every item is sourced or marked a gap; nothing invented.</p>
-      <div class="fd-filters" id="filters">
-        <button class="fd-chip on" data-f="all">All</button>
-        <button class="fd-chip" data-f="money">💰 Money-driven</button>
-        <button class="fd-chip" data-f="general">General</button>
-        <button class="fd-chip" data-f="analysis">Analysis</button>
-        <button class="fd-chip" data-f="story">Story chains</button>
+      <div class="eyebrow">The feed · place by place · bias vs reality</div>
+      <h1 class="display">News, <em>place by place</em></h1>
+      <p>Every place gathers the news covering it — split by <b>who's telling it</b> (media lean,
+      left→right). Beside the coverage sits the <b>reality</b>: population, per-capita money, crime and
+      prison figures — sourced or marked a gap, never invented.</p>
+      <p class="fd-thesis">History is written by the winner, and a "fact" can be disputable depending
+      on who won. So we separate the two: the coverage is contested; the numbers underneath are not.</p>
+      <div class="fd-controls">
+        <div class="fd-filters" id="filters">
+          <button class="fd-chip on" data-f="all">All places</button>
+          <button class="fd-chip" data-f="district">Districts</button>
+          <button class="fd-chip" data-f="state">States</button>
+          <button class="fd-chip" data-f="split">Both sides covered</button>
+          <button class="fd-chip" data-f="oneside">One-sided</button>
+        </div>
+        <label class="fd-sort">sort
+          <select id="sort">
+            <option value="volume">most covered</option>
+            <option value="recent">most recent</option>
+            <option value="skew">most lean-skewed</option>
+          </select>
+        </label>
       </div>
     </header>
 
-    <div class="fd-list" id="list"><p class="fd-empty">Loading…</p></div>
+    <div class="fd-grid" id="grid"><p class="fd-empty">Loading the feed…</p></div>
 
     <p class="fd-note">
-      The feed merges <a href="articles.html">analysis</a>, fund <a href="timeline.html">story chains</a>,
-      and moderated headlines. Headlines link out to the original outlet (we show only a title +
-      snippet). Severity = the transparent <a href="about.html">scale-of-problem</a> score.
+      Coverage comes from a moderated, geo-anchored <a href="knowledge.html">news feed</a>; headlines link
+      out to the original outlet (title + snippet only). <b>Lean</b> is the outlet's editorial leaning, not a
+      claim about any single story. The <b>reality</b> panel joins Census population, the money
+      <a href="provenance.html">ledger</a>, and NCRB <a href="engine-corruption.html">safety</a> figures for that
+      place — each sourced or shown as a gap. Click a place to open it on the
+      <a href="index.html">map</a>.
     </p>
   </main>
 
@@ -66,68 +130,229 @@
   <script>
     const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     const fmtDate = d => { if (!d) return ""; const x = new Date(d); return isNaN(x) ? d : x.toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"}); };
-    let ITEMS = [], FILTER = "all";
+    const fmtN = n => n == null ? null : Number(n).toLocaleString("en-IN");
+    const crShort = v => v == null ? null : (v >= 1000 ? "₹" + (v/1000).toFixed(1) + "k cr" : "₹" + Math.round(v) + " cr");
+
+    // Lean buckets in left→right display order, with class + short label.
+    const LEANS = [
+      { key: "centre-left", cls: "lean-cleft", short: "C-L", side: "left" },
+      { key: "left",        cls: "lean-left",  short: "L",   side: "left" },
+      { key: "centre",      cls: "lean-centre",short: "C",   side: "centre" },
+      { key: "state_media", cls: "lean-state", short: "Gov", side: "centre" },
+      { key: "centre-right",cls: "lean-cright",short: "C-R", side: "right" },
+      { key: "right",       cls: "lean-right", short: "R",   side: "right" },
+      { key: "unknown",     cls: "lean-unknown",short: "?",  side: "unknown" },
+    ];
+    const LEAN_BY = Object.fromEntries(LEANS.map(l => [l.key, l]));
+
+    let PLACES = [], FILTER = "all", SORT = "volume";
+    let LED = null, SAFETY = null, POP = null;
 
     Promise.all([
-      fetch("articles.json").then(r => r.ok ? r.json() : {articles:[]}).catch(()=>({articles:[]})),
-      fetch("fiscal-events.json").then(r => r.ok ? r.json() : {story_chains:[],fiscal_events:[]}).catch(()=>({story_chains:[],fiscal_events:[]})),
-      fetch("approved-news.json").then(r => r.ok ? r.json() : {news_items:[]}).catch(()=>({news_items:[]})),
-    ]).then(([arts, ev, news]) => {
-      build(arts, ev, news);
+      fetch("news-feed.json").then(r => r.ok ? r.json() : { news_items: [] }).catch(() => ({ news_items: [] })),
+      fetch("district-ledger.json").then(r => r.ok ? r.json() : null).catch(() => null),
+      fetch("safety.json").then(r => r.ok ? r.json() : null).catch(() => null),
+      fetch("district-pop.json").then(r => r.ok ? r.json() : null).catch(() => null),
+    ]).then(([feed, led, safety, pop]) => {
+      LED = led; SAFETY = safety; POP = pop;
+      cluster(feed.news_items || []);
       document.querySelectorAll(".fd-chip").forEach(b => b.addEventListener("click", () => {
         FILTER = b.dataset.f;
         document.querySelectorAll(".fd-chip").forEach(x => x.classList.toggle("on", x === b));
         render();
       }));
+      document.getElementById("sort").addEventListener("change", e => { SORT = e.target.value; render(); });
       render();
-    }).catch(e => document.getElementById("list").innerHTML = `<p class="fd-empty">Load error: ${esc(e.message)}</p>`);
+    }).catch(e => document.getElementById("grid").innerHTML = `<p class="fd-empty">Load error: ${esc(e.message)}</p>`);
 
-    function maxSev(ev, c) {
-      let best = null;
-      (c.event_ids||[]).forEach(id => { const e=(ev.fiscal_events||[]).find(x=>x.id===id); const s=e&&e.severity; if(s&&(best==null||(s.score||0)>best.score)) best={score:s.score||0,band:s.band}; });
-      return best;
-    }
-
-    function build(arts, ev, news) {
-      ITEMS = [];
-      // 1. original analysis (always money/data-driven, original content)
-      (arts.articles||[]).filter(a=>a.status==="published").forEach(a => ITEMS.push({
-        kind:"analysis", type:"money", date:a.published, title:a.title, dek:a.dek,
-        loc:(a.districts||[]).map(d=>d.join(", ")).join(" · "), href:`article.html?slug=${encodeURIComponent(a.slug)}`, sev:null
-      }));
-      // 2. fund story chains (money-driven)
-      (ev.story_chains||[]).forEach(c => { const s=maxSev(ev,c); ITEMS.push({
-        kind:"story", type:"money", date:c.last_event_at, title:c.title, dek:c.one_line,
-        loc:`${c.geo?.district||""}${c.geo?.state?", "+c.geo.state:""}`, href:`story.html?chain=${encodeURIComponent(c.id)}`, sev:s
-      });});
-      // 3. moderated headlines (general or money; link out)
-      (news.news_items||[]).forEach(n => ITEMS.push({
-        kind:"headline", type: n.scheme_ref ? "money" : "general", date:n.published_at, title:n.headline, dek:n.snippet,
-        loc:`${n.geo?.district||n.geo?.state||""}`, href:n.url, ext:true, outlet:n.outlet, sev:null
-      }));
-      ITEMS.sort((a,b)=> (new Date(b.date||0)) - (new Date(a.date||0)));
-    }
-
-    function render() {
-      let items = ITEMS.filter(it => {
-        if (FILTER==="all") return true;
-        if (FILTER==="money"||FILTER==="general") return it.type===FILTER;
-        return it.kind===FILTER;
+    // ---- group news items into place clusters ----------------------------------
+    function cluster(items) {
+      const map = new Map();   // placeKey → cluster
+      for (const it of items) {
+        const g = it.geo || {};
+        const district = g.district || null;
+        const state = g.state || null;
+        if (!district && !state) continue;           // unplaceable → skip (honest: no fake location)
+        const level = district ? "district" : "state";
+        const name = district || state;
+        const key = level + "|" + name;
+        if (!map.has(key)) map.set(key, { key, level, name, state: state || name, district, items: [], leans: {} });
+        const c = map.get(key);
+        c.items.push(it);
+        const lk = LEAN_BY[it.outlet_lean] ? it.outlet_lean : "unknown";
+        c.leans[lk] = (c.leans[lk] || 0) + 1;
+      }
+      // finalise each cluster: sort items newest-first, compute lean sides + skew
+      PLACES = [...map.values()].map(c => {
+        c.items.sort((a, b) => new Date(b.published_at || 0) - new Date(a.published_at || 0));
+        c.lastAt = c.items[0]?.published_at || null;
+        let left = 0, right = 0, known = 0;
+        for (const [k, n] of Object.entries(c.leans)) {
+          const side = LEAN_BY[k]?.side;
+          if (side === "left") left += n; else if (side === "right") right += n;
+          if (side !== "unknown") known += n;
+        }
+        c.bothSides = left > 0 && right > 0;
+        // skew: 0 = perfectly balanced L/R, 1 = entirely one side (only over known-lean items)
+        c.skew = known ? Math.abs(left - right) / known : 1;
+        c.oneSided = known >= 3 && c.skew >= 0.8;
+        c.reality = buildReality(c);
+        return c;
       });
-      const list = document.getElementById("list");
-      if (!items.length) { list.innerHTML = `<p class="fd-empty">Nothing here yet. As analysis, story chains, and moderated headlines are added, they appear here newest-first.</p>`; return; }
-      list.innerHTML = items.map(it => `
-        <a class="fd-item" href="${esc(it.href)}" ${it.ext?'target="_blank" rel="noopener"':''}>
-          <div class="fd-meta">
-            <span class="fd-kind k-${it.kind}">${it.kind}</span>
-            <span class="fd-type ${it.type==='money'?'money':''}">${it.type==='money'?'money-driven':'general'}</span>
-            ${it.sev?`<span class="fd-sev sev-${it.sev.band}">⚠ ${it.sev.band} ${it.sev.score}/12</span>`:''}
-            <span class="fd-date">${esc(fmtDate(it.date))}</span>
-          </div>
-          <div class="fd-title">${esc(it.title)}${it.ext?' ↗':''}</div>
-          ${it.dek?`<div class="fd-dek">${esc(it.dek)}</div>`:''}
-          ${it.loc?`<div class="fd-loc">📍 ${esc(it.loc)}${it.outlet?` · ${esc(it.outlet)}`:''}</div>`:''}
-        </a>`).join("");
+    }
+
+    // Case-insensitive state lookup across the three data files (state names differ in case).
+    function findState(obj, name) {
+      if (!obj || !name) return null;
+      if (obj[name]) return obj[name];
+      const lc = name.toLowerCase();
+      for (const k of Object.keys(obj)) if (k.toLowerCase() === lc) return obj[k];
+      return null;
+    }
+
+    // Population for a place: district-level if known, else summed state, else gap.
+    function placePop(c) {
+      const states = POP && POP.states;
+      const st = findState(states, c.state);
+      if (!st || typeof st !== "object") return null;
+      if (c.district) {
+        const d = findState(st, c.district);
+        if (d && typeof d.population === "number") return { n: d.population, level: "district" };
+        return null;   // district not in Census-2011 keys → honest gap, don't sum the state
+      }
+      let tot = 0, any = false;
+      for (const dv of Object.values(st)) if (dv && typeof dv.population === "number") { tot += dv.population; any = true; }
+      return any ? { n: tot, level: "state" } : null;
+    }
+
+    // Money headline tied to this place, from the ledger (district-level deep dives only).
+    function placeMoney(c) {
+      if (!LED || !c.district) return null;
+      const st = LED.states && LED.states[c.state];
+      const dd = st && st.districts && st.districts[c.district];
+      if (!dd || !Array.isArray(dd.ledger)) return null;
+      const vals = dd.ledger.map(r => r.money_in_cr).filter(v => typeof v === "number");
+      if (!vals.length) return null;
+      const top = Math.max(...vals);
+      const row = dd.ledger.find(r => r.money_in_cr === top) || {};
+      const flagged = dd.ledger.some(r => (r.what_happened || {}).audit_flag);
+      return { cr: top, label: row.label || row.scheme || row.head || "public money", tier: dd.departments_source_tier || null, flagged };
+    }
+
+    function buildReality(c) {
+      const sf = SAFETY && SAFETY.states ? findState(SAFETY.states, c.state) : null;
+      const pop = placePop(c);
+      const money = placeMoney(c);
+      const perCap = (money && pop && pop.n) ? (money.cr * 1e7 / pop.n) : null;   // cr → rupees ÷ people
+      return {
+        pop,
+        money,
+        perCap,
+        crime: sf && sf.crime && !sf.crime.gap ? sf.crime.rate_per_lakh : null,
+        prison: sf && sf.prisons ? (sf.prisons.occupancy_pct ?? null) : null,
+        prisonBand: sf && sf.prisons ? (sf.prisons.occupancy_band || null) : null,
+        density: sf && sf.density && !sf.density.gap ? sf.density.per_km2 : null,
+      };
+    }
+
+    // ---- render ----------------------------------------------------------------
+    function render() {
+      let places = PLACES.filter(c => {
+        if (FILTER === "all") return true;
+        if (FILTER === "district" || FILTER === "state") return c.level === FILTER;
+        if (FILTER === "split") return c.bothSides;
+        if (FILTER === "oneside") return c.oneSided;
+        return true;
+      });
+      if (SORT === "volume") places.sort((a, b) => b.items.length - a.items.length);
+      else if (SORT === "recent") places.sort((a, b) => new Date(b.lastAt || 0) - new Date(a.lastAt || 0));
+      else if (SORT === "skew") places.sort((a, b) => b.skew - a.skew || b.items.length - a.items.length);
+
+      const grid = document.getElementById("grid");
+      if (!places.length) { grid.innerHTML = `<p class="fd-empty">No places match this filter yet.</p>`; return; }
+      grid.innerHTML = places.map(card).join("");
+
+      // wire "show more" toggles
+      grid.querySelectorAll(".fd-more").forEach(btn => btn.addEventListener("click", () => {
+        const box = btn.nextElementSibling;
+        const open = box.classList.toggle("open");
+        btn.textContent = open ? "− show less" : `+ ${box.dataset.n} more stor${box.dataset.n === "1" ? "y" : "ies"} here`;
+      }));
+    }
+
+    function leanBar(c) {
+      const total = c.items.length;
+      const seg = LEANS.filter(l => c.leans[l.key]).map(l =>
+        `<i class="${l.cls}" style="width:${(c.leans[l.key] / total * 100).toFixed(1)}%" title="${l.short}: ${c.leans[l.key]}"></i>`).join("");
+      const key = LEANS.filter(l => c.leans[l.key]).map(l =>
+        `<span><i class="${l.cls}"></i>${l.short} ${c.leans[l.key]}</span>`).join("");
+      let note = "";
+      if (c.oneSided) note = `<div class="fd-oneside">⚠ One-sided coverage — nearly all from a single lean. The other side's telling is missing here.</div>`;
+      else if (c.bothSides) note = `<div class="fd-oneside" style="color:oklch(0.74 0.14 145)">✓ Both sides are covering this place — compare how they frame it.</div>`;
+      return `<div class="fd-lbl">Who's covering it — media lean</div>
+        <div class="fd-lean">${seg}</div>
+        <div class="fd-lean-key">${key}</div>${note}`;
+    }
+
+    function storyLink(it, small) {
+      const lean = LEAN_BY[it.outlet_lean] || LEAN_BY.unknown;
+      return `<a class="${small ? "" : "fd-top"}" href="${esc(it.url || "#")}" target="_blank" rel="noopener">
+        <div class="t">${esc(it.headline || "(untitled)")} ↗</div>
+        <div class="m">${esc(lean.short)} · ${esc(it.outlet || "unknown outlet")} · ${esc(fmtDate(it.published_at))}</div>
+      </a>`;
+    }
+
+    function realityPanel(c) {
+      const r = c.reality;
+      const rows = [];
+      const popTxt = r.pop ? `${fmtN(r.pop.n)}${r.pop.level === "state" ? " (state)" : ""}` : null;
+      rows.push(rlRow("People it serves", popTxt));
+      rows.push(rlRow("Per-capita money", r.perCap != null ? "₹" + Math.round(r.perCap).toLocaleString("en-IN") : null,
+        r.perCap == null ? "no district money figure — a gap" : null));
+      rows.push(rlRow("Crime rate /lakh", r.crime != null ? fmtN(Math.round(r.crime)) : null, null, r.crime != null && r.crime > 500));
+      const prisonTxt = r.prison != null ? Math.round(r.prison) + "%" + (r.prisonBand ? " · " + r.prisonBand : "") : null;
+      rows.push(rlRow("Prison occupancy", prisonTxt, null, r.prison != null && r.prison > 100));
+      return `<div class="fd-reality">
+        <div class="rl-h">◆ Bias vs reality — the spin-proof numbers</div>
+        ${rows.join("")}
+        <div class="rl-foot">Population = Census 2011; money = ledger; crime/prisons = NCRB (state-level). A gap is an honest "no published figure", not a zero.</div>
+      </div>`;
+    }
+    function rlRow(k, v, gapNote, warn) {
+      if (v == null) return `<div class="rl-row"><span class="k">${esc(k)}</span><span class="v gap" title="${esc(gapNote || "no published figure")}">— gap</span></div>`;
+      return `<div class="rl-row"><span class="k">${esc(k)}</span><span class="v${warn ? " warn" : ""}">${esc(v)}</span></div>`;
+    }
+
+    function policyBlock(c) {
+      const m = c.reality.money;
+      if (!m) {
+        return `<div class="fd-policy" style="color:var(--muted-foreground)">Policy / money tied here: <i>no deep money-ledger for this place yet — a gap.</i></div>`;
+      }
+      return `<div class="fd-policy">Policy tied here: <span class="amt">${esc(crShort(m.cr))}</span> — ${esc(m.label)}
+        ${m.tier ? `<span class="fd-tier">tier ${esc(String(m.tier))}</span>` : ""}
+        ${m.flagged ? `<span class="fd-tier" style="color:oklch(0.76 0.17 45);border-color:currentColor">⚠ audit flag</span>` : ""}</div>`;
+    }
+
+    function card(c) {
+      const href = `index.html?state=${encodeURIComponent(c.state)}${c.district ? "&district=" + encodeURIComponent(c.district) : ""}`;
+      const extra = c.items.slice(1, 6);
+      const hidden = extra.length ? `
+        <button class="fd-more">+ ${extra.length} more stor${extra.length === 1 ? "y" : "ies"} here</button>
+        <div class="fd-extra" data-n="${extra.length}">${extra.map(it => storyLink(it, true)).join("")}</div>` : "";
+      return `<article class="fd-card">
+        <div class="fd-card-h">
+          <a class="fd-place" href="${href}">${esc(c.name)}<span class="lvl">${c.level}${c.level === "district" ? " · " + esc(c.state) : ""}</span></a>
+          <span class="fd-count">${c.items.length} stor${c.items.length === 1 ? "y" : "ies"}</span>
+        </div>
+        ${leanBar(c)}
+        <div class="fd-lbl">Latest here</div>
+        ${storyLink(c.items[0])}
+        ${hidden}
+        <div class="fd-split">
+          ${policyBlock(c)}
+          ${realityPanel(c)}
+        </div>
+      </article>`;
     }
   </script>
   <script src="command-palette.js"></script>
