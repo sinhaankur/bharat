@@ -61,6 +61,12 @@
     .fd-place:hover { color: oklch(0.84 0.15 78); }
     .fd-place .lvl { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted-foreground); margin-left: 0.3rem; vertical-align: middle; }
     .fd-count { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); margin-left: auto; white-space: nowrap; }
+    /* trend sparkline (story volume/day, ~30d) */
+    .fd-trend { display: flex; align-items: center; gap: 0.4rem; margin: 0.1rem 0 0.2rem; }
+    .fd-trend .lbl { font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted-foreground); white-space: nowrap; }
+    svg.fd-spark { display: block; }
+    svg.fd-spark rect { fill: oklch(0.72 0.13 78); }
+    .fd-trend .peak { font-family: var(--font-mono); font-size: 8.5px; color: var(--muted-foreground); white-space: nowrap; }
 
     .fd-lbl { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted-foreground); margin: 0.7rem 0 0.35rem; }
     /* lean bar */
@@ -251,7 +257,13 @@
         const lk = LEAN_BY[it.outlet_lean] ? it.outlet_lean : "unknown";
         c.leans[lk] = (c.leans[lk] || 0) + 1;
       }
-      // finalise each cluster: sort items newest-first, compute lean sides + skew
+      // Anchor the sparkline window to the newest story in the whole feed, so the right
+      // edge isn't a run of empty days (data ends a day or two before "now").
+      let maxT = 0;
+      for (const it of items) { const t = +new Date(it.published_at || 0); if (t && t > maxT) maxT = t; }
+      SPARK_END = maxT ? new Date(maxT) : new Date();
+
+      // finalise each cluster: sort items newest-first, compute lean sides + skew + trend
       PLACES = [...map.values()].map(c => {
         c.items.sort((a, b) => new Date(b.published_at || 0) - new Date(a.published_at || 0));
         c.lastAt = c.items[0]?.published_at || null;
@@ -265,9 +277,37 @@
         // skew: 0 = perfectly balanced L/R, 1 = entirely one side (only over known-lean items)
         c.skew = known ? Math.abs(left - right) / known : 1;
         c.oneSided = known >= 3 && c.skew >= 0.8;
+        c.spark = dailyCounts(c.items);
         c.reality = buildReality(c);
         return c;
       });
+    }
+
+    // Story count per day over the trailing SPARK_DAYS window (index 0 = oldest, last = newest).
+    const SPARK_DAYS = 30;
+    let SPARK_END = new Date();
+    function dailyCounts(items) {
+      const bins = new Array(SPARK_DAYS).fill(0);
+      const endDay = Date.UTC(SPARK_END.getFullYear(), SPARK_END.getMonth(), SPARK_END.getDate());
+      for (const it of items) {
+        const d = new Date(it.published_at || 0);
+        if (isNaN(d)) continue;
+        const day = Date.UTC(d.getFullYear(), d.getMonth(), d.getDate());
+        const idx = SPARK_DAYS - 1 - Math.round((endDay - day) / 86400000);
+        if (idx >= 0 && idx < SPARK_DAYS) bins[idx]++;
+      }
+      return bins;
+    }
+
+    // Tiny inline-SVG sparkline (area under a bar/line of daily counts). Pure presentation.
+    function sparkSvg(bins, w, h) {
+      const max = Math.max(1, ...bins);
+      const n = bins.length, bw = w / n;
+      const bars = bins.map((v, i) => {
+        const bh = v ? Math.max(1.2, v / max * (h - 2)) : 0;
+        return bh ? `<rect x="${(i * bw).toFixed(1)}" y="${(h - bh).toFixed(1)}" width="${Math.max(0.8, bw - 0.6).toFixed(1)}" height="${bh.toFixed(1)}" rx="0.4"/>` : "";
+      }).join("");
+      return `<svg class="fd-spark" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" preserveAspectRatio="none" aria-hidden="true">${bars}</svg>`;
     }
 
     // Case-insensitive state lookup across the three data files (state names differ in case).
@@ -425,8 +465,11 @@
       if (r.crime != null) bits.push(`crime ${Math.round(r.crime)}/lakh`);
       const note = c.oneSided ? '<div style="color:oklch(0.76 0.17 45);font-size:11px;margin-top:4px">⚠ one-sided coverage</div>'
         : c.bothSides ? '<div style="color:oklch(0.74 0.14 145);font-size:11px;margin-top:4px">✓ both sides cover it</div>' : "";
+      const trend = (c.spark && c.spark.reduce((a, b) => a + b, 0) >= 2)
+        ? `<div class="fd-trend" style="margin:5px 0 2px"><span class="lbl">Trend</span>${sparkSvg(c.spark, 90, 15)}</div>` : "";
       return `<a class="fd-pop-h" href="${href}">${esc(c.name)}<span class="lvl">${c.level}</span></a>
         <div class="fd-pop-sub">${total} stor${total === 1 ? "y" : "ies"}${c.district ? " · " + esc(c.state) : ""}</div>
+        ${trend}
         <div class="fd-lean" style="height:8px">${seg}</div>${note}
         <div class="fd-pop-sub" style="margin-top:6px">${bits.length ? esc(bits.join(" · ")) : "reality figures a gap here"}</div>
         <a class="fd-pop-open" href="${href}">open on the atlas →</a>`;
@@ -485,6 +528,19 @@
         ${m.flagged ? `<span class="fd-tier" style="color:oklch(0.76 0.17 45);border-color:currentColor">⚠ audit flag</span>` : ""}</div>`;
     }
 
+    // Coverage-trend row: sparkline of stories/day + when it peaked.
+    function trendBlock(c) {
+      const bins = c.spark || [];
+      const total = bins.reduce((a, b) => a + b, 0);
+      if (total < 2) return "";   // one story → no trend to show
+      const peakIdx = bins.reduce((best, v, i) => v > bins[best] ? i : best, 0);
+      const peakDate = new Date(+SPARK_END - (bins.length - 1 - peakIdx) * 86400000);
+      return `<div class="fd-trend" title="stories per day, last ${bins.length} days">
+        <span class="lbl">Trend</span>${sparkSvg(bins, 96, 16)}
+        <span class="peak">peak ${esc(fmtDate(peakDate))}</span>
+      </div>`;
+    }
+
     function card(c) {
       const href = `index.html?state=${encodeURIComponent(c.state)}${c.district ? "&district=" + encodeURIComponent(c.district) : ""}`;
       const extra = c.items.slice(1, 6);
@@ -496,6 +552,7 @@
           <a class="fd-place" href="${href}">${esc(c.name)}<span class="lvl">${c.level}${c.level === "district" ? " · " + esc(c.state) : ""}</span></a>
           <span class="fd-count">${c.items.length} stor${c.items.length === 1 ? "y" : "ies"}</span>
         </div>
+        ${trendBlock(c)}
         ${leanBar(c)}
         <div class="fd-lbl">Latest here</div>
         ${storyLink(c.items[0])}
