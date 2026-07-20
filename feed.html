@@ -79,6 +79,21 @@
     .fd-lean-key span { font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); display: inline-flex; align-items: center; gap: 0.3rem; }
     .fd-lean-key i { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
     .fd-oneside { font-size: 0.78rem; color: oklch(0.80 0.14 60); margin-top: 0.4rem; line-height: 1.45; }
+    /* prominent bias headline — "bias is the key player" */
+    .fd-bias-hd { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 0.6rem; margin: 0.2rem 0 0.5rem; padding: 0.5rem 0.6rem; background: oklch(0.13 0 0); border: 1px solid var(--border); border-radius: var(--radius); }
+    .fd-bias-hd .big { font-family: var(--font-mono); font-size: 1.15rem; font-weight: 700; color: var(--foreground); line-height: 1; }
+    .fd-bias-hd .lbl { font-size: 0.78rem; color: var(--muted-foreground); line-height: 1.3; }
+    .fd-bias-hd .lean-tag { font-family: var(--font-mono); font-size: 9px; font-weight: 700; padding: 1px 6px; border-radius: 999px; }
+    /* funding bar */
+    .fund-cong{background:oklch(0.66 0.19 20)} .fund-corp{background:oklch(0.70 0.15 40)}
+    .fund-priv{background:oklch(0.72 0.11 90)} .fund-dig{background:oklch(0.70 0.12 140)}
+    .fund-state{background:oklch(0.62 0.13 300)} .fund-unknown{background:oklch(0.35 0 0)}
+    .fd-fund { display: flex; height: 8px; border-radius: 999px; overflow: hidden; background: var(--muted); }
+    .fd-fund i { display: block; height: 100%; }
+    .fd-fund-key { display: flex; flex-wrap: wrap; gap: 0.4rem 0.7rem; margin-top: 0.35rem; }
+    .fd-fund-key span { font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); display: inline-flex; align-items: center; gap: 0.3rem; }
+    .fd-fund-key i { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
+    .fd-owners { font-size: 0.74rem; color: var(--muted-foreground); margin-top: 0.35rem; line-height: 1.45; }
 
     /* top story */
     .fd-top { display: block; text-decoration: none; margin-top: 0.3rem; }
@@ -121,8 +136,9 @@
       <div class="eyebrow">The feed · place by place · bias vs reality</div>
       <h1 class="display">News, <em>place by place</em></h1>
       <p>Every place gathers the news covering it — split by <b>who's telling it</b> (media lean,
-      left→right). Beside the coverage sits the <b>reality</b>: population, per-capita money, crime and
-      prison figures — sourced or marked a gap, never invented.</p>
+      left→right) and <b>who funds them</b> (owner / funding type). Beside the coverage sits the
+      <b>reality</b>: population, per-capita money, crime and prison figures — sourced or marked a
+      gap, never invented.</p>
       <p class="fd-thesis">History is written by the winner, and a "fact" can be disputable depending
       on who won. So we separate the two: the coverage is contested; the numbers underneath are not.</p>
       <div class="fd-controls">
@@ -136,6 +152,7 @@
           <button class="fd-chip" data-f="state">States</button>
           <button class="fd-chip" data-f="split">Both sides covered</button>
           <button class="fd-chip" data-f="oneside">One-sided</button>
+          <button class="fd-chip" data-f="conglomerate">Conglomerate-dominated</button>
         </div>
         <label class="fd-sort">sort
           <select id="sort">
@@ -191,7 +208,19 @@
     ];
     const LEAN_BY = Object.fromEntries(LEANS.map(l => [l.key, l]));
 
+    // Funding / ownership buckets — short label + swatch class + colour.
+    const FUNDING = [
+      { key: "corporate_conglomerate", short: "Conglomerate", cls: "fund-cong" },
+      { key: "corporate_media",        short: "Corp. media",  cls: "fund-corp" },
+      { key: "private_family",         short: "Private/family",cls: "fund-priv" },
+      { key: "private_digital",        short: "Private digital",cls: "fund-dig" },
+      { key: "state_public",           short: "State/public",  cls: "fund-state" },
+      { key: "unknown",                short: "Owner a gap",   cls: "fund-unknown" },
+    ];
+    const FUND_BY = Object.fromEntries(FUNDING.map(f => [f.key, f]));
+
     let PLACES = [], FILTER = "all", SORT = "volume", VIEW = "cards";
+    let OUTLETS = {}, FUNDING_META = {};
     let LED = null, SAFETY = null, POP = null, CENTROIDS = null, DCENT = {};
 
     Promise.all([
@@ -201,8 +230,11 @@
       fetch("district-pop.json").then(r => r.ok ? r.json() : null).catch(() => null),
       fetch("india-states.geojson").then(r => r.ok ? r.json() : null).catch(() => null),
       fetch("district-centroids.json").then(r => r.ok ? r.json() : null).catch(() => null),
-    ]).then(([feed, led, safety, pop, geo, dcent]) => {
+      fetch("outlets.json").then(r => r.ok ? r.json() : null).catch(() => null),
+    ]).then(([feed, led, safety, pop, geo, dcent, outlets]) => {
       LED = led; SAFETY = safety; POP = pop;
+      OUTLETS = (outlets && outlets.outlets) || {};
+      FUNDING_META = (outlets && outlets._meta && outlets._meta.funding_types) || {};
       CENTROIDS = geo ? stateCentroids(geo) : {};
       // district centroids keyed lower-case "state|district" for case-insensitive lookup
       if (dcent && dcent.centroids) for (const [k, v] of Object.entries(dcent.centroids)) DCENT[k.toLowerCase()] = v;
@@ -257,11 +289,16 @@
         const level = district ? "district" : "state";
         const name = district || state;
         const key = level + "|" + name;
-        if (!map.has(key)) map.set(key, { key, level, name, state: state || name, district, items: [], leans: {} });
+        if (!map.has(key)) map.set(key, { key, level, name, state: state || name, district, items: [], leans: {}, funds: {}, owners: new Set() });
         const c = map.get(key);
         c.items.push(it);
         const lk = LEAN_BY[it.outlet_lean] ? it.outlet_lean : "unknown";
         c.leans[lk] = (c.leans[lk] || 0) + 1;
+        // funding / ownership of the outlet (from the sourced registry) — a gap if unregistered
+        const reg = OUTLETS[it.outlet];
+        const fk = (reg && FUND_BY[reg.funding_type]) ? reg.funding_type : "unknown";
+        c.funds[fk] = (c.funds[fk] || 0) + 1;
+        if (reg && reg.owner) c.owners.add(reg.owner);
       }
       // Anchor the sparkline window to the newest story in the whole feed, so the right
       // edge isn't a run of empty days (data ends a day or two before "now").
@@ -285,6 +322,17 @@
         c.oneSided = known >= 3 && c.skew >= 0.8;
         c.spark = dailyCounts(c.items);
         c.reality = buildReality(c);
+        // dominant funding type + its share of this place's coverage (the "who funds the story" %)
+        const total = c.items.length;
+        const fEntries = Object.entries(c.funds).sort((a, b) => b[1] - a[1]);
+        const [domFund, domN] = fEntries[0] || ["unknown", 0];
+        c.domFund = domFund;
+        c.domFundPct = total ? Math.round(domN / total * 100) : 0;
+        // dominant lean + its share too (percentage matters — surface it up front)
+        const lEntries = Object.entries(c.leans).sort((a, b) => b[1] - a[1]);
+        const [domLean, domLN] = lEntries[0] || ["unknown", 0];
+        c.domLean = domLean;
+        c.domLeanPct = total ? Math.round(domLN / total * 100) : 0;
         return c;
       });
     }
@@ -377,6 +425,7 @@
         if (FILTER === "district" || FILTER === "state") return c.level === FILTER;
         if (FILTER === "split") return c.bothSides;
         if (FILTER === "oneside") return c.oneSided;
+        if (FILTER === "conglomerate") return c.domFund === "corporate_conglomerate" && c.domFundPct >= 50;
         return true;
       });
       if (SORT === "volume") places.sort((a, b) => b.items.length - a.items.length);
@@ -473,33 +522,71 @@
         : c.bothSides ? '<div style="color:oklch(0.74 0.14 145);font-size:11px;margin-top:4px">✓ both sides cover it</div>' : "";
       const trend = (c.spark && c.spark.reduce((a, b) => a + b, 0) >= 2)
         ? `<div class="fd-trend" style="margin:5px 0 2px"><span class="lbl">Trend</span>${sparkSvg(c.spark, 90, 15)}</div>` : "";
+      // funding bar + the who-funds headline
+      const fundSeg = FUNDING.filter(f => c.funds[f.key]).map(f =>
+        `<i class="${f.cls}" style="width:${(c.funds[f.key] / total * 100).toFixed(1)}%"></i>`).join("");
+      const domFundL = FUND_BY[c.domFund] || FUND_BY.unknown;
+      const biasLine = `<div class="fd-pop-sub" style="margin-top:5px;color:var(--foreground)"><b>${c.domLeanPct}%</b> ${esc((LEAN_BY[c.domLean] || LEAN_BY.unknown).short)} · <b>${c.domFundPct}%</b> ${esc(domFundL.short)}-funded</div>`;
       return `<a class="fd-pop-h" href="${href}">${esc(c.name)}<span class="lvl">${c.level}</span></a>
         <div class="fd-pop-sub">${total} stor${total === 1 ? "y" : "ies"}${c.district ? " · " + esc(c.state) : ""}</div>
         ${trend}
-        <div class="fd-lean" style="height:8px">${seg}</div>${note}
+        <div class="fd-lean" style="height:8px">${seg}</div>
+        <div class="fd-fund" style="height:7px;margin-top:3px">${fundSeg}</div>${biasLine}${note}
         <div class="fd-pop-sub" style="margin-top:6px">${bits.length ? esc(bits.join(" · ")) : "reality figures a gap here"}</div>
         <a class="fd-pop-open" href="${href}">open on the atlas →</a>`;
     }
 
-    function leanBar(c) {
+    // The full bias block — the headline signal (lean% + funding%), the lean bar, the
+    // funding/ownership bar, and who owns the coverage. Bias is the key player here.
+    function biasBlock(c) {
       const total = c.items.length;
-      const seg = LEANS.filter(l => c.leans[l.key]).map(l =>
-        `<i class="${l.cls}" style="width:${(c.leans[l.key] / total * 100).toFixed(1)}%" title="${l.short}: ${c.leans[l.key]}"></i>`).join("");
-      const key = LEANS.filter(l => c.leans[l.key]).map(l =>
-        `<span><i class="${l.cls}"></i>${l.short} ${c.leans[l.key]}</span>`).join("");
+      // lean bar
+      const leanSeg = LEANS.filter(l => c.leans[l.key]).map(l =>
+        `<i class="${l.cls}" style="width:${(c.leans[l.key] / total * 100).toFixed(1)}%" title="${l.short}: ${(c.leans[l.key] / total * 100).toFixed(0)}%"></i>`).join("");
+      const leanKey = LEANS.filter(l => c.leans[l.key]).map(l =>
+        `<span><i class="${l.cls}"></i>${l.short} ${Math.round(c.leans[l.key] / total * 100)}%</span>`).join("");
+      // funding bar
+      const fundSeg = FUNDING.filter(f => c.funds[f.key]).map(f =>
+        `<i class="${f.cls}" style="width:${(c.funds[f.key] / total * 100).toFixed(1)}%" title="${f.short}: ${(c.funds[f.key] / total * 100).toFixed(0)}%"></i>`).join("");
+      const fundKey = FUNDING.filter(f => c.funds[f.key]).map(f =>
+        `<span><i class="${f.cls}"></i>${f.short} ${Math.round(c.funds[f.key] / total * 100)}%</span>`).join("");
+
+      const domLeanL = LEAN_BY[c.domLean] || LEAN_BY.unknown;
+      const domFundL = FUND_BY[c.domFund] || FUND_BY.unknown;
+      // headline: the single biggest lean and the single biggest funding source, as %
+      const headline = `<div class="fd-bias-hd">
+        <span class="big">${c.domLeanPct}%</span>
+        <span class="lbl">of coverage leans <b>${esc(domLeanL.short)}</b></span>
+        <span class="big" style="margin-left:0.4rem">${c.domFundPct}%</span>
+        <span class="lbl">is <b>${esc(domFundL.short)}</b>-funded</span>
+      </div>`;
+
       let note = "";
       if (c.oneSided) note = `<div class="fd-oneside">⚠ One-sided coverage — nearly all from a single lean. The other side's telling is missing here.</div>`;
       else if (c.bothSides) note = `<div class="fd-oneside" style="color:oklch(0.74 0.14 145)">✓ Both sides are covering this place — compare how they frame it.</div>`;
-      return `<div class="fd-lbl">Who's covering it — media lean</div>
-        <div class="fd-lean">${seg}</div>
-        <div class="fd-lean-key">${key}</div>${note}`;
+
+      const owners = c.owners && c.owners.size
+        ? `<div class="fd-owners">Owners: ${[...c.owners].slice(0, 5).map(esc).join(" · ")}</div>` : "";
+
+      return `${headline}
+        <div class="fd-lbl">Who's covering it — media lean</div>
+        <div class="fd-lean">${leanSeg}</div>
+        <div class="fd-lean-key">${leanKey}</div>${note}
+        <div class="fd-lbl">Who funds the coverage — ownership</div>
+        <div class="fd-fund">${fundSeg}</div>
+        <div class="fd-fund-key">${fundKey}</div>${owners}`;
     }
 
     function storyLink(it, small) {
       const lean = LEAN_BY[it.outlet_lean] || LEAN_BY.unknown;
+      const reg = OUTLETS[it.outlet];
+      const fund = reg && FUND_BY[reg.funding_type] ? FUND_BY[reg.funding_type] : null;
+      // mark each source's bias level inline: a lean chip + a funding swatch
+      const marks = `<span class="lean-tag ${lean.cls}" style="color:oklch(0.15 0 0)">${esc(lean.short)}</span>`
+        + (fund ? ` <i class="${fund.cls}" style="width:8px;height:8px;border-radius:2px;display:inline-block" title="${esc(fund.short)}-funded${reg.owner ? " · " + reg.owner : ""}"></i>` : "");
       return `<a class="${small ? "" : "fd-top"}" href="${esc(it.url || "#")}" target="_blank" rel="noopener">
         <div class="t">${esc(it.headline || "(untitled)")} ↗</div>
-        <div class="m">${esc(lean.short)} · ${esc(it.outlet || "unknown outlet")} · ${esc(fmtDate(it.published_at))}</div>
+        <div class="m">${marks} ${esc(it.outlet || "unknown outlet")}${fund && reg.owner ? ` <span style="opacity:.7">(${esc(reg.owner)})</span>` : ""} · ${esc(fmtDate(it.published_at))}</div>
       </a>`;
     }
 
@@ -559,7 +646,7 @@
           <span class="fd-count">${c.items.length} stor${c.items.length === 1 ? "y" : "ies"}</span>
         </div>
         ${trendBlock(c)}
-        ${leanBar(c)}
+        ${biasBlock(c)}
         <div class="fd-lbl">Latest here</div>
         ${storyLink(c.items[0])}
         ${hidden}
