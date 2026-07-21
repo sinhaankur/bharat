@@ -2756,6 +2756,7 @@
   }
 
   function selectState(name, scrollMap = false) {
+    dismissOnboarding();   // any state pick means they've found the interaction
     ui.state.selected = name;
     pathByName.forEach((layer, n) => layer._path?.classList.toggle('selected', n === name));
     renderDetail(name);
@@ -3602,6 +3603,41 @@
     map.addControl(new Ctl());
   }
 
+  // First-visit onboarding: a small, dismissible "tap a state to begin" nudge over the
+  // map. Shows once (localStorage), skips if the user arrived via a deep-link (they're
+  // already somewhere specific), and self-dismisses on the first state pick or after 12s.
+  const ONBOARD_KEY = 'atlas_onboarded_v1';
+  let _onboardTimer = null;
+  function maybeShowOnboarding() {
+    try {
+      if (localStorage.getItem(ONBOARD_KEY)) return;
+      if (/[?&](state|district)=/.test(location.search)) return;   // deep-link → skip
+    } catch (e) { /* private mode: still show, just won't persist */ }
+    const wrap = document.getElementById('india-map-wrap');
+    if (!wrap || document.getElementById('onboard-nudge')) return;
+    const touch = window.matchMedia && window.matchMedia('(hover: none)').matches;
+    const el = document.createElement('div');
+    el.id = 'onboard-nudge';
+    el.className = 'onboard-nudge';
+    el.innerHTML = `
+      <button class="onboard-x" aria-label="Dismiss">×</button>
+      <div class="onboard-ic">👆</div>
+      <div class="onboard-body">
+        <b>${touch ? 'Tap' : 'Click'} any state to begin.</b>
+        <span>See who earns, who leaks and who gets fed — 10 fiscal years, drill into districts, flip layers.</span>
+      </div>`;
+    wrap.appendChild(el);
+    requestAnimationFrame(() => el.classList.add('show'));
+    el.querySelector('.onboard-x').onclick = dismissOnboarding;
+    _onboardTimer = setTimeout(dismissOnboarding, 12000);   // fade out if ignored
+  }
+  function dismissOnboarding() {
+    if (_onboardTimer) { clearTimeout(_onboardTimer); _onboardTimer = null; }
+    try { localStorage.setItem(ONBOARD_KEY, '1'); } catch (e) {}
+    const el = document.getElementById('onboard-nudge');
+    if (el) { el.classList.remove('show'); setTimeout(() => el.remove(), 300); }
+  }
+
   async function bootstrap() {
     try {
       // CRITICAL PATH ONLY — the small files the first paint needs (map + states +
@@ -3632,6 +3668,7 @@
       buildMap();
       setupMapExpand();
       repaint();
+      maybeShowOnboarding();   // first-visit nudge: "tap a state to begin"
 
       // Background (non-blocking): the heavy ledger + secondary data. The map is
       // already interactive; these light up news bubbles, search, scrubber, and the
