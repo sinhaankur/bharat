@@ -3635,7 +3635,7 @@
     if (_onboardTimer) { clearTimeout(_onboardTimer); _onboardTimer = null; }
     try { localStorage.setItem(ONBOARD_KEY, '1'); } catch (e) {}
     const el = document.getElementById('onboard-nudge');
-    if (el) { el.classList.remove('show'); setTimeout(() => el.remove(), 300); }
+    if (el) { el.classList.add('leaving'); el.classList.remove('show'); setTimeout(() => el.remove(), 400); }
   }
 
   async function bootstrap() {
