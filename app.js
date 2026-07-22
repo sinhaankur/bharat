@@ -3041,8 +3041,18 @@
     Object.values(mapLayers.basemaps).forEach(l => map.removeLayer(l));
     mapLayers.basemaps[name].addTo(map);
     mapLayers.current = name;
+    // Auto-hillshade on the terrain basemaps: blend relief in so hills/valleys and the
+    // flood-plain read with real depth. Only touch what WE auto-added, so an explicit
+    // user hillshade toggle is never overridden.
+    const isTerrain = /^Terrain/.test(name);
+    const hs = mapLayers.hillshade;
+    if (hs) {
+      if (isTerrain && !map.hasLayer(hs)) { hs.addTo(map); mapLayers._autoHillshade = true; }
+      else if (!isTerrain && mapLayers._autoHillshade && map.hasLayer(hs)) { map.removeLayer(hs); mapLayers._autoHillshade = false; }
+    }
     // labels/hillshade/weather live in their own panes — no re-raising needed
     if (mapUI) mapUI.refresh();   // native-max (→ deep-zoom note) differs per basemap
+    renderLayersPanel();          // reflect the hillshade checkbox state
   }
   // Add the optional "Satellite HD" basemap using the user's OWN Mapbox token.
   // We ship no key; the token stays in their browser (localStorage via MapLayers).
@@ -3131,8 +3141,8 @@
       title: 'Legal zone over real satellite imagery — what may be built vs what is actually built' },
     risk: { label: '⚠ Risk stack', base: 'Dark map', overlays: { hillshade: false, elevTint: false, rain: false, clouds: false }, mode: 'geography', facet: 'vulnerability', hazards: true,
       title: 'Overlapping sourced risk signals (count, not a score) + hazard & zoning pins when drilled' },
-    relief: { label: '🏔 Relief', base: 'Dark map', overlays: { hillshade: true, elevTint: true, rain: false, clouds: false }, mode: 'geography', facet: 'elevation',
-      title: 'Hillshade + per-pixel elevation tint + elevation facet — the physical terrain in one view' },
+    relief: { label: '🏔 Relief', base: 'Terrain HD', overlays: { hillshade: true, elevTint: true, rain: false, clouds: false }, mode: 'geography', facet: 'elevation',
+      title: 'Sharp topographic base + hillshade + per-pixel elevation tint (metres above sea) — the physical terrain in one view. For a true 3D height model, open the 3D topography page.' },
     money: { label: '₹ Money', base: 'Dark map', overlays: { hillshade: false, elevTint: false, rain: false, clouds: false }, mode: 'money',
       title: 'Per-district money flow (drill into a state first)' },
     safety: { label: '🚨 Safety', base: 'Dark map', overlays: { hillshade: false, elevTint: false, rain: false, clouds: false }, stateView: 'crime', unrest: true,
@@ -3240,7 +3250,8 @@
       <div class="mlp-sec-h">Terrain &amp; labels</div>
       <label class="mlp-check"><input type="checkbox" id="mlp-hill" ${hillOn ? 'checked' : ''}> Topography (hillshade)</label>
       <label class="mlp-check"><input type="checkbox" id="mlp-elev" ${elevOn ? 'checked' : ''}> Elevation tint (m above sea)</label>
-      ${elevOn ? `<div class="mlp-elev-legend">${elevTintLegend()}</div>` : ''}
+      ${elevOn ? `<div class="mlp-elev-legend">${elevTintLegend()}</div>
+        <div class="mlp-tip">Want the height in 3D? <a href="terrain-3d.html" title="Interactive 3D relief coloured by metres above sea level">open the 3D topography view →</a></div>` : ''}
       ${(elevOn || hillOn) && cur === 'Terrain' ? `<div class="mlp-tip">Tip: elevation tint / hillshade read best over the <b>Dark</b> or <b>Satellite</b> base (Terrain already shades relief).</div>` : ''}
       <label class="mlp-check"><input type="checkbox" id="mlp-labels" ${labelsOn ? 'checked' : ''}> Place labels</label>
       <div class="mlp-sec-h">Live weather <span class="mlp-live">● live</span></div>
