@@ -22,6 +22,8 @@
     .t3-sea-story.on { padding: 0.4rem 0.6rem; background: oklch(0.2 0.05 220 / 0.35); border-left: 3px solid oklch(0.6 0.14 220); border-radius: 0 6px 6px 0; }
     .t3-sea-story b { font-family: var(--font-mono); color: oklch(0.88 0.13 210); }
     .t3-sea-story .cap { color: var(--muted-foreground); font-size: 0.78rem; }
+    .t3-sea-story .sea-hit { font-size: 0.82rem; color: oklch(0.86 0.13 40); }
+    .t3-sea-story .sea-hit b { font-family: var(--font-mono); color: oklch(0.88 0.16 45); }
     .t3-note { font-size: 0.82rem; color: var(--muted-foreground); line-height: 1.6; margin-top: 1.4rem; border-top: 1px solid var(--border); padding-top: 1rem; }
     .t3-note a { color: oklch(0.74 0.16 75); }
     .t3-gap { border-left: 3px solid oklch(0.6 0.16 60); padding: 0.55rem 0.9rem; background: oklch(0.2 0.03 60 / 0.3); border-radius: var(--radius-sm); margin: 1rem 0; font-size: 0.85rem; line-height: 1.55; }
@@ -283,14 +285,27 @@
       { m: 30, label: "+30 m — Partial ice-sheet melt", cap: "illustrative — reshapes the whole coast" },
       { m: 70, label: "+70 m — Total ice melt (geological max)", cap: "if ALL land ice melted — the far ceiling, not a projection" },
     ];
+    // Sourced district counts per stop (how many of the 594 have land below the line).
+    let SEA_EXPOSURE = null;
+    fetch('sealevel-exposure.json').then(r => r.ok ? r.json() : null).then(d => { SEA_EXPOSURE = d; }).catch(() => {});
+
     document.getElementById('t3-sea').addEventListener('input', e => {
       const stop = SEA_STOPS[+e.target.value] || SEA_STOPS[0];
       applySea(stop.m);
       const el = document.getElementById('t3-sea-story');
       el.classList.toggle('on', stop.m > 0);
-      el.innerHTML = stop.m === 0
-        ? `<span class="cap">Drag 🌊 to raise the sea — the water snaps to real reference levels and shows which ground goes under first.</span>`
-        : `<b>${esc3(stop.label)}</b> <span class="cap">${esc3(stop.cap)}</span>`;
+      if (stop.m === 0) {
+        el.innerHTML = `<span class="cap">Drag 🌊 to raise the sea — it snaps to real reference levels and shows which ground goes under first.</span>`;
+        return;
+      }
+      // append the real count of exposed districts for this stop, if loaded
+      let tag = '';
+      const s = SEA_EXPOSURE && SEA_EXPOSURE.stops && SEA_EXPOSURE.stops[String(stop.m)];
+      if (s) {
+        const top = (s.top || []).slice(0, 3).map(t => esc3(t.district)).join(', ');
+        tag = ` <span class="sea-hit"><b>${s.count}</b> of ${SEA_EXPOSURE._meta.total_districts} districts have land below this line${top ? ` — worst: ${top}` : ''}</span>`;
+      }
+      el.innerHTML = `<b>${esc3(stop.label)}</b> <span class="cap">${esc3(stop.cap)}</span>${tag}`;
     });
     function esc3(s){ return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
     document.getElementById('t3-region').addEventListener('change', e => {
