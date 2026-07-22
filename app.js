@@ -2512,6 +2512,37 @@
       src: 'CWC/NDMA · MoEFCC · physiography',
     },
   };
+  // India-level layer story: when the state choropleth is coloured by a VIEW (own-tax,
+  // corruption, GSDP, net flow…) and nothing is selected, rank the states for THAT view so
+  // the right panel always explains + leaderboards whatever the map is currently showing.
+  function viewStoryHTML() {
+    const view = VIEWS[ui.state.view];
+    if (!view || !DATA?._meta) return '';
+    const yi = ui.state.yearIdx;
+    const rows = [];
+    for (const name of Object.keys(DATA.states || {})) {
+      const r = rowFor(name, yi);
+      if (!r) continue;
+      const v = view.compute(r, extFor(name));
+      if (typeof v === 'number' && isFinite(v)) rows.push({ name, v });
+    }
+    if (!rows.length) return '';
+    // diverging views (net flow) rank by extremes; the rest high→low
+    rows.sort((a, b) => b.v - a.v);
+    const top = rows.slice(0, 8);
+    const list = `<ol class="ls-top">${top.map((r, i) => `
+      <li><button class="vs-go" data-st="${esc(r.name)}">${esc(r.name)}</button><span class="ls-val">${view.fmt(r.v)}</span></li>`).join('')}</ol>
+      <div class="ls-count">${rows.length} states/UTs ranked · ${esc(DATA._meta.yearLabels[yi])} · click one to open it</div>`;
+    return `<div class="layer-story">
+      <div class="ls-head"><span class="eyebrow">map is colouring states by</span><b>${esc(view.label)}</b></div>
+      <div class="ls-desc">${esc(view.help)}</div>
+      ${list}
+    </div>`;
+  }
+  function bindViewStory(root) {
+    root.querySelectorAll('.vs-go').forEach(b => b.onclick = () => selectState(b.dataset.st, true));
+  }
+
   function layerStoryHTML() {
     if (ui.state.districtMode !== 'geography' || !LEDGER?.states) return '';
     const M = LAYER_STORY[ui.state.geoFacet || 'zoning'];
@@ -2565,11 +2596,13 @@
       <div class="india-detail-empty">
         <div class="eyebrow">Active view: ${esc(view.shortLabel)} · ${esc(DATA._meta.yearLabels[ui.state.yearIdx])}</div>
         <p class="india-detail-empty-body">Click any state for its 10-year history, governance footprint (IAS · employees · bribe-paid %), departments split (back-office vs public-facing), and structural pros / cons.</p>
+        ${viewStoryHTML()}
         ${layerStoryHTML()}
         ${renderFeaturedDistricts()}
         <div id="india-summary" class="india-summary-inline"></div>
       </div>`;
     bindFeaturedDistricts(detail);
+    bindViewStory(detail);
     bindLayerStory(detail);
     renderSummary();
   }
@@ -2786,6 +2819,8 @@
           ui.state.showUnrest = true; unrestLayer.addTo(map); renderLayersPanel();
         }
         repaint();
+        // keep the right panel in step with the layer: if nothing's selected, re-rank for the new view
+        if (!ui.state.selected && !ui.state.drillState) renderEmptyState();
       });
     });
     const slider = $ind('#india-year');
@@ -2794,6 +2829,8 @@
     slider.addEventListener('input', (e) => {
       ui.state.yearIdx = parseInt(e.target.value, 10);
       repaint();
+      // the view story ranks for a given year — refresh it as the year scrubs
+      if (!ui.state.selected && !ui.state.drillState) renderEmptyState();
     });
 
     const fcStrip = $ind('#india-fc-strip');
@@ -4076,6 +4113,7 @@
         ui.state.showUnrest = true; unrestLayer.addTo(map); renderLayersPanel();
       }
       repaint();
+      if (!ui.state.selected && !ui.state.drillState) renderEmptyState();
       return true;
     },
     // The available state lenses, for the command palette to index.
