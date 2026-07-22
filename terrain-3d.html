@@ -34,13 +34,28 @@
       data</strong> (SRTM / Terrarium terrain-RGB) — the actual topography: the
       Himalayan wall, the Deccan plateau, the flat Ganga plain, the Western Ghats
       dropping to the coast. Colour and height are <strong>metres above sea
-      level</strong>. Drag to orbit, scroll to zoom.</p>
+      level</strong>. Drag to orbit, scroll to zoom. <strong>Focus a region</strong>
+      for finer detail, push the <strong>exaggeration</strong> to make the lows pop,
+      and <strong>raise the sea</strong> to see which ground goes under first.</p>
     </header>
 
     <div id="t3-status">Loading elevation tiles…</div>
     <div class="t3-controls">
-      <label>Vertical exaggeration <input type="range" id="t3-exag" min="1" max="12" value="6" step="1"></label>
-      <span id="t3-exag-val" style="font-family:var(--font-mono);font-size:11px;color:var(--foreground)">6×</span>
+      <label>Region
+        <select id="t3-region" style="background:oklch(0.18 0 0);color:var(--foreground);border:1px solid var(--border-strong);border-radius:5px;padding:2px 6px;font-family:var(--font-mono);font-size:11px">
+          <option value="india">All India</option>
+          <option value="himalaya">Himalaya &amp; the North</option>
+          <option value="ganga">Ganga plain (the flat belt)</option>
+          <option value="ghats">Western Ghats &amp; Konkan coast</option>
+          <option value="deccan">Deccan plateau</option>
+          <option value="northeast">North-East hills</option>
+          <option value="coast_east">East coast &amp; deltas</option>
+        </select>
+      </label>
+      <label>Vertical exaggeration <input type="range" id="t3-exag" min="1" max="40" value="8" step="1"></label>
+      <span id="t3-exag-val" style="font-family:var(--font-mono);font-size:11px;color:var(--foreground)">8×</span>
+      <label>🌊 Sea level <input type="range" id="t3-sea" min="0" max="500" value="0" step="5"></label>
+      <span id="t3-sea-val" style="font-family:var(--font-mono);font-size:11px;color:oklch(0.80 0.13 220)">0 m</span>
     </div>
     <canvas id="t3-canvas"></canvas>
     <div class="t3-legend" id="t3-legend"></div>
@@ -113,9 +128,22 @@
     import * as THREE from 'three';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-    // India bounding box (lon/lat) and the sampling grid.
-    const LON0 = 68, LON1 = 97.5, LAT0 = 6.5, LAT1 = 35.7;
-    const ZOOM = 6;                    // terrain-tile zoom (grid resolution)
+    // Regions: [lon0, lon1, lat0, lat1, tile-zoom]. Zooming into a smaller region uses a
+    // HIGHER tile zoom → finer DEM detail than the whole-India view can show. All open,
+    // keyless AWS Terrain Tiles (no Mapbox / no paid key anywhere on this page).
+    const REGIONS = {
+      india:      [68, 97.5, 6.5, 35.7, 6],
+      himalaya:   [73, 89, 28, 35.5, 8],
+      ganga:      [77, 89, 24, 29, 8],
+      ghats:      [72.5, 77.5, 8, 21, 8],
+      deccan:     [74, 80, 14, 21, 8],
+      northeast:  [89, 97, 22, 28.5, 8],
+      coast_east: [79, 88, 10, 22, 8],
+    };
+    let REGION = 'india';
+    let LON0, LON1, LAT0, LAT1, ZOOM;
+    function setRegion(key) { REGION = key; [LON0, LON1, LAT0, LAT1, ZOOM] = REGIONS[key]; }
+    setRegion('india');
     const TILE = 256;
     const status = document.getElementById('t3-status');
 
@@ -176,15 +204,18 @@
     const controls = new OrbitControls(camera, canvas);
     controls.enableDamping = true; controls.maxPolarAngle = Math.PI * 0.49;
 
-    let mesh = null, baseZ = null, GWg = 0, GHg = 0, exag = 6;
+    let mesh = null, water = null, baseZ = null, GWg = 0, GHg = 0, exag = 8;
+    let SCALE_H = 1, MESH_W = 30, MESH_H = 30, SEA_M = 0;
     function buildMesh(grid) {
+      if (mesh) { scene.remove(mesh); mesh.geometry.dispose(); mesh.material.dispose(); mesh = null; }
+      if (water) { scene.remove(water); water = null; }
       const { elev, GW, GH, max } = grid; GWg = GW; GHg = GH;
-      const W = 30, H = W * GH / GW;
+      const W = 30, H = W * GH / GW; MESH_W = W; MESH_H = H;
       const geo = new THREE.PlaneGeometry(W, H, GW - 1, GH - 1);
       const pos = geo.attributes.position;
       const colors = new Float32Array(pos.count * 3);
       baseZ = new Float32Array(pos.count);
-      const scaleH = 6 / Math.max(1, max);   // normalise so max peak ≈ 6 units at 1×… we multiply by exag
+      const scaleH = 6 / Math.max(1, max); SCALE_H = scaleH;   // world-units per metre at 1×
       for (let i = 0; i < pos.count; i++) {
         const gx = i % GW, gy = (i / GW) | 0;
         const m = elev[gy * GW + gx];
@@ -199,6 +230,13 @@
       mesh = new THREE.Mesh(geo, mat);
       mesh.rotation.x = -Math.PI / 2;      // lay flat, y-up
       scene.add(mesh);
+      // a translucent water plane the sea-level slider raises through the terrain
+      const wgeo = new THREE.PlaneGeometry(W, H);
+      const wmat = new THREE.MeshStandardMaterial({ color: 0x2e6fb0, transparent: true, opacity: 0.62, roughness: 0.3, metalness: 0.1 });
+      water = new THREE.Mesh(wgeo, wmat);
+      water.rotation.x = -Math.PI / 2; water.visible = false;
+      scene.add(water);
+      applySea(SEA_M);
     }
     function applyExag(v) {
       exag = v;
@@ -206,11 +244,32 @@
       const pos = mesh.geometry.attributes.position;
       for (let i = 0; i < pos.count; i++) pos.setZ(i, baseZ[i] * (v / 6));
       pos.needsUpdate = true; mesh.geometry.computeVertexNormals();
+      applySea(SEA_M);   // water rides at the same exaggeration
+    }
+    // Raise "sea level" to SEA_M metres: the water plane sits at that height (× current
+    // exaggeration) so everything below it reads as submerged. A bathtub view, not a forecast.
+    function applySea(m) {
+      SEA_M = m;
+      if (!water) return;
+      water.visible = m > 0;
+      water.position.y = m * SCALE_H * (exag / 6);
     }
 
     document.getElementById('t3-exag').addEventListener('input', e => {
       document.getElementById('t3-exag-val').textContent = e.target.value + '×';
       applyExag(+e.target.value);
+    });
+    document.getElementById('t3-sea').addEventListener('input', e => {
+      document.getElementById('t3-sea-val').textContent = e.target.value + ' m';
+      applySea(+e.target.value);
+    });
+    document.getElementById('t3-region').addEventListener('change', e => {
+      setRegion(e.target.value);
+      status.textContent = 'Loading elevation tiles…';
+      loadElevation().then(grid => {
+        status.textContent = `Rendering ${e.target.selectedOptions[0].text} · elevation 0–${Math.round(grid.max)} m (open ${ZOOM >= 8 ? '~90' : '~500'} m sampling)`;
+        buildMesh(grid); buildLegend(grid.max);
+      }).catch(() => { status.textContent = 'Could not load elevation tiles (network).'; });
     });
 
     function buildLegend(max) {
@@ -228,8 +287,9 @@
     }
     function loop() { resize(); controls.update(); renderer.render(scene, camera); requestAnimationFrame(loop); }
 
+    exag = 8;   // match the slider's default
     loadElevation().then(grid => {
-      status.textContent = `Rendering relief · elevation 0–${Math.round(grid.max)} m (open 30 m DEM)`;
+      status.textContent = `Rendering relief · elevation 0–${Math.round(grid.max)} m (open 30 m DEM) · drag a region or raise the sea`;
       buildMesh(grid); buildLegend(grid.max); loop();
     }).catch(err => { status.textContent = 'Could not load elevation tiles (network).'; console.error(err); });
   </script>
