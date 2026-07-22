@@ -32,6 +32,11 @@
       'Terrain': L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
         subdomains: 'abc', attribution: 'Map data: &copy; OpenTopoMap (CC-BY-SA), SRTM', maxZoom: MAX_ZOOM, maxNativeZoom: 17,
       }),
+      // Sharper topographic base — stays crisp to z19 (roads, contours, water, labels),
+      // where OpenTopoMap upscales past z17. Better when you zoom right into a town.
+      'Terrain HD': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Topo &copy; Esri, USGS, NGA, NASA, CGIAR, GEBCO', maxZoom: MAX_ZOOM, maxNativeZoom: 19,
+      }),
       'Recent satellite (Sentinel-2)': L.tileLayer('https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2020_3857/default/g/{z}/{y}/{x}.jpg', {
         attribution: 'Sentinel-2 cloudless &copy; EOX / ESA Copernicus (open, ~10 m)', maxZoom: MAX_ZOOM, maxNativeZoom: 16,
       }),
@@ -73,7 +78,7 @@
   // Hillshade relief (open 30 m DEM — SRTM/CartoDEM class; NOT LIDAR).
   function hillshade(L) {
     return L.tileLayer('https://services.arcgisonline.com/arcgis/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Hillshade &copy; Esri, USGS, NASA SRTM (open 30 m DEM)', maxZoom: MAX_ZOOM, maxNativeZoom: 15, opacity: 0.55, pane: 'terrainPane',
+      attribution: 'Hillshade &copy; Esri, USGS, NASA SRTM (open 30 m DEM)', maxZoom: MAX_ZOOM, maxNativeZoom: 16, opacity: 0.55, pane: 'terrainPane',
     });
   }
 
