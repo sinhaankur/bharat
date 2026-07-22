@@ -108,6 +108,14 @@
       compute: (d) => { const n = safetyFor(d.stateName)?.unrest?.news_mentions; return n ? n : null; },
       fmt: v => v == null ? '—' : v + (v === 1 ? ' item' : ' items'),
       help: 'Recent protest/strike/clash items anchored to the state in our aggregated news feed. A NEWS-ATTENTION signal (tier-3), not an official incident count.'
+    },
+    wealthPerCapita: {
+      label: 'Wealth per person (per-capita income ₹/yr · RBI)',
+      shortLabel: '₹ Wealth / person',
+      diverging: false,
+      compute: (d) => safetyFor(d.stateName)?.wealth?.percapita_income_inr ?? null,
+      fmt: v => v == null ? '—' : '₹' + (v / 1000).toFixed(0) + 'k',
+      help: 'RBI Handbook — per-capita Net State Domestic Product (current prices): the state economy divided by its people. NOMINAL rupees, not PPP/cost-of-living adjusted, so a rupee stretches further in cheaper states — the real gap between rich and poor states is narrower than the headline.'
     }
   };
   // State-level safety block (NCRB crime + prisons + derived unrest). Null-safe.
