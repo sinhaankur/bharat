@@ -49,6 +49,16 @@
     .ea-pop-wb { font-size: 0.82rem; color: oklch(0.86 0.10 220); margin: 2px 0; }
     .ea-pop-open { display: inline-block; margin-top: 5px; font-family: var(--font-mono); font-size: 9.5px; color: oklch(0.74 0.16 75); text-decoration: none; }
 
+    /* time scrubber */
+    .ea-scrub { border: 1px solid var(--border); border-radius: var(--radius); padding: 0.7rem 0.9rem; margin: 0.7rem 0 0.2rem; background: oklch(0.15 0.01 220); }
+    .ea-scrub-hd { display: flex; align-items: baseline; justify-content: space-between; font-size: 0.86rem; color: var(--muted-foreground); }
+    .ea-scrub-hd b { font-family: var(--font-mono); font-size: 1.5rem; color: oklch(0.86 0.12 210); }
+    .ea-scrub input[type=range] { width: 100%; margin: 0.5rem 0 0.35rem; accent-color: oklch(0.66 0.16 210); cursor: pointer; }
+    .ea-scrub-foot { font-size: 0.74rem; color: var(--muted-foreground); line-height: 1.45; }
+    .ea-scrub-reset { background: none; border: none; color: oklch(0.74 0.16 75); font-size: 0.74rem; cursor: pointer; text-decoration: underline; padding: 0; }
+    /* the "as of year" state on a card's loss bar */
+    .ea-loss-now { font-family: var(--font-mono); font-size: 0.8rem; color: oklch(0.86 0.12 210); }
+    .ea-loss-bar .now { position: relative; }
     .ea-controls { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin: 1rem 0 0.2rem; }
     .ea-chip { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.03em; padding: 4px 11px; border-radius: 999px; border: 1px solid var(--border-strong); color: var(--muted-foreground); background: transparent; cursor: pointer; }
     .ea-chip.on { border-color: oklch(0.66 0.19 32); color: oklch(0.16 0 0); background: oklch(0.7 0.17 40); font-weight: 600; }
@@ -104,6 +114,15 @@
 
     <div id="ea-map"></div>
 
+    <div class="ea-scrub" id="scrub" hidden>
+      <div class="ea-scrub-hd">
+        <span>⏳ Watch the water disappear</span>
+        <b id="scrub-year">2024</b>
+      </div>
+      <input id="scrub-range" type="range" min="1960" max="2024" value="2024" step="1" aria-label="Year" />
+      <div class="ea-scrub-foot">Drag to a year — each case fills to its water-body extent then. Dots on a card's bar are the real sourced data-points; values between are interpolated. <button id="scrub-reset" class="ea-scrub-reset">reset to today</button></div>
+    </div>
+
     <div class="ea-controls">
       <div id="filters" style="display:flex;flex-wrap:wrap;gap:0.5rem">
         <button class="ea-chip on" data-f="all">All cases</button>
@@ -137,7 +156,7 @@
   <script src="map-layers.js"></script>
   <script>
     const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    let CASES = [], FILTER = "all", MAP = null, MARKERS = null;
+    let CASES = [], FILTER = "all", MAP = null, MARKERS = null, SCRUB_YEAR = null;
 
     fetch("encroachment-cases.json").then(r => r.ok ? r.json() : { cases: [] }).catch(() => ({ cases: [] }))
       .then(d => {
@@ -149,9 +168,42 @@
           document.querySelectorAll(".ea-chip").forEach(x => x.classList.toggle("on", x === b));
           render();
         }));
+        initScrubber();
         initMap();
         render();
       }).catch(e => document.getElementById("list").innerHTML = `<p class="ea-empty">Load error: ${esc(e.message)}</p>`);
+
+    // Value of a case's metric AT a given year — clamped to its sourced range, linearly
+    // interpolated between the real data-points (the dots). null if the case has no series.
+    function valueAt(c, year) {
+      const pts = c.loss && c.loss.points;
+      if (!pts || pts.length < 2) return null;
+      if (year <= pts[0][0]) return pts[0][1];
+      if (year >= pts[pts.length - 1][0]) return pts[pts.length - 1][1];
+      for (let i = 0; i < pts.length - 1; i++) {
+        const [y0, v0] = pts[i], [y1, v1] = pts[i + 1];
+        if (year >= y0 && year <= y1) return v0 + (v1 - v0) * ((year - y0) / (y1 - y0));
+      }
+      return pts[pts.length - 1][1];
+    }
+
+    function initScrubber() {
+      const scrubbable = CASES.some(c => c.loss && c.loss.points && c.loss.points.length >= 2);
+      const wrap = document.getElementById("scrub");
+      if (!scrubbable) { wrap.hidden = true; return; }
+      wrap.hidden = false;
+      const range = document.getElementById("scrub-range");
+      const yr = document.getElementById("scrub-year");
+      const apply = () => {
+        SCRUB_YEAR = +range.value;
+        yr.textContent = SCRUB_YEAR;
+        render();
+      };
+      range.addEventListener("input", apply);
+      document.getElementById("scrub-reset").addEventListener("click", () => {
+        range.value = range.max; SCRUB_YEAR = null; yr.textContent = range.max; render();
+      });
+    }
 
     // classify a case for filtering, from its type + water-body text
     function bucket(c) {
@@ -261,13 +313,22 @@
       const L = c.loss;
       if (!L || typeof L.pct !== "number") return "";
       const shrunk = L.pct < 0;
-      const mag = Math.min(100, Math.abs(L.pct));
-      // bar shows the surviving share for a shrink, or the growth for built-up
-      const remain = shrunk ? Math.max(4, 100 + L.pct) : 100;
-      const fmt = v => `${v}${esc(L.unit || "")}`;
+      const round1 = v => Math.round(v * 10) / 10;
+      const fmt = v => `${round1(v)}${esc(L.unit || "")}`;
+      // When the scrubber is active, show this case's value AT that year (interpolated),
+      // and fill the bar to its share of the original — you watch the water shrink.
+      const now = SCRUB_YEAR != null ? valueAt(c, SCRUB_YEAR) : null;
+      let barPct, headExtra = "";
+      if (now != null) {
+        barPct = Math.max(2, Math.min(100, now / L.from * 100));
+        const pctNow = Math.round((now - L.from) / L.from * 100);
+        headExtra = ` <span class="ea-loss-now">· ${fmt(now)} in ${SCRUB_YEAR} (${pctNow >= 0 ? "+" : ""}${pctNow}%)</span>`;
+      } else {
+        barPct = shrunk ? Math.max(4, 100 + L.pct) : Math.min(100, Math.abs(L.pct));
+      }
       return `<div class="ea-loss">
-        <div class="ea-loss-hd"><b>${shrunk ? "▼" : "▲"} ${Math.abs(L.pct)}%</b> ${esc(L.label)} — ${fmt(L.from)} <span class="ea-loss-yr">${L.from_year}</span> → ${fmt(L.to)} <span class="ea-loss-yr">${L.to_year}</span></div>
-        <div class="ea-loss-bar"><i style="width:${shrunk ? remain : mag}%;background:${shrunk ? "oklch(0.6 0.13 200)" : "oklch(0.66 0.19 32)"}"></i></div>
+        <div class="ea-loss-hd"><b>${shrunk ? "▼" : "▲"} ${Math.abs(L.pct)}%</b> ${esc(L.label)} — ${fmt(L.from)} <span class="ea-loss-yr">${L.from_year}</span> → ${fmt(L.to)} <span class="ea-loss-yr">${L.to_year}</span>${headExtra}</div>
+        <div class="ea-loss-bar"><i style="width:${barPct}%;background:${shrunk ? "oklch(0.6 0.13 200)" : "oklch(0.66 0.19 32)"};transition:width .25s"></i></div>
       </div>`;
     }
 

@@ -73,6 +73,9 @@ def loss_from_timeline(tl):
             "metric": metric, "label": label, "unit": unit,
             "from": a["value"], "from_year": a["year"],
             "to": b["value"], "to_year": b["year"], "pct": pct,
+            # every sourced point [year, value], so the atlas can scrub a timeline
+            # (values BETWEEN points are interpolated — the dots are the real data).
+            "points": [[p["year"], p["value"]] for p in ps],
         }
     return best, (tl.get("range_note") or None)
 
