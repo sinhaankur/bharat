@@ -33,12 +33,12 @@
   <main class="i3-wrap">
     <header class="i3-head">
       <div class="eyebrow">Geography · 3D India</div>
-      <h1 class="display">India in <em>3D</em> — states &amp; rivers</h1>
-      <p>Every state raised in 3D, with the major rivers — the <strong>Ganga, Brahmaputra,
-      Godavari, Cauvery, Chambal, Sutlej</strong> and more — drawn as their real courses.
-      Rendered on India's <strong>full claimed boundary</strong>, including
-      <strong>Pakistan-occupied Kashmir</strong> and <strong>Aksai Chin</strong>. Drag to
-      orbit, scroll to zoom.</p>
+      <h1 class="display">India on the <em>globe</em> — states, rivers &amp; cities</h1>
+      <p>India raised in 3D <strong>on a real globe</strong>, in world context — every state
+      lifted off the sphere, the major rivers (<strong>Ganga, Brahmaputra, Godavari,
+      Cauvery</strong>…) as real courses, and the big cities pinned. Rendered on India's
+      <strong>full claimed boundary</strong>, including <strong>Pakistan-occupied Kashmir</strong>
+      and <strong>Aksai Chin</strong>. Drag to orbit, scroll to zoom.</p>
     </header>
 
     <div id="i3-status">Loading map…</div>
@@ -53,6 +53,7 @@
       </label>
       <label>Height <input type="range" id="i3-height" min="0" max="10" value="4" step="1"></label>
       <label><input type="checkbox" id="i3-rivers" checked> 🌊 Rivers</label>
+      <label><input type="checkbox" id="i3-cities" checked> 📍 Major cities</label>
     </div>
     <div class="i3-legend" id="i3-legend"></div>
     <canvas id="i3-canvas"></canvas>
@@ -94,35 +95,59 @@
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
     const status = document.getElementById('i3-status');
-    const LAT_MID = 22.0, XY = 1.0;
-    const cosLat = Math.cos(LAT_MID * Math.PI / 180);
-    const CX = 80.0;   // recentre longitude
-    const proj = (lon, lat) => [(lon - CX) * XY * cosLat, (lat - LAT_MID) * XY];
+    const R = 10;   // globe radius (world units)
 
-    let STATES = null, RIVERS = null, FISCAL = null;
+    // lon/lat (+ altitude above the surface) → a 3D point on the sphere. THIS is the globe:
+    // every coordinate wraps onto the real Earth sphere instead of a flat plane.
+    function toSphere(lon, lat, alt = 0) {
+      const phi = (90 - lat) * Math.PI / 180;      // polar angle
+      const theta = (lon + 180) * Math.PI / 180;   // azimuth
+      const r = R + alt;
+      return new THREE.Vector3(
+        -r * Math.sin(phi) * Math.cos(theta),
+        r * Math.cos(phi),
+        r * Math.sin(phi) * Math.sin(theta),
+      );
+    }
+
+    // Notable places to simulate on the globe (name, lon, lat) — capital + major metros.
+    const PLACES = [
+      ['New Delhi', 77.21, 28.61], ['Mumbai', 72.88, 19.08], ['Kolkata', 88.36, 22.57],
+      ['Chennai', 80.27, 13.08], ['Bengaluru', 77.59, 12.97], ['Hyderabad', 78.47, 17.38],
+      ['Ahmedabad', 72.57, 23.03], ['Pune', 73.86, 18.52], ['Jaipur', 75.79, 26.91],
+      ['Lucknow', 80.95, 26.85], ['Srinagar', 74.80, 34.08], ['Guwahati', 91.74, 26.14],
+      ['Bhopal', 77.41, 23.26], ['Patna', 85.14, 25.61], ['Kochi', 76.27, 9.93],
+    ];
+
+    let STATES = null, RIVERS = null, FISCAL = null, WORLD = null;
     Promise.all([
       fetch('india-states.geojson').then(r => r.json()),
       fetch('india-rivers.geojson').then(r => r.ok ? r.json() : { features: [] }).catch(() => ({ features: [] })),
       fetch('india-fiscal.json').then(r => r.json()),
-    ]).then(([s, r, f]) => { STATES = s; RIVERS = r; FISCAL = f.states || {}; boot(); })
+      fetch('world-outlines.geojson').then(r => r.ok ? r.json() : { features: [] }).catch(() => ({ features: [] })),
+    ]).then(([s, r, f, w]) => { STATES = s; RIVERS = r; FISCAL = f.states || {}; WORLD = w; boot(); })
       .catch(e => { status.textContent = 'Could not load map data.'; console.error(e); });
 
     // ---- three.js scene ----
     const canvas = document.getElementById('i3-canvas');
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(45, 2, 0.1, 500);
-    camera.position.set(0, -30, 26);
+    // start looking at India (≈ 80°E, 22°N) from just off the surface
+    camera.position.copy(toSphere(80, 22, R * 1.9));
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-    scene.add(new THREE.HemisphereLight(0x9fc4e8, 0x161310, 0.6));
-    const sun = new THREE.DirectionalLight(0xfff2e0, 1.2); sun.position.set(-9, -14, 18); scene.add(sun);
+    scene.add(new THREE.HemisphereLight(0x9fc4e8, 0x161310, 0.7));
+    const sun = new THREE.DirectionalLight(0xfff2e0, 1.3); sun.position.set(-30, 20, 40); scene.add(sun);
     const controls = new OrbitControls(camera, canvas);
-    controls.enableDamping = true; controls.autoRotate = true; controls.autoRotateSpeed = 0.5;
+    controls.enableDamping = true; controls.autoRotate = true; controls.autoRotateSpeed = 0.45;
+    controls.minDistance = R * 1.15; controls.maxDistance = R * 4.5;   // stay outside the globe
     ['pointerdown', 'wheel', 'touchstart'].forEach(ev => canvas.addEventListener(ev, () => { controls.autoRotate = false; }, { passive: true }));
 
-    const mapGroup = new THREE.Group();
-    mapGroup.rotation.x = -Math.PI / 2;   // lay flat, y-up
-    scene.add(mapGroup);
+    // the ocean globe
+    const globe = new THREE.Mesh(
+      new THREE.SphereGeometry(R, 64, 48),
+      new THREE.MeshStandardMaterial({ color: 0x0c2233, roughness: 0.85, metalness: 0.05 }));
+    scene.add(globe);
 
     function ramp(t) {
       t = Math.max(0, Math.min(1, t));
@@ -143,10 +168,32 @@
       if (geom.type === 'MultiPolygon') return geom.coordinates.map(p => p[0]);
       return [];
     }
+    // build one flat cap ring at altitude, then a wall down to the surface → a "raised tile"
+    // that sits ON the sphere and points radially outward (real 3-D extrusion on a globe).
+    function raisedRing(ring, alt, color) {
+      const n = ring.length;
+      const top = ring.map(([lon, lat]) => toSphere(lon, lat, alt));
+      const bot = ring.map(([lon, lat]) => toSphere(lon, lat, 0.02));
+      const verts = [], idx = [];
+      top.forEach(v => verts.push(v.x, v.y, v.z));
+      bot.forEach(v => verts.push(v.x, v.y, v.z));
+      // top cap (fan)
+      for (let i = 1; i < n - 1; i++) idx.push(0, i, i + 1);
+      // walls
+      for (let i = 0; i < n; i++) {
+        const j = (i + 1) % n;
+        idx.push(i, n + j, n + i);
+        idx.push(i, j, n + j);
+      }
+      const g = new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
+      g.setIndex(idx); g.computeVertexNormals();
+      return new THREE.Mesh(g, new THREE.MeshStandardMaterial({ color, roughness: 0.75 }));
+    }
 
-    let statesGroup = null, riversGroup = null;
+    let statesGroup = null, riversGroup = null, worldGroup = null, cityGroup = null;
     function buildStates() {
-      if (statesGroup) { mapGroup.remove(statesGroup); }
+      if (statesGroup) scene.remove(statesGroup);
       statesGroup = new THREE.Group();
       const H = +document.getElementById('i3-height').value;
       const vals = STATES.features.map(f => val(f.properties.ST_NM)).filter(v => typeof v === 'number');
@@ -154,30 +201,36 @@
       for (const f of STATES.features) {
         const v = val(f.properties.ST_NM);
         const t = (typeof v === 'number') ? v / vmax : 0;
-        const height = 0.05 + t * H * 0.35;
-        const color = (typeof v === 'number') ? ramp(t) : new THREE.Color(0.26, 0.26, 0.3);
+        const alt = 0.05 + t * H * 0.12;
+        const color = (typeof v === 'number') ? ramp(t) : new THREE.Color(0.30, 0.30, 0.34);
         for (const ring of ringsOf(f.geometry)) {
-          if (ring.length < 3) continue;
-          const shape = new THREE.Shape();
-          ring.forEach(([lon, lat], k) => { const [x, y] = proj(lon, lat); k ? shape.lineTo(x, y) : shape.moveTo(x, y); });
-          const geo = new THREE.ExtrudeGeometry(shape, { depth: height, bevelEnabled: false });
-          const mat = new THREE.MeshStandardMaterial({ color, roughness: 0.75, flatShading: false });
-          statesGroup.add(new THREE.Mesh(geo, mat));
+          if (ring.length >= 3) statesGroup.add(raisedRing(ring, alt, color));
         }
       }
-      mapGroup.add(statesGroup);
+      scene.add(statesGroup);
+    }
+
+    // world country outlines drawn ON the sphere so India sits in real context
+    function buildWorld() {
+      worldGroup = new THREE.Group();
+      const mat = new THREE.LineBasicMaterial({ color: 0x2f4a63, transparent: true, opacity: 0.75 });
+      for (const f of (WORLD.features || [])) {
+        for (const ring of ringsOf(f.geometry)) {
+          if (ring.length < 2) continue;
+          const pts = ring.map(([lon, lat]) => toSphere(lon, lat, 0.03));
+          worldGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), mat));
+        }
+      }
+      scene.add(worldGroup);
     }
 
     function buildRivers() {
-      if (riversGroup) { mapGroup.remove(riversGroup); riversGroup = null; }
+      if (riversGroup) { scene.remove(riversGroup); riversGroup = null; }
       if (!document.getElementById('i3-rivers').checked) return;
       riversGroup = new THREE.Group();
       const mat = new THREE.LineBasicMaterial({ color: 0x3b8fd0 });
-      // sit rivers just above the tallest state slab so they read as ON the map, not floating
-      const H = +document.getElementById('i3-height').value;
-      const riverZ = 0.05 + H * 0.35 + 0.08;
       const addLine = coords => {
-        const pts = coords.map(([lon, lat]) => { const [x, y] = proj(lon, lat); return new THREE.Vector3(x, y, riverZ); });
+        const pts = coords.map(([lon, lat]) => toSphere(lon, lat, 0.06));
         if (pts.length > 1) riversGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), mat));
       };
       for (const f of RIVERS.features) {
@@ -185,7 +238,25 @@
         if (g.type === 'LineString') addLine(g.coordinates);
         else if (g.type === 'MultiLineString') g.coordinates.forEach(addLine);
       }
-      mapGroup.add(riversGroup);
+      scene.add(riversGroup);
+    }
+
+    // simulate important places — a small glowing dot + a thin pin standing off the surface
+    function buildCities() {
+      if (cityGroup) { scene.remove(cityGroup); cityGroup = null; }
+      if (!document.getElementById('i3-cities').checked) return;
+      cityGroup = new THREE.Group();
+      const dotMat = new THREE.MeshBasicMaterial({ color: 0xffcf5a });
+      const pinMat = new THREE.LineBasicMaterial({ color: 0xffcf5a, transparent: true, opacity: 0.7 });
+      for (const [name, lon, lat] of PLACES) {
+        const base = toSphere(lon, lat, 0.1);
+        const tip = toSphere(lon, lat, 0.55);
+        cityGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([base, tip]), pinMat));
+        const dot = new THREE.Mesh(new THREE.SphereGeometry(0.06, 10, 10), dotMat);
+        dot.position.copy(tip);
+        cityGroup.add(dot);
+      }
+      scene.add(cityGroup);
     }
 
     function legend() {
@@ -193,17 +264,21 @@
       const lbl = { ownTax: 'own-tax revenue (₹k cr)', gsdp: 'GSDP (₹k cr)', pop_cr: 'population (cr)', flat: 'uniform' }[layer];
       document.getElementById('i3-legend').innerHTML =
         (layer === 'flat' ? '' : `<span><span class="i3-chip" style="background:rgb(51,77,115)"></span>low</span><span><span class="i3-chip" style="background:rgb(217,184,89)"></span>high</span><span style="opacity:.7">height + colour = ${lbl}</span> · `) +
-        `<span><span class="i3-chip" style="background:rgb(59,143,208)"></span>rivers (Natural Earth)</span>`;
+        `<span><span class="i3-chip" style="background:rgb(59,143,208)"></span>rivers</span> · ` +
+        `<span><span class="i3-chip" style="background:rgb(255,207,90)"></span>major cities</span> · ` +
+        `<span style="opacity:.7">on a globe, India's full claimed boundary</span>`;
     }
 
-    function rebuild() { buildStates(); buildRivers(); legend(); }
+    function rebuild() { buildStates(); buildRivers(); buildCities(); legend(); }
 
     function boot() {
-      status.textContent = `${STATES.features.length} states · ${RIVERS.features.length} river features · full claimed boundary`;
+      status.textContent = `India on a globe · ${STATES.features.length} states · ${RIVERS.features.length} rivers · ${(WORLD.features || []).length} countries · ${PLACES.length} cities`;
+      buildWorld();
       rebuild();
       document.getElementById('i3-layer').addEventListener('change', rebuild);
-      document.getElementById('i3-height').addEventListener('input', () => { buildStates(); buildRivers(); });
+      document.getElementById('i3-height').addEventListener('input', buildStates);
       document.getElementById('i3-rivers').addEventListener('change', buildRivers);
+      document.getElementById('i3-cities').addEventListener('change', buildCities);
       loop();
     }
     function resize() {
