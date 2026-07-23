@@ -34,11 +34,12 @@
     <header class="i3-head">
       <div class="eyebrow">Geography · 3D India</div>
       <h1 class="display">India on the <em>globe</em> — states, rivers &amp; cities</h1>
-      <p>India raised in 3D <strong>on a real globe</strong>, in world context — every state
-      lifted off the sphere, the major rivers (<strong>Ganga, Brahmaputra, Godavari,
-      Cauvery</strong>…) as real courses, and the big cities pinned. Rendered on India's
-      <strong>full claimed boundary</strong>, including <strong>Pakistan-occupied Kashmir</strong>
-      and <strong>Aksai Chin</strong>. Drag to orbit, scroll to zoom.</p>
+      <p>India raised in 3D <strong>on the real Earth</strong> — a NASA-derived day/night globe
+      with city lights and drifting clouds, in world context. Every state lifts off the sphere,
+      the major rivers (<strong>Ganga, Brahmaputra, Godavari, Cauvery</strong>…) run as real
+      courses, and the big cities are pinned. Rendered on India's <strong>full claimed
+      boundary</strong>, including <strong>Pakistan-occupied Kashmir</strong> and
+      <strong>Aksai Chin</strong>. Drag to orbit, scroll to zoom.</p>
     </header>
 
     <div id="i3-status">Loading map…</div>
@@ -79,8 +80,11 @@
 
     <p class="i3-note">
       States: <code>india-states.geojson</code> extruded by data from
-      <code>india-fiscal.json</code>. Rivers: Natural Earth 10 m river centre-lines.
-      Rendered client-side with <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a>.
+      <code>india-fiscal.json</code>. Rivers: Natural Earth 10 m river centre-lines. Earth day /
+      night / cloud textures: <a href="https://www.solarsystemscope.com/textures/" target="_blank" rel="noopener">Solar
+      System Scope</a> (CC BY 4.0, derived from NASA Blue Marble / Visible Earth). World country
+      outlines: Natural Earth (public domain). Rendered client-side with
+      <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a>.
       For a true elevation surface see the <a href="terrain-3d.html">3D topography view</a>;
       for states extruded by development constraint, the
       <a href="atlas-3d.html">constraint atlas</a>. This same map is reproducible offline in
@@ -153,11 +157,28 @@
     controls.minDistance = R * 1.15; controls.maxDistance = R * 4.5;   // stay outside the globe
     ['pointerdown', 'wheel', 'touchstart'].forEach(ev => canvas.addEventListener(ev, () => { controls.autoRotate = false; }, { passive: true }));
 
-    // the ocean globe
-    const globe = new THREE.Mesh(
-      new THREE.SphereGeometry(R, 96, 64),
-      new THREE.MeshStandardMaterial({ color: 0x0c2233, roughness: 0.85, metalness: 0.05 }));
+    // the real Earth — NASA-derived day texture, night-lights as emissive (cities glow on
+    // the dark side), a subtle cloud shell. Textures: Solar System Scope, CC BY 4.0.
+    const texLoader = new THREE.TextureLoader();
+    const earthMat = new THREE.MeshStandardMaterial({ color: 0x8899aa, roughness: 0.95, metalness: 0.0 });
+    const dayTex = texLoader.load('vendor/earth/2k_earth_daymap.jpg', t => { t.colorSpace = THREE.SRGBColorSpace; earthMat.map = t; earthMat.needsUpdate = true; });
+    texLoader.load('vendor/earth/2k_earth_nightmap.jpg', t => {
+      t.colorSpace = THREE.SRGBColorSpace;
+      earthMat.emissiveMap = t; earthMat.emissive = new THREE.Color(0xffffff);
+      earthMat.emissiveIntensity = 0.55; earthMat.needsUpdate = true;
+    });
+    const globe = new THREE.Mesh(new THREE.SphereGeometry(R, 96, 64), earthMat);
     scene.add(globe);
+
+    // clouds — a translucent shell just above the surface, drifting slowly
+    let cloudMesh = null;
+    texLoader.load('vendor/earth/2k_earth_clouds.jpg', t => {
+      t.colorSpace = THREE.SRGBColorSpace;
+      cloudMesh = new THREE.Mesh(
+        new THREE.SphereGeometry(R * 1.012, 96, 64),
+        new THREE.MeshStandardMaterial({ map: t, alphaMap: t, transparent: true, opacity: 0.5, depthWrite: false }));
+      scene.add(cloudMesh);
+    });
 
     // --- realism: a soft atmosphere halo (back-side shell) + a starfield backdrop ---
     const atmo = new THREE.Mesh(
@@ -360,7 +381,13 @@
       const w = canvas.clientWidth, h = canvas.clientHeight;
       if (canvas.width !== w || canvas.height !== h) { renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
     }
-    function loop() { resize(); controls.update(); renderer.render(scene, camera); requestAnimationFrame(loop); }
+    function loop() {
+      resize();
+      if (cloudMesh) cloudMesh.rotation.y += 0.0003;   // clouds drift
+      controls.update();
+      renderer.render(scene, camera);
+      requestAnimationFrame(loop);
+    }
   </script>
 </body>
 </html>
