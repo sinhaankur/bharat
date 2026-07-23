@@ -15,8 +15,7 @@
   <meta property="og:image" content="https://sinhaankur.github.io/india-fiscal-map/og-image.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://sinhaankur.github.io/india-fiscal-map/og-image.png" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
   <link rel="stylesheet" href="styles.css" />
   <style>
     .fd-wrap { max-width: 1080px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; }
@@ -200,8 +199,7 @@
 
   <div id="site-footer"></div>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="vendor/leaflet/leaflet.js"></script>
   <script src="map-layers.js"></script>
   <script>
     const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
