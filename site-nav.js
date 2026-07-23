@@ -81,14 +81,17 @@
       { href: "articles.html", text: "Analysis" },
       { href: "mesh.html", text: "The mesh" },
       { href: "command-chain.html", text: "Chain of command" },
-      { href: "india-3d.html", text: "India in 3D — states & rivers" },
-      { href: "atlas-3d.html", text: "India in 3D — by constraint" },
-      { href: "terrain-3d.html", text: "3D topography" },
-      { href: "flood-3d.html", text: "Flood explorer (3D)" },
       { href: "encroachment-atlas.html", text: "Built where water returns" },
       { href: "history.html", text: "History race" },
       { href: "global.html", text: "India vs world" },
       { href: "share.html", text: "Share" },
+    ]},
+    // 3D — the interactive three-dimensional views, gathered into their own tab.
+    { label: "3D", items: [
+      { href: "india-3d.html", text: "India in 3D — states & rivers" },
+      { href: "terrain-3d.html", text: "3D topography (real relief)" },
+      { href: "atlas-3d.html", text: "India by constraint" },
+      { href: "flood-3d.html", text: "Flood explorer" },
     ]},
     { label: "Data", items: [
       { href: "knowledge.html", text: "Knowledge base" },
