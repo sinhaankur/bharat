@@ -55,6 +55,8 @@
       <label>Height <input type="range" id="i3-height" min="0" max="10" value="4" step="1"></label>
       <label><input type="checkbox" id="i3-rivers" checked> 🌊 Rivers</label>
       <label><input type="checkbox" id="i3-cities" checked> 📍 Major cities</label>
+      <label><input type="checkbox" id="i3-roads"> 🛣️ Highways</label>
+      <label><input type="checkbox" id="i3-lakes"> 💧 Lakes</label>
       <label><input type="checkbox" id="i3-enc"> 🏗️ Illegal habitation</label>
       <label>🌊 Sea level
         <select id="i3-sea" style="background:oklch(0.18 0 0);color:var(--foreground);border:1px solid var(--border-strong);border-radius:5px;padding:2px 6px;font-family:var(--font-mono);font-size:11px">
@@ -131,15 +133,18 @@
       ['Bhopal', 77.41, 23.26], ['Patna', 85.14, 25.61], ['Kochi', 76.27, 9.93],
     ];
 
-    let STATES = null, RIVERS = null, FISCAL = null, WORLD = null, ENC = null, SEA = null;
+    let STATES = null, RIVERS = null, FISCAL = null, WORLD = null, ENC = null, SEA = null, ROADS = null, LAKES = null;
+    const j = (u, d) => fetch(u).then(r => r.ok ? r.json() : d).catch(() => d);
     Promise.all([
       fetch('india-states.geojson').then(r => r.json()),
-      fetch('india-rivers.geojson').then(r => r.ok ? r.json() : { features: [] }).catch(() => ({ features: [] })),
+      j('india-rivers.geojson', { features: [] }),
       fetch('india-fiscal.json').then(r => r.json()),
-      fetch('world-outlines.geojson').then(r => r.ok ? r.json() : { features: [] }).catch(() => ({ features: [] })),
-      fetch('encroachment-cases.json').then(r => r.ok ? r.json() : { cases: [] }).catch(() => ({ cases: [] })),
-      fetch('sealevel-exposure.json').then(r => r.ok ? r.json() : null).catch(() => null),
-    ]).then(([s, r, f, w, e, sl]) => { STATES = s; RIVERS = r; FISCAL = f.states || {}; WORLD = w; ENC = e; SEA = sl; boot(); })
+      j('world-outlines.geojson', { features: [] }),
+      j('encroachment-cases.json', { cases: [] }),
+      j('sealevel-exposure.json', null),
+      j('india-roads.geojson', { features: [] }),
+      j('india-lakes.geojson', { features: [] }),
+    ]).then(([s, r, f, w, e, sl, rd, lk]) => { STATES = s; RIVERS = r; FISCAL = f.states || {}; WORLD = w; ENC = e; SEA = sl; ROADS = rd; LAKES = lk; boot(); })
       .catch(e => { status.textContent = 'Could not load map data.'; console.error(e); });
 
     // ---- three.js scene ----
@@ -351,21 +356,65 @@
       scene.add(encGroup);
     }
 
+    // roads (major highways) — gold lines draped on the globe
+    let roadGroup = null;
+    function buildRoads() {
+      if (roadGroup) { scene.remove(roadGroup); roadGroup = null; }
+      if (!document.getElementById('i3-roads').checked || !ROADS) return;
+      roadGroup = new THREE.Group();
+      const mat = new THREE.LineBasicMaterial({ color: 0xe4b23a, transparent: true, opacity: 0.7 });
+      const addLine = coords => {
+        const pts = coords.map(([lon, lat]) => toSphere(lon, lat, 0.05));
+        if (pts.length > 1) roadGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), mat));
+      };
+      for (const f of ROADS.features) {
+        if (f.properties.t !== 'Major Highway') continue;   // keep it legible — highways only
+        const g = f.geometry;
+        if (g.type === 'LineString') addLine(g.coordinates);
+        else if (g.type === 'MultiLineString') g.coordinates.forEach(addLine);
+      }
+      scene.add(roadGroup);
+    }
+
+    // lakes & big ponds — filled blue rings on the surface
+    let lakeGroup = null;
+    function buildLakes() {
+      if (lakeGroup) { scene.remove(lakeGroup); lakeGroup = null; }
+      if (!document.getElementById('i3-lakes').checked || !LAKES) return;
+      lakeGroup = new THREE.Group();
+      const mat = new THREE.MeshBasicMaterial({ color: 0x2f7fc4, transparent: true, opacity: 0.85, side: THREE.DoubleSide });
+      for (const f of LAKES.features) {
+        for (const ring of ringsOf(f.geometry)) {
+          if (ring.length < 3) continue;
+          const verts = [], idx = [];
+          ring.forEach(([lon, lat]) => { const v = toSphere(lon, lat, 0.055); verts.push(v.x, v.y, v.z); });
+          for (let i = 1; i < ring.length - 1; i++) idx.push(0, i, i + 1);   // fan cap
+          const g = new THREE.BufferGeometry();
+          g.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
+          g.setIndex(idx); g.computeVertexNormals();
+          lakeGroup.add(new THREE.Mesh(g, mat));
+        }
+      }
+      scene.add(lakeGroup);
+    }
+
     function legend() {
       const layer = document.getElementById('i3-layer').value;
       const lbl = { ownTax: 'own-tax revenue (₹k cr)', gsdp: 'GSDP (₹k cr)', pop_cr: 'population (cr)', flat: 'uniform' }[layer];
       document.getElementById('i3-legend').innerHTML =
         (layer === 'flat' ? '' : `<span><span class="i3-chip" style="background:rgb(51,77,115)"></span>low</span><span><span class="i3-chip" style="background:rgb(217,184,89)"></span>high</span><span style="opacity:.7">height + colour = ${lbl}</span> · `) +
         `<span><span class="i3-chip" style="background:rgb(59,143,208)"></span>rivers</span> · ` +
+        `<span><span class="i3-chip" style="background:rgb(228,178,58)"></span>highways</span> · ` +
+        `<span><span class="i3-chip" style="background:rgb(47,127,196)"></span>lakes</span> · ` +
         `<span><span class="i3-chip" style="background:rgb(255,207,90)"></span>cities</span> · ` +
-        `<span><span class="i3-chip" style="background:rgb(255,90,60)"></span>illegal habitation</span> · ` +
-        `<span style="opacity:.7">globe · full claimed boundary</span>`;
+        `<span><span class="i3-chip" style="background:rgb(255,90,60)"></span>illegal habitation</span>`;
     }
 
-    function rebuild() { buildStates(); buildRivers(); buildCities(); buildEnc(); legend(); }
+    function rebuild() { buildStates(); buildRivers(); buildRoads(); buildLakes(); buildCities(); buildEnc(); legend(); }
 
     function boot() {
-      status.textContent = `India on a globe · ${STATES.features.length} states · ${RIVERS.features.length} rivers · ${(WORLD.features || []).length} countries · ${PLACES.length} cities`;
+      const hw = (ROADS.features || []).filter(f => f.properties.t === 'Major Highway').length;
+      status.textContent = `Real-Earth globe · ${STATES.features.length} states · ${RIVERS.features.length} rivers · ${hw} highways · ${(LAKES.features || []).length} lakes · ${(WORLD.features || []).length} countries`;
       buildWorld();
       rebuild();
       applySea();
@@ -374,6 +423,8 @@
       document.getElementById('i3-rivers').addEventListener('change', buildRivers);
       document.getElementById('i3-cities').addEventListener('change', buildCities);
       document.getElementById('i3-enc').addEventListener('change', buildEnc);
+      document.getElementById('i3-roads').addEventListener('change', buildRoads);
+      document.getElementById('i3-lakes').addEventListener('change', buildLakes);
       document.getElementById('i3-sea').addEventListener('change', applySea);
       loop();
     }
