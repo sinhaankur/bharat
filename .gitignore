@@ -17,3 +17,8 @@ curation-export.json
 .social_posted.json
 .env
 __pycache__/
+# Generated Blender scenes — heavy build artifacts. The build_india_*_blender.py
+# scripts + source geojson/ledger reproduce them exactly, so don't commit the output.
+india_map.blend
+india_districts.blend
+*.blend1
