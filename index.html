@@ -74,6 +74,10 @@
   }
   </script>
 
+  <!-- Perf: warm up the Leaflet CDN FIRST — its JS+CSS are render-blocking for the map,
+       so start the connection before anything else. -->
+  <link rel="preconnect" href="https://unpkg.com" crossorigin />
+  <link rel="preload" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" as="script" crossorigin />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
         crossorigin="" />
@@ -187,11 +191,13 @@
   <script src="coverage.js"></script>
   <script src="query-engine.js"></script>
   <script src="vulnerability.js"></script>
-  <script src="accountability-arc.js"></script>
-  <script src="stats-bar.js"></script>
-  <script src="whats-new.js"></script>
+  <!-- Post-paint helpers — app.js only calls these AFTER the background ledger loads
+       (all guarded by typeof checks), so defer them off the map's critical path. -->
+  <script defer src="accountability-arc.js"></script>
+  <script defer src="stats-bar.js"></script>
+  <script defer src="whats-new.js"></script>
   <script src="app.js"></script>
-  <script src="command-palette.js"></script>
+  <script defer src="command-palette.js"></script>
   <script src="site-nav.js"></script>
 </body>
 </html>
