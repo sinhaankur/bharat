@@ -56,6 +56,7 @@
       <label><input type="checkbox" id="i3-rivers" checked> 🌊 Rivers</label>
       <label><input type="checkbox" id="i3-cities" checked> 📍 Major cities</label>
       <label><input type="checkbox" id="i3-roads"> 🛣️ Highways</label>
+      <label><input type="checkbox" id="i3-rail"> 🚆 Railways</label>
       <label><input type="checkbox" id="i3-lakes"> 💧 Lakes</label>
       <label><input type="checkbox" id="i3-enc"> 🏗️ Illegal habitation</label>
       <label>🌊 Sea level
@@ -133,7 +134,7 @@
       ['Bhopal', 77.41, 23.26], ['Patna', 85.14, 25.61], ['Kochi', 76.27, 9.93],
     ];
 
-    let STATES = null, RIVERS = null, FISCAL = null, WORLD = null, ENC = null, SEA = null, ROADS = null, LAKES = null;
+    let STATES = null, RIVERS = null, FISCAL = null, WORLD = null, ENC = null, SEA = null, ROADS = null, LAKES = null, RAIL = null;
     const j = (u, d) => fetch(u).then(r => r.ok ? r.json() : d).catch(() => d);
     Promise.all([
       fetch('india-states.geojson').then(r => r.json()),
@@ -144,7 +145,8 @@
       j('sealevel-exposure.json', null),
       j('india-roads.geojson', { features: [] }),
       j('india-lakes.geojson', { features: [] }),
-    ]).then(([s, r, f, w, e, sl, rd, lk]) => { STATES = s; RIVERS = r; FISCAL = f.states || {}; WORLD = w; ENC = e; SEA = sl; ROADS = rd; LAKES = lk; boot(); })
+      j('india-railways.geojson', { features: [] }),
+    ]).then(([s, r, f, w, e, sl, rd, lk, rw]) => { STATES = s; RIVERS = r; FISCAL = f.states || {}; WORLD = w; ENC = e; SEA = sl; ROADS = rd; LAKES = lk; RAIL = rw; boot(); })
       .catch(e => { status.textContent = 'Could not load map data.'; console.error(e); });
 
     // ---- three.js scene ----
@@ -376,6 +378,25 @@
       scene.add(roadGroup);
     }
 
+    // railways — dashed steel-grey lines
+    let railGroup = null;
+    function buildRail() {
+      if (railGroup) { scene.remove(railGroup); railGroup = null; }
+      if (!document.getElementById('i3-rail').checked || !RAIL) return;
+      railGroup = new THREE.Group();
+      const mat = new THREE.LineDashedMaterial({ color: 0xc9c9d2, dashSize: 0.08, gapSize: 0.05, transparent: true, opacity: 0.8 });
+      const addLine = coords => {
+        const pts = coords.map(([lon, lat]) => toSphere(lon, lat, 0.045));
+        if (pts.length > 1) { const l = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), mat); l.computeLineDistances(); railGroup.add(l); }
+      };
+      for (const f of RAIL.features) {
+        const g = f.geometry;
+        if (g.type === 'LineString') addLine(g.coordinates);
+        else if (g.type === 'MultiLineString') g.coordinates.forEach(addLine);
+      }
+      scene.add(railGroup);
+    }
+
     // lakes & big ponds — filled blue rings on the surface
     let lakeGroup = null;
     function buildLakes() {
@@ -410,7 +431,7 @@
         `<span><span class="i3-chip" style="background:rgb(255,90,60)"></span>illegal habitation</span>`;
     }
 
-    function rebuild() { buildStates(); buildRivers(); buildRoads(); buildLakes(); buildCities(); buildEnc(); legend(); }
+    function rebuild() { buildStates(); buildRivers(); buildRoads(); buildRail(); buildLakes(); buildCities(); buildEnc(); legend(); }
 
     function boot() {
       const hw = (ROADS.features || []).filter(f => f.properties.t === 'Major Highway').length;
@@ -424,6 +445,7 @@
       document.getElementById('i3-cities').addEventListener('change', buildCities);
       document.getElementById('i3-enc').addEventListener('change', buildEnc);
       document.getElementById('i3-roads').addEventListener('change', buildRoads);
+      document.getElementById('i3-rail').addEventListener('change', buildRail);
       document.getElementById('i3-lakes').addEventListener('change', buildLakes);
       document.getElementById('i3-sea').addEventListener('change', applySea);
       loop();
