@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>India in 3D — states, rivers &amp; the full claimed map | India District Atlas</title>
+  <meta name="description" content="Interactive 3D India — every state extruded, the major rivers (Ganga, Brahmaputra, Godavari, Cauvery…) drawn as real courses from Natural Earth, on India's full claimed boundary including PoK and Aksai Chin. Drag to orbit, scroll to zoom." />
+  <link rel="canonical" href="https://sinhaankur.github.io/india-fiscal-map/india-3d.html" />
+  <meta property="og:title" content="India in 3D — states, rivers &amp; the full claimed map" />
+  <meta property="og:description" content="Every state in 3D + the major rivers as real courses, on India's full claimed boundary (PoK + Aksai Chin included)." />
+  <meta property="og:image" content="https://sinhaankur.github.io/india-fiscal-map/og-image.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .i3-wrap { max-width: 1100px; margin: 0 auto; padding: 1.6rem var(--pad-x) 4rem; }
+    .i3-head h1 { margin: 0.3rem 0 0.5rem; font-size: clamp(1.6rem, 3.5vw, 2.4rem); }
+    .i3-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.55; max-width: 74ch; }
+    #i3-canvas { width: 100%; height: 66vh; min-height: 460px; border: 1px solid var(--border-strong); border-radius: var(--radius); background: radial-gradient(ellipse at 50% 30%, oklch(0.19 0.02 250), oklch(0.11 0 0)); display: block; margin: 1.1rem 0 0.6rem; cursor: grab; }
+    #i3-canvas:active { cursor: grabbing; }
+    #i3-status { font-family: var(--font-mono); font-size: 11.5px; color: oklch(0.82 0.14 78); min-height: 1.2em; margin-bottom: 0.3rem; }
+    .i3-controls { display: flex; flex-wrap: wrap; gap: 0.6rem 1.1rem; align-items: center; margin: 0.4rem 0; font-size: 12px; }
+    .i3-controls label { color: var(--muted-foreground); font-family: var(--font-mono); font-size: 11px; display: inline-flex; align-items: center; gap: 0.4rem; }
+    .i3-controls input[type=range] { accent-color: oklch(0.74 0.16 70); }
+    .i3-legend { display: flex; flex-wrap: wrap; gap: 0.4rem 0.9rem; align-items: center; font-size: 11px; color: var(--muted-foreground); margin: 0.4rem 0 1rem; font-family: var(--font-mono); }
+    .i3-chip { display: inline-block; width: 13px; height: 9px; border-radius: 2px; vertical-align: middle; margin-right: 4px; }
+    .i3-note { font-size: 0.82rem; color: var(--muted-foreground); line-height: 1.6; margin-top: 1.3rem; border-top: 1px solid var(--border); padding-top: 1rem; }
+    .i3-note a { color: oklch(0.74 0.16 75); }
+    .i3-gap { border-left: 3px solid oklch(0.6 0.16 60); padding: 0.55rem 0.9rem; background: oklch(0.2 0.03 60 / 0.3); border-radius: var(--radius-sm); margin: 1rem 0; font-size: 0.85rem; line-height: 1.55; }
+  </style>
+</head>
+<body>
+  <div id="site-nav"></div>
+
+  <main class="i3-wrap">
+    <header class="i3-head">
+      <div class="eyebrow">Geography · 3D India</div>
+      <h1 class="display">India in <em>3D</em> — states &amp; rivers</h1>
+      <p>Every state raised in 3D, with the major rivers — the <strong>Ganga, Brahmaputra,
+      Godavari, Cauvery, Chambal, Sutlej</strong> and more — drawn as their real courses.
+      Rendered on India's <strong>full claimed boundary</strong>, including
+      <strong>Pakistan-occupied Kashmir</strong> and <strong>Aksai Chin</strong>. Drag to
+      orbit, scroll to zoom.</p>
+    </header>
+
+    <div id="i3-status">Loading map…</div>
+    <div class="i3-controls">
+      <label>Colour states by
+        <select id="i3-layer" style="background:oklch(0.18 0 0);color:var(--foreground);border:1px solid var(--border-strong);border-radius:5px;padding:2px 6px;font-family:var(--font-mono);font-size:11px">
+          <option value="ownTax">Own-tax revenue</option>
+          <option value="gsdp">GSDP</option>
+          <option value="pop_cr">Population</option>
+          <option value="flat">Uniform (rivers only)</option>
+        </select>
+      </label>
+      <label>Height <input type="range" id="i3-height" min="0" max="10" value="4" step="1"></label>
+      <label><input type="checkbox" id="i3-rivers" checked> 🌊 Rivers</label>
+    </div>
+    <div class="i3-legend" id="i3-legend"></div>
+    <canvas id="i3-canvas"></canvas>
+
+    <div class="i3-gap">
+      <strong>The boundary is India's full claimed map.</strong> States use
+      <code>india-states.geojson</code>, which extends to ~37° N and includes PoK
+      (Gilgit-Baltistan) and Aksai Chin — the official Survey-of-India depiction, not the
+      de-facto line-of-control. <em>District</em>-level geometry (Census-2011) stops short of
+      the northern claimed area, so this states view is the correct one for the full boundary.
+      Rivers are <a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener">Natural
+      Earth</a> centre-lines (public domain), clipped to India — representative courses, not
+      survey-grade channels.
+    </div>
+
+    <p class="i3-note">
+      States: <code>india-states.geojson</code> extruded by data from
+      <code>india-fiscal.json</code>. Rivers: Natural Earth 10 m river centre-lines.
+      Rendered client-side with <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a>.
+      For a true elevation surface see the <a href="terrain-3d.html">3D topography view</a>;
+      for states extruded by development constraint, the
+      <a href="atlas-3d.html">constraint atlas</a>. This same map is reproducible offline in
+      Blender via <code>build_india_blender.py</code>.
+    </p>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="command-palette.js"></script>
+  <script src="site-nav.js"></script>
+  <script type="importmap">
+    { "imports": {
+      "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+    } }
+  </script>
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    const status = document.getElementById('i3-status');
+    const LAT_MID = 22.0, XY = 1.0;
+    const cosLat = Math.cos(LAT_MID * Math.PI / 180);
+    const CX = 80.0;   // recentre longitude
+    const proj = (lon, lat) => [(lon - CX) * XY * cosLat, (lat - LAT_MID) * XY];
+
+    let STATES = null, RIVERS = null, FISCAL = null;
+    Promise.all([
+      fetch('india-states.geojson').then(r => r.json()),
+      fetch('india-rivers.geojson').then(r => r.ok ? r.json() : { features: [] }).catch(() => ({ features: [] })),
+      fetch('india-fiscal.json').then(r => r.json()),
+    ]).then(([s, r, f]) => { STATES = s; RIVERS = r; FISCAL = f.states || {}; boot(); })
+      .catch(e => { status.textContent = 'Could not load map data.'; console.error(e); });
+
+    // ---- three.js scene ----
+    const canvas = document.getElementById('i3-canvas');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, 2, 0.1, 500);
+    camera.position.set(0, -30, 26);
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    scene.add(new THREE.HemisphereLight(0x9fc4e8, 0x161310, 0.6));
+    const sun = new THREE.DirectionalLight(0xfff2e0, 1.2); sun.position.set(-9, -14, 18); scene.add(sun);
+    const controls = new OrbitControls(camera, canvas);
+    controls.enableDamping = true; controls.autoRotate = true; controls.autoRotateSpeed = 0.5;
+    ['pointerdown', 'wheel', 'touchstart'].forEach(ev => canvas.addEventListener(ev, () => { controls.autoRotate = false; }, { passive: true }));
+
+    const mapGroup = new THREE.Group();
+    mapGroup.rotation.x = -Math.PI / 2;   // lay flat, y-up
+    scene.add(mapGroup);
+
+    function ramp(t) {
+      t = Math.max(0, Math.min(1, t));
+      const stops = [[0.20, 0.30, 0.45], [0.30, 0.55, 0.70], [0.85, 0.72, 0.35], [0.80, 0.35, 0.20]];
+      const seg = t * (stops.length - 1), i = Math.min(seg | 0, stops.length - 2), f = seg - i;
+      const a = stops[i], b = stops[i + 1];
+      return new THREE.Color(a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f, a[2] + (b[2] - a[2]) * f);
+    }
+    const val = (name) => {
+      const layer = document.getElementById('i3-layer').value;
+      if (layer === 'flat') return null;
+      const s = FISCAL[name]; if (!s) return null;
+      if (layer === 'pop_cr') return typeof s.pop_cr === 'number' ? s.pop_cr : null;
+      const arr = s[layer]; return Array.isArray(arr) ? arr[arr.length - 1] : null;
+    };
+    function ringsOf(geom) {
+      if (geom.type === 'Polygon') return [geom.coordinates[0]];
+      if (geom.type === 'MultiPolygon') return geom.coordinates.map(p => p[0]);
+      return [];
+    }
+
+    let statesGroup = null, riversGroup = null;
+    function buildStates() {
+      if (statesGroup) { mapGroup.remove(statesGroup); }
+      statesGroup = new THREE.Group();
+      const H = +document.getElementById('i3-height').value;
+      const vals = STATES.features.map(f => val(f.properties.ST_NM)).filter(v => typeof v === 'number');
+      const vmax = vals.length ? Math.max(...vals) : 1;
+      for (const f of STATES.features) {
+        const v = val(f.properties.ST_NM);
+        const t = (typeof v === 'number') ? v / vmax : 0;
+        const height = 0.05 + t * H * 0.35;
+        const color = (typeof v === 'number') ? ramp(t) : new THREE.Color(0.26, 0.26, 0.3);
+        for (const ring of ringsOf(f.geometry)) {
+          if (ring.length < 3) continue;
+          const shape = new THREE.Shape();
+          ring.forEach(([lon, lat], k) => { const [x, y] = proj(lon, lat); k ? shape.lineTo(x, y) : shape.moveTo(x, y); });
+          const geo = new THREE.ExtrudeGeometry(shape, { depth: height, bevelEnabled: false });
+          const mat = new THREE.MeshStandardMaterial({ color, roughness: 0.75, flatShading: false });
+          statesGroup.add(new THREE.Mesh(geo, mat));
+        }
+      }
+      mapGroup.add(statesGroup);
+    }
+
+    function buildRivers() {
+      if (riversGroup) { mapGroup.remove(riversGroup); riversGroup = null; }
+      if (!document.getElementById('i3-rivers').checked) return;
+      riversGroup = new THREE.Group();
+      const mat = new THREE.LineBasicMaterial({ color: 0x3b8fd0 });
+      // sit rivers just above the tallest state slab so they read as ON the map, not floating
+      const H = +document.getElementById('i3-height').value;
+      const riverZ = 0.05 + H * 0.35 + 0.08;
+      const addLine = coords => {
+        const pts = coords.map(([lon, lat]) => { const [x, y] = proj(lon, lat); return new THREE.Vector3(x, y, riverZ); });
+        if (pts.length > 1) riversGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), mat));
+      };
+      for (const f of RIVERS.features) {
+        const g = f.geometry;
+        if (g.type === 'LineString') addLine(g.coordinates);
+        else if (g.type === 'MultiLineString') g.coordinates.forEach(addLine);
+      }
+      mapGroup.add(riversGroup);
+    }
+
+    function legend() {
+      const layer = document.getElementById('i3-layer').value;
+      const lbl = { ownTax: 'own-tax revenue (₹k cr)', gsdp: 'GSDP (₹k cr)', pop_cr: 'population (cr)', flat: 'uniform' }[layer];
+      document.getElementById('i3-legend').innerHTML =
+        (layer === 'flat' ? '' : `<span><span class="i3-chip" style="background:rgb(51,77,115)"></span>low</span><span><span class="i3-chip" style="background:rgb(217,184,89)"></span>high</span><span style="opacity:.7">height + colour = ${lbl}</span> · `) +
+        `<span><span class="i3-chip" style="background:rgb(59,143,208)"></span>rivers (Natural Earth)</span>`;
+    }
+
+    function rebuild() { buildStates(); buildRivers(); legend(); }
+
+    function boot() {
+      status.textContent = `${STATES.features.length} states · ${RIVERS.features.length} river features · full claimed boundary`;
+      rebuild();
+      document.getElementById('i3-layer').addEventListener('change', rebuild);
+      document.getElementById('i3-height').addEventListener('input', () => { buildStates(); buildRivers(); });
+      document.getElementById('i3-rivers').addEventListener('change', buildRivers);
+      loop();
+    }
+    function resize() {
+      const w = canvas.clientWidth, h = canvas.clientHeight;
+      if (canvas.width !== w || canvas.height !== h) { renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
+    }
+    function loop() { resize(); controls.update(); renderer.render(scene, camera); requestAnimationFrame(loop); }
+  </script>
+</body>
+</html>

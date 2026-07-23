@@ -163,8 +163,8 @@ def main():
                 lat, lon = ll
                 cx = lon * XY_SCALE * math.cos(math.radians(LAT_MID)) - 78.0 * math.cos(math.radians(LAT_MID))
                 cy = lat * XY_SCALE - LAT_MID
-                bpy.ops.mesh.primitive_cone_add(radius1=0.05, depth=0.18,
-                                                location=(cx, cy, height + 0.09))
+                bpy.ops.mesh.primitive_cone_add(radius1=0.02, depth=0.06,
+                                                location=(cx, cy, height + 0.03))
                 cone = bpy.context.active_object
                 cone.name = f"city_{dn}"
                 # unlink from scene root, put in Cities
@@ -172,6 +172,48 @@ def main():
                     c.objects.unlink(cone)
                 cities.objects.link(cone)
                 city_marked += 1
+
+    # RIVERS — real Natural Earth centre-lines drawn as blue curves riding just above the land
+    rivers_built = 0
+    rpath = os.path.join(HERE, "india-rivers.geojson")
+    if os.path.exists(rpath):
+        rcoll = bpy.data.collections.new("Rivers")
+        scene.collection.children.link(rcoll)
+        rmat = bpy.data.materials.new("river_mat")
+        rmat.use_nodes = True
+        rb = rmat.node_tree.nodes.get("Principled BSDF")
+        if rb:
+            rb.inputs["Base Color"].default_value = (0.18, 0.52, 0.82, 1.0)
+            if "Emission Color" in rb.inputs:
+                rb.inputs["Emission Color"].default_value = (0.10, 0.35, 0.6, 1.0)
+        rj = json.load(open(rpath))
+
+        def add_line(coords):
+            nonlocal rivers_built
+            pts = [c for c in coords if isinstance(c, list) and len(c) >= 2 and isinstance(c[0], (int, float))]
+            if len(pts) < 2:
+                return
+            cu = bpy.data.curves.new("river", "CURVE")
+            cu.dimensions = "3D"
+            cu.bevel_depth = 0.012
+            sp = cu.splines.new("POLY")
+            sp.points.add(len(pts) - 1)
+            for i, (lon, lat) in enumerate(pts):
+                x = lon * XY_SCALE * math.cos(math.radians(LAT_MID)) - 78.0 * math.cos(math.radians(LAT_MID))
+                y = lat * XY_SCALE - LAT_MID
+                sp.points[i].co = (x, y, 0.6, 1.0)   # ride above the land
+            ob = bpy.data.objects.new("river", cu)
+            ob.data.materials.append(rmat)
+            rcoll.objects.link(ob)
+            rivers_built += 1
+
+        for f in rj.get("features", []):
+            g = f.get("geometry", {})
+            if g.get("type") == "LineString":
+                add_line(g["coordinates"])
+            elif g.get("type") == "MultiLineString":
+                for line in g["coordinates"]:
+                    add_line(line)
 
     # camera + sun + dark world
     cam_data = bpy.data.cameras.new("Cam")
@@ -193,7 +235,8 @@ def main():
     bpy.ops.wm.save_as_mainfile(filepath=OUT)
     print(f"\n[districts] wrote {OUT}")
     print(f"[districts] {built} districts · {with_elev} by real elevation · "
-          f"{river_marked} river-corridor tinted · {city_marked} city markers")
+          f"{river_marked} river-corridor tinted · {city_marked} city markers · "
+          f"{rivers_built} real river curves")
 
 
 if __name__ == "__main__":
