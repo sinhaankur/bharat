@@ -20,12 +20,12 @@ path that reaches Google-Earth grade.
 - [x] Major cities (15 pins) + illegal-habitation pins (16 encroachment cases)
 - [x] Rising sea-level water shell (today → +70 m, tied to district counts)
 
-### 1. Real Earth textures — biggest realism jump, low effort
-- [ ] Day texture: **NASA Blue Marble Next Generation** (500 m/px; 8k or 21600×10800 tiled)
-- [ ] Night texture: **NASA Black Marble** (Earth-at-night city lights) — swap on rotate-to-dark
-- [ ] Bump/normal map for terrain relief + specular map so oceans glint
-- [ ] Cloud layer (optional) — a second transparent sphere
-- Cost: a few MB of images, public domain (attribution to NASA/GSFC SVS). No key.
+### 1. Real Earth textures — biggest realism jump, low effort ✅ DONE
+- [x] Day texture (2k Blue-Marble-derived, Solar System Scope CC BY 4.0)
+- [x] Night texture as EMISSIVE map — city lights glow on the dark side
+- [x] Cloud layer — translucent shell, drifts slowly
+- [ ] Higher-res 8k textures + a bump/normal map for terrain relief (future polish)
+- Shipped in vendor/earth/ (~1.6 MB total). Attribution on the page + LICENSE.txt.
 
 ### 2. More open vector detail on the globe — medium effort
 - [ ] Major roads — **Natural Earth 10 m roads** (highways only; light) as gold lines

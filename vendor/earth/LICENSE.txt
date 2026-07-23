@@ -1,0 +1,4 @@
+Earth textures (2k day / night / clouds) from Solar System Scope
+https://www.solarsystemscope.com/textures/
+License: CC BY 4.0 — attribution: Solar System Scope (solarsystemscope.com),
+derived from NASA Blue Marble / Visible Earth imagery.
