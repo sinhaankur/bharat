@@ -325,8 +325,10 @@ a:hover { border-color: var(--foreground); }
   cursor: pointer;
   transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
 }
-.ind-btn:hover { color: var(--foreground); }
-.ind-btn.active { background: var(--foreground); color: var(--background); border-color: var(--foreground); }
+.ind-btn:hover { color: var(--foreground); border-color: var(--muted-foreground); }
+/* Active layer button carries the warm accent (matching the map's active-layer badge
+   + the "map is colouring by" panel) so the eye locks onto what's currently shown. */
+.ind-btn.active { background: var(--warm); color: oklch(0.18 0 0); border-color: var(--warm); font-weight: 600; box-shadow: 0 0 0 3px oklch(0.82 0.16 78 / 0.18); }
 
 .india-year-group {
   display: flex;
