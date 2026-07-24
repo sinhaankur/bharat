@@ -9,6 +9,7 @@
   <meta property="og:title" content="India in 3D — states, rivers &amp; the full claimed map" />
   <meta property="og:description" content="Every state in 3D + the major rivers as real courses, on India's full claimed boundary (PoK + Aksai Chin included)." />
   <meta property="og:image" content="https://sinhaankur.github.io/india-fiscal-map/og-image.png" />
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
   <link rel="stylesheet" href="styles.css" />
   <style>
     .i3-wrap { max-width: 1100px; margin: 0 auto; padding: 1.6rem var(--pad-x) 4rem; }
@@ -86,7 +87,15 @@
     </div>
     <div class="i3-legend" id="i3-legend"></div>
     <div id="i3-sea-note" style="font-family:var(--font-mono);font-size:11px;color:oklch(0.84 0.11 210);min-height:1.1em;margin:-0.2rem 0 0.5rem"></div>
-    <canvas id="i3-canvas"></canvas>
+    <div id="i3-stage" style="position:relative">
+      <canvas id="i3-canvas"></canvas>
+      <button id="i3-drop" hidden style="position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:5;background:oklch(0.2 0.04 250 / 0.95);color:oklch(0.86 0.13 78);border:1px solid var(--warm);border-radius:999px;padding:7px 15px;font-family:var(--font-mono);font-size:12px;cursor:pointer;backdrop-filter:blur(8px)">🔻 drop to street level here</button>
+      <div id="i3-street" hidden style="position:absolute;inset:0;z-index:10;border-radius:var(--radius);overflow:hidden;background:oklch(0.13 0 0)">
+        <div id="i3-street-map" style="position:absolute;inset:0"></div>
+        <button id="i3-up" style="position:absolute;left:12px;top:12px;z-index:20;background:oklch(0.18 0.02 250 / 0.95);color:var(--foreground);border:1px solid var(--border-strong);border-radius:999px;padding:6px 13px;font-family:var(--font-mono);font-size:12px;cursor:pointer">↑ back to globe</button>
+        <div id="i3-street-label" style="position:absolute;right:12px;top:12px;z-index:20;background:oklch(0.15 0 0 / 0.9);color:var(--muted-foreground);border:1px solid var(--border);border-radius:6px;padding:4px 9px;font-family:var(--font-mono);font-size:10px"></div>
+      </div>
+    </div>
 
     <div class="i3-gap">
       <strong>The Impact simulator is a real-elevation bathtub, not a physics forecast.</strong>
@@ -161,6 +170,8 @@
 
   <div id="site-footer"></div>
 
+  <script src="vendor/leaflet/leaflet.js"></script>
+  <script src="map-layers.js"></script>
   <script src="command-palette.js"></script>
   <script src="site-nav.js"></script>
   <script type="importmap">
@@ -667,8 +678,59 @@
         buildAqi();
       });
       document.getElementById('i3-sea').addEventListener('change', applySea);
+      wireFlyDown();
       loop();
     }
+
+    // ---- fly down to real streets (OpenStreetMap) ----
+    // Inverse of toSphere: the lon/lat of a point on the globe surface. We take the point the
+    // camera is looking at (its target, snapped to the surface) as the drop location.
+    function pointToLonLat(v) {
+      const p = v.clone().normalize();
+      const lat = 90 - Math.acos(p.y) * 180 / Math.PI;
+      let lon = Math.atan2(p.z, -p.x) * 180 / Math.PI - 180;
+      while (lon < -180) lon += 360; while (lon > 180) lon -= 360;
+      return [lon, lat];
+    }
+    let STREET_MAP = null;
+    function wireFlyDown() {
+      const drop = document.getElementById('i3-drop');
+      const street = document.getElementById('i3-street');
+      // show the "drop" prompt once you've zoomed in close to the surface
+      controls.addEventListener('change', () => {
+        if (street.hidden) drop.hidden = camera.position.distanceTo(controls.target) > R * 1.35;
+      });
+      drop.addEventListener('click', () => openStreet());
+      document.getElementById('i3-up').addEventListener('click', () => {
+        street.hidden = true; drop.hidden = true;
+        setTimeout(() => { if (STREET_MAP) { STREET_MAP.remove(); STREET_MAP = null; } }, 200);
+      });
+    }
+    const _ray = new THREE.Raycaster();
+    function openStreet() {
+      // where on Earth is the camera looking? Raycast from screen-centre to the globe; the
+      // hit point (else the nearest surface point under the camera) is the drop location.
+      _ray.setFromCamera(new THREE.Vector2(0, 0), camera);
+      const hit = _ray.intersectObject(globe, false)[0];
+      const surface = hit ? hit.point : camera.position.clone().normalize().multiplyScalar(R);
+      const [lon, lat] = pointToLonLat(surface);
+      const street = document.getElementById('i3-street');
+      document.getElementById('i3-drop').hidden = true;
+      street.hidden = false;
+      if (STREET_MAP) { STREET_MAP.remove(); STREET_MAP = null; }
+      STREET_MAP = L.map('i3-street-map', { zoomControl: true, attributionControl: true }).setView([lat, lon], 13);
+      // real OSM streets/buildings/ponds — the "everything real" tiles
+      const base = (window.MapLayers && MapLayers.basemaps)
+        ? MapLayers.basemaps(L)['Dark map']
+        : L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', { subdomains: 'abcd', attribution: '&copy; OSM, &copy; CARTO' });
+      base.addTo(STREET_MAP);
+      // an actual OSM roads/labels layer on top so it reads as real streets
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png', { subdomains: 'abcd', opacity: 0.9 }).addTo(STREET_MAP);
+      L.marker([lat, lon]).addTo(STREET_MAP);
+      document.getElementById('i3-street-label').textContent = `📍 ${lat.toFixed(3)}, ${lon.toFixed(3)} · real OSM streets — zoom in`;
+      setTimeout(() => STREET_MAP.invalidateSize(), 80);
+    }
+
     function resize() {
       const w = canvas.clientWidth, h = canvas.clientHeight;
       if (canvas.width !== w || canvas.height !== h) { renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }

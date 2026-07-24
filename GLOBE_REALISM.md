@@ -34,12 +34,12 @@ path that reaches Google-Earth grade.
 - [ ] Railways — Natural Earth 10 m railroads
 - Cost: each is a small clipped geojson like the rivers file. Still fast, still a globe.
 
-### 3. Stream real slippy tiles (roads/ponds/buildings, zoom to street) — medium effort
-- [ ] A "zoom to the ground" mode: on deep zoom, drop from the vector globe into a real
-      **OpenStreetMap** slippy map (roads, ponds, buildings — everything, streamed)
-- [ ] Reuse the main map's Leaflet + tile stack; this is what the atlas already does at
-      district level, just wired to the globe's "fly down" gesture
-- Cost: none — tiles stream on demand. Not a *globe* at that zoom, but shows EVERYTHING real.
+### 3. Stream real slippy tiles (roads/ponds/buildings, zoom to street) — ✅ DONE
+- [x] "Drop to street level" — zoom the globe in and a 🔻 prompt appears; click it and a real
+      **OpenStreetMap** Leaflet map opens at exactly the point you were looking at (raycast to
+      the sphere → lon/lat), with roads/labels/buildings. "↑ back to globe" returns you.
+- [x] Reuses the self-hosted Leaflet + CARTO/OSM tiles. Tiles stream on demand.
+- Shipped on india-3d.html. Not a *globe* at that zoom — a real street map, which is the point.
 
 ### 4. Google-Earth-grade photoreal 3D (buildings + terrain) — the paid path
 - [ ] **CesiumJS + Google Photorealistic 3D Tiles** — actual 3D buildings/terrain globe
