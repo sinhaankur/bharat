@@ -59,6 +59,8 @@
       <label><input type="checkbox" id="i3-rail"> 🚆 Railways</label>
       <label><input type="checkbox" id="i3-lakes"> 💧 Lakes</label>
       <label><input type="checkbox" id="i3-enc"> 🏗️ Illegal habitation</label>
+      <label>📅 Month <input type="range" id="i3-month" min="0" max="12" value="0" step="1"></label>
+      <span id="i3-month-val" style="font-family:var(--font-mono);font-size:11px;color:oklch(0.84 0.11 210)">— annual</span>
       <label>🌊 Sea level
         <select id="i3-sea" style="background:oklch(0.18 0 0);color:var(--foreground);border:1px solid var(--border-strong);border-radius:5px;padding:2px 6px;font-family:var(--font-mono);font-size:11px">
           <option value="0">today</option><option value="1">+1 m</option><option value="2">+2 m</option>
@@ -70,6 +72,14 @@
     <div id="i3-sea-note" style="font-family:var(--font-mono);font-size:11px;color:oklch(0.84 0.11 210);min-height:1.1em;margin:-0.2rem 0 0.5rem"></div>
     <canvas id="i3-canvas"></canvas>
 
+    <div class="i3-gap">
+      <strong>Seasonal river flow follows the real monsoon calendar, illustratively.</strong>
+      Drag the <b>Month</b> slider and the rivers swell through the south-west monsoon
+      (Jun–Sep, peaking Aug–Sep) and thin in the dry season — the <em>timing</em> is India's
+      actual monsoon onset/withdrawal (IMD), but the flow <em>magnitude</em> is illustrative of
+      the cycle, <em>not</em> gauge discharge. Per-river monthly discharge (CWC / India-WRIS)
+      is a separate, largely restricted dataset — a declared gap, not faked here.
+    </div>
     <div class="i3-gap">
       <strong>The boundary is India's full claimed map.</strong> States use
       <code>india-states.geojson</code>, which extends to ~37° N and includes PoK
@@ -301,13 +311,25 @@
       scene.add(worldGroup);
     }
 
+    // India's monsoon calendar (relative flow 0..1 by month) — the SW monsoon (Jun–Sep)
+    // fills the rivers, they peak Aug–Sep, then recede through the dry season. This is the
+    // real seasonal TIMING (IMD monsoon onset/withdrawal); magnitude is illustrative of the
+    // cycle, not gauge discharge. Index 0 = annual average (no month selected).
+    const MONSOON = [0.55, 0.18, 0.15, 0.16, 0.22, 0.38, 0.72, 0.95, 1.0, 0.82, 0.5, 0.32, 0.22];
+    const MONTHS = ['annual', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
     function buildRivers() {
       if (riversGroup) { scene.remove(riversGroup); riversGroup = null; }
       if (!document.getElementById('i3-rivers').checked) return;
       riversGroup = new THREE.Group();
-      const mat = new THREE.LineBasicMaterial({ color: 0x3b8fd0 });
+      const mi = +document.getElementById('i3-month').value;
+      const flow = MONSOON[mi];                 // 0 (bone dry) → 1 (monsoon peak)
+      // dry = thin pale trickle; monsoon = bright full blue. Colour carries the flow.
+      const col = new THREE.Color().setHSL(0.57, 0.55 + 0.25 * flow, 0.30 + 0.35 * flow);
+      const mat = new THREE.LineBasicMaterial({ color: col, transparent: true, opacity: 0.4 + 0.6 * flow });
+      const alt = 0.06 + flow * 0.05;           // swell lifts them a touch so they read fuller
       const addLine = coords => {
-        const pts = coords.map(([lon, lat]) => toSphere(lon, lat, 0.06));
+        const pts = coords.map(([lon, lat]) => toSphere(lon, lat, alt));
         if (pts.length > 1) riversGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), mat));
       };
       for (const f of RIVERS.features) {
@@ -442,6 +464,13 @@
       document.getElementById('i3-layer').addEventListener('change', rebuild);
       document.getElementById('i3-height').addEventListener('input', buildStates);
       document.getElementById('i3-rivers').addEventListener('change', buildRivers);
+      document.getElementById('i3-month').addEventListener('input', () => {
+        const mi = +document.getElementById('i3-month').value, flow = MONSOON[mi];
+        const label = mi === 0 ? '— annual' : `${MONTHS[mi]} · ${flow >= 0.7 ? 'monsoon high 🌊' : flow <= 0.25 ? 'dry / lean 🏜' : 'rising/receding'} (${Math.round(flow * 100)}%)`;
+        document.getElementById('i3-month-val').textContent = label;
+        document.getElementById('i3-rivers').checked = true;   // month implies you want to see flow
+        buildRivers();
+      });
       document.getElementById('i3-cities').addEventListener('change', buildCities);
       document.getElementById('i3-enc').addEventListener('change', buildEnc);
       document.getElementById('i3-roads').addEventListener('change', buildRoads);
