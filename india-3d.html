@@ -34,12 +34,13 @@
     <header class="i3-head">
       <div class="eyebrow">Geography · 3D India</div>
       <h1 class="display">India on the <em>globe</em> — states, rivers &amp; cities</h1>
-      <p>India raised in 3D <strong>on the real Earth</strong> — a NASA-derived day/night globe
-      with city lights and drifting clouds, in world context. Every state lifts off the sphere,
-      the major rivers (<strong>Ganga, Brahmaputra, Godavari, Cauvery</strong>…) run as real
-      courses, and the big cities are pinned. Rendered on India's <strong>full claimed
-      boundary</strong>, including <strong>Pakistan-occupied Kashmir</strong> and
-      <strong>Aksai Chin</strong>. Drag to orbit, scroll to zoom.</p>
+      <p>India on the real Earth, in one place — a NASA-derived day/night globe with city
+      lights and clouds; states raised by data; rivers that <strong>swell with the monsoon</strong>,
+      highways, railways, lakes; <strong>zones</strong> (CRZ, flood, unsafe); illegal-habitation
+      pins; and an <strong>impact simulator</strong> — sea-level rise, cyclone surge, tsunami or an
+      asteroid wave floods the land that's really below the line. India's <strong>full claimed
+      boundary</strong> (incl. PoK &amp; Aksai Chin). Drag to orbit, scroll to zoom; toggle any
+      layer above.</p>
     </header>
 
     <div id="i3-status">Loading map…</div>
@@ -68,10 +69,15 @@
       </label>
       <label>📅 Month <input type="range" id="i3-month" min="0" max="12" value="0" step="1"></label>
       <span id="i3-month-val" style="font-family:var(--font-mono);font-size:11px;color:oklch(0.84 0.11 210)">— annual</span>
-      <label>🌊 Sea level
+      <label>💥 Impact
         <select id="i3-sea" style="background:oklch(0.18 0 0);color:var(--foreground);border:1px solid var(--border-strong);border-radius:5px;padding:2px 6px;font-family:var(--font-mono);font-size:11px">
-          <option value="0">today</option><option value="1">+1 m</option><option value="2">+2 m</option>
-          <option value="5">+5 m</option><option value="10">+10 m</option><option value="30">+30 m</option><option value="70">+70 m</option>
+          <option value="0">none — today's coast</option>
+          <option value="1">Sea-level rise · +1 m (2100 high)</option>
+          <option value="2">Sea-level rise · +2 m (2150)</option>
+          <option value="5">Cyclone storm surge · ~5 m</option>
+          <option value="10">Major tsunami · ~10 m</option>
+          <option value="30">Mega-tsunami · ~30 m</option>
+          <option value="70">Asteroid ocean impact · ~70 m</option>
         </select>
       </label>
     </div>
@@ -79,6 +85,17 @@
     <div id="i3-sea-note" style="font-family:var(--font-mono);font-size:11px;color:oklch(0.84 0.11 210);min-height:1.1em;margin:-0.2rem 0 0.5rem"></div>
     <canvas id="i3-canvas"></canvas>
 
+    <div class="i3-gap">
+      <strong>The Impact simulator is a real-elevation bathtub, not a physics forecast.</strong>
+      Pick an event — sea-level rise, cyclone surge, tsunami, or an asteroid ocean-impact
+      wave — and the water rises to that event's characteristic height. Which land goes under
+      is <em>real</em>: it's the districts whose actual DEM elevation sits below the line
+      (from the same open elevation data as <a href="terrain-3d.html">3D topography</a>, all
+      594 districts). The event heights are representative reference values and it floods
+      everything below them uniformly — it ignores wave direction, run-up, drainage and
+      timing. The classic <a href="terrain-3d.html#flood-sim">fluid simulation over Kolkata's
+      real terrain</a> is the physics version, offline, for one district.
+    </div>
     <div class="i3-gap">
       <strong>Zones are the sourced flags, honestly limited.</strong> The <b>Zones</b> selector
       shows the zone types the atlas actually sources — <b>CRZ</b> (MoEFCC 2019, 73 coastal
@@ -246,12 +263,17 @@
       scene.add(waterShell);
       seaStatus(m);
     }
+    const IMPACT_LABEL = {
+      1: 'Sea-level rise +1 m', 2: 'Sea-level rise +2 m', 5: 'Cyclone storm surge ~5 m',
+      10: 'Major tsunami ~10 m', 30: 'Mega-tsunami ~30 m', 70: 'Asteroid ocean-impact wave ~70 m',
+    };
     function seaStatus(m) {
       const el = document.getElementById('i3-sea-note');
       if (!el) return;
       if (m <= 0 || !SEA) { el.textContent = ''; return; }
       const s = SEA.stops && SEA.stops[String(m)];
-      el.textContent = s ? `+${m} m → ${s.count} of ${SEA._meta.total_districts} districts have land below this line` : '';
+      const name = IMPACT_LABEL[m] || `+${m} m`;
+      el.textContent = s ? `💥 ${name} → ${s.count} of ${SEA._meta.total_districts} districts have land under the water line` : '';
     }
 
     function ramp(t) {
