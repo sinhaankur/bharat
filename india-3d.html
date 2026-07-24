@@ -60,6 +60,7 @@
       <label><input type="checkbox" id="i3-rail"> 🚆 Railways</label>
       <label><input type="checkbox" id="i3-lakes"> 💧 Lakes</label>
       <label><input type="checkbox" id="i3-aqi"> 😷 Air quality</label>
+      <button id="i3-aqi-live" type="button" style="background:oklch(0.2 0.03 250);color:oklch(0.8 0.12 210);border:1px solid var(--border-strong);border-radius:5px;padding:3px 9px;font-family:var(--font-mono);font-size:10px;cursor:pointer">⚡ live AQI (your key)</button>
       <label><input type="checkbox" id="i3-enc"> 🏗️ Illegal habitation</label>
       <label>⚖ Zones
         <select id="i3-zone" style="background:oklch(0.18 0 0);color:var(--foreground);border:1px solid var(--border-strong);border-radius:5px;padding:2px 6px;font-family:var(--font-mono);font-size:11px">
@@ -193,6 +194,31 @@
       const stops = [[5, 0x3ec46d], [12, 0x9ccb3b], [35, 0xf2c53d], [55, 0xf28d3d], [75, 0xd8433c], [110, 0x8b2fb0]];
       for (let i = 0; i < stops.length - 1; i++) if (pm <= stops[i + 1][0]) return stops[i + 1][1];
       return stops[stops.length - 1][1];
+    }
+    // Live AQI is OPT-IN via the user's OWN free WAQI token (aqicn.org/data-platform/token).
+    // We ship no key; it lives only in this browser (?waqi_token=… or localStorage). Default
+    // stays the static annual averages — live just refreshes the PM2.5 in place when enabled.
+    let AQI_LIVE = false;
+    function waqiToken() {
+      try {
+        const qs = new URLSearchParams(location.search).get('waqi_token');
+        if (qs) { localStorage.setItem('waqi_token', qs); return qs; }
+        return localStorage.getItem('waqi_token') || (window.WAQI_TOKEN || '') || '';
+      } catch (e) { return window.WAQI_TOKEN || ''; }
+    }
+    async function fetchLiveAqi() {
+      const tok = waqiToken();
+      if (!tok || !AQI || !AQI.cities) return false;
+      let ok = 0;
+      await Promise.all(AQI.cities.map(async c => {
+        try {
+          const r = await fetch(`https://api.waqi.info/feed/geo:${c.lat};${c.lon}/?token=${encodeURIComponent(tok)}`);
+          const d = await r.json();
+          const pm = d && d.data && d.data.iaqi && d.data.iaqi.pm25 && d.data.iaqi.pm25.v;
+          if (typeof pm === 'number') { c.pm25 = pm; c.live = true; ok++; }
+        } catch (e) { /* leave the annual average for this city */ }
+      }));
+      return ok > 0;
     }
     const ZONE_COLOR = { crz: 0x2fb0c4, flood: 0x3b6fd0, unsafe: 0xd83c3c, paleo: 0xb06fd0, encz: 0xe0a020 };
     const j = (u, d) => fetch(u).then(r => r.ok ? r.json() : d).catch(() => d);
@@ -477,6 +503,10 @@
         dot.position.copy(tip); aqiGroup.add(dot);
       }
       scene.add(aqiGroup);
+      const note = document.getElementById('i3-sea-note');
+      if (note && !note.textContent) note.textContent = AQI_LIVE
+        ? '😷 Air quality: LIVE PM2.5 (WAQI, your token) over each city'
+        : '😷 Air quality: annual-average PM2.5 (IQAir/CPCB) — click "live AQI" for real-time with your own free WAQI token';
     }
 
     // roads (major highways) — gold lines draped on the globe
@@ -577,6 +607,21 @@
       document.getElementById('i3-lakes').addEventListener('change', buildLakes);
       document.getElementById('i3-zone').addEventListener('change', buildZones);
       document.getElementById('i3-aqi').addEventListener('change', buildAqi);
+      document.getElementById('i3-aqi-live').addEventListener('click', async () => {
+        let tok = waqiToken();
+        if (!tok) {
+          tok = (window.prompt('Paste your FREE WAQI (aqicn.org) API token for live AQI.\n\nWe ship no key — it stays in this browser (localStorage). Get one at aqicn.org/data-platform/token', '') || '').trim();
+          if (!tok) return;
+          try { localStorage.setItem('waqi_token', tok); } catch (e) {}
+        }
+        const btn = document.getElementById('i3-aqi-live');
+        btn.textContent = '⚡ fetching…';
+        const ok = await fetchLiveAqi();
+        AQI_LIVE = ok;
+        btn.textContent = ok ? '⚡ live AQI ✓' : '⚡ live failed — check token';
+        document.getElementById('i3-aqi').checked = true;
+        buildAqi();
+      });
       document.getElementById('i3-sea').addEventListener('change', applySea);
       loop();
     }
