@@ -59,6 +59,13 @@
       <label><input type="checkbox" id="i3-rail"> 🚆 Railways</label>
       <label><input type="checkbox" id="i3-lakes"> 💧 Lakes</label>
       <label><input type="checkbox" id="i3-enc"> 🏗️ Illegal habitation</label>
+      <label>⚖ Zones
+        <select id="i3-zone" style="background:oklch(0.18 0 0);color:var(--foreground);border:1px solid var(--border-strong);border-radius:5px;padding:2px 6px;font-family:var(--font-mono);font-size:11px">
+          <option value="off">off</option><option value="all">all zones</option>
+          <option value="crz">CRZ (coastal)</option><option value="flood">Flood-hazard</option>
+          <option value="unsafe">Unsafe / no-build</option><option value="paleo">Palaeochannel</option><option value="encz">Encroachment zone</option>
+        </select>
+      </label>
       <label>📅 Month <input type="range" id="i3-month" min="0" max="12" value="0" step="1"></label>
       <span id="i3-month-val" style="font-family:var(--font-mono);font-size:11px;color:oklch(0.84 0.11 210)">— annual</span>
       <label>🌊 Sea level
@@ -72,6 +79,15 @@
     <div id="i3-sea-note" style="font-family:var(--font-mono);font-size:11px;color:oklch(0.84 0.11 210);min-height:1.1em;margin:-0.2rem 0 0.5rem"></div>
     <canvas id="i3-canvas"></canvas>
 
+    <div class="i3-gap">
+      <strong>Zones are the sourced flags, honestly limited.</strong> The <b>Zones</b> selector
+      shows the zone types the atlas actually sources — <b>CRZ</b> (MoEFCC 2019, 73 coastal
+      districts), <b>flood-hazard</b> (CWC/NDMA, 87), plus unsafe / palaeochannel /
+      encroachment zones — placed at district centroids (approximate, not the zone-map
+      polygon). <b>Agriculture zones</b> and <b>zoning changes 1900→now</b> are
+      <em>declared gaps</em>: India has no open, nationwide zoning-map or land-use-history
+      dataset to draw them from, so they aren't shown rather than invented.
+    </div>
     <div class="i3-gap">
       <strong>Seasonal river flow follows the real monsoon calendar, illustratively.</strong>
       Drag the <b>Month</b> slider and the rivers swell through the south-west monsoon
@@ -144,7 +160,8 @@
       ['Bhopal', 77.41, 23.26], ['Patna', 85.14, 25.61], ['Kochi', 76.27, 9.93],
     ];
 
-    let STATES = null, RIVERS = null, FISCAL = null, WORLD = null, ENC = null, SEA = null, ROADS = null, LAKES = null, RAIL = null;
+    let STATES = null, RIVERS = null, FISCAL = null, WORLD = null, ENC = null, SEA = null, ROADS = null, LAKES = null, RAIL = null, ZONES = null;
+    const ZONE_COLOR = { crz: 0x2fb0c4, flood: 0x3b6fd0, unsafe: 0xd83c3c, paleo: 0xb06fd0, encz: 0xe0a020 };
     const j = (u, d) => fetch(u).then(r => r.ok ? r.json() : d).catch(() => d);
     Promise.all([
       fetch('india-states.geojson').then(r => r.json()),
@@ -156,7 +173,8 @@
       j('india-roads.geojson', { features: [] }),
       j('india-lakes.geojson', { features: [] }),
       j('india-railways.geojson', { features: [] }),
-    ]).then(([s, r, f, w, e, sl, rd, lk, rw]) => { STATES = s; RIVERS = r; FISCAL = f.states || {}; WORLD = w; ENC = e; SEA = sl; ROADS = rd; LAKES = lk; RAIL = rw; boot(); })
+      j('india-zones.json', { zones: [] }),
+    ]).then(([s, r, f, w, e, sl, rd, lk, rw, zn]) => { STATES = s; RIVERS = r; FISCAL = f.states || {}; WORLD = w; ENC = e; SEA = sl; ROADS = rd; LAKES = lk; RAIL = rw; ZONES = zn; boot(); })
       .catch(e => { status.textContent = 'Could not load map data.'; console.error(e); });
 
     // ---- three.js scene ----
@@ -380,6 +398,29 @@
       scene.add(encGroup);
     }
 
+    // zones — sourced zone FLAGS (CRZ / flood / unsafe / palaeochannel / encroachment)
+    // as coloured dots at district centroids. Approximate placement; agriculture zones +
+    // pre-2000 zoning history are DECLARED GAPS (no open data) — not shown, not faked.
+    let zoneGroup = null;
+    function buildZones() {
+      if (zoneGroup) { scene.remove(zoneGroup); zoneGroup = null; }
+      const sel = document.getElementById('i3-zone').value;
+      if (sel === 'off' || !ZONES) return;
+      zoneGroup = new THREE.Group();
+      const mats = {};
+      for (const z of (ZONES.zones || [])) {
+        const [lat, lon] = z.ll;
+        for (const t of z.z) {
+          if (sel !== 'all' && sel !== t) continue;
+          if (!mats[t]) mats[t] = new THREE.MeshBasicMaterial({ color: ZONE_COLOR[t] || 0xffffff, transparent: true, opacity: 0.85 });
+          const dot = new THREE.Mesh(new THREE.SphereGeometry(0.07, 8, 8), mats[t]);
+          dot.position.copy(toSphere(lon, lat, 0.12));
+          zoneGroup.add(dot);
+        }
+      }
+      scene.add(zoneGroup);
+    }
+
     // roads (major highways) — gold lines draped on the globe
     let roadGroup = null;
     function buildRoads() {
@@ -453,7 +494,7 @@
         `<span><span class="i3-chip" style="background:rgb(255,90,60)"></span>illegal habitation</span>`;
     }
 
-    function rebuild() { buildStates(); buildRivers(); buildRoads(); buildRail(); buildLakes(); buildCities(); buildEnc(); legend(); }
+    function rebuild() { buildStates(); buildRivers(); buildRoads(); buildRail(); buildLakes(); buildCities(); buildEnc(); buildZones(); legend(); }
 
     function boot() {
       const hw = (ROADS.features || []).filter(f => f.properties.t === 'Major Highway').length;
@@ -476,6 +517,7 @@
       document.getElementById('i3-roads').addEventListener('change', buildRoads);
       document.getElementById('i3-rail').addEventListener('change', buildRail);
       document.getElementById('i3-lakes').addEventListener('change', buildLakes);
+      document.getElementById('i3-zone').addEventListener('change', buildZones);
       document.getElementById('i3-sea').addEventListener('change', applySea);
       loop();
     }
