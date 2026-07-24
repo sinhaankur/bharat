@@ -62,6 +62,7 @@
       <label><input type="checkbox" id="i3-aqi"> 😷 Air quality</label>
       <button id="i3-aqi-live" type="button" style="background:oklch(0.2 0.03 250);color:oklch(0.8 0.12 210);border:1px solid var(--border-strong);border-radius:5px;padding:3px 9px;font-family:var(--font-mono);font-size:10px;cursor:pointer">⚡ live AQI (your key)</button>
       <label><input type="checkbox" id="i3-enc"> 🏗️ Illegal habitation</label>
+      <label><input type="checkbox" id="i3-dispute"> ⚖️ Land disputes</label>
       <label>⚖ Zones
         <select id="i3-zone" style="background:oklch(0.18 0 0);color:var(--foreground);border:1px solid var(--border-strong);border-radius:5px;padding:2px 6px;font-family:var(--font-mono);font-size:11px">
           <option value="off">off</option><option value="all">all zones</option>
@@ -97,6 +98,15 @@
       everything below them uniformly — it ignores wave direction, run-up, drainage and
       timing. The classic <a href="terrain-3d.html#flood-sim">fluid simulation over Kolkata's
       real terrain</a> is the physics version, offline, for one district.
+    </div>
+    <div class="i3-gap">
+      <strong>Land disputes are the sourced cases, with their pending age.</strong> The
+      ⚖️ layer stands a column over each documented land/water court case — taller and redder
+      the longer it's been pending (filing/order year → now). These are the cases the atlas has
+      sourced (NGT / High Court / Supreme Court orders, each with a citation). The <em>full
+      universe</em> of India's land litigation lives in the <b>eCourts / NGT portals</b> — public
+      (the govt does post it) but not a bulk-downloadable dataset, so "all cases" is a declared
+      gap, grown case-by-case as each is sourced, never scraped-and-guessed.
     </div>
     <div class="i3-gap">
       <strong>Air quality is annual-average, not live.</strong> The 😷 layer stands a coloured
@@ -463,6 +473,39 @@
       scene.add(encGroup);
     }
 
+    // land disputes — the sourced court/NGT cases, pins scaled by how long they've been
+    // pending (filing year → now). Older-pending = taller + redder: "the water's still
+    // contested." Reuses encroachment-cases.json (each has a year + an order_ref).
+    let disputeGroup = null;
+    function buildDispute() {
+      if (disputeGroup) { scene.remove(disputeGroup); disputeGroup = null; }
+      if (!document.getElementById('i3-dispute').checked || !ENC) return;
+      disputeGroup = new THREE.Group();
+      const now = new Date().getFullYear();
+      const seen = new Set();
+      let oldest = 0, tot = 0, n = 0;
+      for (const c of (ENC.cases || [])) {
+        if (!c.latlng || !c.year) continue;
+        const key = c.state + '|' + c.district;
+        if (seen.has(key)) continue; seen.add(key);
+        const pending = Math.max(0, now - c.year);          // years since filed/ordered
+        oldest = Math.max(oldest, pending); tot += pending; n++;
+        const [lat, lon] = c.latlng;
+        // colour: fresh (green) → long-pending (deep red); height grows with years
+        const t = Math.min(1, pending / 20);
+        const col = new THREE.Color().setHSL(0.33 - 0.33 * t, 0.7, 0.45);
+        const h = 0.15 + t * 0.9;
+        const base = toSphere(lon, lat, 0.08), tip = toSphere(lon, lat, 0.08 + h);
+        disputeGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([base, tip]),
+          new THREE.LineBasicMaterial({ color: col, transparent: true, opacity: 0.7 })));
+        const dot = new THREE.Mesh(new THREE.SphereGeometry(0.08, 10, 10), new THREE.MeshBasicMaterial({ color: col }));
+        dot.position.copy(tip); disputeGroup.add(dot);
+      }
+      scene.add(disputeGroup);
+      const note = document.getElementById('i3-sea-note');
+      if (note && n) note.textContent = `⚖️ ${n} sourced land-dispute cases · avg ${Math.round(tot / n)} yrs since the order, oldest ${oldest} yrs pending · taller/redder = longer contested`;
+    }
+
     // zones — sourced zone FLAGS (CRZ / flood / unsafe / palaeochannel / encroachment)
     // as coloured dots at district centroids. Approximate placement; agriculture zones +
     // pre-2000 zoning history are DECLARED GAPS (no open data) — not shown, not faked.
@@ -582,7 +625,7 @@
         `<span><span class="i3-chip" style="background:rgb(255,90,60)"></span>illegal habitation</span>`;
     }
 
-    function rebuild() { buildStates(); buildRivers(); buildRoads(); buildRail(); buildLakes(); buildCities(); buildEnc(); buildZones(); buildAqi(); legend(); }
+    function rebuild() { buildStates(); buildRivers(); buildRoads(); buildRail(); buildLakes(); buildCities(); buildEnc(); buildDispute(); buildZones(); buildAqi(); legend(); }
 
     function boot() {
       const hw = (ROADS.features || []).filter(f => f.properties.t === 'Major Highway').length;
@@ -602,6 +645,7 @@
       });
       document.getElementById('i3-cities').addEventListener('change', buildCities);
       document.getElementById('i3-enc').addEventListener('change', buildEnc);
+      document.getElementById('i3-dispute').addEventListener('change', buildDispute);
       document.getElementById('i3-roads').addEventListener('change', buildRoads);
       document.getElementById('i3-rail').addEventListener('change', buildRail);
       document.getElementById('i3-lakes').addEventListener('change', buildLakes);
