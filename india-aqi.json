@@ -1,0 +1,33 @@
+{
+  "_meta": {
+    "purpose": "City annual-average air quality for India's major monitored cities — PM2.5 (µg/m³ annual mean) and a representative AQI band. Static, citable figures from published annual reports; NOT live station data. India routinely holds many of the world's most-polluted cities (IQAir World Air Quality Report; CPCB NAMP).",
+    "source": "IQAir World Air Quality Report (annual PM2.5) + CPCB National Air Quality Monitoring; WHO guideline 5 µg/m³ annual PM2.5",
+    "source_url": "https://www.iqair.com/world-air-quality-report",
+    "metric": "annual-mean PM2.5 (µg/m³); band = US-EPA-style AQI category for that PM2.5",
+    "caveat": "City-level annual averages, representative of recent years — not real-time and not per-station. Real-time AQI is CPCB/WAQI (live, keyed). WHO annual guideline is 5 µg/m³, so nearly every Indian city here is many times over.",
+    "who_guideline_pm25": 5,
+    "as_of": "recent annual reports (~2023-2024)"
+  },
+  "cities": [
+    { "city": "Delhi", "lon": 77.21, "lat": 28.61, "pm25": 92, "band": "hazardous" },
+    { "city": "Ghaziabad", "lon": 77.45, "lat": 28.67, "pm25": 89, "band": "hazardous" },
+    { "city": "Noida", "lon": 77.39, "lat": 28.54, "pm25": 82, "band": "hazardous" },
+    { "city": "Gurugram", "lon": 77.03, "lat": 28.46, "pm25": 80, "band": "hazardous" },
+    { "city": "Patna", "lon": 85.14, "lat": 25.61, "pm25": 78, "band": "hazardous" },
+    { "city": "Lucknow", "lon": 80.95, "lat": 26.85, "pm25": 71, "band": "very-unhealthy" },
+    { "city": "Kanpur", "lon": 80.35, "lat": 26.45, "pm25": 68, "band": "very-unhealthy" },
+    { "city": "Muzaffarnagar", "lon": 77.70, "lat": 29.47, "pm25": 75, "band": "hazardous" },
+    { "city": "Kolkata", "lon": 88.36, "lat": 22.57, "pm25": 52, "band": "very-unhealthy" },
+    { "city": "Mumbai", "lon": 72.88, "lat": 19.08, "pm25": 44, "band": "unhealthy" },
+    { "city": "Jaipur", "lon": 75.79, "lat": 26.91, "pm25": 48, "band": "unhealthy" },
+    { "city": "Ahmedabad", "lon": 72.57, "lat": 23.03, "pm25": 46, "band": "unhealthy" },
+    { "city": "Hyderabad", "lon": 78.47, "lat": 17.38, "pm25": 39, "band": "unhealthy-sensitive" },
+    { "city": "Pune", "lon": 73.86, "lat": 18.52, "pm25": 41, "band": "unhealthy" },
+    { "city": "Bengaluru", "lon": 77.59, "lat": 12.97, "pm25": 32, "band": "unhealthy-sensitive" },
+    { "city": "Chennai", "lon": 80.27, "lat": 13.08, "pm25": 30, "band": "unhealthy-sensitive" },
+    { "city": "Bhopal", "lon": 77.41, "lat": 23.26, "pm25": 45, "band": "unhealthy" },
+    { "city": "Nagpur", "lon": 79.09, "lat": 21.15, "pm25": 42, "band": "unhealthy" },
+    { "city": "Guwahati", "lon": 91.74, "lat": 26.14, "pm25": 58, "band": "very-unhealthy" },
+    { "city": "Amritsar", "lon": 74.87, "lat": 31.63, "pm25": 61, "band": "very-unhealthy" }
+  ]
+}

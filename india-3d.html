@@ -59,6 +59,7 @@
       <label><input type="checkbox" id="i3-roads"> 🛣️ Highways</label>
       <label><input type="checkbox" id="i3-rail"> 🚆 Railways</label>
       <label><input type="checkbox" id="i3-lakes"> 💧 Lakes</label>
+      <label><input type="checkbox" id="i3-aqi"> 😷 Air quality</label>
       <label><input type="checkbox" id="i3-enc"> 🏗️ Illegal habitation</label>
       <label>⚖ Zones
         <select id="i3-zone" style="background:oklch(0.18 0 0);color:var(--foreground);border:1px solid var(--border-strong);border-radius:5px;padding:2px 6px;font-family:var(--font-mono);font-size:11px">
@@ -95,6 +96,15 @@
       everything below them uniformly — it ignores wave direction, run-up, drainage and
       timing. The classic <a href="terrain-3d.html#flood-sim">fluid simulation over Kolkata's
       real terrain</a> is the physics version, offline, for one district.
+    </div>
+    <div class="i3-gap">
+      <strong>Air quality is annual-average, not live.</strong> The 😷 layer stands a coloured
+      column over each major city — taller and redder the dirtier the air — from
+      <b>annual-mean PM2.5</b> (IQAir World Air Quality Report / CPCB). India routinely holds
+      many of the world's most-polluted cities; the <b>WHO annual guideline is 5 µg/m³</b>, so
+      nearly every city shown is <em>many times</em> over (Delhi ≈ 90+). These are city-level
+      yearly averages — <em>not</em> real-time and not per-station. Live AQI is CPCB / WAQI
+      (keyed API), a separate opt-in.
     </div>
     <div class="i3-gap">
       <strong>Zones are the sourced flags, honestly limited.</strong> The <b>Zones</b> selector
@@ -177,7 +187,13 @@
       ['Bhopal', 77.41, 23.26], ['Patna', 85.14, 25.61], ['Kochi', 76.27, 9.93],
     ];
 
-    let STATES = null, RIVERS = null, FISCAL = null, WORLD = null, ENC = null, SEA = null, ROADS = null, LAKES = null, RAIL = null, ZONES = null;
+    let STATES = null, RIVERS = null, FISCAL = null, WORLD = null, ENC = null, SEA = null, ROADS = null, LAKES = null, RAIL = null, ZONES = null, AQI = null;
+    // PM2.5 → colour (green clean → dark red hazardous). WHO annual guideline is 5 µg/m³.
+    function aqiColor(pm) {
+      const stops = [[5, 0x3ec46d], [12, 0x9ccb3b], [35, 0xf2c53d], [55, 0xf28d3d], [75, 0xd8433c], [110, 0x8b2fb0]];
+      for (let i = 0; i < stops.length - 1; i++) if (pm <= stops[i + 1][0]) return stops[i + 1][1];
+      return stops[stops.length - 1][1];
+    }
     const ZONE_COLOR = { crz: 0x2fb0c4, flood: 0x3b6fd0, unsafe: 0xd83c3c, paleo: 0xb06fd0, encz: 0xe0a020 };
     const j = (u, d) => fetch(u).then(r => r.ok ? r.json() : d).catch(() => d);
     Promise.all([
@@ -191,7 +207,8 @@
       j('india-lakes.geojson', { features: [] }),
       j('india-railways.geojson', { features: [] }),
       j('india-zones.json', { zones: [] }),
-    ]).then(([s, r, f, w, e, sl, rd, lk, rw, zn]) => { STATES = s; RIVERS = r; FISCAL = f.states || {}; WORLD = w; ENC = e; SEA = sl; ROADS = rd; LAKES = lk; RAIL = rw; ZONES = zn; boot(); })
+      j('india-aqi.json', { cities: [] }),
+    ]).then(([s, r, f, w, e, sl, rd, lk, rw, zn, aq]) => { STATES = s; RIVERS = r; FISCAL = f.states || {}; WORLD = w; ENC = e; SEA = sl; ROADS = rd; LAKES = lk; RAIL = rw; ZONES = zn; AQI = aq; boot(); })
       .catch(e => { status.textContent = 'Could not load map data.'; console.error(e); });
 
     // ---- three.js scene ----
@@ -443,6 +460,25 @@
       scene.add(zoneGroup);
     }
 
+    // air quality — a column of coloured light over each city, taller + redder the dirtier
+    // the air. Annual-mean PM2.5 (IQAir/CPCB), city-level, not live per-station.
+    let aqiGroup = null;
+    function buildAqi() {
+      if (aqiGroup) { scene.remove(aqiGroup); aqiGroup = null; }
+      if (!document.getElementById('i3-aqi').checked || !AQI) return;
+      aqiGroup = new THREE.Group();
+      for (const c of (AQI.cities || [])) {
+        const col = aqiColor(c.pm25);
+        const h = 0.25 + Math.min(1.4, c.pm25 / 92 * 1.4);   // taller = worse
+        const base = toSphere(c.lon, c.lat, 0.05), tip = toSphere(c.lon, c.lat, 0.05 + h);
+        const barMat = new THREE.LineBasicMaterial({ color: col, transparent: true, opacity: 0.55 });
+        aqiGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([base, tip]), barMat));
+        const dot = new THREE.Mesh(new THREE.SphereGeometry(0.09, 10, 10), new THREE.MeshBasicMaterial({ color: col }));
+        dot.position.copy(tip); aqiGroup.add(dot);
+      }
+      scene.add(aqiGroup);
+    }
+
     // roads (major highways) — gold lines draped on the globe
     let roadGroup = null;
     function buildRoads() {
@@ -516,7 +552,7 @@
         `<span><span class="i3-chip" style="background:rgb(255,90,60)"></span>illegal habitation</span>`;
     }
 
-    function rebuild() { buildStates(); buildRivers(); buildRoads(); buildRail(); buildLakes(); buildCities(); buildEnc(); buildZones(); legend(); }
+    function rebuild() { buildStates(); buildRivers(); buildRoads(); buildRail(); buildLakes(); buildCities(); buildEnc(); buildZones(); buildAqi(); legend(); }
 
     function boot() {
       const hw = (ROADS.features || []).filter(f => f.properties.t === 'Major Highway').length;
@@ -540,6 +576,7 @@
       document.getElementById('i3-rail').addEventListener('change', buildRail);
       document.getElementById('i3-lakes').addEventListener('change', buildLakes);
       document.getElementById('i3-zone').addEventListener('change', buildZones);
+      document.getElementById('i3-aqi').addEventListener('change', buildAqi);
       document.getElementById('i3-sea').addEventListener('change', applySea);
       loop();
     }
