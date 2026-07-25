@@ -18,9 +18,15 @@
     #i3-canvas { width: 100%; height: 66vh; min-height: 460px; border: 1px solid var(--border-strong); border-radius: var(--radius); background: radial-gradient(ellipse at 50% 30%, oklch(0.19 0.02 250), oklch(0.11 0 0)); display: block; margin: 1.1rem 0 0.6rem; cursor: grab; }
     #i3-canvas:active { cursor: grabbing; }
     #i3-status { font-family: var(--font-mono); font-size: 11.5px; color: oklch(0.82 0.14 78); min-height: 1.2em; margin-bottom: 0.3rem; }
-    .i3-controls { display: flex; flex-wrap: wrap; gap: 0.6rem 1.1rem; align-items: center; margin: 0.4rem 0; font-size: 12px; }
-    .i3-controls label { color: var(--muted-foreground); font-family: var(--font-mono); font-size: 11px; display: inline-flex; align-items: center; gap: 0.4rem; }
-    .i3-controls input[type=range] { accent-color: oklch(0.74 0.16 70); }
+    /* grouped control panel — labelled sections so 18 toggles are actually navigable */
+    .i3-panel { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: stretch; margin: 0.5rem 0; }
+    .i3-grp { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.7rem; padding: 0.45rem 0.7rem; border: 1px solid var(--border); border-radius: var(--radius); background: oklch(0.155 0 0); }
+    .i3-grp-h { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: oklch(0.72 0.05 250); width: 100%; margin-bottom: 0.1rem; }
+    .i3-grp label { color: var(--muted-foreground); font-family: var(--font-mono); font-size: 11px; display: inline-flex; align-items: center; gap: 0.35rem; cursor: pointer; }
+    .i3-grp select { background: oklch(0.18 0 0); color: var(--foreground); border: 1px solid var(--border-strong); border-radius: 5px; padding: 2px 6px; font-family: var(--font-mono); font-size: 11px; }
+    .i3-grp input[type=range] { accent-color: oklch(0.74 0.16 70); width: 92px; }
+    .i3-btn { background: oklch(0.2 0.03 250); color: oklch(0.8 0.12 210); border: 1px solid var(--border-strong); border-radius: 5px; padding: 3px 9px; font-family: var(--font-mono); font-size: 10px; cursor: pointer; }
+    .i3-btn:hover { border-color: var(--warm); }
     .i3-legend { display: flex; flex-wrap: wrap; gap: 0.4rem 0.9rem; align-items: center; font-size: 11px; color: var(--muted-foreground); margin: 0.4rem 0 1rem; font-family: var(--font-mono); }
     .i3-chip { display: inline-block; width: 13px; height: 9px; border-radius: 2px; vertical-align: middle; margin-right: 4px; }
     .i3-note { font-size: 0.82rem; color: var(--muted-foreground); line-height: 1.6; margin-top: 1.3rem; border-top: 1px solid var(--border); padding-top: 1rem; }
@@ -45,48 +51,68 @@
     </header>
 
     <div id="i3-status">Loading map…</div>
-    <div class="i3-controls">
-      <label>Colour states by
-        <select id="i3-layer" style="background:oklch(0.18 0 0);color:var(--foreground);border:1px solid var(--border-strong);border-radius:5px;padding:2px 6px;font-family:var(--font-mono);font-size:11px">
-          <option value="ownTax">Own-tax revenue</option>
-          <option value="gsdp">GSDP</option>
-          <option value="pop_cr">Population</option>
-          <option value="flat">Uniform (rivers only)</option>
-        </select>
-      </label>
-      <label>Height <input type="range" id="i3-height" min="0" max="10" value="4" step="1"></label>
-      <label><input type="checkbox" id="i3-rivers" checked> 🌊 Rivers</label>
-      <label><input type="checkbox" id="i3-cities" checked> 📍 Major cities</label>
-      <label><input type="checkbox" id="i3-roads"> 🛣️ Highways</label>
-      <label><input type="checkbox" id="i3-rail"> 🚆 Railways</label>
-      <label><input type="checkbox" id="i3-lakes"> 💧 Lakes</label>
-      <label><input type="checkbox" id="i3-aqi"> 😷 Air quality</label>
-      <label><input type="checkbox" id="i3-crz"> 🏖️ CRZ lines</label>
-      <button id="i3-aqi-live" type="button" style="background:oklch(0.2 0.03 250);color:oklch(0.8 0.12 210);border:1px solid var(--border-strong);border-radius:5px;padding:3px 9px;font-family:var(--font-mono);font-size:10px;cursor:pointer">⚡ live AQI (your key)</button>
-      <label><input type="checkbox" id="i3-enc"> 🏗️ Illegal habitation</label>
-      <label><input type="checkbox" id="i3-dispute"> ⚖️ Land disputes</label>
-      <label>⚖ Zones
-        <select id="i3-zone" style="background:oklch(0.18 0 0);color:var(--foreground);border:1px solid var(--border-strong);border-radius:5px;padding:2px 6px;font-family:var(--font-mono);font-size:11px">
-          <option value="off">off</option><option value="all">all zones</option>
-          <option value="crz">CRZ (coastal)</option><option value="flood">Flood-hazard</option>
-          <option value="unsafe">Unsafe / no-build</option><option value="paleo">Palaeochannel</option><option value="encz">Encroachment zone</option>
-        </select>
-      </label>
-      <label>📅 Month <input type="range" id="i3-month" min="0" max="12" value="0" step="1"></label>
-      <span id="i3-month-val" style="font-family:var(--font-mono);font-size:11px;color:oklch(0.84 0.11 210)">— annual</span>
-      <label>💥 Impact
-        <select id="i3-sea" style="background:oklch(0.18 0 0);color:var(--foreground);border:1px solid var(--border-strong);border-radius:5px;padding:2px 6px;font-family:var(--font-mono);font-size:11px">
-          <option value="0">none — today's coast</option>
-          <option value="1">Sea-level rise · +1 m (2100 high)</option>
-          <option value="2">Sea-level rise · +2 m (2150)</option>
-          <option value="5">Cyclone storm surge · ~5 m</option>
-          <option value="10">Major tsunami · ~10 m</option>
-          <option value="30">Mega-tsunami · ~30 m</option>
-          <option value="70">Asteroid ocean impact · ~70 m</option>
-        </select>
-      </label>
-      <label>🌊 Ocean depth <input type="range" id="i3-drain" min="0" max="100" value="0" step="5" title="drain the ocean to reveal the seafloor around India"></label>
-      <span id="i3-drain-val" style="font-family:var(--font-mono);font-size:11px;color:oklch(0.7 0.1 220)">full</span>
+    <div class="i3-panel">
+      <div class="i3-grp">
+        <span class="i3-grp-h">Base</span>
+        <label>Colour states by
+          <select id="i3-layer">
+            <option value="ownTax">Own-tax revenue</option>
+            <option value="gsdp">GSDP</option>
+            <option value="pop_cr">Population</option>
+            <option value="flat">Uniform (rivers only)</option>
+          </select>
+        </label>
+        <label>Height <input type="range" id="i3-height" min="0" max="10" value="4" step="1"></label>
+      </div>
+
+      <div class="i3-grp">
+        <span class="i3-grp-h">🌿 Nature</span>
+        <label><input type="checkbox" id="i3-rivers" checked> 🌊 Rivers</label>
+        <label><input type="checkbox" id="i3-lakes"> 💧 Lakes</label>
+        <label><input type="checkbox" id="i3-crz"> 🏖️ CRZ lines</label>
+        <label><input type="checkbox" id="i3-bathy"> 🌊 Ocean floor</label>
+      </div>
+
+      <div class="i3-grp">
+        <span class="i3-grp-h">🏙 Built</span>
+        <label><input type="checkbox" id="i3-cities" checked> 📍 Cities</label>
+        <label><input type="checkbox" id="i3-roads"> 🛣️ Highways</label>
+        <label><input type="checkbox" id="i3-rail"> 🚆 Railways</label>
+      </div>
+
+      <div class="i3-grp">
+        <span class="i3-grp-h">⚖ Accountability</span>
+        <label><input type="checkbox" id="i3-enc"> 🏗️ Illegal habitation</label>
+        <label><input type="checkbox" id="i3-dispute"> ⚖️ Land disputes</label>
+        <label>Zones
+          <select id="i3-zone">
+            <option value="off">off</option><option value="all">all</option>
+            <option value="crz">CRZ</option><option value="flood">Flood-hazard</option>
+            <option value="unsafe">Unsafe</option><option value="paleo">Palaeochannel</option><option value="encz">Encroachment</option>
+          </select>
+        </label>
+        <label><input type="checkbox" id="i3-aqi"> 😷 Air quality</label>
+        <button id="i3-aqi-live" type="button" class="i3-btn">⚡ live AQI (key)</button>
+      </div>
+
+      <div class="i3-grp">
+        <span class="i3-grp-h">🌊 Time &amp; water</span>
+        <label>📅 Month <input type="range" id="i3-month" min="0" max="12" value="0" step="1"></label>
+        <span id="i3-month-val" style="font-family:var(--font-mono);font-size:11px;color:oklch(0.84 0.11 210)">annual</span>
+        <label>💥 Impact
+          <select id="i3-sea">
+            <option value="0">today's coast</option>
+            <option value="1">Sea rise +1 m (2100)</option>
+            <option value="2">Sea rise +2 m (2150)</option>
+            <option value="5">Cyclone surge ~5 m</option>
+            <option value="10">Tsunami ~10 m</option>
+            <option value="30">Mega-tsunami ~30 m</option>
+            <option value="70">Asteroid wave ~70 m</option>
+          </select>
+        </label>
+        <label>Ocean depth <input type="range" id="i3-drain" min="0" max="100" value="0" step="5" title="drain the ocean to reveal the seafloor"></label>
+        <span id="i3-drain-val" style="font-family:var(--font-mono);font-size:11px;color:oklch(0.7 0.1 220)">full</span>
+      </div>
     </div>
     <div class="i3-legend" id="i3-legend"></div>
     <div id="i3-sea-note" style="font-family:var(--font-mono);font-size:11px;color:oklch(0.84 0.11 210);min-height:1.1em;margin:-0.2rem 0 0.5rem"></div>
@@ -596,6 +622,35 @@
         : '😷 Air quality: annual-average PM2.5 (IQAir/CPCB) — click "live AQI" for real-time with your own free WAQI token';
     }
 
+    // Ocean floor — REAL bathymetry depth contours (isobaths) around India, from Natural
+    // Earth (public domain), coloured shallow→deep. The true shape of the Bay of Bengal /
+    // Arabian Sea seafloor. Lazy-loaded on toggle (196 KB).
+    let BATHY = null, bathyGroup = null, bathyLoading = false;
+    function bathyColor(depth) {
+      const c = { 200: 0x2f9fb0, 1000: 0x2570a0, 2000: 0x1c5488, 3000: 0x143c6e, 4000: 0x0c2650 };
+      return c[depth] || 0x0c2650;
+    }
+    function buildBathy() {
+      if (bathyGroup) { scene.remove(bathyGroup); bathyGroup = null; }
+      if (!document.getElementById('i3-bathy').checked) return;
+      if (!BATHY && !bathyLoading) {
+        bathyLoading = true;
+        fetch('india-bathymetry.geojson').then(r => r.json()).then(d => { BATHY = d; bathyLoading = false; buildBathy(); }).catch(() => { bathyLoading = false; });
+        return;
+      }
+      if (!BATHY) return;
+      bathyGroup = new THREE.Group();
+      for (const f of BATHY.features) {
+        const mat = new THREE.LineBasicMaterial({ color: bathyColor(f.properties.depth), transparent: true, opacity: 0.75 });
+        // sink deeper contours slightly below the surface so they read as ocean-floor depth
+        const alt = -0.015 - (f.properties.depth / 4000) * 0.06;
+        const pts = f.geometry.coordinates.map(([lon, lat]) => toSphere(lon, lat, alt));
+        if (pts.length > 1) bathyGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), mat));
+      }
+      scene.add(bathyGroup);
+      document.getElementById('i3-sea-note').textContent = `🌊 Ocean floor: real bathymetry isobaths (200 m → 4 km) around India — Bay of Bengal & Arabian Sea. Drain the ocean to see them.`;
+    }
+
     // CRZ-2019 regulatory lines — the REAL coastal-zone geometry (High/Low Tide, Hazard
     // Line, CRZ Boundary) from MoEFCC via india-geodata. Lazy-loaded (6 MB) on first toggle.
     let CRZ = null, crzGroup = null, crzLoading = false;
@@ -723,6 +778,7 @@
       document.getElementById('i3-zone').addEventListener('change', buildZones);
       document.getElementById('i3-aqi').addEventListener('change', buildAqi);
       document.getElementById('i3-crz').addEventListener('change', buildCrz);
+      document.getElementById('i3-bathy').addEventListener('change', buildBathy);
       document.getElementById('i3-aqi-live').addEventListener('click', async () => {
         let tok = waqiToken();
         if (!tok) {
