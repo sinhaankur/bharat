@@ -69,6 +69,8 @@
         <span class="i3-grp-h">🌿 Nature</span>
         <label><input type="checkbox" id="i3-rivers" checked> 🌊 Rivers</label>
         <label><input type="checkbox" id="i3-lakes"> 💧 Lakes</label>
+        <label><input type="checkbox" id="i3-ponds"> 🪷 Ponds</label>
+        <label><input type="checkbox" id="i3-eco"> 🌳 Eco zones</label>
         <label><input type="checkbox" id="i3-crz"> 🏖️ CRZ lines</label>
         <label><input type="checkbox" id="i3-bathy"> 🌊 Ocean floor</label>
       </div>
@@ -651,6 +653,50 @@
       document.getElementById('i3-sea-note').textContent = `🌊 Ocean floor: real bathymetry isobaths (200 m → 4 km) around India — Bay of Bengal & Arabian Sea. Drain the ocean to see them.`;
     }
 
+    // Ponds — 67,499 real Amrit Sarovar ponds (thinned) as tiny water dots. "rivers to ponds."
+    let PONDS = null, pondGroup = null, pondLoading = false;
+    function buildPonds() {
+      if (pondGroup) { scene.remove(pondGroup); pondGroup = null; }
+      if (!document.getElementById('i3-ponds').checked) return;
+      if (!PONDS && !pondLoading) {
+        pondLoading = true;
+        fetch('india-ponds.geojson').then(r => r.json()).then(d => { PONDS = d; pondLoading = false; buildPonds(); }).catch(() => { pondLoading = false; });
+        return;
+      }
+      if (!PONDS) return;
+      pondGroup = new THREE.Group();
+      const coords = (PONDS.features[0] && PONDS.features[0].geometry.coordinates) || [];
+      // one merged points cloud for speed
+      const pos = [];
+      for (const [lon, lat] of coords) { const v = toSphere(lon, lat, 0.04); pos.push(v.x, v.y, v.z); }
+      const g = new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+      pondGroup.add(new THREE.Points(g, new THREE.PointsMaterial({ color: 0x4fb0e0, size: 0.04, sizeAttenuation: true })));
+      scene.add(pondGroup);
+      document.getElementById('i3-sea-note').textContent = `🪷 Ponds: ${coords.length.toLocaleString()} shown of 67,499 real Amrit Sarovar ponds (thinned for web)`;
+    }
+
+    // Eco-sensitive zones — real MoEFCC protected-area outlines around wildlife/forests.
+    let ECO = null, ecoGroup = null, ecoLoading = false;
+    function buildEco() {
+      if (ecoGroup) { scene.remove(ecoGroup); ecoGroup = null; }
+      if (!document.getElementById('i3-eco').checked) return;
+      if (!ECO && !ecoLoading) {
+        ecoLoading = true;
+        fetch('india-eco-zones.geojson').then(r => r.json()).then(d => { ECO = d; ecoLoading = false; buildEco(); }).catch(() => { ecoLoading = false; });
+        return;
+      }
+      if (!ECO) return;
+      ecoGroup = new THREE.Group();
+      const mat = new THREE.LineBasicMaterial({ color: 0x4fc46a, transparent: true, opacity: 0.7 });
+      for (const f of ECO.features) {
+        const pts = f.geometry.coordinates.map(([lon, lat]) => toSphere(lon, lat, 0.06));
+        if (pts.length > 1) ecoGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), mat));
+      }
+      scene.add(ecoGroup);
+      document.getElementById('i3-sea-note').textContent = `🌳 Eco-sensitive zones: ${ECO.features.length} MoEFCC protected-area outlines (real geometry)`;
+    }
+
     // CRZ-2019 regulatory lines — the REAL coastal-zone geometry (High/Low Tide, Hazard
     // Line, CRZ Boundary) from MoEFCC via india-geodata. Lazy-loaded (6 MB) on first toggle.
     let CRZ = null, crzGroup = null, crzLoading = false;
@@ -779,6 +825,8 @@
       document.getElementById('i3-aqi').addEventListener('change', buildAqi);
       document.getElementById('i3-crz').addEventListener('change', buildCrz);
       document.getElementById('i3-bathy').addEventListener('change', buildBathy);
+      document.getElementById('i3-ponds').addEventListener('change', buildPonds);
+      document.getElementById('i3-eco').addEventListener('change', buildEco);
       document.getElementById('i3-aqi-live').addEventListener('click', async () => {
         let tok = waqiToken();
         if (!tok) {
