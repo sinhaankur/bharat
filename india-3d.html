@@ -61,6 +61,7 @@
       <label><input type="checkbox" id="i3-rail"> 🚆 Railways</label>
       <label><input type="checkbox" id="i3-lakes"> 💧 Lakes</label>
       <label><input type="checkbox" id="i3-aqi"> 😷 Air quality</label>
+      <label><input type="checkbox" id="i3-crz"> 🏖️ CRZ lines</label>
       <button id="i3-aqi-live" type="button" style="background:oklch(0.2 0.03 250);color:oklch(0.8 0.12 210);border:1px solid var(--border-strong);border-radius:5px;padding:3px 9px;font-family:var(--font-mono);font-size:10px;cursor:pointer">⚡ live AQI (your key)</button>
       <label><input type="checkbox" id="i3-enc"> 🏗️ Illegal habitation</label>
       <label><input type="checkbox" id="i3-dispute"> ⚖️ Land disputes</label>
@@ -595,6 +596,33 @@
         : '😷 Air quality: annual-average PM2.5 (IQAir/CPCB) — click "live AQI" for real-time with your own free WAQI token';
     }
 
+    // CRZ-2019 regulatory lines — the REAL coastal-zone geometry (High/Low Tide, Hazard
+    // Line, CRZ Boundary) from MoEFCC via india-geodata. Lazy-loaded (6 MB) on first toggle.
+    let CRZ = null, crzGroup = null, crzLoading = false;
+    const CRZ_COLOR = { 'CRZ Boundary': 0xff7a3c, 'High Tide Line': 0x3ec4c4, 'Low Tide Line': 0x2f7fc4, 'Hazard Line': 0xe0d020 };
+    function buildCrz() {
+      if (crzGroup) { scene.remove(crzGroup); crzGroup = null; }
+      if (!document.getElementById('i3-crz').checked) return;
+      if (!CRZ && !crzLoading) {
+        crzLoading = true;
+        document.getElementById('i3-sea-note').textContent = '🏖️ loading real CRZ-2019 lines (6 MB)…';
+        fetch('india-crz.geojson').then(r => r.json()).then(d => { CRZ = d; crzLoading = false; buildCrz(); })
+          .catch(() => { crzLoading = false; document.getElementById('i3-sea-note').textContent = 'CRZ lines failed to load.'; });
+        return;
+      }
+      if (!CRZ) return;
+      crzGroup = new THREE.Group();
+      const mats = {};
+      for (const f of CRZ.features) {
+        const c = f.properties.cat || '';
+        if (!mats[c]) mats[c] = new THREE.LineBasicMaterial({ color: CRZ_COLOR[c] || 0xffffff, transparent: true, opacity: 0.8 });
+        const pts = f.geometry.coordinates.map(([lon, lat]) => toSphere(lon, lat, 0.07));
+        if (pts.length > 1) crzGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), mats[c]));
+      }
+      scene.add(crzGroup);
+      document.getElementById('i3-sea-note').textContent = `🏖️ CRZ-2019 (MoEFCC): ${CRZ.features.length} real regulatory lines — 🟠 CRZ boundary · 🔵 tide lines · 🟡 hazard line`;
+    }
+
     // roads (major highways) — gold lines draped on the globe
     let roadGroup = null;
     function buildRoads() {
@@ -694,6 +722,7 @@
       document.getElementById('i3-lakes').addEventListener('change', buildLakes);
       document.getElementById('i3-zone').addEventListener('change', buildZones);
       document.getElementById('i3-aqi').addEventListener('change', buildAqi);
+      document.getElementById('i3-crz').addEventListener('change', buildCrz);
       document.getElementById('i3-aqi-live').addEventListener('click', async () => {
         let tok = waqiToken();
         if (!tok) {
