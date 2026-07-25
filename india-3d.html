@@ -121,6 +121,7 @@
     <div id="i3-stage" style="position:relative">
       <canvas id="i3-canvas"></canvas>
       <button id="i3-drop" hidden style="position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:5;background:oklch(0.2 0.04 250 / 0.95);color:oklch(0.86 0.13 78);border:1px solid var(--warm);border-radius:999px;padding:7px 15px;font-family:var(--font-mono);font-size:12px;cursor:pointer;backdrop-filter:blur(8px)">🔻 drop to street level here</button>
+      <button id="i3-bldg" style="position:absolute;right:12px;bottom:18px;z-index:5;background:oklch(0.2 0.04 30 / 0.95);color:oklch(0.86 0.13 45);border:1px solid oklch(0.6 0.16 40);border-radius:999px;padding:7px 13px;font-family:var(--font-mono);font-size:11px;cursor:pointer;backdrop-filter:blur(8px)">🏢 real 3D buildings (Gandhinagar)</button>
       <div id="i3-street" hidden style="position:absolute;inset:0;z-index:10;border-radius:var(--radius);overflow:hidden;background:oklch(0.13 0 0)">
         <div id="i3-street-map" style="position:absolute;inset:0"></div>
         <button id="i3-up" style="position:absolute;left:12px;top:12px;z-index:20;background:oklch(0.18 0.02 250 / 0.95);color:var(--foreground);border:1px solid var(--border-strong);border-radius:999px;padding:6px 13px;font-family:var(--font-mono);font-size:12px;cursor:pointer">↑ back to globe</button>
@@ -867,24 +868,28 @@
         if (street.hidden) drop.hidden = camera.position.distanceTo(controls.target) > R * 1.35;
       });
       drop.addEventListener('click', () => openStreet());
+      document.getElementById('i3-bldg').addEventListener('click', () => openStreet(23.2199, 72.6428, 15));
       document.getElementById('i3-up').addEventListener('click', () => {
         street.hidden = true; drop.hidden = true;
         setTimeout(() => { if (STREET_MAP) { STREET_MAP.remove(); STREET_MAP = null; } }, 200);
       });
     }
     const _ray = new THREE.Raycaster();
-    function openStreet() {
-      // where on Earth is the camera looking? Raycast from screen-centre to the globe; the
-      // hit point (else the nearest surface point under the camera) is the drop location.
-      _ray.setFromCamera(new THREE.Vector2(0, 0), camera);
-      const hit = _ray.intersectObject(globe, false)[0];
-      const surface = hit ? hit.point : camera.position.clone().normalize().multiplyScalar(R);
-      const [lon, lat] = pointToLonLat(surface);
+    function openStreet(forceLat, forceLon, forceZoom) {
+      let lon, lat;
+      if (typeof forceLat === 'number') { lat = forceLat; lon = forceLon; }
+      else {
+        // where on Earth is the camera looking? Raycast from screen-centre to the globe.
+        _ray.setFromCamera(new THREE.Vector2(0, 0), camera);
+        const hit = _ray.intersectObject(globe, false)[0];
+        const surface = hit ? hit.point : camera.position.clone().normalize().multiplyScalar(R);
+        [lon, lat] = pointToLonLat(surface);
+      }
       const street = document.getElementById('i3-street');
       document.getElementById('i3-drop').hidden = true;
       street.hidden = false;
       if (STREET_MAP) { STREET_MAP.remove(); STREET_MAP = null; }
-      STREET_MAP = L.map('i3-street-map', { zoomControl: true, attributionControl: true }).setView([lat, lon], 13);
+      STREET_MAP = L.map('i3-street-map', { zoomControl: true, attributionControl: true }).setView([lat, lon], forceZoom || 13);
       // real OSM streets/buildings/ponds — the "everything real" tiles
       const base = (window.MapLayers && MapLayers.basemaps)
         ? MapLayers.basemaps(L)['Dark map']
@@ -895,6 +900,45 @@
       L.marker([lat, lon]).addTo(STREET_MAP);
       document.getElementById('i3-street-label').textContent = `📍 ${lat.toFixed(3)}, ${lon.toFixed(3)} · real OSM streets — zoom in`;
       setTimeout(() => STREET_MAP.invalidateSize(), 80);
+      maybeBuildings(lat, lon);
+    }
+
+    // If the drop is near Gandhinagar, overlay the REAL building footprints (35,941, with
+    // height) coloured by height — actual buildings, not just tiles. Lazy-loaded (6.7 MB).
+    let BLD = null, bldLoading = false;
+    function maybeBuildings(lat, lon) {
+      const GN = [23.2199, 72.6428];   // Gandhinagar centre
+      const near = Math.abs(lat - GN[0]) < 0.25 && Math.abs(lon - GN[1]) < 0.25;
+      if (!near) return;
+      const draw = () => {
+        if (!BLD || !STREET_MAP) return;
+        STREET_MAP.setView(GN, 15);
+        const hColor = h => h > 40 ? '#e0563c' : h > 20 ? '#e0a83c' : h > 9 ? '#8fc46a' : '#4f9fd0';
+        // Canvas renderer + no per-feature tooltip → 35k polygons render without blowing the
+        // call stack. Only draw buildings in the current view (padded), refreshed on move.
+        const canvas = L.canvas({ padding: 0.3 });
+        let bldLayer = null;
+        const redraw = () => {
+          const bnds = STREET_MAP.getBounds().pad(0.3);
+          const inView = BLD.features.filter(f => {
+            const c = f.geometry.coordinates[0][0];
+            return c && bnds.contains([c[1], c[0]]);
+          });
+          if (bldLayer) STREET_MAP.removeLayer(bldLayer);
+          bldLayer = L.geoJSON({ type: 'FeatureCollection', features: inView }, {
+            renderer: canvas,
+            style: f => ({ color: hColor(f.properties.h), weight: 0.3, fillColor: hColor(f.properties.h), fillOpacity: 0.75 }),
+          }).addTo(STREET_MAP);
+          document.getElementById('i3-street-label').textContent = `🏢 Gandhinagar · ${inView.length.toLocaleString()} of ${BLD.features.length.toLocaleString()} real buildings in view (by height)`;
+        };
+        redraw();
+        STREET_MAP.on('moveend zoomend', redraw);
+      };
+      if (BLD) return draw();
+      if (bldLoading) return;
+      bldLoading = true;
+      document.getElementById('i3-street-label').textContent = '🏢 loading real Gandhinagar buildings…';
+      fetch('gandhinagar-buildings.geojson').then(r => r.json()).then(d => { BLD = d; bldLoading = false; draw(); }).catch(() => { bldLoading = false; });
     }
 
     function resize() {
