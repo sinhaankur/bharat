@@ -89,6 +89,7 @@
     // 3D — the interactive three-dimensional views, gathered into their own tab.
     { label: "3D", items: [
       { href: "india-3d.html", text: "India in 3D — states & rivers" },
+      { href: "earth-3d.html", text: "Photoreal 3D Earth (your key)" },
       { href: "terrain-3d.html", text: "3D topography (real relief)" },
       { href: "atlas-3d.html", text: "India by constraint" },
       { href: "flood-3d.html", text: "Flood explorer" },

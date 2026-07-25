@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Photoreal 3D Earth — Google 3D Tiles (your key) | India District Atlas</title>
+  <meta name="description" content="A true photorealistic 3D Earth — Google Maps Platform Photorealistic 3D Tiles rendered with CesiumJS: real 3D buildings and terrain, worldwide, country by country. Opt-in with your own Google API key; we ship no key." />
+  <link rel="canonical" href="https://sinhaankur.github.io/india-fiscal-map/earth-3d.html" />
+  <meta property="og:title" content="Photoreal 3D Earth — Google 3D Tiles" />
+  <meta property="og:description" content="True photorealistic 3D buildings + terrain worldwide (Google 3D Tiles via CesiumJS). Bring your own Google API key." />
+  <meta property="og:image" content="https://sinhaankur.github.io/india-fiscal-map/og-image.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .e3-wrap { max-width: 1100px; margin: 0 auto; padding: 1.6rem var(--pad-x) 4rem; }
+    .e3-head h1 { margin: 0.3rem 0 0.5rem; font-size: clamp(1.6rem, 3.5vw, 2.4rem); }
+    .e3-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.55; max-width: 74ch; }
+    #cesiumContainer { width: 100%; height: 66vh; min-height: 460px; border: 1px solid var(--border-strong); border-radius: var(--radius); overflow: hidden; margin: 1.1rem 0 0.6rem; background: oklch(0.11 0 0); position: relative; }
+    .e3-gate { position: absolute; inset: 0; z-index: 5; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.8rem; text-align: center; padding: 1.5rem; background: radial-gradient(ellipse at 50% 40%, oklch(0.2 0.02 250), oklch(0.1 0 0)); }
+    .e3-gate h2 { font-size: 1.2rem; margin: 0; }
+    .e3-gate p { max-width: 52ch; color: var(--muted-foreground); font-size: 0.88rem; line-height: 1.55; }
+    .e3-gate input { width: min(90%, 420px); background: oklch(0.16 0 0); color: var(--foreground); border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 0.6rem 0.8rem; font-family: var(--font-mono); font-size: 0.85rem; }
+    .e3-gate button { background: var(--warm); color: oklch(0.18 0 0); border: none; border-radius: 999px; padding: 0.55rem 1.4rem; font-weight: 600; cursor: pointer; font-family: var(--font-mono); font-size: 0.85rem; }
+    .e3-gate .lnk { color: oklch(0.74 0.16 75); font-size: 0.8rem; }
+    .e3-jump { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.4rem 0 0.8rem; }
+    .e3-jump button { background: oklch(0.18 0 0); color: var(--muted-foreground); border: 1px solid var(--border-strong); border-radius: 999px; padding: 4px 12px; font-family: var(--font-mono); font-size: 11px; cursor: pointer; }
+    .e3-jump button:hover { border-color: var(--warm); color: var(--foreground); }
+    .e3-note { font-size: 0.82rem; color: var(--muted-foreground); line-height: 1.6; margin-top: 1.3rem; border-top: 1px solid var(--border); padding-top: 1rem; }
+    .e3-note a { color: oklch(0.74 0.16 75); }
+    .e3-gap { border-left: 3px solid oklch(0.6 0.16 60); padding: 0.55rem 0.9rem; background: oklch(0.2 0.03 60 / 0.3); border-radius: var(--radius-sm); margin: 1rem 0; font-size: 0.85rem; line-height: 1.55; }
+    #e3-status { font-family: var(--font-mono); font-size: 11.5px; color: oklch(0.82 0.14 78); min-height: 1.2em; margin: 0.2rem 0; }
+  </style>
+</head>
+<body>
+  <div id="site-nav"></div>
+
+  <main class="e3-wrap">
+    <header class="e3-head">
+      <div class="eyebrow">3D · photoreal Earth</div>
+      <h1 class="display">Photoreal 3D <em>Earth</em></h1>
+      <p>A <strong>true photorealistic 3D Earth</strong> — real 3D buildings and terrain,
+      worldwide, country by country — using <strong>Google Maps Platform Photorealistic 3D
+      Tiles</strong> rendered with <strong>CesiumJS</strong>. This is the Google-Earth-grade view.
+      Because it streams <em>Google's</em> data, it needs <strong>your own Google API key</strong>
+      — we ship no key, and it never leaves your browser.</p>
+    </header>
+
+    <div id="e3-status"></div>
+    <div class="e3-jump" id="e3-jump" hidden>
+      <span style="font-family:var(--font-mono);font-size:11px;color:var(--muted-foreground);align-self:center">Jump to:</span>
+      <button data-lat="28.6139" data-lon="77.2090">New Delhi</button>
+      <button data-lat="18.922" data-lon="72.8347">Mumbai · Gateway</button>
+      <button data-lat="27.1751" data-lon="78.0421">Taj Mahal</button>
+      <button data-lat="12.9716" data-lon="77.5946">Bengaluru</button>
+      <button data-lat="40.6892" data-lon="-74.0445">Statue of Liberty</button>
+      <button data-lat="48.8584" data-lon="2.2945">Eiffel Tower</button>
+    </div>
+
+    <div id="cesiumContainer">
+      <div class="e3-gate" id="e3-gate">
+        <h2>🌍 Bring your own Google key</h2>
+        <p>Google Photorealistic 3D Tiles are a paid Google service (free tier, then billed).
+        Enable the <b>Map Tiles API</b> in Google Maps Platform, create an API key, and paste it
+        below. It's stored only in this browser (localStorage) and is never sent to us or committed.</p>
+        <input id="e3-key" type="password" placeholder="Paste your Google Maps Platform API key" autocomplete="off" />
+        <button id="e3-go">Load photoreal Earth</button>
+        <a class="lnk" href="https://developers.google.com/maps/documentation/tile/3d-tiles" target="_blank" rel="noopener">How to get a key + enable the Map Tiles API ↗</a>
+      </div>
+    </div>
+
+    <div class="e3-gap">
+      <strong>This is Google's data, not ours.</strong> The photoreal 3D buildings and terrain are
+      streamed live from Google Maps Platform under <em>your</em> key and their
+      <a href="https://cloud.google.com/maps-platform/terms" target="_blank" rel="noopener">Terms of Service</a>
+      — usage is billed to your Google account, and Google's copyright/attribution shows on the map.
+      Nothing here is stored or redistributed. For the atlas's own free, open, sourced-or-gap globe
+      (no key needed), use <a href="india-3d.html">India in 3D</a>.
+    </div>
+
+    <p class="e3-note">
+      Renderer: <a href="https://cesium.com/platform/cesiumjs/" target="_blank" rel="noopener">CesiumJS</a>
+      (Apache-2.0). Tiles: <a href="https://developers.google.com/maps/documentation/tile/3d-tiles" target="_blank" rel="noopener">Google
+      Photorealistic 3D Tiles</a> (your key). To reset your key, clear this site's localStorage.
+    </p>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="command-palette.js"></script>
+  <script src="site-nav.js"></script>
+  <link rel="stylesheet" href="https://cesium.com/downloads/cesiumjs/releases/1.118/Build/Cesium/Widgets/widgets.css" />
+  <script src="https://cesium.com/downloads/cesiumjs/releases/1.118/Build/Cesium/Cesium.js"></script>
+  <script>
+    const KEY_LS = 'google_maps_key';
+    const status = document.getElementById('e3-status');
+    let viewer = null;
+
+    function savedKey() {
+      try {
+        const qs = new URLSearchParams(location.search).get('gmaps_key');
+        if (qs) { localStorage.setItem(KEY_LS, qs); return qs; }
+        return localStorage.getItem(KEY_LS) || '';
+      } catch (e) { return ''; }
+    }
+
+    async function loadEarth(key) {
+      if (typeof Cesium === 'undefined') { status.textContent = 'CesiumJS failed to load (network).'; return; }
+      document.getElementById('e3-gate').style.display = 'none';
+      status.textContent = 'Loading Google Photorealistic 3D Tiles…';
+      try {
+        // Google's tiles cover the whole globe → turn off Cesium's own globe/imagery.
+        viewer = new Cesium.Viewer('cesiumContainer', {
+          globe: false, baseLayerPicker: false, geocoder: false, homeButton: false,
+          sceneModePicker: false, navigationHelpButton: false, timeline: false, animation: false,
+          infoBox: false, selectionIndicator: false,
+        });
+        // faster tile loading
+        try { Cesium.RequestScheduler.requestsByServer['tile.googleapis.com:443'] = 18; } catch (e) {}
+        const tileset = await Cesium.createGooglePhotorealistic3DTileset({ key });
+        viewer.scene.primitives.add(tileset);
+        status.textContent = 'Photoreal Earth loaded · drag to orbit · scroll to zoom · use the Jump buttons';
+        document.getElementById('e3-jump').hidden = false;
+        flyTo(28.6139, 77.2090);   // open on New Delhi
+      } catch (err) {
+        status.textContent = 'Could not load Google 3D Tiles — check the key + that the Map Tiles API is enabled & billing is on.';
+        document.getElementById('e3-gate').style.display = 'flex';
+        console.error(err);
+      }
+    }
+
+    function flyTo(lat, lon) {
+      if (!viewer) return;
+      viewer.camera.flyTo({
+        destination: Cesium.Cartesian3.fromDegrees(lon, lat, 1200),
+        orientation: { heading: 0, pitch: Cesium.Math.toRadians(-35), roll: 0 },
+        duration: 2.2,
+      });
+    }
+
+    document.getElementById('e3-go').addEventListener('click', () => {
+      const key = document.getElementById('e3-key').value.trim();
+      if (!key) return;
+      try { localStorage.setItem(KEY_LS, key); } catch (e) {}
+      loadEarth(key);
+    });
+    document.getElementById('e3-jump').addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      flyTo(+b.dataset.lat, +b.dataset.lon);
+    });
+
+    // auto-load if a key is already saved (or provided via ?gmaps_key=)
+    const k = savedKey();
+    if (k) { const inp = document.getElementById('e3-key'); if (inp) inp.value = k; loadEarth(k); }
+  </script>
+</body>
+</html>
