@@ -93,6 +93,7 @@
       <button type="button" class="i3-preset" data-preset="money">💰 Money</button>
       <button type="button" class="i3-preset" data-preset="water">🌊 Water</button>
       <button type="button" class="i3-preset" data-preset="risk">⚠️ Risk</button>
+      <button type="button" class="i3-preset" data-preset="study">⚡ Study</button>
       <button type="button" class="i3-preset" data-preset="earth">🌏 Real Earth</button>
       <span class="i3-preset-hint" id="i3-preset-hint">one click sets the layers · then fine-tune below</span>
       <button type="button" class="i3-help" id="i3-help" title="Show the quick tour again" aria-label="Show the quick tour">?</button>
@@ -131,6 +132,7 @@
         <label><input type="checkbox" id="i3-eco"> 🌳 Eco zones</label>
         <label><input type="checkbox" id="i3-crz"> 🏖️ CRZ lines</label>
         <label><input type="checkbox" id="i3-bathy"> 🌊 Ocean floor</label>
+        <label><input type="checkbox" id="i3-quakes"> 🔴 Earthquakes</label>
       </div>
 
       <div class="i3-grp">
@@ -262,6 +264,18 @@
       universe</em> of India's land litigation lives in the <b>eCourts / NGT portals</b> — public
       (the govt does post it) but not a bulk-downloadable dataset, so "all cases" is a declared
       gap, grown case-by-case as each is sourced, never scraped-and-guessed.
+    </div>
+    <div class="i3-gap">
+      <strong>The Study view overlays three real forces — for eyeballing, not a causal claim.</strong>
+      The <b>⚡ Study</b> preset (or the 🔴 Earthquakes toggle) shows <b>2,000 real USGS
+      earthquake epicenters</b> (M4.5+, 2000–2025, India region — size = magnitude, colour =
+      depth) together with the <b>monsoon-swollen rivers</b> and the <b>flood/sea water</b>. It
+      lets you <em>see</em> where the Himalayan seismic belt, the big river systems and the
+      monsoon coincide — the collision-zone geography that shapes all three. It is an
+      <em>overlay for observation</em>, not a claim that one causes another; real correlation
+      (e.g. reservoir-induced seismicity, monsoon-loading of faults) needs proper analysis, and
+      is a genuine research question, not asserted here. Quakes: USGS (public domain); monsoon
+      timing: IMD; water: real DEM/flood zones.
     </div>
     <div class="i3-gap">
       <strong>The 594 districts are placed for real, coloured only where sourced.</strong> Every
@@ -997,6 +1011,48 @@
       document.getElementById('i3-sea-note').textContent = `🌊 ${WRIVERS.features.length} world rivers (Natural Earth) — Nile, Amazon, Mississippi, Yangtze… the whole Earth's water, not just India's.`;
     }
 
+    // Earthquakes — real USGS epicenters (M4.5+, 2000–2025, India region). For the
+    // water-vs-quake-vs-monsoon study: overlay these with the monsoon rivers + flood/sea water
+    // and see where seismic activity, big rivers and the monsoon belt coincide. Size ∝ magnitude,
+    // colour by depth (shallow=red, hot & most damaging → deep=blue). One InstancedMesh. Lazy.
+    let QUAKES = null, quakeMesh = null, quakeLoading = false;
+    const _qObj = new THREE.Object3D();
+    function quakeDepthColor(km) {
+      // shallow (<70 km, most destructive) red → intermediate orange → deep (>300) blue
+      if (km < 70) return new THREE.Color(0xff4030);
+      if (km < 300) return new THREE.Color(0xf0a030);
+      return new THREE.Color(0x4090e0);
+    }
+    function buildQuakes() {
+      if (quakeMesh) { scene.remove(quakeMesh); quakeMesh.geometry.dispose(); quakeMesh = null; }
+      if (!document.getElementById('i3-quakes').checked) return;
+      if (!QUAKES && !quakeLoading) {
+        quakeLoading = true;
+        document.getElementById('i3-sea-note').textContent = '🔴 loading real USGS earthquakes…';
+        fetch('india-earthquakes.json').then(r => r.json()).then(d => { QUAKES = d; quakeLoading = false; buildQuakes(); }).catch(() => { quakeLoading = false; });
+        return;
+      }
+      if (!QUAKES) return;
+      const qs = QUAKES.quakes;
+      const geo = new THREE.SphereGeometry(1, 8, 8);
+      const mat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.8 });
+      quakeMesh = new THREE.InstancedMesh(geo, mat, qs.length);
+      quakeMesh.instanceColor = new THREE.InstancedBufferAttribute(new Float32Array(qs.length * 3), 3);
+      qs.forEach((q, i) => {
+        const [lat, lon] = q.ll;
+        const rad = 0.03 + Math.pow(Math.max(0, q.m - 4), 1.7) * 0.02;   // grows fast with magnitude
+        _qObj.position.copy(toSphere(lon, lat, 0.11));
+        _qObj.scale.setScalar(rad); _qObj.updateMatrix();
+        quakeMesh.setMatrixAt(i, _qObj.matrix);
+        quakeMesh.setColorAt(i, quakeDepthColor(q.d));
+      });
+      quakeMesh.instanceMatrix.needsUpdate = true;
+      if (quakeMesh.instanceColor) quakeMesh.instanceColor.needsUpdate = true;
+      scene.add(quakeMesh);
+      const big = qs.filter(q => q.m >= 7).length;
+      document.getElementById('i3-sea-note').textContent = `🔴 ${qs.length} real USGS earthquakes (M4.5+, 2000–2025) · ${big} were M7+ · size = magnitude, colour = depth (red shallow → blue deep). Turn on 🌊 rivers + the 📅 monsoon month + 💥 water to overlay the three.`;
+    }
+
     // lakes & big ponds — filled blue rings on the surface
     let lakeGroup = null;
     function buildLakes() {
@@ -1056,6 +1112,12 @@
         checks: { 'i3-enc': true, 'i3-dispute': true, 'i3-aqi': true, 'i3-districts': false, 'i3-cities': true, 'i3-rivers': false, 'i3-lakes': false, 'i3-ponds': false, 'i3-eco': true, 'i3-crz': false, 'i3-bathy': false, 'i3-roads': false, 'i3-rail': false },
         month: 0, drain: 0,
       },
+      study: {  // water vs earthquakes vs monsoon — overlay the three forces
+        _hint: '⚡ Study: earthquakes + rivers at monsoon peak + flood water — see where seismic, water & monsoon coincide.',
+        selects: { 'i3-layer': 'flat', 'i3-zone': 'flood', 'i3-sea': '2' },
+        checks: { 'i3-quakes': true, 'i3-rivers': true, 'i3-lakes': false, 'i3-ponds': false, 'i3-eco': false, 'i3-crz': false, 'i3-bathy': false, 'i3-districts': false, 'i3-cities': true, 'i3-roads': false, 'i3-rail': false, 'i3-wcities': false, 'i3-wrivers': false, 'i3-enc': false, 'i3-dispute': false, 'i3-aqi': false },
+        month: 8, drain: 0,   // August monsoon peak
+      },
       earth: {  // the whole real planet — global cities + rivers, mapped everywhere
         _hint: '🌏 The whole Earth — world cities + world rivers on every continent, on the real NASA globe.',
         selects: { 'i3-layer': 'flat', 'i3-dmetric': 'pop', 'i3-zone': 'off', 'i3-sea': '0' },
@@ -1071,7 +1133,7 @@
       const month = document.getElementById('i3-month'); if (month) month.value = p.month || 0;
       const drain = document.getElementById('i3-drain'); if (drain) drain.value = p.drain || 0;
       // fire the same handlers the UI uses, so lazy layers (CRZ/eco/bathy/ponds) load on demand
-      ['i3-districts', 'i3-cities', 'i3-rivers', 'i3-lakes', 'i3-ponds', 'i3-eco', 'i3-crz', 'i3-bathy', 'i3-roads', 'i3-rail', 'i3-wcities', 'i3-wrivers', 'i3-enc', 'i3-dispute', 'i3-aqi', 'i3-zone', 'i3-sea']
+      ['i3-districts', 'i3-cities', 'i3-rivers', 'i3-lakes', 'i3-ponds', 'i3-eco', 'i3-crz', 'i3-bathy', 'i3-quakes', 'i3-roads', 'i3-rail', 'i3-wcities', 'i3-wrivers', 'i3-enc', 'i3-dispute', 'i3-aqi', 'i3-zone', 'i3-sea']
         .forEach(id => { const el = document.getElementById(id); if (el) el.dispatchEvent(new Event('change')); });
       // month/drain use 'input'
       if (month) month.dispatchEvent(new Event('input'));
@@ -1118,6 +1180,7 @@
       document.getElementById('i3-aqi').addEventListener('change', buildAqi);
       document.getElementById('i3-crz').addEventListener('change', buildCrz);
       document.getElementById('i3-bathy').addEventListener('change', buildBathy);
+      document.getElementById('i3-quakes').addEventListener('change', buildQuakes);
       document.getElementById('i3-ponds').addEventListener('change', buildPonds);
       document.getElementById('i3-eco').addEventListener('change', buildEco);
       document.getElementById('i3-aqi-live').addEventListener('click', async () => {
