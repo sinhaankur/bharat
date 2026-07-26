@@ -1,0 +1,27 @@
+Nehru-era historical images — public domain
+============================================
+
+All images in this folder are in the PUBLIC DOMAIN and were obtained from
+Wikimedia Commons. They are historical photographs from 1947 (the Indian
+independence / Partition period), published in India well over 60 years ago
+and/or works of the Government of India Photo Division — public domain under
+Indian copyright law and marked "Public domain" on Wikimedia Commons.
+
+They are used here as historical context for a public-domain reading room of
+M.O. Mathai's Nehru-age memoirs.
+
+File                     Source (Wikimedia Commons)
+----                     --------------------------
+swearing-in.jpg          "Lord Mountbatten swears in Jawaharlal Nehru as the first
+                         Prime Minister of free India on Aug 15, 1947"
+midnight-session.jpg     "Jawaharlal Nehru during the midnight session of the
+                         Constituent Assembly of India held on 14 and 15 August 1947"
+independence-day.jpg     "Lord Mountbatten, Edwina Mountbatten and Jawaharlal Nehru at
+                         the first Independence Day celebrations in New Delhi"
+partition-refugees.jpg   "Gandhi and Nehru and refugees" (downscaled to ~1000px)
+kashmir-1947.jpg         "Jawaharlal Nehru and Sheikh Abdullah in Srinagar"
+new-flag.jpg             "A news bureau photo of Nehru and the new flag"
+
+Each file's Commons page (search the title) carries the full public-domain tag
+and provenance. No rights reserved; attribution to the original archives is a
+courtesy, retained here.

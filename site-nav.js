@@ -84,6 +84,7 @@
       { href: "encroachment-atlas.html", text: "Built where water returns" },
       { href: "history.html", text: "History race" },
       { href: "global.html", text: "India vs world" },
+      { href: "library.html", text: "Reading room — primary sources" },
       { href: "share.html", text: "Share" },
     ]},
     // 3D — the interactive three-dimensional views, gathered into their own tab.
