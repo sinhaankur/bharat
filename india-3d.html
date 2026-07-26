@@ -15,7 +15,15 @@
     .i3-wrap { max-width: 1100px; margin: 0 auto; padding: 1.6rem var(--pad-x) 4rem; }
     .i3-head h1 { margin: 0.3rem 0 0.5rem; font-size: clamp(1.6rem, 3.5vw, 2.4rem); }
     .i3-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.55; max-width: 74ch; }
-    #i3-canvas { width: 100%; height: 66vh; min-height: 460px; border: 1px solid var(--border-strong); border-radius: var(--radius); background: radial-gradient(ellipse at 50% 30%, oklch(0.19 0.02 250), oklch(0.11 0 0)); display: block; margin: 1.1rem 0 0.6rem; cursor: grab; }
+    #i3-canvas { width: 100%; height: 72vh; min-height: 520px; border: 1px solid var(--border-strong); border-radius: var(--radius); background: radial-gradient(ellipse at 50% 30%, oklch(0.19 0.02 250), oklch(0.11 0 0)); display: block; margin: 0.6rem 0 0.5rem; cursor: grab; }
+    .i3-lede { font-size: 1rem !important; color: var(--foreground) !important; margin: 0.2rem 0 0.6rem; }
+    .i3-more { background: none; border: 0; color: oklch(0.78 0.16 72); font-family: var(--font-mono); font-size: 12px; cursor: pointer; padding: 0; margin-left: 0.3rem; }
+    .i3-more:hover { text-decoration: underline; }
+    .i3-about { max-width: 78ch; }
+    .i3-about p { color: var(--muted-foreground); font-size: 0.9rem; line-height: 1.6; margin: 0.3rem 0 0; }
+    .i3-drawer { margin: 0.2rem 0 0.4rem; }
+    .i3-drawer-btn { background: oklch(0.19 0.03 250); color: var(--foreground); border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 7px 14px; font-family: var(--font-mono); font-size: 12px; cursor: pointer; }
+    .i3-drawer-btn:hover { border-color: var(--warm); }
     #i3-canvas:active { cursor: grabbing; }
     #i3-status { font-family: var(--font-mono); font-size: 11.5px; color: oklch(0.82 0.14 78); min-height: 1.2em; margin-bottom: 0.3rem; }
     /* one-click view presets — set a coherent layer story so the ~19 toggles are navigable */
@@ -75,19 +83,22 @@
   <main class="i3-wrap">
     <header class="i3-head">
       <div class="eyebrow">Geography · 3D India</div>
-      <h1 class="display">India on the <em>globe</em> — states, rivers &amp; cities</h1>
-      <p>India on the real Earth, in one place — a NASA-derived day/night globe with city
-      lights and clouds, now mapped <strong>worldwide</strong> (world cities + world rivers on
-      every continent); states raised by data; rivers that <strong>swell with the monsoon</strong>,
-      highways, railways, lakes; <strong>zones</strong> (CRZ, flood, unsafe); illegal-habitation
-      pins; <strong>all 594 districts</strong> as markers sized by real Census population; and an
-      <strong>impact simulator</strong> — sea-level rise, cyclone surge, tsunami or an
-      asteroid wave floods the land that's really below the line. India's <strong>full claimed
-      boundary</strong> (incl. PoK &amp; Aksai Chin). Drag to orbit, scroll to zoom; toggle any
-      layer above.</p>
+      <h1 class="display">India on the <em>globe</em></h1>
+      <p class="i3-lede">The real Earth in 3D — pick a <strong>view</strong> below, then explore.
+        <button type="button" class="i3-more" id="i3-more" aria-expanded="false">what's on it? ▾</button></p>
+      <div class="i3-about" id="i3-about" hidden>
+        <p>A NASA-derived day/night globe with city lights and clouds, mapped <strong>worldwide</strong>
+        (world cities + world rivers on every continent); India in depth — states raised by data;
+        rivers that <strong>swell with the monsoon</strong>, highways, railways, lakes;
+        <strong>zones</strong> (CRZ, flood, unsafe); illegal-habitation pins;
+        <strong>all 594 districts</strong> as markers sized by real Census population (click one to
+        open it); real <strong>earthquake</strong> epicenters; and an <strong>impact simulator</strong>
+        — sea-level rise, cyclone surge, tsunami or an asteroid wave floods the land that's really
+        below the line. India's <strong>full claimed boundary</strong> (incl. PoK &amp; Aksai Chin).
+        Drag to orbit, scroll to zoom; zoom in to <strong>drop to street level</strong>.</p>
+      </div>
     </header>
 
-    <div id="i3-status">Loading map…</div>
     <div class="i3-presets" id="i3-presets">
       <span class="i3-presets-h">Views</span>
       <button type="button" class="i3-preset" data-preset="money">💰 Money</button>
@@ -95,10 +106,19 @@
       <button type="button" class="i3-preset" data-preset="risk">⚠️ Risk</button>
       <button type="button" class="i3-preset" data-preset="study">⚡ Study</button>
       <button type="button" class="i3-preset" data-preset="earth">🌏 Real Earth</button>
-      <span class="i3-preset-hint" id="i3-preset-hint">one click sets the layers · then fine-tune below</span>
+      <span class="i3-preset-hint" id="i3-preset-hint">one click sets the layers</span>
       <button type="button" class="i3-help" id="i3-help" title="Show the quick tour again" aria-label="Show the quick tour">?</button>
     </div>
-    <div class="i3-panel">
+    <div id="i3-status">Loading map…</div>
+
+    <!-- GLOBE-FIRST: the hero moves up here (canvas + drop/street overlay) -->
+    <div id="i3-stage-slot"></div>
+
+    <!-- controls tuck into a collapsible drawer below the globe -->
+    <div class="i3-drawer">
+      <button type="button" class="i3-drawer-btn" id="i3-drawer-btn" aria-expanded="false">⚙ Layers &amp; fine-tune ▾</button>
+    </div>
+    <div class="i3-panel" id="i3-panel" hidden>
       <div class="i3-grp">
         <span class="i3-grp-h">Base</span>
         <label>Colour states by
@@ -182,8 +202,6 @@
         <span id="i3-drain-val" style="font-family:var(--font-mono);font-size:11px;color:oklch(0.7 0.1 220)">full</span>
       </div>
     </div>
-    <div class="i3-legend" id="i3-legend"></div>
-    <div id="i3-sea-note" style="font-family:var(--font-mono);font-size:11px;color:oklch(0.84 0.11 210);min-height:1.1em;margin:-0.2rem 0 0.5rem"></div>
     <div id="i3-stage" style="position:relative">
       <canvas id="i3-canvas"></canvas>
       <div id="i3-tip" hidden style="position:absolute;z-index:6;pointer-events:none;background:oklch(0.15 0.01 250 / 0.95);color:var(--foreground);border:1px solid var(--border-strong);border-radius:6px;padding:4px 8px;font-family:var(--font-mono);font-size:11px;white-space:nowrap;transform:translate(-50%,-140%)"></div>
@@ -196,6 +214,8 @@
         <div id="i3-street-label" style="position:absolute;right:12px;top:12px;z-index:20;background:oklch(0.15 0 0 / 0.9);color:var(--muted-foreground);border:1px solid var(--border);border-radius:6px;padding:4px 9px;font-family:var(--font-mono);font-size:10px"></div>
       </div>
     </div>
+    <div id="i3-sea-note" style="font-family:var(--font-mono);font-size:11px;color:oklch(0.84 0.11 210);min-height:1.1em;margin:0.5rem 0"></div>
+    <div class="i3-legend" id="i3-legend"></div>
 
     <details class="i3-real" open>
       <summary>How real is this? — every layer, and where reality runs out</summary>
@@ -356,6 +376,28 @@
 
     const status = document.getElementById('i3-status');
     const R = 10;   // globe radius (world units)
+
+    // ---- GLOBE-FIRST layout: move the globe up to be the hero, tuck controls into a drawer ----
+    // The 3D Earth is the whole point, so it leads; the ~28 toggles collapse behind a button.
+    (function heroLayout() {
+      const slot = document.getElementById('i3-stage-slot');
+      const stage = document.getElementById('i3-stage');
+      if (slot && stage) slot.replaceWith(stage);   // relocate the canvas to the top
+      // "what's on it?" read-more
+      const more = document.getElementById('i3-more'), about = document.getElementById('i3-about');
+      if (more && about) more.addEventListener('click', () => {
+        const open = about.hidden; about.hidden = !open;
+        more.setAttribute('aria-expanded', String(open));
+        more.textContent = open ? "what's on it? ▴" : "what's on it? ▾";
+      });
+      // "Layers & fine-tune" drawer
+      const dbtn = document.getElementById('i3-drawer-btn'), panel = document.getElementById('i3-panel');
+      if (dbtn && panel) dbtn.addEventListener('click', () => {
+        const open = panel.hidden; panel.hidden = !open;
+        dbtn.setAttribute('aria-expanded', String(open));
+        dbtn.textContent = open ? '⚙ Layers & fine-tune ▴' : '⚙ Layers & fine-tune ▾';
+      });
+    })();
 
     // lon/lat (+ altitude above the surface) → a 3D point on the sphere. THIS is the globe:
     // every coordinate wraps onto the real Earth sphere instead of a flat plane.
@@ -1321,10 +1363,14 @@
       };
       // a helpful side-effect: step ② pre-checks the district layer so ③ has something to hover
       if (step.sel === '#i3-districts') {
+        // the districts toggle lives in the collapsible drawer — open it so the tour can ring it
+        const panel = document.getElementById('i3-panel'), dbtn = document.getElementById('i3-drawer-btn');
+        if (panel && panel.hidden && dbtn) dbtn.click();
         const d = document.getElementById('i3-districts');
         if (d && !d.checked) { d.checked = true; d.dispatchEvent(new Event('change')); }
       }
-      positionTour();
+      // give the layout a beat to settle (drawer open) before measuring positions
+      requestAnimationFrame(positionTour);
     }
     function startTour() {
       clearTour();
