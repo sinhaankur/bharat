@@ -77,7 +77,8 @@
       <div class="eyebrow">Geography · 3D India</div>
       <h1 class="display">India on the <em>globe</em> — states, rivers &amp; cities</h1>
       <p>India on the real Earth, in one place — a NASA-derived day/night globe with city
-      lights and clouds; states raised by data; rivers that <strong>swell with the monsoon</strong>,
+      lights and clouds, now mapped <strong>worldwide</strong> (world cities + world rivers on
+      every continent); states raised by data; rivers that <strong>swell with the monsoon</strong>,
       highways, railways, lakes; <strong>zones</strong> (CRZ, flood, unsafe); illegal-habitation
       pins; <strong>all 594 districts</strong> as markers sized by real Census population; and an
       <strong>impact simulator</strong> — sea-level rise, cyclone surge, tsunami or an
@@ -140,6 +141,12 @@
       </div>
 
       <div class="i3-grp">
+        <span class="i3-grp-h">🌍 World</span>
+        <label><input type="checkbox" id="i3-wcities"> 🏙 World cities</label>
+        <label><input type="checkbox" id="i3-wrivers"> 🌊 World rivers</label>
+      </div>
+
+      <div class="i3-grp">
         <span class="i3-grp-h">⚖ Accountability</span>
         <label><input type="checkbox" id="i3-enc"> 🏗️ Illegal habitation</label>
         <label><input type="checkbox" id="i3-dispute"> ⚖️ Land disputes</label>
@@ -196,9 +203,11 @@
 
         <div class="i3-tier i3-tier--real">
           <h5>✅ Real — measured data, drawn as it is</h5>
-          <p>The <b>Earth</b> itself (NASA-derived day/night/cloud textures on a true sphere).
-          All <b>594 districts</b> at their real Census-2011 centroids, sized by real
-          population/literacy. <b>Rivers, roads, railways, lakes, coastlines</b> (Natural Earth).
+          <p>The <b>Earth</b> itself (NASA-derived day/night/cloud textures on a true sphere) plus
+          <b>world cities and world rivers on every continent</b> (Natural Earth) — mapped
+          worldwide, not just India. All <b>594 districts</b> at their real Census-2011 centroids,
+          sized by real population/literacy. India's own <b>rivers, roads, railways, lakes,
+          coastlines</b> in depth (Natural Earth).
           <b>CRZ-2019 lines, eco-sensitive zones, ponds</b> (real MoEFCC / india-geodata polygons).
           <b>Ocean-floor bathymetry</b> (real isobaths). <b>35,941 Gandhinagar buildings</b> with
           real height on the fly-down. <b>Annual PM2.5</b> air quality. And in the impact sim,
@@ -931,6 +940,61 @@
       scene.add(railGroup);
     }
 
+    // ---- WORLD layers: the globe is mapped everywhere, not just India ----
+    // Major world cities (Natural Earth 110m, public domain) as pale pins — so every
+    // continent shows its capitals/metros, not just India's. Lazy-loaded (12 KB) on toggle.
+    let WCITIES = null, wcityGroup = null, wcityLoading = false;
+    function buildWCities() {
+      if (wcityGroup) { scene.remove(wcityGroup); wcityGroup = null; }
+      if (!document.getElementById('i3-wcities').checked) return;
+      if (!WCITIES && !wcityLoading) {
+        wcityLoading = true;
+        fetch('world-cities.geojson').then(r => r.json()).then(d => { WCITIES = d; wcityLoading = false; buildWCities(); }).catch(() => { wcityLoading = false; });
+        return;
+      }
+      if (!WCITIES) return;
+      wcityGroup = new THREE.Group();
+      const capMat = new THREE.MeshBasicMaterial({ color: 0xe8ecff });   // capitals brighter
+      const cityMat = new THREE.MeshBasicMaterial({ color: 0x8fa4c8, transparent: true, opacity: 0.75 });
+      for (const c of (WCITIES.cities || [])) {
+        const [lat, lon] = c.ll;
+        const sz = c.cap ? 0.05 : Math.max(0.025, 0.05 - c.r * 0.004);
+        const dot = new THREE.Mesh(new THREE.SphereGeometry(sz, 8, 8), c.cap ? capMat : cityMat);
+        dot.position.copy(toSphere(lon, lat, 0.06));
+        wcityGroup.add(dot);
+      }
+      scene.add(wcityGroup);
+      document.getElementById('i3-sea-note').textContent = `🏙 ${WCITIES.cities.length} major world cities (Natural Earth) — brighter = national capitals. India's own metros stay on the 📍 Cities layer.`;
+    }
+
+    // World rivers (Natural Earth 50m centre-lines, public domain) — the Nile, Amazon,
+    // Mississippi, Yangtze… draped on the sphere so the whole Earth's water shows. 461 KB, lazy.
+    let WRIVERS = null, wriverGroup = null, wriverLoading = false;
+    function buildWRivers() {
+      if (wriverGroup) { scene.remove(wriverGroup); wriverGroup = null; }
+      if (!document.getElementById('i3-wrivers').checked) return;
+      if (!WRIVERS && !wriverLoading) {
+        wriverLoading = true;
+        document.getElementById('i3-sea-note').textContent = '🌊 loading world rivers…';
+        fetch('world-rivers.geojson').then(r => r.json()).then(d => { WRIVERS = d; wriverLoading = false; buildWRivers(); }).catch(() => { wriverLoading = false; });
+        return;
+      }
+      if (!WRIVERS) return;
+      wriverGroup = new THREE.Group();
+      const mat = new THREE.LineBasicMaterial({ color: 0x3f7fb8, transparent: true, opacity: 0.6 });
+      const addLine = coords => {
+        const pts = coords.map(([lon, lat]) => toSphere(lon, lat, 0.045));
+        if (pts.length > 1) wriverGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), mat));
+      };
+      for (const f of WRIVERS.features) {
+        const g = f.geometry;
+        if (g.type === 'LineString') addLine(g.coordinates);
+        else if (g.type === 'MultiLineString') g.coordinates.forEach(addLine);
+      }
+      scene.add(wriverGroup);
+      document.getElementById('i3-sea-note').textContent = `🌊 ${WRIVERS.features.length} world rivers (Natural Earth) — Nile, Amazon, Mississippi, Yangtze… the whole Earth's water, not just India's.`;
+    }
+
     // lakes & big ponds — filled blue rings on the surface
     let lakeGroup = null;
     function buildLakes() {
@@ -990,10 +1054,10 @@
         checks: { 'i3-enc': true, 'i3-dispute': true, 'i3-aqi': true, 'i3-districts': false, 'i3-cities': true, 'i3-rivers': false, 'i3-lakes': false, 'i3-ponds': false, 'i3-eco': true, 'i3-crz': false, 'i3-bathy': false, 'i3-roads': false, 'i3-rail': false },
         month: 0, drain: 0,
       },
-      earth: {  // just the real planet — a clean reset
-        _hint: '🌏 Just the NASA globe + cities. Everything else off — the real Earth.',
+      earth: {  // the whole real planet — global cities + rivers, mapped everywhere
+        _hint: '🌏 The whole Earth — world cities + world rivers on every continent, on the real NASA globe.',
         selects: { 'i3-layer': 'flat', 'i3-dmetric': 'pop', 'i3-zone': 'off', 'i3-sea': '0' },
-        checks: { 'i3-cities': true, 'i3-districts': false, 'i3-rivers': false, 'i3-lakes': false, 'i3-ponds': false, 'i3-eco': false, 'i3-crz': false, 'i3-bathy': false, 'i3-roads': false, 'i3-rail': false, 'i3-enc': false, 'i3-dispute': false, 'i3-aqi': false },
+        checks: { 'i3-cities': true, 'i3-wcities': true, 'i3-wrivers': true, 'i3-districts': false, 'i3-rivers': false, 'i3-lakes': false, 'i3-ponds': false, 'i3-eco': false, 'i3-crz': false, 'i3-bathy': false, 'i3-roads': false, 'i3-rail': false, 'i3-enc': false, 'i3-dispute': false, 'i3-aqi': false },
         month: 0, drain: 0,
       },
     };
@@ -1005,7 +1069,7 @@
       const month = document.getElementById('i3-month'); if (month) month.value = p.month || 0;
       const drain = document.getElementById('i3-drain'); if (drain) drain.value = p.drain || 0;
       // fire the same handlers the UI uses, so lazy layers (CRZ/eco/bathy/ponds) load on demand
-      ['i3-districts', 'i3-cities', 'i3-rivers', 'i3-lakes', 'i3-ponds', 'i3-eco', 'i3-crz', 'i3-bathy', 'i3-roads', 'i3-rail', 'i3-enc', 'i3-dispute', 'i3-aqi', 'i3-zone', 'i3-sea']
+      ['i3-districts', 'i3-cities', 'i3-rivers', 'i3-lakes', 'i3-ponds', 'i3-eco', 'i3-crz', 'i3-bathy', 'i3-roads', 'i3-rail', 'i3-wcities', 'i3-wrivers', 'i3-enc', 'i3-dispute', 'i3-aqi', 'i3-zone', 'i3-sea']
         .forEach(id => { const el = document.getElementById(id); if (el) el.dispatchEvent(new Event('change')); });
       // month/drain use 'input'
       if (month) month.dispatchEvent(new Event('input'));
@@ -1045,6 +1109,8 @@
       document.getElementById('i3-dispute').addEventListener('change', buildDispute);
       document.getElementById('i3-roads').addEventListener('change', buildRoads);
       document.getElementById('i3-rail').addEventListener('change', buildRail);
+      document.getElementById('i3-wcities').addEventListener('change', buildWCities);
+      document.getElementById('i3-wrivers').addEventListener('change', buildWRivers);
       document.getElementById('i3-lakes').addEventListener('change', buildLakes);
       document.getElementById('i3-zone').addEventListener('change', buildZones);
       document.getElementById('i3-aqi').addEventListener('change', buildAqi);
