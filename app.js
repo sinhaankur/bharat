@@ -1319,6 +1319,7 @@
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.4rem">
           <button class="india-back-btn" id="india-back-to-districts">← All districts</button>
           <button class="india-back-btn" id="india-back-to-state">← ${esc(state)}</button>
+          <a class="india-back-btn" href="terrain-3d.html?district=${encodeURIComponent(district)}" title="See ${esc(district)} in real 3D terrain — river, plain & hills in relief" style="color:oklch(0.84 0.13 78);border-color:oklch(0.6 0.14 78)">🏔 See in 3D terrain</a>
         </div>
       </div>
       ${renderCoverageMeter(state, district)}
