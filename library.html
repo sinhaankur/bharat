@@ -244,6 +244,19 @@
 
     </div>
 
+    <!-- one event, many sentiments — the shared "story card" (same pattern the news feed uses) -->
+    <section style="max-width:820px;margin:3.4rem auto 0">
+      <div class="jr-intro" style="margin-top:0">
+        <div class="jr-eyebrow">Bias · one event, many memories</div>
+        <h2>Whose <em>story</em> is Partition?</h2>
+        <p>Bias isn't only which newspaper covers a thing — it's <strong>how a major section of
+        people feels or remembers it</strong>. The same 1947 that these memoirs recount lands
+        completely differently depending on who lived it. Here is one event, held against the
+        record — the same <em>story card</em> the atlas uses for today's news.</p>
+      </div>
+      <div id="story-partition" style="margin-top:1.4rem"></div>
+    </section>
+
     <!-- a period "letter" — Nehru's own words, the tenor of the age -->
     <div class="jr-letter">
       <div class="jr-l-head">Tryst with Destiny · Constituent Assembly · 14 August 1947</div>
@@ -274,6 +287,7 @@
 
   <script src="command-palette.js"></script>
   <script src="site-nav.js"></script>
+  <script src="story-card.js"></script>
   <script>
     // The shelf — public-domain scans on Archive.org (Digital Library of India).
     // id = the Archive item identifier; embedded via archive.org/embed/<id> (their BookReader).
@@ -352,6 +366,34 @@
     let startIdx = 0;
     if (q) { const byId = BOOKS.findIndex(b => b.id === q); startIdx = byId >= 0 ? byId : (Number(q) || 0); }
     selectBook(Math.max(0, Math.min(BOOKS.length - 1, startIdx)), pg);
+
+    // one event, many sentiments — rendered with the shared StoryCard (same as the news feed).
+    // Sentiment weights are an honest editorial read of documented reaction, NOT a poll; the
+    // record numbers are the sourced anchor.
+    if (window.StoryCard) {
+      document.getElementById('story-partition').innerHTML = StoryCard.render({
+        title: 'Partition of British India',
+        when: 'August 1947',
+        summary: 'Independence came split in two. To read Mathai’s memoirs is to read one man in Delhi; ' +
+          'to the people, the same weeks were remembered in utterly different registers.',
+        sentiment: [
+          { section: 'Refugees who fled (Punjab/Bengal)', mood: 'raw trauma', weight: 1.0, tone: 'hot' },
+          { section: 'Families who lost people', mood: 'grief / anger', weight: 0.9, tone: 'hot' },
+          { section: 'Those far from the border', mood: 'freedom & hope', weight: 0.7, tone: 'warm' },
+          { section: 'The new administration', mood: 'crisis to manage', weight: 0.6, tone: 'cool' },
+          { section: 'Later generations', mood: 'a date in a textbook', weight: 0.35, tone: 'cold' },
+        ],
+        record: [
+          { k: 'People displaced', v: '≈ 15 million (largest mass migration in history)' },
+          { k: 'Estimated deaths', v: '≈ 200,000 – 2 million (estimates vary widely)' },
+          { k: 'New borders drawn', v: 'Radcliffe Line — 5 weeks, published 17 Aug 1947' },
+          { k: 'Exact toll', v: null },
+        ],
+        source: 'standard histories of Partition (displacement/death estimates are ranges, not settled)',
+        link: 'india-3d.html',
+        linkText: 'see the borders it drew, on the 3D globe →',
+      });
+    }
   </script>
 </body>
 </html>
