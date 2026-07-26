@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reading Room — study the primary sources | India District Atlas</title>
+  <meta name="description" content="A reading room of public-domain primary sources on India's history and governance — read them in full, page by page, in an embedded book reader. First on the shelf: M.O. Mathai's memoirs of the Nehru age." />
+  <link rel="canonical" href="https://sinhaankur.github.io/india-fiscal-map/library.html" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .lib-wrap { max-width: 1100px; margin: 0 auto; padding: 1.6rem var(--pad-x, 1.5rem) 5rem; }
+    .lib-head .eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted-foreground); }
+    .lib-head h1 { margin: 0.3rem 0 0.5rem; font-size: clamp(1.6rem, 3.5vw, 2.4rem); }
+    .lib-head h1 em { font-family: var(--font-italic, var(--font-display)); font-style: italic; }
+    .lib-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.6; max-width: 74ch; }
+    /* the shelf — a row of selectable book cards */
+    .lib-shelf { display: flex; flex-wrap: wrap; gap: 0.8rem; margin: 1.4rem 0 1rem; }
+    .lib-book { flex: 1 1 260px; min-width: 240px; text-align: left; background: oklch(0.16 0.005 250); border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 0.9rem 1rem; cursor: pointer; transition: border-color .15s, background .15s; color: var(--foreground); }
+    .lib-book:hover { border-color: var(--warm); }
+    .lib-book.active { border-color: var(--warm); background: oklch(0.22 0.04 78); }
+    .lib-book .bk-title { font-family: var(--font-display); font-size: 1.05rem; line-height: 1.25; margin-bottom: 0.2rem; }
+    .lib-book .bk-author { font-family: var(--font-mono); font-size: 11px; color: oklch(0.82 0.11 78); letter-spacing: 0.03em; }
+    .lib-book .bk-note { font-size: 0.8rem; color: var(--muted-foreground); line-height: 1.5; margin-top: 0.45rem; }
+    /* the reader */
+    .lib-reader { position: relative; margin: 0.6rem 0 0.4rem; border: 1px solid var(--border-strong); border-radius: var(--radius); overflow: hidden; background: oklch(0.1 0 0); }
+    .lib-reader iframe { display: block; width: 100%; height: 74vh; min-height: 520px; border: 0; }
+    .lib-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1rem; margin: 0.7rem 0; font-family: var(--font-mono); font-size: 11.5px; color: var(--muted-foreground); }
+    .lib-bar .now { color: var(--foreground); }
+    .lib-bar a { color: oklch(0.78 0.16 72); }
+    .lib-btn { background: oklch(0.2 0.03 250); color: oklch(0.84 0.11 210); border: 1px solid var(--border-strong); border-radius: 999px; padding: 4px 12px; font-family: var(--font-mono); font-size: 11px; cursor: pointer; }
+    .lib-btn:hover { border-color: var(--warm); }
+    .lib-note { font-size: 0.83rem; color: var(--muted-foreground); line-height: 1.6; margin-top: 1.6rem; border-top: 1px solid var(--border); padding-top: 1rem; }
+    .lib-note a { color: oklch(0.78 0.16 72); }
+    .lib-gap { border-left: 3px solid oklch(0.6 0.16 60); padding: 0.55rem 0.9rem; background: oklch(0.2 0.03 60 / 0.3); border-radius: var(--radius-sm); margin: 1.2rem 0; font-size: 0.85rem; line-height: 1.55; }
+    /* the journey — a scrollytelling walk through the history behind the books */
+    .jr-intro { max-width: 74ch; margin: 3.2rem auto 0; text-align: center; }
+    .jr-intro .jr-eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.82 0.11 78); }
+    .jr-intro h2 { font-size: clamp(1.5rem, 3vw, 2.1rem); margin: 0.4rem 0 0.6rem; }
+    .jr-intro h2 em { font-family: var(--font-italic, var(--font-display)); font-style: italic; }
+    .jr-intro p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.65; }
+    .jr-line { width: 2px; background: linear-gradient(oklch(0.7 0.16 78 / 0), oklch(0.7 0.16 78 / 0.5), oklch(0.7 0.16 78 / 0)); margin: 2rem auto 0; height: 40px; }
+    .jr-steps { max-width: 980px; margin: 1rem auto 0; }
+    .jr-step { display: grid; grid-template-columns: 1fr 1fr; gap: 1.6rem 2.4rem; align-items: center; margin: 3.4rem 0; }
+    .jr-step:nth-child(even) .jr-media { order: 2; }
+    .jr-media { position: relative; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border-strong); background: oklch(0.1 0 0); aspect-ratio: 3 / 2; }
+    .jr-media img { width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(0.92) contrast(1.03); transition: transform .5s ease; }
+    .jr-media:hover img { transform: scale(1.03); }
+    .jr-media figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 0.5rem 0.7rem; font-family: var(--font-mono); font-size: 10.5px; color: oklch(0.92 0.02 90); background: linear-gradient(transparent, oklch(0.08 0 0 / 0.9)); }
+    .jr-body .jr-year { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; color: oklch(0.82 0.13 78); }
+    .jr-body h3 { font-size: 1.25rem; margin: 0.2rem 0 0.5rem; line-height: 1.2; }
+    .jr-body p { color: var(--muted-foreground); font-size: 0.92rem; line-height: 1.65; margin: 0 0 0.7rem; }
+    .jr-body .jr-link { font-family: var(--font-mono); font-size: 11px; color: oklch(0.78 0.16 72); cursor: pointer; border: 0; background: none; padding: 0; }
+    .jr-body .jr-link:hover { text-decoration: underline; }
+    .jr-quote { border-left: 3px solid oklch(0.7 0.16 78); padding: 0.3rem 0 0.3rem 1rem; margin: 0.2rem 0 0.8rem; font-family: var(--font-italic, var(--font-display)); font-style: italic; color: oklch(0.9 0.02 90); font-size: 0.95rem; line-height: 1.55; }
+    /* a "letter" card — period document styling */
+    .jr-letter { max-width: 760px; margin: 3.2rem auto; background: oklch(0.96 0.02 85); color: oklch(0.25 0.03 60); border-radius: var(--radius); padding: 2rem 2.2rem; box-shadow: 0 10px 40px oklch(0.05 0 0 / 0.5); font-family: Georgia, 'Times New Roman', serif; line-height: 1.7; position: relative; transform: rotate(-0.4deg); }
+    .jr-letter::before { content: ''; position: absolute; inset: 0; border: 1px solid oklch(0.4 0.04 60 / 0.2); border-radius: var(--radius); pointer-events: none; }
+    .jr-letter .jr-l-head { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: oklch(0.45 0.05 40); margin-bottom: 1rem; }
+    .jr-letter p { margin: 0 0 0.9rem; font-size: 1.02rem; }
+    .jr-letter .jr-sign { text-align: right; font-style: italic; margin-top: 1.2rem; }
+    .jr-letter .jr-l-note { font-family: var(--font-sans); font-size: 11px; color: oklch(0.45 0.03 60); margin-top: 1.2rem; border-top: 1px dashed oklch(0.4 0.04 60 / 0.3); padding-top: 0.7rem; line-height: 1.5; }
+    @media (max-width: 720px) {
+      .jr-step { grid-template-columns: 1fr; gap: 1rem; }
+      .jr-step:nth-child(even) .jr-media { order: 0; }
+      .jr-letter { transform: none; padding: 1.4rem 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+  <div id="site-nav"></div>
+
+  <main class="lib-wrap">
+    <header class="lib-head">
+      <div class="eyebrow">Study · Reading Room</div>
+      <h1 class="display">The <em>reading room</em> — study the primary sources</h1>
+      <p>The atlas is built on the record; this is where you can <strong>read the record itself</strong>.
+      A shelf of public-domain books on India's history and governance, each streamed page-by-page
+      in a real book reader — turn pages, zoom, search the full text, go full-screen. First on the
+      shelf: <strong>M.O. Mathai</strong>'s two memoirs from inside Nehru's office — a contested,
+      first-hand account of the age that shaped modern India's institutions.</p>
+    </header>
+
+    <div class="lib-shelf" id="lib-shelf"></div>
+
+    <div class="lib-gap">
+      <strong>What time do these books cover — and why the “1909” catalog date is wrong.</strong>
+      The Internet Archive record lists a <em>publication date of 1909</em> — that is a
+      <strong>cataloguing error</strong> in the old Digital Library of India scan (the same
+      collection tag, “Banasthali”, and file are inherited across many volumes). These memoirs
+      cannot be from 1909: their author, M.O. Mathai, was <em>born</em> in 1909, only met Nehru in
+      the mid-1940s, and the books describe events up to Nehru's death in 1964. The real dates:
+      <strong>written and first published 1978–1979</strong>, recounting the period Mathai served
+      as Nehru's private secretary, roughly <strong>1946 to 1959</strong>, within the wider
+      <strong>Nehru age of 1947–1964</strong> (independence to his death). So: a late-1970s memoir
+      about the 1940s–50s — <em>not</em> a 1909 book. The journey below walks that true timeline.
+    </div>
+
+    <div class="lib-bar">
+      <span>Now reading: <span class="now" id="lib-now">—</span></span>
+      <label style="display:inline-flex;align-items:center;gap:0.35rem">go to page
+        <input id="lib-page" type="number" min="1" value="1" style="width:64px;background:oklch(0.18 0 0);color:var(--foreground);border:1px solid var(--border-strong);border-radius:5px;padding:2px 6px;font-family:var(--font-mono);font-size:11px">
+        <button class="lib-btn" id="lib-go" type="button">go</button>
+      </label>
+      <button class="lib-btn" id="lib-full" type="button">⛶ full screen</button>
+      <button class="lib-btn" id="lib-link" type="button" title="copy a link to this exact page">🔗 link this page</button>
+      <a id="lib-archive" href="#" target="_blank" rel="noopener">↗ open on Archive.org</a>
+    </div>
+
+    <div class="lib-reader" id="lib-reader">
+      <iframe id="lib-frame" title="Book reader" allowfullscreen loading="lazy"
+              src="about:blank" referrerpolicy="no-referrer"></iframe>
+    </div>
+
+    <div class="lib-gap">
+      <strong>How to read here.</strong> The reader streams the <em>real scanned book</em> from the
+      Internet Archive — every original page, exactly as printed. Use the arrows (or your keyboard)
+      to turn pages, the magnifier to zoom, the search box to find a word across the whole book, and
+      ⛶ for full-screen. Nothing is downloaded or re-hosted here — it plays from Archive.org, the
+      library that holds the public-domain scan.
+    </div>
+
+    <div class="lib-gap">
+      <strong>Read them as memoir, not as verified fact.</strong> M.O. Mathai was Nehru's private
+      secretary; these are his <em>personal recollections</em>, written years later and long
+      debated — vivid and revealing, but a partial, interested account, not a neutral history. Read
+      them the way the atlas treats any single source: as one voice to weigh against the record, not
+      the record itself. They're here because studying the age means hearing the people who were in
+      the room — including the contested ones.
+    </div>
+
+    <!-- ============ THE JOURNEY: the history behind the books ============ -->
+    <section class="jr-intro">
+      <div class="jr-eyebrow">The journey · 1946 – 1979</div>
+      <h2>How <em>history</em> wrote these books</h2>
+      <p>M.O. Mathai sat in the room where independent India was being invented — as
+      Jawaharlal Nehru's private secretary from 1946 to 1959. To read his memoirs is to read
+      one man's view of the age. Before you turn the pages, walk the years he lived through —
+      the moments the books circle back to again and again — each with a photograph from that
+      exact time. At any step, jump straight to where the book itself is scanned.</p>
+    </section>
+    <div class="jr-line"></div>
+
+    <div class="jr-steps" id="jr-steps">
+
+      <div class="jr-step">
+        <figure class="jr-media">
+          <img src="vendor/nehru-era/midnight-session.jpg" alt="Nehru during the midnight session of the Constituent Assembly, 14–15 August 1947" loading="lazy">
+          <figcaption>Nehru, midnight session of the Constituent Assembly, 14–15 Aug 1947 · public domain</figcaption>
+        </figure>
+        <div class="jr-body">
+          <div class="jr-year">1946 — the office opens</div>
+          <h3>A secretary walks into the future PM's office</h3>
+          <p>In 1946, as the Interim Government took shape, M.O. Mathai — a Malayali from Travancore —
+          became private secretary to Jawaharlal Nehru. For the next thirteen years he would handle
+          the appointments, the correspondence, the visitors and the paper of the most powerful office
+          in the new nation. The memoirs are his account of what crossed that desk.</p>
+          <button class="jr-link" data-book="in.ernet.dli.2015.147284" data-page="9">↳ open “My Days with Nehru” — page 9</button>
+        </div>
+      </div>
+
+      <div class="jr-step">
+        <figure class="jr-media">
+          <img src="vendor/nehru-era/swearing-in.jpg" alt="Mountbatten swears in Nehru as first Prime Minister, 15 August 1947" loading="lazy">
+          <figcaption>Mountbatten swears in Nehru as first PM, 15 Aug 1947 · public domain</figcaption>
+        </figure>
+        <div class="jr-body">
+          <div class="jr-year">15 August 1947 — freedom at midnight</div>
+          <h3>“At the stroke of the midnight hour…”</h3>
+          <p>India became free, and Nehru its first Prime Minister. Mathai was inside the machinery of
+          that transition — the telegrams, the ceremonies, the sleepless nights. His books are studded
+          with the small, human detail of those days that formal histories leave out: who said what in
+          the corridor, which crisis landed on the desk at 2 a.m.</p>
+          <div class="jr-quote">“The record the atlas is built on begins here — the institutions,
+          the borders, the money-flows of the republic were all set in motion in these months.”</div>
+        </div>
+      </div>
+
+      <div class="jr-step">
+        <figure class="jr-media">
+          <img src="vendor/nehru-era/partition-refugees.jpg" alt="Gandhi and Nehru with Partition refugees, 1947" loading="lazy">
+          <figcaption>Gandhi &amp; Nehru with Partition refugees, 1947 · public domain</figcaption>
+        </figure>
+        <div class="jr-body">
+          <div class="jr-year">1947 — Partition</div>
+          <h3>The wound the maps still carry</h3>
+          <p>Freedom came cleaved in two. Partition uprooted some fifteen million people and killed
+          perhaps a million more — the largest mass migration in human history. The new government Mathai
+          served spent its first months not celebrating but managing catastrophe: refugee columns, riots,
+          a divided army and treasury. The lines drawn in 1947 still shape the borders, the disputes and
+          the demographics the atlas maps today.</p>
+          <button class="jr-link" data-book="in.ernet.dli.2015.147284" data-page="30">↳ read the Partition chapter</button>
+        </div>
+      </div>
+
+      <div class="jr-step">
+        <figure class="jr-media">
+          <img src="vendor/nehru-era/kashmir-1947.jpg" alt="Nehru with Sheikh Abdullah in Srinagar, 1947" loading="lazy">
+          <figcaption>Nehru with Sheikh Abdullah in Srinagar, 1947 · public domain</figcaption>
+        </figure>
+        <div class="jr-body">
+          <div class="jr-year">Oct 1947 — Kashmir</div>
+          <h3>The accession that never settled</h3>
+          <p>In October 1947 the Maharaja of Kashmir acceded to India as tribal raiders advanced; Nehru,
+          himself of Kashmiri descent, took the question to the United Nations. Mathai watched the decision
+          up close. The line that emerged is the one this atlas draws to <strong>India's full claimed
+          boundary</strong> — PoK and Aksai Chin included — on the very
+          <a href="india-3d.html">3D globe</a> where the states are raised.</p>
+          <button class="jr-link" data-book="in.ernet.dli.2015.103038" data-page="120">↳ Kashmir, in “Reminiscences of the Nehru Age”</button>
+        </div>
+      </div>
+
+      <div class="jr-step">
+        <figure class="jr-media">
+          <img src="vendor/nehru-era/independence-day.jpg" alt="Mountbattens and Nehru at the first Independence Day, New Delhi" loading="lazy">
+          <figcaption>The Mountbattens &amp; Nehru, first Independence Day, New Delhi · public domain</figcaption>
+        </figure>
+        <div class="jr-body">
+          <div class="jr-year">1947 – 1959 — the desk years</div>
+          <h3>Power, proximity — and its price</h3>
+          <p>For twelve years Mathai was one of the most quietly powerful men in Delhi — the gatekeeper to
+          Nehru. In 1959 he resigned amid corruption allegations and an official inquiry. That fall, and
+          the resentment it left, colours everything he later wrote. The books are the testimony of an
+          insider who was pushed out — invaluable and interested at once.</p>
+        </div>
+      </div>
+
+      <div class="jr-step">
+        <figure class="jr-media">
+          <img src="vendor/nehru-era/new-flag.jpg" alt="News bureau photo of Nehru and the new national flag, 1947" loading="lazy">
+          <figcaption>Nehru and the new national flag, 1947 · public domain</figcaption>
+        </figure>
+        <div class="jr-body">
+          <div class="jr-year">1978 – 1979 — the books appear</div>
+          <h3>The memoirs that scandalised Delhi</h3>
+          <p>Two decades on, during the brief Janata window after Indira Gandhi's Emergency, Mathai finally
+          published: <em>Reminiscences of the Nehru Age</em> (1978, 49 chapters) and <em>My Days with
+          Nehru</em> (1979). One chapter — number 29, titled simply “She” — was left <strong>blank</strong>
+          in print, its contents about the Nehru–Gandhi family too explosive to run. “Few books in India,”
+          wrote one critic, “have got such bad reviews.” They remain among the most talked-about,
+          least-trusted memoirs of the age — which is exactly why they're worth reading with your eyes open.</p>
+          <button class="jr-link" data-book="in.ernet.dli.2015.103038" data-page="1">↳ start at the beginning</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- a period "letter" — Nehru's own words, the tenor of the age -->
+    <div class="jr-letter">
+      <div class="jr-l-head">Tryst with Destiny · Constituent Assembly · 14 August 1947</div>
+      <p>“Long years ago we made a tryst with destiny, and now the time comes when we shall
+      redeem our pledge, not wholly or in full measure, but very substantially.</p>
+      <p>At the stroke of the midnight hour, when the world sleeps, India will awake to life and
+      freedom. A moment comes, which comes but rarely in history, when we step out from the old
+      to the new, when an age ends, and when the soul of a nation, long suppressed, finds
+      utterance.”</p>
+      <div class="jr-sign">— Jawaharlal Nehru</div>
+      <div class="jr-l-note">Nehru's address to the Constituent Assembly on the eve of independence — the
+      speech that opens the age these memoirs recount. Public-domain text; reproduced here as the
+      period document that frames the reading. The photographs above are public-domain images from
+      1947 (Wikimedia Commons).</div>
+    </div>
+
+    <p class="lib-note">
+      Books are public-domain scans hosted by the <a href="https://archive.org" target="_blank" rel="noopener">Internet
+      Archive</a> (Digital Library of India collection), embedded via the Archive's own BookReader —
+      streamed from Archive.org, not copied here. Titles: <em>Reminiscences of the Nehru Age</em> and
+      <em>My Days with Nehru</em>, both by M.O. Mathai. If a book fails to load, use the
+      "open on Archive.org" link. This reading room is part of the atlas's
+      <a href="references.html">sources &amp; references</a> effort — the primary record you can read for yourself.
+    </p>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="command-palette.js"></script>
+  <script src="site-nav.js"></script>
+  <script>
+    // The shelf — public-domain scans on Archive.org (Digital Library of India).
+    // id = the Archive item identifier; embedded via archive.org/embed/<id> (their BookReader).
+    const BOOKS = [
+      { id: 'in.ernet.dli.2015.147284', title: 'My Days with Nehru',
+        author: 'M.O. Mathai', year: '1979', pages: 287,
+        note: 'Mathai’s account of his years as Nehru’s private secretary — the day-to-day of the PM’s office.' },
+      { id: 'in.ernet.dli.2015.103038', title: 'Reminiscences of the Nehru Age',
+        author: 'M.O. Mathai', year: '1978',
+        note: 'His earlier, more controversial memoir of the Nehru years — much-discussed, long out of print.' },
+    ];
+
+    const shelf = document.getElementById('lib-shelf');
+    const frame = document.getElementById('lib-frame');
+    const nowEl = document.getElementById('lib-now');
+    const archiveEl = document.getElementById('lib-archive');
+    const pageInput = document.getElementById('lib-page');
+    let current = 0, currentPage = 1;
+
+    // Archive's BookReader deep-links to a leaf with #page/n{N}/mode/2up. We drive the iframe
+    // src so a link like library.html?book=…&page=9 opens that exact scanned page.
+    function selectBook(i, page) {
+      const b = BOOKS[i]; current = i; currentPage = Math.max(1, page || 1);
+      const frag = `#page/n${currentPage}/mode/2up`;
+      frame.src = `https://archive.org/embed/${b.id}?ui=full&sharing=false${frag}`;
+      nowEl.textContent = `${b.title} — ${b.author} (${b.year})` + (b.pages ? ` · page ${currentPage} / ${b.pages}` : ` · page ${currentPage}`);
+      archiveEl.href = `https://archive.org/details/${b.id}/page/n${currentPage}/mode/2up`;
+      pageInput.value = currentPage;
+      if (b.pages) pageInput.max = b.pages;
+      document.querySelectorAll('.lib-book').forEach((el, k) => el.classList.toggle('active', k === i));
+      document.title = `${b.title} — Reading Room | India District Atlas`;
+    }
+    function goToPage(p) { selectBook(current, p); }
+
+    BOOKS.forEach((b, i) => {
+      const card = document.createElement('button');
+      card.className = 'lib-book';
+      card.type = 'button';
+      card.innerHTML = `<div class="bk-title">${b.title}</div>
+        <div class="bk-author">${b.author} · ${b.year}${b.pages ? ` · ${b.pages} pp` : ''}</div>
+        <div class="bk-note">${b.note}</div>`;
+      card.addEventListener('click', () => selectBook(i, 1));
+      shelf.appendChild(card);
+    });
+
+    // go-to-page + link-this-page
+    document.getElementById('lib-go').addEventListener('click', () => goToPage(Number(pageInput.value) || 1));
+    pageInput.addEventListener('keydown', e => { if (e.key === 'Enter') goToPage(Number(pageInput.value) || 1); });
+    document.getElementById('lib-link').addEventListener('click', () => {
+      const url = `${location.origin}${location.pathname}?book=${BOOKS[current].id}&page=${currentPage}`;
+      const btn = document.getElementById('lib-link');
+      (navigator.clipboard?.writeText(url) || Promise.reject()).then(
+        () => { btn.textContent = '🔗 link copied ✓'; setTimeout(() => btn.textContent = '🔗 link this page', 1800); },
+        () => { prompt('Copy this link to the page:', url); });
+    });
+
+    document.getElementById('lib-full').addEventListener('click', () => {
+      const r = document.getElementById('lib-reader');
+      if (document.fullscreenElement) document.exitFullscreen();
+      else if (r.requestFullscreen) r.requestFullscreen();
+    });
+
+    // journey step buttons → open a specific book at a specific page, scroll up to the reader
+    document.querySelectorAll('.jr-link[data-book]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const i = BOOKS.findIndex(b => b.id === btn.dataset.book);
+        if (i < 0) return;
+        selectBook(i, Number(btn.dataset.page) || 1);
+        document.getElementById('lib-reader').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    });
+
+    // deep-link ?book=<archive-id|index>&page=<n>; default to the first, page 1
+    const qs = new URLSearchParams(location.search);
+    const q = qs.get('book'), pg = Number(qs.get('page')) || 1;
+    let startIdx = 0;
+    if (q) { const byId = BOOKS.findIndex(b => b.id === q); startIdx = byId >= 0 ? byId : (Number(q) || 0); }
+    selectBook(Math.max(0, Math.min(BOOKS.length - 1, startIdx)), pg);
+  </script>
+</body>
+</html>
