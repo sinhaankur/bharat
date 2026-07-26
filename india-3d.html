@@ -190,6 +190,7 @@
       <div id="i3-street" hidden style="position:absolute;inset:0;z-index:10;border-radius:var(--radius);overflow:hidden;background:oklch(0.13 0 0)">
         <div id="i3-street-map" style="position:absolute;inset:0"></div>
         <button id="i3-up" style="position:absolute;left:12px;top:12px;z-index:20;background:oklch(0.18 0.02 250 / 0.95);color:var(--foreground);border:1px solid var(--border-strong);border-radius:999px;padding:6px 13px;font-family:var(--font-mono);font-size:12px;cursor:pointer">↑ back to globe</button>
+        <button id="i3-bridges" style="position:absolute;left:12px;bottom:18px;z-index:20;background:oklch(0.2 0.04 45 / 0.95);color:oklch(0.86 0.13 60);border:1px solid oklch(0.6 0.16 50);border-radius:999px;padding:7px 14px;font-family:var(--font-mono);font-size:11px;cursor:pointer;backdrop-filter:blur(8px)">🌉 show real bridges here</button>
         <div id="i3-street-label" style="position:absolute;right:12px;top:12px;z-index:20;background:oklch(0.15 0 0 / 0.9);color:var(--muted-foreground);border:1px solid var(--border);border-radius:6px;padding:4px 9px;font-family:var(--font-mono);font-size:10px"></div>
       </div>
     </div>
@@ -210,7 +211,8 @@
           coastlines</b> in depth (Natural Earth).
           <b>CRZ-2019 lines, eco-sensitive zones, ponds</b> (real MoEFCC / india-geodata polygons).
           <b>Ocean-floor bathymetry</b> (real isobaths). <b>35,941 Gandhinagar buildings</b> with
-          real height on the fly-down. <b>Annual PM2.5</b> air quality. And in the impact sim,
+          real height on the fly-down, and <b>real bridges anywhere</b> (live OpenStreetMap, on
+          the drop-to-street view). <b>Annual PM2.5</b> air quality. And in the impact sim,
           <b>which land floods is decided by real DEM elevation</b>.</p>
         </div>
 
@@ -1300,8 +1302,11 @@
       });
       drop.addEventListener('click', () => openStreet());
       document.getElementById('i3-bldg').addEventListener('click', () => openStreet(23.2199, 72.6428, 15));
+      document.getElementById('i3-bridges').addEventListener('click', showBridges);
       document.getElementById('i3-up').addEventListener('click', () => {
         street.hidden = true; drop.hidden = true;
+        bridgeLayer = null;
+        document.getElementById('i3-bridges').textContent = '🌉 show real bridges here';
         setTimeout(() => { if (STREET_MAP) { STREET_MAP.remove(); STREET_MAP = null; } }, 200);
       });
     }
@@ -1332,6 +1337,67 @@
       document.getElementById('i3-street-label').textContent = `📍 ${lat.toFixed(3)}, ${lon.toFixed(3)} · real OSM streets — zoom in`;
       setTimeout(() => STREET_MAP.invalidateSize(), 80);
       maybeBuildings(lat, lon);
+    }
+
+    // ---- real bridges, anywhere (OpenStreetMap via Overpass) ----
+    // Bridges are OSM-scale detail (not on the vector globe). When you're down at street level,
+    // this queries the live OSM Overpass API for every bridge=yes way in the current view and
+    // draws the real bridge geometry — actual bridges, on demand, anywhere on Earth. On-click
+    // only (respects Overpass's fair-use: one query per request, small bbox at street zoom).
+    let bridgeLayer = null, bridgeBusy = false;
+    // Overpass is a free shared service — it can be slow/busy. Race the request against a
+    // timeout, and fall through to a mirror, so the button never hangs silently.
+    const OVERPASS = ['https://overpass-api.de/api/interpreter', 'https://overpass.kumi.systems/api/interpreter'];
+    async function overpass(query) {
+      let lastErr;
+      for (const url of OVERPASS) {
+        try {
+          const ctrl = new AbortController();
+          const to = setTimeout(() => ctrl.abort(), 20000);
+          const r = await fetch(url, { method: 'POST', body: 'data=' + encodeURIComponent(query), signal: ctrl.signal });
+          clearTimeout(to);
+          if (!r.ok) { lastErr = new Error('HTTP ' + r.status); continue; }
+          return await r.json();
+        } catch (e) { lastErr = e; }   // try the next mirror
+      }
+      throw lastErr || new Error('overpass unreachable');
+    }
+    async function showBridges() {
+      if (!STREET_MAP || bridgeBusy) return;
+      const btn = document.getElementById('i3-bridges');
+      if (STREET_MAP.getZoom() < 13) STREET_MAP.setZoom(14);
+      const b = STREET_MAP.getBounds();
+      const bbox = `${b.getSouth().toFixed(4)},${b.getWest().toFixed(4)},${b.getNorth().toFixed(4)},${b.getEast().toFixed(4)}`;
+      bridgeBusy = true; btn.textContent = '🌉 finding real bridges…';
+      // ways tagged as bridges (road + rail + foot), with geometry, in this bbox
+      const q = `[out:json][timeout:25];(way["bridge"](${bbox}););out geom;`;
+      try {
+        const d = await overpass(q);
+        if (bridgeLayer) { STREET_MAP.removeLayer(bridgeLayer); bridgeLayer = null; }
+        bridgeLayer = L.layerGroup();
+        let n = 0;
+        for (const el of (d.elements || [])) {
+          if (el.type !== 'way' || !el.geometry) continue;
+          const pts = el.geometry.map(g => [g.lat, g.lon]);
+          if (pts.length < 2) continue;
+          const rail = el.tags && el.tags.railway;
+          const foot = el.tags && (el.tags.highway === 'footway' || el.tags.highway === 'path');
+          const col = rail ? '#c9c9d2' : foot ? '#7fd0a0' : '#ff8a3c';   // rail grey · foot green · road orange
+          const line = L.polyline(pts, { color: col, weight: 5, opacity: 0.95 });
+          const nm = (el.tags && (el.tags.name || el.tags['bridge:name'])) || (rail ? 'rail bridge' : foot ? 'footbridge' : 'road bridge');
+          line.bindTooltip(`🌉 ${nm}`, { sticky: true });
+          bridgeLayer.addLayer(line);
+          n++;
+        }
+        bridgeLayer.addTo(STREET_MAP);
+        btn.textContent = n ? `🌉 ${n} real bridges — refresh` : '🌉 none tagged here — pan & retry';
+        document.getElementById('i3-street-label').textContent = n
+          ? `🌉 ${n} real OSM bridges in view — 🟠 road · ⚪ rail · 🟢 foot (live from OpenStreetMap)`
+          : '🌉 no bridges tagged in OSM for this exact view — pan to a river crossing and retry';
+      } catch (e) {
+        btn.textContent = '🌉 OSM busy — retry';
+        document.getElementById('i3-street-label').textContent = '🌉 OpenStreetMap Overpass is busy right now — try again in a moment (it’s a free shared service).';
+      } finally { bridgeBusy = false; }
     }
 
     // If the drop is near Gandhinagar, overlay the REAL building footprints (35,941, with
