@@ -39,6 +39,20 @@
     .i3-note { font-size: 0.82rem; color: var(--muted-foreground); line-height: 1.6; margin-top: 1.3rem; border-top: 1px solid var(--border); padding-top: 1rem; }
     .i3-note a { color: oklch(0.74 0.16 75); }
     .i3-gap { border-left: 3px solid oklch(0.6 0.16 60); padding: 0.55rem 0.9rem; background: oklch(0.2 0.03 60 / 0.3); border-radius: var(--radius-sm); margin: 1rem 0; font-size: 0.85rem; line-height: 1.55; }
+    /* first-visit tour — a dim veil + a coaching card that spotlights one control at a time */
+    .i3-tour-veil { position: fixed; inset: 0; z-index: 60; background: oklch(0.05 0 0 / 0.55); backdrop-filter: blur(1px); }
+    .i3-tour-ring { position: absolute; z-index: 61; border: 2px solid var(--warm); border-radius: 10px; box-shadow: 0 0 0 4px oklch(0.74 0.16 70 / 0.25), 0 0 0 9999px oklch(0.05 0 0 / 0.55); pointer-events: none; transition: all .25s ease; }
+    .i3-tour-card { position: absolute; z-index: 62; max-width: 300px; background: oklch(0.17 0.02 250); color: var(--foreground); border: 1px solid var(--warm); border-radius: var(--radius); padding: 0.85rem 1rem; box-shadow: 0 8px 30px oklch(0.05 0 0 / 0.6); transition: all .25s ease; }
+    .i3-tour-card h4 { margin: 0 0 0.35rem; font-size: 0.95rem; }
+    .i3-tour-card p { margin: 0 0 0.7rem; font-size: 0.83rem; line-height: 1.5; color: var(--muted-foreground); }
+    .i3-tour-row { display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; }
+    .i3-tour-step { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
+    .i3-tour-btns { display: flex; gap: 0.4rem; }
+    .i3-tour-btns button { font-family: var(--font-mono); font-size: 11px; border-radius: 5px; padding: 4px 10px; cursor: pointer; border: 1px solid var(--border-strong); }
+    .i3-tour-skip { background: transparent; color: var(--muted-foreground); }
+    .i3-tour-next { background: oklch(0.28 0.07 78); color: oklch(0.94 0.05 90); border-color: var(--warm); }
+    .i3-help { background: oklch(0.19 0.03 250); color: oklch(0.8 0.1 210); border: 1px solid var(--border-strong); border-radius: 999px; width: 22px; height: 22px; font-size: 12px; cursor: pointer; padding: 0; line-height: 1; }
+    .i3-help:hover { border-color: var(--warm); }
   </style>
 </head>
 <body>
@@ -66,6 +80,7 @@
       <button type="button" class="i3-preset" data-preset="risk">⚠️ Risk</button>
       <button type="button" class="i3-preset" data-preset="earth">🌏 Real Earth</button>
       <span class="i3-preset-hint" id="i3-preset-hint">one click sets the layers · then fine-tune below</span>
+      <button type="button" class="i3-help" id="i3-help" title="Show the quick tour again" aria-label="Show the quick tour">?</button>
     </div>
     <div class="i3-panel">
       <div class="i3-grp">
@@ -998,12 +1013,14 @@
       // preset buttons — one click sets a coherent layer story
       document.querySelectorAll('.i3-preset').forEach(btn =>
         btn.addEventListener('click', () => applyPreset(btn.dataset.preset)));
+      document.getElementById('i3-help').addEventListener('click', startTour);
       // if the user hand-tweaks any control, drop the "active preset" highlight (it's no longer that view)
       document.querySelector('.i3-panel').addEventListener('change', (e) => {
         if (e.isTrusted) document.querySelectorAll('.i3-preset.active').forEach(b => b.classList.remove('active'));
       });
       wireFlyDown();
       loop();
+      maybeStartTour();
     }
 
     // hover a district marker → tooltip with its name + the current metric's real value;
@@ -1054,6 +1071,88 @@
         const st = DISTRICTS.states[r[1]] || '';
         location.href = `index.html?state=${encodeURIComponent(st)}&district=${encodeURIComponent(r[0])}`;
       });
+    }
+
+    // ---- first-visit tour ----
+    // A tiny, dependency-free coach-mark sequence: dim the page, ring one control at a time,
+    // show a card explaining it. Shown once (localStorage); the "?" button replays it.
+    const TOUR = [
+      { sel: '#i3-presets', title: '① Start with a View',
+        body: 'One click sets a whole story — Money, Water, Risk, or the plain Real-Earth globe. Everything else below just fine-tunes it.' },
+      { sel: '#i3-districts', title: '② Turn on the 594 districts',
+        body: 'Every district as a marker on the real Earth, sized & coloured by real Census data (population / literacy) — the "pixels of money".' },
+      { sel: '#i3-canvas', title: '③ Hover, then click',
+        body: 'Hover any district marker for its name and numbers. Click it to open that district\'s full page. Drag to orbit, scroll to zoom.', place: 'center' },
+    ];
+    const TOUR_KEY = 'i3_tour_seen_v1';
+    let tourEls = null, tourIdx = 0;
+    function clearTour() {
+      if (tourEls) { tourEls.veil.remove(); tourEls.ring.remove(); tourEls.card.remove(); tourEls = null; }
+      window.removeEventListener('resize', positionTour);
+    }
+    function positionTour() {
+      if (!tourEls) return;
+      const step = TOUR[tourIdx];
+      const target = document.querySelector(step.sel);
+      if (!target) return;
+      const r = target.getBoundingClientRect();
+      const pad = 6;
+      const ring = tourEls.ring, card = tourEls.card;
+      if (step.place === 'center') {
+        // spotlight the canvas but drop the card in its middle-ish so it's readable
+        ring.style.cssText += `;left:${r.left - pad}px;top:${r.top - pad}px;width:${r.width + pad * 2}px;height:${Math.min(r.height, 260) + pad * 2}px`;
+        card.style.left = Math.min(r.left + 30, innerWidth - 320) + 'px';
+        card.style.top = (r.top + 40) + 'px';
+      } else {
+        ring.style.left = (r.left - pad) + 'px'; ring.style.top = (r.top - pad) + 'px';
+        ring.style.width = (r.width + pad * 2) + 'px'; ring.style.height = (r.height + pad * 2) + 'px';
+        // card below the target, clamped to the viewport
+        card.style.left = Math.min(r.left, innerWidth - 320) + 'px';
+        card.style.top = (r.bottom + 12) + 'px';
+        if (r.bottom + 180 > innerHeight) card.style.top = (r.top - 12 - card.offsetHeight) + 'px';
+      }
+    }
+    function renderTour() {
+      const step = TOUR[tourIdx];
+      const last = tourIdx === TOUR.length - 1;
+      tourEls.card.innerHTML =
+        `<h4>${step.title}</h4><p>${step.body}</p>
+         <div class="i3-tour-row">
+           <span class="i3-tour-step">${tourIdx + 1} / ${TOUR.length}</span>
+           <span class="i3-tour-btns">
+             <button class="i3-tour-skip" id="i3-tour-skip">Skip</button>
+             <button class="i3-tour-next" id="i3-tour-next">${last ? 'Got it' : 'Next →'}</button>
+           </span>
+         </div>`;
+      document.getElementById('i3-tour-skip').onclick = endTour;
+      document.getElementById('i3-tour-next').onclick = () => {
+        if (last) return endTour();
+        tourIdx++; renderTour(); positionTour();
+      };
+      // a helpful side-effect: step ② pre-checks the district layer so ③ has something to hover
+      if (step.sel === '#i3-districts') {
+        const d = document.getElementById('i3-districts');
+        if (d && !d.checked) { d.checked = true; d.dispatchEvent(new Event('change')); }
+      }
+      positionTour();
+    }
+    function startTour() {
+      clearTour();
+      tourIdx = 0;
+      const veil = document.createElement('div'); veil.className = 'i3-tour-veil';
+      const ring = document.createElement('div'); ring.className = 'i3-tour-ring';
+      const card = document.createElement('div'); card.className = 'i3-tour-card';
+      document.body.append(veil, ring, card);
+      veil.onclick = endTour;
+      tourEls = { veil, ring, card };
+      window.addEventListener('resize', positionTour);
+      renderTour();
+    }
+    function endTour() { try { localStorage.setItem(TOUR_KEY, '1'); } catch (e) {} clearTour(); }
+    function maybeStartTour() {
+      let seen = false;
+      try { seen = localStorage.getItem(TOUR_KEY) === '1'; } catch (e) {}
+      if (!seen) setTimeout(startTour, 700);   // let the globe paint first
     }
 
     // ---- fly down to real streets (OpenStreetMap) ----
