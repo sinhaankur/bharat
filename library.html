@@ -43,6 +43,23 @@
     .la-meta b { color: var(--foreground); }
     .la-verdict { font-size: 0.86rem; line-height: 1.6; color: var(--muted-foreground); margin: 0.3rem 0 0; border-left: 3px solid oklch(0.7 0.16 78); padding-left: 0.8rem; }
     .la-verdict em { font-style: italic; color: oklch(0.9 0.02 90); }
+    /* "about this book" — detailed explanation + true references */
+    .lib-about { border: 1px solid var(--border-strong); border-radius: var(--radius); background: oklch(0.15 0.005 250); padding: 1rem 1.1rem; margin: 0.6rem 0 0.4rem; }
+    .lib-about .lb-cols { display: grid; grid-template-columns: 1.6fr 1fr; gap: 1.4rem; }
+    .lib-about .lb-head { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em; color: oklch(0.82 0.13 78); margin-bottom: 0.5rem; }
+    .lib-about .lb-body p { font-size: 0.9rem; line-height: 1.65; color: var(--muted-foreground); margin: 0 0 0.7rem; }
+    .lib-about .lb-why { border-left: 3px solid oklch(0.66 0.16 30); padding: 0.4rem 0 0.4rem 0.8rem; font-size: 0.85rem; line-height: 1.55; color: oklch(0.86 0.05 60); background: oklch(0.2 0.03 30 / 0.25); border-radius: var(--radius-sm); }
+    .lib-about .lb-refs-h { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: oklch(0.74 0.14 145); margin-bottom: 0.6rem; }
+    .lib-about .lb-refs { list-style: none; padding: 0; margin: 0; }
+    .lib-about .lb-refs li { padding: 0.4rem 0; border-bottom: 1px dashed oklch(0.985 0 0 / 0.08); font-size: 0.82rem; line-height: 1.45; }
+    .lib-about .lb-refs li:last-child { border-bottom: 0; }
+    .lib-about .lb-refs a { color: oklch(0.78 0.16 72); }
+    .lib-about .lb-refs .kind { display: inline-block; font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.05em; text-transform: uppercase; padding: 1px 5px; border-radius: 999px; margin-right: 0.4rem; vertical-align: 1px; }
+    .lib-about .kind-primary { background: oklch(0.3 0.1 145); color: oklch(0.9 0.1 145); }
+    .lib-about .kind-reference { background: oklch(0.3 0.08 250); color: oklch(0.88 0.09 250); }
+    .lib-about .kind-review { background: oklch(0.32 0.1 60); color: oklch(0.9 0.1 78); }
+    .lib-about .lb-refs-note { font-size: 0.72rem; color: var(--muted-foreground); line-height: 1.5; margin: 0.7rem 0 0; }
+    @media (max-width: 720px) { .lib-about .lb-cols { grid-template-columns: 1fr; gap: 1rem; } }
     /* the journey — a scrollytelling walk through the history behind the books */
     .jr-intro { max-width: 74ch; margin: 3.2rem auto 0; text-align: center; }
     .jr-intro .jr-eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.82 0.11 78); }
@@ -112,6 +129,23 @@
         <div class="la-mix" id="la-mix"></div>
         <div class="la-meta" id="la-meta"></div>
         <p class="la-verdict" id="la-verdict"></p>
+      </div>
+    </div>
+
+    <div class="lib-about" id="lib-about" hidden>
+      <div class="lb-cols">
+        <div class="lb-main">
+          <div class="lb-head" id="lb-head"></div>
+          <div class="lb-body" id="lb-body"></div>
+          <div class="lb-why" id="lb-why"></div>
+        </div>
+        <div class="lb-side">
+          <div class="lb-refs-h">📚 True references — check it yourself</div>
+          <ul class="lb-refs" id="lb-refs"></ul>
+          <p class="lb-refs-note">Every claim above is traceable to these. This is a memoir, so
+          the references are about the book and its reception — not a stamp that its contents are
+          fact. Weigh it.</p>
+        </div>
       </div>
     </div>
 
@@ -313,11 +347,45 @@
     // id = the Archive item identifier; embedded via archive.org/embed/<id> (their BookReader).
     const BOOKS = [
       { id: 'in.ernet.dli.2015.147284', title: 'My Days with Nehru',
-        author: 'M.O. Mathai', year: '1979', pages: 287,
-        note: 'Mathai’s account of his years as Nehru’s private secretary — the day-to-day of the PM’s office.' },
+        author: 'M.O. Mathai', year: '1979', pages: 287, publisher: 'Vikas Publishing House',
+        note: 'Mathai’s account of his years as Nehru’s private secretary — the day-to-day of the PM’s office.',
+        about: [
+          'The second and quieter of M.O. Mathai’s two memoirs. Mundapallil Oommen Mathai (1909–1981) was ' +
+          'private secretary to Jawaharlal Nehru, India’s first Prime Minister, from 1946 to 1959 — a post ' +
+          'that put him at the paper-flow of the most powerful office in the new republic.',
+          'Where his first book (Reminiscences of the Nehru Age) caused a scandal, this follow-up is generally ' +
+          'described as having “failed to gain traction” — steadier, more anecdotal, less explosive. It is ' +
+          'valuable as an insider’s day-to-day, but written two decades after the events, by a man who had ' +
+          'been forced out, and long disputed. Read it as testimony, not settled history.',
+        ],
+        why: 'Mathai left in 1959 amid corruption charges; Cabinet Secretary Vishnu Sahay’s inquiry concluded ' +
+          'he had “compromised every file since the days of the Interim Government.” That fall colours the memoirs.',
+        references: [
+          { t: 'Internet Archive — scanned original (this reader)', u: 'https://archive.org/details/in.ernet.dli.2015.147284', kind: 'primary' },
+          { t: 'M.O. Mathai — Wikipedia (author, service, 1959 resignation)', u: 'https://en.wikipedia.org/wiki/M._O._Mathai', kind: 'reference' },
+          { t: 'Inder Malhotra, on the reception of Mathai’s memoirs', u: 'https://en.wikipedia.org/wiki/M._O._Mathai', kind: 'review' },
+        ] },
       { id: 'in.ernet.dli.2015.103038', title: 'Reminiscences of the Nehru Age',
-        author: 'M.O. Mathai', year: '1978',
-        note: 'His earlier, more controversial memoir of the Nehru years — much-discussed, long out of print.' },
+        author: 'M.O. Mathai', year: '1978', publisher: 'Vikas Publishing House', isbn: '978-0-7069-0621-9',
+        note: 'His earlier, far more controversial memoir of the Nehru years — much-discussed, long out of print.',
+        about: [
+          'Mathai’s first and most notorious memoir — 49 chapters of reminiscence about Nehru’s work, his ' +
+          'circle, and the people Mathai met across thirteen years in the PM’s office. He called it “chatty ' +
+          'stuff,” not history, and even styled himself “Nehru’s Special Assistant” — a title he did not hold.',
+          'It appeared in 1978, during the brief Janata government after Indira Gandhi’s Emergency, when — as ' +
+          'critics noted — maligning her image was commercially profitable. Chapter 29, titled simply “She,” was ' +
+          'printed BLANK: its contents, said to concern the Nehru–Gandhi family, were too explosive to run. ' +
+          '“Few books in India,” wrote the journalist Inder Malhotra, “have got such bad reviews.” Prime Minister ' +
+          'Morarji Desai refused demands to ban it.',
+        ],
+        why: 'The blanked chapter and the political timing are exactly why this is a case study in bias: a real ' +
+          'insider, a real axe to grind, published at a moment that rewarded one side of the story.',
+        references: [
+          { t: 'Internet Archive — scanned original (this reader)', u: 'https://archive.org/details/in.ernet.dli.2015.103038', kind: 'primary' },
+          { t: 'Reminiscences of the Nehru Age — Wikipedia (chapters, ch.29 “She”, ban refusal)', u: 'https://en.wikipedia.org/wiki/Reminiscences_of_the_Nehru_Age', kind: 'reference' },
+          { t: 'Vikas Publishing, 1978 · ISBN 978-0-7069-0621-9 (bibliographic record)', u: 'https://en.wikipedia.org/wiki/Reminiscences_of_the_Nehru_Age', kind: 'reference' },
+          { t: 'Inder Malhotra & T.V. Rajeswar — on the book’s reception & the “She” chapter', u: 'https://en.wikipedia.org/wiki/M._O._Mathai', kind: 'review' },
+        ] },
     ];
 
     const shelf = document.getElementById('lib-shelf');
@@ -340,8 +408,24 @@
       document.querySelectorAll('.lib-book').forEach((el, k) => el.classList.toggle('active', k === i));
       document.title = `${b.title} — Reading Room | India District Atlas`;
       if (typeof renderAnalysis === 'function') renderAnalysis();
+      renderAbout(b);
     }
     function goToPage(p) { selectBook(current, p); }
+
+    // "about this book" — a detailed, referenced explanation of the current book
+    const escH = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    function renderAbout(b) {
+      const panel = document.getElementById('lib-about');
+      if (!b || !b.about) { panel.hidden = true; return; }
+      panel.hidden = false;
+      const meta = [b.author, b.publisher, b.year, b.isbn ? 'ISBN ' + b.isbn : null].filter(Boolean).join(' · ');
+      document.getElementById('lb-head').textContent = `About “${b.title}” — ${meta}`;
+      document.getElementById('lb-body').innerHTML = b.about.map(p => `<p>${escH(p)}</p>`).join('');
+      document.getElementById('lb-why').innerHTML = b.why ? `<b>Why it’s contested:</b> ${escH(b.why)}` : '';
+      document.getElementById('lb-refs').innerHTML = (b.references || []).map(r =>
+        `<li><span class="kind kind-${r.kind || 'reference'}">${escH(r.kind || 'ref')}</span>` +
+        `<a href="${escH(r.u)}" target="_blank" rel="noopener">${escH(r.t)} ↗</a></li>`).join('');
+    }
 
     // "what kind of book is this?" — the measured content analysis (book-analysis.json),
     // computed from the real OCR text. Shows the technical/political/personal mix + verdict.
