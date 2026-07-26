@@ -18,6 +18,13 @@
     #i3-canvas { width: 100%; height: 66vh; min-height: 460px; border: 1px solid var(--border-strong); border-radius: var(--radius); background: radial-gradient(ellipse at 50% 30%, oklch(0.19 0.02 250), oklch(0.11 0 0)); display: block; margin: 1.1rem 0 0.6rem; cursor: grab; }
     #i3-canvas:active { cursor: grabbing; }
     #i3-status { font-family: var(--font-mono); font-size: 11.5px; color: oklch(0.82 0.14 78); min-height: 1.2em; margin-bottom: 0.3rem; }
+    /* one-click view presets — set a coherent layer story so the ~19 toggles are navigable */
+    .i3-presets { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin: 0.3rem 0 0.1rem; }
+    .i3-presets-h { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: oklch(0.72 0.05 250); }
+    .i3-preset { background: oklch(0.19 0.03 250); color: var(--foreground); border: 1px solid var(--border-strong); border-radius: 999px; padding: 5px 13px; font-family: var(--font-mono); font-size: 12px; cursor: pointer; transition: border-color .15s, background .15s; }
+    .i3-preset:hover { border-color: var(--warm); }
+    .i3-preset.active { background: oklch(0.28 0.07 78); border-color: var(--warm); color: oklch(0.92 0.06 90); }
+    .i3-preset-hint { font-family: var(--font-mono); font-size: 10.5px; color: var(--muted-foreground); opacity: 0.8; }
     /* grouped control panel — labelled sections so 18 toggles are actually navigable */
     .i3-panel { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: stretch; margin: 0.5rem 0; }
     .i3-grp { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.7rem; padding: 0.45rem 0.7rem; border: 1px solid var(--border); border-radius: var(--radius); background: oklch(0.155 0 0); }
@@ -52,6 +59,14 @@
     </header>
 
     <div id="i3-status">Loading map…</div>
+    <div class="i3-presets" id="i3-presets">
+      <span class="i3-presets-h">Views</span>
+      <button type="button" class="i3-preset" data-preset="money">💰 Money</button>
+      <button type="button" class="i3-preset" data-preset="water">🌊 Water</button>
+      <button type="button" class="i3-preset" data-preset="risk">⚠️ Risk</button>
+      <button type="button" class="i3-preset" data-preset="earth">🌏 Real Earth</button>
+      <span class="i3-preset-hint" id="i3-preset-hint">one click sets the layers · then fine-tune below</span>
+    </div>
     <div class="i3-panel">
       <div class="i3-grp">
         <span class="i3-grp-h">Base</span>
@@ -878,6 +893,60 @@
 
     function rebuild() { buildStates(); buildRivers(); buildRoads(); buildRail(); buildLakes(); buildCities(); buildDistricts(); buildEnc(); buildDispute(); buildZones(); buildAqi(); legend(); }
 
+    // ---- one-click view presets ----
+    // Each preset is a coherent story: set every control to a defined state, then let the
+    // normal change-handlers rebuild the scene (so lazy layers like CRZ/eco/bathy load too).
+    // Defaults for anything a preset doesn't mention keep the globe legible.
+    const PRESETS = {
+      money: {  // where the money + people are
+        _hint: '💰 States by revenue · all 594 districts by population · cities. The pixels of money.',
+        selects: { 'i3-layer': 'ownTax', 'i3-dmetric': 'pop', 'i3-zone': 'off', 'i3-sea': '0' },
+        checks: { 'i3-districts': true, 'i3-cities': true, 'i3-rivers': false, 'i3-lakes': false, 'i3-ponds': false, 'i3-eco': false, 'i3-crz': false, 'i3-bathy': false, 'i3-roads': false, 'i3-rail': false, 'i3-enc': false, 'i3-dispute': false, 'i3-aqi': false },
+        month: 0, drain: 0,
+      },
+      water: {  // the water story — rivers swelling, coasts, seafloor
+        _hint: '🌊 Rivers at monsoon peak · lakes · ponds · CRZ coast lines · ocean floor. Follow the water.',
+        selects: { 'i3-layer': 'flat', 'i3-zone': 'off', 'i3-sea': '0' },
+        checks: { 'i3-rivers': true, 'i3-lakes': true, 'i3-ponds': true, 'i3-eco': false, 'i3-crz': true, 'i3-bathy': true, 'i3-districts': false, 'i3-cities': true, 'i3-roads': false, 'i3-rail': false, 'i3-enc': false, 'i3-dispute': false, 'i3-aqi': false },
+        month: 8, drain: 35,   // August peak + drain the sea a bit to reveal the shelf
+      },
+      risk: {  // hazard + accountability
+        _hint: '⚠️ All zones · illegal habitation · land disputes · air quality · storm surge. What’s at risk.',
+        selects: { 'i3-layer': 'flat', 'i3-zone': 'all', 'i3-sea': '5' },
+        checks: { 'i3-enc': true, 'i3-dispute': true, 'i3-aqi': true, 'i3-districts': false, 'i3-cities': true, 'i3-rivers': false, 'i3-lakes': false, 'i3-ponds': false, 'i3-eco': true, 'i3-crz': false, 'i3-bathy': false, 'i3-roads': false, 'i3-rail': false },
+        month: 0, drain: 0,
+      },
+      earth: {  // just the real planet — a clean reset
+        _hint: '🌏 Just the NASA globe + cities. Everything else off — the real Earth.',
+        selects: { 'i3-layer': 'flat', 'i3-dmetric': 'pop', 'i3-zone': 'off', 'i3-sea': '0' },
+        checks: { 'i3-cities': true, 'i3-districts': false, 'i3-rivers': false, 'i3-lakes': false, 'i3-ponds': false, 'i3-eco': false, 'i3-crz': false, 'i3-bathy': false, 'i3-roads': false, 'i3-rail': false, 'i3-enc': false, 'i3-dispute': false, 'i3-aqi': false },
+        month: 0, drain: 0,
+      },
+    };
+    function applyPreset(name) {
+      const p = PRESETS[name];
+      if (!p) return;
+      for (const [id, v] of Object.entries(p.selects || {})) { const el = document.getElementById(id); if (el) el.value = v; }
+      for (const [id, on] of Object.entries(p.checks || {})) { const el = document.getElementById(id); if (el) el.checked = on; }
+      const month = document.getElementById('i3-month'); if (month) month.value = p.month || 0;
+      const drain = document.getElementById('i3-drain'); if (drain) drain.value = p.drain || 0;
+      // fire the same handlers the UI uses, so lazy layers (CRZ/eco/bathy/ponds) load on demand
+      ['i3-districts', 'i3-cities', 'i3-rivers', 'i3-lakes', 'i3-ponds', 'i3-eco', 'i3-crz', 'i3-bathy', 'i3-roads', 'i3-rail', 'i3-enc', 'i3-dispute', 'i3-aqi', 'i3-zone', 'i3-sea']
+        .forEach(id => { const el = document.getElementById(id); if (el) el.dispatchEvent(new Event('change')); });
+      // month/drain use 'input'
+      if (month) month.dispatchEvent(new Event('input'));
+      if (drain) drain.dispatchEvent(new Event('input'));
+      // the month handler force-enables rivers; re-assert the preset's rivers intent so it wins
+      if (p.checks && 'i3-rivers' in p.checks) {
+        const rv = document.getElementById('i3-rivers');
+        if (rv && rv.checked !== p.checks['i3-rivers']) { rv.checked = p.checks['i3-rivers']; buildRivers(); }
+      }
+      rebuild();
+      // reflect the active preset + its hint
+      document.querySelectorAll('.i3-preset').forEach(b => b.classList.toggle('active', b.dataset.preset === name));
+      const hint = document.getElementById('i3-preset-hint'); if (hint) hint.textContent = p._hint;
+    }
+
     function boot() {
       const hw = (ROADS.features || []).filter(f => f.properties.t === 'Major Highway').length;
       status.textContent = `Real-Earth globe · ${STATES.features.length} states · ${(DISTRICTS.districts || []).length} districts · ${RIVERS.features.length} rivers · ${hw} highways · ${(LAKES.features || []).length} lakes · ${(WORLD.features || []).length} countries`;
@@ -926,6 +995,13 @@
       });
       document.getElementById('i3-sea').addEventListener('change', applySea);
       document.getElementById('i3-drain').addEventListener('input', applyDrain);
+      // preset buttons — one click sets a coherent layer story
+      document.querySelectorAll('.i3-preset').forEach(btn =>
+        btn.addEventListener('click', () => applyPreset(btn.dataset.preset)));
+      // if the user hand-tweaks any control, drop the "active preset" highlight (it's no longer that view)
+      document.querySelector('.i3-panel').addEventListener('change', (e) => {
+        if (e.isTrusted) document.querySelectorAll('.i3-preset.active').forEach(b => b.classList.remove('active'));
+      });
       wireFlyDown();
       loop();
     }
