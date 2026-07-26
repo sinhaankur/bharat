@@ -32,6 +32,17 @@
     .lib-note { font-size: 0.83rem; color: var(--muted-foreground); line-height: 1.6; margin-top: 1.6rem; border-top: 1px solid var(--border); padding-top: 1rem; }
     .lib-note a { color: oklch(0.78 0.16 72); }
     .lib-gap { border-left: 3px solid oklch(0.6 0.16 60); padding: 0.55rem 0.9rem; background: oklch(0.2 0.03 60 / 0.3); border-radius: var(--radius-sm); margin: 1.2rem 0; font-size: 0.85rem; line-height: 1.55; }
+    /* "what kind of book is this?" — the measured content analysis */
+    .lib-analysis { border: 1px solid var(--border-strong); border-radius: var(--radius); background: oklch(0.15 0.005 250); padding: 0.9rem 1rem; margin: 0.6rem 0 0.4rem; }
+    .lib-analysis .la-head { font-family: var(--font-mono); font-size: 0.9rem; color: var(--foreground); margin-bottom: 0.7rem; }
+    .lib-analysis .la-sub { color: var(--muted-foreground); font-size: 0.78rem; }
+    .la-mix { display: flex; height: 26px; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); }
+    .la-mix .seg { display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 10px; color: oklch(0.12 0 0); font-weight: 700; }
+    .la-seg-tech { background: oklch(0.7 0.13 210); } .la-seg-pol { background: oklch(0.72 0.16 60); } .la-seg-pers { background: oklch(0.66 0.18 20); }
+    .la-meta { display: flex; flex-wrap: wrap; gap: 0.5rem 1.2rem; font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); margin: 0.6rem 0; }
+    .la-meta b { color: var(--foreground); }
+    .la-verdict { font-size: 0.86rem; line-height: 1.6; color: var(--muted-foreground); margin: 0.3rem 0 0; border-left: 3px solid oklch(0.7 0.16 78); padding-left: 0.8rem; }
+    .la-verdict em { font-style: italic; color: oklch(0.9 0.02 90); }
     /* the journey — a scrollytelling walk through the history behind the books */
     .jr-intro { max-width: 74ch; margin: 3.2rem auto 0; text-align: center; }
     .jr-intro .jr-eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.82 0.11 78); }
@@ -93,6 +104,15 @@
       as Nehru's private secretary, roughly <strong>1946 to 1959</strong>, within the wider
       <strong>Nehru age of 1947–1964</strong> (independence to his death). So: a late-1970s memoir
       about the 1940s–50s — <em>not</em> a 1909 book. The journey below walks that true timeline.
+    </div>
+
+    <div class="lib-analysis" id="lib-analysis" hidden>
+      <div class="la-head">📊 What kind of book is this? <span class="la-sub">— measured from the actual OCR text, not guessed</span></div>
+      <div class="la-body">
+        <div class="la-mix" id="la-mix"></div>
+        <div class="la-meta" id="la-meta"></div>
+        <p class="la-verdict" id="la-verdict"></p>
+      </div>
     </div>
 
     <div class="lib-bar">
@@ -319,8 +339,33 @@
       if (b.pages) pageInput.max = b.pages;
       document.querySelectorAll('.lib-book').forEach((el, k) => el.classList.toggle('active', k === i));
       document.title = `${b.title} — Reading Room | India District Atlas`;
+      if (typeof renderAnalysis === 'function') renderAnalysis();
     }
     function goToPage(p) { selectBook(current, p); }
+
+    // "what kind of book is this?" — the measured content analysis (book-analysis.json),
+    // computed from the real OCR text. Shows the technical/political/personal mix + verdict.
+    let ANALYSIS = null;
+    fetch('book-analysis.json').then(r => r.json()).then(d => { ANALYSIS = d; renderAnalysis(); }).catch(() => {});
+    function renderAnalysis() {
+      const panel = document.getElementById('lib-analysis');
+      const a = ANALYSIS && ANALYSIS.books && ANALYSIS.books[BOOKS[current].id];
+      if (!a) { panel.hidden = true; return; }
+      panel.hidden = false;
+      const mix = a.mix_label || { technical: 34, political: 33, personal: 33 };
+      document.getElementById('la-mix').innerHTML =
+        `<div class="seg la-seg-tech" style="width:${mix.technical}%">technical ${mix.technical}%</div>` +
+        `<div class="seg la-seg-pol" style="width:${mix.political}%">political ${mix.political}%</div>` +
+        `<div class="seg la-seg-pers" style="width:${mix.personal}%">personal ${mix.personal}%</div>`;
+      const reg = a.registers_per_1k || {};
+      document.getElementById('la-meta').innerHTML =
+        `<span><b>${a.words.toLocaleString()}</b> words</span>` +
+        `<span>first-person voice <b>${a.first_person_per_1k}/1k</b> (memoir signal)</span>` +
+        `<span>bias-laden words <b>${reg.emotional_bias_laden}/1k</b></span>` +
+        `<span><b>${a.year_mentions}</b> date-mentions</span>`;
+      document.getElementById('la-verdict').innerHTML =
+        `<em>Verdict:</em> ${a.verdict.replace(/MEMOIR/, '<em>memoir</em>')}`;
+    }
 
     BOOKS.forEach((b, i) => {
       const card = document.createElement('button');
