@@ -44,7 +44,8 @@
       <p>India on the real Earth, in one place — a NASA-derived day/night globe with city
       lights and clouds; states raised by data; rivers that <strong>swell with the monsoon</strong>,
       highways, railways, lakes; <strong>zones</strong> (CRZ, flood, unsafe); illegal-habitation
-      pins; and an <strong>impact simulator</strong> — sea-level rise, cyclone surge, tsunami or an
+      pins; <strong>all 594 districts</strong> as markers sized by real Census population; and an
+      <strong>impact simulator</strong> — sea-level rise, cyclone surge, tsunami or an
       asteroid wave floods the land that's really below the line. India's <strong>full claimed
       boundary</strong> (incl. PoK &amp; Aksai Chin). Drag to orbit, scroll to zoom; toggle any
       layer above.</p>
@@ -63,6 +64,18 @@
           </select>
         </label>
         <label>Height <input type="range" id="i3-height" min="0" max="10" value="4" step="1"></label>
+      </div>
+
+      <div class="i3-grp">
+        <span class="i3-grp-h">📍 Districts (594)</span>
+        <label><input type="checkbox" id="i3-districts"> show all 594</label>
+        <label>colour by
+          <select id="i3-dmetric">
+            <option value="pop">Population</option>
+            <option value="lit">Literacy %</option>
+            <option value="deep">Sourced ledger depth</option>
+          </select>
+        </label>
       </div>
 
       <div class="i3-grp">
@@ -120,6 +133,7 @@
     <div id="i3-sea-note" style="font-family:var(--font-mono);font-size:11px;color:oklch(0.84 0.11 210);min-height:1.1em;margin:-0.2rem 0 0.5rem"></div>
     <div id="i3-stage" style="position:relative">
       <canvas id="i3-canvas"></canvas>
+      <div id="i3-tip" hidden style="position:absolute;z-index:6;pointer-events:none;background:oklch(0.15 0.01 250 / 0.95);color:var(--foreground);border:1px solid var(--border-strong);border-radius:6px;padding:4px 8px;font-family:var(--font-mono);font-size:11px;white-space:nowrap;transform:translate(-50%,-140%)"></div>
       <button id="i3-drop" hidden style="position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:5;background:oklch(0.2 0.04 250 / 0.95);color:oklch(0.86 0.13 78);border:1px solid var(--warm);border-radius:999px;padding:7px 15px;font-family:var(--font-mono);font-size:12px;cursor:pointer;backdrop-filter:blur(8px)">🔻 drop to street level here</button>
       <button id="i3-bldg" style="position:absolute;right:12px;bottom:18px;z-index:5;background:oklch(0.2 0.04 30 / 0.95);color:oklch(0.86 0.13 45);border:1px solid oklch(0.6 0.16 40);border-radius:999px;padding:7px 13px;font-family:var(--font-mono);font-size:11px;cursor:pointer;backdrop-filter:blur(8px)">🏢 real 3D buildings (Gandhinagar)</button>
       <div id="i3-street" hidden style="position:absolute;inset:0;z-index:10;border-radius:var(--radius);overflow:hidden;background:oklch(0.13 0 0)">
@@ -148,6 +162,15 @@
       universe</em> of India's land litigation lives in the <b>eCourts / NGT portals</b> — public
       (the govt does post it) but not a bulk-downloadable dataset, so "all cases" is a declared
       gap, grown case-by-case as each is sourced, never scraped-and-guessed.
+    </div>
+    <div class="i3-gap">
+      <strong>The 594 districts are placed for real, coloured only where sourced.</strong> Every
+      district sits at its true Census-2011 centroid. Coloured/sized by <b>population</b> or
+      <b>literacy</b>, that's real Census data — districts we couldn't confidently match show
+      <em>grey (a gap)</em>, not an invented number. The <b>"sourced ledger depth"</b> mode lights
+      up only the <b>13 districts with a full money-ledger</b> (Kolkata-depth); the other 581 are
+      named and placed, <em>not</em> fabricated to that depth — the atlas scales structure, not
+      figures. Hover any marker for its name + value.
     </div>
     <div class="i3-gap">
       <strong>Air quality is annual-average, not live.</strong> The 😷 layer stands a coloured
@@ -241,7 +264,7 @@
       ['Bhopal', 77.41, 23.26], ['Patna', 85.14, 25.61], ['Kochi', 76.27, 9.93],
     ];
 
-    let STATES = null, RIVERS = null, FISCAL = null, WORLD = null, ENC = null, SEA = null, ROADS = null, LAKES = null, RAIL = null, ZONES = null, AQI = null;
+    let STATES = null, RIVERS = null, FISCAL = null, WORLD = null, ENC = null, SEA = null, ROADS = null, LAKES = null, RAIL = null, ZONES = null, AQI = null, DISTRICTS = null;
     // PM2.5 → colour (green clean → dark red hazardous). WHO annual guideline is 5 µg/m³.
     function aqiColor(pm) {
       const stops = [[5, 0x3ec46d], [12, 0x9ccb3b], [35, 0xf2c53d], [55, 0xf28d3d], [75, 0xd8433c], [110, 0x8b2fb0]];
@@ -287,7 +310,8 @@
       j('india-railways.geojson', { features: [] }),
       j('india-zones.json', { zones: [] }),
       j('india-aqi.json', { cities: [] }),
-    ]).then(([s, r, f, w, e, sl, rd, lk, rw, zn, aq]) => { STATES = s; RIVERS = r; FISCAL = f.states || {}; WORLD = w; ENC = e; SEA = sl; ROADS = rd; LAKES = lk; RAIL = rw; ZONES = zn; AQI = aq; boot(); })
+      j('district-globe.json', { states: [], districts: [] }),
+    ]).then(([s, r, f, w, e, sl, rd, lk, rw, zn, aq, dg]) => { STATES = s; RIVERS = r; FISCAL = f.states || {}; WORLD = w; ENC = e; SEA = sl; ROADS = rd; LAKES = lk; RAIL = rw; ZONES = zn; AQI = aq; DISTRICTS = dg; boot(); })
       .catch(e => { status.textContent = 'Could not load map data.'; console.error(e); });
 
     // ---- three.js scene ----
@@ -522,6 +546,59 @@
         cityGroup.add(dot);
       }
       scene.add(cityGroup);
+    }
+
+    // all 594 districts — placed at their real Census centroids, drawn as ONE InstancedMesh
+    // (a single draw call for 594 markers) so it stays fast. Height + colour carry the chosen
+    // metric where it's REAL; a gap (no matched Census figure) reads grey. See district-globe.json.
+    let distMesh = null, DIST_ROWS = [];
+    const _dObj = new THREE.Object3D();
+    const GAP_COL = new THREE.Color(0x555a63);   // grey = a data gap, honestly shown
+    function distColorVal(r, metric, max) {
+      // returns [THREE.Color, tHeight 0..1, valueLabel] — or null-ish for a gap
+      const [name, si, lat, lon, pop, lit, deep] = r;
+      if (metric === 'deep') {
+        return deep ? [new THREE.Color(0xffb43c), 1, 'full sourced ledger'] : [GAP_COL, 0.12, 'placed — not deep-sourced'];
+      }
+      if (metric === 'lit') {
+        if (typeof lit !== 'number') return [GAP_COL, 0.1, 'literacy: gap'];
+        const t = Math.max(0, Math.min(1, (lit - 40) / 55));   // ~40%→95% span
+        return [new THREE.Color().setHSL(0.02 + 0.35 * t, 0.7, 0.35 + 0.2 * t), t, `${lit}% literate`];
+      }
+      // population (default) — log scale so a metro doesn't dwarf every rural district
+      if (typeof pop !== 'number') return [GAP_COL, 0.1, 'population: gap'];
+      const t = Math.max(0, Math.min(1, Math.log10(pop) - 5) / (Math.log10(max) - 5 || 1));
+      return [ramp(t), t, `${(pop / 1e5).toFixed(1)} lakh people`];
+    }
+    function buildDistricts() {
+      if (distMesh) { scene.remove(distMesh); distMesh.geometry.dispose(); distMesh = null; }
+      if (!document.getElementById('i3-districts').checked || !DISTRICTS) return;
+      const metric = document.getElementById('i3-dmetric').value;
+      DIST_ROWS = DISTRICTS.districts;
+      const pops = DIST_ROWS.map(r => r[4]).filter(p => typeof p === 'number');
+      const maxPop = pops.length ? Math.max(...pops) : 1e7;
+      const geo = new THREE.SphereGeometry(1, 8, 8);
+      const mat = new THREE.MeshStandardMaterial({ roughness: 0.5, metalness: 0.1, emissive: 0x000000 });
+      distMesh = new THREE.InstancedMesh(geo, mat, DIST_ROWS.length);
+      distMesh.instanceColor = new THREE.InstancedBufferAttribute(new Float32Array(DIST_ROWS.length * 3), 3);
+      DIST_ROWS.forEach((r, i) => {
+        const [name, si, lat, lon] = r;
+        const [col, th] = distColorVal(r, metric, maxPop);
+        const rad = 0.035 + th * 0.09;             // marker size grows with the value
+        const p = toSphere(lon, lat, 0.09 + th * 0.35);   // and lifts off the surface
+        _dObj.position.copy(p); _dObj.scale.setScalar(rad); _dObj.updateMatrix();
+        distMesh.setMatrixAt(i, _dObj.matrix);
+        distMesh.setColorAt(i, col);
+      });
+      distMesh.instanceMatrix.needsUpdate = true;
+      if (distMesh.instanceColor) distMesh.instanceColor.needsUpdate = true;
+      scene.add(distMesh);
+      const note = document.getElementById('i3-sea-note');
+      const lbl = { pop: 'population', lit: 'literacy %', deep: 'sourced ledger depth' }[metric];
+      const gaps = DIST_ROWS.filter(r => metric === 'lit' ? typeof r[5] !== 'number' : metric === 'pop' ? typeof r[4] !== 'number' : !r[6]).length;
+      if (note) note.textContent = metric === 'deep'
+        ? `📍 594 districts · 13 with a full sourced money-ledger (gold), 581 placed & named (grey) — structure scaled, figures not faked`
+        : `📍 594 districts coloured by ${lbl} (real Census-2011) · ${DIST_ROWS.length - gaps} sourced, ${gaps} shown grey as a gap · hover a marker to identify`;
     }
 
     // illegal habitation — the 16 sourced encroachment cases as red pins on the globe
@@ -798,11 +875,11 @@
         `<span><span class="i3-chip" style="background:rgb(255,90,60)"></span>illegal habitation</span>`;
     }
 
-    function rebuild() { buildStates(); buildRivers(); buildRoads(); buildRail(); buildLakes(); buildCities(); buildEnc(); buildDispute(); buildZones(); buildAqi(); legend(); }
+    function rebuild() { buildStates(); buildRivers(); buildRoads(); buildRail(); buildLakes(); buildCities(); buildDistricts(); buildEnc(); buildDispute(); buildZones(); buildAqi(); legend(); }
 
     function boot() {
       const hw = (ROADS.features || []).filter(f => f.properties.t === 'Major Highway').length;
-      status.textContent = `Real-Earth globe · ${STATES.features.length} states · ${RIVERS.features.length} rivers · ${hw} highways · ${(LAKES.features || []).length} lakes · ${(WORLD.features || []).length} countries`;
+      status.textContent = `Real-Earth globe · ${STATES.features.length} states · ${(DISTRICTS.districts || []).length} districts · ${RIVERS.features.length} rivers · ${hw} highways · ${(LAKES.features || []).length} lakes · ${(WORLD.features || []).length} countries`;
       buildWorld();
       rebuild();
       applySea();
@@ -817,6 +894,9 @@
         buildRivers();
       });
       document.getElementById('i3-cities').addEventListener('change', buildCities);
+      document.getElementById('i3-districts').addEventListener('change', buildDistricts);
+      document.getElementById('i3-dmetric').addEventListener('change', buildDistricts);
+      wireDistrictHover();
       document.getElementById('i3-enc').addEventListener('change', buildEnc);
       document.getElementById('i3-dispute').addEventListener('change', buildDispute);
       document.getElementById('i3-roads').addEventListener('change', buildRoads);
@@ -847,6 +927,34 @@
       document.getElementById('i3-drain').addEventListener('input', applyDrain);
       wireFlyDown();
       loop();
+    }
+
+    // hover a district marker → tooltip with its name + the current metric's real value.
+    // Raycasts against the one InstancedMesh; instanceId indexes back into DIST_ROWS.
+    const _hray = new THREE.Raycaster();
+    _hray.params.Points = _hray.params.Points || {};
+    function wireDistrictHover() {
+      const tip = document.getElementById('i3-tip');
+      canvas.addEventListener('pointermove', (ev) => {
+        if (!distMesh || !document.getElementById('i3-districts').checked) { tip.hidden = true; return; }
+        const rect = canvas.getBoundingClientRect();
+        const nx = ((ev.clientX - rect.left) / rect.width) * 2 - 1;
+        const ny = -((ev.clientY - rect.top) / rect.height) * 2 + 1;
+        _hray.setFromCamera(new THREE.Vector2(nx, ny), camera);
+        const hit = _hray.intersectObject(distMesh, false)[0];
+        if (!hit || hit.instanceId == null) { tip.hidden = true; return; }
+        const r = DIST_ROWS[hit.instanceId];
+        if (!r) { tip.hidden = true; return; }
+        const metric = document.getElementById('i3-dmetric').value;
+        const pops = DIST_ROWS.map(x => x[4]).filter(p => typeof p === 'number');
+        const label = distColorVal(r, metric, pops.length ? Math.max(...pops) : 1e7)[2];
+        const stName = DISTRICTS.states[r[1]] || '';
+        tip.innerHTML = `<b>${r[0]}</b> <span style="opacity:.6">${stName}</span><br>${label}${r[6] ? ' · 📒 deep ledger' : ''}`;
+        tip.style.left = (ev.clientX - rect.left) + 'px';
+        tip.style.top = (ev.clientY - rect.top) + 'px';
+        tip.hidden = false;
+      });
+      canvas.addEventListener('pointerleave', () => { tip.hidden = true; });
     }
 
     // ---- fly down to real streets (OpenStreetMap) ----
