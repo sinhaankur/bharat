@@ -348,10 +348,42 @@
 
     exag = 6;   // match the slider's default
     document.getElementById('t3-sea').dispatchEvent(new Event('input'));   // paint the initial hint
-    loadElevation().then(grid => {
-      status.textContent = `Rendering relief · elevation 0–${Math.round(grid.max)} m (open 30 m DEM) · drag a region or raise the sea`;
+
+    // ---- deep-link to any of the 594 districts: terrain-3d.html?district=Munger ----
+    // Look up the district's real centroid, build a tight bbox around it at a HIGH tile-zoom
+    // (street-scale relief — river, flood plain, hills), and open there. "3D as the front door."
+    async function districtDeepLink() {
+      const q = new URLSearchParams(location.search);
+      const want = q.get('district'); if (!want) return false;
+      try {
+        const cen = await fetch('district-centroids.json').then(r => r.json());
+        const norm = s => s.trim().toLowerCase().replace(/&/g, 'and');
+        let hit = null, hitName = '';
+        for (const [key, ll] of Object.entries(cen.centroids || {})) {
+          const dn = key.split('|')[1] || '';
+          if (norm(dn) === norm(want)) { hit = ll; hitName = key.replace('|', ' · '); break; }
+        }
+        if (!hit) return false;
+        const [lat, lon] = hit;                 // centroids are [lat, lng]
+        const half = 0.28;                       // ~0.56° box ≈ a district's neighbourhood
+        REGIONS.__district = [lon - half, lon + half, lat - half, lat + half, 11];   // z11 ≈ street relief
+        setRegion('__district');
+        // add + select an option so the selector reflects it
+        const sel = document.getElementById('t3-region');
+        const opt = document.createElement('option');
+        opt.value = '__district'; opt.textContent = `📍 ${hitName}`; opt.selected = true;
+        sel.insertBefore(opt, sel.firstChild);
+        window.__t3_district = hitName;
+        return true;
+      } catch (e) { return false; }
+    }
+
+    districtDeepLink().then(() => loadElevation().then(grid => {
+      status.textContent = window.__t3_district
+        ? `📍 ${window.__t3_district} — real 3D terrain · elevation 0–${Math.round(grid.max)} m (open 30 m DEM) · drag to orbit, raise the sea`
+        : `Rendering relief · elevation 0–${Math.round(grid.max)} m (open 30 m DEM) · drag a region or raise the sea`;
       buildMesh(grid); buildLegend(grid.max); loop();
-    }).catch(err => { status.textContent = 'Could not load elevation tiles (network).'; console.error(err); });
+    }).catch(err => { status.textContent = 'Could not load elevation tiles (network).'; console.error(err); }));
   </script>
 </body>
 </html>
