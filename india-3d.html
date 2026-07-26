@@ -53,6 +53,20 @@
     .i3-tour-next { background: oklch(0.28 0.07 78); color: oklch(0.94 0.05 90); border-color: var(--warm); }
     .i3-help { background: oklch(0.19 0.03 250); color: oklch(0.8 0.1 210); border: 1px solid var(--border-strong); border-radius: 999px; width: 22px; height: 22px; font-size: 12px; cursor: pointer; padding: 0; line-height: 1; }
     .i3-help:hover { border-color: var(--warm); }
+    /* "how real is this?" — the honesty statement, three tiers, one place */
+    .i3-real { margin: 1.4rem 0 0.4rem; border: 1px solid var(--border-strong); border-radius: var(--radius); background: oklch(0.15 0.005 250); overflow: hidden; }
+    .i3-real > summary { cursor: pointer; padding: 0.7rem 1rem; font-family: var(--font-mono); font-size: 0.9rem; color: var(--foreground); list-style: none; display: flex; align-items: center; gap: 0.5rem; }
+    .i3-real > summary::-webkit-details-marker { display: none; }
+    .i3-real > summary::before { content: '▸'; color: var(--warm); transition: transform .15s; }
+    .i3-real[open] > summary::before { transform: rotate(90deg); }
+    .i3-real-body { padding: 0.2rem 1rem 1rem; }
+    .i3-tier { border-left: 3px solid var(--tier); padding: 0.5rem 0.9rem; margin: 0.7rem 0; background: oklch(from var(--tier) l c h / 0.08); border-radius: var(--radius-sm); }
+    .i3-tier h5 { margin: 0 0 0.25rem; font-size: 0.85rem; color: var(--tier-text, var(--foreground)); }
+    .i3-tier p { margin: 0; font-size: 0.82rem; line-height: 1.55; color: var(--muted-foreground); }
+    .i3-tier--real { --tier: oklch(0.7 0.16 150); --tier-text: oklch(0.82 0.14 150); }
+    .i3-tier--illus { --tier: oklch(0.74 0.16 70); --tier-text: oklch(0.85 0.14 78); }
+    .i3-tier--gap { --tier: oklch(0.62 0.16 30); --tier-text: oklch(0.8 0.14 40); }
+    .i3-real-foot { font-size: 0.8rem; color: var(--muted-foreground); margin-top: 0.6rem; line-height: 1.5; }
   </style>
 </head>
 <body>
@@ -172,6 +186,51 @@
         <div id="i3-street-label" style="position:absolute;right:12px;top:12px;z-index:20;background:oklch(0.15 0 0 / 0.9);color:var(--muted-foreground);border:1px solid var(--border);border-radius:6px;padding:4px 9px;font-family:var(--font-mono);font-size:10px"></div>
       </div>
     </div>
+
+    <details class="i3-real" open>
+      <summary>How real is this? — every layer, and where reality runs out</summary>
+      <div class="i3-real-body">
+        <p style="font-size:0.85rem;color:var(--muted-foreground);line-height:1.55;margin:0.3rem 0 0.2rem">
+          This is a real simulation of the real Earth — built on measured, open data — and it says
+          so plainly where the data runs out. Three honesty tiers:</p>
+
+        <div class="i3-tier i3-tier--real">
+          <h5>✅ Real — measured data, drawn as it is</h5>
+          <p>The <b>Earth</b> itself (NASA-derived day/night/cloud textures on a true sphere).
+          All <b>594 districts</b> at their real Census-2011 centroids, sized by real
+          population/literacy. <b>Rivers, roads, railways, lakes, coastlines</b> (Natural Earth).
+          <b>CRZ-2019 lines, eco-sensitive zones, ponds</b> (real MoEFCC / india-geodata polygons).
+          <b>Ocean-floor bathymetry</b> (real isobaths). <b>35,941 Gandhinagar buildings</b> with
+          real height on the fly-down. <b>Annual PM2.5</b> air quality. And in the impact sim,
+          <b>which land floods is decided by real DEM elevation</b>.</p>
+        </div>
+
+        <div class="i3-tier i3-tier--illus">
+          <h5>🟡 Real timing / structure — illustrative magnitude (stated on-page)</h5>
+          <p><b>Seasonal river flow</b> follows India's real IMD monsoon calendar, but the flow
+          <em>amount</em> is illustrative of the cycle, not gauge discharge. The <b>impact
+          simulator</b> uses real elevation but a uniform water line, not wave physics. The
+          <b>sea-level &amp; ocean-depth shells</b> are exaggerated at globe scale so a few metres
+          are visible. The <em>shape</em> is real; the <em>scale</em> is illustrative — and each
+          note below spells out exactly which.</p>
+        </div>
+
+        <div class="i3-tier i3-tier--gap">
+          <h5>🟥 Declared gaps — honestly not shown, never faked</h5>
+          <p><b>43 districts show grey</b> — no confident Census match, so no invented number.
+          Only <b>13 districts</b> light up in "ledger depth" mode; the other 581 are placed and
+          named, <em>not</em> fabricated to Kolkata depth (structure scaled, not figures).
+          <b>Agriculture zones, pre-2000 zoning history, per-river discharge,</b> and the
+          <b>full court-case universe</b> are declared gaps — India has no open dataset for them,
+          so they're absent, not guessed.</p>
+        </div>
+
+        <p class="i3-real-foot">The rule across the whole atlas: <b>open-sourced-or-a-gap, never
+        faked.</b> Where reality is available it's here as measured; where it isn't, the globe
+        tells you — that's what makes it trustworthy, not just detailed. Each layer's own note
+        is below.</p>
+      </div>
+    </details>
 
     <div class="i3-gap">
       <strong>The Impact simulator is a real-elevation bathtub, not a physics forecast.</strong>
