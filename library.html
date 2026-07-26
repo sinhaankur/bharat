@@ -641,7 +641,7 @@
           ${p.impact_gap ? `<p class="pol-gap"><b>⚠️ Honest gap:</b> ${escH(p.impact_gap)}</p>` : ''}
           <div class="pol-links">
             ${p.book_page ? `<button data-pol-page="${p.book_page}">📖 read it in the book (p.${p.book_page})</button>` : ''}
-            <a href="india-3d.html" title="see the states on the 3D globe">🌏 on the globe</a>
+            <a href="india-3d.html?highlight=${encodeURIComponent((p.shaped || []).join(','))}&label=${encodeURIComponent(p.title)}" title="see these states light up on the 3D globe">🌏 see it on the 3D globe</a>
             ${p.ref ? `<a href="${escH(p.ref)}" target="_blank" rel="noopener">🔗 source</a>` : ''}
           </div>
         </article>`;

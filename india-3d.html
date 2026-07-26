@@ -110,6 +110,10 @@
       <button type="button" class="i3-help" id="i3-help" title="Show the quick tour again" aria-label="Show the quick tour">?</button>
     </div>
     <div id="i3-status">Loading map…</div>
+    <div id="i3-hilite" hidden style="display:flex;flex-wrap:wrap;align-items:center;gap:0.5rem;margin:0.3rem 0 0.4rem;padding:0.5rem 0.8rem;background:oklch(0.24 0.06 78 / 0.35);border:1px solid var(--warm);border-radius:var(--radius);font-family:var(--font-mono);font-size:12px">
+      <span id="i3-hilite-txt" style="color:oklch(0.9 0.08 85)"></span>
+      <button type="button" id="i3-hilite-clear" style="background:oklch(0.2 0.02 250);color:var(--foreground);border:1px solid var(--border-strong);border-radius:999px;padding:2px 10px;font-family:var(--font-mono);font-size:11px;cursor:pointer">clear ✕</button>
+    </div>
 
     <!-- GLOBE-FIRST: the hero moves up here (canvas + drop/street overlay) -->
     <div id="i3-stage-slot"></div>
@@ -422,6 +426,17 @@
     ];
 
     let STATES = null, RIVERS = null, FISCAL = null, WORLD = null, ENC = null, SEA = null, ROADS = null, LAKES = null, RAIL = null, ZONES = null, AQI = null, DISTRICTS = null;
+
+    // ---- highlight states from the URL (?highlight=State1,State2&label=…) ----
+    // Lets other pages (e.g. the reading-room policy cards) open the globe focused on the
+    // states a policy shaped. Those states glow + rise; the rest dim. This is the "3D as the
+    // site's front door" wiring — every place-claim can point AT the globe.
+    const _hilNorm = s => s.trim().toLowerCase().replace(/&/g, 'and').replace(/\s+/g, ' ');
+    const HILITE = (function () {
+      const p = new URLSearchParams(location.search).get('highlight');
+      return p ? new Set(p.split(',').map(_hilNorm).filter(Boolean)) : null;
+    })();
+    const HILITE_LABEL = new URLSearchParams(location.search).get('label') || '';
     // PM2.5 → colour (green clean → dark red hazardous). WHO annual guideline is 5 µg/m³.
     function aqiColor(pm) {
       const stops = [[5, 0x3ec46d], [12, 0x9ccb3b], [35, 0xf2c53d], [55, 0xf28d3d], [75, 0xd8433c], [110, 0x8b2fb0]];
@@ -635,8 +650,14 @@
       for (const f of STATES.features) {
         const v = val(f.properties.ST_NM);
         const t = (typeof v === 'number') ? v / vmax : 0;
-        const alt = 0.05 + t * H * 0.12;
-        const color = (typeof v === 'number') ? ramp(t) : new THREE.Color(0.30, 0.30, 0.34);
+        let alt = 0.05 + t * H * 0.12;
+        let color = (typeof v === 'number') ? ramp(t) : new THREE.Color(0.30, 0.30, 0.34);
+        // highlight mode: the named states glow gold + rise; the rest dim right down
+        if (HILITE) {
+          const on = HILITE.has(_hilNorm(f.properties.ST_NM || ''));
+          if (on) { color = new THREE.Color(0xffb43c); alt = Math.max(alt, 0.12) + 0.14; }
+          else { color = color.clone().multiplyScalar(0.35); }
+        }
         for (const ring of ringsOf(f.geometry)) {
           if (ring.length >= 3) statesGroup.add(raisedRing(ring, alt, color));
         }
@@ -1197,6 +1218,20 @@
       buildWorld();
       rebuild();
       applySea();
+      // highlight mode (opened from another page with ?highlight=…): show a banner + let it clear
+      if (HILITE && HILITE.size) {
+        const el = document.getElementById('i3-hilite'), txt = document.getElementById('i3-hilite-txt');
+        const names = STATES.features.map(f => f.properties.ST_NM).filter(n => HILITE.has(_hilNorm(n || '')));
+        txt.innerHTML = `✨ Highlighting <b>${names.length}</b> state${names.length === 1 ? '' : 's'}` +
+          (HILITE_LABEL ? ` — <b>${HILITE_LABEL.replace(/[<>]/g, '')}</b>` : '') +
+          `: ${names.join(', ')}`;
+        el.hidden = false;
+        document.getElementById('i3-hilite-clear').addEventListener('click', () => {
+          HILITE.clear(); el.hidden = true; buildStates();
+          history.replaceState(null, '', location.pathname);
+        });
+        controls.autoRotate = false;   // hold still so the user sees the highlighted states
+      }
       document.getElementById('i3-layer').addEventListener('change', rebuild);
       document.getElementById('i3-height').addEventListener('input', buildStates);
       document.getElementById('i3-rivers').addEventListener('change', buildRivers);
