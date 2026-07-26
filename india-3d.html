@@ -170,7 +170,8 @@
       <em>grey (a gap)</em>, not an invented number. The <b>"sourced ledger depth"</b> mode lights
       up only the <b>13 districts with a full money-ledger</b> (Kolkata-depth); the other 581 are
       named and placed, <em>not</em> fabricated to that depth — the atlas scales structure, not
-      figures. Hover any marker for its name + value.
+      figures. <b>Hover</b> any marker for its name + value; <b>click</b> it to open that
+      district's page.
     </div>
     <div class="i3-gap">
       <strong>Air quality is annual-average, not live.</strong> The 😷 layer stands a coloured
@@ -929,32 +930,54 @@
       loop();
     }
 
-    // hover a district marker → tooltip with its name + the current metric's real value.
-    // Raycasts against the one InstancedMesh; instanceId indexes back into DIST_ROWS.
+    // hover a district marker → tooltip with its name + the current metric's real value;
+    // CLICK it → open that district's page (index.html?state=…&district=…). The globe becomes
+    // a navigation surface, not just a display. Raycasts against the one InstancedMesh;
+    // instanceId indexes back into DIST_ROWS. Names match the ledger keys exactly (594/594),
+    // so every marker deep-links and drills all the way in.
     const _hray = new THREE.Raycaster();
-    _hray.params.Points = _hray.params.Points || {};
+    let hoverRow = null;   // the district currently under the cursor (for the click)
+    function districtAt(ev) {
+      if (!distMesh || !document.getElementById('i3-districts').checked) return null;
+      const rect = canvas.getBoundingClientRect();
+      const nx = ((ev.clientX - rect.left) / rect.width) * 2 - 1;
+      const ny = -((ev.clientY - rect.top) / rect.height) * 2 + 1;
+      _hray.setFromCamera(new THREE.Vector2(nx, ny), camera);
+      const hit = _hray.intersectObject(distMesh, false)[0];
+      return (hit && hit.instanceId != null) ? DIST_ROWS[hit.instanceId] : null;
+    }
     function wireDistrictHover() {
       const tip = document.getElementById('i3-tip');
       canvas.addEventListener('pointermove', (ev) => {
-        if (!distMesh || !document.getElementById('i3-districts').checked) { tip.hidden = true; return; }
-        const rect = canvas.getBoundingClientRect();
-        const nx = ((ev.clientX - rect.left) / rect.width) * 2 - 1;
-        const ny = -((ev.clientY - rect.top) / rect.height) * 2 + 1;
-        _hray.setFromCamera(new THREE.Vector2(nx, ny), camera);
-        const hit = _hray.intersectObject(distMesh, false)[0];
-        if (!hit || hit.instanceId == null) { tip.hidden = true; return; }
-        const r = DIST_ROWS[hit.instanceId];
+        const r = districtAt(ev);
+        hoverRow = r;
+        canvas.style.cursor = r ? 'pointer' : 'grab';
         if (!r) { tip.hidden = true; return; }
+        const rect = canvas.getBoundingClientRect();
         const metric = document.getElementById('i3-dmetric').value;
         const pops = DIST_ROWS.map(x => x[4]).filter(p => typeof p === 'number');
         const label = distColorVal(r, metric, pops.length ? Math.max(...pops) : 1e7)[2];
         const stName = DISTRICTS.states[r[1]] || '';
-        tip.innerHTML = `<b>${r[0]}</b> <span style="opacity:.6">${stName}</span><br>${label}${r[6] ? ' · 📒 deep ledger' : ''}`;
+        tip.innerHTML = `<b>${r[0]}</b> <span style="opacity:.6">${stName}</span><br>${label}${r[6] ? ' · 📒 deep ledger' : ''}<br><span style="opacity:.55">click → open district →</span>`;
         tip.style.left = (ev.clientX - rect.left) + 'px';
         tip.style.top = (ev.clientY - rect.top) + 'px';
         tip.hidden = false;
       });
-      canvas.addEventListener('pointerleave', () => { tip.hidden = true; });
+      canvas.addEventListener('pointerleave', () => { tip.hidden = true; hoverRow = null; });
+      // click a marker → its district page. Guard against drag: only fire if the pointer
+      // barely moved between down and up (a real click, not an orbit-drag).
+      let dp = null;
+      canvas.addEventListener('pointerdown', (e) => { dp = { x: e.clientX, y: e.clientY }; });
+      canvas.addEventListener('pointerup', (e) => {
+        if (!dp) return;
+        const moved = Math.hypot(e.clientX - dp.x, e.clientY - dp.y);
+        dp = null;
+        if (moved > 5) return;                 // that was a drag/orbit, not a click
+        const r = districtAt(e);
+        if (!r) return;
+        const st = DISTRICTS.states[r[1]] || '';
+        location.href = `index.html?state=${encodeURIComponent(st)}&district=${encodeURIComponent(r[0])}`;
+      });
     }
 
     // ---- fly down to real streets (OpenStreetMap) ----
