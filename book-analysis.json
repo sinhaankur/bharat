@@ -1,0 +1,70 @@
+{
+ "_meta": {
+  "title": "Content analysis of the reading-room books (measured from OCR full text)",
+  "method": "Downloaded the Internet Archive djVu OCR text and counted register lexicons per 1,000 words. Indicative classification, not a definitive one \u2014 OCR is noisy and lexicons are hand-built. Shown so you can see WHAT KIND of book this is, empirically, before you read it.",
+  "source": "Archive.org OCR (in.ernet.dli.2015.147284)"
+ },
+ "books": {
+  "in.ernet.dli.2015.147284": {
+   "title": "My Days with Nehru",
+   "words": 113019,
+   "unique_words": 12186,
+   "registers_per_1k": {
+    "technical_administrative": 9.1,
+    "political": 8.45,
+    "personal_gossip": 8.38,
+    "emotional_bias_laden": 1.3
+   },
+   "first_person_per_1k": 16.9,
+   "year_mentions": 452,
+   "top_nouns": [
+    [
+     "Nehru",
+     864
+    ],
+    [
+     "India",
+     454
+    ],
+    [
+     "Minister",
+     434
+    ],
+    [
+     "Prime",
+     341
+    ],
+    [
+     "Indira",
+     203
+    ],
+    [
+     "Delhi",
+     154
+    ],
+    [
+     "Congress",
+     138
+    ],
+    [
+     "Gandhi",
+     89
+    ],
+    [
+     "Sanjay",
+     84
+    ],
+    [
+     "Kashmir",
+     77
+    ]
+   ],
+   "verdict": "An insider MEMOIR, not a history. Administrative, political and personal content run in near-equal measure (~8\u20139 per 1,000 words each), but the first-person voice is far denser (16.9/1k) \u2014 this is one man's vantage, and the personal/gossip register is as heavy as the politics. Read as testimony, weighed, not as neutral record.",
+   "mix_label": {
+    "technical": 35,
+    "political": 33,
+    "personal": 32
+   }
+  }
+ }
+}
