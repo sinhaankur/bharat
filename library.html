@@ -92,15 +92,28 @@
       .jr-step:nth-child(even) .jr-media { order: 0; }
       .jr-letter { transform: none; padding: 1.4rem 1.3rem; }
     }
+    /* policy filter bar — interactive: click a state to see only its policies */
+    .pol-filter { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 1.2rem 0 0.4rem; }
+    .pol-fbtn { font-family: var(--font-mono); font-size: 11px; padding: 4px 11px; border-radius: 999px; background: oklch(0.18 0.02 250); color: var(--muted-foreground); border: 1px solid var(--border-strong); cursor: pointer; transition: border-color .15s, background .15s, color .15s; }
+    .pol-fbtn:hover { border-color: var(--warm); color: var(--foreground); }
+    .pol-fbtn.active { background: oklch(0.28 0.07 78); border-color: var(--warm); color: oklch(0.94 0.05 90); }
+    .pol-count { font-family: var(--font-mono); font-size: 11px; color: oklch(0.82 0.13 78); min-height: 1.1em; margin-bottom: 0.3rem; }
     /* policy cards — books → policy → state → map */
-    .pol-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; margin-top: 1.4rem; }
-    .pol-card { border: 1px solid var(--border-strong); border-radius: var(--radius); background: oklch(0.155 0.005 250); padding: 1rem 1.05rem; display: flex; flex-direction: column; }
+    .pol-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; margin-top: 0.6rem; }
+    .pol-card { border: 1px solid var(--border-strong); border-radius: var(--radius); background: oklch(0.155 0.005 250); padding: 1rem 1.05rem; display: flex; flex-direction: column; transition: border-color .15s, transform .15s; }
+    .pol-card:hover { border-color: oklch(0.5 0.06 250); transform: translateY(-2px); }
+    .pol-cardtop { display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.5rem; }
+    .pol-icon { font-size: 1.6rem; line-height: 1; filter: saturate(1.1); flex-shrink: 0; }
     .pol-card .pol-when { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.04em; color: oklch(0.82 0.13 78); }
-    .pol-card h3 { font-size: 1.08rem; margin: 0.15rem 0 0.5rem; line-height: 1.22; }
+    .pol-card h3 { font-size: 1.05rem; margin: 0.1rem 0 0; line-height: 1.22; }
+    .pol-states-h { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: oklch(0.72 0.06 250); margin-bottom: 0.4rem; }
+    .pol-states-sub { text-transform: none; letter-spacing: 0; opacity: 0.7; }
     .pol-card .pol-what { font-size: 0.86rem; line-height: 1.6; color: var(--muted-foreground); margin: 0 0 0.7rem; }
     .pol-states { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-bottom: 0.6rem; }
-    .pol-states a { font-family: var(--font-mono); font-size: 10px; padding: 2px 8px; border-radius: 999px; background: oklch(0.22 0.04 250); color: oklch(0.86 0.09 230); border: 1px solid var(--border-strong); }
+    .pol-states a { font-family: var(--font-mono); font-size: 10px; padding: 2px 8px; border-radius: 999px; background: oklch(0.22 0.04 250); color: oklch(0.86 0.09 230); border: 1px solid var(--border-strong); display: inline-flex; align-items: baseline; gap: 0.35rem; }
     .pol-states a:hover { border-color: var(--warm); color: var(--foreground); }
+    .pol-states .pol-fig { font-size: 9px; color: oklch(0.78 0.12 78); opacity: 0.9; }
+    .pol-states a:hover .pol-fig { color: oklch(0.86 0.13 78); }
     .pol-note { font-size: 0.78rem; color: var(--muted-foreground); line-height: 1.5; margin: 0 0 0.6rem; }
     .pol-impact { font-size: 0.82rem; line-height: 1.55; border-left: 3px solid oklch(0.7 0.16 145); padding-left: 0.7rem; margin: 0 0 0.5rem; color: oklch(0.88 0.03 145); }
     .pol-gap { font-size: 0.76rem; line-height: 1.5; border-left: 3px solid oklch(0.62 0.16 60); padding-left: 0.7rem; margin: 0 0 0.7rem; color: oklch(0.82 0.08 70); }
@@ -354,6 +367,8 @@
         what it <em>did</em>, not blamed or credited for a state's condition today (that's a causal
         leap we don't make).</p>
       </div>
+      <div class="pol-filter" id="pol-filter"></div>
+      <div class="pol-count" id="pol-count"></div>
       <div class="pol-grid" id="pol-grid"></div>
       <p class="lib-note" style="margin-top:1.4rem">
         Policy facts (dates, structure, which states) are from standard references — each card links
@@ -533,28 +548,67 @@
     if (q) { const byId = BOOKS.findIndex(b => b.id === q); startIdx = byId >= 0 ? byId : (Number(q) || 0); }
     selectBook(Math.max(0, Math.min(BOOKS.length - 1, startIdx)), pg);
 
-    // policies that shaped the states — books → policy → state → map. Loaded from policies.json.
-    fetch('policies.json').then(r => r.json()).then(d => {
+    // policies that shaped the states — books → policy → state → map, with LIVE ledger figures.
+    // Loads policies.json + india-fiscal.json so each state chip shows its real population +
+    // own-tax revenue (the atlas ledger) — the policy's states, quantified today.
+    Promise.all([
+      fetch('policies.json').then(r => r.json()),
+      fetch('india-fiscal.json').then(r => r.json()).catch(() => ({ states: {} })),
+    ]).then(([d, fiscal]) => {
+      const FISCAL = fiscal.states || {};
       const grid = document.getElementById('pol-grid');
       if (!grid || !d.policies) return;
+      // a state chip carries its real ledger figure inline: "Kerala · 3.6cr · ₹100k cr"
+      const stateChip = s => {
+        const f = FISCAL[s];
+        const pop = f && typeof f.pop_cr === 'number' ? `${f.pop_cr}cr` : null;
+        const ot = f && Array.isArray(f.ownTax) && f.ownTax.length ? `₹${f.ownTax[f.ownTax.length - 1]}k cr` : null;
+        const fig = [pop, ot].filter(Boolean).join(' · ');
+        const title = f ? `${escH(s)} — ${fig || 'in the ledger'} · click to open on the map` : `${escH(s)} — click to open`;
+        return `<a href="index.html?state=${encodeURIComponent(s)}" title="${title}">${escH(s)}${fig ? `<span class="pol-fig">${fig}</span>` : ''}</a>`;
+      };
+      // an interactive filter bar — every state that any policy touched, click to filter
+      const allStates = [...new Set(d.policies.flatMap(p => p.shaped || []))].sort();
+      const filterBar = document.getElementById('pol-filter');
+      if (filterBar) filterBar.innerHTML =
+        `<button class="pol-fbtn active" data-fstate="">🏛️ All ${d.policies.length}</button>` +
+        allStates.map(s => `<button class="pol-fbtn" data-fstate="${escH(s)}">${escH(s)}</button>`).join('');
+
       grid.innerHTML = d.policies.map(p => {
-        const states = (p.shaped || []).map(s =>
-          `<a href="index.html?state=${encodeURIComponent(s)}" title="see ${escH(s)} on the map">${escH(s)}</a>`).join('');
-        return `<article class="pol-card">
-          <div class="pol-when">${escH(p.when)}</div>
-          <h3>${escH(p.title)}</h3>
+        const states = (p.shaped || []).map(stateChip).join('');
+        return `<article class="pol-card" data-states="${escH((p.shaped || []).join('|'))}">
+          <div class="pol-cardtop">
+            <span class="pol-icon">${p.icon || '📜'}</span>
+            <div><div class="pol-when">${escH(p.when)}</div><h3>${escH(p.title)}</h3></div>
+          </div>
           <p class="pol-what">${escH(p.what)}</p>
+          <div class="pol-states-h">🏛️ States it shaped <span class="pol-states-sub">— click a chip for its real ledger figure on the map</span></div>
           <div class="pol-states">${states}</div>
           ${p.shaped_note ? `<p class="pol-note">${escH(p.shaped_note)}</p>` : ''}
-          ${p.impact ? `<p class="pol-impact"><b>What it did →</b> ${escH(p.impact)}</p>` : ''}
-          ${p.impact_gap ? `<p class="pol-gap"><b>Honest gap:</b> ${escH(p.impact_gap)}</p>` : ''}
+          ${p.impact ? `<p class="pol-impact"><b>✅ What it did →</b> ${escH(p.impact)}</p>` : ''}
+          ${p.impact_gap ? `<p class="pol-gap"><b>⚠️ Honest gap:</b> ${escH(p.impact_gap)}</p>` : ''}
           <div class="pol-links">
-            ${p.book_page ? `<button data-pol-page="${p.book_page}">↳ read it in the book (p.${p.book_page})</button>` : ''}
+            ${p.book_page ? `<button data-pol-page="${p.book_page}">📖 read it in the book (p.${p.book_page})</button>` : ''}
             <a href="india-3d.html" title="see the states on the 3D globe">🌏 on the globe</a>
-            ${p.ref ? `<a href="${escH(p.ref)}" target="_blank" rel="noopener">source ↗</a>` : ''}
+            ${p.ref ? `<a href="${escH(p.ref)}" target="_blank" rel="noopener">🔗 source</a>` : ''}
           </div>
         </article>`;
       }).join('');
+
+      // interactive: filtering by state shows only the policies that shaped it
+      if (filterBar) filterBar.addEventListener('click', e => {
+        const btn = e.target.closest('.pol-fbtn'); if (!btn) return;
+        filterBar.querySelectorAll('.pol-fbtn').forEach(b => b.classList.toggle('active', b === btn));
+        const st = btn.dataset.fstate;
+        let shown = 0;
+        grid.querySelectorAll('.pol-card').forEach(card => {
+          const match = !st || card.dataset.states.split('|').includes(st);
+          card.style.display = match ? '' : 'none';
+          if (match) shown++;
+        });
+        const cnt = document.getElementById('pol-count');
+        if (cnt) cnt.textContent = st ? `${shown} polic${shown === 1 ? 'y' : 'ies'} shaped ${st}` : '';
+      });
       // "read it in the book" → open the reader at that page + scroll up
       grid.querySelectorAll('[data-pol-page]').forEach(btn => btn.addEventListener('click', () => {
         selectBook(current, Number(btn.dataset.polPage) || 1);

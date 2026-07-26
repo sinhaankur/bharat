@@ -1,70 +1,156 @@
 {
-  "_meta": {
-    "title": "Nehru-era policies that shaped the states (1947–1964)",
-    "purpose": "Connect the primary-source memoirs (reading room) to how policy shaped India's states — each policy links to where it's discussed in the book and to the states on the map. Impact is stated sourced-or-a-gap; this is NOT a causal claim that a policy alone caused an outcome.",
-    "sources": "Wikipedia (per-policy articles) + standard histories; dates/structure are citable facts, 'impact' notes are directional and marked where they are a gap.",
-    "honesty": "History is contested. These cards say what a policy DID (documented) and which states it touched — not that it single-handedly 'caused' a state's condition today. Causation needs analysis; gaps are marked."
+ "_meta": {
+  "title": "Nehru-era policies that shaped the states (1947–1964)",
+  "purpose": "Connect the primary-source memoirs (reading room) to how policy shaped India's states — each policy links to where it's discussed in the book and to the states on the map. Impact is stated sourced-or-a-gap; this is NOT a causal claim that a policy alone caused an outcome.",
+  "sources": "Wikipedia (per-policy articles) + standard histories; dates/structure are citable facts, 'impact' notes are directional and marked where they are a gap.",
+  "honesty": "History is contested. These cards say what a policy DID (documented) and which states it touched — not that it single-handedly 'caused' a state's condition today. Causation needs analysis; gaps are marked."
+ },
+ "policies": [
+  {
+   "id": "src-1956",
+   "title": "States Reorganisation Act, 1956",
+   "when": "31 Aug 1956 (effective 1 Nov 1956)",
+   "what": "Redrew India's internal map along LINGUISTIC lines — the largest boundary change since independence. Replaced the Part A/B/C/D system with 14 states + 6 union territories (Fazl Ali Commission, 1953–55).",
+   "shaped": [
+    "Andhra Pradesh",
+    "Kerala",
+    "Karnataka",
+    "Maharashtra",
+    "Madhya Pradesh",
+    "Tamil Nadu"
+   ],
+   "shaped_note": "Formed/redrew nearly every state — Andhra Pradesh (Telugu), Kerala (Malayalam), Mysore→Karnataka (Kannada), Bombay→later Maharashtra/Gujarat (Marathi/Gujarati).",
+   "impact": "The state boundaries the atlas maps today largely date from here. It set the precedent that language = state — the organising logic of Indian federalism.",
+   "impact_gap": "Whether linguistic states helped or hurt development is a live scholarly debate — not settled, so not asserted.",
+   "book_page": 120,
+   "ref": "https://en.wikipedia.org/wiki/States_Reorganisation_Act,_1956",
+   "icon": "🗺️"
   },
-  "policies": [
-    {
-      "id": "src-1956",
-      "title": "States Reorganisation Act, 1956",
-      "when": "31 Aug 1956 (effective 1 Nov 1956)",
-      "what": "Redrew India's internal map along LINGUISTIC lines — the largest boundary change since independence. Replaced the Part A/B/C/D system with 14 states + 6 union territories (Fazl Ali Commission, 1953–55).",
-      "shaped": ["Andhra Pradesh", "Kerala", "Karnataka", "Maharashtra", "Madhya Pradesh", "Tamil Nadu"],
-      "shaped_note": "Formed/redrew nearly every state — Andhra Pradesh (Telugu), Kerala (Malayalam), Mysore→Karnataka (Kannada), Bombay→later Maharashtra/Gujarat (Marathi/Gujarati).",
-      "impact": "The state boundaries the atlas maps today largely date from here. It set the precedent that language = state — the organising logic of Indian federalism.",
-      "impact_gap": "Whether linguistic states helped or hurt development is a live scholarly debate — not settled, so not asserted.",
-      "book_page": 120,
-      "ref": "https://en.wikipedia.org/wiki/States_Reorganisation_Act,_1956"
-    },
-    {
-      "id": "plan-1951",
-      "title": "Planning Commission & the Five-Year Plans",
-      "when": "1950 (Commission) · 1st Plan 1951–56, 2nd 1956–61",
-      "what": "Set up central economic planning: the Planning Commission allocated capital to states by plan. The 2nd Plan (Mahalanobis) bet on heavy industry and public-sector steel.",
-      "shaped": ["Odisha", "Jharkhand", "Chhattisgarh", "West Bengal", "Madhya Pradesh"],
-      "shaped_note": "Directed where public capital and heavy industry landed — the mineral-belt states got the steel plants; others got dams and irrigation.",
-      "impact": "Central-to-state capital allocation as a system starts here — the ancestor of the Finance Commission devolution the atlas tracks.",
-      "impact_gap": "Per-state plan-outlay-to-outcome is not cleanly reconstructable from open data for the 1950s — a gap.",
-      "book_page": 60,
-      "ref": "https://en.wikipedia.org/wiki/Five-Year_Plans_of_India"
-    },
-    {
-      "id": "psu-steel",
-      "title": "Public-sector steel towns",
-      "when": "1955–1959 (Bhilai, Rourkela, Durgapur)",
-      "what": "State-built integrated steel plants — Bhilai (Soviet aid), Rourkela (West German), Durgapur (British) — planted heavy industry and whole new cities in the mineral belt.",
-      "shaped": ["Chhattisgarh", "Odisha", "West Bengal"],
-      "shaped_note": "Bhilai (then MP, now Chhattisgarh), Rourkela (Odisha), Durgapur (West Bengal) — company towns that reshaped their districts.",
-      "impact": "Created industrial districts and PSU employment that still anchor these local economies.",
-      "impact_gap": "The long-run local prosperity vs displacement balance is contested — stated as documented facts, not a verdict.",
-      "book_page": 75,
-      "ref": "https://en.wikipedia.org/wiki/Bhilai_Steel_Plant"
-    },
-    {
-      "id": "iit",
-      "title": "The IITs & scientific institutions",
-      "when": "1951 (Kharagpur) onward",
-      "what": "Founded the Indian Institutes of Technology and a network of national labs — Nehru's bet on science and higher technical education as nation-building.",
-      "shaped": ["West Bengal", "Maharashtra", "Tamil Nadu", "Uttar Pradesh", "Delhi"],
-      "shaped_note": "IIT Kharagpur (1951), then Bombay, Madras, Kanpur, Delhi — concentrated elite technical capacity in these states.",
-      "impact": "Seeded the human-capital clusters that later feed India's tech economy — a state-level advantage that compounds.",
-      "impact_gap": "Attributing a state's present tech economy to a 1950s institute is exactly the causal leap we DON'T make — a gap.",
-      "book_page": 90,
-      "ref": "https://en.wikipedia.org/wiki/Indian_Institutes_of_Technology"
-    },
-    {
-      "id": "bhakra",
-      "title": "Bhakra-Nangal & the big dams",
-      "when": "1948–1963 (Bhakra dam inaugurated 1963)",
-      "what": "Multipurpose river-valley projects — Nehru's “temples of modern India.” Bhakra-Nangal on the Sutlej brought irrigation and power to the northwest.",
-      "shaped": ["Punjab", "Haryana", "Rajasthan", "Himachal Pradesh"],
-      "shaped_note": "Bhakra-Nangal irrigated Punjab/Haryana/Rajasthan — the water base later crucial to the Green Revolution.",
-      "impact": "The irrigation these dams provided underpins the agricultural map the atlas shows in the northwest.",
-      "impact_gap": "Dam displacement and long-run ecological cost are real and debated — not netted out here.",
-      "book_page": 68,
-      "ref": "https://en.wikipedia.org/wiki/Bhakra_Dam"
-    }
-  ]
+  {
+   "id": "plan-1951",
+   "title": "Planning Commission & the Five-Year Plans",
+   "when": "1950 (Commission) · 1st Plan 1951–56, 2nd 1956–61",
+   "what": "Set up central economic planning: the Planning Commission allocated capital to states by plan. The 2nd Plan (Mahalanobis) bet on heavy industry and public-sector steel.",
+   "shaped": [
+    "Odisha",
+    "Jharkhand",
+    "Chhattisgarh",
+    "West Bengal",
+    "Madhya Pradesh"
+   ],
+   "shaped_note": "Directed where public capital and heavy industry landed — the mineral-belt states got the steel plants; others got dams and irrigation.",
+   "impact": "Central-to-state capital allocation as a system starts here — the ancestor of the Finance Commission devolution the atlas tracks.",
+   "impact_gap": "Per-state plan-outlay-to-outcome is not cleanly reconstructable from open data for the 1950s — a gap.",
+   "book_page": 60,
+   "ref": "https://en.wikipedia.org/wiki/Five-Year_Plans_of_India",
+   "icon": "📊"
+  },
+  {
+   "id": "psu-steel",
+   "title": "Public-sector steel towns",
+   "when": "1955–1959 (Bhilai, Rourkela, Durgapur)",
+   "what": "State-built integrated steel plants — Bhilai (Soviet aid), Rourkela (West German), Durgapur (British) — planted heavy industry and whole new cities in the mineral belt.",
+   "shaped": [
+    "Chhattisgarh",
+    "Odisha",
+    "West Bengal"
+   ],
+   "shaped_note": "Bhilai (then MP, now Chhattisgarh), Rourkela (Odisha), Durgapur (West Bengal) — company towns that reshaped their districts.",
+   "impact": "Created industrial districts and PSU employment that still anchor these local economies.",
+   "impact_gap": "The long-run local prosperity vs displacement balance is contested — stated as documented facts, not a verdict.",
+   "book_page": 75,
+   "ref": "https://en.wikipedia.org/wiki/Bhilai_Steel_Plant",
+   "icon": "🏭"
+  },
+  {
+   "id": "iit",
+   "title": "The IITs & scientific institutions",
+   "when": "1951 (Kharagpur) onward",
+   "what": "Founded the Indian Institutes of Technology and a network of national labs — Nehru's bet on science and higher technical education as nation-building.",
+   "shaped": [
+    "West Bengal",
+    "Maharashtra",
+    "Tamil Nadu",
+    "Uttar Pradesh",
+    "Delhi"
+   ],
+   "shaped_note": "IIT Kharagpur (1951), then Bombay, Madras, Kanpur, Delhi — concentrated elite technical capacity in these states.",
+   "impact": "Seeded the human-capital clusters that later feed India's tech economy — a state-level advantage that compounds.",
+   "impact_gap": "Attributing a state's present tech economy to a 1950s institute is exactly the causal leap we DON'T make — a gap.",
+   "book_page": 90,
+   "ref": "https://en.wikipedia.org/wiki/Indian_Institutes_of_Technology",
+   "icon": "🎓"
+  },
+  {
+   "id": "bhakra",
+   "title": "Bhakra-Nangal & the big dams",
+   "when": "1948–1963 (Bhakra dam inaugurated 1963)",
+   "what": "Multipurpose river-valley projects — Nehru's “temples of modern India.” Bhakra-Nangal on the Sutlej brought irrigation and power to the northwest.",
+   "shaped": [
+    "Punjab",
+    "Haryana",
+    "Rajasthan",
+    "Himachal Pradesh"
+   ],
+   "shaped_note": "Bhakra-Nangal irrigated Punjab/Haryana/Rajasthan — the water base later crucial to the Green Revolution.",
+   "impact": "The irrigation these dams provided underpins the agricultural map the atlas shows in the northwest.",
+   "impact_gap": "Dam displacement and long-run ecological cost are real and debated — not netted out here.",
+   "book_page": 68,
+   "ref": "https://en.wikipedia.org/wiki/Bhakra_Dam",
+   "icon": "🌊"
+  },
+  {
+   "id": "bombay-1960",
+   "title": "Bombay Reorganisation Act, 1960",
+   "when": "1 May 1960",
+   "what": "Split the bilingual Bombay State into two linguistic states — Maharashtra (Marathi) and Gujarat (Gujarati) — after the Samyukta Maharashtra and Mahagujarat movements.",
+   "shaped": [
+    "Maharashtra",
+    "Gujarat"
+   ],
+   "shaped_note": "Created Maharashtra and Gujarat as separate states; Bombay city stayed with Maharashtra.",
+   "impact": "Two of India’s largest economies got their modern form and capitals (Mumbai, later Gandhinagar) here.",
+   "impact_gap": "Which state “won” Bombay’s wealth is still argued — not adjudicated here.",
+   "book_page": 125,
+   "ref": "https://en.wikipedia.org/wiki/Bombay_Reorganisation_Act,_1960",
+   "icon": "🏙️"
+  },
+  {
+   "id": "hindu-code",
+   "title": "The Hindu Code Bills",
+   "when": "1955–1956",
+   "what": "A set of laws (Hindu Marriage Act, Succession Act, Minority & Guardianship, Adoptions & Maintenance) that reformed Hindu personal law — legalising divorce, giving women inheritance rights.",
+   "shaped": [
+    "Uttar Pradesh",
+    "Bihar",
+    "Madhya Pradesh",
+    "Rajasthan"
+   ],
+   "shaped_note": "National in scope; applied Hindu personal-law reform across every state — a social, not territorial, reshaping.",
+   "impact": "Among the most consequential social reforms of the era — women’s legal inheritance and divorce rights date from here.",
+   "impact_gap": "Real-world effect on women’s outcomes by state is not cleanly measurable from open data — a gap.",
+   "book_page": 100,
+   "ref": "https://en.wikipedia.org/wiki/Hindu_code_bills",
+   "icon": "⚖️"
+  },
+  {
+   "id": "community-dev",
+   "title": "Community Development Programme",
+   "when": "1952 onward",
+   "what": "A nationwide rural-development scheme — blocks, village-level workers, panchayat groundwork — meant to modernise agriculture and village life from the ground up.",
+   "shaped": [
+    "Uttar Pradesh",
+    "Bihar",
+    "West Bengal",
+    "Andhra Pradesh",
+    "Tamil Nadu"
+   ],
+   "shaped_note": "Rolled out through “development blocks” across rural India — the administrative ancestor of today’s block/taluk tier the atlas maps.",
+   "impact": "Set up the block-level administrative grid still used for rural delivery (and still in the atlas’s block dataset).",
+   "impact_gap": "Contemporary assessments judged its actual rural impact mixed — stated, not scored.",
+   "book_page": 82,
+   "ref": "https://en.wikipedia.org/wiki/Community_Development_Programme_(India)",
+   "icon": "🌾"
+  }
+ ]
 }
