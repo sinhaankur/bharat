@@ -154,6 +154,11 @@
     </div>
   </div>
 
+  <script>
+    // mark that the visitor has reached the hero this session, so index.html's front-door
+    // redirect won't bounce them back here when they open "The map".
+    try { sessionStorage.setItem('atlas_seen_hero', '1'); } catch (e) {}
+  </script>
   <script src="nav-data.js"></script>
   <script>
     // Build the rail's pinned views + the launcher from the shared catalog (window.ATLAS_NAV),
