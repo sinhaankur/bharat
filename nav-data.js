@@ -1,0 +1,61 @@
+/* nav-data.js — the SINGLE SOURCE OF TRUTH for the atlas's views.
+   Both the site nav (site-nav.js) and the hero app's rail + "All views" launcher
+   (hero.html) read from this, so the two can never drift. Add a page once, here.
+
+   Each group: { label, items: [ { href, text, hint?, icon?, rail?, ext? } ] }
+     - hint : one-line description (shown in nav dropdowns + launcher)
+     - icon : emoji (used by the hero launcher + rail)
+     - rail : true → also pinned to the hero's slim left rail (the curated few)
+     - ext  : external link (opens in a new tab; skipped by the hero)
+   Exposes window.ATLAS_NAV. Plain script (no modules) so every page can include it. */
+(function (g) {
+  g.ATLAS_NAV = [
+    { label: "Map", items: [
+      { href: "hero.html", text: "★ One screen (globe app)", hint: "the whole atlas on one screen", icon: "🌍" },
+      { href: "index.html", text: "The map", hint: "2D fiscal atlas — every district", icon: "🗺", rail: true },
+      { href: "explore.html", text: "Explore / query", hint: "filter & rank all 594", icon: "🔎", rail: true },
+      { href: "feed.html", text: "News feed", hint: "bias vs the record, by place", icon: "📰", rail: true },
+      { href: "timeline.html", text: "Timeline", hint: "events over time", icon: "🕐" },
+      { href: "encroachment-atlas.html", text: "Built where water returns", hint: "illegal habitation", icon: "🏗" },
+    ]},
+    { label: "3D", items: [
+      { href: "india-3d.html", text: "The globe", hint: "real Earth · 594 districts · layers", icon: "🌍" },
+      { href: "terrain-3d.html", text: "District terrain 3D", hint: "relief · river · flood plain (2D/3D)", icon: "🏔", rail: true },
+      { href: "atlas-3d.html", text: "India by constraint", hint: "states by development constraint", icon: "⛰" },
+      { href: "flood-3d.html", text: "Flood explorer", hint: "water over real terrain", icon: "🌊" },
+      { href: "earth-3d.html", text: "Photoreal Earth", hint: "Google 3D tiles (your key)", icon: "🛰" },
+    ]},
+    { label: "Study", items: [
+      { href: "library.html", text: "Reading room", hint: "read the primary sources", icon: "📖", rail: true },
+      { href: "engines.html", text: "The 7 engines", hint: "the composable lenses", icon: "⚙" },
+      { href: "engine-survey.html", text: "· Survey · origin" },
+      { href: "engine-country.html", text: "· Country" },
+      { href: "engine-development.html", text: "· Development" },
+      { href: "engine-climate.html", text: "· Climate" },
+      { href: "engine-zoning.html", text: "· Land-Zoning" },
+      { href: "engine-corruption.html", text: "· Corruption" },
+      { href: "engine-news.html", text: "· News" },
+      { href: "articles.html", text: "Analysis", hint: "written pieces", icon: "📝" },
+      { href: "history.html", text: "History race", hint: "states over time", icon: "🏁" },
+      { href: "command-chain.html", text: "Chain of command", hint: "who answers to whom", icon: "🔗" },
+      { href: "mesh.html", text: "The mesh", hint: "how it all connects", icon: "🕸" },
+      { href: "global.html", text: "India vs world", hint: "global comparison", icon: "🌐" },
+    ]},
+    { label: "Data", items: [
+      { href: "knowledge.html", text: "Knowledge base", hint: "the data catalog", icon: "📚", rail: true },
+      { href: "data.html", text: "Data & API", hint: "get the data", icon: "🧾" },
+      { href: "references.html", text: "Sources", hint: "every citation", icon: "🔖" },
+      { href: "provenance.html", text: "Provenance ledger", hint: "figure → source, audited", icon: "✅" },
+      { href: "for-organisations.html", text: "For organisations", icon: "🏢" },
+      { href: "share.html", text: "Share", icon: "🔗" },
+    ]},
+    { label: "About", items: [
+      { href: "how-it-works.html", text: "How it works", hint: "the project, explained", icon: "ℹ️" },
+      { href: "about.html", text: "Methodology & disclaimer", icon: "📋" },
+      { href: "privacy-policy.html", text: "Privacy & policy", icon: "🔒" },
+      { href: "sitemap.html", text: "Site map", icon: "🗺" },
+      { href: "usa.html", text: "Compare: US", icon: "🇺🇸" },
+      { href: "https://github.com/sinhaankur/india-fiscal-map", text: "GitHub ↗", ext: true },
+    ]},
+  ];
+})(typeof window !== "undefined" ? window : this);

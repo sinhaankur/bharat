@@ -62,68 +62,23 @@
   // groups stay pragmatic: Explore (the views/tools), Data (get it + audit it),
   // About (the project). No page is orphaned; the old "Understand" group dissolved
   // into the engines (its conceptual pages) + Explore (its 3D/comparison views).
-  // IA regrouped by what you DO (2026-07-27). Task-based tabs: Map (the live 2D
-  // surfaces) · 3D (every 3D view, the front door) · Study (the conceptual + narrative
-  // layers incl. the engines + reading room) · Data (get/audit it) · About. The old
-  // 12-item "Explore" dumping-ground is split; the engines become a Study sub-spine.
-  // Each item has a short `hint` for a layered, scannable menu. No page orphaned.
-  const NAV = [
-    { label: "Map", items: [
-      { href: "hero.html", text: "★ One screen (globe app)", hint: "the whole atlas on one screen" },
-      { href: "index.html", text: "The map", hint: "2D fiscal atlas — every district" },
-      { href: "explore.html", text: "Explore / query", hint: "filter & rank all 594" },
-      { href: "feed.html", text: "News feed", hint: "bias vs the record, by place" },
-      { href: "timeline.html", text: "Timeline", hint: "events over time" },
-      { href: "encroachment-atlas.html", text: "Built where water returns", hint: "illegal habitation" },
-    ]},
-    // 3D — the front door: every interactive three-dimensional view.
-    { label: "3D", items: [
-      { href: "india-3d.html", text: "The globe", hint: "real Earth · 594 districts · layers" },
-      { href: "terrain-3d.html", text: "District terrain 3D", hint: "relief · river · flood plain (2D/3D)" },
-      { href: "atlas-3d.html", text: "India by constraint", hint: "states by development constraint" },
-      { href: "flood-3d.html", text: "Flood explorer", hint: "water over real terrain" },
-      { href: "earth-3d.html", text: "Photoreal Earth", hint: "Google 3D tiles (your key)" },
-    ]},
-    { label: "Study", items: [
-      { href: "library.html", text: "Reading room", hint: "read the primary sources" },
-      { href: "engines.html", text: "The 7 engines", hint: "the composable lenses" },
-      { href: "engine-survey.html", text: "· Survey · origin" },
-      { href: "engine-country.html", text: "· Country" },
-      { href: "engine-development.html", text: "· Development" },
-      { href: "engine-climate.html", text: "· Climate" },
-      { href: "engine-zoning.html", text: "· Land-Zoning" },
-      { href: "engine-corruption.html", text: "· Corruption" },
-      { href: "engine-news.html", text: "· News" },
-      { href: "articles.html", text: "Analysis", hint: "written pieces" },
-      { href: "history.html", text: "History race", hint: "states over time" },
-      { href: "command-chain.html", text: "Chain of command", hint: "who answers to whom" },
-      { href: "mesh.html", text: "The mesh", hint: "how it all connects" },
-      { href: "global.html", text: "India vs world", hint: "global comparison" },
-    ]},
-    { label: "Data", items: [
-      { href: "knowledge.html", text: "Knowledge base", hint: "the data catalog" },
-      { href: "data.html", text: "Data & API", hint: "get the data" },
-      { href: "references.html", text: "Sources", hint: "every citation" },
-      { href: "provenance.html", text: "Provenance ledger", hint: "figure → source, audited" },
-      { href: "for-organisations.html", text: "For organisations" },
-      { href: "share.html", text: "Share" },
-    ]},
-    { label: "About", items: [
-      { href: "how-it-works.html", text: "How it works" },
-      { href: "about.html", text: "Methodology & disclaimer" },
-      { href: "privacy-policy.html", text: "Privacy & policy" },
-      { href: "sitemap.html", text: "Site map" },
-      { href: "usa.html", text: "Compare: US" },
-      { href: "https://github.com/sinhaankur/india-fiscal-map", text: "GitHub ↗", ext: true },
-    ]},
+  // The view catalog is the SINGLE SOURCE OF TRUTH in nav-data.js (window.ATLAS_NAV),
+  // shared with the hero app's rail + launcher so the two can never drift. This nav
+  // just renders it. If nav-data.js failed to load, fall back to a minimal set so the
+  // header never disappears entirely.
+  const FALLBACK_NAV = [
+    { label: "Map", items: [{ href: "index.html", text: "The map" }, { href: "hero.html", text: "One screen" }] },
+    { label: "About", items: [{ href: "sitemap.html", text: "Site map" }] },
   ];
+  // resolved at mount time (after nav-data.js loads), never at IIFE-eval time
+  function getNav() { return (typeof window !== "undefined" && window.ATLAS_NAV) || FALLBACK_NAV; }
 
   const here = (location.pathname.split("/").pop() || "index.html").toLowerCase() || "index.html";
   const isHere = href => !/^https?:/.test(href) && href.split("?")[0].toLowerCase() === here;
-  // which group contains the current page (to highlight the group button)
-  const activeGroup = NAV.find(g => g.items.some(i => isHere(i.href)));
 
   function navHTML() {
+    const NAV = getNav();
+    const activeGroup = NAV.find(g => g.items.some(i => isHere(i.href)));
     const groups = NAV.map(g => {
       const open = g === activeGroup ? " is-current" : "";
       const items = g.items.map(i => {
@@ -148,7 +103,7 @@
   }
 
   function footerHTML() {
-    const cols = NAV.map(g => `
+    const cols = getNav().map(g => `
       <div class="sfoot-col">
         <div class="sfoot-h">${g.label}</div>
         ${g.items.map(i => {
@@ -228,8 +183,22 @@
 
   // Expose the IA so sitemap.html (and anything else) can render the SAME structure
   // without duplicating it — single source of truth for the site's information map.
-  window.SiteNav = { NAV, SITE };
+  window.SiteNav = { get NAV() { return getNav(); }, SITE };
 
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", mount);
-  else mount();
+  // ensure the shared view catalog (nav-data.js) is loaded, THEN mount. If a page already
+  // included nav-data.js, this is instant; otherwise we inject it so no page has to remember to.
+  function ensureNavData(cb) {
+    if (window.ATLAS_NAV) return cb();
+    // derive the path to nav-data.js from this script's own src (same folder)
+    let base = "";
+    const me = document.currentScript || [...document.scripts].find(s => /site-nav\.js/.test(s.src));
+    if (me && me.src) base = me.src.replace(/site-nav\.js.*$/, "");
+    const s = document.createElement("script");
+    s.src = base + "nav-data.js";
+    s.onload = cb; s.onerror = cb;   // fall back to FALLBACK_NAV if it can't load
+    document.head.appendChild(s);
+  }
+  function start() { ensureNavData(mount); }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
+  else start();
 })();
