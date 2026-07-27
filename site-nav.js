@@ -62,45 +62,50 @@
   // groups stay pragmatic: Explore (the views/tools), Data (get it + audit it),
   // About (the project). No page is orphaned; the old "Understand" group dissolved
   // into the engines (its conceptual pages) + Explore (its 3D/comparison views).
+  // IA regrouped by what you DO (2026-07-27). Task-based tabs: Map (the live 2D
+  // surfaces) · 3D (every 3D view, the front door) · Study (the conceptual + narrative
+  // layers incl. the engines + reading room) · Data (get/audit it) · About. The old
+  // 12-item "Explore" dumping-ground is split; the engines become a Study sub-spine.
+  // Each item has a short `hint` for a layered, scannable menu. No page orphaned.
   const NAV = [
-    { label: "Engines", items: [
-      { href: "engines.html", text: "All engines" },
-      { href: "engine-survey.html", text: "Survey · origin" },
-      { href: "engine-country.html", text: "Country" },
-      { href: "engine-development.html", text: "Development" },
-      { href: "engine-climate.html", text: "Climate" },
-      { href: "engine-zoning.html", text: "Land-Zoning" },
-      { href: "engine-corruption.html", text: "Corruption" },
-      { href: "engine-news.html", text: "News" },
+    { label: "Map", items: [
+      { href: "index.html", text: "The map", hint: "2D fiscal atlas — every district" },
+      { href: "explore.html", text: "Explore / query", hint: "filter & rank all 594" },
+      { href: "feed.html", text: "News feed", hint: "bias vs the record, by place" },
+      { href: "timeline.html", text: "Timeline", hint: "events over time" },
+      { href: "encroachment-atlas.html", text: "Built where water returns", hint: "illegal habitation" },
     ]},
-    { label: "Explore", items: [
-      { href: "index.html", text: "Map" },
-      { href: "explore.html", text: "Explore / query" },
-      { href: "feed.html", text: "The feed" },
-      { href: "timeline.html", text: "Timeline" },
-      { href: "articles.html", text: "Analysis" },
-      { href: "mesh.html", text: "The mesh" },
-      { href: "command-chain.html", text: "Chain of command" },
-      { href: "encroachment-atlas.html", text: "Built where water returns" },
-      { href: "history.html", text: "History race" },
-      { href: "global.html", text: "India vs world" },
-      { href: "library.html", text: "Reading room — primary sources" },
-      { href: "share.html", text: "Share" },
-    ]},
-    // 3D — the interactive three-dimensional views, gathered into their own tab.
+    // 3D — the front door: every interactive three-dimensional view.
     { label: "3D", items: [
-      { href: "india-3d.html", text: "India in 3D — states & rivers" },
-      { href: "earth-3d.html", text: "Photoreal 3D Earth (your key)" },
-      { href: "terrain-3d.html", text: "3D topography (real relief)" },
-      { href: "atlas-3d.html", text: "India by constraint" },
-      { href: "flood-3d.html", text: "Flood explorer" },
+      { href: "india-3d.html", text: "The globe", hint: "real Earth · 594 districts · layers" },
+      { href: "terrain-3d.html", text: "District terrain 3D", hint: "relief · river · flood plain (2D/3D)" },
+      { href: "atlas-3d.html", text: "India by constraint", hint: "states by development constraint" },
+      { href: "flood-3d.html", text: "Flood explorer", hint: "water over real terrain" },
+      { href: "earth-3d.html", text: "Photoreal Earth", hint: "Google 3D tiles (your key)" },
+    ]},
+    { label: "Study", items: [
+      { href: "library.html", text: "Reading room", hint: "read the primary sources" },
+      { href: "engines.html", text: "The 7 engines", hint: "the composable lenses" },
+      { href: "engine-survey.html", text: "· Survey · origin" },
+      { href: "engine-country.html", text: "· Country" },
+      { href: "engine-development.html", text: "· Development" },
+      { href: "engine-climate.html", text: "· Climate" },
+      { href: "engine-zoning.html", text: "· Land-Zoning" },
+      { href: "engine-corruption.html", text: "· Corruption" },
+      { href: "engine-news.html", text: "· News" },
+      { href: "articles.html", text: "Analysis", hint: "written pieces" },
+      { href: "history.html", text: "History race", hint: "states over time" },
+      { href: "command-chain.html", text: "Chain of command", hint: "who answers to whom" },
+      { href: "mesh.html", text: "The mesh", hint: "how it all connects" },
+      { href: "global.html", text: "India vs world", hint: "global comparison" },
     ]},
     { label: "Data", items: [
-      { href: "knowledge.html", text: "Knowledge base" },
-      { href: "data.html", text: "Data & API" },
-      { href: "references.html", text: "Sources" },
-      { href: "provenance.html", text: "Provenance ledger" },
+      { href: "knowledge.html", text: "Knowledge base", hint: "the data catalog" },
+      { href: "data.html", text: "Data & API", hint: "get the data" },
+      { href: "references.html", text: "Sources", hint: "every citation" },
+      { href: "provenance.html", text: "Provenance ledger", hint: "figure → source, audited" },
       { href: "for-organisations.html", text: "For organisations" },
+      { href: "share.html", text: "Share" },
     ]},
     { label: "About", items: [
       { href: "how-it-works.html", text: "How it works" },
@@ -121,9 +126,12 @@
     const groups = NAV.map(g => {
       const open = g === activeGroup ? " is-current" : "";
       const items = g.items.map(i => {
-        const cur = isHere(i.href) ? ' aria-current="page" class="snav-cur"' : "";
+        const here = isHere(i.href);
+        const cls = [here ? "snav-cur" : "", i.hint ? "snav-has-hint" : ""].filter(Boolean).join(" ");
+        const cur = (here ? ' aria-current="page"' : "") + (cls ? ` class="${cls}"` : "");
         const ext = i.ext ? ' target="_blank" rel="noopener"' : "";
-        return `<a href="${i.href}"${ext}${cur}>${i.text}</a>`;
+        const hint = i.hint ? `<span class="snav-hint">${i.hint}</span>` : "";
+        return `<a href="${i.href}"${ext}${cur}><span class="snav-t">${i.text}</span>${hint}</a>`;
       }).join("");
       return `<div class="snav-group${open}">
         <button class="snav-top" aria-expanded="false">${g.label} <span class="snav-caret">▾</span></button>
