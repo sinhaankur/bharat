@@ -79,16 +79,12 @@
 </head>
 <body>
   <div id="hero">
-    <!-- left rail: switch modes; content changes on THIS screen -->
+    <!-- left rail: switch modes; content changes on THIS screen. The pinned views are
+         rendered from the shared catalog (nav-data.js) so nav + rail never drift. -->
     <nav id="hero-rail" aria-label="Views">
       <a class="brand-dot" href="index.html" title="India Fiscal Atlas">🇮🇳</a>
       <button class="rail-btn active" data-mode="globe"><span>🌍</span><span class="rail-tip">The globe</span></button>
-      <button class="rail-btn" data-view="index.html" data-title="The map"><span>🗺</span><span class="rail-tip">2D map</span></button>
-      <button class="rail-btn" data-view="terrain-3d.html" data-title="District terrain 3D"><span>🏔</span><span class="rail-tip">District terrain</span></button>
-      <button class="rail-btn" data-view="feed.html" data-title="News — bias vs reality"><span>📰</span><span class="rail-tip">News feed</span></button>
-      <button class="rail-btn" data-view="library.html" data-title="Reading room"><span>📖</span><span class="rail-tip">Reading room</span></button>
-      <button class="rail-btn" data-view="explore.html" data-title="Explore / query"><span>🔎</span><span class="rail-tip">Explore</span></button>
-      <button class="rail-btn" data-view="knowledge.html" data-title="Data & knowledge"><span>📊</span><span class="rail-tip">Data</span></button>
+      <span id="rail-pinned"></span>
       <button class="rail-btn" id="rail-all"><span>⊞</span><span class="rail-tip">All views</span></button>
       <div class="rail-spacer"></div>
       <button class="rail-btn" id="rail-help"><span>?</span><span class="rail-tip">What is this?</span></button>
@@ -137,7 +133,20 @@
     </div>
   </div>
 
+  <script src="nav-data.js"></script>
   <script>
+    // Build the rail's pinned views + the launcher from the shared catalog (window.ATLAS_NAV),
+    // so the hero and the site nav are one source of truth. rail:true → pinned to the rail.
+    const NAVGROUPS = (window.ATLAS_NAV || []).filter(g => g.label !== 'About');
+    const railPinned = document.getElementById('rail-pinned');
+    NAVGROUPS.forEach(g => g.items.forEach(i => {
+      if (!i.rail || i.ext) return;
+      const b = document.createElement('button');
+      b.className = 'rail-btn'; b.dataset.view = i.href; b.dataset.title = i.text;
+      b.innerHTML = `<span>${i.icon || '•'}</span><span class="rail-tip">${i.text}</span>`;
+      railPinned.appendChild(b);
+    }));
+
     const railBtns = [...document.querySelectorAll('.rail-btn[data-view], .rail-btn[data-mode]')];
     const panel = document.getElementById('hero-panel');
     const hpFrame = document.getElementById('hp-frame');
@@ -178,39 +187,14 @@
       if (e.data && e.data.heroOpen) openView(e.data.heroOpen + (e.data.heroOpen.includes('?') ? '&' : '?') + 'embed=1', e.data.heroTitle || 'View', null);
     });
 
-    // ---- ⊞ All views launcher: every view, grouped, one click, on this screen ----
-    const CATALOG = [
-      { group: 'Map & live', items: [
-        { ic: '🗺', href: 'index.html', t: 'The map', h: '2D fiscal atlas — every district' },
-        { ic: '🔎', href: 'explore.html', t: 'Explore / query', h: 'filter & rank all 594' },
-        { ic: '📰', href: 'feed.html', t: 'News feed', h: 'bias vs the record, by place' },
-        { ic: '🕐', href: 'timeline.html', t: 'Timeline', h: 'events over time' },
-        { ic: '🏗', href: 'encroachment-atlas.html', t: 'Built where water returns', h: 'illegal habitation' },
-      ]},
-      { group: '3D views', items: [
-        { ic: '🌍', href: 'india-3d.html', t: 'The globe', h: 'real Earth · 594 districts · layers' },
-        { ic: '🏔', href: 'terrain-3d.html', t: 'District terrain 3D', h: 'relief · river · flood plain' },
-        { ic: '⛰', href: 'atlas-3d.html', t: 'India by constraint', h: 'states by development constraint' },
-        { ic: '🌊', href: 'flood-3d.html', t: 'Flood explorer', h: 'water over real terrain' },
-        { ic: '🛰', href: 'earth-3d.html', t: 'Photoreal Earth', h: 'Google 3D tiles (your key)' },
-      ]},
-      { group: 'Study', items: [
-        { ic: '📖', href: 'library.html', t: 'Reading room', h: 'read the primary sources' },
-        { ic: '⚙', href: 'engines.html', t: 'The 7 engines', h: 'the composable lenses' },
-        { ic: '📝', href: 'articles.html', t: 'Analysis', h: 'written pieces' },
-        { ic: '🏁', href: 'history.html', t: 'History race', h: 'states over time' },
-        { ic: '🔗', href: 'command-chain.html', t: 'Chain of command', h: 'who answers to whom' },
-        { ic: '🕸', href: 'mesh.html', t: 'The mesh', h: 'how it all connects' },
-        { ic: '🌐', href: 'global.html', t: 'India vs world', h: 'global comparison' },
-      ]},
-      { group: 'Data & trust', items: [
-        { ic: '📚', href: 'knowledge.html', t: 'Knowledge base', h: 'the data catalog' },
-        { ic: '🧾', href: 'data.html', t: 'Data & API', h: 'get the data' },
-        { ic: '🔖', href: 'references.html', t: 'Sources', h: 'every citation' },
-        { ic: '✅', href: 'provenance.html', t: 'Provenance ledger', h: 'figure → source, audited' },
-        { ic: 'ℹ️', href: 'how-it-works.html', t: 'How it works', h: 'the project, explained' },
-      ]},
-    ];
+    // ---- ⊞ All views launcher: built from the shared catalog (window.ATLAS_NAV) ----
+    // Skips external links + the engine sub-items (the '·' rows with no icon), so the launcher
+    // shows the real, openable views. One source with the nav → they can't drift.
+    const CATALOG = (window.ATLAS_NAV || []).map(g => ({
+      group: g.label,
+      items: g.items.filter(i => !i.ext && i.icon && i.href !== 'hero.html')
+        .map(i => ({ ic: i.icon, href: i.href, t: i.text, h: i.hint || '' })),
+    })).filter(g => g.items.length);
     const launcher = document.getElementById('hero-launcher');
     const hlGroups = document.getElementById('hl-groups');
     const hlSearch = document.getElementById('hl-search');
