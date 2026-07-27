@@ -69,6 +69,7 @@
   // Each item has a short `hint` for a layered, scannable menu. No page orphaned.
   const NAV = [
     { label: "Map", items: [
+      { href: "hero.html", text: "★ One screen (globe app)", hint: "the whole atlas on one screen" },
       { href: "index.html", text: "The map", hint: "2D fiscal atlas — every district" },
       { href: "explore.html", text: "Explore / query", hint: "filter & rank all 594" },
       { href: "feed.html", text: "News feed", hint: "bias vs the record, by place" },
@@ -174,6 +175,16 @@
 
   function mount() {
     injectSEO();
+    // EMBED MODE: when a page is loaded inside the hero app (?embed=1), suppress the site
+    // header + footer so the hero's own chrome is the only navigation. The page's own
+    // content fills the panel. A body class lets pages trim their own margins if they like.
+    const EMBED = new URLSearchParams(location.search).get("embed") === "1";
+    if (EMBED) {
+      document.documentElement.classList.add("embed-mode");
+      const nh = document.getElementById("site-nav"); if (nh) nh.remove();
+      const fh = document.getElementById("site-footer"); if (fh) fh.remove();
+      return;   // no header/footer inside the hero
+    }
     // header: replace #site-nav placeholder, or any pre-existing #nav, or prepend to body
     const navHost = document.getElementById("site-nav");
     if (navHost) navHost.outerHTML = navHTML();

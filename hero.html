@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>India Fiscal Atlas — the whole country, on one screen</title>
+  <meta name="description" content="One screen for India: a real-Earth 3D globe of all 594 districts, with the map, district terrain, primary-source reading room and the data all a click away — nothing reloads. Break India into pixels of money, in 3D." />
+  <link rel="canonical" href="https://sinhaankur.github.io/india-fiscal-map/hero.html" />
+  <meta property="og:title" content="India Fiscal Atlas — the whole country, on one screen" />
+  <meta property="og:description" content="A real-Earth 3D globe of all 594 districts + the map, terrain, reading room & data — one screen, nothing reloads." />
+  <meta property="og:image" content="https://sinhaankur.github.io/india-fiscal-map/og-image.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    html, body { height: 100%; margin: 0; overflow: hidden; background: oklch(0.09 0 0); }
+    #hero { position: fixed; inset: 0; display: flex; }
+    /* the globe fills the screen (reuses the working india-3d engine via iframe) */
+    #hero-stage { position: absolute; inset: 0; z-index: 0; }
+    #hero-frame { width: 100%; height: 100%; border: 0; display: block; }
+    /* slim left rail — the mode switch */
+    #hero-rail { position: relative; z-index: 3; width: 60px; flex: 0 0 60px; background: oklch(0.11 0 0 / 0.82); backdrop-filter: blur(12px); border-right: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; padding: 0.6rem 0; gap: 0.3rem; }
+    #hero-rail .brand-dot { width: 26px; height: 26px; border-radius: 7px; background: linear-gradient(135deg, oklch(0.7 0.18 30), oklch(0.72 0.16 78)); margin-bottom: 0.7rem; display: grid; place-items: center; font-size: 14px; }
+    .rail-btn { width: 46px; height: 46px; border-radius: 10px; border: 1px solid transparent; background: transparent; color: var(--muted-foreground); font-size: 19px; cursor: pointer; display: grid; place-items: center; transition: background .15s, color .15s, border-color .15s; position: relative; }
+    .rail-btn:hover { background: oklch(0.2 0 0); color: var(--foreground); }
+    .rail-btn.active { background: oklch(0.26 0.06 78); color: oklch(0.94 0.05 90); border-color: var(--warm); }
+    .rail-btn .rail-tip { position: absolute; left: 54px; top: 50%; transform: translateY(-50%); white-space: nowrap; background: oklch(0.16 0 0); border: 1px solid var(--border-strong); color: var(--foreground); font-family: var(--font-mono); font-size: 11px; padding: 3px 9px; border-radius: 6px; opacity: 0; pointer-events: none; transition: opacity .12s; z-index: 5; }
+    .rail-btn:hover .rail-tip { opacity: 1; }
+    .rail-spacer { flex: 1; }
+    /* the slide-in side panel — content loads here, same screen */
+    #hero-panel { position: absolute; right: 0; top: 0; bottom: 0; z-index: 4; width: min(560px, 92vw); background: oklch(0.12 0 0 / 0.97); backdrop-filter: blur(14px); border-left: 1px solid var(--border-strong); box-shadow: -16px 0 50px oklch(0 0 0 / 0.5); transform: translateX(100%); transition: transform .28s cubic-bezier(.4,0,.2,1); display: flex; flex-direction: column; }
+    #hero-panel.open { transform: translateX(0); }
+    .hp-head { display: flex; align-items: center; gap: 0.6rem; padding: 0.7rem 0.9rem; border-bottom: 1px solid var(--border); }
+    .hp-title { font-family: var(--font-display); font-size: 1.05rem; flex: 1; }
+    .hp-close { background: oklch(0.2 0 0); border: 1px solid var(--border-strong); color: var(--foreground); border-radius: 999px; width: 28px; height: 28px; cursor: pointer; font-size: 14px; }
+    .hp-close:hover { border-color: var(--warm); }
+    .hp-open-full { font-family: var(--font-mono); font-size: 10.5px; color: oklch(0.78 0.16 72); text-decoration: none; border: 1px solid var(--border-strong); border-radius: 999px; padding: 3px 9px; }
+    .hp-open-full:hover { border-color: var(--warm); }
+    .hp-body { flex: 1; position: relative; }
+    .hp-body iframe { width: 100%; height: 100%; border: 0; display: block; background: oklch(0.1 0 0); }
+    /* the intro overlay — what this is, shown once, dismissable */
+    #hero-intro { position: absolute; z-index: 6; left: 50%; bottom: 26px; transform: translateX(-50%); max-width: 620px; width: calc(100% - 120px); background: oklch(0.13 0.01 250 / 0.92); backdrop-filter: blur(12px); border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 0.8rem 1.1rem; display: flex; align-items: center; gap: 1rem; }
+    #hero-intro p { margin: 0; font-size: 0.86rem; line-height: 1.5; color: var(--muted-foreground); }
+    #hero-intro b { color: var(--foreground); }
+    #hero-intro button { flex: 0 0 auto; background: oklch(0.26 0.06 78); color: oklch(0.94 0.05 90); border: 1px solid var(--warm); border-radius: 999px; padding: 5px 13px; font-family: var(--font-mono); font-size: 11px; cursor: pointer; }
+    /* top-right: search + a link back to the classic multi-page site */
+    #hero-top { position: absolute; z-index: 3; right: 14px; top: 12px; display: flex; gap: 0.5rem; align-items: center; }
+    #hero-top a { font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); text-decoration: none; border: 1px solid var(--border); border-radius: 999px; padding: 4px 11px; background: oklch(0.13 0 0 / 0.8); backdrop-filter: blur(8px); }
+    #hero-top a:hover { color: var(--foreground); border-color: var(--border-strong); }
+    @media (max-width: 720px) {
+      #hero-rail { width: 52px; flex-basis: 52px; }
+      #hero-panel { width: 100vw; }
+      #hero-intro { width: calc(100% - 70px); left: 50%; bottom: 14px; flex-direction: column; align-items: flex-start; gap: 0.6rem; }
+    }
+  </style>
+</head>
+<body>
+  <div id="hero">
+    <!-- left rail: switch modes; content changes on THIS screen -->
+    <nav id="hero-rail" aria-label="Views">
+      <a class="brand-dot" href="index.html" title="India Fiscal Atlas">🇮🇳</a>
+      <button class="rail-btn active" data-mode="globe"><span>🌍</span><span class="rail-tip">The globe</span></button>
+      <button class="rail-btn" data-view="index.html" data-title="The map"><span>🗺</span><span class="rail-tip">2D map</span></button>
+      <button class="rail-btn" data-view="terrain-3d.html" data-title="District terrain 3D"><span>🏔</span><span class="rail-tip">District terrain</span></button>
+      <button class="rail-btn" data-view="feed.html" data-title="News — bias vs reality"><span>📰</span><span class="rail-tip">News feed</span></button>
+      <button class="rail-btn" data-view="library.html" data-title="Reading room"><span>📖</span><span class="rail-tip">Reading room</span></button>
+      <button class="rail-btn" data-view="explore.html" data-title="Explore / query"><span>🔎</span><span class="rail-tip">Explore</span></button>
+      <button class="rail-btn" data-view="knowledge.html" data-title="Data & knowledge"><span>📊</span><span class="rail-tip">Data</span></button>
+      <div class="rail-spacer"></div>
+      <button class="rail-btn" id="rail-help"><span>?</span><span class="rail-tip">What is this?</span></button>
+    </nav>
+
+    <!-- the globe: the full-screen hero, reusing the working india-3d engine -->
+    <div id="hero-stage">
+      <iframe id="hero-frame" src="india-3d.html?embed=1" title="India 3D globe" allow="fullscreen"></iframe>
+    </div>
+
+    <div id="hero-top">
+      <a href="sitemap.html" title="All pages">☰ all pages</a>
+    </div>
+
+    <!-- the slide-in panel: any other view, on the same screen -->
+    <aside id="hero-panel" aria-label="View panel">
+      <div class="hp-head">
+        <div class="hp-title" id="hp-title">—</div>
+        <a class="hp-open-full" id="hp-full" href="#" target="_blank" rel="noopener">open full ↗</a>
+        <button class="hp-close" id="hp-close" aria-label="Close panel">✕</button>
+      </div>
+      <div class="hp-body"><iframe id="hp-frame" src="about:blank" title="View"></iframe></div>
+    </aside>
+
+    <div id="hero-intro">
+      <p><b>The whole of India, on one screen.</b> This is a real-Earth 3D globe of all 594
+      districts. Use the rail on the left to bring the <b>map</b>, <b>district terrain</b>,
+      <b>news</b>, the <b>reading room</b> or the <b>data</b> in beside it — nothing reloads.</p>
+      <button id="hero-intro-x">Got it</button>
+    </div>
+  </div>
+
+  <script>
+    const railBtns = [...document.querySelectorAll('.rail-btn[data-view], .rail-btn[data-mode]')];
+    const panel = document.getElementById('hero-panel');
+    const hpFrame = document.getElementById('hp-frame');
+    const hpTitle = document.getElementById('hp-title');
+    const hpFull = document.getElementById('hp-full');
+
+    function setActive(btn) { railBtns.forEach(b => b.classList.toggle('active', b === btn)); }
+    function openView(url, title, btn) {
+      hpFrame.src = url;
+      hpTitle.textContent = title;
+      hpFull.href = url;
+      panel.classList.add('open');
+      setActive(btn);
+    }
+    function closePanel() {
+      panel.classList.remove('open');
+      setActive(document.querySelector('.rail-btn[data-mode="globe"]'));
+      setTimeout(() => { if (!panel.classList.contains('open')) hpFrame.src = 'about:blank'; }, 320);
+    }
+
+    railBtns.forEach(btn => btn.addEventListener('click', () => {
+      if (btn.dataset.mode === 'globe') { closePanel(); return; }
+      openView(btn.dataset.view + (btn.dataset.view.includes('?') ? '&' : '?') + 'embed=1', btn.dataset.title, btn);
+    }));
+    document.getElementById('hp-close').addEventListener('click', closePanel);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
+
+    // intro overlay — show once
+    const intro = document.getElementById('hero-intro');
+    try { if (localStorage.getItem('hero_intro_seen') === '1') intro.remove(); } catch (e) {}
+    document.getElementById('hero-intro-x').addEventListener('click', () => { intro.remove(); try { localStorage.setItem('hero_intro_seen', '1'); } catch (e) {} });
+    document.getElementById('rail-help').addEventListener('click', () => {
+      if (!document.getElementById('hero-intro')) { const d = intro.cloneNode(true); document.getElementById('hero').appendChild(d); d.querySelector('#hero-intro-x').addEventListener('click', () => d.remove()); }
+    });
+
+    // let the globe iframe request a view open (e.g. click a district → open its page in the panel)
+    window.addEventListener('message', e => {
+      if (e.data && e.data.heroOpen) openView(e.data.heroOpen + (e.data.heroOpen.includes('?') ? '&' : '?') + 'embed=1', e.data.heroTitle || 'View', null);
+    });
+  </script>
+</body>
+</html>
