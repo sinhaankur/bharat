@@ -80,6 +80,7 @@
       <canvas id="t3-canvas"></canvas>
       <div id="t3-place" hidden style="position:absolute;left:14px;top:12px;z-index:5;background:oklch(0.14 0.01 250 / 0.9);border:1px solid var(--border-strong);border-radius:var(--radius-sm);padding:6px 11px;font-family:var(--font-mono);font-size:12px;color:var(--foreground);backdrop-filter:blur(6px);pointer-events:none"></div>
       <div id="t3-modehint" style="position:absolute;right:14px;bottom:12px;z-index:5;background:oklch(0.14 0.01 250 / 0.85);border:1px solid var(--border);border-radius:999px;padding:4px 11px;font-family:var(--font-mono);font-size:10.5px;color:var(--muted-foreground)">🏔 3D relief · drag to orbit</div>
+      <div id="t3-townlabel" hidden style="position:absolute;z-index:6;transform:translate(-50%,-100%);pointer-events:none;background:oklch(0.16 0.02 40 / 0.95);border:1px solid oklch(0.7 0.16 45);border-radius:6px;padding:2px 8px;font-family:var(--font-mono);font-size:11px;color:oklch(0.92 0.08 60);white-space:nowrap"></div>
     </div>
     <div class="t3-legend" id="t3-legend"></div>
 
@@ -284,6 +285,7 @@
       applySea(SEA_M);
       if (RIVERS_DATA) buildRivers();      // redraw overlays on the fresh mesh
       if (document.getElementById('t3-flood')?.checked) buildFlood();
+      buildTown();                          // the pin at the town centroid
     }
 
     // ---- project a lon/lat onto the terrain mesh + sample its elevation there ----
@@ -389,6 +391,28 @@
       const note = document.getElementById('t3-flood-note');
       if (note) note.textContent = `flood plain ≈ land within ${margin} m of the river level (${Math.round(line)} m) — the low ground the water reclaims`;
     }
+
+    // ---- town marker: a pin at the district centroid, on the terrain, with a tracking label ----
+    let townPin = null, townPos = null;
+    function buildTown() {
+      if (townPin) { scene.remove(townPin); townPin = null; }
+      if (!window.__t3_center || !GRID) return;
+      const [lon, lat] = window.__t3_center;
+      const base = lonLatToWorld(lon, lat, 0);        // on the surface
+      townPin = new THREE.Group();
+      const stalk = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.03, 0.03, 1.1, 8),
+        new THREE.MeshBasicMaterial({ color: 0xff7a3c }));
+      stalk.position.copy(base).add(new THREE.Vector3(0, 0.55, 0));
+      townPin.add(stalk);
+      const head = new THREE.Mesh(
+        new THREE.SphereGeometry(0.13, 14, 14),
+        new THREE.MeshBasicMaterial({ color: 0xff9a4c }));
+      head.position.copy(base).add(new THREE.Vector3(0, 1.15, 0));
+      townPin.add(head);
+      scene.add(townPin);
+      townPos = base.clone().add(new THREE.Vector3(0, 1.35, 0));   // where the label floats
+    }
     function applyExag(v) {
       exag = v;
       if (!mesh || !baseZ) return;
@@ -398,6 +422,7 @@
       applySea(SEA_M);   // water rides at the same exaggeration
       if (riverGroup) buildRivers();   // rivers ride the surface too
       if (floodMesh) buildFlood();     // flood plain hugs the surface too
+      if (townPin) buildTown();        // the pin rides the surface too
     }
     // Raise "sea level" to SEA_M metres: the water plane sits at that height (× current
     // exaggeration) so everything below it reads as submerged. A bathtub view, not a forecast.
@@ -498,7 +523,18 @@
       const w = canvas.clientWidth, h = canvas.clientHeight;
       if (canvas.width !== w || canvas.height !== h) { renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
     }
-    function loop() { resize(); controls.update(); renderer.render(scene, camera); requestAnimationFrame(loop); }
+    function updateTownLabel() {
+      const el = document.getElementById('t3-townlabel');
+      if (!el || !townPos || !window.__t3_town) { if (el) el.hidden = true; return; }
+      const p = townPos.clone().project(camera);
+      if (p.z > 1) { el.hidden = true; return; }   // behind the camera
+      const rect = canvas.getBoundingClientRect ? { w: canvas.clientWidth, h: canvas.clientHeight } : { w: canvas.width, h: canvas.height };
+      el.style.left = ((p.x * 0.5 + 0.5) * rect.w) + 'px';
+      el.style.top = ((-p.y * 0.5 + 0.5) * rect.h) + 'px';
+      el.textContent = '📍 ' + window.__t3_town;
+      el.hidden = false;
+    }
+    function loop() { resize(); controls.update(); updateTownLabel(); renderer.render(scene, camera); requestAnimationFrame(loop); }
 
     exag = 6;   // match the slider's default
     document.getElementById('t3-sea').dispatchEvent(new Event('input'));   // paint the initial hint
@@ -528,6 +564,8 @@
         opt.value = '__district'; opt.textContent = `📍 ${hitName}`; opt.selected = true;
         sel.insertBefore(opt, sel.firstChild);
         window.__t3_district = hitName;
+        window.__t3_center = [lon, lat];
+        window.__t3_town = (hitName.split('·').pop() || '').trim();   // the district/town name
         return true;
       } catch (e) { return false; }
     }
