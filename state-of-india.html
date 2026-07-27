@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>State of India — who carries the country | India District Atlas</title>
+  <meta name="description" content="India at a glance, state by state: population, GSDP, own-tax revenue and — the real impact — net contribution to the union (what each state puts into the central pool minus what comes back). See who carries the country and who depends on it, ranked, sourced." />
+  <link rel="canonical" href="https://sinhaankur.github.io/india-fiscal-map/state-of-india.html" />
+  <meta property="og:title" content="State of India — who carries the country" />
+  <meta property="og:description" content="Every state ranked by its real weight: net contribution to the union, population, GSDP, own-tax. Understand India as a whole." />
+  <meta property="og:image" content="https://sinhaankur.github.io/india-fiscal-map/og-image.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .soi-wrap { max-width: 1080px; margin: 0 auto; padding: 1.6rem var(--pad-x, 1.5rem) 5rem; }
+    .soi-head .eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted-foreground); }
+    .soi-head h1 { margin: 0.3rem 0 0.5rem; font-size: clamp(1.6rem, 3.6vw, 2.5rem); }
+    .soi-head h1 em { font-family: var(--font-italic, var(--font-display)); font-style: italic; }
+    .soi-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.6; max-width: 76ch; }
+    /* the totals strip — India as one number */
+    .soi-totals { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.2rem 0; }
+    .soi-tot { flex: 1 1 150px; background: oklch(0.155 0.005 250); border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 0.7rem 0.9rem; }
+    .soi-tot .v { font-family: var(--font-mono); font-size: 1.3rem; color: var(--foreground); }
+    .soi-tot .l { font-size: 0.75rem; color: var(--muted-foreground); margin-top: 2px; }
+    /* metric switch */
+    .soi-metrics { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 1rem 0 0.4rem; }
+    .soi-mbtn { font-family: var(--font-mono); font-size: 12px; padding: 5px 13px; border-radius: 999px; background: oklch(0.18 0.02 250); color: var(--muted-foreground); border: 1px solid var(--border-strong); cursor: pointer; }
+    .soi-mbtn:hover { color: var(--foreground); border-color: var(--warm); }
+    .soi-mbtn.active { background: oklch(0.28 0.07 78); border-color: var(--warm); color: oklch(0.94 0.05 90); }
+    .soi-metric-note { font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); min-height: 1.1em; margin-bottom: 0.6rem; }
+    /* the ranked bars */
+    .soi-list { display: flex; flex-direction: column; gap: 2px; }
+    .soi-row { display: grid; grid-template-columns: 22px 150px 1fr auto; align-items: center; gap: 0.6rem; padding: 0.32rem 0.5rem; border-radius: 6px; cursor: pointer; transition: background .12s; }
+    .soi-row:hover { background: oklch(0.2 0.02 250); }
+    .soi-rank { font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); text-align: right; }
+    .soi-name { font-size: 0.9rem; }
+    .soi-name .rg { font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); }
+    .soi-bar-wrap { height: 15px; background: oklch(0.2 0 0); border-radius: 4px; overflow: hidden; position: relative; }
+    .soi-bar { height: 100%; border-radius: 4px; transition: width .35s ease; }
+    .soi-bar.neg { background: linear-gradient(90deg, oklch(0.55 0.16 30), oklch(0.62 0.18 25)); }
+    .soi-bar.pos { background: linear-gradient(90deg, oklch(0.55 0.1 210), oklch(0.72 0.15 145)); }
+    .soi-val { font-family: var(--font-mono); font-size: 12px; color: var(--foreground); white-space: nowrap; }
+    .soi-val.negc { color: oklch(0.72 0.16 35); }
+    .soi-note { font-size: 0.83rem; color: var(--muted-foreground); line-height: 1.6; margin-top: 1.6rem; border-top: 1px solid var(--border); padding-top: 1rem; }
+    .soi-note a { color: oklch(0.78 0.16 72); }
+    .soi-gap { border-left: 3px solid oklch(0.6 0.16 60); padding: 0.55rem 0.9rem; background: oklch(0.2 0.03 60 / 0.3); border-radius: var(--radius-sm); margin: 1.2rem 0; font-size: 0.85rem; line-height: 1.55; }
+    @media (max-width: 640px) { .soi-row { grid-template-columns: 20px 96px 1fr auto; } .soi-name { font-size: 0.8rem; } }
+  </style>
+</head>
+<body>
+  <div id="site-nav"></div>
+  <main class="soi-wrap">
+    <header class="soi-head">
+      <div class="eyebrow">Understand · State of India</div>
+      <h1 class="display">State of <em>India</em> — who carries the country</h1>
+      <p>India is one union of very unequal states. This is the whole country at a glance:
+      every state's <strong>weight and impact</strong> — its people, its economy, and the real
+      one — its <strong>net contribution to the union</strong> (what it puts into the central tax
+      pool minus what flows back as devolution + grants). A few states carry the many. Switch the
+      metric; click any state to open it.</p>
+    </header>
+
+    <div class="soi-totals" id="soi-totals"></div>
+
+    <div class="soi-metrics" id="soi-metrics"></div>
+    <div class="soi-metric-note" id="soi-metric-note"></div>
+    <div class="soi-list" id="soi-list"></div>
+
+    <div class="soi-gap">
+      <strong>What "net contribution" means — and its honest limits.</strong> It's each state's
+      <em>contribution to the central tax pool</em> minus what it gets back as <em>devolution +
+      grants</em> (latest year, from <code>india-fiscal.json</code>). Positive = the state gives the
+      union more than it receives; negative = it's net-supported. This is a real and important lens
+      on impact — but it is <em>not</em> a verdict on a state's worth: poorer states receive more by
+      design (that's what a union is for), and contribution tracks where economic activity and
+      company HQs sit, not only where value is created. State-level figures are approximations within
+      ~±10% (see <a href="references.html">sources</a>), smoothed for comparability.
+    </div>
+
+    <p class="soi-note">
+      Data: <code>india-fiscal.json</code> (GSDP, own-tax, devolution, grants, contribution per
+      state — RBI / Finance Commission / budget-derived). See the money flow live on the
+      <a href="index.html">map</a>, raised on the <a href="india-3d.html">3D globe</a>, and audited in
+      the <a href="provenance.html">provenance ledger</a>. Sourced, or it's a gap — never faked.
+    </p>
+  </main>
+  <div id="site-footer"></div>
+
+  <script src="nav-data.js"></script>
+  <script src="site-nav.js"></script>
+  <script>
+    const fmt = n => n == null ? '—' : (Math.abs(n) >= 1000 ? '₹' + (n / 1000).toFixed(1) + 'L cr' : '₹' + Math.round(n) + 'k cr');
+    const last = x => Array.isArray(x) ? x[x.length - 1] : x;
+    const METRICS = {
+      net: { label: '⚖️ Net to union', note: 'Net contribution = what the state puts in − what comes back (devolution + grants). Blue = net giver, red = net-supported.', signed: true,
+             val: s => (last(s.contribution) || 0) - ((last(s.devolution) || 0) + (last(s.grants) || 0)), unit: fmt },
+      contribution: { label: '💰 Contributes', note: 'What the state pays into the central tax pool (latest year).',
+             val: s => last(s.contribution) || 0, unit: fmt },
+      gsdp: { label: '🏭 Economy (GSDP)', note: 'Gross State Domestic Product — the size of the state economy.',
+             val: s => last(s.gsdp) || 0, unit: fmt },
+      ownTax: { label: '🧾 Own-tax revenue', note: 'What the state raises itself in taxes (its fiscal self-reliance).',
+             val: s => last(s.ownTax) || 0, unit: fmt },
+      pop: { label: '👥 Population', note: 'People (crore) — the human weight of the state.',
+             val: s => s.pop_cr || 0, unit: n => n.toFixed(1) + ' cr' },
+    };
+    let STATES = {}, metric = 'net';
+
+    fetch('india-fiscal.json').then(r => r.json()).then(d => { STATES = d.states || {}; boot(); })
+      .catch(() => { document.getElementById('soi-list').innerHTML = '<p class="soi-metric-note">Could not load state data.</p>'; });
+
+    function boot() {
+      // totals strip
+      const arr = Object.values(STATES);
+      const totPop = arr.reduce((a, s) => a + (s.pop_cr || 0), 0);
+      const totGsdp = arr.reduce((a, s) => a + (last(s.gsdp) || 0), 0);
+      const totContrib = arr.reduce((a, s) => a + (last(s.contribution) || 0), 0);
+      const givers = arr.filter(s => METRICS.net.val(s) > 0).length;
+      document.getElementById('soi-totals').innerHTML =
+        `<div class="soi-tot"><div class="v">${Object.keys(STATES).length}</div><div class="l">states &amp; UTs mapped</div></div>` +
+        `<div class="soi-tot"><div class="v">${Math.round(totPop)} cr</div><div class="l">people</div></div>` +
+        `<div class="soi-tot"><div class="v">${fmt(totGsdp)}</div><div class="l">combined economy (GSDP)</div></div>` +
+        `<div class="soi-tot"><div class="v">${givers} of ${arr.length}</div><div class="l">are net givers to the union</div></div>`;
+      // metric buttons
+      document.getElementById('soi-metrics').innerHTML = Object.entries(METRICS)
+        .map(([k, m]) => `<button class="soi-mbtn${k === metric ? ' active' : ''}" data-m="${k}">${m.label}</button>`).join('');
+      document.querySelectorAll('.soi-mbtn').forEach(b => b.addEventListener('click', () => {
+        metric = b.dataset.m;
+        document.querySelectorAll('.soi-mbtn').forEach(x => x.classList.toggle('active', x === b));
+        render();
+      }));
+      render();
+    }
+
+    function render() {
+      const m = METRICS[metric];
+      document.getElementById('soi-metric-note').textContent = m.note;
+      const rows = Object.entries(STATES).map(([name, s]) => ({ name, region: s.region, capital: s.capital, v: m.val(s) }));
+      rows.sort((a, b) => b.v - a.v);
+      const maxAbs = Math.max(...rows.map(r => Math.abs(r.v)), 1);
+      document.getElementById('soi-list').innerHTML = rows.map((r, i) => {
+        const neg = m.signed && r.v < 0;
+        const w = Math.max(2, Math.abs(r.v) / maxAbs * 100);
+        return `<div class="soi-row" data-state="${encodeURIComponent(r.name)}">
+          <span class="soi-rank">${i + 1}</span>
+          <span class="soi-name">${r.name}<br><span class="rg">${r.region || ''}</span></span>
+          <span class="soi-bar-wrap"><span class="soi-bar ${neg ? 'neg' : 'pos'}" style="width:${w}%"></span></span>
+          <span class="soi-val ${neg ? 'negc' : ''}">${neg ? '−' : (m.signed ? '+' : '')}${m.unit(Math.abs(r.v))}</span>
+        </div>`;
+      }).join('');
+      document.querySelectorAll('.soi-row').forEach(row => row.addEventListener('click', () => {
+        const st = decodeURIComponent(row.dataset.state);
+        // in the hero panel, ask the parent to open the state; else navigate
+        const url = `index.html?state=${encodeURIComponent(st)}`;
+        if (new URLSearchParams(location.search).get('embed') === '1' && window.parent !== window) {
+          window.parent.postMessage({ heroOpen: url, heroTitle: st }, '*');
+        } else location.href = url;
+      }));
+    }
+  </script>
+</body>
+</html>

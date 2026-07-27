@@ -12,6 +12,7 @@
   g.ATLAS_NAV = [
     { label: "Map", items: [
       { href: "hero.html", text: "★ One screen (globe app)", hint: "the whole atlas on one screen", icon: "🌍" },
+      { href: "state-of-india.html", text: "State of India", hint: "who carries the country — states ranked", icon: "🏛", rail: true },
       { href: "index.html", text: "The map", hint: "2D fiscal atlas — every district", icon: "🗺", rail: true },
       { href: "explore.html", text: "Explore / query", hint: "filter & rank all 594", icon: "🔎", rail: true },
       { href: "feed.html", text: "News feed", hint: "bias vs the record, by place", icon: "📰", rail: true },
