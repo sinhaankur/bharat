@@ -66,6 +66,7 @@
           <option value="coast_east">East coast &amp; deltas</option>
         </select>
       </label>
+      <label title="draw the real river course on the terrain"><input type="checkbox" id="t3-rivers"> 🌊 Rivers</label>
       <label>Vertical exaggeration <input type="range" id="t3-exag" min="1" max="40" value="6" step="1"></label>
       <span id="t3-exag-val" style="font-family:var(--font-mono);font-size:11px;color:var(--foreground)">6×</span>
       <label>🌊 Sea level <input type="range" id="t3-sea" min="0" max="6" value="0" step="1" list="t3-sea-ticks"></label>
@@ -238,11 +239,11 @@
     ['pointerdown', 'wheel', 'touchstart'].forEach(ev => canvas.addEventListener(ev, () => { controls.autoRotate = false; }, { passive: true }));
 
     let mesh = null, water = null, ocean = null, baseZ = null, GWg = 0, GHg = 0, exag = 6;
-    let SCALE_H = 1, MESH_W = 30, MESH_H = 30, SEA_M = 0;
+    let SCALE_H = 1, MESH_W = 30, MESH_H = 30, SEA_M = 0, GRID = null;
     function buildMesh(grid) {
       if (mesh) { scene.remove(mesh); mesh.geometry.dispose(); mesh.material.dispose(); mesh = null; }
       if (water) { scene.remove(water); water = null; }
-      const { elev, GW, GH, max } = grid; GWg = GW; GHg = GH;
+      const { elev, GW, GH, max } = grid; GWg = GW; GHg = GH; GRID = grid;
       const W = 30, H = W * GH / GW; MESH_W = W; MESH_H = H;
       const geo = new THREE.PlaneGeometry(W, H, GW - 1, GH - 1);
       const pos = geo.attributes.position;
@@ -278,6 +279,51 @@
       water.rotation.x = -Math.PI / 2; water.visible = false;
       scene.add(water);
       applySea(SEA_M);
+      if (RIVERS_DATA) buildRivers();      // redraw overlays on the fresh mesh
+    }
+
+    // ---- project a lon/lat onto the terrain mesh + sample its elevation there ----
+    // The mesh spans [LON0,LON1]×[LAT0,LAT1] as a W×H plane laid flat (y-up). Sampling the
+    // DEM grid at that point lets a river drape ON the surface, not float or sink.
+    function elevAt(lon, lat) {
+      if (!GRID) return 0;
+      const fx = (lon - LON0) / (LON1 - LON0), fy = (lat - LAT0) / (LAT1 - LAT0);
+      const gx = Math.round(fx * (GRID.GW - 1)), gy = Math.round((1 - fy) * (GRID.GH - 1));
+      if (gx < 0 || gy < 0 || gx >= GRID.GW || gy >= GRID.GH) return 0;
+      return GRID.elev[gy * GRID.GW + gx] || 0;
+    }
+    function lonLatToWorld(lon, lat, lift = 0) {
+      const fx = (lon - LON0) / (LON1 - LON0), fy = (lat - LAT0) / (LAT1 - LAT0);
+      const x = -MESH_W / 2 + fx * MESH_W;
+      const z = MESH_H / 2 - fy * MESH_H;
+      const y = elevAt(lon, lat) * SCALE_H * (exag / 6) + lift;
+      return new THREE.Vector3(x, y, z);
+    }
+
+    // ---- rivers drawn ON the real terrain (clipped to this district's bbox) ----
+    let RIVERS_DATA = null, riverGroup = null;
+    function inBox(lon, lat) { return lon >= LON0 && lon <= LON1 && lat >= LAT0 && lat <= LAT1; }
+    function buildRivers() {
+      if (riverGroup) { scene.remove(riverGroup); riverGroup = null; }
+      if (!document.getElementById('t3-rivers')?.checked || !RIVERS_DATA) return;
+      riverGroup = new THREE.Group();
+      const mat = new THREE.LineBasicMaterial({ color: 0x3fa9e8, transparent: true, opacity: 0.95 });
+      const addSeg = coords => {
+        // keep only the part inside this district's box; break where it leaves
+        let run = [];
+        const flush = () => { if (run.length > 1) { riverGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(run), mat)); } run = []; };
+        for (const [lon, lat] of coords) {
+          if (inBox(lon, lat)) run.push(lonLatToWorld(lon, lat, 0.06));
+          else flush();
+        }
+        flush();
+      };
+      for (const f of RIVERS_DATA.features) {
+        const g = f.geometry;
+        if (g.type === 'LineString') addSeg(g.coordinates);
+        else if (g.type === 'MultiLineString') g.coordinates.forEach(addSeg);
+      }
+      scene.add(riverGroup);
     }
     function applyExag(v) {
       exag = v;
@@ -286,6 +332,7 @@
       for (let i = 0; i < pos.count; i++) pos.setZ(i, baseZ[i] * (v / 6));
       pos.needsUpdate = true; mesh.geometry.computeVertexNormals();
       applySea(SEA_M);   // water rides at the same exaggeration
+      if (riverGroup) buildRivers();   // rivers ride the surface too
     }
     // Raise "sea level" to SEA_M metres: the water plane sits at that height (× current
     // exaggeration) so everything below it reads as submerged. A bathtub view, not a forecast.
@@ -431,7 +478,22 @@
         pl.hidden = false;
       }
       buildMesh(grid); buildLegend(grid.max); loop();
+      // when a district is loaded, rivers are usually the point — fetch + auto-show them
+      if (window.__t3_district) {
+        fetch('india-rivers.geojson').then(r => r.json()).then(d => {
+          RIVERS_DATA = d;
+          const anyInBox = d.features.some(f => {
+            const lines = f.geometry.type === 'LineString' ? [f.geometry.coordinates] : (f.geometry.coordinates || []);
+            return lines.some(ln => ln.some(([lo, la]) => inBox(lo, la)));
+          });
+          if (anyInBox) { document.getElementById('t3-rivers').checked = true; buildRivers(); }
+        }).catch(() => {});
+      }
     }).catch(err => { status.textContent = 'Could not load elevation tiles (network).'; console.error(err); }));
+    document.getElementById('t3-rivers').addEventListener('change', () => {
+      if (!RIVERS_DATA) { fetch('india-rivers.geojson').then(r => r.json()).then(d => { RIVERS_DATA = d; buildRivers(); }).catch(() => {}); }
+      else buildRivers();
+    });
   </script>
 </body>
 </html>
