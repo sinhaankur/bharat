@@ -36,6 +36,23 @@
     .hp-open-full:hover { border-color: var(--warm); }
     .hp-body { flex: 1; position: relative; }
     .hp-body iframe { width: 100%; height: 100%; border: 0; display: block; background: oklch(0.1 0 0); }
+    /* ⊞ All-views launcher overlay */
+    #hero-launcher { position: absolute; inset: 0; z-index: 7; display: grid; place-items: center; background: oklch(0.06 0 0 / 0.6); backdrop-filter: blur(6px); }
+    .hl-card { width: min(880px, 92vw); max-height: 86vh; overflow: auto; background: oklch(0.13 0.005 250); border: 1px solid var(--border-strong); border-radius: var(--radius); box-shadow: 0 20px 60px oklch(0 0 0 / 0.6); padding: 1rem 1.1rem 1.3rem; }
+    .hl-head { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.8rem; }
+    .hl-title { flex: 1; font-family: var(--font-display); font-size: 1.2rem; }
+    .hl-sub { font-family: var(--font-sans); font-size: 0.78rem; color: var(--muted-foreground); }
+    #hl-search { width: 100%; background: oklch(0.17 0 0); border: 1px solid var(--border-strong); color: var(--foreground); border-radius: var(--radius-sm); padding: 8px 12px; font-family: var(--font-mono); font-size: 12px; margin-bottom: 1rem; }
+    #hl-search:focus { outline: none; border-color: var(--warm); }
+    .hl-group { margin-bottom: 1.1rem; }
+    .hl-group-h { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.72 0.06 250); margin-bottom: 0.5rem; }
+    .hl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.5rem; }
+    .hl-item { text-align: left; background: oklch(0.16 0.005 250); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.6rem 0.7rem; cursor: pointer; color: var(--foreground); display: flex; gap: 0.55rem; align-items: flex-start; transition: border-color .15s, background .15s, transform .12s; }
+    .hl-item:hover { border-color: var(--warm); background: oklch(0.2 0.02 250); transform: translateY(-1px); }
+    .hl-item .ic { font-size: 1.15rem; line-height: 1.1; flex: 0 0 auto; }
+    .hl-item .tx b { display: block; font-size: 0.85rem; }
+    .hl-item .tx span { font-size: 0.72rem; color: var(--muted-foreground); line-height: 1.35; }
+    .hl-empty { color: var(--muted-foreground); font-size: 0.85rem; padding: 0.5rem 0; }
     /* the intro overlay — what this is, shown once, dismissable */
     #hero-intro { position: absolute; z-index: 6; left: 50%; bottom: 26px; transform: translateX(-50%); max-width: 620px; width: calc(100% - 120px); background: oklch(0.13 0.01 250 / 0.92); backdrop-filter: blur(12px); border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 0.8rem 1.1rem; display: flex; align-items: center; gap: 1rem; }
     #hero-intro p { margin: 0; font-size: 0.86rem; line-height: 1.5; color: var(--muted-foreground); }
@@ -64,6 +81,7 @@
       <button class="rail-btn" data-view="library.html" data-title="Reading room"><span>📖</span><span class="rail-tip">Reading room</span></button>
       <button class="rail-btn" data-view="explore.html" data-title="Explore / query"><span>🔎</span><span class="rail-tip">Explore</span></button>
       <button class="rail-btn" data-view="knowledge.html" data-title="Data & knowledge"><span>📊</span><span class="rail-tip">Data</span></button>
+      <button class="rail-btn" id="rail-all"><span>⊞</span><span class="rail-tip">All views</span></button>
       <div class="rail-spacer"></div>
       <button class="rail-btn" id="rail-help"><span>?</span><span class="rail-tip">What is this?</span></button>
     </nav>
@@ -86,6 +104,18 @@
       </div>
       <div class="hp-body"><iframe id="hp-frame" src="about:blank" title="View"></iframe></div>
     </aside>
+
+    <!-- ⊞ All views — a grouped grid of every view; each opens in the same panel -->
+    <div id="hero-launcher" hidden>
+      <div class="hl-card">
+        <div class="hl-head">
+          <div class="hl-title">All views <span class="hl-sub">— everything, one click. Opens on this screen.</span></div>
+          <button class="hp-close" id="hl-close" aria-label="Close">✕</button>
+        </div>
+        <input id="hl-search" type="text" placeholder="Filter views…" autocomplete="off" />
+        <div class="hl-groups" id="hl-groups"></div>
+      </div>
+    </div>
 
     <div id="hero-intro">
       <p><b>The whole of India, on one screen.</b> This is a real-Earth 3D globe of all 594
@@ -135,6 +165,69 @@
     window.addEventListener('message', e => {
       if (e.data && e.data.heroOpen) openView(e.data.heroOpen + (e.data.heroOpen.includes('?') ? '&' : '?') + 'embed=1', e.data.heroTitle || 'View', null);
     });
+
+    // ---- ⊞ All views launcher: every view, grouped, one click, on this screen ----
+    const CATALOG = [
+      { group: 'Map & live', items: [
+        { ic: '🗺', href: 'index.html', t: 'The map', h: '2D fiscal atlas — every district' },
+        { ic: '🔎', href: 'explore.html', t: 'Explore / query', h: 'filter & rank all 594' },
+        { ic: '📰', href: 'feed.html', t: 'News feed', h: 'bias vs the record, by place' },
+        { ic: '🕐', href: 'timeline.html', t: 'Timeline', h: 'events over time' },
+        { ic: '🏗', href: 'encroachment-atlas.html', t: 'Built where water returns', h: 'illegal habitation' },
+      ]},
+      { group: '3D views', items: [
+        { ic: '🌍', href: 'india-3d.html', t: 'The globe', h: 'real Earth · 594 districts · layers' },
+        { ic: '🏔', href: 'terrain-3d.html', t: 'District terrain 3D', h: 'relief · river · flood plain' },
+        { ic: '⛰', href: 'atlas-3d.html', t: 'India by constraint', h: 'states by development constraint' },
+        { ic: '🌊', href: 'flood-3d.html', t: 'Flood explorer', h: 'water over real terrain' },
+        { ic: '🛰', href: 'earth-3d.html', t: 'Photoreal Earth', h: 'Google 3D tiles (your key)' },
+      ]},
+      { group: 'Study', items: [
+        { ic: '📖', href: 'library.html', t: 'Reading room', h: 'read the primary sources' },
+        { ic: '⚙', href: 'engines.html', t: 'The 7 engines', h: 'the composable lenses' },
+        { ic: '📝', href: 'articles.html', t: 'Analysis', h: 'written pieces' },
+        { ic: '🏁', href: 'history.html', t: 'History race', h: 'states over time' },
+        { ic: '🔗', href: 'command-chain.html', t: 'Chain of command', h: 'who answers to whom' },
+        { ic: '🕸', href: 'mesh.html', t: 'The mesh', h: 'how it all connects' },
+        { ic: '🌐', href: 'global.html', t: 'India vs world', h: 'global comparison' },
+      ]},
+      { group: 'Data & trust', items: [
+        { ic: '📚', href: 'knowledge.html', t: 'Knowledge base', h: 'the data catalog' },
+        { ic: '🧾', href: 'data.html', t: 'Data & API', h: 'get the data' },
+        { ic: '🔖', href: 'references.html', t: 'Sources', h: 'every citation' },
+        { ic: '✅', href: 'provenance.html', t: 'Provenance ledger', h: 'figure → source, audited' },
+        { ic: 'ℹ️', href: 'how-it-works.html', t: 'How it works', h: 'the project, explained' },
+      ]},
+    ];
+    const launcher = document.getElementById('hero-launcher');
+    const hlGroups = document.getElementById('hl-groups');
+    const hlSearch = document.getElementById('hl-search');
+    function renderLauncher(filter) {
+      const f = (filter || '').trim().toLowerCase();
+      let any = false;
+      hlGroups.innerHTML = CATALOG.map(g => {
+        const items = g.items.filter(i => !f || (i.t + ' ' + i.h).toLowerCase().includes(f));
+        if (!items.length) return '';
+        any = true;
+        return `<div class="hl-group"><div class="hl-group-h">${g.group}</div><div class="hl-grid">` +
+          items.map(i => `<button class="hl-item" data-href="${i.href}" data-title="${i.t}">
+            <span class="ic">${i.ic}</span><span class="tx"><b>${i.t}</b><span>${i.h}</span></span></button>`).join('') +
+          `</div></div>`;
+      }).join('');
+      if (!any) hlGroups.innerHTML = '<div class="hl-empty">No view matches “' + f + '”.</div>';
+      hlGroups.querySelectorAll('.hl-item').forEach(btn => btn.addEventListener('click', () => {
+        const href = btn.dataset.href;
+        openView(href + (href.includes('?') ? '&' : '?') + 'embed=1', btn.dataset.title, null);
+        closeLauncher();
+      }));
+    }
+    function openLauncher() { launcher.hidden = false; renderLauncher(''); hlSearch.value = ''; setTimeout(() => hlSearch.focus(), 30); }
+    function closeLauncher() { launcher.hidden = true; }
+    document.getElementById('rail-all').addEventListener('click', openLauncher);
+    document.getElementById('hl-close').addEventListener('click', closeLauncher);
+    hlSearch.addEventListener('input', e => renderLauncher(e.target.value));
+    launcher.addEventListener('click', e => { if (e.target === launcher) closeLauncher(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && !launcher.hidden) closeLauncher(); });
   </script>
 </body>
 </html>
