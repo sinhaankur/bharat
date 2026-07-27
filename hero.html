@@ -53,11 +53,21 @@
     .hl-item .tx b { display: block; font-size: 0.85rem; }
     .hl-item .tx span { font-size: 0.72rem; color: var(--muted-foreground); line-height: 1.35; }
     .hl-empty { color: var(--muted-foreground); font-size: 0.85rem; padding: 0.5rem 0; }
-    /* the intro overlay — what this is, shown once, dismissable */
-    #hero-intro { position: absolute; z-index: 6; left: 50%; bottom: 26px; transform: translateX(-50%); max-width: 620px; width: calc(100% - 120px); background: oklch(0.13 0.01 250 / 0.92); backdrop-filter: blur(12px); border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 0.8rem 1.1rem; display: flex; align-items: center; gap: 1rem; }
-    #hero-intro p { margin: 0; font-size: 0.86rem; line-height: 1.5; color: var(--muted-foreground); }
-    #hero-intro b { color: var(--foreground); }
-    #hero-intro button { flex: 0 0 auto; background: oklch(0.26 0.06 78); color: oklch(0.94 0.05 90); border: 1px solid var(--warm); border-radius: 999px; padding: 5px 13px; font-family: var(--font-mono); font-size: 11px; cursor: pointer; }
+    /* landing splash — the first impression over the globe (shown once) */
+    #hero-splash { position: absolute; inset: 0; z-index: 6; display: grid; place-items: center; background: radial-gradient(ellipse at 50% 45%, oklch(0.08 0.01 250 / 0.55), oklch(0.05 0 0 / 0.85)); backdrop-filter: blur(2px); animation: hs-in .4s ease; }
+    @keyframes hs-in { from { opacity: 0; } to { opacity: 1; } }
+    .hs-card { max-width: 640px; width: calc(100% - 80px); text-align: center; }
+    .hs-eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: oklch(0.82 0.13 78); margin-bottom: 0.8rem; }
+    .hs-title { font-family: var(--font-display); font-weight: 400; font-size: clamp(2rem, 5.5vw, 3.4rem); line-height: 1.05; margin: 0 0 1rem; letter-spacing: -0.01em; }
+    .hs-title em { font-family: var(--font-italic, var(--font-display)); font-style: italic; color: oklch(0.86 0.13 78); }
+    .hs-lede { font-size: clamp(0.9rem, 1.4vw, 1.02rem); line-height: 1.6; color: var(--muted-foreground); max-width: 56ch; margin: 0 auto 1.6rem; }
+    .hs-lede b { color: var(--foreground); }
+    .hs-cta { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; }
+    .hs-btn { font-family: var(--font-mono); font-size: 13px; padding: 9px 18px; border-radius: 999px; border: 1px solid var(--border-strong); background: oklch(0.16 0 0 / 0.8); color: var(--foreground); cursor: pointer; backdrop-filter: blur(8px); transition: border-color .15s, transform .12s, background .15s; }
+    .hs-btn:hover { border-color: var(--warm); transform: translateY(-1px); }
+    .hs-btn.primary { background: oklch(0.3 0.08 78); border-color: var(--warm); color: oklch(0.95 0.05 90); }
+    .hs-foot { margin-top: 1.6rem; font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); }
+    .hs-foot a { color: oklch(0.78 0.16 72); }
     /* top-right: search + a link back to the classic multi-page site */
     #hero-top { position: absolute; z-index: 3; right: 14px; top: 12px; display: flex; gap: 0.5rem; align-items: center; }
     #hero-top a { font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); text-decoration: none; border: 1px solid var(--border); border-radius: 999px; padding: 4px 11px; background: oklch(0.13 0 0 / 0.8); backdrop-filter: blur(8px); }
@@ -125,11 +135,22 @@
       </div>
     </div>
 
-    <div id="hero-intro">
-      <p><b>The whole of India, on one screen.</b> This is a real-Earth 3D globe of all 594
-      districts. Use the rail on the left to bring the <b>map</b>, <b>district terrain</b>,
-      <b>news</b>, the <b>reading room</b> or the <b>data</b> in beside it — nothing reloads.</p>
-      <button id="hero-intro-x">Got it</button>
+    <!-- landing splash — the first impression over the globe (shown once) -->
+    <div id="hero-splash">
+      <div class="hs-card">
+        <div class="hs-eyebrow">India District Atlas</div>
+        <h1 class="hs-title">Break India into <em>pixels of money</em>.</h1>
+        <p class="hs-lede">A real-Earth 3D globe of all <b>594 districts</b> — trace public money,
+        weigh the record against the spin, and read the primary sources. The whole atlas, on one
+        screen: the <b>map</b>, <b>district terrain</b>, <b>news</b>, the <b>reading room</b> and
+        the <b>data</b> all slide in beside the globe — nothing reloads.</p>
+        <div class="hs-cta">
+          <button id="hs-explore" class="hs-btn primary">🌍 Explore the globe</button>
+          <button id="hs-search" class="hs-btn">🔍 Search a district</button>
+          <button id="hs-all" class="hs-btn">⊞ All views</button>
+        </div>
+        <div class="hs-foot">Sourced, or it's marked a gap — never faked. <a href="how-it-works.html?embed=1" id="hs-about">How it works →</a></div>
+      </div>
     </div>
   </div>
 
@@ -174,13 +195,15 @@
     document.getElementById('hp-close').addEventListener('click', closePanel);
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
 
-    // intro overlay — show once
-    const intro = document.getElementById('hero-intro');
-    try { if (localStorage.getItem('hero_intro_seen') === '1') intro.remove(); } catch (e) {}
-    document.getElementById('hero-intro-x').addEventListener('click', () => { intro.remove(); try { localStorage.setItem('hero_intro_seen', '1'); } catch (e) {} });
-    document.getElementById('rail-help').addEventListener('click', () => {
-      if (!document.getElementById('hero-intro')) { const d = intro.cloneNode(true); document.getElementById('hero').appendChild(d); d.querySelector('#hero-intro-x').addEventListener('click', () => d.remove()); }
-    });
+    // landing splash — the first impression, shown once (or via ? in the rail)
+    const splash = document.getElementById('hero-splash');
+    function dismissSplash(seen) { if (!splash) return; splash.style.display = 'none'; if (seen) { try { localStorage.setItem('hero_intro_seen', '1'); } catch (e) {} } }
+    try { if (localStorage.getItem('hero_intro_seen') === '1') dismissSplash(false); } catch (e) {}
+    document.getElementById('hs-explore').addEventListener('click', () => dismissSplash(true));
+    document.getElementById('hs-search').addEventListener('click', () => { dismissSplash(true); const s = document.getElementById('hero-search'); s.focus(); });
+    document.getElementById('hs-all').addEventListener('click', () => { dismissSplash(true); openLauncher(); });
+    document.getElementById('hs-about').addEventListener('click', e => { e.preventDefault(); dismissSplash(true); openView('how-it-works.html?embed=1', 'How it works', null); });
+    document.getElementById('rail-help').addEventListener('click', () => { if (splash) splash.style.display = 'grid'; });
 
     // let the globe iframe request a view open (e.g. click a district → open its page in the panel)
     window.addEventListener('message', e => {
