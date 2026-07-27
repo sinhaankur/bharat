@@ -15,6 +15,10 @@
     .t3-legend { display: flex; flex-wrap: wrap; gap: 0.4rem 0.9rem; align-items: center; font-size: 11px; color: var(--muted-foreground); margin: 0.5rem 0 1rem; font-family: var(--font-mono); }
     .t3-chip { display: inline-block; width: 14px; height: 10px; border-radius: 2px; vertical-align: middle; margin-right: 4px; }
     .t3-controls { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; margin: 0.4rem 0 0.2rem; font-size: 12px; }
+    .t3-mode { display: inline-flex; border: 1px solid var(--border-strong); border-radius: 999px; overflow: hidden; }
+    .t3-mode-btn { background: oklch(0.16 0 0); color: var(--muted-foreground); border: 0; padding: 4px 14px; font-family: var(--font-mono); font-size: 12px; cursor: pointer; transition: background .15s, color .15s; }
+    .t3-mode-btn.active { background: oklch(0.28 0.07 78); color: oklch(0.94 0.05 90); }
+    .t3-mode-btn:not(.active):hover { color: var(--foreground); }
     .t3-controls label { color: var(--muted-foreground); font-family: var(--font-mono); font-size: 11px; }
     .t3-controls input[type=range] { accent-color: oklch(0.74 0.16 70); }
     #t3-status { font-family: var(--font-mono); font-size: 11.5px; color: oklch(0.82 0.14 78); min-height: 1.2em; margin-bottom: 0.3rem; }
@@ -47,6 +51,10 @@
 
     <div id="t3-status">Loading elevation tiles…</div>
     <div class="t3-controls">
+      <span class="t3-mode" role="group" aria-label="View mode">
+        <button type="button" id="t3-mode-3d" class="t3-mode-btn active">🏔 3D</button>
+        <button type="button" id="t3-mode-2d" class="t3-mode-btn">🗺 2D</button>
+      </span>
       <label>Region
         <select id="t3-region" style="background:oklch(0.18 0 0);color:var(--foreground);border:1px solid var(--border-strong);border-radius:5px;padding:2px 6px;font-family:var(--font-mono);font-size:11px">
           <option value="india">All India</option>
@@ -64,7 +72,11 @@
       <datalist id="t3-sea-ticks"><option value="0"></option><option value="1"></option><option value="2"></option><option value="3"></option><option value="4"></option><option value="5"></option><option value="6"></option></datalist>
     </div>
     <div id="t3-sea-story" class="t3-sea-story"></div>
-    <canvas id="t3-canvas"></canvas>
+    <div style="position:relative">
+      <canvas id="t3-canvas"></canvas>
+      <div id="t3-place" hidden style="position:absolute;left:14px;top:12px;z-index:5;background:oklch(0.14 0.01 250 / 0.9);border:1px solid var(--border-strong);border-radius:var(--radius-sm);padding:6px 11px;font-family:var(--font-mono);font-size:12px;color:var(--foreground);backdrop-filter:blur(6px);pointer-events:none"></div>
+      <div id="t3-modehint" style="position:absolute;right:14px;bottom:12px;z-index:5;background:oklch(0.14 0.01 250 / 0.85);border:1px solid var(--border);border-radius:999px;padding:4px 11px;font-family:var(--font-mono);font-size:10.5px;color:var(--muted-foreground)">🏔 3D relief · drag to orbit</div>
+    </div>
     <div class="t3-legend" id="t3-legend"></div>
 
     <div class="t3-gap">
@@ -286,8 +298,38 @@
 
     document.getElementById('t3-exag').addEventListener('input', e => {
       document.getElementById('t3-exag-val').textContent = e.target.value + '×';
-      applyExag(+e.target.value);
+      if (viewMode === '3d') applyExag(+e.target.value);   // exag only bites in 3D
     });
+
+    // ---- 2D ⇄ 3D mode: flat top-down map vs raised relief, same data ----
+    // 2D = flatten the terrain (colour map from above, like a paper map); 3D = restore the
+    // relief and orbit. The colour is identical (metres above sea level), so you SEE the same
+    // place two ways — that's the "understand it" pay-off.
+    let viewMode = '3d';
+    function setMode(mode) {
+      viewMode = mode;
+      const is2d = mode === '2d';
+      document.getElementById('t3-mode-2d').classList.toggle('active', is2d);
+      document.getElementById('t3-mode-3d').classList.toggle('active', !is2d);
+      controls.autoRotate = false;
+      if (is2d) {
+        applyExag(0.001);                        // flatten to a plane
+        controls.reset();
+        camera.position.set(0, 34, 0.01);        // straight top-down
+        controls.maxPolarAngle = 0.02;           // lock to overhead
+        controls.enableRotate = false;           // pan/zoom only, like a 2D map
+        document.getElementById('t3-modehint').textContent = '🗺 2D map · flat, coloured by elevation — scroll to zoom';
+      } else {
+        controls.maxPolarAngle = Math.PI * 0.49;
+        controls.enableRotate = true;
+        camera.position.set(0, 22, 26);
+        applyExag(+document.getElementById('t3-exag').value);   // restore relief
+        document.getElementById('t3-modehint').textContent = '🏔 3D relief · drag to orbit, scroll to zoom';
+      }
+      controls.update();
+    }
+    document.getElementById('t3-mode-2d').addEventListener('click', () => setMode('2d'));
+    document.getElementById('t3-mode-3d').addEventListener('click', () => setMode('3d'));
     // Meaningful sea-level stops — the slider snaps to reference points that tell a story,
     // not arbitrary metres. Each cites a real (if illustrative) benchmark.
     const SEA_STOPS = [
@@ -380,8 +422,14 @@
 
     districtDeepLink().then(() => loadElevation().then(grid => {
       status.textContent = window.__t3_district
-        ? `📍 ${window.__t3_district} — real 3D terrain · elevation 0–${Math.round(grid.max)} m (open 30 m DEM) · drag to orbit, raise the sea`
+        ? `📍 ${window.__t3_district} — real 3D terrain · elevation 0–${Math.round(grid.max)} m (open 30 m DEM) · flip 2D/3D, raise the sea`
         : `Rendering relief · elevation 0–${Math.round(grid.max)} m (open 30 m DEM) · drag a region or raise the sea`;
+      // show the place label + its elevation depth on the canvas
+      if (window.__t3_district) {
+        const pl = document.getElementById('t3-place');
+        pl.innerHTML = `📍 <b>${window.__t3_district}</b><br><span style="opacity:.75;font-size:11px">terrain 0–${Math.round(grid.max)} m above sea · low = river/plain, high = hills</span>`;
+        pl.hidden = false;
+      }
       buildMesh(grid); buildLegend(grid.max); loop();
     }).catch(err => { status.textContent = 'Could not load elevation tiles (network).'; console.error(err); }));
   </script>
