@@ -62,6 +62,14 @@
     #hero-top { position: absolute; z-index: 3; right: 14px; top: 12px; display: flex; gap: 0.5rem; align-items: center; }
     #hero-top a { font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); text-decoration: none; border: 1px solid var(--border); border-radius: 999px; padding: 4px 11px; background: oklch(0.13 0 0 / 0.8); backdrop-filter: blur(8px); }
     #hero-top a:hover { color: var(--foreground); border-color: var(--border-strong); }
+    #hero-search-wrap { position: relative; }
+    #hero-search { width: 220px; background: oklch(0.13 0 0 / 0.85); backdrop-filter: blur(8px); border: 1px solid var(--border-strong); color: var(--foreground); border-radius: 999px; padding: 5px 13px; font-family: var(--font-mono); font-size: 12px; transition: width .2s, border-color .15s; }
+    #hero-search:focus { outline: none; border-color: var(--warm); width: 280px; }
+    #hero-search-results { position: absolute; right: 0; top: 36px; width: 300px; max-height: 340px; overflow-y: auto; background: oklch(0.14 0 0 / 0.98); backdrop-filter: blur(12px); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); box-shadow: 0 12px 36px oklch(0 0 0 / 0.5); padding: 0.3rem; }
+    #hero-search-results button { display: block; width: 100%; text-align: left; background: none; border: 0; color: var(--foreground); font-family: var(--font-mono); font-size: 12px; padding: 6px 10px; border-radius: 5px; cursor: pointer; }
+    #hero-search-results button:hover, #hero-search-results button.sel { background: oklch(0.24 0.04 250); }
+    #hero-search-results button .st { color: var(--muted-foreground); font-size: 10px; }
+    #hero-search-results .no { color: var(--muted-foreground); font-size: 11px; padding: 6px 10px; }
     @media (max-width: 720px) {
       #hero-rail { width: 52px; flex-basis: 52px; }
       #hero-panel { width: 100vw; }
@@ -92,6 +100,10 @@
     </div>
 
     <div id="hero-top">
+      <div id="hero-search-wrap">
+        <input id="hero-search" type="text" placeholder="🔍 Search a district…" autocomplete="off" />
+        <div id="hero-search-results" hidden></div>
+      </div>
       <a href="sitemap.html" title="All pages">☰ all pages</a>
     </div>
 
@@ -221,6 +233,47 @@
         closeLauncher();
       }));
     }
+    // ---- district search: type a district → open it in the panel (+ globe terrain link) ----
+    let DISTRICTS = [];
+    fetch('district-centroids.json').then(r => r.json()).then(d => {
+      DISTRICTS = Object.keys(d.centroids || {}).map(k => {
+        const [state, name] = k.split('|');
+        return { state, name };
+      });
+    }).catch(() => {});
+    const sInput = document.getElementById('hero-search');
+    const sResults = document.getElementById('hero-search-results');
+    let sSel = -1, sList = [];
+    function renderSearch(q) {
+      const f = q.trim().toLowerCase();
+      if (!f) { sResults.hidden = true; return; }
+      sList = DISTRICTS.filter(d => d.name.toLowerCase().includes(f) || d.state.toLowerCase().includes(f)).slice(0, 12);
+      sSel = -1;
+      sResults.innerHTML = sList.length
+        ? sList.map((d, i) => `<button data-i="${i}">${d.name} <span class="st">· ${d.state}</span></button>`).join('')
+        : `<div class="no">No district matches “${q}”.</div>`;
+      sResults.hidden = false;
+      sResults.querySelectorAll('button').forEach(b => b.addEventListener('click', () => pickDistrict(+b.dataset.i)));
+    }
+    function pickDistrict(i) {
+      const d = sList[i]; if (!d) return;
+      const url = `index.html?state=${encodeURIComponent(d.state)}&district=${encodeURIComponent(d.name)}`;
+      openView(url + '&embed=1', `${d.name} · ${d.state}`, null);
+      sResults.hidden = true; sInput.value = d.name;
+    }
+    sInput.addEventListener('input', e => renderSearch(e.target.value));
+    sInput.addEventListener('keydown', e => {
+      if (sResults.hidden) return;
+      const btns = [...sResults.querySelectorAll('button')];
+      if (e.key === 'ArrowDown') { e.preventDefault(); sSel = Math.min(sSel + 1, btns.length - 1); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); sSel = Math.max(sSel - 1, 0); }
+      else if (e.key === 'Enter') { e.preventDefault(); pickDistrict(sSel < 0 ? 0 : sSel); return; }
+      else if (e.key === 'Escape') { sResults.hidden = true; return; }
+      btns.forEach((b, k) => b.classList.toggle('sel', k === sSel));
+      if (btns[sSel]) btns[sSel].scrollIntoView({ block: 'nearest' });
+    });
+    document.addEventListener('click', e => { if (!e.target.closest('#hero-search-wrap')) sResults.hidden = true; });
+
     function openLauncher() { launcher.hidden = false; renderLauncher(''); hlSearch.value = ''; setTimeout(() => hlSearch.focus(), 30); }
     function closeLauncher() { launcher.hidden = true; }
     document.getElementById('rail-all').addEventListener('click', openLauncher);

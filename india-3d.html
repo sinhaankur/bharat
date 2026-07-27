@@ -380,6 +380,9 @@
 
     const status = document.getElementById('i3-status');
     const R = 10;   // globe radius (world units)
+    // are we running inside the hero app? (?embed=1 in a frame) — if so, district clicks open
+    // in the hero side-panel via postMessage instead of navigating the whole window away.
+    const EMBEDDED = new URLSearchParams(location.search).get('embed') === '1' && window.parent !== window;
 
     // ---- GLOBE-FIRST layout: move the globe up to be the hero, tuck controls into a drawer ----
     // The 3D Earth is the whole point, so it leads; the ~28 toggles collapse behind a button.
@@ -1336,7 +1339,13 @@
         const r = districtAt(e);
         if (!r) return;
         const st = DISTRICTS.states[r[1]] || '';
-        location.href = `index.html?state=${encodeURIComponent(st)}&district=${encodeURIComponent(r[0])}`;
+        const url = `index.html?state=${encodeURIComponent(st)}&district=${encodeURIComponent(r[0])}`;
+        // inside the hero app (embed): open the district in the slide-in panel, don't navigate
+        if (EMBEDDED) {
+          parent.postMessage({ heroOpen: url, heroTitle: `${r[0]} · ${st}` }, '*');
+        } else {
+          location.href = url;
+        }
       });
     }
 
