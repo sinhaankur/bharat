@@ -70,8 +70,8 @@
     .hs-foot a { color: oklch(0.78 0.16 72); }
     /* top-right: search + a link back to the classic multi-page site */
     #hero-top { position: absolute; z-index: 3; right: 14px; top: 12px; display: flex; gap: 0.5rem; align-items: center; }
-    #hero-top a { font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); text-decoration: none; border: 1px solid var(--border); border-radius: 999px; padding: 4px 11px; background: oklch(0.13 0 0 / 0.8); backdrop-filter: blur(8px); }
-    #hero-top a:hover { color: var(--foreground); border-color: var(--border-strong); }
+    #hero-top a, #hero-top button { font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); text-decoration: none; border: 1px solid var(--border); border-radius: 999px; padding: 4px 11px; background: oklch(0.13 0 0 / 0.8); backdrop-filter: blur(8px); cursor: pointer; }
+    #hero-top a:hover, #hero-top button:hover { color: var(--foreground); border-color: var(--border-strong); }
     #hero-search-wrap { position: relative; }
     #hero-search { width: 220px; background: oklch(0.13 0 0 / 0.85); backdrop-filter: blur(8px); border: 1px solid var(--border-strong); color: var(--foreground); border-radius: 999px; padding: 5px 13px; font-family: var(--font-mono); font-size: 12px; transition: width .2s, border-color .15s; }
     #hero-search:focus { outline: none; border-color: var(--warm); width: 280px; }
@@ -110,6 +110,7 @@
         <input id="hero-search" type="text" placeholder="🔍 Search a district…" autocomplete="off" />
         <div id="hero-search-results" hidden></div>
       </div>
+      <button id="hero-share" type="button" title="Share the atlas">🔗 Share</button>
       <a href="sitemap.html" title="All pages">☰ all pages</a>
     </div>
 
@@ -160,6 +161,7 @@
     try { sessionStorage.setItem('atlas_seen_hero', '1'); } catch (e) {}
   </script>
   <script src="nav-data.js"></script>
+  <script src="share-widget.js"></script>
   <script>
     // Build the rail's pinned views + the launcher from the shared catalog (window.ATLAS_NAV),
     // so the hero and the site nav are one source of truth. rail:true → pinned to the rail.
@@ -209,6 +211,15 @@
     document.getElementById('hs-all').addEventListener('click', () => { dismissSplash(true); openLauncher(); });
     document.getElementById('hs-about').addEventListener('click', e => { e.preventDefault(); dismissSplash(true); openView('how-it-works.html?embed=1', 'How it works', null); });
     document.getElementById('rail-help').addEventListener('click', () => { if (splash) splash.style.display = 'grid'; });
+
+    // share the atlas from the hero
+    document.getElementById('hero-share').addEventListener('click', () => {
+      window.ShareWidget && ShareWidget.open({
+        url: location.href.split('?')[0],
+        title: 'India District Atlas — the whole country on one screen',
+        text: 'India as a real-Earth 3D globe of all 594 districts — trace public money, weigh the record, read the sources. The whole atlas on one screen:',
+      });
+    });
 
     // let the globe iframe request a view open (e.g. click a district → open its page in the panel)
     window.addEventListener('message', e => {
