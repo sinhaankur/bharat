@@ -232,6 +232,14 @@ a:hover { border-color: var(--foreground); }
   width: 100%;
   transition: grid-template-columns 0.28s ease;
 }
+/* EMBED MODE (inside the hero app's ?embed=1 panel): no site header, so use the full
+   viewport height and drop the 720px floor. On a narrow panel, stack the map over its
+   side-panel (single column) so the map fills the width and its tiles load properly. */
+html.embed-mode body { margin: 0; }
+html.embed-mode .india-shell { height: 100vh; min-height: 0; }
+@media (max-width: 760px) {
+  html.embed-mode .india-shell { grid-template-columns: 1fr; grid-template-rows: 62vh auto; }
+}
 /* Immersive "India in pixels" mode — panel collapses, map goes near-full-width. */
 .india-shell.map-expanded { grid-template-columns: 1fr 0fr; }
 .india-shell.map-expanded .india-side-panel { opacity: 0; pointer-events: none; padding: 0; border: 0; }

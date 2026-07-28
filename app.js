@@ -2866,6 +2866,19 @@
       wheelPxPerZoomLevel: 120,      // gentler wheel so you can settle on a level
     }).setView([22.5, 80], 4.5);
 
+    // Keep Leaflet in sync with its container size — critical when the map is embedded in
+    // the hero app's side-panel (?embed=1), where the container settles AFTER load and on
+    // panel open/resize. Without this the map renders at the wrong height and tiles leave
+    // grey gaps. ResizeObserver covers iframe/panel resizes; a couple of delayed nudges
+    // catch the initial layout settle.
+    try {
+      const _mapEl = document.getElementById('india-map');
+      if (_mapEl && 'ResizeObserver' in window) {
+        let _riz; new ResizeObserver(() => { clearTimeout(_riz); _riz = setTimeout(() => map && map.invalidateSize(), 120); }).observe(_mapEl);
+      }
+    } catch (e) {}
+    [200, 600, 1200].forEach(t => setTimeout(() => { if (map) map.invalidateSize(); }, t));
+
     // Deliberate layer stack, bottom → top: basemap (tilePane 200) < terrain shading
     // (hillshade + elevation tint) < district/taluk data colours (overlayPane 400) <
     // live weather < place labels (kept under marker pins at 600). Without these
