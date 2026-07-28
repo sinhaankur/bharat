@@ -108,7 +108,11 @@
             <div id="map-search-results" hidden></div>
           </div>
           <button id="map-expand-btn" title="Expand map (India in pixels)" aria-label="Expand map">⛶</button>
-          <a id="map-hero-link" href="hero.html" title="Open the one-screen globe app — the whole atlas on one screen" aria-label="Open the globe app">🌍 Globe app</a>
+          <div id="map-viewswitch" role="group" aria-label="View format">
+            <button class="mvs active" data-view="2d" title="The classic 2D map (you're here)" aria-pressed="true">🗺 2D map</button>
+            <a class="mvs" href="hero.html" data-view="globe" title="Explore India as a 3D globe — the whole atlas on one screen">🌍 Globe</a>
+            <a class="mvs" href="terrain-3d.html" data-view="terrain" title="Explore the real 3D terrain — relief, rivers, flood plains">🏔 Terrain</a>
+          </div>
           <div id="india-map-readout">
             <div class="readout-label mono">Hover a state</div>
             <div class="readout-name">—</div>
