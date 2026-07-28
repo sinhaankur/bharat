@@ -3,23 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Front door: a CLEAN first visit (bare URL, no query/hash) lands on the hero app.
-       Any deep-link (?state=…, ?district=…, #…) stays on the map, so the 58 map links,
-       shares and bookmarks all still work. Escapes: ?map (force map) or the hero's "The map"
-       link. Reversible — delete this block to make the map the front door again. -->
-  <script>
-    (function () {
-      try {
-        var qs = location.search, hash = location.hash;
-        var forceMap = /[?&]map\b/.test(qs);
-        var clean = !qs && !hash;          // truly bare URL
-        if (clean && !forceMap && sessionStorage.getItem('atlas_seen_hero') !== '1') {
-          sessionStorage.setItem('atlas_seen_hero', '1');   // once per session — no loop
-          location.replace('hero.html');
-        }
-      } catch (e) { /* if anything fails, just show the map */ }
-    })();
-  </script>
 
   <!-- ============ SEO: India District Atlas — money + land + law ============ -->
   <title>India District Atlas — public money, flood &amp; CRZ zoning, land &amp; law per district</title>
@@ -125,6 +108,7 @@
             <div id="map-search-results" hidden></div>
           </div>
           <button id="map-expand-btn" title="Expand map (India in pixels)" aria-label="Expand map">⛶</button>
+          <a id="map-hero-link" href="hero.html" title="Open the one-screen globe app — the whole atlas on one screen" aria-label="Open the globe app">🌍 Globe app</a>
           <div id="india-map-readout">
             <div class="readout-label mono">Hover a state</div>
             <div class="readout-name">—</div>
