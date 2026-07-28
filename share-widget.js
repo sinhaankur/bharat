@@ -28,6 +28,23 @@
   ];
   function enc(s) { return encodeURIComponent(s || ""); }
 
+  // turn a snapshot source (canvas | dataURL string) into a PNG dataURL. For a WebGL canvas
+  // that wasn't created with preserveDrawingBuffer, the caller should force a render right
+  // before opening the share sheet so the buffer is still intact.
+  function snapshotDataURL(src) {
+    try {
+      if (typeof src === "string") return src;                       // already a dataURL
+      if (src && src.toDataURL) return src.toDataURL("image/png");    // a canvas element
+    } catch (e) {}
+    return null;
+  }
+  function downloadBlob(blob, name) {
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = name;
+    document.body.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  }
+
   function injectCSS() {
     if (document.getElementById("share-widget-css")) return;
     var css = ""
@@ -46,7 +63,9 @@
       + ".sw-row{display:flex;gap:0.45rem;margin-top:0.7rem}"
       + ".sw-copy{flex:1;display:flex;align-items:center;justify-content:center;gap:0.4rem;background:oklch(0.2 0.03 250);border:1px solid var(--border-strong);color:var(--foreground);border-radius:var(--radius-sm);padding:0.55rem;font-family:var(--font-mono);font-size:12px;cursor:pointer}"
       + ".sw-copy:hover{border-color:var(--warm)}"
-      + ".sw-native{background:oklch(0.28 0.07 78);border-color:var(--warm);color:oklch(0.94 0.05 90)}";
+      + ".sw-native{background:oklch(0.28 0.07 78);border-color:var(--warm);color:oklch(0.94 0.05 90)}"
+      + ".sw-snap{margin:0 0 0.6rem;border:1px solid var(--border-strong);border-radius:var(--radius-sm);overflow:hidden;background:oklch(0.08 0 0)}"
+      + ".sw-snap img{display:block;width:100%;max-height:200px;object-fit:cover}";
     var s = document.createElement("style"); s.id = "share-widget-css"; s.textContent = css;
     document.head.appendChild(s);
   }
@@ -64,14 +83,37 @@
       return '<a class="sw-target" target="_blank" rel="noopener" href="' + esc(t.href(url, text, title)) + '"><span class="swi">' + t.ic + "</span>" + esc(t.label) + "</a>";
     }).join("");
     var nativeBtn = navigator.share ? '<button class="sw-copy sw-native" id="sw-native">📲 Share…</button>' : "";
+    // optional snapshot: a canvas/dataURL/blob of the current view to share as an IMAGE.
+    var snap = opts.snapshot ? snapshotDataURL(opts.snapshot) : null;
+    var snapRow = snap
+      ? '<div class="sw-snap"><img src="' + snap + '" alt="snapshot"/></div>'
+        + '<div class="sw-row"><button class="sw-copy sw-native" id="sw-shareimg">📸 Share image…</button><button class="sw-copy" id="sw-dlimg">⬇ Save image</button></div>'
+      : "";
     ov.innerHTML =
       '<div class="sw-card" role="dialog" aria-label="Share">'
       + '<div class="sw-head"><div class="sw-title">Share this</div><button class="sw-close" id="sw-close" aria-label="Close">✕</button></div>'
       + '<div class="sw-preview">' + esc(text) + '</div>'
+      + snapRow
       + '<div class="sw-grid">' + targets + "</div>"
       + '<div class="sw-row">' + nativeBtn + '<button class="sw-copy" id="sw-copy">🔗 Copy link</button></div>'
       + "</div>";
     document.body.appendChild(ov);
+
+    // snapshot buttons: share the image file (Web Share w/ files) or download it to attach.
+    if (snap) {
+      var toBlob = function (cb) { fetch(snap).then(function (r) { return r.blob(); }).then(cb); };
+      var fname = 'india-atlas-' + Date.now() + '.png';
+      var shareImgBtn = document.getElementById('sw-shareimg');
+      shareImgBtn.addEventListener('click', function () {
+        toBlob(function (blob) {
+          var file = new File([blob], fname, { type: 'image/png' });
+          if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            navigator.share({ files: [file], title: title, text: text }).catch(function () {});
+          } else { downloadBlob(blob, fname); shareImgBtn.textContent = '⬇ saved — attach it'; }
+        });
+      });
+      document.getElementById('sw-dlimg').addEventListener('click', function () { toBlob(function (b) { downloadBlob(b, fname); }); });
+    }
 
     ov.addEventListener("click", function (e) { if (e.target === ov) close(); });
     document.getElementById("sw-close").addEventListener("click", close);
