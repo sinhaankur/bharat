@@ -703,28 +703,8 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 }
 #map-expand-btn:hover { border-color: var(--warm); color: oklch(0.86 0.15 78); }
 .india-shell.map-expanded #map-expand-btn { color: oklch(0.86 0.15 78); border-color: var(--warm); }
-/* VIEW-FORMAT SWITCHER — the map is the default; the globe/terrain are optional formats
-   for more exploration. A small segmented control, top-right of the map. */
-#map-viewswitch {
-  position: absolute; top: 12px; right: 54px; z-index: 600;
-  display: inline-flex; align-items: stretch; border-radius: 8px; overflow: hidden;
-  border: 1px solid var(--border-strong); background: oklch(0.14 0.005 240 / 0.94);
-  backdrop-filter: blur(4px); box-shadow: 0 2px 8px oklch(0 0 0 / 0.4);
-}
-#map-viewswitch .mvs {
-  display: inline-flex; align-items: center; gap: 0.3rem; padding: 0 11px; height: 34px;
-  font-family: var(--font-mono); font-size: 11.5px; color: var(--muted-foreground);
-  text-decoration: none; cursor: pointer; background: none; border: 0;
-  border-right: 1px solid var(--border); transition: color .15s, background .15s;
-}
-#map-viewswitch .mvs:last-child { border-right: 0; }
-#map-viewswitch .mvs:hover { color: var(--foreground); background: oklch(0.2 0.01 240); }
-#map-viewswitch .mvs.active { color: oklch(0.92 0.05 90); background: oklch(0.28 0.07 78); }
-@media (max-width: 640px) {
-  #map-viewswitch { right: 8px; top: 8px; }
-  #map-viewswitch .mvs { padding: 0 8px; height: 30px; font-size: 10.5px; }
-  #map-viewswitch .mvs[data-view="terrain"] { display: none; }   /* keep the phone control compact */
-}
+/* the "View as" format switcher (2D map / globe / terrain) is a shared module —
+   see view-switch.js, which injects #vsw + its own styles on the three view pages. */
 @media (max-width: 640px) { .mlp { width: 168px; top: 8px; left: 8px; padding: 6px 7px; } }
 
 /* metres-above-sea-level readout, bottom-left of the map */
