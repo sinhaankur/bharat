@@ -9,12 +9,25 @@
   var DEFAULTS = { font: "default", size: 100, contrast: false, motion: true };
   var state = load();
 
+  // 'bundled' fonts are self-hosted (vendor/fonts) and lazy-loaded only when picked.
   var FONTS = {
-    default: { label: "Default", stack: null },   // null → use the page's own --font-sans
-    sans:    { label: "Clean sans", stack: "'Helvetica Neue', Arial, system-ui, sans-serif" },
-    serif:   { label: "Serif (reading)", stack: "Georgia, 'Iowan Old Style', 'Times New Roman', serif" },
-    dyslexic:{ label: "Dyslexia-friendly", stack: "'OpenDyslexic', 'Comic Sans MS', 'Atkinson Hyperlegible', sans-serif" },
+    default:   { label: "Default", stack: null },   // null → use the page's own --font-sans
+    sans:      { label: "Clean sans", stack: "'Helvetica Neue', Arial, system-ui, sans-serif" },
+    serif:     { label: "Serif (reading)", stack: "Georgia, 'Iowan Old Style', 'Times New Roman', serif" },
+    hyperleg:  { label: "Hyper-legible", stack: "'Atkinson Hyperlegible', system-ui, sans-serif", bundled: true },
+    dyslexic:  { label: "Dyslexia-friendly", stack: "'OpenDyslexic', 'Comic Sans MS', sans-serif", bundled: true },
   };
+
+  // load the self-hosted accessibility font-faces once, on demand (path from this script's src)
+  function ensureFonts() {
+    if (document.getElementById("a11y-fonts")) return;
+    var base = "";
+    var me = document.currentScript || [].slice.call(document.scripts).find(function (s) { return /a11y\.js/.test(s.src); });
+    if (me && me.src) base = me.src.replace(/a11y\.js.*$/, "");
+    var l = document.createElement("link");
+    l.id = "a11y-fonts"; l.rel = "stylesheet"; l.href = base + "vendor/fonts/fonts.css";
+    document.head.appendChild(l);
+  }
 
   function load() {
     try { return Object.assign({}, DEFAULTS, JSON.parse(localStorage.getItem(LS) || "{}")); }
@@ -26,6 +39,7 @@
   function apply() {
     var root = document.documentElement;
     var f = FONTS[state.font] || FONTS.default;
+    if (f.bundled) ensureFonts();   // lazy-load the self-hosted font only when it's chosen
     if (f.stack) root.style.setProperty("--font-sans", f.stack);
     else root.style.removeProperty("--font-sans");
     // scale the base font-size (html is 14px by default) — everything in rem/em follows

@@ -1,0 +1,16 @@
+Accessibility fonts bundled here — both under the SIL Open Font License 1.1
+(free to use, bundle and redistribute; https://openfontlicense.org).
+
+OpenDyslexic
+  A typeface designed to increase readability for readers with dyslexia.
+  © Abbie Gonzalez / the OpenDyslexic project. SIL OFL 1.1.
+  https://opendyslexic.org · https://github.com/antijingoist/opendyslexic
+
+Atkinson Hyperlegible
+  Designed by the Braille Institute for maximum legibility and character
+  distinction, especially for low-vision readers.
+  © Braille Institute of America, Inc. SIL OFL 1.1.
+  https://brailleinstitute.org/freefont
+
+Files obtained via the @fontsource packages (jsDelivr), which repackage the
+upstream OFL fonts as woff2. Only the Latin subset is bundled.
