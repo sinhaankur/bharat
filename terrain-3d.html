@@ -12,6 +12,7 @@
     .t3-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.55; max-width: 74ch; }
     #t3-canvas { width: 100%; height: 64vh; min-height: 440px; border: 1px solid var(--border-strong); border-radius: var(--radius); background: radial-gradient(ellipse at 50% 30%, oklch(0.2 0.02 250), oklch(0.12 0 0)); display: block; margin: 1.2rem 0 0.7rem; cursor: grab; }
     #t3-canvas:active { cursor: grabbing; }
+    @keyframes t3spin { to { transform: rotate(360deg); } }
     .t3-legend { display: flex; flex-wrap: wrap; gap: 0.4rem 0.9rem; align-items: center; font-size: 11px; color: var(--muted-foreground); margin: 0.5rem 0 1rem; font-family: var(--font-mono); }
     .t3-chip { display: inline-block; width: 14px; height: 10px; border-radius: 2px; vertical-align: middle; margin-right: 4px; }
     .t3-controls { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; margin: 0.4rem 0 0.2rem; font-size: 12px; }
@@ -81,6 +82,13 @@
       <div id="t3-place" hidden style="position:absolute;left:14px;top:12px;z-index:5;background:oklch(0.14 0.01 250 / 0.9);border:1px solid var(--border-strong);border-radius:var(--radius-sm);padding:6px 11px;font-family:var(--font-mono);font-size:12px;color:var(--foreground);backdrop-filter:blur(6px);pointer-events:none"></div>
       <div id="t3-modehint" style="position:absolute;right:14px;bottom:12px;z-index:5;background:oklch(0.14 0.01 250 / 0.85);border:1px solid var(--border);border-radius:999px;padding:4px 11px;font-family:var(--font-mono);font-size:10.5px;color:var(--muted-foreground)">🏔 3D relief · drag to orbit</div>
       <div id="t3-townlabel" hidden style="position:absolute;z-index:6;transform:translate(-50%,-100%);pointer-events:none;background:oklch(0.16 0.02 40 / 0.95);border:1px solid oklch(0.7 0.16 45);border-radius:6px;padding:2px 8px;font-family:var(--font-mono);font-size:11px;color:oklch(0.92 0.08 60);white-space:nowrap"></div>
+      <div id="t3-loading" style="position:absolute;inset:0;z-index:7;display:grid;place-items:center;background:oklch(0.11 0.005 250 / 0.72);backdrop-filter:blur(2px)">
+        <div style="text-align:center">
+          <div class="t3-spin" style="width:38px;height:38px;margin:0 auto 0.8rem;border:3px solid oklch(0.3 0.02 250);border-top-color:oklch(0.82 0.14 78);border-radius:50%;animation:t3spin .8s linear infinite"></div>
+          <div id="t3-loading-txt" style="font-family:var(--font-mono);font-size:12px;color:oklch(0.86 0.1 78)">Building the terrain…</div>
+          <div style="width:180px;height:4px;background:oklch(0.25 0 0);border-radius:2px;margin:0.6rem auto 0;overflow:hidden"><div id="t3-loading-bar" style="height:100%;width:0;background:oklch(0.78 0.14 78);border-radius:2px;transition:width .2s"></div></div>
+        </div>
+      </div>
     </div>
     <div class="t3-legend" id="t3-legend"></div>
 
@@ -189,8 +197,24 @@
       return (1 - Math.log(Math.tan(r) + 1 / Math.cos(r)) / Math.PI) / 2 * Math.pow(2, z);
     }
 
-    // Load the terrain-RGB tiles covering India, decode to an elevation grid.
+    // ---- terrain loading UI ----
+    function setLoading(on, txt, pct) {
+      const el = document.getElementById('t3-loading');
+      if (!el) return;
+      el.style.display = on ? 'grid' : 'none';
+      if (txt) { const t = document.getElementById('t3-loading-txt'); if (t) t.textContent = txt; }
+      if (pct != null) { const b = document.getElementById('t3-loading-bar'); if (b) b.style.width = Math.round(pct) + '%'; }
+    }
+
+    // Load the terrain-RGB tiles covering the region, decode to an elevation grid.
+    // OPTIMIZED: (1) a decoded-grid CACHE keyed by region+zoom → revisiting a district/region
+    // is instant (no refetch/redecode). (2) a real progress overlay so it never looks stuck.
+    // (3) renders whatever loaded even if a tile 404s (partial > blank).
+    const _gridCache = {};
     async function loadElevation() {
+      const key = `${REGION}|${LON0},${LON1},${LAT0},${LAT1}|${ZOOM}`;
+      if (_gridCache[key]) { setLoading(false); return _gridCache[key]; }   // instant on revisit
+      setLoading(true, 'Building the terrain…', 0);
       const tx0 = Math.floor(lon2tile(LON0, ZOOM)), tx1 = Math.floor(lon2tile(LON1, ZOOM));
       const ty0 = Math.floor(lat2tile(LAT1, ZOOM)), ty1 = Math.floor(lat2tile(LAT0, ZOOM));
       const nx = (tx1 - tx0 + 1), ny = (ty1 - ty0 + 1);
@@ -203,11 +227,13 @@
         const gx = i % nx, gy = (i / nx) | 0;
         return new Promise(res => {
           const img = new Image(); img.crossOrigin = 'anonymous';
-          img.onload = () => { ctx.drawImage(img, gx * TILE, gy * TILE); done++; status.textContent = `Loading elevation tiles… ${done}/${total}`; res(); };
-          img.onerror = () => { done++; res(); };
+          const fin = () => { done++; const p = done / total * 100; status.textContent = `Loading elevation tiles… ${done}/${total}`; setLoading(true, `Loading elevation… ${done}/${total} tiles`, p); res(); };
+          img.onload = () => { try { ctx.drawImage(img, gx * TILE, gy * TILE); } catch (e) {} fin(); };
+          img.onerror = fin;
           img.src = window.DEM.tileUrl(ZOOM, tx0 + gx, ty0 + gy);
         });
       }));
+      setLoading(true, 'Sculpting relief…', 100);
 
       const data = ctx.getImageData(0, 0, W, H).data;
       // Downsample to a manageable mesh grid.
@@ -222,7 +248,10 @@
         elev[y * GW + x] = v;
         if (v < min) min = v; if (v > max) max = v;
       }
-      return { elev, GW, GH, min, max };
+      const grid = { elev, GW, GH, min, max };
+      _gridCache[key] = grid;   // cache so revisiting this region/district is instant
+      setLoading(false);
+      return grid;
     }
 
     const canvas = document.getElementById('t3-canvas');
@@ -507,7 +536,7 @@
       loadElevation().then(grid => {
         status.textContent = `Rendering ${e.target.selectedOptions[0].text} · elevation 0–${Math.round(grid.max)} m (open ${ZOOM >= 8 ? '~90' : '~500'} m sampling)`;
         buildMesh(grid); buildLegend(grid.max);
-      }).catch(() => { status.textContent = 'Could not load elevation tiles (network).'; });
+      }).catch(() => { setLoading(false); status.textContent = 'Could not load elevation tiles (network).'; });
     });
 
     function buildLegend(max) {
@@ -592,7 +621,7 @@
           if (anyInBox) { document.getElementById('t3-rivers').checked = true; buildRivers(); }
         }).catch(() => {});
       }
-    }).catch(err => { status.textContent = 'Could not load elevation tiles (network).'; console.error(err); }));
+    }).catch(err => { setLoading(false); status.textContent = 'Could not load elevation tiles (network).'; console.error(err); }));
     document.getElementById('t3-rivers').addEventListener('change', () => {
       if (!RIVERS_DATA) { fetch('india-rivers.geojson').then(r => r.json()).then(d => { RIVERS_DATA = d; buildRivers(); }).catch(() => {}); }
       else buildRivers();
