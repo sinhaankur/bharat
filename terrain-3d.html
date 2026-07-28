@@ -56,6 +56,7 @@
         <button type="button" id="t3-mode-3d" class="t3-mode-btn active">🏔 3D</button>
         <button type="button" id="t3-mode-2d" class="t3-mode-btn">🗺 2D</button>
       </span>
+      <button type="button" id="t3-share" class="t3-mode-btn" style="border:1px solid var(--border-strong);border-radius:999px" title="Share a snapshot of this terrain">📸 Share</button>
       <label>Region
         <select id="t3-region" style="background:oklch(0.18 0 0);color:var(--foreground);border:1px solid var(--border-strong);border-radius:5px;padding:2px 6px;font-family:var(--font-mono);font-size:11px">
           <option value="india">All India</option>
@@ -158,6 +159,7 @@
   <script src="dem.js"></script>
   <script src="command-palette.js"></script>
   <script src="site-nav.js"></script>
+  <script src="share-widget.js"></script>
   <script type="importmap">
     { "imports": {
       "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
@@ -258,7 +260,7 @@
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(45, 2, 0.1, 200);
     camera.position.set(0, 22, 26);
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, preserveDrawingBuffer: true });
     renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
     // Softer, more three-dimensional lighting: a warm key sun, a cool fill from the
     // opposite side to lift the shadows, and a sky/ground hemisphere for ambient depth.
@@ -496,6 +498,16 @@
     }
     document.getElementById('t3-mode-2d').addEventListener('click', () => setMode('2d'));
     document.getElementById('t3-mode-3d').addEventListener('click', () => setMode('3d'));
+    document.getElementById('t3-share').addEventListener('click', () => {
+      renderer.render(scene, camera);   // fresh frame so the WebGL buffer is capturable
+      const place = window.__t3_district ? window.__t3_district.replace(' · ', ', ') : 'India';
+      window.ShareWidget && ShareWidget.open({
+        url: location.href,
+        title: `${place} in real 3D terrain — India District Atlas`,
+        text: `${place} in real 3D relief — river, flood plain and hills from open elevation data. Explore any district:`,
+        snapshot: canvas,
+      });
+    });
     // Meaningful sea-level stops — the slider snaps to reference points that tell a story,
     // not arbitrary metres. Each cites a real (if illustrative) benchmark.
     const SEA_STOPS = [

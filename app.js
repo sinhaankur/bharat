@@ -1320,6 +1320,7 @@
           <button class="india-back-btn" id="india-back-to-districts">← All districts</button>
           <button class="india-back-btn" id="india-back-to-state">← ${esc(state)}</button>
           <a class="india-back-btn" href="terrain-3d.html?district=${encodeURIComponent(district)}" title="See ${esc(district)} in real 3D terrain — river, plain & hills in relief" style="color:oklch(0.84 0.13 78);border-color:oklch(0.6 0.14 78)">🏔 See in 3D terrain</a>
+          <button class="india-back-btn" id="india-share-district" title="Share ${esc(district)}'s stats" style="color:oklch(0.8 0.13 210);border-color:oklch(0.55 0.12 220)">🔗 Share ${esc(district)}</button>
         </div>
       </div>
       ${renderCoverageMeter(state, district)}
@@ -1362,6 +1363,20 @@
       }
     });
     detail.querySelector('#india-back-to-state')?.addEventListener('click', () => exitDrill(state));
+    // Share THIS district's real stats — a specific segment of data — to Reddit/X/WhatsApp/etc.
+    detail.querySelector('#india-share-district')?.addEventListener('click', () => {
+      if (!window.ShareWidget) return;
+      const bits = [];
+      if (data?.population) bits.push(`${(data.population / 1e5).toFixed(1)} lakh people`);
+      if (litRate) bits.push(`${litRate}% literate`);
+      const stat = bits.length ? ` — ${bits.join(', ')}` : '';
+      const url = `${location.origin}${location.pathname}?state=${encodeURIComponent(state)}&district=${encodeURIComponent(district)}`;
+      ShareWidget.open({
+        url,
+        title: `${district}, ${state} — India District Atlas`,
+        text: `${district}, ${state}${stat}. See where its public money goes — sourced, per district:`,
+      });
+    });
     const covT = detail.querySelector('#cov-toggle');
     if (covT) covT.addEventListener('click', () => {
       const dt = detail.querySelector('#cov-detail');
