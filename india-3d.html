@@ -75,6 +75,26 @@
     .i3-tier--illus { --tier: oklch(0.74 0.16 70); --tier-text: oklch(0.85 0.14 78); }
     .i3-tier--gap { --tier: oklch(0.62 0.16 30); --tier-text: oklch(0.8 0.14 40); }
     .i3-real-foot { font-size: 0.8rem; color: var(--muted-foreground); margin-top: 0.6rem; line-height: 1.5; }
+
+    /* EMBED MODE — inside the hero app (?embed=1): show ONLY a clean full-bleed globe.
+       Hide this page's own header, controls, prose and footer; the hero provides the chrome.
+       The globe canvas fills the viewport. */
+    html.embed-mode, html.embed-mode body { margin: 0; height: 100%; overflow: hidden; background: oklch(0.06 0 0); }
+    html.embed-mode .i3-wrap { max-width: none; margin: 0; padding: 0; height: 100vh; }
+    html.embed-mode .i3-head,
+    html.embed-mode .i3-presets,
+    html.embed-mode #i3-status,
+    html.embed-mode .i3-drawer,
+    html.embed-mode #i3-panel,
+    html.embed-mode #i3-legend,
+    html.embed-mode #i3-sea-note,
+    html.embed-mode .i3-gap,
+    html.embed-mode .i3-real,
+    html.embed-mode .i3-note { display: none !important; }
+    html.embed-mode #i3-stage { height: 100vh; }
+    html.embed-mode #i3-canvas { height: 100vh !important; min-height: 0 !important; margin: 0 !important; border: 0 !important; border-radius: 0 !important; }
+    /* keep the sea-level readout floating (it's the one useful HUD) */
+    html.embed-mode #i3-hilite { position: absolute; top: 10px; left: 10px; z-index: 8; margin: 0; }
   </style>
 </head>
 <body>
@@ -1451,6 +1471,7 @@
     }
     function endTour() { try { localStorage.setItem(TOUR_KEY, '1'); } catch (e) {} clearTour(); }
     function maybeStartTour() {
+      if (EMBEDDED) return;   // inside the hero: the hero has its own splash — no globe tour
       let seen = false;
       try { seen = localStorage.getItem(TOUR_KEY) === '1'; } catch (e) {}
       if (!seen) setTimeout(startTour, 700);   // let the globe paint first
