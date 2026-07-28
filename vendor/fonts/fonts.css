@@ -1,0 +1,23 @@
+/* Accessibility fonts — self-hosted, SIL Open Font License 1.1 (see LICENSE.txt).
+   Loaded on demand by a11y.js only when a reader picks a dyslexia-friendly option, so
+   there's no font cost for everyone else. */
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('OpenDyslexic-Regular.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('OpenDyslexic-Bold.woff2') format('woff2');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  src: url('AtkinsonHyperlegible-Regular.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  src: url('AtkinsonHyperlegible-Bold.woff2') format('woff2');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
