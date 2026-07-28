@@ -473,6 +473,17 @@
     }
     const ZONE_COLOR = { crz: 0x2fb0c4, flood: 0x3b6fd0, unsafe: 0xd83c3c, paleo: 0xb06fd0, encz: 0xe0a020 };
     const j = (u, d) => fetch(u).then(r => r.ok ? r.json() : d).catch(() => d);
+    // lazy-load a data file on first use, then run a callback (e.g. rebuild the layer). Caches
+    // in-flight promises so rapid toggles don't double-fetch. Used by the heavy default-off layers.
+    const _lazy = {};
+    function lazyLoad(url, fallback, assign, then) {
+      if (!_lazy[url]) _lazy[url] = j(url, fallback);
+      _lazy[url].then(d => { assign(d); then && then(); });
+    }
+    // Load ONLY what the default view needs up front (states + rivers + fiscal + world
+    // outlines + encroachment + sea-level + districts). Roads, railways, lakes, zones and
+    // AQI are OFF by default and heavy (railways alone is 1.3 MB) — they lazy-load on their
+    // toggle instead, so the globe paints ~2 MB sooner. See lazyLoad() below.
     Promise.all([
       fetch('india-states.geojson').then(r => r.json()),
       j('india-rivers.geojson', { features: [] }),
@@ -480,13 +491,8 @@
       j('world-outlines.geojson', { features: [] }),
       j('encroachment-cases.json', { cases: [] }),
       j('sealevel-exposure.json', null),
-      j('india-roads.geojson', { features: [] }),
-      j('india-lakes.geojson', { features: [] }),
-      j('india-railways.geojson', { features: [] }),
-      j('india-zones.json', { zones: [] }),
-      j('india-aqi.json', { cities: [] }),
       j('district-globe.json', { states: [], districts: [] }),
-    ]).then(([s, r, f, w, e, sl, rd, lk, rw, zn, aq, dg]) => { STATES = s; RIVERS = r; FISCAL = f.states || {}; WORLD = w; ENC = e; SEA = sl; ROADS = rd; LAKES = lk; RAIL = rw; ZONES = zn; AQI = aq; DISTRICTS = dg; boot(); })
+    ]).then(([s, r, f, w, e, sl, dg]) => { STATES = s; RIVERS = r; FISCAL = f.states || {}; WORLD = w; ENC = e; SEA = sl; DISTRICTS = dg; boot(); })
       .catch(e => { status.textContent = 'Could not load map data.'; console.error(e); });
 
     // ---- three.js scene ----
@@ -844,7 +850,8 @@
     function buildZones() {
       if (zoneGroup) { scene.remove(zoneGroup); zoneGroup = null; }
       const sel = document.getElementById('i3-zone').value;
-      if (sel === 'off' || !ZONES) return;
+      if (sel === 'off') return;
+      if (!ZONES) return lazyLoad('india-zones.json', { zones: [] }, d => ZONES = d, buildZones);
       zoneGroup = new THREE.Group();
       const mats = {};
       for (const z of (ZONES.zones || [])) {
@@ -865,7 +872,8 @@
     let aqiGroup = null;
     function buildAqi() {
       if (aqiGroup) { scene.remove(aqiGroup); aqiGroup = null; }
-      if (!document.getElementById('i3-aqi').checked || !AQI) return;
+      if (!document.getElementById('i3-aqi').checked) return;
+      if (!AQI) return lazyLoad('india-aqi.json', { cities: [] }, d => AQI = d, buildAqi);
       aqiGroup = new THREE.Group();
       for (const c of (AQI.cities || [])) {
         const col = aqiColor(c.pm25);
@@ -987,7 +995,8 @@
     let roadGroup = null;
     function buildRoads() {
       if (roadGroup) { scene.remove(roadGroup); roadGroup = null; }
-      if (!document.getElementById('i3-roads').checked || !ROADS) return;
+      if (!document.getElementById('i3-roads').checked) return;
+      if (!ROADS) return lazyLoad('india-roads.geojson', { features: [] }, d => ROADS = d, buildRoads);
       roadGroup = new THREE.Group();
       const mat = new THREE.LineBasicMaterial({ color: 0xe4b23a, transparent: true, opacity: 0.7 });
       const addLine = coords => {
@@ -1007,7 +1016,8 @@
     let railGroup = null;
     function buildRail() {
       if (railGroup) { scene.remove(railGroup); railGroup = null; }
-      if (!document.getElementById('i3-rail').checked || !RAIL) return;
+      if (!document.getElementById('i3-rail').checked) return;
+      if (!RAIL) return lazyLoad('india-railways.geojson', { features: [] }, d => RAIL = d, buildRail);
       railGroup = new THREE.Group();
       const mat = new THREE.LineDashedMaterial({ color: 0xc9c9d2, dashSize: 0.08, gapSize: 0.05, transparent: true, opacity: 0.8 });
       const addLine = coords => {
@@ -1123,7 +1133,8 @@
     let lakeGroup = null;
     function buildLakes() {
       if (lakeGroup) { scene.remove(lakeGroup); lakeGroup = null; }
-      if (!document.getElementById('i3-lakes').checked || !LAKES) return;
+      if (!document.getElementById('i3-lakes').checked) return;
+      if (!LAKES) return lazyLoad('india-lakes.geojson', { features: [] }, d => LAKES = d, buildLakes);
       lakeGroup = new THREE.Group();
       const mat = new THREE.MeshBasicMaterial({ color: 0x2f7fc4, transparent: true, opacity: 0.85, side: THREE.DoubleSide });
       for (const f of LAKES.features) {
@@ -1216,8 +1227,7 @@
     }
 
     function boot() {
-      const hw = (ROADS.features || []).filter(f => f.properties.t === 'Major Highway').length;
-      status.textContent = `Real-Earth globe · ${STATES.features.length} states · ${(DISTRICTS.districts || []).length} districts · ${RIVERS.features.length} rivers · ${hw} highways · ${(LAKES.features || []).length} lakes · ${(WORLD.features || []).length} countries`;
+      status.textContent = `Real-Earth globe · ${STATES.features.length} states · ${(DISTRICTS.districts || []).length} districts · ${RIVERS.features.length} rivers · ${(WORLD.features || []).length} countries · toggle roads / rail / zones to load more`;
       buildWorld();
       rebuild();
       applySea();
