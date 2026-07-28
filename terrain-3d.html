@@ -269,7 +269,7 @@
     const fill = new THREE.DirectionalLight(0xa9c8ff, 0.35); fill.position.set(10, 8, -8); scene.add(fill);
     const controls = new OrbitControls(camera, canvas);
     controls.enableDamping = true; controls.maxPolarAngle = Math.PI * 0.49;
-    controls.autoRotate = true; controls.autoRotateSpeed = 0.55;   // gentle intro spin
+    controls.autoRotate = !document.documentElement.classList.contains('a11y-reduce-motion'); controls.autoRotateSpeed = 0.55;   // gentle intro spin (off if reduce-motion)
     // stop the auto-spin the moment the user takes control
     ['pointerdown', 'wheel', 'touchstart'].forEach(ev => canvas.addEventListener(ev, () => { controls.autoRotate = false; }, { passive: true }));
 

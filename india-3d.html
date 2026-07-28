@@ -508,7 +508,7 @@
     scene.add(new THREE.HemisphereLight(0x9fc4e8, 0x161310, 0.7));
     const sun = new THREE.DirectionalLight(0xfff2e0, 1.3); sun.position.set(-30, 20, 40); scene.add(sun);
     const controls = new OrbitControls(camera, canvas);
-    controls.enableDamping = true; controls.autoRotate = true; controls.autoRotateSpeed = 0.45;
+    controls.enableDamping = true; controls.autoRotate = !document.documentElement.classList.contains('a11y-reduce-motion'); controls.autoRotateSpeed = 0.45;
     controls.minDistance = R * 0.99; controls.maxDistance = R * 4.5;   // can dip just under the surface (undersea view)
     ['pointerdown', 'wheel', 'touchstart'].forEach(ev => canvas.addEventListener(ev, () => { controls.autoRotate = false; }, { passive: true }));
 

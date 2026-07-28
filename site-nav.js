@@ -128,8 +128,22 @@
       </footer>`;
   }
 
+  // load the accessibility/reader-prefs module once, on every page (even embedded), so a
+  // reader's font/size/contrast choice applies + is offered everywhere. Derives its path
+  // from this script's own src. Self-mounts its "Aa" button.
+  function ensureA11y() {
+    if (window.A11y || document.getElementById("a11y-script")) return;
+    let base = "";
+    const me = document.currentScript || [...document.scripts].find(s => /site-nav\.js/.test(s.src));
+    if (me && me.src) base = me.src.replace(/site-nav\.js.*$/, "");
+    const s = document.createElement("script");
+    s.id = "a11y-script"; s.src = base + "a11y.js";
+    document.head.appendChild(s);
+  }
+
   function mount() {
     injectSEO();
+    ensureA11y();
     // EMBED MODE: when a page is loaded inside the hero app (?embed=1), suppress the site
     // header + footer so the hero's own chrome is the only navigation. The page's own
     // content fills the panel. A body class lets pages trim their own margins if they like.
