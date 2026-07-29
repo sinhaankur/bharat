@@ -1527,6 +1527,7 @@
       street.hidden = false;
       if (STREET_MAP) { STREET_MAP.remove(); STREET_MAP = null; }
       STREET_MAP = L.map('i3-street-map', { zoomControl: true, attributionControl: true }).setView([lat, lon], forceZoom || 13);
+      window.STREET_MAP = STREET_MAP;   // exposed so any view/test can recenter the street map
       // real OSM streets/buildings/ponds — the "everything real" tiles
       const base = (window.MapLayers && MapLayers.basemaps)
         ? MapLayers.basemaps(L)['Dark map']
@@ -1700,15 +1701,18 @@
     let PM_LIB = null, pmBldLayer = null;
     function loadProtomaps() {
       if (PM_LIB) return Promise.resolve(PM_LIB);
-      // protomaps-leaflet (bundles the pmtiles reader) from CDN, on demand.
-      // Global is `protomapsL`; browser bundle is dist/protomaps-leaflet.js (v5).
-      return new Promise((res, rej) => {
+      // protomaps-leaflet (bundles the pmtiles reader). Prefer the self-hosted copy
+      // (vendor/protomaps) so it works offline; fall back to the CDN. Global is `protomapsL`.
+      const tryLoad = src => new Promise((res, rej) => {
         const s = document.createElement('script');
-        s.src = 'https://cdn.jsdelivr.net/npm/protomaps-leaflet@5.1.0/dist/protomaps-leaflet.js';
-        s.onload = () => { PM_LIB = window.protomapsL; PM_LIB ? res(PM_LIB) : rej(new Error('protomapsL missing')); };
-        s.onerror = rej;
+        s.src = src;
+        s.onload = () => window.protomapsL ? res(window.protomapsL) : rej(new Error('protomapsL missing'));
+        s.onerror = () => rej(new Error('load failed: ' + src));
         document.head.appendChild(s);
       });
+      return tryLoad('vendor/protomaps/protomaps-leaflet.js')
+        .catch(() => tryLoad('https://cdn.jsdelivr.net/npm/protomaps-leaflet@5.1.0/dist/protomaps-leaflet.js'))
+        .then(lib => { PM_LIB = lib; return lib; });
     }
     async function showIndiaBuildingsPmtiles() {
       const url = indiaBuildingsPmtilesUrl();
