@@ -1700,11 +1700,12 @@
     let PM_LIB = null, pmBldLayer = null;
     function loadProtomaps() {
       if (PM_LIB) return Promise.resolve(PM_LIB);
-      // protomaps-leaflet (bundles the pmtiles reader) from CDN, on demand
+      // protomaps-leaflet (bundles the pmtiles reader) from CDN, on demand.
+      // Global is `protomapsL`; browser bundle is dist/protomaps-leaflet.js (v5).
       return new Promise((res, rej) => {
         const s = document.createElement('script');
-        s.src = 'https://unpkg.com/protomaps-leaflet@4.0.1/dist/protomaps-leaflet.min.js';
-        s.onload = () => { PM_LIB = window.protomapsL || window.protomaps_leaflet || window.protomaps; res(PM_LIB); };
+        s.src = 'https://cdn.jsdelivr.net/npm/protomaps-leaflet@5.1.0/dist/protomaps-leaflet.js';
+        s.onload = () => { PM_LIB = window.protomapsL; PM_LIB ? res(PM_LIB) : rej(new Error('protomapsL missing')); };
         s.onerror = rej;
         document.head.appendChild(s);
       });
@@ -1724,11 +1725,13 @@
         // a vector-tile layer straight off the PMTiles archive; paint building polygons by height
         pmBldLayer = P.leafletLayer({
           url,
+          // VIDA India PMTiles: the building polygons live in a layer named "IND"
+          // (from `pmtiles show` metadata). Match it so the polygons actually paint.
           paintRules: [{
-            dataLayer: 'buildings',
+            dataLayer: 'IND',
             symbolizer: new P.PolygonSymbolizer({ fill: '#e0a83c', opacity: 0.7, stroke: '#8a5a1e', width: 0.4 }),
           }],
-          attribution: '© Google, © Microsoft, VIDA — ODbL',
+          attribution: '© Google, © Microsoft, VIDA — Open Buildings, ODbL',
         });
         pmBldLayer.addTo(STREET_MAP);
         if (STREET_MAP.getZoom() < 14) STREET_MAP.setZoom(15);
