@@ -1539,6 +1539,8 @@
       document.getElementById('i3-street-label').textContent = `📍 ${lat.toFixed(3)}, ${lon.toFixed(3)} · real OSM streets — zoom in`;
       setTimeout(() => STREET_MAP.invalidateSize(), 80);
       maybeBuildings(lat, lon);
+      // if an all-India buildings PMTiles is configured, show it automatically (no click)
+      if (indiaBuildingsPmtilesUrl()) setTimeout(showIndiaBuildingsPmtiles, 300);
     }
 
     // ---- real bridges, anywhere (OpenStreetMap via Overpass) ----
@@ -1727,19 +1729,27 @@
         const P = await loadProtomaps();
         if (pmBldLayer) { STREET_MAP.removeLayer(pmBldLayer); pmBldLayer = null; }
         // a vector-tile layer straight off the PMTiles archive; paint building polygons by height
+        // Colour each footprint by AREA (the VIDA data has no height — a declared gap —
+        // but area_in_meters is real: small homes → cool, large blocks/malls → warm).
+        // protomaps-leaflet calls the fill fn as (zoom, feature); props are on feature.props.
+        const areaFill = (z, f) => {
+          const a = (f && f.props && f.props.area_in_meters) || 0;
+          return a > 4000 ? '#e0563c' : a > 1000 ? '#e0a83c' : a > 250 ? '#c9b24a' : '#6f93b6';
+        };
         pmBldLayer = P.leafletLayer({
           url,
-          // VIDA India PMTiles: the building polygons live in a layer named "IND"
-          // (from `pmtiles show` metadata). Match it so the polygons actually paint.
+          // VIDA India PMTiles: building polygons live in a layer named "IND" (from
+          // `pmtiles show` metadata). Paint by footprint area.
           paintRules: [{
             dataLayer: 'IND',
-            symbolizer: new P.PolygonSymbolizer({ fill: '#e0a83c', opacity: 0.7, stroke: '#8a5a1e', width: 0.4 }),
+            symbolizer: new P.PolygonSymbolizer({ fill: areaFill, opacity: 0.72, stroke: '#5a3a12', width: 0.3 }),
           }],
           attribution: '© Google, © Microsoft, VIDA — Open Buildings, ODbL',
         });
         pmBldLayer.addTo(STREET_MAP);
         if (STREET_MAP.getZoom() < 14) STREET_MAP.setZoom(15);
-        label.textContent = '🏙 all-India buildings — streaming from PMTiles (© Google/Microsoft/VIDA, ODbL). Zoom/pan; only tiles in view load.';
+        document.getElementById('i3-pmbld').textContent = '🏙 all-India buildings ✓';
+        label.textContent = '🏙 all-India buildings — real footprints, coloured by size (🔵 small → 🔴 large). Streaming from PMTiles (© Google/Microsoft/VIDA, ODbL) — only tiles in view load.';
         return true;
       } catch (e) {
         label.textContent = '🏙 couldn’t load the PMTiles layer (check the URL / CORS).';
