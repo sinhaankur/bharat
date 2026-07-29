@@ -237,6 +237,7 @@
         <button id="i3-up" style="position:absolute;left:12px;top:12px;z-index:20;background:oklch(0.18 0.02 250 / 0.95);color:var(--foreground);border:1px solid var(--border-strong);border-radius:999px;padding:6px 13px;font-family:var(--font-mono);font-size:12px;cursor:pointer">↑ back to globe</button>
         <button id="i3-bridges" style="position:absolute;left:12px;bottom:18px;z-index:20;background:oklch(0.2 0.04 45 / 0.95);color:oklch(0.86 0.13 60);border:1px solid oklch(0.6 0.16 50);border-radius:999px;padding:7px 14px;font-family:var(--font-mono);font-size:11px;cursor:pointer;backdrop-filter:blur(8px)">🌉 show real bridges here</button>
         <button id="i3-osmbld" style="position:absolute;left:12px;bottom:54px;z-index:20;background:oklch(0.2 0.04 30 / 0.95);color:oklch(0.86 0.13 45);border:1px solid oklch(0.6 0.16 40);border-radius:999px;padding:7px 14px;font-family:var(--font-mono);font-size:11px;cursor:pointer;backdrop-filter:blur(8px)">🏢 real buildings here</button>
+        <button id="i3-pmbld" style="position:absolute;left:12px;bottom:90px;z-index:20;background:oklch(0.2 0.05 60 / 0.95);color:oklch(0.88 0.12 72);border:1px solid oklch(0.62 0.15 65);border-radius:999px;padding:7px 14px;font-family:var(--font-mono);font-size:11px;cursor:pointer;backdrop-filter:blur(8px)">🏙 all-India buildings</button>
         <div id="i3-street-label" style="position:absolute;right:12px;top:12px;z-index:20;background:oklch(0.15 0 0 / 0.9);color:var(--muted-foreground);border:1px solid var(--border);border-radius:6px;padding:4px 9px;font-family:var(--font-mono);font-size:10px"></div>
       </div>
     </div>
@@ -1501,9 +1502,10 @@
       document.getElementById('i3-bldg').addEventListener('click', () => openStreet(23.2199, 72.6428, 15));
       document.getElementById('i3-bridges').addEventListener('click', showBridges);
       document.getElementById('i3-osmbld').addEventListener('click', showBuildings);
+      document.getElementById('i3-pmbld').addEventListener('click', showIndiaBuildingsPmtiles);
       document.getElementById('i3-up').addEventListener('click', () => {
         street.hidden = true; drop.hidden = true;
-        bridgeLayer = null; osmBldLayer = null;
+        bridgeLayer = null; osmBldLayer = null; pmBldLayer = null;
         document.getElementById('i3-bridges').textContent = '🌉 show real bridges here';
         document.getElementById('i3-osmbld').textContent = '🏢 real buildings here';
         setTimeout(() => { if (STREET_MAP) { STREET_MAP.remove(); STREET_MAP = null; } }, 200);
@@ -1680,6 +1682,62 @@
       bldLoading = true;
       document.getElementById('i3-street-label').textContent = '🏢 loading real Gandhinagar buildings…';
       fetch('gandhinagar-buildings.geojson').then(r => r.json()).then(d => { BLD = d; bldLoading = false; draw(); }).catch(() => { bldLoading = false; });
+    }
+
+    // ---- ALL-INDIA buildings via PMTiles (VIDA Open Buildings, ODbL) ----
+    // The full-India footprints are ~41 GB — too big to bundle, so they live as a single
+    // streamable PMTiles archive on object storage (see BUILDINGS_PLAN.md). This overlays it
+    // in the fly-down: the browser range-requests ONLY the tiles in view. The URL is NOT
+    // hardcoded — set it with ?buildings_pmtiles=<url> or window.INDIA_BUILDINGS_PMTILES
+    // (same bring-your-own-URL posture as the Mapbox/WAQI keys). Uses protomaps-leaflet + pmtiles.
+    function indiaBuildingsPmtilesUrl() {
+      try {
+        const qs = new URLSearchParams(location.search).get('buildings_pmtiles');
+        if (qs) { localStorage.setItem('buildings_pmtiles', qs); return qs; }
+        return localStorage.getItem('buildings_pmtiles') || window.INDIA_BUILDINGS_PMTILES || '';
+      } catch (e) { return window.INDIA_BUILDINGS_PMTILES || ''; }
+    }
+    let PM_LIB = null, pmBldLayer = null;
+    function loadProtomaps() {
+      if (PM_LIB) return Promise.resolve(PM_LIB);
+      // protomaps-leaflet (bundles the pmtiles reader) from CDN, on demand
+      return new Promise((res, rej) => {
+        const s = document.createElement('script');
+        s.src = 'https://unpkg.com/protomaps-leaflet@4.0.1/dist/protomaps-leaflet.min.js';
+        s.onload = () => { PM_LIB = window.protomapsL || window.protomaps_leaflet || window.protomaps; res(PM_LIB); };
+        s.onerror = rej;
+        document.head.appendChild(s);
+      });
+    }
+    async function showIndiaBuildingsPmtiles() {
+      const url = indiaBuildingsPmtilesUrl();
+      const label = document.getElementById('i3-street-label');
+      if (!url) {
+        label.textContent = '🏙 all-India buildings: no PMTiles URL set — add ?buildings_pmtiles=<url> (see BUILDINGS_PLAN.md)';
+        return false;
+      }
+      if (!STREET_MAP) return false;
+      label.textContent = '🏙 loading all-India buildings (streaming PMTiles)…';
+      try {
+        const P = await loadProtomaps();
+        if (pmBldLayer) { STREET_MAP.removeLayer(pmBldLayer); pmBldLayer = null; }
+        // a vector-tile layer straight off the PMTiles archive; paint building polygons by height
+        pmBldLayer = P.leafletLayer({
+          url,
+          paintRules: [{
+            dataLayer: 'buildings',
+            symbolizer: new P.PolygonSymbolizer({ fill: '#e0a83c', opacity: 0.7, stroke: '#8a5a1e', width: 0.4 }),
+          }],
+          attribution: '© Google, © Microsoft, VIDA — ODbL',
+        });
+        pmBldLayer.addTo(STREET_MAP);
+        if (STREET_MAP.getZoom() < 14) STREET_MAP.setZoom(15);
+        label.textContent = '🏙 all-India buildings — streaming from PMTiles (© Google/Microsoft/VIDA, ODbL). Zoom/pan; only tiles in view load.';
+        return true;
+      } catch (e) {
+        label.textContent = '🏙 couldn’t load the PMTiles layer (check the URL / CORS).';
+        return false;
+      }
     }
 
     function resize() {
