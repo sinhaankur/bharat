@@ -7,6 +7,16 @@
   },
   "updates": [
     {
+      "id": "u_2026_07_30_quake_tsunami",
+      "date": "2026-07-30",
+      "kind": "feature",
+      "scope": "Hazard · India region",
+      "title": "Earthquake & tsunami tracker — live USGS + historical + tsunami catalogue",
+      "detail": "Added quake-tsunami.html: a Leaflet map layering (1) live earthquakes from the USGS public GeoJSON feeds (past day / week / M4.5+ month / significant month), (2) the atlas's historical India-region catalogue (2,000 USGS quakes, M5+, 2000-2025), and (3) a new sourced tsunami dataset (tsunamis.json) covering the 2004 Sumatra-Andaman, 1945 Makran, 1883 Krakatoa, 1762 Arakan and 1881 Car Nicobar events. Magnitude + timeframe filters; quakes carrying a USGS tsunami flag are ringed. Clearly labelled a study tool, not an early-warning system (real warnings: INCOIS).",
+      "source": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php",
+      "link": "quake-tsunami.html"
+    },
+    {
       "id": "u_2026_07_30_heritage_3d",
       "date": "2026-07-30",
       "kind": "feature",
