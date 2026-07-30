@@ -93,6 +93,19 @@
     .ha-note { font-size: 0.78rem; color: var(--muted-foreground); line-height: 1.6; margin-top: 1.8rem; border-top: 1px solid var(--border); padding-top: 1rem; }
     .ha-note a { color: oklch(0.74 0.16 75); }
     .ha-note b { color: var(--foreground); }
+
+    /* EMBED MODE (?embed=1, inside the hero app): trim the long intro so the map +
+       timeline + filters are reachable immediately, and let the map fill the panel. */
+    html.embed-mode body { margin: 0; }
+    html.embed-mode .ha-wrap { padding: 0.7rem 0.9rem 2rem; max-width: none; }
+    html.embed-mode .eyebrow,
+    html.embed-mode .ha-head p,
+    html.embed-mode .ha-thesis { display: none; }
+    html.embed-mode .ha-head h1 { font-size: 1.15rem; margin: 0 0 0.5rem; }
+    html.embed-mode .ha-stats { margin: 0 0 0.6rem; gap: 1rem; }
+    html.embed-mode .ha-stat b { font-size: 1.15rem; }
+    html.embed-mode #ha-map { height: 52vh; min-height: 300px; margin: 0.4rem 0; }
+    html.embed-mode .ha-note { display: none; }
   </style>
 </head>
 <body>
@@ -205,6 +218,7 @@
         `Death-toll estimates for medieval events have wide historian spread and, where relevant, link to the ` +
         `<a href="atrocities.html">atrocities timeline</a> rather than assert a single number. ` +
         `The term <b>Sanatan Dharma</b> is used in place of "Hindu" per the project's editorial choice. ` +
+        `<b>Modern country names are only present-day locators.</b> Many sites (Taxila, Mohenjo-daro, Sharda Peeth, Somapura) predate today's borders by millennia; they are labelled <b>"undivided India / Bharat (present-day …)"</b> or by their ancient region (Gandhara, Sindh, Varendra). This is a geographic pointer, not a claim of cultural origin — the origin is the ancient Indic civilisation named in each entry. The 1947 border is younger than the heritage. ` +
         `Contested sites (e.g. "ancient machining" claims) are shown but labelled and carry the scholarly rebuttal. ` +
         `See also: <a href="atrocities.html">Population Control, Marauder Style</a> · ` +
         `<a href="references.html">sources</a>.`;

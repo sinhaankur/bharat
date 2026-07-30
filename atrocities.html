@@ -71,6 +71,12 @@
     .at-note { font-size: 0.78rem; color: var(--muted-foreground); line-height: 1.6; margin-top: 1.8rem; border-top: 1px solid var(--border); padding-top: 1rem; }
     .at-note a { color: oklch(0.74 0.16 75); }
     .at-note b { color: var(--foreground); }
+
+    html.embed-mode body { margin: 0; }
+    html.embed-mode .at-wrap { padding: 0.7rem 0.9rem 2rem; max-width: none; }
+    html.embed-mode .eyebrow, html.embed-mode .at-head p, html.embed-mode .at-src, html.embed-mode .at-note { display: none; }
+    html.embed-mode .at-head h1 { font-size: 1.15rem; margin: 0 0 0.5rem; }
+    html.embed-mode .at-stats { margin: 0 0 0.5rem; }
   </style>
 </head>
 <body>

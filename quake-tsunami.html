@@ -63,6 +63,13 @@
     .qt-row .toll { font-family: var(--font-mono); font-size: 0.8rem; color: oklch(0.84 0.14 30); text-align: right; }
     .qt-note { font-size: 0.78rem; color: var(--muted-foreground); line-height: 1.6; margin-top: 1.7rem; border-top: 1px solid var(--border); padding-top: 1rem; }
     .qt-note b { color: var(--foreground); } .qt-note a { color: oklch(0.74 0.16 75); }
+
+    html.embed-mode body { margin: 0; }
+    html.embed-mode .qt-wrap { padding: 0.7rem 0.9rem 2rem; max-width: none; }
+    html.embed-mode .eyebrow, html.embed-mode .qt-head p, html.embed-mode .qt-note { display: none; }
+    html.embed-mode .qt-head h1 { font-size: 1.15rem; margin: 0 0 0.5rem; }
+    html.embed-mode .qt-stats { margin: 0 0 0.5rem; }
+    html.embed-mode #qt-map { height: 50vh; min-height: 300px; }
   </style>
 </head>
 <body>
