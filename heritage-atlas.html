@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sacred ground — a sourced atlas of Sanatan, Jain & Buddhist sites, their builders and their destruction | India District Atlas</title>
-  <meta name="description" content="A geolocated, ASI-sourced atlas of Dharmic sacred sites — Sanatan Dharma, Jain, Buddhist and pre-Vedic megalithic — across Bharat, the Silk Route and Southeast Asia. Who built each site, when, and the documented record of its destruction: Somnath, Martand, Nalanda, Hampi, Angkor, Prambanan and more. Sourced or marked a gap." />
+  <title>Sacred ground of the world — a sourced atlas of sacred sites, their builders and their destruction | India District Atlas</title>
+  <meta name="description" content="A geolocated, sourced world atlas of sacred sites across all six inhabited continents — Sanatan Dharma, Buddhist, Jain, Sikh, Adivasi/indigenous, ancient native faiths (Egyptian, Greek, Norse, Mesoamerican, Andean, African, Zoroastrian, Yazidi), Christian, megalithic and Indus Valley. Who built each site, when, and the documented record of its destruction — from Göbekli Tepe and Karnak to Somnath, Nalanda, Angkor, Teotihuacan, Machu Picchu and Great Zimbabwe. Sourced or marked a gap." />
   <meta name="keywords" content="Sanatan Dharma temples, Jain temples, Buddhist sites, temple destruction India, Martand Sun Temple, Somnath, Nalanda, Hampi Vijayanagara, Kashmir Hindu past, Angkor Wat, Prambanan, ASI, Silk Route temples, Southeast Asia Hindu temples" />
   <link rel="canonical" href="https://sinhaankur.github.io/india-fiscal-map/heritage-atlas.html" />
   <meta property="og:type" content="website" />
@@ -106,6 +106,7 @@
     .ha-chip[data-trad="sikh"].on { border-color: oklch(0.66 0.16 25); background: oklch(0.72 0.16 25); }
     .ha-chip[data-trad="adivasi"].on { border-color: oklch(0.62 0.15 130); background: oklch(0.7 0.15 130); }
     .ha-chip[data-trad="native_faith"].on { border-color: oklch(0.66 0.15 100); background: oklch(0.74 0.15 100); }
+    .ha-chip[data-trad="christian"].on { border-color: oklch(0.6 0.13 250); background: oklch(0.68 0.13 250); color: oklch(0.99 0 0); }
     .ha-chip[data-trad="pre_vedic_megalithic"].on { border-color: oklch(0.65 0.05 250); background: oklch(0.72 0.06 250); }
     .ha-chip[data-trad="indus_valley"].on { border-color: oklch(0.6 0.11 190); background: oklch(0.7 0.12 190); }
     .ha-chip[data-trad="contested"].on { border-color: oklch(0.6 0.02 300); background: oklch(0.66 0.03 300); }
@@ -194,10 +195,11 @@
   <main class="ha-wrap ha-page">
     <header class="ha-hero">
       <div class="ha-eyebrow">Heritage · builders & their destruction · sourced-or-gap</div>
-      <h1>Sacred ground of <em>Bharat</em><br>who built it — and who destroyed it</h1>
-      <p class="ha-lede">A geolocated atlas of <b>Sanatan Dharma</b>, <b>Jain</b>, <b>Buddhist</b> and <b>Sikh</b> sites,
-      pre-Vedic <b>megalithic</b> and <b>Indus Valley</b> grounds — across Bharat, the Silk Route, Southeast &amp; East Asia.
-      For each: who built it (the king, dynasty or people), when, and its <em>lifespan</em> — built, damaged or destroyed,
+      <h1>Sacred ground of <em>the world</em><br>who built it — and who destroyed it</h1>
+      <p class="ha-lede">A geolocated atlas of the world's sacred sites — <b>Sanatan Dharma</b>, <b>Buddhist</b>, <b>Jain</b>, <b>Sikh</b>,
+      <b>Adivasi</b> &amp; indigenous, ancient <b>native faiths</b> (Egyptian, Greek, Norse, Mesoamerican, Andean, African,
+      Zoroastrian, Yazidi), <b>Christian</b>, pre-Vedic <b>megalithic</b> and <b>Indus Valley</b> grounds — across all six
+      inhabited continents. For each: who built it, when, and its <em>lifespan</em> — built, damaged or destroyed,
       and what stands today. Where a site fell, we name the actor and cite the record.</p>
       <p class="ha-thesis">A temple is not only stone. Its lifespan is a ledger: who raised it, what it meant,
       and — where it fell — who brought it down and at what human cost. Sourced from the ASI and scholarship, or
@@ -226,7 +228,7 @@
         <span>🕰️ Walk the timeline — sites that existed in this year glow; destroyed sites fade after they fell</span>
         <b id="scrub-year">2026 CE</b>
       </div>
-      <input type="range" id="scrub-range" min="-1200" max="2026" step="10" value="2026" />
+      <input type="range" id="scrub-range" min="-10000" max="2026" step="10" value="2026" />
       <div class="ha-scrub-foot">
         <button class="ha-scrub-btn" id="scrub-play">▶ play the centuries</button>
         <button class="ha-scrub-btn" id="scrub-reset">reset to today</button>
@@ -235,6 +237,15 @@
     </div>
 
     <div class="ha-filters" id="filters">
+      <div class="ha-controls" id="cont-controls">
+        <span class="ha-lbl">Continent</span>
+        <button class="ha-chip generic" data-cont="Asia">🌏 Asia<span class="n"></span></button>
+        <button class="ha-chip generic" data-cont="Europe">🌍 Europe<span class="n"></span></button>
+        <button class="ha-chip generic" data-cont="Africa">🌍 Africa<span class="n"></span></button>
+        <button class="ha-chip generic" data-cont="North America">🌎 N. America<span class="n"></span></button>
+        <button class="ha-chip generic" data-cont="South America">🌎 S. America<span class="n"></span></button>
+        <button class="ha-chip generic" data-cont="Oceania">🌏 Oceania<span class="n"></span></button>
+      </div>
       <div class="ha-controls" id="trad-controls">
         <span class="ha-lbl">Tradition</span>
         <button class="ha-chip" data-trad="sanatan">🕉 Sanatan<span class="n"></span></button>
@@ -242,7 +253,8 @@
         <button class="ha-chip" data-trad="jain">卐 Jain<span class="n"></span></button>
         <button class="ha-chip" data-trad="sikh">☬ Sikh<span class="n"></span></button>
         <button class="ha-chip" data-trad="adivasi">🌿 Adivasi / tribal<span class="n"></span></button>
-        <button class="ha-chip" data-trad="native_faith">🔥 Native faith<span class="n"></span></button>
+        <button class="ha-chip" data-trad="native_faith">🔥 Native / ancient<span class="n"></span></button>
+        <button class="ha-chip" data-trad="christian">✝ Christian<span class="n"></span></button>
         <button class="ha-chip" data-trad="pre_vedic_megalithic">🗿 Megalithic<span class="n"></span></button>
         <button class="ha-chip" data-trad="indus_valley">🏺 Indus Valley<span class="n"></span></button>
         <button class="ha-chip" data-trad="contested">❓ Contested<span class="n"></span></button>
@@ -285,7 +297,8 @@
       jain:                 { label: "Jain",           color: "oklch(0.76 0.13 150)", icon: "卐" },
       sikh:                 { label: "Sikh",           color: "oklch(0.72 0.16 25)", icon: "☬" },
       adivasi:              { label: "Adivasi / tribal", color: "oklch(0.7 0.15 130)", icon: "🌿" },
-      native_faith:         { label: "Native faith",   color: "oklch(0.74 0.15 100)", icon: "🔥" },
+      native_faith:         { label: "Native / ancient", color: "oklch(0.74 0.15 100)", icon: "🔥" },
+      christian:            { label: "Christian",      color: "oklch(0.68 0.13 250)", icon: "✝" },
       pre_vedic_megalithic: { label: "Megalithic",     color: "oklch(0.72 0.06 250)", icon: "🗿" },
       indus_valley:         { label: "Indus Valley",   color: "oklch(0.7 0.12 190)", icon: "🏺" },
       contested:            { label: "Contested",      color: "oklch(0.68 0.03 300)", icon: "❓" }
@@ -293,6 +306,7 @@
 
     let DATA = null, SITES = [], MAP = null, MARKERS = null;
     const activeTrad = new Set();     // empty = all
+    const activeCont = new Set();     // empty = all continents
     let activeFlt = null;             // destroyed | ruin | active | null
     let activeSeries = null;          // jyotirlinga | char_dham | chota_char_dham | null
     const SERIES_TOTAL = { jyotirlinga: 12, char_dham: 4, chota_char_dham: 4, shakti_peetha: 51, indigenous_sacred: null, pre_abrahamic: null };
@@ -324,7 +338,7 @@
         `<div class="ha-stat"><b>${n}</b><span>sites mapped</span></div>` +
         `<div class="ha-stat"><b>${destroyed}</b><span>with a destruction record</span></div>` +
         `<div class="ha-stat"><b>${traditions}</b><span>traditions</span></div>` +
-        `<div class="ha-stat"><b>${regions}</b><span>regions · Bharat → SE Asia</span></div>`;
+        `<div class="ha-stat"><b>${new Set(SITES.map(s => s.continent).filter(Boolean)).size}</b><span>continents · worldwide</span></div>`;
     }
 
     function renderNote() {
@@ -343,7 +357,7 @@
 
     function initMap() {
       if (typeof L === "undefined") return;
-      MAP = L.map("ha-map", { scrollWheelZoom: true }).setView([18, 88], 4);
+      MAP = L.map("ha-map", { scrollWheelZoom: true, worldCopyJump: true }).setView([20, 40], 2);
       const base = (window.MapLayers && MapLayers.basemaps)
         ? MapLayers.basemaps(L)["Dark map"]
         : L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png", { subdomains: "abcd", attribution: "&copy; OSM, &copy; CARTO" });
@@ -361,6 +375,7 @@
     function visible() {
       return SITES.filter(s => {
         if (activeTrad.size && !activeTrad.has(s.tradition)) return false;
+        if (activeCont.size && !activeCont.has(s.continent)) return false;
         if (activeFlt === "destroyed" && !s.destruction) return false;
         if (activeFlt === "ruin" && !/ruin/.test(s.status || "")) return false;
         if (activeFlt === "active" && s.status !== "active" && s.status !== "reconstructed") return false;
@@ -415,7 +430,7 @@
         m.addTo(MARKERS);
         bounds.push([s.lat, s.lng]);
       }
-      if (fit && bounds.length) try { MAP.flyToBounds(bounds, { padding: [45, 45], maxZoom: 6, duration: 0.6 }); } catch (e) {}
+      if (fit && bounds.length) try { MAP.flyToBounds(bounds, { padding: [45, 45], maxZoom: 5, duration: 0.6 }); } catch (e) {}
     }
 
     function renderLegend() {
@@ -425,13 +440,21 @@
         + `<span><i style="background:oklch(0.72 0.2 30)"></i>destroyed (pulsing)</span>`;
     }
 
+    // Non-linear time→x mapping so deep prehistory (down to -10000) stays legible
+    // next to the crowded last two millennia. Signed "symlog" around year 0.
+    function timePct(y) {
+      const NOW = 2026, OLD = -10000;
+      const f = v => Math.sign(v) * Math.log10(1 + Math.abs(v));   // symlog
+      const lo = f(OLD), hi = f(NOW);
+      return Math.max(0, Math.min(100, ((f(y) - lo) / (hi - lo)) * 100));
+    }
+
     function spanBar(s) {
       const b = s.built_from ?? s.built_to;
       const fell = fellYear(s);
-      const now = 2026, min = -1300, span = now - min;
-      const pct = y => Math.max(0, Math.min(100, ((y - min) / span) * 100));
+      const pct = y => timePct(y);
       const start = pct(b);
-      const endYear = (fell && s.status !== "reconstructed" && s.status !== "active") ? fell : now;
+      const endYear = (fell && s.status !== "reconstructed" && s.status !== "active") ? fell : 2026;
       const end = pct(endYear);
       const xMark = fell ? `<i class="ha-span-x" style="left:${pct(fell)}%"></i>` : "";
       return `<div class="ha-span">
@@ -515,6 +538,11 @@
       document.querySelectorAll("#status-controls .ha-chip").forEach(ch => {
         const span = ch.querySelector(".n"); if (span) span.textContent = st[ch.dataset.flt] ? st[ch.dataset.flt] : "";
       });
+      // continent counts reflect all OTHER active filters (so you see what's left per continent)
+      const byCont = {}; vis.forEach(s => byCont[s.continent] = (byCont[s.continent] || 0) + 1);
+      document.querySelectorAll("#cont-controls .ha-chip").forEach(ch => {
+        const span = ch.querySelector(".n"); if (span) span.textContent = byCont[ch.dataset.cont] ? byCont[ch.dataset.cont] : "";
+      });
     }
 
     function render(fit) {
@@ -552,7 +580,7 @@
     }
 
     function resetAll() {
-      activeTrad.clear(); activeFlt = null; activeSeries = null; query = "";
+      activeTrad.clear(); activeCont.clear(); activeFlt = null; activeSeries = null; query = "";
       document.getElementById("ha-q").value = "";
       document.getElementById("ha-q-clr").style.display = "none";
       document.querySelectorAll(".ha-filters .ha-chip.on").forEach(c => c.classList.remove("on"));
@@ -588,6 +616,12 @@
     }
 
     function wire() {
+      document.querySelectorAll("#cont-controls .ha-chip").forEach(ch => ch.onclick = () => {
+        const c = ch.dataset.cont;
+        if (activeCont.has(c)) { activeCont.delete(c); ch.classList.remove("on"); }
+        else { activeCont.add(c); ch.classList.add("on"); }
+        render(true);
+      });
       document.querySelectorAll("#trad-controls .ha-chip").forEach(ch => ch.onclick = () => {
         const t = ch.dataset.trad;
         if (activeTrad.has(t)) { activeTrad.delete(t); ch.classList.remove("on"); }
@@ -642,12 +676,14 @@
       document.getElementById("scrub-play").onclick = () => {
         if (playTimer) return stopPlay();
         document.getElementById("scrub-play").textContent = "⏸ pause";
-        range.value = -1200; setScrub(-1200);
+        range.value = -10000; setScrub(-10000);
         playTimer = setInterval(() => {
-          let y = parseInt(range.value, 10) + 40;
+          let y = parseInt(range.value, 10);
+          // accelerate through the empty deep past, slow down near the busy present
+          y += y < -3000 ? 250 : y < 0 ? 80 : 30;
           if (y >= 2026) { y = 2026; stopPlay(); }
           range.value = y; setScrub(y);
-        }, 220);
+        }, 130);
       };
       function stopPlay() { if (playTimer) { clearInterval(playTimer); playTimer = null; } document.getElementById("scrub-play").textContent = "▶ play the centuries"; }
       window.__stopPlay = stopPlay;
