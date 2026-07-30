@@ -26,6 +26,7 @@
       { href: "atlas-3d.html", text: "India by constraint", hint: "states by development constraint", icon: "⛰" },
       { href: "flood-3d.html", text: "Flood explorer", hint: "water over real terrain", icon: "🌊" },
       { href: "heritage-3d.html", text: "Temples in 3D", hint: "photogrammetry of temples & ruins (Sketchfab)", icon: "🛕", rail: true },
+      { href: "temple-forms.html", text: "Temple forms in 3D", hint: "architecture types & orientation, modelled in Blender", icon: "🏛" },
       { href: "earth-3d.html", text: "Photoreal Earth", hint: "Google 3D tiles (your key)", icon: "🛰" },
     ]},
     { label: "Study", items: [

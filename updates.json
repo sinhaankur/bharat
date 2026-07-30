@@ -7,6 +7,16 @@
   },
   "updates": [
     {
+      "id": "u_2026_07_30_temple_forms_3d",
+      "date": "2026-07-30",
+      "kind": "feature",
+      "scope": "Heritage · 3D architecture",
+      "title": "Temple forms in 3D — architecture types modelled in Blender, with orientation",
+      "detail": "Added temple-forms.html: interactive 3D models (built procedurally in Blender, exported to glTF) of the six Indian temple architecture types — Nagara shikhara, Dravidian gopuram+vimana, Buddhist stupa, Jain marble temple, Kashmiri pyramidal roof, and the east-facing Sun-temple chariot form (Konark/Martand/Modhera). Each rotates in-browser via <model-viewer>, shows its orientation (a compass marking the sun-facing/east entrance, or the stupa's four cardinal gateways), its defining features, and the real sourced atlas sites built in that style (83 sites tagged with an architecture_type). Clearly labelled as stylised type-forms, not scans of specific temples (the photogrammetry viewer covers those).",
+      "source": "heritage-atlas.html",
+      "link": "temple-forms.html"
+    },
+    {
       "id": "u_2026_07_30_world_atlas",
       "date": "2026-07-30",
       "kind": "feature",

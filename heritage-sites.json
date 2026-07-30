@@ -74,7 +74,8 @@
       "series": [
         "jyotirlinga"
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "martand",
@@ -106,7 +107,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "sun_temple"
     },
     {
       "id": "avantipura",
@@ -138,7 +140,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "kashmiri"
     },
     {
       "id": "kashi-vishwanath",
@@ -173,7 +176,8 @@
       "series": [
         "jyotirlinga"
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "keshava-deva-mathura",
@@ -205,7 +209,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "nalanda",
@@ -237,7 +242,8 @@
           "tier": 1
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "stupa"
     },
     {
       "id": "vikramashila",
@@ -267,7 +273,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "stupa"
     },
     {
       "id": "hampi-vitthala",
@@ -299,7 +306,8 @@
           "tier": 1
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "dravidian"
     },
     {
       "id": "kailasa-ellora",
@@ -322,7 +330,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "dravidian"
     },
     {
       "id": "brihadeeswara",
@@ -345,7 +354,8 @@
           "tier": 1
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "dravidian"
     },
     {
       "id": "konark",
@@ -368,7 +378,8 @@
           "tier": 1
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "sun_temple"
     },
     {
       "id": "khajuraho",
@@ -391,7 +402,8 @@
           "tier": 1
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "modhera",
@@ -423,7 +435,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "sun_temple"
     },
     {
       "id": "dilwara",
@@ -446,7 +459,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "jain"
     },
     {
       "id": "shravanabelagola",
@@ -469,7 +483,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "jain"
     },
     {
       "id": "sanchi",
@@ -491,7 +506,8 @@
           "tier": 1
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "stupa"
     },
     {
       "id": "mahabodhi",
@@ -513,7 +529,8 @@
           "tier": 1
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "stupa"
     },
     {
       "id": "somapura",
@@ -536,7 +553,8 @@
           "tier": 1
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "stupa"
     },
     {
       "id": "bamiyan",
@@ -568,7 +586,8 @@
           "tier": 1
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "stupa"
     },
     {
       "id": "mes-aynak",
@@ -591,7 +610,8 @@
           "tier": 3
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "stupa"
     },
     {
       "id": "taxila",
@@ -622,7 +642,8 @@
           "tier": 1
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "stupa"
     },
     {
       "id": "mahasthangarh",
@@ -646,7 +667,8 @@
           "tier": 3
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "kashmiri"
     },
     {
       "id": "shankaracharya",
@@ -669,7 +691,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "kashmiri"
     },
     {
       "id": "parihaspora",
@@ -713,7 +736,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "kashmiri"
     },
     {
       "id": "harwan",
@@ -736,7 +760,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "stupa"
     },
     {
       "id": "naranag-wangath",
@@ -759,7 +784,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "kashmiri"
     },
     {
       "id": "pandrethan",
@@ -782,7 +808,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "kashmiri"
     },
     {
       "id": "vijayeshvara-bijbehara",
@@ -814,7 +841,8 @@
           "tier": 3
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "kashmiri"
     },
     {
       "id": "takht-i-bahi",
@@ -839,7 +867,8 @@
           "tier": 1
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "stupa"
     },
     {
       "id": "kanishka-stupa",
@@ -864,7 +893,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "stupa"
     },
     {
       "id": "tilla-jogian",
@@ -897,7 +927,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "gor-khatri",
@@ -922,7 +953,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "hadda",
@@ -955,7 +987,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "stupa"
     },
     {
       "id": "jokhang",
@@ -979,7 +1012,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "stupa"
     },
     {
       "id": "potala",
@@ -1003,7 +1037,8 @@
           "tier": 1
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "stupa"
     },
     {
       "id": "white-horse-temple",
@@ -1027,7 +1062,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "stupa"
     },
     {
       "id": "leshan-buddha",
@@ -1051,7 +1087,8 @@
           "tier": 1
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "stupa"
     },
     {
       "id": "todaiji",
@@ -1075,7 +1112,8 @@
           "tier": 1
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "stupa"
     },
     {
       "id": "horyuji",
@@ -1099,7 +1137,8 @@
           "tier": 1
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "stupa"
     },
     {
       "id": "sensoji",
@@ -1123,7 +1162,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "stupa"
     },
     {
       "id": "angkor-wat",
@@ -1152,7 +1192,8 @@
           "tier": 1
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "prambanan",
@@ -1183,7 +1224,8 @@
           "tier": 1
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "borobudur",
@@ -1211,7 +1253,8 @@
           "tier": 1
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "stupa"
     },
     {
       "id": "my-son",
@@ -1243,7 +1286,8 @@
           "tier": 1
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "goa-temples",
@@ -1275,7 +1319,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "temple-endowment-control",
@@ -1307,7 +1352,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "rudra-mahalaya",
@@ -1347,7 +1393,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "bhojshala",
@@ -1379,7 +1426,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "adina-pandua",
@@ -1410,7 +1458,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "warangal-fort-temple",
@@ -1441,7 +1490,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "dravidian"
     },
     {
       "id": "quwwat-ul-islam-delhi",
@@ -1473,7 +1523,8 @@
           "tier": 1
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "jain"
     },
     {
       "id": "kalika-mata-chittorgarh",
@@ -1505,7 +1556,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "martand-village-shrines",
@@ -1538,7 +1590,8 @@
           "tier": 3
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "kashmiri"
     },
     {
       "id": "tirupati",
@@ -1561,7 +1614,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "dravidian"
     },
     {
       "id": "meenakshi",
@@ -1584,7 +1638,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "dravidian"
     },
     {
       "id": "padmanabhaswamy",
@@ -1607,7 +1662,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "dravidian"
     },
     {
       "id": "jagannath-puri",
@@ -1633,7 +1689,8 @@
       "series": [
         "char_dham"
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "vaishno-devi",
@@ -1656,7 +1713,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "ram-mandir-ayodhya",
@@ -1679,7 +1737,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "akshardham-delhi",
@@ -1702,7 +1761,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "golden-temple",
@@ -1748,7 +1808,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "jain"
     },
     {
       "id": "kedarnath",
@@ -1775,7 +1836,8 @@
         "jyotirlinga",
         "chota_char_dham"
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "mallikarjuna",
@@ -1801,7 +1863,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "dravidian"
     },
     {
       "id": "mahakaleshwar",
@@ -1836,7 +1899,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "omkareshwar",
@@ -1862,7 +1926,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "bhimashankar",
@@ -1888,7 +1953,8 @@
           "tier": 3
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "trimbakeshwar",
@@ -1914,7 +1980,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "baidyanath",
@@ -1940,7 +2007,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "nageshwar",
@@ -1966,7 +2034,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "rameshwaram",
@@ -1993,7 +2062,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "dravidian"
     },
     {
       "id": "grishneshwar",
@@ -2028,7 +2098,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "badrinath",
@@ -2055,7 +2126,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "dwarkadhish",
@@ -2081,7 +2153,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "yamunotri",
@@ -2107,7 +2180,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "gangotri",
@@ -2133,7 +2207,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "hinglaj-mata",
@@ -2160,7 +2235,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "katas-raj",
@@ -2194,7 +2270,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "panchmukhi-hanuman-karachi",
@@ -2219,7 +2296,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "swaminarayan-karachi",
@@ -2244,7 +2322,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "multan-sun-prahladpuri",
@@ -2278,7 +2357,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "sun_temple"
     },
     {
       "id": "amb-temples",
@@ -2303,7 +2383,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "nagarparkar-jain",
@@ -2328,7 +2409,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "jain"
     },
     {
       "id": "kalka-aror",
@@ -2355,7 +2437,8 @@
           "tier": 2
         }
       ],
-      "continent": "Asia"
+      "continent": "Asia",
+      "architecture_type": "nagara"
     },
     {
       "id": "indus-great-bath",
@@ -2938,30 +3021,48 @@
       "name": "St Basil's Cathedral, Moscow",
       "tradition": "christian",
       "deity": "Russian Orthodox Christianity",
-      "region": "Europe", "continent": "Europe",
+      "region": "Europe",
+      "continent": "Europe",
       "state": "Russia (Moscow)",
-      "lat": 55.7525, "lng": 37.6231,
+      "lat": 55.7525,
+      "lng": 37.6231,
       "builder": "Tsar Ivan the Terrible (architects Barma & Postnik)",
-      "built_from": 1555, "built_to": 1561,
+      "built_from": 1555,
+      "built_to": 1561,
       "status": "active",
       "lifespan_note": "The iconic swirl of coloured onion domes on Red Square, built to mark the conquest of Kazan. A Russian Orthodox landmark; secularised as a museum under the USSR and preserved. UNESCO World Heritage (Kremlin & Red Square).",
       "series": [],
-      "source": [ { "label": "UNESCO — Kremlin and Red Square, Moscow", "url": "https://whc.unesco.org/en/list/545/", "tier": 1 } ]
+      "source": [
+        {
+          "label": "UNESCO — Kremlin and Red Square, Moscow",
+          "url": "https://whc.unesco.org/en/list/545/",
+          "tier": 1
+        }
+      ]
     },
     {
       "id": "arkaim",
       "name": "Arkaim (Bronze-Age Sintashta site)",
       "tradition": "native_faith",
       "deity": "Proto-Indo-Iranian (early Aryan / Steppe culture)",
-      "region": "Steppe", "continent": "Asia",
+      "region": "Steppe",
+      "continent": "Asia",
       "state": "Russia (Chelyabinsk, southern Urals)",
-      "lat": 52.6494, "lng": 59.5636,
+      "lat": 52.6494,
+      "lng": 59.5636,
       "builder": "The Sintashta culture (early Indo-Iranian / Steppe pastoralists)",
-      "built_from": -2100, "built_to": -1800,
+      "built_from": -2100,
+      "built_to": -1800,
       "status": "ruin",
       "lifespan_note": "A fortified Bronze-Age settlement of the Sintashta culture — the same Steppe / Indo-Iranian world the ancient-DNA layer links to the Yamnaya ancestry that reached both Europe and India. Often read as a proto-Aryan ritual/astronomical site. A tangible tie between the Steppe and the subcontinent's deep history.",
       "series": [],
-      "source": [ { "label": "Wikipedia — Arkaim; Sintashta culture", "url": "https://en.wikipedia.org/wiki/Arkaim", "tier": 3 } ]
+      "source": [
+        {
+          "label": "Wikipedia — Arkaim; Sintashta culture",
+          "url": "https://en.wikipedia.org/wiki/Arkaim",
+          "tier": 3
+        }
+      ]
     },
     {
       "id": "uppsala",
