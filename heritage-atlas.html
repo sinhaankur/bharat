@@ -734,6 +734,27 @@
       setTimeout(() => node.classList.remove("ha-card--hl"), 2200);
     }
 
+    // Arriving via #site-xxx (a deep link): focus that ONE site — search-filter to it so
+    // the map shows its single pin and the list shows just its card, then scroll cleanly
+    // to the top of the results (not into the middle of a 137-card wall).
+    function focusSite(id) {
+      const s = SITES.find(x => x.id === id);
+      if (!s) return;
+      query = s.name.split("(")[0].trim().toLowerCase();
+      const q = document.getElementById("ha-q");
+      if (q) { q.value = s.name.split("(")[0].trim(); document.getElementById("ha-q-clr").style.display = "block"; }
+      render(true);
+      // scroll so the (now single) result card is comfortably in view under the map
+      setTimeout(() => {
+        const node = document.getElementById("site-" + id);
+        if (node) {
+          node.scrollIntoView({ behavior: "smooth", block: "center" });
+          node.classList.add("ha-card--hl");
+          setTimeout(() => node.classList.remove("ha-card--hl"), 2600);
+        }
+      }, 250);
+    }
+
     function shareSite(id) {
       const s = SITES.find(x => x.id === id); if (!s) return;
       const d = s.destruction && s.destruction.primary;
@@ -834,7 +855,9 @@
       function stopPlay() { if (playTimer) { clearInterval(playTimer); playTimer = null; } document.getElementById("scrub-play").textContent = "▶ play the centuries"; }
       window.__stopPlay = stopPlay;
       // deep-link to a site
-      if (location.hash.startsWith("#site-")) setTimeout(() => jumpTo(location.hash.slice(6)), 400);
+      if (location.hash.startsWith("#site-")) setTimeout(() => focusSite(location.hash.slice(6)), 450);
+      // also handle in-page hash changes (e.g. clicking a link to another site)
+      window.addEventListener("hashchange", () => { if (location.hash.startsWith("#site-")) focusSite(location.hash.slice(6)); });
     }
   })();
   </script>
