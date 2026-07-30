@@ -9,7 +9,7 @@
       "'Sanatan Dharma' is used per the user's instruction; 'Hindu' is retained only inside quoted source titles."
     ],
     "fields": {
-      "tradition": "sanatan | jain | buddhist | pre_vedic_megalithic | contested",
+      "tradition": "sanatan | jain | buddhist | pre_vedic_megalithic | indus_valley | contested",
       "builder": "The king / dynasty / people credited by scholarship or inscription.",
       "built_from / built_to": "Construction span, CE (negative = BCE).",
       "status": "active | ruin | partially_ruined | converted | destroyed | reconstructed | contested",
@@ -20,7 +20,7 @@
       "region": "Grouping for filters: North India, Kashmir, Deccan, South India, East India, West India, Central India, Silk Route, Southeast Asia."
     },
     "updated_at": "2026-07-30",
-    "coverage": "Seed set — representative, not exhaustive. Expandable; the schema is the deliverable as much as the rows."
+    "coverage": "Growing set — representative, not exhaustive. Deepest in Kashmir (pre-Islamic Sanatan + Buddhist sites and their conquest) and includes smaller/local destroyed temples (Rudra Mahalaya, Bhojshala, Adina spolia, Warangal, Quwwat-ul-Islam, Chittor) alongside the monumental ones, plus Indus Valley / proto-historic sacred sites. The schema is the deliverable as much as the rows."
   },
 
   "sites": [
@@ -408,6 +408,112 @@
       ]
     },
     {
+      "id": "shankaracharya",
+      "name": "Shankaracharya (Jyeshteshwara) Temple, Srinagar",
+      "tradition": "sanatan",
+      "deity": "Shiva (Jyeshteshwara)",
+      "region": "Kashmir",
+      "state": "Jammu & Kashmir",
+      "lat": 34.072, "lng": 74.844,
+      "builder": "Traditionally Jaluka (son of Ashoka, ~200 BCE) / King Gopaditya; the oldest temple in Kashmir",
+      "built_from": -371, "built_to": 371,
+      "status": "active",
+      "lifespan_note": "Kashmir's oldest surviving shrine, on the Gopadri hill above Srinagar — a Shiva temple linked in the Rajatarangini to Gopaditya/Jaluka and later to Adi Shankaracharya's 8th-c. visit. Repaired after earthquakes (Zain-ul-Abidin renovated the roof; Gulab Singh built the 243 steps). Still in worship.",
+      "source": [
+        { "label": "ASI; Kalhana, Rajatarangini; Wikipedia — Shankaracharya Temple", "url": "https://en.wikipedia.org/wiki/Shankaracharya_Temple", "tier": 2 }
+      ]
+    },
+    {
+      "id": "parihaspora",
+      "name": "Parihaspora — Parihasakeshava temple & Buddhist stupa (Lalitaditya's capital)",
+      "tradition": "sanatan",
+      "deity": "Vishnu (Parihasakeshava & Muktakeshava) + Buddhist stupa/chaitya",
+      "region": "Kashmir",
+      "state": "Jammu & Kashmir",
+      "lat": 34.166, "lng": 74.653,
+      "builder": "Lalitaditya Muktapida, Karkota dynasty",
+      "built_from": 724, "built_to": 760,
+      "status": "ruin",
+      "lifespan_note": "Lalitaditya's grand new capital, with BOTH Hindu temples (Kalhana says the Vishnu Parihasakeshava image used vast quantities of gold/silver) and a great Buddhist stupa, chaitya and monastery — a Hindu–Buddhist royal city. Its silver Vishnu image was later broken up by the Kashmiri Hindu king Harsha (r. 1089–1101) for treasure; King Shankaravarman earlier quarried its stone; Abul Fazl records Sikandar 'Butshikan' finishing the destruction. Now an ASI ruin ('Ancient Stupa, Chaitya and Monastery').",
+      "destruction": {
+        "primary": { "year": 1099, "actor": "King Harsha of Kashmir", "actor_role": "Kashmiri Hindu ruler (temple-looter)", "account": "Kalhana's Rajatarangini records Harsha — a Hindu king — plundering and melting temple images across Kashmir for treasure, including the silver Parihasakeshava Vishnu. Included precisely to show destruction was not only inter-religious: Kalhana even coins the term 'devotpatana-nayaka' (superintendent of idol-uprooting) for Harsha's officials.", "toll_note": "A financial/temple-looting campaign by a Hindu ruler, per Kalhana." },
+        "later": [
+          { "year": 895, "actor": "Shankaravarman", "actor_role": "Kashmiri king (quarried the stone)" },
+          { "year": 1400, "actor": "Sikandar 'Butshikan' (per Abul Fazl)", "actor_role": "Sultan of Kashmir" }
+        ]
+      },
+      "source": [
+        { "label": "ASI Srinagar Circle; Kalhana, Rajatarangini (M. A. Stein trans.); Abul Fazl, Ain-i-Akbari", "url": "https://en.wikipedia.org/wiki/Parihaspora", "tier": 2 }
+      ]
+    },
+    {
+      "id": "harwan",
+      "name": "Harwan Buddhist Monastery (Sadarhadvana)",
+      "tradition": "buddhist",
+      "deity": "Buddhist monastery & stupa (Fourth Buddhist Council site)",
+      "region": "Kashmir",
+      "state": "Jammu & Kashmir",
+      "lat": 34.148, "lng": 74.882,
+      "builder": "Kushan-era Buddhist community (patronage of Kanishka I)",
+      "built_from": 100, "built_to": 500,
+      "status": "ruin",
+      "lifespan_note": "A Kushan-era monastery in the Zabarwan hills, identified by Aurel Stein as Sadarhadvana, home of the Bodhisattva Nagarjuna. Traditionally the site of the Fourth Buddhist Council under Kanishka I — pivotal for Mahayana Buddhism. Excavated 1923; its terracotta tiles depict Central-Asian faces (Yarkand/Kashgar), the 'only remains of their kind'. ASI-protected ruin.",
+      "source": [
+        { "label": "ASI; A. Stein's Rajatarangini; R. C. Kak excavation (1923); LiveHistoryIndia", "url": "https://www.livehistoryindia.com/story/monuments/the-harwan-monastery-a-relic-of-kashmirs-buddhist-past", "tier": 2 }
+      ]
+    },
+    {
+      "id": "naranag-wangath",
+      "name": "Naranag (Wangath) Shiva Temple Complex",
+      "tradition": "sanatan",
+      "deity": "Shiva (Bhuteshvara / Jyeshthesha)",
+      "region": "Kashmir",
+      "state": "Jammu & Kashmir",
+      "lat": 34.353, "lng": 74.976,
+      "builder": "Ancient shrine (Jaluka ~2nd c. BCE); developed by Lalitaditya (8th c.) & Avantivarman (9th c.)",
+      "built_from": -137, "built_to": 883,
+      "status": "ruin",
+      "lifespan_note": "A group of stone Shiva temples at the foot of Harmukh, around the holy spring of Naranag — one of Kashmir's most important Shaiva sites per the Rajatarangini (Jaluka, then Lalitaditya's Jyeshthesha temple, then Avantivarman's silver bathing-conduit for Bhuteshvara). Now a forested ruin; ASI Monument of National Importance (N-JK-16).",
+      "source": [
+        { "label": "ASI Srinagar Circle (N-JK-16); Kalhana, Rajatarangini", "url": "https://en.wikipedia.org/wiki/Wangath_temple_complex", "tier": 2 }
+      ]
+    },
+    {
+      "id": "pandrethan",
+      "name": "Pandrethan (Meruvardhanaswami) Shiva Temple, Srinagar",
+      "tradition": "sanatan",
+      "deity": "Shiva (Meruvardhanaswami)",
+      "region": "Kashmir",
+      "state": "Jammu & Kashmir",
+      "lat": 34.049, "lng": 74.869,
+      "builder": "Built by Meru, minister of King Partha, Utpala era",
+      "built_from": 913, "built_to": 921,
+      "status": "ruin",
+      "lifespan_note": "A small 10th-c. stone temple standing in a tank at Pandrethan (from 'Puranadhisthana', Kashmir's old capital), noted for its carved ceiling. Survives as a protected monument on an army cantonment; a rare intact example of the Kashmiri stone-temple form.",
+      "source": [
+        { "label": "ASI; Kalhana, Rajatarangini; Wikipedia — Pandrethan Shiva Temple", "url": "https://en.wikipedia.org/wiki/Pandrethan_Shiva_Temple", "tier": 2 }
+      ]
+    },
+    {
+      "id": "vijayeshvara-bijbehara",
+      "name": "Vijayeshvara Temple, Bijbehara",
+      "tradition": "sanatan",
+      "deity": "Shiva (Vijayeshvara — 'god of victory')",
+      "region": "Kashmir",
+      "state": "Jammu & Kashmir",
+      "lat": 33.795, "lng": 75.106,
+      "builder": "Ancient shrine (Ashoka built a stone enclosure & two Ashokeshvara temples); refounded by King Vijaya",
+      "built_from": -250, "built_to": 500,
+      "status": "destroyed",
+      "lifespan_note": "One of the most ancient Shaiva shrines of Kashmir, giving Bijbehara ('Vijabror' < Vijayabhattaraka) its name. Ashoka is said to have enclosed the shrine and built two Ashokeshvara temples. The temple was destroyed in the medieval period; a later temple stands near the site on the Jhelum.",
+      "destruction": {
+        "primary": { "year": 1400, "actor": "Medieval Sultanate-era destruction (attributed)", "actor_role": "Sultanate of Kashmir", "account": "Grouped with the Valley-wide temple destruction of the Sikandar 'Butshikan' era recorded in the Kashmiri chronicles; the ancient Vijayeshvara did not survive.", "needs_source": true }
+      },
+      "source": [
+        { "label": "Kalhana, Rajatarangini (M. A. Stein trans., notes on Vijayesvara)", "url": "https://en.wikipedia.org/wiki/Bijbehara", "tier": 3 }
+      ]
+    },
+    {
       "id": "angkor-wat",
       "name": "Angkor Wat",
       "tradition": "sanatan",
@@ -650,6 +756,70 @@
       },
       "source": [
         { "label": "Jonaraja, Rajatarangini (continuation); modern histories of medieval Kashmir", "url": "https://en.wikipedia.org/wiki/Sikandar_Shah_Miri", "tier": 3 }
+      ]
+    },
+    {
+      "id": "indus-great-bath",
+      "name": "Great Bath, Mohenjo-daro",
+      "tradition": "indus_valley",
+      "deity": "Unknown — likely ritual/purification structure (script undeciphered)",
+      "region": "Indus Valley",
+      "state": "Pakistan (Sindh)",
+      "lat": 27.329, "lng": 68.139,
+      "builder": "Indus (Harappan) Civilisation — no named ruler; the script is undeciphered",
+      "built_from": -2500, "built_to": -1900,
+      "status": "ruin",
+      "lifespan_note": "The 'earliest public water tank of the ancient world' (c. 2500 BCE), 12×7 m and 2.4 m deep, watertight with bitumen — widely read as a ritual bathing structure, a possible root of later Dharmic purification practice. Mohenjo-daro (pop. ~40,000) was abandoned c. 1700 BCE. NOTE: attributing a religion to the Indus Valley is speculative — the script is undeciphered and there are no confirmed temples; this is included as a proto-historic SACRED/ritual site, honestly labelled.",
+      "source": [
+        { "label": "UNESCO — Archaeological Ruins at Moenjodaro; Britannica — Great Bath", "url": "https://whc.unesco.org/en/list/138/", "tier": 1 }
+      ]
+    },
+    {
+      "id": "indus-kalibangan",
+      "name": "Kalibangan Fire Altars",
+      "tradition": "indus_valley",
+      "deity": "Unknown — fire-ritual platforms",
+      "region": "Indus Valley",
+      "state": "Rajasthan",
+      "lat": 29.474, "lng": 74.130,
+      "builder": "Indus (Harappan) Civilisation",
+      "built_from": -2800, "built_to": -1900,
+      "status": "ruin",
+      "lifespan_note": "On the dried Ghaggar-Hakra (identified by some with the Vedic Sarasvati), Kalibangan yielded rows of mud-brick 'fire altars' — among the few Harappan sites with them — argued to preforeshadow Vedic fire (yajna) ritual, and the earliest known ploughed field (c. 2800 BCE). The fire-altar interpretation is debated. ASI-excavated (B. B. Lal / B. K. Thapar).",
+      "source": [
+        { "label": "ASI (B. B. Lal); Wikipedia — Kalibangan", "url": "https://en.wikipedia.org/wiki/Kalibangan", "tier": 2 }
+      ]
+    },
+    {
+      "id": "indus-dholavira",
+      "name": "Dholavira (Harappan city)",
+      "tradition": "indus_valley",
+      "deity": "Unknown — urban ceremonial ground & reservoirs",
+      "region": "Indus Valley",
+      "state": "Gujarat",
+      "lat": 23.883, "lng": 70.216,
+      "builder": "Indus (Harappan) Civilisation",
+      "built_from": -3000, "built_to": -1500,
+      "status": "ruin",
+      "lifespan_note": "A great Harappan city in the Rann of Kutch, famed for its cascade of stone reservoirs, a large ceremonial ground, and the still-undeciphered 'Dholavira signboard'. UNESCO World Heritage (2021). Included as a proto-historic site whose religion is unknown, not as a temple.",
+      "source": [
+        { "label": "ASI; UNESCO — Dholavira: a Harappan City", "url": "https://whc.unesco.org/en/list/1645/", "tier": 1 }
+      ]
+    },
+    {
+      "id": "indus-rakhigarhi",
+      "name": "Rakhigarhi (largest Harappan site in India)",
+      "tradition": "indus_valley",
+      "deity": "Unknown — ritual/burial evidence",
+      "region": "Indus Valley",
+      "state": "Haryana",
+      "lat": 29.293, "lng": 76.114,
+      "builder": "Indus (Harappan) Civilisation",
+      "built_from": -3000, "built_to": -1500,
+      "status": "ruin",
+      "lifespan_note": "The largest Harappan settlement in the Indian subcontinent, on the Ghaggar-Hakra plain. Ancient-DNA work here (2019) informs the debate on the population ancestry of South Asia — relevant to the DNA/population-shift layer on the wishlist. ASI-documented since the 1960s; museum under construction.",
+      "source": [
+        { "label": "ASI; Rakhigarhi ancient-DNA study (Shinde et al., 2019); Wikipedia", "url": "https://en.wikipedia.org/wiki/Rakhigarhi", "tier": 2 }
       ]
     },
     {
