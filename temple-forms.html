@@ -114,9 +114,12 @@
 
     <div class="tf-stage">
       <div class="tf-viewer">
-        <model-viewer id="mv" camera-controls auto-rotate auto-rotate-delay="0" rotation-per-second="18deg"
-          shadow-intensity="1" exposure="1.05" camera-orbit="45deg 68deg 16m" min-camera-orbit="auto auto 6m" interaction-prompt="none"
-          ar ar-modes="webxr scene-viewer quick-look" alt="3D temple form">
+        <model-viewer id="mv" camera-controls auto-rotate auto-rotate-delay="0" rotation-per-second="16deg"
+          environment-image="https://modelviewer.dev/shared-assets/environments/moon_1k.hdr"
+          skybox-image=""
+          shadow-intensity="1.4" shadow-softness="0.9" exposure="1.15" tone-mapping="aces"
+          camera-orbit="40deg 70deg 16m" min-camera-orbit="auto auto 7m" max-camera-orbit="auto auto 30m"
+          interaction-prompt="none" ar ar-modes="webxr scene-viewer quick-look" alt="3D temple form">
         </model-viewer>
         <div class="tf-compass" id="compass" title="Entrance orientation">
           <span class="n">N</span><span class="s">S</span><span class="e">E ☀</span><span class="w">W</span>
