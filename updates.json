@@ -7,6 +7,16 @@
   },
   "updates": [
     {
+      "id": "u_2026_07_30_cutaway",
+      "date": "2026-07-30",
+      "kind": "feature",
+      "scope": "3D · see inside",
+      "title": "Cutaway / cross-section views — see inside the structure",
+      "detail": "Added a '✂ see inside' toggle to the Temple Forms 3D viewer: it swaps to a cross-section model (built in Blender by bisecting the mesh) that slices the structure open so you can see the interior. Nagara & Dravidian reveal the tiny, dark garbhagriha (womb-chamber) buried under the mass of the tower — the sacred space is deliberately small and windowless. The Buddhist stupa reveals the relic casket at the heart of a solid dome (you walk around it, not into it). Elephanta reveals the pillared hall and the lit Trimurti carved from solid basalt (here the interior IS the temple). Each cutaway carries a note explaining what the inside shows and why.",
+      "source": "temple-forms.html",
+      "link": "temple-forms.html"
+    },
+    {
       "id": "u_2026_07_30_build_all_plus_embed",
       "date": "2026-07-30",
       "kind": "feature",
