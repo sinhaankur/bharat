@@ -18,16 +18,61 @@
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
   <link rel="stylesheet" href="styles.css" />
   <style>
-    .ha-wrap { max-width: 1120px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; }
-    .ha-head h1 { margin: 0.3rem 0 0.4rem; font-size: clamp(1.7rem, 3.6vw, 2.6rem); }
-    .ha-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.55; max-width: 74ch; }
-    .ha-thesis { border-left: 2px solid oklch(0.7 0.15 60); padding: 0.2rem 0 0.2rem 0.8rem; margin: 0.9rem 0 0; color: oklch(0.85 0.10 70); font-size: 0.92rem; line-height: 1.5; font-style: italic; max-width: 66ch; }
-    .ha-stats { display: flex; flex-wrap: wrap; gap: 1.4rem; margin: 1.3rem 0 0.2rem; }
-    .ha-stat b { font-family: var(--font-mono); font-size: 1.5rem; color: oklch(0.84 0.13 75); display: block; line-height: 1; }
-    .ha-stat span { font-size: 0.78rem; color: var(--muted-foreground); }
+    /* ── palette + motion tokens for this page ─────────────────────────── */
+    .ha-page { --gold: oklch(0.84 0.13 75); --gold-deep: oklch(0.66 0.15 60); --ember: oklch(0.72 0.19 32); }
+    .ha-wrap { max-width: 1180px; margin: 0 auto; padding: 0 var(--pad-x) 5rem; }
 
-    #ha-map { height: 480px; border: 1px solid var(--border); border-radius: var(--radius); margin: 1.3rem 0 0.5rem; background: oklch(0.13 0 0); }
-    @media (max-width: 640px) { #ha-map { height: 360px; } }
+    /* ── cinematic hero ────────────────────────────────────────────────── */
+    .ha-hero { position: relative; margin: 0 calc(var(--pad-x) * -1) 1.6rem; padding: 3.4rem var(--pad-x) 2rem; overflow: hidden;
+      background:
+        radial-gradient(1200px 340px at 80% -10%, oklch(0.66 0.15 60 / 0.22), transparent 60%),
+        radial-gradient(900px 300px at 5% 120%, oklch(0.5 0.14 30 / 0.18), transparent 55%),
+        linear-gradient(180deg, oklch(0.12 0.01 60), oklch(0.145 0 0)); }
+    /* faint shikhara skyline drawn in CSS, no image needed */
+    .ha-hero::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 120px; pointer-events: none; opacity: 0.5;
+      background:
+        conic-gradient(from -90deg at 12% 100%, transparent 0 65deg, oklch(0.2 0.02 60 / 0.9) 65deg 115deg, transparent 115deg) 0 100%/220px 120px no-repeat,
+        conic-gradient(from -90deg at 30% 100%, transparent 0 72deg, oklch(0.22 0.03 55 / 0.85) 72deg 108deg, transparent 108deg) 120px 100%/300px 120px no-repeat,
+        conic-gradient(from -90deg at 55% 100%, transparent 0 68deg, oklch(0.2 0.02 60 / 0.9) 68deg 112deg, transparent 112deg) 330px 100%/360px 120px no-repeat,
+        conic-gradient(from -90deg at 82% 100%, transparent 0 70deg, oklch(0.22 0.03 55 / 0.8) 70deg 110deg, transparent 110deg) 620px 100%/320px 120px no-repeat;
+      mask: linear-gradient(180deg, transparent, #000 70%); }
+    .ha-hero > * { position: relative; z-index: 1; }
+    .ha-eyebrow { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); }
+    .ha-hero h1 { margin: 0.5rem 0 0.5rem; font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1.02; letter-spacing: -0.02em;
+      background: linear-gradient(180deg, oklch(0.99 0 0), oklch(0.84 0.10 70)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .ha-hero h1 em { font-style: normal; background: linear-gradient(180deg, var(--gold), var(--ember)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .ha-lede { color: var(--muted-foreground); font-size: 1rem; line-height: 1.6; max-width: 66ch; }
+    .ha-lede b { color: oklch(0.92 0.02 80); font-weight: 600; }
+    .ha-thesis { border-left: 2px solid var(--gold-deep); padding: 0.15rem 0 0.15rem 0.85rem; margin: 1rem 0 0; color: oklch(0.85 0.10 70); font-size: 0.92rem; line-height: 1.5; font-style: italic; max-width: 64ch; }
+
+    /* animated stat pills */
+    .ha-stats { display: flex; flex-wrap: wrap; gap: 0.7rem; margin: 1.6rem 0 0; }
+    .ha-stat { border: 1px solid var(--border-strong); border-radius: 14px; padding: 0.6rem 1rem; background: oklch(0.16 0.005 60 / 0.7); backdrop-filter: blur(6px); min-width: 92px;
+      transition: transform 0.25s, border-color 0.25s; }
+    .ha-stat:hover { transform: translateY(-3px); border-color: var(--gold-deep); }
+    .ha-stat b { font-family: var(--font-mono); font-size: 1.7rem; color: var(--gold); display: block; line-height: 1; }
+    .ha-stat span { font-size: 0.72rem; color: var(--muted-foreground); }
+
+    /* ── toolbar: search + view toggle ─────────────────────────────────── */
+    .ha-toolbar { display: flex; gap: 0.7rem; align-items: center; flex-wrap: wrap; margin: 0.4rem 0 0.2rem; }
+    .ha-search { position: relative; flex: 1; min-width: 220px; }
+    .ha-search input { width: 100%; background: oklch(0.16 0 0); border: 1px solid var(--border-strong); border-radius: 999px;
+      color: var(--foreground); font-size: 0.9rem; padding: 0.6rem 2.2rem 0.6rem 2.2rem; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+    .ha-search input:focus { border-color: var(--gold-deep); box-shadow: 0 0 0 3px oklch(0.66 0.15 60 / 0.18); }
+    .ha-search .ic { position: absolute; left: 0.8rem; top: 50%; transform: translateY(-50%); color: var(--muted-foreground); font-size: 0.9rem; }
+    .ha-search .clr { position: absolute; right: 0.6rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--muted-foreground); cursor: pointer; font-size: 1rem; display: none; }
+    .ha-view { display: flex; border: 1px solid var(--border-strong); border-radius: 999px; overflow: hidden; }
+    .ha-view button { background: none; border: none; color: var(--muted-foreground); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.5rem 0.9rem; cursor: pointer; }
+    .ha-view button.on { background: var(--gold); color: oklch(0.16 0 0); font-weight: 700; }
+
+    #ha-map { height: 500px; border: 1px solid var(--border-strong); border-radius: var(--radius-lg); margin: 0.7rem 0 0.5rem; background: oklch(0.12 0 0);
+      box-shadow: 0 20px 60px -30px oklch(0 0 0 / 0.9), inset 0 0 0 1px oklch(1 0 0 / 0.02); overflow: hidden; }
+    @media (max-width: 640px) { #ha-map { height: 380px; } }
+    .ha-maplegend { display: flex; flex-wrap: wrap; gap: 0.3rem 1rem; font-size: 0.72rem; color: var(--muted-foreground); margin: 0 0.2rem 0.3rem; }
+    .ha-maplegend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; }
+    /* pulsing ring for destroyed markers */
+    @keyframes ha-pulse { 0% { transform: scale(1); opacity: 0.55; } 70% { transform: scale(2.4); opacity: 0; } 100% { opacity: 0; } }
+    .ha-pulse { animation: ha-pulse 2.4s ease-out infinite; transform-origin: center; }
     .leaflet-container { background: oklch(0.13 0 0); font-family: inherit; }
     .leaflet-popup-content-wrapper, .leaflet-popup-tip { background: oklch(0.16 0 0); color: var(--foreground); border: 1px solid var(--border-strong); }
     .leaflet-popup-content { margin: 0.65rem 0.8rem; min-width: 210px; }
@@ -37,16 +82,23 @@
     .ha-pop-open { display: inline-block; margin-top: 5px; font-family: var(--font-mono); font-size: 9.5px; color: oklch(0.74 0.16 75); text-decoration: none; cursor: pointer; }
 
     /* time scrubber */
-    .ha-scrub { border: 1px solid var(--border); border-radius: var(--radius); padding: 0.7rem 0.9rem; margin: 0.7rem 0 0.2rem; background: oklch(0.15 0.01 60); }
+    .ha-scrub { border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 0.75rem 0.95rem; margin: 0.7rem 0 0.2rem;
+      background: linear-gradient(180deg, oklch(0.17 0.01 60), oklch(0.15 0.005 60)); }
     .ha-scrub-hd { display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem; font-size: 0.86rem; color: var(--muted-foreground); }
-    .ha-scrub-hd b { font-family: var(--font-mono); font-size: 1.4rem; color: oklch(0.86 0.12 75); }
-    .ha-scrub input[type=range] { width: 100%; margin: 0.5rem 0 0.35rem; accent-color: oklch(0.7 0.15 70); cursor: pointer; }
+    .ha-scrub-hd b { font-family: var(--font-mono); font-size: 1.5rem; color: var(--gold); text-shadow: 0 0 18px oklch(0.66 0.15 60 / 0.4); }
+    .ha-scrub input[type=range] { width: 100%; margin: 0.55rem 0 0.35rem; accent-color: var(--gold-deep); cursor: pointer; height: 6px; }
     .ha-scrub-foot { font-size: 0.74rem; color: var(--muted-foreground); line-height: 1.45; display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap; }
-    .ha-scrub-btn { background: none; border: 1px solid var(--border-strong); color: oklch(0.8 0.12 75); font-family: var(--font-mono); font-size: 10px; padding: 4px 10px; border-radius: 999px; cursor: pointer; }
+    .ha-scrub-btn { background: none; border: 1px solid var(--border-strong); color: var(--gold); font-family: var(--font-mono); font-size: 10px; padding: 5px 12px; border-radius: 999px; cursor: pointer; transition: background 0.2s, color 0.2s; }
+    .ha-scrub-btn:hover { background: var(--gold); color: oklch(0.16 0 0); }
 
-    .ha-controls { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin: 1rem 0 0.2rem; }
-    .ha-lbl { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted-foreground); margin-right: 0.2rem; }
-    .ha-chip { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.03em; padding: 4px 11px; border-radius: 999px; border: 1px solid var(--border-strong); color: var(--muted-foreground); background: transparent; cursor: pointer; }
+    /* sticky filter rack */
+    .ha-filters { position: sticky; top: 0; z-index: 20; margin: 0.8rem 0 0.2rem; padding: 0.6rem 0.2rem; background: oklch(0.145 0 0 / 0.82); backdrop-filter: blur(8px); border-bottom: 1px solid transparent; transition: border-color 0.2s, box-shadow 0.2s; }
+    .ha-filters.stuck { border-color: var(--border); box-shadow: 0 8px 24px -18px oklch(0 0 0 / 0.9); }
+    .ha-controls { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; margin: 0.28rem 0; }
+    .ha-lbl { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted-foreground); margin-right: 0.2rem; min-width: 84px; }
+    .ha-chip { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.03em; padding: 5px 12px; border-radius: 999px; border: 1px solid var(--border-strong); color: var(--muted-foreground); background: transparent; cursor: pointer; transition: transform 0.12s, border-color 0.15s, color 0.15s, background 0.15s; }
+    .ha-chip:hover { transform: translateY(-1px); border-color: var(--foreground); color: var(--foreground); }
+    .ha-chip .n { opacity: 0.6; margin-left: 0.35rem; }
     .ha-chip.on { color: oklch(0.16 0 0); font-weight: 600; }
     .ha-chip[data-trad="sanatan"].on { border-color: oklch(0.7 0.17 40); background: oklch(0.74 0.16 55); }
     .ha-chip[data-trad="buddhist"].on { border-color: oklch(0.7 0.15 75); background: oklch(0.78 0.14 80); }
@@ -58,23 +110,39 @@
     .ha-chip.on.generic { border-color: oklch(0.66 0.16 75); background: oklch(0.74 0.15 75); }
     .ha-count { margin-left: auto; font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
 
-    .ha-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1rem; margin-top: 1rem; }
-    .ha-card { border: 1px solid var(--border); border-left: 3px solid var(--tc, oklch(0.7 0.15 60)); border-radius: 0 var(--radius) var(--radius) 0; padding: 0.9rem 1rem; background: oklch(0.155 0 0); }
-    .ha-card-h { display: flex; align-items: baseline; gap: 0.5rem; }
-    .ha-name { font-weight: 700; font-size: 1.05rem; color: var(--foreground); }
-    .ha-badge { font-family: var(--font-mono); font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.04em; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--tc); color: var(--tc); white-space: nowrap; }
-    .ha-yr { margin-left: auto; font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); white-space: nowrap; }
-    .ha-place { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; color: var(--muted-foreground); margin: 0.3rem 0 0.1rem; }
-    .ha-deity { font-size: 0.86rem; color: oklch(0.82 0.10 80); }
-    .ha-builder { font-size: 0.85rem; line-height: 1.5; color: var(--foreground); margin: 0.4rem 0 0; }
-    .ha-builder b { color: oklch(0.86 0.12 75); }
+    .ha-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.1rem; margin-top: 1.1rem; }
+    .ha-card { position: relative; border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 0; background: oklch(0.155 0 0); overflow: hidden;
+      transition: transform 0.28s cubic-bezier(.2,.7,.3,1), box-shadow 0.28s, border-color 0.28s; }
+    .ha-card::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 3px; background: var(--tc, var(--gold)); opacity: 0.9; }
+    .ha-card:hover { transform: translateY(-5px); border-color: color-mix(in oklch, var(--tc, var(--gold)) 55%, var(--border-strong)); box-shadow: 0 24px 50px -30px oklch(0 0 0 / 0.9), 0 0 0 1px color-mix(in oklch, var(--tc, var(--gold)) 22%, transparent); }
+    .ha-cardbody { padding: 0.95rem 1.05rem; }
+    /* tradition-tinted header wash */
+    .ha-card-h { display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.85rem 1.05rem 0.6rem;
+      background: linear-gradient(180deg, color-mix(in oklch, var(--tc, var(--gold)) 12%, transparent), transparent); }
+    .ha-name { font-weight: 700; font-size: 1.08rem; color: var(--foreground); line-height: 1.2; letter-spacing: -0.01em; }
+    .ha-badge { font-family: var(--font-mono); font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.04em; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--tc); color: var(--tc); white-space: nowrap; background: color-mix(in oklch, var(--tc) 10%, transparent); }
+    .ha-yr { margin-left: auto; font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); white-space: nowrap; padding-top: 2px; }
+    /* status ribbon */
+    .ha-ribbon { font-family: var(--font-mono); font-size: 8px; text-transform: uppercase; letter-spacing: 0.05em; padding: 2px 8px; border-radius: 999px; display: inline-flex; align-items: center; gap: 3px; }
+    .ha-ribbon.active { color: oklch(0.16 0 0); background: oklch(0.78 0.15 150); }
+    .ha-ribbon.ruin { color: oklch(0.86 0.06 80); background: oklch(0.35 0.05 70); }
+    .ha-ribbon.destroyed, .ha-ribbon.converted { color: oklch(0.95 0.04 30); background: oklch(0.45 0.16 30); }
+    .ha-ribbon.reconstructed { color: oklch(0.16 0 0); background: oklch(0.76 0.13 200); }
+    .ha-ribbon.contested { color: oklch(0.9 0 0); background: oklch(0.4 0.02 300); }
+    .ha-place { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; color: var(--muted-foreground); margin: 0 0 0.35rem; letter-spacing: 0.02em; }
+    .ha-series { display: flex; flex-wrap: wrap; gap: 0.3rem; margin: 0.2rem 0 0.1rem; }
+    .ha-seriestag { font-family: var(--font-mono); font-size: 8px; text-transform: uppercase; letter-spacing: 0.04em; padding: 2px 7px; border-radius: 999px; border: 1px solid oklch(0.6 0.14 60); color: oklch(0.84 0.13 70); }
+    .ha-builder { font-size: 0.85rem; line-height: 1.5; color: var(--foreground); margin: 0.5rem 0 0; }
+    .ha-builder b { color: var(--gold); }
     .ha-life { font-size: 0.84rem; line-height: 1.5; color: var(--muted-foreground); margin: 0.4rem 0; }
     /* lifespan bar: built → destroyed → now */
-    .ha-span { margin: 0.55rem 0 0.35rem; }
-    .ha-span-track { position: relative; height: 6px; background: var(--muted); border-radius: 999px; }
-    .ha-span-fill { position: absolute; top: 0; bottom: 0; border-radius: 999px; background: linear-gradient(90deg, oklch(0.6 0.14 145), oklch(0.72 0.15 75)); }
-    .ha-span-x { position: absolute; top: -3px; width: 2px; height: 12px; background: oklch(0.72 0.19 30); }
-    .ha-span-x::after { content: "✕"; position: absolute; top: -13px; left: -3px; font-size: 8px; color: oklch(0.78 0.18 30); }
+    .ha-span { margin: 0.65rem 0 0.4rem; }
+    .ha-span-track { position: relative; height: 7px; background: oklch(0.24 0 0); border-radius: 999px; overflow: hidden; }
+    .ha-span-fill { position: absolute; top: 0; bottom: 0; border-radius: 999px; background: linear-gradient(90deg, oklch(0.55 0.13 150), var(--gold)); }
+    .ha-span-fill::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, oklch(1 0 0 / 0.35), transparent); transform: translateX(-100%); animation: ha-shimmer 3.2s ease-in-out infinite; }
+    @keyframes ha-shimmer { 0% { transform: translateX(-100%); } 60%,100% { transform: translateX(220%); } }
+    .ha-span-x { position: absolute; top: -3px; width: 2px; height: 13px; background: var(--ember); z-index: 2; }
+    .ha-span-x::after { content: "✕"; position: absolute; top: -13px; left: -3px; font-size: 8px; color: var(--ember); }
     .ha-span-lbls { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 8.5px; color: var(--muted-foreground); margin-top: 3px; }
     .ha-destroy { font-size: 0.83rem; line-height: 1.5; color: oklch(0.85 0.10 32); background: oklch(0.2 0.06 30 / 0.35); border-radius: 6px; padding: 0.4rem 0.55rem; margin: 0.4rem 0; }
     .ha-destroy b { color: oklch(0.86 0.15 32); }
@@ -88,9 +156,18 @@
     .ha-gap { font-family: var(--font-mono); font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.03em; padding: 1px 7px; border-radius: 999px; border: 1px dashed oklch(0.6 0.14 60); color: oklch(0.78 0.14 70); }
     .ha-share { margin-left: auto; background: none; border: 1px solid var(--border-strong); color: var(--muted-foreground); font-family: var(--font-mono); font-size: 10px; padding: 6px 12px; border-radius: 999px; cursor: pointer; }
     .ha-share:hover { border-color: oklch(0.72 0.15 70); color: oklch(0.84 0.13 75); }
-    .ha-card--dim { opacity: 0.32; }
-    .ha-card--hl { border-color: oklch(0.78 0.16 70); box-shadow: 0 0 0 2px oklch(0.7 0.16 70 / 0.4); }
+    .ha-card--dim { opacity: 0.34; filter: saturate(0.5); }
+    .ha-card--hl { border-color: var(--gold) !important; box-shadow: 0 0 0 2px oklch(0.7 0.16 70 / 0.5), 0 24px 50px -28px oklch(0 0 0 / 0.9) !important; }
+    /* scroll reveal */
+    .ha-card { opacity: 0; transform: translateY(14px); }
+    .ha-card.in { opacity: 1; transform: translateY(0); transition: opacity 0.5s ease, transform 0.5s cubic-bezier(.2,.7,.3,1); }
+    .ha-card--dim.in { opacity: 0.34; }
     .ha-empty { grid-column: 1/-1; color: var(--muted-foreground); text-align: center; padding: 2rem 0; }
+    @media (prefers-reduced-motion: reduce) {
+      .ha-card, .ha-card.in { opacity: 1 !important; transform: none !important; transition: none !important; }
+      .ha-span-fill::after, .ha-pulse { animation: none !important; }
+      .ha-stat:hover, .ha-card:hover, .ha-chip:hover { transform: none; }
+    }
     .ha-note { font-size: 0.78rem; color: var(--muted-foreground); line-height: 1.6; margin-top: 1.8rem; border-top: 1px solid var(--border); padding-top: 1rem; }
     .ha-note a { color: oklch(0.74 0.16 75); }
     .ha-note b { color: var(--foreground); }
@@ -112,21 +189,35 @@
 <body>
   <div id="site-nav"></div>
 
-  <main class="ha-wrap">
-    <header class="ha-head">
-      <div class="eyebrow">Heritage · builders & their destruction · sourced-or-gap</div>
-      <h1 class="display">Sacred ground of <em>Bharat</em> — who built it, and who destroyed it</h1>
-      <p>A geolocated atlas of <b>Sanatan Dharma</b>, <b>Jain</b>, <b>Buddhist</b> and pre-Vedic <b>megalithic</b> sites
-      across Bharat, the Silk Route and Southeast Asia. For each: who built it (the king, dynasty or people), when,
-      and its <em>lifespan</em> — built, damaged or destroyed, and what stands today. Where a site was destroyed, we
-      name the actor and cite the record.</p>
+  <main class="ha-wrap ha-page">
+    <header class="ha-hero">
+      <div class="ha-eyebrow">Heritage · builders & their destruction · sourced-or-gap</div>
+      <h1>Sacred ground of <em>Bharat</em><br>who built it — and who destroyed it</h1>
+      <p class="ha-lede">A geolocated atlas of <b>Sanatan Dharma</b>, <b>Jain</b>, <b>Buddhist</b> and <b>Sikh</b> sites,
+      pre-Vedic <b>megalithic</b> and <b>Indus Valley</b> grounds — across Bharat, the Silk Route, Southeast &amp; East Asia.
+      For each: who built it (the king, dynasty or people), when, and its <em>lifespan</em> — built, damaged or destroyed,
+      and what stands today. Where a site fell, we name the actor and cite the record.</p>
       <p class="ha-thesis">A temple is not only stone. Its lifespan is a ledger: who raised it, what it meant,
       and — where it fell — who brought it down and at what human cost. Sourced from the ASI and scholarship, or
       marked a gap. Claims not accepted by archaeology are shown separately and labelled contested.</p>
       <div class="ha-stats" id="stats"></div>
     </header>
 
+    <div class="ha-toolbar">
+      <div class="ha-search">
+        <span class="ic">⌕</span>
+        <input id="ha-q" type="search" placeholder="Search temple, deity, king, dynasty, place…" autocomplete="off" aria-label="Search sites" />
+        <button class="clr" id="ha-q-clr" title="Clear" aria-label="Clear search">×</button>
+      </div>
+      <div class="ha-view" role="tablist" aria-label="View">
+        <button id="view-both" class="on">Map + list</button>
+        <button id="view-map">Map</button>
+        <button id="view-list">List</button>
+      </div>
+    </div>
+
     <div id="ha-map"></div>
+    <div class="ha-maplegend" id="ha-maplegend"></div>
 
     <div class="ha-scrub" id="scrub">
       <div class="ha-scrub-hd">
@@ -141,29 +232,33 @@
       </div>
     </div>
 
-    <div class="ha-controls" id="trad-controls">
-      <span class="ha-lbl">Tradition</span>
-      <button class="ha-chip" data-trad="sanatan">☸ Sanatan</button>
-      <button class="ha-chip" data-trad="buddhist">☸ Buddhist</button>
-      <button class="ha-chip" data-trad="jain">卐 Jain</button>
-      <button class="ha-chip" data-trad="sikh">☬ Sikh</button>
-      <button class="ha-chip" data-trad="pre_vedic_megalithic">🗿 Megalithic</button>
-      <button class="ha-chip" data-trad="indus_valley">🏺 Indus Valley</button>
-      <button class="ha-chip" data-trad="contested">❓ Contested</button>
-    </div>
-    <div class="ha-controls" id="status-controls">
-      <span class="ha-lbl">Filter</span>
-      <button class="ha-chip generic" data-flt="destroyed">🔥 Destroyed / desecrated</button>
-      <button class="ha-chip generic" data-flt="ruin">🏛 Ruins</button>
-      <button class="ha-chip generic" data-flt="active">🪔 Still active</button>
-      <span class="ha-count" id="count"></span>
-    </div>
-    <div class="ha-controls" id="series-controls">
-      <span class="ha-lbl">Pilgrim circuits</span>
-      <button class="ha-chip generic" data-series="jyotirlinga">🔱 12 Jyotirlingas</button>
-      <button class="ha-chip generic" data-series="char_dham">🛕 Char Dham</button>
-      <button class="ha-chip generic" data-series="chota_char_dham">⛰ Chota Char Dham</button>
-      <span class="ha-count" id="series-count"></span>
+    <div class="ha-filters" id="filters">
+      <div class="ha-controls" id="trad-controls">
+        <span class="ha-lbl">Tradition</span>
+        <button class="ha-chip" data-trad="sanatan">🕉 Sanatan<span class="n"></span></button>
+        <button class="ha-chip" data-trad="buddhist">☸ Buddhist<span class="n"></span></button>
+        <button class="ha-chip" data-trad="jain">卐 Jain<span class="n"></span></button>
+        <button class="ha-chip" data-trad="sikh">☬ Sikh<span class="n"></span></button>
+        <button class="ha-chip" data-trad="pre_vedic_megalithic">🗿 Megalithic<span class="n"></span></button>
+        <button class="ha-chip" data-trad="indus_valley">🏺 Indus Valley<span class="n"></span></button>
+        <button class="ha-chip" data-trad="contested">❓ Contested<span class="n"></span></button>
+      </div>
+      <div class="ha-controls" id="status-controls">
+        <span class="ha-lbl">Status</span>
+        <button class="ha-chip generic" data-flt="destroyed">🔥 Destroyed / desecrated<span class="n"></span></button>
+        <button class="ha-chip generic" data-flt="ruin">🏛 Ruins<span class="n"></span></button>
+        <button class="ha-chip generic" data-flt="active">🪔 Still active<span class="n"></span></button>
+        <span class="ha-count" id="count"></span>
+      </div>
+      <div class="ha-controls" id="series-controls">
+        <span class="ha-lbl">Pilgrim circuits</span>
+        <button class="ha-chip generic" data-series="jyotirlinga">🔱 12 Jyotirlingas</button>
+        <button class="ha-chip generic" data-series="char_dham">🛕 Char Dham</button>
+        <button class="ha-chip generic" data-series="chota_char_dham">⛰ Chota Char Dham</button>
+        <button class="ha-chip generic" data-series="shakti_peetha">🔻 Shakti Peethas</button>
+        <button class="ha-chip" id="ha-reset" style="margin-left:auto;border-style:dashed">↺ reset</button>
+        <span class="ha-count" id="series-count"></span>
+      </div>
     </div>
 
     <div class="ha-list" id="list"></div>
@@ -192,9 +287,10 @@
     const activeTrad = new Set();     // empty = all
     let activeFlt = null;             // destroyed | ruin | active | null
     let activeSeries = null;          // jyotirlinga | char_dham | chota_char_dham | null
-    const SERIES_TOTAL = { jyotirlinga: 12, char_dham: 4, chota_char_dham: 4 };
-    const SERIES_LABEL = { jyotirlinga: "Jyotirlingas", char_dham: "Char Dham", chota_char_dham: "Chota Char Dham" };
-    let scrubYear = 2026, playTimer = null;
+    const SERIES_TOTAL = { jyotirlinga: 12, char_dham: 4, chota_char_dham: 4, shakti_peetha: 51 };
+    const SERIES_LABEL = { jyotirlinga: "Jyotirlingas", char_dham: "Char Dham", chota_char_dham: "Chota Char Dham", shakti_peetha: "Shakti Peethas" };
+    let scrubYear = 2026, playTimer = null, query = "", io = null;
+    const SERIES_ICON = { jyotirlinga: "🔱", char_dham: "🛕", chota_char_dham: "⛰", shakti_peetha: "🔻" };
 
     const yr = y => (y < 0 ? Math.abs(y) + " BCE" : y + " CE");
     // built end year (fall back to built_from), and the destruction year if any
@@ -206,7 +302,7 @@
 
     fetch("heritage-sites.json").then(r => r.json()).then(d => {
       DATA = d; SITES = d.sites || [];
-      renderStats(); renderNote(); initMap(); wire(); render();
+      renderStats(); renderNote(); initMap(); renderLegend(); wire(); render(true);
     }).catch(e => {
       document.getElementById("list").innerHTML = `<div class="ha-empty">Could not load heritage-sites.json — ${esc(e.message)}</div>`;
     });
@@ -247,6 +343,13 @@
       MARKERS = L.layerGroup().addTo(MAP);
     }
 
+    function matchesQuery(s) {
+      if (!query) return true;
+      const hay = [s.name, s.deity, s.builder, s.state, s.region, s.historical_region, s.lifespan_note,
+        s.destruction && s.destruction.primary && s.destruction.primary.actor].filter(Boolean).join(" ").toLowerCase();
+      return query.split(/\s+/).every(w => hay.includes(w));
+    }
+
     function visible() {
       return SITES.filter(s => {
         if (activeTrad.size && !activeTrad.has(s.tradition)) return false;
@@ -254,6 +357,7 @@
         if (activeFlt === "ruin" && !/ruin/.test(s.status || "")) return false;
         if (activeFlt === "active" && s.status !== "active" && s.status !== "reconstructed") return false;
         if (activeSeries && !(Array.isArray(s.series) && s.series.includes(activeSeries))) return false;
+        if (!matchesQuery(s)) return false;
         return true;
       });
     }
@@ -267,7 +371,7 @@
       return true;
     }
 
-    function drawMarkers(list) {
+    function drawMarkers(list, fit) {
       if (!MAP || !MARKERS) return;
       MARKERS.clearLayers();
       const bounds = [];
@@ -276,16 +380,23 @@
         const t = TRAD[s.tradition] || TRAD.contested;
         const fell = fellYear(s);
         const present = presentInYear(s, scrubYear);
+        const r = s.destruction ? 8 : (s.series && s.series.length ? 7 : 6);
+        // pulsing halo for destroyed sites that are "gone" at the current scrub year
+        if (fell && !present) {
+          L.circleMarker([s.lat, s.lng], { radius: r, color: "transparent", fillColor: "oklch(0.7 0.2 30)", fillOpacity: 0.5,
+            className: "ha-pulse" }).addTo(MARKERS);
+        }
         const m = L.circleMarker([s.lat, s.lng], {
-          radius: s.destruction ? 8 : 6,
-          color: fell ? "oklch(0.7 0.2 30)" : t.color,
-          weight: fell ? 2 : 1.3,
+          radius: r,
+          color: fell ? "oklch(0.72 0.2 30)" : t.color,
+          weight: fell ? 2 : 1.4,
           fillColor: t.color,
-          fillOpacity: present ? 0.75 : 0.12
+          fillOpacity: present ? 0.8 : 0.14
         });
+        const series = (s.series || []).map(x => SERIES_ICON[x] || "").join(" ");
         m.bindPopup(
           `<div class="ha-pop-t">${t.icon} ${esc(s.name)}</div>` +
-          `<div class="ha-pop-sub">${esc(t.label)} · ${esc(s.state || "")} · built ${yr(s.built_from ?? s.built_to)}</div>` +
+          `<div class="ha-pop-sub">${esc(t.label)} · ${esc(s.state || "")} · built ${yr(s.built_from ?? s.built_to)}${series ? " · " + series : ""}</div>` +
           (fell ? `<div class="ha-pop-x">🔥 ${esc(s.destruction.primary.actor)} · ${yr(fell)}</div>` : "") +
           `<a class="ha-pop-open" data-jump="${esc(s.id)}">read the record →</a>`
         );
@@ -296,7 +407,14 @@
         m.addTo(MARKERS);
         bounds.push([s.lat, s.lng]);
       }
-      if (bounds.length) try { MAP.fitBounds(bounds, { padding: [40, 40], maxZoom: 6 }); } catch (e) {}
+      if (fit && bounds.length) try { MAP.flyToBounds(bounds, { padding: [45, 45], maxZoom: 6, duration: 0.6 }); } catch (e) {}
+    }
+
+    function renderLegend() {
+      const el = document.getElementById("ha-maplegend");
+      if (!el) return;
+      el.innerHTML = Object.values(TRAD).map(t => `<span><i style="background:${t.color}"></i>${esc(t.label)}</span>`).join("")
+        + `<span><i style="background:oklch(0.72 0.2 30)"></i>destroyed (pulsing)</span>`;
     }
 
     function spanBar(s) {
@@ -333,47 +451,100 @@
       </div>`;
     }
 
+    const RIBBON = {
+      active: "🪔 living", reconstructed: "🔷 rebuilt", ruin: "🏛 ruin",
+      partially_ruined: "🏛 part-ruin", destroyed: "🔥 destroyed", converted: "⛨ converted", contested: "❓ contested"
+    };
+
     function card(s) {
       const t = TRAD[s.tradition] || TRAD.contested;
       const anySrc = (s.source || []).find(x => x.url);
       const needsSrc = !anySrc || (s.destruction && s.destruction.primary && s.destruction.primary.needs_source);
       const dim = !presentInYear(s, scrubYear) ? " ha-card--dim" : "";
+      const st = s.status || "active";
+      const ribCls = /ruin/.test(st) ? "ruin" : st;
+      const ribbon = RIBBON[st] || RIBBON[ribCls] || st;
+      const series = (s.series || []).map(x => `<span class="ha-seriestag">${SERIES_ICON[x] || ""} ${esc((x || "").replace(/_/g, " "))}</span>`).join("");
       return `<article class="ha-card${dim}" id="site-${esc(s.id)}" style="--tc:${t.color}">
         <div class="ha-card-h">
-          <span class="ha-name">${esc(s.name)}</span>
-          <span class="ha-badge">${t.icon} ${esc(t.label)}</span>
+          <div style="flex:1">
+            <span class="ha-name">${esc(s.name)}</span>
+          </div>
           <span class="ha-yr">${yr(s.built_from ?? s.built_to)}${s.built_to && s.built_to !== s.built_from ? "–" + (s.built_to < 0 ? Math.abs(s.built_to) + " BCE" : s.built_to) : ""}</span>
         </div>
-        <div class="ha-place">${esc(s.region || "")} · ${esc(s.state || "")}${s.deity ? " · " + esc(s.deity) : ""}</div>
-        <div class="ha-builder"><b>Built by:</b> ${esc(s.builder || "—")}</div>
-        ${spanBar(s)}
-        ${s.lifespan_note ? `<div class="ha-life">${esc(s.lifespan_note)}</div>` : ""}
-        ${destroyBlock(s)}
-        ${s.contested && s.rebuttal ? `<div class="ha-rebut"><b>Not accepted by archaeology:</b> ${esc(s.rebuttal)}</div>` : ""}
-        <div class="ha-foot">
-          ${anySrc ? `<span class="ha-src">📄 <a href="${esc(anySrc.url)}" target="_blank" rel="noopener">${esc(anySrc.label)}</a></span>`
-                   : `<span class="ha-src">${esc((s.source && s.source[0] && s.source[0].label) || "source pending")}</span>`}
-          ${needsSrc ? `<span class="ha-gap">gap</span>` : ""}
-          <button class="ha-share" data-id="${esc(s.id)}" title="Share this site">↗ share</button>
+        <div class="ha-cardbody">
+          <div style="display:flex;gap:0.35rem;flex-wrap:wrap;align-items:center;margin-bottom:0.35rem">
+            <span class="ha-badge">${t.icon} ${esc(t.label)}</span>
+            <span class="ha-ribbon ${esc(ribCls)}">${ribbon}</span>
+          </div>
+          <div class="ha-place">${esc(s.region || "")} · ${esc(s.state || "")}${s.deity ? " · " + esc(s.deity) : ""}</div>
+          ${series ? `<div class="ha-series">${series}</div>` : ""}
+          <div class="ha-builder"><b>Built by:</b> ${esc(s.builder || "—")}</div>
+          ${spanBar(s)}
+          ${s.lifespan_note ? `<div class="ha-life">${esc(s.lifespan_note)}</div>` : ""}
+          ${destroyBlock(s)}
+          ${s.contested && s.rebuttal ? `<div class="ha-rebut"><b>Not accepted by archaeology:</b> ${esc(s.rebuttal)}</div>` : ""}
+          <div class="ha-foot">
+            ${anySrc ? `<span class="ha-src">📄 <a href="${esc(anySrc.url)}" target="_blank" rel="noopener">${esc(anySrc.label)}</a></span>`
+                     : `<span class="ha-src">${esc((s.source && s.source[0] && s.source[0].label) || "source pending")}</span>`}
+            ${needsSrc ? `<span class="ha-gap">gap</span>` : ""}
+            <button class="ha-share" data-id="${esc(s.id)}" title="Share this site">↗ share</button>
+          </div>
         </div>
       </article>`;
     }
 
-    function render() {
+    function updateChipCounts() {
+      // count of currently-visible sites per tradition/status, so chips show live numbers
+      const vis = visible();
+      const byTrad = {}; vis.forEach(s => byTrad[s.tradition] = (byTrad[s.tradition] || 0) + 1);
+      document.querySelectorAll("#trad-controls .ha-chip").forEach(ch => {
+        const n = byTrad[ch.dataset.trad] || 0;
+        const span = ch.querySelector(".n"); if (span) span.textContent = n ? n : "";
+      });
+      const st = { destroyed: vis.filter(s => s.destruction).length, ruin: vis.filter(s => /ruin/.test(s.status || "")).length,
+        active: vis.filter(s => s.status === "active" || s.status === "reconstructed").length };
+      document.querySelectorAll("#status-controls .ha-chip").forEach(ch => {
+        const span = ch.querySelector(".n"); if (span) span.textContent = st[ch.dataset.flt] ? st[ch.dataset.flt] : "";
+      });
+    }
+
+    function render(fit) {
       const list = visible();
       // order: destroyed first (the record the page foregrounds), then by build date
       list.sort((a, b) => (Number(!!b.destruction) - Number(!!a.destruction)) || ((a.built_from ?? 0) - (b.built_from ?? 0)));
       const el = document.getElementById("list");
-      el.innerHTML = list.length ? list.map(card).join("") : `<div class="ha-empty">No sites match these filters.</div>`;
+      el.innerHTML = list.length ? list.map(card).join("") : `<div class="ha-empty">No sites match these filters. <a href="#" id="ha-clear-empty" style="color:var(--gold)">clear filters</a></div>`;
+      const ce = document.getElementById("ha-clear-empty"); if (ce) ce.onclick = e => { e.preventDefault(); resetAll(); };
       document.getElementById("count").textContent = `${list.length} of ${SITES.length} sites`;
       // series completeness ("N of TOTAL mapped") — a full, sourced pilgrim circuit
       const sc = document.getElementById("series-count");
       if (activeSeries) {
         const have = SITES.filter(s => Array.isArray(s.series) && s.series.includes(activeSeries)).length;
-        sc.textContent = `${have} of ${SERIES_TOTAL[activeSeries]} ${SERIES_LABEL[activeSeries]} mapped`;
+        const done = have >= SERIES_TOTAL[activeSeries];
+        sc.textContent = `${have} of ${SERIES_TOTAL[activeSeries]} ${SERIES_LABEL[activeSeries]} mapped${done ? " ✓" : ""}`;
       } else { sc.textContent = ""; }
-      drawMarkers(list);
+      drawMarkers(list, fit);
+      updateChipCounts();
       el.querySelectorAll(".ha-share").forEach(b => b.onclick = () => shareSite(b.dataset.id));
+      revealCards();
+    }
+
+    function revealCards() {
+      const cards = document.querySelectorAll(".ha-card");
+      if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        cards.forEach(c => c.classList.add("in")); return;
+      }
+      if (!io) io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { rootMargin: "0px 0px -8% 0px" });
+      cards.forEach((c, i) => { c.style.transitionDelay = Math.min(i, 8) * 28 + "ms"; io.observe(c); });
+    }
+
+    function resetAll() {
+      activeTrad.clear(); activeFlt = null; activeSeries = null; query = "";
+      document.getElementById("ha-q").value = "";
+      document.getElementById("ha-q-clr").style.display = "none";
+      document.querySelectorAll(".ha-filters .ha-chip.on").forEach(c => c.classList.remove("on"));
+      render(true);
     }
 
     function jumpTo(id) {
@@ -409,22 +580,50 @@
         const t = ch.dataset.trad;
         if (activeTrad.has(t)) { activeTrad.delete(t); ch.classList.remove("on"); }
         else { activeTrad.add(t); ch.classList.add("on"); }
-        render();
+        render(true);
       });
       document.querySelectorAll("#status-controls .ha-chip").forEach(ch => ch.onclick = () => {
         const f = ch.dataset.flt;
         document.querySelectorAll("#status-controls .ha-chip").forEach(x => x.classList.remove("on"));
         if (activeFlt === f) { activeFlt = null; }
         else { activeFlt = f; ch.classList.add("on"); }
-        render();
+        render(true);
       });
-      document.querySelectorAll("#series-controls .ha-chip").forEach(ch => ch.onclick = () => {
+      document.querySelectorAll("#series-controls .ha-chip[data-series]").forEach(ch => ch.onclick = () => {
         const sname = ch.dataset.series;
-        document.querySelectorAll("#series-controls .ha-chip").forEach(x => x.classList.remove("on"));
+        document.querySelectorAll("#series-controls .ha-chip[data-series]").forEach(x => x.classList.remove("on"));
         if (activeSeries === sname) { activeSeries = null; }
         else { activeSeries = sname; ch.classList.add("on"); }
-        render();
+        render(true);
       });
+      document.getElementById("ha-reset").onclick = resetAll;
+
+      // search
+      const q = document.getElementById("ha-q"), clr = document.getElementById("ha-q-clr");
+      let qt = null;
+      q.addEventListener("input", () => {
+        clr.style.display = q.value ? "block" : "none";
+        clearTimeout(qt); qt = setTimeout(() => { query = q.value.trim().toLowerCase(); render(true); }, 160);
+      });
+      clr.onclick = () => { q.value = ""; query = ""; clr.style.display = "none"; render(true); q.focus(); };
+
+      // view toggle
+      const vb = document.getElementById("view-both"), vm = document.getElementById("view-map"), vl = document.getElementById("view-list");
+      const setView = (mode, btn) => {
+        [vb, vm, vl].forEach(b => b.classList.remove("on")); btn.classList.add("on");
+        document.getElementById("ha-map").style.display = mode === "list" ? "none" : "";
+        document.getElementById("ha-maplegend").style.display = mode === "list" ? "none" : "";
+        document.getElementById("list").style.display = mode === "map" ? "none" : "";
+        if (mode !== "list" && MAP) setTimeout(() => { MAP.invalidateSize(); render(true); }, 60);
+      };
+      vb.onclick = () => setView("both", vb); vm.onclick = () => setView("map", vm); vl.onclick = () => setView("list", vl);
+
+      // sticky filter shadow
+      const filters = document.getElementById("filters");
+      const sentinel = document.createElement("div"); filters.parentNode.insertBefore(sentinel, filters);
+      new IntersectionObserver(([e]) => filters.classList.toggle("stuck", e.intersectionRatio < 1),
+        { threshold: [1] }).observe(sentinel);
+
       const range = document.getElementById("scrub-range");
       range.oninput = () => { stopPlay(); setScrub(parseInt(range.value, 10)); };
       document.getElementById("scrub-reset").onclick = () => { stopPlay(); range.value = 2026; setScrub(2026); };
