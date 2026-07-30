@@ -7,6 +7,16 @@
   },
   "updates": [
     {
+      "id": "u_2026_07_30_living_temples",
+      "date": "2026-07-30",
+      "kind": "data",
+      "scope": "Living temples · India + East Asia",
+      "title": "Heritage atlas: present-day living temples added (India + Tibet/China/Japan)",
+      "detail": "Grew the atlas from 49 to 66 sites, foregrounding the temples that are ALIVE and worshipped today (filter: 'still active' now shows 32). Added India's major living shrines — Tirupati, Meenakshi (Madurai), Padmanabhaswamy, Jagannath Puri, Vaishno Devi, Kedarnath, Ranakpur (Jain), the new Ram Mandir (Ayodhya, 2024) and Akshardham (Delhi) — plus the Golden Temple under a new 'sikh' tradition. Also added the East-Asian Dharmic sites that were missing (new 'East Asia' region): Jokhang & Potala (Tibet), White Horse Temple & Leshan Giant Buddha (China), Tōdai-ji, Hōryū-ji & Sensō-ji (Japan) — tracing Buddhism's spread out of India. All sourced or gap-flagged.",
+      "source": "https://en.wikipedia.org/wiki/Venkateswara_Temple,_Tirumala",
+      "link": "heritage-atlas.html"
+    },
+    {
       "id": "u_2026_07_30_deep_history_dna",
       "date": "2026-07-30",
       "kind": "feature",
