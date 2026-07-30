@@ -111,6 +111,21 @@
       "source": { "label": "Narasimhan et al. 2019, Science; and the surrounding scholarly debate", "url": "https://www.science.org/doi/10.1126/science.aat7487" }
     },
     {
+      "id": "everyone-is-related",
+      "title": "How related everyone is — the borders are younger than the blood",
+      "year_label": "the through-line of the whole record",
+      "sort_year": 3000,
+      "region": "Subcontinent → Eurasia",
+      "kind": "admixture",
+      "consensus": "established",
+      "lat": 24.0, "lng": 74.0,
+      "components": ["AASI", "Iranian-farmer-related", "Steppe pastoralist (Yamnaya-related)"],
+      "finding": "Almost every living South Asian is a blend of the SAME three ancient sources (AASI + Iranian-farmer-related + Steppe), differing only in proportion. The very same Yamnaya/Steppe ancestry that entered South Asia also spread into Bronze-Age Europe — so North Indians and Europeans literally share a documented ancestral pulse. There is no genetically 'pure' or separate people here; the modern national and communal lines are far younger than the shared ancestry beneath them.",
+      "interpretation": "This is the atlas's honest point: a DNA map shows how connected people are, not how divided. Borders drawn by 20th-century politics, and identities hardened by religion or nation, sit on top of a population that is deeply intermixed. The science does not endorse any 'us vs them' — it dissolves it. (What it does NOT do is license claims about any group being superior, indigenous-and-therefore-owning, or foreign-and-therefore-lesser — descent is not desert.)",
+      "contested": false,
+      "source": { "label": "Narasimhan et al. 2019, Science (shared Yamnaya ancestry in Europe & South Asia; ANI/ASI as blends of common sources)", "url": "https://www.science.org/doi/10.1126/science.aat7487" }
+    },
+    {
       "id": "rakhigarhi-link",
       "title": "Rakhigarhi genome ties living South Asians to the IVC",
       "year_label": "individual dated ~2800–2300 BCE (sequenced 2019)",
