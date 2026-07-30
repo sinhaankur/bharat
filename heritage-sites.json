@@ -475,7 +475,8 @@
           "url": "https://whc.unesco.org/en/list/922/",
           "tier": 1
         }
-      ]
+      ],
+      "cyark_url": "https://www.cyark.org/projects/rani-ki-vav/3D-Explorer"
     },
     {
       "id": "dilwara",
@@ -2604,7 +2605,8 @@
         "title": "Teotihuacán — Pyramid of Quetzalcoatl",
         "attribution": "CyArk",
         "scan": "lidar"
-      }
+      },
+      "cyark_url": "https://www.cyark.org/projects/teotihuacn/3D-Explorer"
     },
     {
       "id": "templo-mayor",
@@ -3191,7 +3193,8 @@
         "attribution": "CyArk",
         "scan": "lidar",
         "search": "Rapa Nui moai CyArk"
-      }
+      },
+      "cyark_url": "https://www.cyark.org/projects/rapa-nui"
     },
     {
       "id": "uluru",
@@ -3494,6 +3497,182 @@
         }
       ],
       "continent": "Asia"
+    },
+    {
+      "id": "elephanta",
+      "name": "Elephanta Caves (Trimurti Shiva)",
+      "tradition": "sanatan",
+      "deity": "Shiva (the great Trimurti relief)",
+      "region": "West India",
+      "continent": "Asia",
+      "state": "Maharashtra",
+      "lat": 18.9633,
+      "lng": 72.9314,
+      "builder": "Kalachuri dynasty (King Krishnaraja), mid-6th c.",
+      "built_from": 540,
+      "built_to": 580,
+      "status": "active",
+      "architecture_type": "elephanta",
+      "lifespan_note": "Rock-cut Shiva cave-temples on Gharapuri island off Mumbai; the 6 m three-headed Trimurti (Creator-Preserver-Destroyer) is a masterpiece of Indian art. Damaged by the Portuguese, who reportedly used the reliefs for target practice. UNESCO World Heritage. LiDAR + photogrammetry scanned by CyArk (2023).",
+      "series": [],
+      "destruction": {
+        "primary": {
+          "year": 1550,
+          "actor": "Portuguese colonial soldiers",
+          "actor_role": "Portuguese Estado da Índia",
+          "account": "Portuguese occupiers are recorded damaging the sculptures (target practice); several panels are defaced.",
+          "needs_source": true
+        }
+      },
+      "cyark_url": "https://www.cyark.org/projects/elephanta/tapestry2",
+      "source": [
+        {
+          "label": "ASI; UNESCO — Elephanta Caves; CyArk (LiDAR)",
+          "url": "https://whc.unesco.org/en/list/244/",
+          "tier": 1
+        }
+      ]
+    },
+    {
+      "id": "petra",
+      "name": "Petra — the Monastery (ed-Deir) & Treasury",
+      "tradition": "native_faith",
+      "deity": "Nabataean gods (Dushara); later tomb/temple",
+      "region": "West Asia",
+      "continent": "Asia",
+      "state": "Jordan",
+      "lat": 30.3378,
+      "lng": 35.4311,
+      "builder": "The Nabataeans (peak under King Aretas IV)",
+      "built_from": -50,
+      "built_to": 50,
+      "status": "ruin",
+      "architecture_type": "petra",
+      "lifespan_note": "The rose-red rock-cut city of the Nabataeans — temples and tombs carved into sandstone cliffs (Al-Khazneh the 'Treasury', ed-Deir the 'Monastery'). A caravan-trade capital of a native Arabian faith before Rome and Islam. UNESCO World Heritage; LiDAR-scanned by CyArk.",
+      "series": [
+        "pre_abrahamic"
+      ],
+      "cyark_url": "https://www.cyark.org/projects/petra",
+      "source": [
+        {
+          "label": "UNESCO — Petra; CyArk (LiDAR)",
+          "url": "https://whc.unesco.org/en/list/326/",
+          "tier": 1
+        }
+      ]
+    },
+    {
+      "id": "tikal",
+      "name": "Tikal (Temple of the Great Jaguar)",
+      "tradition": "native_faith",
+      "deity": "Maya gods; funerary temple-pyramid",
+      "region": "Mesoamerica",
+      "continent": "North America",
+      "state": "Guatemala",
+      "lat": 17.2219,
+      "lng": -89.6228,
+      "builder": "The Maya (Temple I built for king Jasaw Chan K'awiil I, ~732 CE)",
+      "built_from": 600,
+      "built_to": 800,
+      "status": "ruin",
+      "architecture_type": "mesoamerican",
+      "lifespan_note": "One of the greatest Maya cities, its steep limestone temple-pyramids rising above the Petén jungle. Temple I (47 m) is a royal funerary pyramid. Abandoned ~10th c.; UNESCO World Heritage. CyArk-scanned.",
+      "series": [],
+      "cyark_url": "https://www.cyark.org/projects/tikal",
+      "source": [
+        {
+          "label": "UNESCO — Tikal National Park; CyArk",
+          "url": "https://whc.unesco.org/en/list/64/",
+          "tier": 1
+        }
+      ]
+    },
+    {
+      "id": "chavin",
+      "name": "Chavín de Huántar",
+      "tradition": "native_faith",
+      "deity": "Chavín cult (the Lanzón deity)",
+      "region": "Andes",
+      "continent": "South America",
+      "state": "Peru",
+      "lat": -9.5936,
+      "lng": -77.1778,
+      "builder": "The Chavín culture",
+      "built_from": -900,
+      "built_to": -200,
+      "status": "ruin",
+      "architecture_type": "andean",
+      "lifespan_note": "A major Andean pilgrimage and oracle centre ~900–200 BCE, with underground galleries housing the Lanzón — a fanged anthropomorphic deity. One of the mother-cultures of the Andes, long before the Inca. UNESCO World Heritage; CyArk-scanned.",
+      "series": [
+        "pre_abrahamic"
+      ],
+      "cyark_url": "https://www.cyark.org/projects/chavin",
+      "source": [
+        {
+          "label": "UNESCO — Chavin (Archaeological Site); CyArk",
+          "url": "https://whc.unesco.org/en/list/330/",
+          "tier": 1
+        }
+      ]
+    },
+    {
+      "id": "djenne",
+      "name": "Great Mosque of Djenné",
+      "tradition": "native_faith",
+      "deity": "Islam (Sudano-Sahelian mud architecture)",
+      "region": "Africa",
+      "continent": "Africa",
+      "state": "Mali",
+      "lat": 13.9054,
+      "lng": -4.5556,
+      "builder": "The people of Djenné (present structure 1907, on 13th-c. foundations)",
+      "built_from": 1200,
+      "built_to": 1907,
+      "status": "active",
+      "architecture_type": null,
+      "lifespan_note": "The largest mud-brick building in the world, the icon of Sudano-Sahelian architecture. Re-plastered every year by the whole community in a festival (crépissage). Included as a distinctly African form. UNESCO World Heritage; CyArk-scanned.",
+      "series": [],
+      "cyark_url": "https://www.cyark.org/projects/djenne-mosque",
+      "source": [
+        {
+          "label": "UNESCO — Old Towns of Djenné; CyArk",
+          "url": "https://whc.unesco.org/en/list/116/",
+          "tier": 1
+        }
+      ]
+    },
+    {
+      "id": "bagan",
+      "name": "Bagan (temple plain)",
+      "tradition": "buddhist",
+      "deity": "Theravada Buddhist temple-plain",
+      "region": "Southeast Asia",
+      "continent": "Asia",
+      "state": "Myanmar",
+      "lat": 21.1717,
+      "lng": 94.8585,
+      "builder": "Kings of the Pagan Kingdom",
+      "built_from": 1044,
+      "built_to": 1287,
+      "status": "active",
+      "architecture_type": "stupa",
+      "lifespan_note": "Over 2,000 surviving Buddhist temples and stupas on a plain by the Irrawaddy — the capital of the Pagan Kingdom and one of the greatest concentrations of Buddhist monuments on Earth. Damaged by the 2016 earthquake. UNESCO World Heritage; aerial-LiDAR scanned (CyArk / Open Heritage).",
+      "series": [],
+      "model3d": {
+        "provider": "sketchfab",
+        "id": "fdae1677de194b00ac6059363557d73d",
+        "title": "Bagan temple aerial scan",
+        "attribution": "CyArk / Open Heritage",
+        "scan": "lidar"
+      },
+      "cyark_url": "https://www.cyark.org/projects/bagan/3D-Explorer",
+      "source": [
+        {
+          "label": "UNESCO — Bagan; CyArk / Open Heritage (aerial LiDAR)",
+          "url": "https://whc.unesco.org/en/list/1588/",
+          "tier": 1
+        }
+      ]
     }
   ]
 }

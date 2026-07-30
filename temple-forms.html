@@ -157,6 +157,12 @@
       { id: "ethiopian", icon: "✝", name: "Rock-hewn church", sub: "Lalibela · Ethiopia", facing: "east", group: "World",
         blurb: "Ethiopian Orthodox rock-hewn church: an entire church carved DOWN into solid volcanic rock — like Bete Giyorgis, a Greek cross cut into the ground, a 'New Jerusalem'.",
         features: ["Carved top-down out of a single mass of living rock", "Cruciform (Greek-cross) plan, e.g. Bete Giyorgis", "Sits in a sunken pit, reached by trenches and tunnels", "Living Ethiopian Christianity — the 11 churches of Lalibela"] },
+      { id: "petra", icon: "🏜", name: "Rock-cut facade", sub: "Petra · Nabataean", facing: "cliff", group: "World",
+        blurb: "A temple or tomb carved directly into a sandstone cliff face — the Nabataean style at Petra (Al-Khazneh, ed-Deir): a classical facade of columns, pediment and a central round kiosk (tholos), all cut from living rock.",
+        features: ["Carved INTO a cliff — the facade is subtractive, not built", "Classical orders (columns, entablature, broken pediment)", "A central tholos (round kiosk) crowned by an urn", "Rose-red sandstone — e.g. Petra's Treasury & Monastery"] },
+      { id: "elephanta", icon: "🕳", name: "Rock-cut cave temple", sub: "Elephanta · Ellora", facing: "east", group: "World",
+        blurb: "A temple hall excavated into a hillside — pillared halls and shrines cut from solid basalt, with monumental reliefs (like Elephanta's three-headed Trimurti Shiva). Architecture as sculpture.",
+        features: ["Excavated into rock — pillars are left standing, not placed", "Fluted rock-cut pillars with cushion capitals", "Monumental wall reliefs (Trimurti Shiva at Elephanta)", "e.g. Elephanta, and the Ellora / Ajanta cave temples"] },
       { id: "megalithic_circle", icon: "🗿", name: "Megalithic circle", sub: "Stonehenge · Neolithic", facing: "solar", group: "World",
         blurb: "Prehistoric megalithic monument: a ring of massive standing stones, some capped by lintels, with an inner setting — aligned to the solstice sun. Its builders' religion is unknown.",
         features: ["Ring of upright sarsens with lintels across the top", "An inner horseshoe of trilithons", "Solstice alignment (midsummer sunrise / midwinter sunset)", "Built by Neolithic peoples ~3000–2000 BCE — e.g. Stonehenge"] }
@@ -187,7 +193,8 @@
       "east-strict": { deg: 0, text: "<b>Strictly east-facing</b> — aligned so the rising sun's first light reaches the deity in the sanctum." },
       "cardinal": { deg: 45, text: "Oriented to the <b>four cardinal directions</b> — often astronomically aligned." },
       "solar": { deg: 0, text: "<b>Solar-aligned</b> — set to the sun's key positions (solstice / equinox), not a fixed entrance." },
-      "inland": { deg: 180, text: "Faces <b>inland</b> (west, away from the sea) — the ancestors watch over the living." }
+      "inland": { deg: 180, text: "Faces <b>inland</b> (west, away from the sea) — the ancestors watch over the living." },
+      "cliff": { deg: 0, text: "Oriented to the <b>cliff face</b> it is carved into — the facade opens outward from the rock." }
     };
 
     function select(t) {

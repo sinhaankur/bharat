@@ -7,6 +7,16 @@
   },
   "updates": [
     {
+      "id": "u_2026_07_30_cyark_expand",
+      "date": "2026-07-30",
+      "kind": "data",
+      "scope": "CyArk LiDAR sites · worldwide",
+      "title": "Mined CyArk's LiDAR catalogue — added scanned sites + own GLBs",
+      "detail": "Added six CyArk-documented heritage sites to the atlas, each linking to its real CyArk LiDAR scan viewer: Elephanta Caves (Trimurti), Petra (Nabataean rock-cut), Tikal (Maya), Chavín de Huántar (Andean oracle), Great Mosque of Djenné (Mali mud architecture), and Bagan (Myanmar — pinned the aerial-LiDAR Sketchfab scan). Pinned CyArk viewer links onto sites already mapped (Rani ki Vav, Rapa Nui, Teotihuacán). Since CyArk mostly hosts scans on its own platform (not embeddable), also modelled two new archetypes in Blender and exported GLB we control — rock-cut cliff facade (Petra) and rock-cut cave temple (Elephanta) — bringing Temple Forms to 16 types. The 3D viewer now shows an 'open the real CyArk LiDAR scan' link. Atlas now 129 sites.",
+      "source": "https://www.cyark.org/collections/",
+      "link": "heritage-3d.html"
+    },
+    {
       "id": "u_2026_07_30_lidar_scans",
       "date": "2026-07-30",
       "kind": "feature",
