@@ -7,6 +7,16 @@
   },
   "updates": [
     {
+      "id": "u_2026_07_30_native_faiths",
+      "date": "2026-07-30",
+      "kind": "data",
+      "scope": "Native, tribal & pre-Abrahamic faiths",
+      "title": "Everyone on the map: Adivasi, native and pre-Abrahamic sacred sites added",
+      "detail": "Answering the point that native populations are erased between larger religions, added two new traditions and 100th site. Adivasi/tribal: Niyamgiri (Dongria Kondh sacred mountain), Sarna Sthal (Sarnaism), Mawphlang sacred grove (Khasi), Khejarli (Bishnoi tree-martyrs), plus Bhimbetka (deepest human layer). Native/pre-Abrahamic faith: Lalish (Yazidi holiest temple, genocide-survivors), Yazd Atash Behram (Zoroastrian Iran), Iranshah Udvada (Parsi refuge in India). Also added Gandhara Buddhist & Nath-yogi sites in present-day Pakistan/Afghanistan: Takht-i-Bahi, Kanishka Stupa, Tilla Jogian, Gor Khatri, Hadda. New 'native / indigenous' and 'pre-Abrahamic' filters. Atlas now 100 sites, 9 traditions — sacred natural sites (groves, mountains) mapped as living faith, not just buildings.",
+      "source": "https://en.wikipedia.org/wiki/Niyamgiri",
+      "link": "heritage-atlas.html"
+    },
+    {
       "id": "u_2026_07_30_jyotirlinga_chardham",
       "date": "2026-07-30",
       "kind": "data",

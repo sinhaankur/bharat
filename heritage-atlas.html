@@ -104,6 +104,8 @@
     .ha-chip[data-trad="buddhist"].on { border-color: oklch(0.7 0.15 75); background: oklch(0.78 0.14 80); }
     .ha-chip[data-trad="jain"].on { border-color: oklch(0.7 0.15 145); background: oklch(0.76 0.13 150); }
     .ha-chip[data-trad="sikh"].on { border-color: oklch(0.66 0.16 25); background: oklch(0.72 0.16 25); }
+    .ha-chip[data-trad="adivasi"].on { border-color: oklch(0.62 0.15 130); background: oklch(0.7 0.15 130); }
+    .ha-chip[data-trad="native_faith"].on { border-color: oklch(0.66 0.15 100); background: oklch(0.74 0.15 100); }
     .ha-chip[data-trad="pre_vedic_megalithic"].on { border-color: oklch(0.65 0.05 250); background: oklch(0.72 0.06 250); }
     .ha-chip[data-trad="indus_valley"].on { border-color: oklch(0.6 0.11 190); background: oklch(0.7 0.12 190); }
     .ha-chip[data-trad="contested"].on { border-color: oklch(0.6 0.02 300); background: oklch(0.66 0.03 300); }
@@ -239,6 +241,8 @@
         <button class="ha-chip" data-trad="buddhist">☸ Buddhist<span class="n"></span></button>
         <button class="ha-chip" data-trad="jain">卐 Jain<span class="n"></span></button>
         <button class="ha-chip" data-trad="sikh">☬ Sikh<span class="n"></span></button>
+        <button class="ha-chip" data-trad="adivasi">🌿 Adivasi / tribal<span class="n"></span></button>
+        <button class="ha-chip" data-trad="native_faith">🔥 Native faith<span class="n"></span></button>
         <button class="ha-chip" data-trad="pre_vedic_megalithic">🗿 Megalithic<span class="n"></span></button>
         <button class="ha-chip" data-trad="indus_valley">🏺 Indus Valley<span class="n"></span></button>
         <button class="ha-chip" data-trad="contested">❓ Contested<span class="n"></span></button>
@@ -256,6 +260,8 @@
         <button class="ha-chip generic" data-series="char_dham">🛕 Char Dham</button>
         <button class="ha-chip generic" data-series="chota_char_dham">⛰ Chota Char Dham</button>
         <button class="ha-chip generic" data-series="shakti_peetha">🔻 Shakti Peethas</button>
+        <button class="ha-chip generic" data-series="indigenous_sacred">🌿 Native / indigenous</button>
+        <button class="ha-chip generic" data-series="pre_abrahamic">🔥 Pre-Abrahamic</button>
         <button class="ha-chip" id="ha-reset" style="margin-left:auto;border-style:dashed">↺ reset</button>
         <span class="ha-count" id="series-count"></span>
       </div>
@@ -278,6 +284,8 @@
       buddhist:             { label: "Buddhist",       color: "oklch(0.78 0.14 80)", icon: "☸" },
       jain:                 { label: "Jain",           color: "oklch(0.76 0.13 150)", icon: "卐" },
       sikh:                 { label: "Sikh",           color: "oklch(0.72 0.16 25)", icon: "☬" },
+      adivasi:              { label: "Adivasi / tribal", color: "oklch(0.7 0.15 130)", icon: "🌿" },
+      native_faith:         { label: "Native faith",   color: "oklch(0.74 0.15 100)", icon: "🔥" },
       pre_vedic_megalithic: { label: "Megalithic",     color: "oklch(0.72 0.06 250)", icon: "🗿" },
       indus_valley:         { label: "Indus Valley",   color: "oklch(0.7 0.12 190)", icon: "🏺" },
       contested:            { label: "Contested",      color: "oklch(0.68 0.03 300)", icon: "❓" }
@@ -287,8 +295,8 @@
     const activeTrad = new Set();     // empty = all
     let activeFlt = null;             // destroyed | ruin | active | null
     let activeSeries = null;          // jyotirlinga | char_dham | chota_char_dham | null
-    const SERIES_TOTAL = { jyotirlinga: 12, char_dham: 4, chota_char_dham: 4, shakti_peetha: 51 };
-    const SERIES_LABEL = { jyotirlinga: "Jyotirlingas", char_dham: "Char Dham", chota_char_dham: "Chota Char Dham", shakti_peetha: "Shakti Peethas" };
+    const SERIES_TOTAL = { jyotirlinga: 12, char_dham: 4, chota_char_dham: 4, shakti_peetha: 51, indigenous_sacred: null, pre_abrahamic: null };
+    const SERIES_LABEL = { jyotirlinga: "Jyotirlingas", char_dham: "Char Dham", chota_char_dham: "Chota Char Dham", shakti_peetha: "Shakti Peethas", indigenous_sacred: "native / indigenous sites", pre_abrahamic: "pre-Abrahamic faith sites" };
     let scrubYear = 2026, playTimer = null, query = "", io = null;
     const SERIES_ICON = { jyotirlinga: "🔱", char_dham: "🛕", chota_char_dham: "⛰", shakti_peetha: "🔻" };
 
@@ -521,8 +529,12 @@
       const sc = document.getElementById("series-count");
       if (activeSeries) {
         const have = SITES.filter(s => Array.isArray(s.series) && s.series.includes(activeSeries)).length;
-        const done = have >= SERIES_TOTAL[activeSeries];
-        sc.textContent = `${have} of ${SERIES_TOTAL[activeSeries]} ${SERIES_LABEL[activeSeries]} mapped${done ? " ✓" : ""}`;
+        const total = SERIES_TOTAL[activeSeries];
+        if (total) {
+          sc.textContent = `${have} of ${total} ${SERIES_LABEL[activeSeries]} mapped${have >= total ? " ✓" : ""}`;
+        } else {
+          sc.textContent = `${have} ${SERIES_LABEL[activeSeries]} mapped`;
+        }
       } else { sc.textContent = ""; }
       drawMarkers(list, fit);
       updateChipCounts();
