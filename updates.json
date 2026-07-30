@@ -7,6 +7,16 @@
   },
   "updates": [
     {
+      "id": "u_2026_07_30_heritage_expand",
+      "date": "2026-07-30",
+      "kind": "data",
+      "scope": "Kashmir · smaller temples · Indus Valley",
+      "title": "Heritage atlas expanded: Kashmir deep-dive, smaller destroyed temples, and Indus Valley sites",
+      "detail": "Grew the sacred-ground atlas from 32 to 49 sites. Added a Kashmir pre-Islamic deep-dive (Shankaracharya/Jyeshteshwara, Parihaspora, Harwan Buddhist monastery, Naranag/Wangath, Pandrethan, Vijayeshvara) anchored to Kalhana's Rajatarangini — including King Harsha, a Hindu ruler who looted temples, so the record is not framed as only inter-religious. Added smaller/local destroyed temples (Rudra Mahalaya, Bhojshala, Adina spolia, Warangal, Quwwat-ul-Islam's 27 razed Jain/Hindu temples, Chittor). Added a new 'Indus Valley' tradition (Great Bath at Mohenjo-daro, Kalibangan fire altars, Dholavira, Rakhigarhi) — honestly labelled as proto-historic ritual sites whose religion is unknown, not temples.",
+      "source": "https://en.wikipedia.org/wiki/Parihaspora",
+      "link": "heritage-atlas.html"
+    },
+    {
       "id": "u_2026_07_30_heritage_atlas",
       "date": "2026-07-30",
       "kind": "feature",
