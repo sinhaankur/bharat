@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sacred ground — a sourced atlas of Sanatan, Jain & Buddhist sites, their builders and their destruction | India District Atlas</title>
+  <meta name="description" content="A geolocated, ASI-sourced atlas of Dharmic sacred sites — Sanatan Dharma, Jain, Buddhist and pre-Vedic megalithic — across Bharat, the Silk Route and Southeast Asia. Who built each site, when, and the documented record of its destruction: Somnath, Martand, Nalanda, Hampi, Angkor, Prambanan and more. Sourced or marked a gap." />
+  <meta name="keywords" content="Sanatan Dharma temples, Jain temples, Buddhist sites, temple destruction India, Martand Sun Temple, Somnath, Nalanda, Hampi Vijayanagara, Kashmir Hindu past, Angkor Wat, Prambanan, ASI, Silk Route temples, Southeast Asia Hindu temples" />
+  <link rel="canonical" href="https://sinhaankur.github.io/india-fiscal-map/heritage-atlas.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="India District Atlas" />
+  <meta property="og:title" content="Sacred ground — builders, lifespans and the destruction of Dharmic sites" />
+  <meta property="og:description" content="Who built each temple, when, and who destroyed it — Sanatan, Jain, Buddhist and megalithic sites across Bharat, the Silk Route and Southeast Asia. Sourced or marked a gap." />
+  <meta property="og:url" content="https://sinhaankur.github.io/india-fiscal-map/heritage-atlas.html" />
+  <meta property="og:image" content="https://sinhaankur.github.io/india-fiscal-map/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://sinhaankur.github.io/india-fiscal-map/og-image.png" />
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .ha-wrap { max-width: 1120px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; }
+    .ha-head h1 { margin: 0.3rem 0 0.4rem; font-size: clamp(1.7rem, 3.6vw, 2.6rem); }
+    .ha-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.55; max-width: 74ch; }
+    .ha-thesis { border-left: 2px solid oklch(0.7 0.15 60); padding: 0.2rem 0 0.2rem 0.8rem; margin: 0.9rem 0 0; color: oklch(0.85 0.10 70); font-size: 0.92rem; line-height: 1.5; font-style: italic; max-width: 66ch; }
+    .ha-stats { display: flex; flex-wrap: wrap; gap: 1.4rem; margin: 1.3rem 0 0.2rem; }
+    .ha-stat b { font-family: var(--font-mono); font-size: 1.5rem; color: oklch(0.84 0.13 75); display: block; line-height: 1; }
+    .ha-stat span { font-size: 0.78rem; color: var(--muted-foreground); }
+
+    #ha-map { height: 480px; border: 1px solid var(--border); border-radius: var(--radius); margin: 1.3rem 0 0.5rem; background: oklch(0.13 0 0); }
+    @media (max-width: 640px) { #ha-map { height: 360px; } }
+    .leaflet-container { background: oklch(0.13 0 0); font-family: inherit; }
+    .leaflet-popup-content-wrapper, .leaflet-popup-tip { background: oklch(0.16 0 0); color: var(--foreground); border: 1px solid var(--border-strong); }
+    .leaflet-popup-content { margin: 0.65rem 0.8rem; min-width: 210px; }
+    .ha-pop-t { font-weight: 700; color: oklch(0.86 0.12 75); }
+    .ha-pop-sub { font-size: 0.8rem; color: var(--muted-foreground); margin: 2px 0; }
+    .ha-pop-x { font-size: 0.8rem; color: oklch(0.78 0.16 30); margin-top: 3px; }
+    .ha-pop-open { display: inline-block; margin-top: 5px; font-family: var(--font-mono); font-size: 9.5px; color: oklch(0.74 0.16 75); text-decoration: none; cursor: pointer; }
+
+    /* time scrubber */
+    .ha-scrub { border: 1px solid var(--border); border-radius: var(--radius); padding: 0.7rem 0.9rem; margin: 0.7rem 0 0.2rem; background: oklch(0.15 0.01 60); }
+    .ha-scrub-hd { display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem; font-size: 0.86rem; color: var(--muted-foreground); }
+    .ha-scrub-hd b { font-family: var(--font-mono); font-size: 1.4rem; color: oklch(0.86 0.12 75); }
+    .ha-scrub input[type=range] { width: 100%; margin: 0.5rem 0 0.35rem; accent-color: oklch(0.7 0.15 70); cursor: pointer; }
+    .ha-scrub-foot { font-size: 0.74rem; color: var(--muted-foreground); line-height: 1.45; display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap; }
+    .ha-scrub-btn { background: none; border: 1px solid var(--border-strong); color: oklch(0.8 0.12 75); font-family: var(--font-mono); font-size: 10px; padding: 4px 10px; border-radius: 999px; cursor: pointer; }
+
+    .ha-controls { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin: 1rem 0 0.2rem; }
+    .ha-lbl { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted-foreground); margin-right: 0.2rem; }
+    .ha-chip { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.03em; padding: 4px 11px; border-radius: 999px; border: 1px solid var(--border-strong); color: var(--muted-foreground); background: transparent; cursor: pointer; }
+    .ha-chip.on { color: oklch(0.16 0 0); font-weight: 600; }
+    .ha-chip[data-trad="sanatan"].on { border-color: oklch(0.7 0.17 40); background: oklch(0.74 0.16 55); }
+    .ha-chip[data-trad="buddhist"].on { border-color: oklch(0.7 0.15 75); background: oklch(0.78 0.14 80); }
+    .ha-chip[data-trad="jain"].on { border-color: oklch(0.7 0.15 145); background: oklch(0.76 0.13 150); }
+    .ha-chip[data-trad="pre_vedic_megalithic"].on { border-color: oklch(0.65 0.05 250); background: oklch(0.72 0.06 250); }
+    .ha-chip[data-trad="contested"].on { border-color: oklch(0.6 0.02 300); background: oklch(0.66 0.03 300); }
+    .ha-chip.on.generic { border-color: oklch(0.66 0.16 75); background: oklch(0.74 0.15 75); }
+    .ha-count { margin-left: auto; font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
+
+    .ha-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1rem; margin-top: 1rem; }
+    .ha-card { border: 1px solid var(--border); border-left: 3px solid var(--tc, oklch(0.7 0.15 60)); border-radius: 0 var(--radius) var(--radius) 0; padding: 0.9rem 1rem; background: oklch(0.155 0 0); }
+    .ha-card-h { display: flex; align-items: baseline; gap: 0.5rem; }
+    .ha-name { font-weight: 700; font-size: 1.05rem; color: var(--foreground); }
+    .ha-badge { font-family: var(--font-mono); font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.04em; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--tc); color: var(--tc); white-space: nowrap; }
+    .ha-yr { margin-left: auto; font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); white-space: nowrap; }
+    .ha-place { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; color: var(--muted-foreground); margin: 0.3rem 0 0.1rem; }
+    .ha-deity { font-size: 0.86rem; color: oklch(0.82 0.10 80); }
+    .ha-builder { font-size: 0.85rem; line-height: 1.5; color: var(--foreground); margin: 0.4rem 0 0; }
+    .ha-builder b { color: oklch(0.86 0.12 75); }
+    .ha-life { font-size: 0.84rem; line-height: 1.5; color: var(--muted-foreground); margin: 0.4rem 0; }
+    /* lifespan bar: built → destroyed → now */
+    .ha-span { margin: 0.55rem 0 0.35rem; }
+    .ha-span-track { position: relative; height: 6px; background: var(--muted); border-radius: 999px; }
+    .ha-span-fill { position: absolute; top: 0; bottom: 0; border-radius: 999px; background: linear-gradient(90deg, oklch(0.6 0.14 145), oklch(0.72 0.15 75)); }
+    .ha-span-x { position: absolute; top: -3px; width: 2px; height: 12px; background: oklch(0.72 0.19 30); }
+    .ha-span-x::after { content: "✕"; position: absolute; top: -13px; left: -3px; font-size: 8px; color: oklch(0.78 0.18 30); }
+    .ha-span-lbls { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 8.5px; color: var(--muted-foreground); margin-top: 3px; }
+    .ha-destroy { font-size: 0.83rem; line-height: 1.5; color: oklch(0.85 0.10 32); background: oklch(0.2 0.06 30 / 0.35); border-radius: 6px; padding: 0.4rem 0.55rem; margin: 0.4rem 0; }
+    .ha-destroy b { color: oklch(0.86 0.15 32); }
+    .ha-destroy .who { font-weight: 700; }
+    .ha-destroy .link { display: inline-block; margin-top: 3px; font-family: var(--font-mono); font-size: 9px; color: oklch(0.74 0.16 75); text-decoration: none; }
+    .ha-rebut { font-size: 0.82rem; line-height: 1.5; color: oklch(0.8 0.06 300); background: oklch(0.2 0.02 300 / 0.4); border-radius: 6px; padding: 0.4rem 0.55rem; margin: 0.4rem 0; }
+    .ha-rebut b { color: oklch(0.86 0.05 300); }
+    .ha-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.6rem; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px dashed var(--border); }
+    .ha-src { font-size: 0.76rem; color: var(--muted-foreground); }
+    .ha-src a { color: oklch(0.72 0.13 250); }
+    .ha-gap { font-family: var(--font-mono); font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.03em; padding: 1px 7px; border-radius: 999px; border: 1px dashed oklch(0.6 0.14 60); color: oklch(0.78 0.14 70); }
+    .ha-share { margin-left: auto; background: none; border: 1px solid var(--border-strong); color: var(--muted-foreground); font-family: var(--font-mono); font-size: 10px; padding: 6px 12px; border-radius: 999px; cursor: pointer; }
+    .ha-share:hover { border-color: oklch(0.72 0.15 70); color: oklch(0.84 0.13 75); }
+    .ha-card--dim { opacity: 0.32; }
+    .ha-card--hl { border-color: oklch(0.78 0.16 70); box-shadow: 0 0 0 2px oklch(0.7 0.16 70 / 0.4); }
+    .ha-empty { grid-column: 1/-1; color: var(--muted-foreground); text-align: center; padding: 2rem 0; }
+    .ha-note { font-size: 0.78rem; color: var(--muted-foreground); line-height: 1.6; margin-top: 1.8rem; border-top: 1px solid var(--border); padding-top: 1rem; }
+    .ha-note a { color: oklch(0.74 0.16 75); }
+    .ha-note b { color: var(--foreground); }
+  </style>
+</head>
+<body>
+  <div id="site-nav"></div>
+
+  <main class="ha-wrap">
+    <header class="ha-head">
+      <div class="eyebrow">Heritage · builders & their destruction · sourced-or-gap</div>
+      <h1 class="display">Sacred ground of <em>Bharat</em> — who built it, and who destroyed it</h1>
+      <p>A geolocated atlas of <b>Sanatan Dharma</b>, <b>Jain</b>, <b>Buddhist</b> and pre-Vedic <b>megalithic</b> sites
+      across Bharat, the Silk Route and Southeast Asia. For each: who built it (the king, dynasty or people), when,
+      and its <em>lifespan</em> — built, damaged or destroyed, and what stands today. Where a site was destroyed, we
+      name the actor and cite the record.</p>
+      <p class="ha-thesis">A temple is not only stone. Its lifespan is a ledger: who raised it, what it meant,
+      and — where it fell — who brought it down and at what human cost. Sourced from the ASI and scholarship, or
+      marked a gap. Claims not accepted by archaeology are shown separately and labelled contested.</p>
+      <div class="ha-stats" id="stats"></div>
+    </header>
+
+    <div id="ha-map"></div>
+
+    <div class="ha-scrub" id="scrub">
+      <div class="ha-scrub-hd">
+        <span>🕰️ Walk the timeline — sites that existed in this year glow; destroyed sites fade after they fell</span>
+        <b id="scrub-year">2026 CE</b>
+      </div>
+      <input type="range" id="scrub-range" min="-1200" max="2026" step="10" value="2026" />
+      <div class="ha-scrub-foot">
+        <button class="ha-scrub-btn" id="scrub-play">▶ play the centuries</button>
+        <button class="ha-scrub-btn" id="scrub-reset">reset to today</button>
+        <span id="scrub-live"></span>
+      </div>
+    </div>
+
+    <div class="ha-controls" id="trad-controls">
+      <span class="ha-lbl">Tradition</span>
+      <button class="ha-chip" data-trad="sanatan">☸ Sanatan</button>
+      <button class="ha-chip" data-trad="buddhist">☸ Buddhist</button>
+      <button class="ha-chip" data-trad="jain">卐 Jain</button>
+      <button class="ha-chip" data-trad="pre_vedic_megalithic">🗿 Megalithic</button>
+      <button class="ha-chip" data-trad="contested">❓ Contested</button>
+    </div>
+    <div class="ha-controls" id="status-controls">
+      <span class="ha-lbl">Filter</span>
+      <button class="ha-chip generic" data-flt="destroyed">🔥 Destroyed / desecrated</button>
+      <button class="ha-chip generic" data-flt="ruin">🏛 Ruins</button>
+      <button class="ha-chip generic" data-flt="active">🪔 Still active</button>
+      <span class="ha-count" id="count"></span>
+    </div>
+
+    <div class="ha-list" id="list"></div>
+
+    <p class="ha-note" id="note"></p>
+  </main>
+
+  <script src="vendor/leaflet/leaflet.js"></script>
+  <script src="map-layers.js"></script>
+  <script>
+  (function () {
+    "use strict";
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+    const TRAD = {
+      sanatan:              { label: "Sanatan Dharma", color: "oklch(0.74 0.16 55)", icon: "🕉" },
+      buddhist:             { label: "Buddhist",       color: "oklch(0.78 0.14 80)", icon: "☸" },
+      jain:                 { label: "Jain",           color: "oklch(0.76 0.13 150)", icon: "卐" },
+      pre_vedic_megalithic: { label: "Megalithic",     color: "oklch(0.72 0.06 250)", icon: "🗿" },
+      contested:            { label: "Contested",      color: "oklch(0.68 0.03 300)", icon: "❓" }
+    };
+
+    let DATA = null, SITES = [], MAP = null, MARKERS = null;
+    const activeTrad = new Set();     // empty = all
+    let activeFlt = null;             // destroyed | ruin | active | null
+    let scrubYear = 2026, playTimer = null;
+
+    const yr = y => (y < 0 ? Math.abs(y) + " BCE" : y + " CE");
+    // built end year (fall back to built_from), and the destruction year if any
+    const builtEnd = s => (s.built_to ?? s.built_from ?? null);
+    const fellYear = s => {
+      const d = s.destruction && s.destruction.primary;
+      return d && typeof d.year === "number" ? d.year : null;
+    };
+
+    fetch("heritage-sites.json").then(r => r.json()).then(d => {
+      DATA = d; SITES = d.sites || [];
+      renderStats(); renderNote(); initMap(); wire(); render();
+    }).catch(e => {
+      document.getElementById("list").innerHTML = `<div class="ha-empty">Could not load heritage-sites.json — ${esc(e.message)}</div>`;
+    });
+
+    function renderStats() {
+      const n = SITES.length;
+      const destroyed = SITES.filter(s => s.destruction).length;
+      const traditions = new Set(SITES.map(s => s.tradition)).size;
+      const regions = new Set(SITES.map(s => s.region)).size;
+      document.getElementById("stats").innerHTML =
+        `<div class="ha-stat"><b>${n}</b><span>sites mapped</span></div>` +
+        `<div class="ha-stat"><b>${destroyed}</b><span>with a destruction record</span></div>` +
+        `<div class="ha-stat"><b>${traditions}</b><span>traditions</span></div>` +
+        `<div class="ha-stat"><b>${regions}</b><span>regions · Bharat → SE Asia</span></div>`;
+    }
+
+    function renderNote() {
+      const m = DATA._meta || {};
+      document.getElementById("note").innerHTML =
+        `<b>How to read this.</b> ${esc(m.editorial_stance || "")} ` +
+        `Every claim is either cited or carries a <span class="ha-gap">gap</span> tag where a source is still needed. ` +
+        `Death-toll estimates for medieval events have wide historian spread and, where relevant, link to the ` +
+        `<a href="atrocities.html">atrocities timeline</a> rather than assert a single number. ` +
+        `The term <b>Sanatan Dharma</b> is used in place of "Hindu" per the project's editorial choice. ` +
+        `Contested sites (e.g. "ancient machining" claims) are shown but labelled and carry the scholarly rebuttal. ` +
+        `See also: <a href="atrocities.html">Population Control, Marauder Style</a> · ` +
+        `<a href="references.html">sources</a>.`;
+    }
+
+    function initMap() {
+      if (typeof L === "undefined") return;
+      MAP = L.map("ha-map", { scrollWheelZoom: true }).setView([18, 88], 4);
+      const base = (window.MapLayers && MapLayers.basemaps)
+        ? MapLayers.basemaps(L)["Dark map"]
+        : L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png", { subdomains: "abcd", attribution: "&copy; OSM, &copy; CARTO" });
+      base.addTo(MAP);
+      MARKERS = L.layerGroup().addTo(MAP);
+    }
+
+    function visible() {
+      return SITES.filter(s => {
+        if (activeTrad.size && !activeTrad.has(s.tradition)) return false;
+        if (activeFlt === "destroyed" && !s.destruction) return false;
+        if (activeFlt === "ruin" && !/ruin/.test(s.status || "")) return false;
+        if (activeFlt === "active" && s.status !== "active" && s.status !== "reconstructed") return false;
+        return true;
+      });
+    }
+
+    // A site is "present" in a scrub year if built by then and (if destroyed) not yet fallen.
+    function presentInYear(s, year) {
+      const b = s.built_from ?? s.built_to;
+      if (b == null || year < b) return false;
+      const f = fellYear(s);
+      if (f != null && year >= f && s.status !== "reconstructed" && s.status !== "active") return false;
+      return true;
+    }
+
+    function drawMarkers(list) {
+      if (!MAP || !MARKERS) return;
+      MARKERS.clearLayers();
+      const bounds = [];
+      for (const s of list) {
+        if (s.lat == null || s.lng == null) continue;
+        const t = TRAD[s.tradition] || TRAD.contested;
+        const fell = fellYear(s);
+        const present = presentInYear(s, scrubYear);
+        const m = L.circleMarker([s.lat, s.lng], {
+          radius: s.destruction ? 8 : 6,
+          color: fell ? "oklch(0.7 0.2 30)" : t.color,
+          weight: fell ? 2 : 1.3,
+          fillColor: t.color,
+          fillOpacity: present ? 0.75 : 0.12
+        });
+        m.bindPopup(
+          `<div class="ha-pop-t">${t.icon} ${esc(s.name)}</div>` +
+          `<div class="ha-pop-sub">${esc(t.label)} · ${esc(s.state || "")} · built ${yr(s.built_from ?? s.built_to)}</div>` +
+          (fell ? `<div class="ha-pop-x">🔥 ${esc(s.destruction.primary.actor)} · ${yr(fell)}</div>` : "") +
+          `<a class="ha-pop-open" data-jump="${esc(s.id)}">read the record →</a>`
+        );
+        m.on("popupopen", e => {
+          const a = e.popup.getElement().querySelector("[data-jump]");
+          if (a) a.onclick = () => jumpTo(s.id);
+        });
+        m.addTo(MARKERS);
+        bounds.push([s.lat, s.lng]);
+      }
+      if (bounds.length) try { MAP.fitBounds(bounds, { padding: [40, 40], maxZoom: 6 }); } catch (e) {}
+    }
+
+    function spanBar(s) {
+      const b = s.built_from ?? s.built_to;
+      const fell = fellYear(s);
+      const now = 2026, min = -1300, span = now - min;
+      const pct = y => Math.max(0, Math.min(100, ((y - min) / span) * 100));
+      const start = pct(b);
+      const endYear = (fell && s.status !== "reconstructed" && s.status !== "active") ? fell : now;
+      const end = pct(endYear);
+      const xMark = fell ? `<i class="ha-span-x" style="left:${pct(fell)}%"></i>` : "";
+      return `<div class="ha-span">
+        <div class="ha-span-track">
+          <i class="ha-span-fill" style="left:${start}%; width:${Math.max(1.5, end - start)}%"></i>
+          ${xMark}
+        </div>
+        <div class="ha-span-lbls"><span>built ${yr(b)}</span>${fell ? `<span>✕ ${yr(fell)}</span>` : ""}<span>${s.status === "active" || s.status === "reconstructed" ? "today" : "gone"}</span></div>
+      </div>`;
+    }
+
+    function destroyBlock(s) {
+      const d = s.destruction && s.destruction.primary;
+      if (!d) return "";
+      const link = d.atrocity_link
+        ? `<a class="link" href="atrocities.html#${encodeURIComponent(d.atrocity_link)}">↗ regional death toll: ${esc(d.atrocity_link)}</a>` : "";
+      const later = (s.destruction.later && s.destruction.later.length)
+        ? `<div style="margin-top:3px;font-size:0.78rem;">Also struck: ${s.destruction.later.map(l => `${esc(l.actor)} (${yr(l.year)})`).join("; ")}.</div>` : "";
+      return `<div class="ha-destroy">
+        <span class="who">🔥 ${esc(d.actor)}</span> — <span>${esc(d.actor_role || "")}</span>, ${yr(d.year)}.
+        ${d.account ? `<div style="margin-top:3px">${esc(d.account)}</div>` : ""}
+        ${d.toll_note ? `<div style="margin-top:3px"><b>Human toll:</b> ${esc(d.toll_note)}</div>` : ""}
+        ${d.needs_source ? `<div style="margin-top:3px"><span class="ha-gap">gap · attribution needs a citation</span></div>` : ""}
+        ${later}${link}
+      </div>`;
+    }
+
+    function card(s) {
+      const t = TRAD[s.tradition] || TRAD.contested;
+      const anySrc = (s.source || []).find(x => x.url);
+      const needsSrc = !anySrc || (s.destruction && s.destruction.primary && s.destruction.primary.needs_source);
+      const dim = !presentInYear(s, scrubYear) ? " ha-card--dim" : "";
+      return `<article class="ha-card${dim}" id="site-${esc(s.id)}" style="--tc:${t.color}">
+        <div class="ha-card-h">
+          <span class="ha-name">${esc(s.name)}</span>
+          <span class="ha-badge">${t.icon} ${esc(t.label)}</span>
+          <span class="ha-yr">${yr(s.built_from ?? s.built_to)}${s.built_to && s.built_to !== s.built_from ? "–" + (s.built_to < 0 ? Math.abs(s.built_to) + " BCE" : s.built_to) : ""}</span>
+        </div>
+        <div class="ha-place">${esc(s.region || "")} · ${esc(s.state || "")}${s.deity ? " · " + esc(s.deity) : ""}</div>
+        <div class="ha-builder"><b>Built by:</b> ${esc(s.builder || "—")}</div>
+        ${spanBar(s)}
+        ${s.lifespan_note ? `<div class="ha-life">${esc(s.lifespan_note)}</div>` : ""}
+        ${destroyBlock(s)}
+        ${s.contested && s.rebuttal ? `<div class="ha-rebut"><b>Not accepted by archaeology:</b> ${esc(s.rebuttal)}</div>` : ""}
+        <div class="ha-foot">
+          ${anySrc ? `<span class="ha-src">📄 <a href="${esc(anySrc.url)}" target="_blank" rel="noopener">${esc(anySrc.label)}</a></span>`
+                   : `<span class="ha-src">${esc((s.source && s.source[0] && s.source[0].label) || "source pending")}</span>`}
+          ${needsSrc ? `<span class="ha-gap">gap</span>` : ""}
+          <button class="ha-share" data-id="${esc(s.id)}" title="Share this site">↗ share</button>
+        </div>
+      </article>`;
+    }
+
+    function render() {
+      const list = visible();
+      // order: destroyed first (the record the page foregrounds), then by build date
+      list.sort((a, b) => (Number(!!b.destruction) - Number(!!a.destruction)) || ((a.built_from ?? 0) - (b.built_from ?? 0)));
+      const el = document.getElementById("list");
+      el.innerHTML = list.length ? list.map(card).join("") : `<div class="ha-empty">No sites match these filters.</div>`;
+      document.getElementById("count").textContent = `${list.length} of ${SITES.length} sites`;
+      drawMarkers(list);
+      el.querySelectorAll(".ha-share").forEach(b => b.onclick = () => shareSite(b.dataset.id));
+    }
+
+    function jumpTo(id) {
+      const node = document.getElementById("site-" + id);
+      if (!node) return;
+      node.scrollIntoView({ behavior: "smooth", block: "center" });
+      node.classList.add("ha-card--hl");
+      setTimeout(() => node.classList.remove("ha-card--hl"), 2200);
+    }
+
+    function shareSite(id) {
+      const s = SITES.find(x => x.id === id); if (!s) return;
+      const d = s.destruction && s.destruction.primary;
+      const txt = d
+        ? `${s.name} (${TRAD[s.tradition].label}) — built by ${s.builder} in ${yr(s.built_from ?? s.built_to)}, destroyed by ${d.actor} in ${yr(d.year)}. Sourced on the India District Atlas.`
+        : `${s.name} (${TRAD[s.tradition].label}) — built by ${s.builder} in ${yr(s.built_from ?? s.built_to)}. On the India District Atlas.`;
+      const url = location.origin + location.pathname + "#site-" + id;
+      if (navigator.share) navigator.share({ title: s.name, text: txt, url }).catch(() => {});
+      else { navigator.clipboard && navigator.clipboard.writeText(txt + " " + url); const b = document.querySelector(`.ha-share[data-id="${id}"]`); if (b) { const o = b.textContent; b.textContent = "✓ copied"; setTimeout(() => b.textContent = o, 1400); } }
+    }
+
+    function setScrub(y) {
+      scrubYear = y;
+      document.getElementById("scrub-year").textContent = yr(y);
+      const alive = SITES.filter(s => presentInYear(s, y)).length;
+      const fell = SITES.filter(s => { const f = fellYear(s); return f != null && f <= y; }).length;
+      document.getElementById("scrub-live").textContent = `${alive} standing · ${fell} already fallen by this year`;
+      render();
+    }
+
+    function wire() {
+      document.querySelectorAll("#trad-controls .ha-chip").forEach(ch => ch.onclick = () => {
+        const t = ch.dataset.trad;
+        if (activeTrad.has(t)) { activeTrad.delete(t); ch.classList.remove("on"); }
+        else { activeTrad.add(t); ch.classList.add("on"); }
+        render();
+      });
+      document.querySelectorAll("#status-controls .ha-chip").forEach(ch => ch.onclick = () => {
+        const f = ch.dataset.flt;
+        document.querySelectorAll("#status-controls .ha-chip").forEach(x => x.classList.remove("on"));
+        if (activeFlt === f) { activeFlt = null; }
+        else { activeFlt = f; ch.classList.add("on"); }
+        render();
+      });
+      const range = document.getElementById("scrub-range");
+      range.oninput = () => { stopPlay(); setScrub(parseInt(range.value, 10)); };
+      document.getElementById("scrub-reset").onclick = () => { stopPlay(); range.value = 2026; setScrub(2026); };
+      document.getElementById("scrub-play").onclick = () => {
+        if (playTimer) return stopPlay();
+        document.getElementById("scrub-play").textContent = "⏸ pause";
+        range.value = -1200; setScrub(-1200);
+        playTimer = setInterval(() => {
+          let y = parseInt(range.value, 10) + 40;
+          if (y >= 2026) { y = 2026; stopPlay(); }
+          range.value = y; setScrub(y);
+        }, 220);
+      };
+      function stopPlay() { if (playTimer) { clearInterval(playTimer); playTimer = null; } document.getElementById("scrub-play").textContent = "▶ play the centuries"; }
+      window.__stopPlay = stopPlay;
+      // deep-link to a site
+      if (location.hash.startsWith("#site-")) setTimeout(() => jumpTo(location.hash.slice(6)), 400);
+    }
+  })();
+  </script>
+  <script src="command-palette.js"></script>
+  <script src="site-nav.js"></script>
+</body>
+</html>

@@ -7,6 +7,26 @@
   },
   "updates": [
     {
+      "id": "u_2026_07_30_heritage_atlas",
+      "date": "2026-07-30",
+      "kind": "feature",
+      "scope": "Bharat · Silk Route · Southeast Asia",
+      "title": "Sacred ground — a sourced atlas of temples, their builders and their destruction",
+      "detail": "Added a geolocated atlas (heritage-atlas.html) of Sanatan Dharma, Jain, Buddhist and pre-Vedic megalithic sites, each with its builder (king/dynasty/people), construction span, lifespan bar, and — where documented — the actor who destroyed it and the human toll (Somnath, Martand, Nalanda, Hampi/Vijayanagara, Angkor, Prambanan, Bamiyan and more). Islamic-era destruction is foregrounded per editorial request; Portuguese Goa Inquisition, British-era temple-endowment control and famines are also recorded so the ledger is complete. Every claim cited (ASI/scholarship) or marked a gap; 'ancient machining'-style claims (e.g. Praveen Mohan) are shown under a 'contested' tradition with the scholarly rebuttal.",
+      "source": "https://whc.unesco.org/en/list/",
+      "link": "heritage-atlas.html"
+    },
+    {
+      "id": "u_2026_07_30_atrocities_timeline",
+      "date": "2026-07-30",
+      "kind": "feature",
+      "scope": "Global · India highlighted",
+      "title": "Population Control, Marauder Style — the NYT/Matthew White atrocities chart, made interactive",
+      "detail": "Rebuilt the New York Times 'Population Control, Marauder Style' data-graphic (Bill Marsh, 6 Nov 2011; data from Matthew White's 'The Great Big Book of Horrible Things') as an interactive timeline (atrocities.html): 100 events sized by deaths or deaths/year, filterable by category and region, with India-relevant events (Timur's sack of Delhi, Bahmani–Vijayanagara, Aurangzeb, famines in British India, Partition, 1971) outlined and linked to the heritage atlas. Figures are reproduced faithfully as estimates from one compilation, not asserted as settled fact.",
+      "source": "https://www.nytimes.com/2011/11/06/opinion/sunday/population-control-marauder-style.html",
+      "link": "atrocities.html"
+    },
+    {
       "id": "u_2026_07_19_bengaluru_bbmp",
       "date": "2026-07-19",
       "kind": "data",
