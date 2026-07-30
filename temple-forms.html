@@ -55,6 +55,9 @@
     .tf-compass .dot { top: 50%; left: 50%; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); transform: translate(-50%,-50%); }
     .tf-compass .ray { top: 50%; left: 50%; width: 30px; height: 2px; background: linear-gradient(90deg, var(--gold), transparent); transform-origin: left center; }
     .tf-hint { position: absolute; right: 12px; top: 12px; font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); background: oklch(0.13 0 0 / 0.6); padding: 3px 8px; border-radius: 999px; }
+    .tf-cutbtn { position: absolute; left: 12px; top: 12px; font-family: var(--font-mono); font-size: 10px; color: var(--gold); background: oklch(0.13 0 0 / 0.7); border: 1px solid var(--gold-deep); padding: 5px 11px; border-radius: 999px; cursor: pointer; z-index: 2; }
+    .tf-cutbtn:hover { background: var(--gold); color: oklch(0.16 0 0); }
+    .tf-cutbtn.on { background: var(--gold); color: oklch(0.16 0 0); font-weight: 700; }
     /* build (construction) scrubber overlay */
     .tf-build { position: absolute; left: 12px; right: 12px; bottom: 12px; background: oklch(0.12 0 0 / 0.86); backdrop-filter: blur(6px); border: 1px solid var(--border-strong); border-radius: 10px; padding: 0.5rem 0.7rem; }
     .tf-build-hd { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; font-family: var(--font-mono); font-size: 10px; color: var(--gold); }
@@ -117,6 +120,7 @@
           <i class="dot"></i><i class="ray" id="ray"></i>
         </div>
         <div class="tf-hint">drag to rotate · scroll to zoom</div>
+        <button class="tf-cutbtn" id="cutbtn" hidden>✂ see inside</button>
         <div class="tf-build" id="build" hidden>
           <div class="tf-build-hd"><span id="build-label">Watch it built</span><button class="tf-play" id="build-play">▶ build it</button></div>
           <input type="range" id="build-range" min="0" max="1" step="1" value="0" />
@@ -286,7 +290,15 @@
       ]
     };
 
-    let SITES = [], current = null, stage = 0, maxStage = 0;
+    // types with a cutaway model (_cut.glb) + what the interior shows
+    const CUTAWAY = {
+      nagara: "Inside: the tiny, dark <b>garbhagriha</b> (womb-chamber) deep under the tower — the deity sits in a small windowless cell. The mass of stone above is solid; the sacred space is deliberately tiny and dark.",
+      dravidian: "Inside: the <b>sanctum cell</b> under the vimana. Like the Nagara, the interior is small and dark — height and mass are the statement, not interior volume.",
+      stupa: "Inside: the <b>relic chamber</b> at the heart of the dome. The stupa is essentially SOLID — a mound built around a casket of relics, not a hall you enter. You walk <em>around</em> it, not into it.",
+      elephanta: "Inside: the <b>pillared hall</b> carved into the hill, with the 6 m <b>Trimurti</b> relief lit on the back wall. Here the interior IS the temple — a void hollowed from solid basalt."
+    };
+
+    let SITES = [], current = null, stage = 0, maxStage = 0, cutOn = false;
 
     fetch("heritage-sites.json").then(r => r.json()).then(d => {
       SITES = d.sites || [];
@@ -297,6 +309,23 @@
 
     let buildTimer = null;
     function wireBuild() {
+      document.getElementById("cutbtn").onclick = () => {
+        if (!current || !CUTAWAY[current.id]) return;
+        cutOn = !cutOn;
+        const btn = document.getElementById("cutbtn");
+        btn.classList.toggle("on", cutOn);
+        btn.textContent = cutOn ? "✕ close" : "✂ see inside";
+        stopBuild();
+        const mp = document.getElementById("mathPanel");
+        if (cutOn) {
+          document.getElementById("mv").setAttribute("src", "assets/temples-3d/" + current.id + "_cut.glb");
+          document.getElementById("build").hidden = true;   // the build bar doesn't apply to the cut view
+          if (mp) mp.innerHTML = `<div class="lbl">✂ Cross-section — inside the structure</div><div class="how">${CUTAWAY[current.id]}</div>`;
+        } else {
+          document.getElementById("build").hidden = !STAGES[current.id];
+          setStage(maxStage);   // back to the finished exterior + its math
+        }
+      };
       document.getElementById("build-range").oninput = e => { stopBuild(); setStage(parseInt(e.target.value, 10)); };
       document.getElementById("build-play").onclick = () => {
         if (buildTimer) return stopBuild();
@@ -351,9 +380,14 @@
     function select(t) {
       if (!t) return;
       current = t;
+      cutOn = false;
       document.querySelectorAll(".tf-tab").forEach(b => b.classList.toggle("on", b.dataset.id === t.id));
       const mv = document.getElementById("mv");
       const buildBox = document.getElementById("build");
+      // cutaway button
+      const cutbtn = document.getElementById("cutbtn");
+      if (CUTAWAY[t.id]) { cutbtn.hidden = false; cutbtn.classList.remove("on"); cutbtn.textContent = "✂ see inside"; }
+      else cutbtn.hidden = true;
       const steps = STAGES[t.id];
       if (steps) {
         maxStage = steps.length;           // last position = full model
