@@ -7,6 +7,16 @@
   },
   "updates": [
     {
+      "id": "u_2026_07_30_deep_history_dna",
+      "date": "2026-07-30",
+      "kind": "feature",
+      "scope": "Deep history · ancient DNA",
+      "title": "Deep history in DNA — the population shifts that made South Asia",
+      "detail": "Added deep-history.html + dna-shifts.json: a sourced timeline of population-turnover events readable in ancient DNA — Homo sapiens × Neanderthal admixture, the AASI substrate, Iranian-farmer ancestry, the Steppe/Yamnaya influx (~2000-1500 BCE), formation of ANI/ASI, and the Rakhigarhi Indus Valley genome (linked to the same site in the heritage atlas). Held strictly to the peer-reviewed science (Reich lab; Narasimhan et al. 2019 Science, Shinde et al. 2019 Cell); the 'Aryan migration vs indigenous' narrative is shown as a contested INTERPRETATION of undisputed data, with the honest line spelled out (gene flow inward is real; 'invasion' is the wrong word; 'no migration' is also wrong). Emphasises that a DNA shift proves movement/mixture, not necessarily a massacre.",
+      "source": "https://www.science.org/doi/10.1126/science.aat7487",
+      "link": "deep-history.html"
+    },
+    {
       "id": "u_2026_07_30_quake_tsunami",
       "date": "2026-07-30",
       "kind": "feature",

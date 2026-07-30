@@ -1,0 +1,130 @@
+{
+  "_meta": {
+    "purpose": "A sourced timeline of major POPULATION-SHIFT events readable in ancient DNA — moments where the genetic makeup of a region changed sharply, which is the physical evidence of migration, admixture, replacement, or (sometimes) conquest. Built to answer the user's question: DNA as the 'ultimate truth' of who moved, who mixed, and who was replaced — from Homo sapiens meeting Neanderthals to the layered ancestry of modern South Asians.",
+    "honesty": "This is one of the most politicised areas of science. We hold strictly to peer-reviewed ancient-DNA findings (chiefly the Reich lab: Narasimhan et al. 2019 Science; Shinde et al. 2019 Cell) and label clearly where a GENETIC finding (well-established) ends and a HISTORICAL interpretation (contested) begins. A DNA shift proves movement and mixture; it does NOT by itself prove violence — 'migration', 'admixture' and 'conquest' are different claims and we keep them distinct. The 'Aryan migration/invasion' framing is flagged contested precisely here.",
+    "key_ancestries": {
+      "AASI": "Ancient Ancestral South Indians — a deeply divergent lineage, distantly related to Andamanese & other early out-of-Africa peoples; the substrate of the subcontinent.",
+      "Iranian_farmer_related": "Neolithic ancestry related to farmers of the Iranian plateau; entered South Asia before/around the Indus Valley Civilisation (the IVC individual sequenced was a mix of this + AASI, with NO Steppe or Anatolian farmer ancestry).",
+      "Steppe_pastoralist": "Yamnaya-related ancestry from the Pontic-Caspian steppe (the 'Yamnaya' / 'Steppe' people); spread into both Bronze-Age Europe and South Asia ~2000-1500 BCE, up to ~30% of some modern South Asian groups; associated by the authors with Indo-European (incl. Indo-Iranian) languages.",
+      "Neanderthal": "~1.5-2.1% of the DNA of all non-African people today comes from admixture with Neanderthals ~50,000-60,000 years ago."
+    },
+    "sources": [
+      { "label": "Narasimhan, Patterson et al. (2019), 'The formation of human populations in South and Central Asia', Science 365:eaat7487", "url": "https://www.science.org/doi/10.1126/science.aat7487" },
+      { "label": "Shinde, Narasimhan et al. (2019), 'An Ancient Harappan Genome Lacks Ancestry from Steppe Pastoralists or Iranian Farmers', Cell 179(3):729-735", "url": "https://doi.org/10.1016/j.cell.2019.08.048" },
+      { "label": "Reich, D. (2018), 'Who We Are and How We Got Here', Pantheon", "url": "https://reich.hms.harvard.edu/" },
+      { "label": "Green et al. (2010), 'A Draft Sequence of the Neandertal Genome', Science 328:710-722", "url": "https://www.science.org/doi/10.1126/science.1188021" }
+    ],
+    "fields": "id, title, years (BP or CE), region, kind (admixture|migration|replacement|contested_interpretation), consensus (established|debated), components[], finding, interpretation, contested, source",
+    "updated_at": "2026-07-30"
+  },
+  "events": [
+    {
+      "id": "sapiens-neanderthal",
+      "title": "Homo sapiens × Neanderthal admixture (and Neanderthal disappearance)",
+      "year_label": "~60,000–40,000 years ago",
+      "sort_year": -58000,
+      "region": "Eurasia (out-of-Africa)",
+      "kind": "admixture",
+      "consensus": "established",
+      "lat": 40.0, "lng": 45.0,
+      "components": ["Homo sapiens (out-of-Africa)", "Neanderthal"],
+      "finding": "As modern humans left Africa they interbred with Neanderthals; every non-African person alive carries ~1.5–2.1% Neanderthal DNA. Neanderthals then vanished from the record ~40,000 years ago.",
+      "interpretation": "Whether sapiens actively 'killed off' Neanderthals or outcompeted/absorbed them is debated — the DNA proves interbreeding and eventual replacement, but NOT a specific massacre. This is the user's 'sapiens taking over Neanderthals' point, stated at the level the evidence supports: replacement + admixture, mechanism uncertain.",
+      "contested": false,
+      "note_on_violence": "Population replacement in ancient DNA can result from conflict, disease, differential fertility, or absorption — genetics alone rarely distinguishes them.",
+      "source": { "label": "Green et al. 2010, Science; subsequent Neanderthal-genome work", "url": "https://www.science.org/doi/10.1126/science.1188021" }
+    },
+    {
+      "id": "aasi-substrate",
+      "title": "AASI — the deep substrate of South Asia",
+      "year_label": "~65,000+ years ago",
+      "sort_year": -63000,
+      "region": "Indian subcontinent",
+      "kind": "migration",
+      "consensus": "established",
+      "lat": 20.0, "lng": 78.0,
+      "components": ["Ancient Ancestral South Indians (AASI)"],
+      "finding": "A deeply divergent hunter-gatherer lineage (AASI), distantly related to the Andamanese and other early out-of-Africa peoples, formed the ancient population substrate of the subcontinent — the layer everything later mixed into.",
+      "interpretation": "AASI is not sampled directly (no ancient AASI genome yet) but is inferred as a source in every model of South Asian ancestry.",
+      "contested": false,
+      "source": { "label": "Narasimhan et al. 2019, Science", "url": "https://www.science.org/doi/10.1126/science.aat7487" }
+    },
+    {
+      "id": "iranian-farmer",
+      "title": "Iranian-farmer-related ancestry enters South Asia",
+      "year_label": "~7000–5000 years ago",
+      "sort_year": -5000,
+      "region": "NW South Asia / Iranian plateau",
+      "kind": "admixture",
+      "consensus": "established",
+      "lat": 30.0, "lng": 66.0,
+      "components": ["Iranian-farmer-related", "AASI"],
+      "finding": "Ancestry related to Neolithic Iranian-plateau farmers mixed with AASI to form the people of the Indus Valley Civilisation. The single sequenced IVC individual (Rakhigarhi) was exactly this mix — with NO Steppe and NO Anatolian-farmer ancestry.",
+      "interpretation": "This ties living South Asians directly to the IVC population. The absence of Steppe ancestry in the IVC individual is a key data point in the Aryan-migration debate below.",
+      "contested": false,
+      "source": { "label": "Shinde et al. 2019, Cell (Rakhigarhi genome)", "url": "https://doi.org/10.1016/j.cell.2019.08.048" }
+    },
+    {
+      "id": "steppe-yamnaya",
+      "title": "Steppe (Yamnaya) pastoralist ancestry spreads into South Asia",
+      "year_label": "~4000–3500 years ago (~2000–1500 BCE)",
+      "sort_year": -1750,
+      "region": "Central Asia → NW South Asia (Swat Valley)",
+      "kind": "migration",
+      "consensus": "established",
+      "lat": 35.2, "lng": 72.4,
+      "components": ["Steppe pastoralist (Yamnaya-related)", "Iranian-farmer-related", "AASI"],
+      "finding": "Steppe (Yamnaya-related) ancestry — the same profile seen spreading into Bronze-Age Europe — reached South Asia in the first half of the 2nd millennium BCE, contributing up to ~30% of the ancestry of some modern groups. Indo-European-speaking groups carry more of it than Dravidian-speaking groups.",
+      "interpretation": "The Reich-lab authors read this as the movement that likely spread Indo-Iranian languages into the subcontinent. THIS is the scientific basis of the 'Aryan migration' picture — see the contested entry.",
+      "contested": false,
+      "source": { "label": "Narasimhan et al. 2019, Science (Swat Valley time-transect)", "url": "https://www.science.org/doi/10.1126/science.aat7487" }
+    },
+    {
+      "id": "ani-asi",
+      "title": "Formation of the two ancestral populations (ANI & ASI)",
+      "year_label": "~4000–2000 years ago",
+      "sort_year": -1000,
+      "region": "Indian subcontinent",
+      "kind": "admixture",
+      "consensus": "established",
+      "lat": 22.0, "lng": 79.0,
+      "components": ["Ancestral North Indians (ANI)", "Ancestral South Indians (ASI)"],
+      "finding": "The IVC-derived population mixed in two directions: southeast (forming the Ancestral South Indians, ASI) and with Steppe-descended groups (forming the Ancestral North Indians, ANI). Almost all South Asians today are a blend of ANI and ASI, whose common thread is the IVC-like ancestry.",
+      "interpretation": "Later the caste system reduced inter-group mixing, 'freezing' distinct ANI/ASI proportions across communities — itself readable in the DNA.",
+      "contested": false,
+      "source": { "label": "Reich et al.; Narasimhan et al. 2019", "url": "https://www.science.org/doi/10.1126/science.aat7487" }
+    },
+    {
+      "id": "aryan-debate",
+      "title": "The 'Aryan migration vs. indigenous origin' interpretation",
+      "year_label": "interpretation of the ~2000-1500 BCE data",
+      "sort_year": -1600,
+      "region": "Indian subcontinent",
+      "kind": "contested_interpretation",
+      "consensus": "debated",
+      "lat": 27.0, "lng": 75.0,
+      "components": ["Steppe pastoralist", "IVC-derived"],
+      "finding": "The GENETICS are not seriously disputed: Steppe ancestry entered South Asia ~2000-1500 BCE. What is contested is the HISTORICAL narrative attached to it.",
+      "interpretation": "Mainstream genetics/linguistics reads the Steppe influx as an inward MIGRATION that spread Indo-Aryan languages (a migration, not necessarily a violent 'invasion'). Some Indian scholars/commentators dispute the direction, timing, or the 'Aryan' label, or argue for an indigenous / Out-of-India origin. We present the genetic finding as established and the invasion/indigenous framing as contested — deliberately NOT taking a side beyond the data.",
+      "contested": true,
+      "rebuttal": "The older colonial-era 'Aryan invasion' (a martial conquest wiping out the IVC) is not supported; the IVC declined for other reasons and Steppe ancestry arrived over centuries by admixture. But wholesale 'no migration at all / Out-of-India' claims are not supported by the ancient-DNA time-transects either. The honest statement: gene flow inward is real; 'invasion' is the wrong word; 'no migration' is also wrong.",
+      "source": { "label": "Narasimhan et al. 2019, Science; and the surrounding scholarly debate", "url": "https://www.science.org/doi/10.1126/science.aat7487" }
+    },
+    {
+      "id": "rakhigarhi-link",
+      "title": "Rakhigarhi genome ties living South Asians to the IVC",
+      "year_label": "individual dated ~2800–2300 BCE (sequenced 2019)",
+      "sort_year": -2500,
+      "region": "Haryana (Ghaggar-Hakra plain)",
+      "kind": "migration",
+      "consensus": "established",
+      "lat": 29.293, "lng": 76.114,
+      "components": ["Iranian-farmer-related", "AASI"],
+      "finding": "The first (and so far only) sequenced Indus Valley genome, from a woman buried at Rakhigarhi, carried Iranian-related + AASI ancestry and NO Steppe or Anatolian-farmer ancestry — direct genetic continuity from the IVC to modern South Asians.",
+      "interpretation": "The authors caution that this is a single individual, limiting firm conclusions. Links to the same Rakhigarhi site in the heritage atlas.",
+      "contested": false,
+      "atlas_link": "indus-rakhigarhi",
+      "source": { "label": "Shinde et al. 2019, Cell", "url": "https://doi.org/10.1016/j.cell.2019.08.048" }
+    }
+  ]
+}
