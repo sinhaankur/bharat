@@ -7,6 +7,16 @@
   },
   "updates": [
     {
+      "id": "u_2026_07_30_heritage_3d",
+      "date": "2026-07-30",
+      "kind": "feature",
+      "scope": "Heritage · 3D",
+      "title": "Temples in 3D — photogrammetry viewer (see how they looked)",
+      "detail": "Added heritage-3d.html: a 3D viewer that embeds real Sketchfab photogrammetry per site — a curated, verified model where one exists (Angkor Wat, Borobudur), else a live name-based search that surfaces community scans of ruins (Martand, Hampi, Nalanda). Destroyed sites deliberately show no model with an honest 'it no longer stands' panel rather than a fabricated reconstruction. Site list filters by has-model / ruins / destroyed; each entry links back to its sourced record on the heritage atlas.",
+      "source": "https://sketchfab.com/3d-models/angkor-wat-cambodia-add92b9193a64b9cbb39d1c968ca86c8",
+      "link": "heritage-3d.html"
+    },
+    {
       "id": "u_2026_07_30_heritage_expand",
       "date": "2026-07-30",
       "kind": "data",

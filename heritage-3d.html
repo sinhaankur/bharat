@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Temples in 3D — see how they looked | India District Atlas</title>
+  <meta name="description" content="Explore Sanatan, Jain and Buddhist temples and ruins in real photorealistic 3D. Where a photogrammetry scan exists (Angkor Wat, Borobudur, and community scans of ruins like Martand and Hampi), it loads live from Sketchfab; destroyed sites honestly show why no model can exist." />
+  <meta name="keywords" content="temple 3D model, photogrammetry heritage, Angkor Wat 3D, Borobudur 3D, Martand ruins 3D, Hampi 3D, Sketchfab temple, Indian temple 3D scan" />
+  <link rel="canonical" href="https://sinhaankur.github.io/india-fiscal-map/heritage-3d.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="India District Atlas" />
+  <meta property="og:title" content="Temples in 3D — see how they looked" />
+  <meta property="og:description" content="Sanatan, Jain and Buddhist temples & ruins in real photogrammetry 3D, live from Sketchfab. Destroyed sites show honestly why no model can exist." />
+  <meta property="og:url" content="https://sinhaankur.github.io/india-fiscal-map/heritage-3d.html" />
+  <meta property="og:image" content="https://sinhaankur.github.io/india-fiscal-map/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://sinhaankur.github.io/india-fiscal-map/og-image.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .h3-wrap { max-width: 1180px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; }
+    .h3-head h1 { margin: 0.3rem 0 0.4rem; font-size: clamp(1.7rem, 3.6vw, 2.6rem); }
+    .h3-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.55; max-width: 74ch; }
+    .h3-head p a { color: oklch(0.74 0.16 75); }
+
+    .h3-layout { display: grid; grid-template-columns: 300px 1fr; gap: 1.1rem; margin-top: 1.3rem; align-items: start; }
+    @media (max-width: 860px) { .h3-layout { grid-template-columns: 1fr; } }
+
+    /* left rail: site list */
+    .h3-rail { border: 1px solid var(--border); border-radius: var(--radius); background: oklch(0.14 0 0); max-height: 640px; overflow-y: auto; }
+    .h3-rail-hd { position: sticky; top: 0; background: oklch(0.16 0 0); padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--border); font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted-foreground); z-index: 2; }
+    .h3-filter { display: flex; gap: 0.3rem; flex-wrap: wrap; padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--border); }
+    .h3-fchip { font-family: var(--font-mono); font-size: 9px; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--border-strong); color: var(--muted-foreground); background: transparent; cursor: pointer; }
+    .h3-fchip.on { color: oklch(0.16 0 0); background: oklch(0.74 0.15 75); border-color: oklch(0.74 0.15 75); font-weight: 600; }
+    .h3-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.8rem; border-bottom: 1px solid oklch(0.2 0 0); cursor: pointer; }
+    .h3-item:hover { background: oklch(0.17 0 0); }
+    .h3-item.on { background: oklch(0.2 0.03 75); }
+    .h3-item .ic { font-size: 1rem; }
+    .h3-item .nm { font-size: 0.86rem; line-height: 1.25; }
+    .h3-item .nm small { display: block; color: var(--muted-foreground); font-size: 0.72rem; }
+    .h3-item .tag { margin-left: auto; font-family: var(--font-mono); font-size: 8px; text-transform: uppercase; letter-spacing: 0.03em; padding: 1px 6px; border-radius: 999px; white-space: nowrap; }
+    .h3-item .tag.scan { color: oklch(0.16 0 0); background: oklch(0.72 0.15 150); }
+    .h3-item .tag.search { color: oklch(0.85 0.1 210); border: 1px solid oklch(0.5 0.1 210); }
+    .h3-item .tag.gone { color: oklch(0.85 0.12 32); border: 1px solid oklch(0.5 0.14 32); }
+
+    /* stage */
+    .h3-stage { border: 1px solid var(--border); border-radius: var(--radius); background: oklch(0.11 0 0); overflow: hidden; }
+    .h3-viewer { position: relative; width: 100%; aspect-ratio: 16/10; background: oklch(0.1 0 0); }
+    .h3-viewer iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .h3-empty { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem; color: var(--muted-foreground); }
+    .h3-empty .big { font-size: 2.4rem; margin-bottom: 0.6rem; }
+    .h3-empty h3 { color: var(--foreground); margin: 0 0 0.4rem; font-size: 1.05rem; }
+    .h3-empty p { max-width: 46ch; font-size: 0.88rem; line-height: 1.5; }
+    .h3-empty a { color: oklch(0.74 0.16 75); }
+
+    .h3-info { padding: 0.9rem 1rem; border-top: 1px solid var(--border); }
+    .h3-info h2 { margin: 0 0 0.15rem; font-size: 1.15rem; }
+    .h3-info .sub { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted-foreground); }
+    .h3-info .life { font-size: 0.88rem; line-height: 1.5; color: var(--muted-foreground); margin: 0.5rem 0; }
+    .h3-info .builder { font-size: 0.86rem; }
+    .h3-info .builder b { color: oklch(0.86 0.12 75); }
+    .h3-info .destroy { font-size: 0.84rem; color: oklch(0.85 0.10 32); background: oklch(0.2 0.06 30 / 0.35); border-radius: 6px; padding: 0.4rem 0.55rem; margin: 0.5rem 0 0; }
+    .h3-info .destroy b { color: oklch(0.86 0.15 32); }
+    .h3-info .links { margin-top: 0.6rem; display: flex; gap: 0.8rem; flex-wrap: wrap; font-family: var(--font-mono); font-size: 10px; }
+    .h3-info .links a { color: oklch(0.74 0.16 75); text-decoration: none; }
+    .h3-attr { font-size: 0.72rem; color: var(--muted-foreground); margin-top: 0.5rem; }
+    .h3-attr a { color: oklch(0.66 0.1 250); }
+    .h3-note { font-size: 0.78rem; color: var(--muted-foreground); line-height: 1.6; margin-top: 1.6rem; border-top: 1px solid var(--border); padding-top: 1rem; }
+    .h3-note b { color: var(--foreground); }
+    .h3-note a { color: oklch(0.74 0.16 75); }
+  </style>
+</head>
+<body>
+  <div id="site-nav"></div>
+
+  <main class="h3-wrap">
+    <header class="h3-head">
+      <div class="eyebrow">Heritage · 3D · photogrammetry</div>
+      <h1 class="display">See the temples in <em>3D</em></h1>
+      <p>Real photorealistic scans, loaded live from Sketchfab. A few sites have a curated model
+      (Angkor Wat, Borobudur); for the rest we search Sketchfab by name — which surfaces community
+      photogrammetry of many <b>ruins</b> too (Martand, Hampi, Nalanda). Where a site was destroyed and
+      nothing survives to scan, the viewer says so plainly — that absence is the point.
+      Pair this with the map & records on the <a href="heritage-atlas.html">heritage atlas</a>.</p>
+    </header>
+
+    <div class="h3-layout">
+      <aside class="h3-rail">
+        <div class="h3-rail-hd" id="rail-count">sites</div>
+        <div class="h3-filter" id="filter">
+          <button class="h3-fchip on" data-f="all">all</button>
+          <button class="h3-fchip" data-f="scan">has model</button>
+          <button class="h3-fchip" data-f="ruin">ruins</button>
+          <button class="h3-fchip" data-f="gone">destroyed</button>
+        </div>
+        <div id="rail-list"></div>
+      </aside>
+
+      <section class="h3-stage">
+        <div class="h3-viewer" id="viewer"></div>
+        <div class="h3-info" id="info"></div>
+      </section>
+    </div>
+
+    <p class="h3-note" id="note"></p>
+  </main>
+
+  <script>
+  (function () {
+    "use strict";
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const TRAD = {
+      sanatan: { l: "Sanatan Dharma", i: "🕉" }, buddhist: { l: "Buddhist", i: "☸" },
+      jain: { l: "Jain", i: "卐" }, pre_vedic_megalithic: { l: "Megalithic", i: "🗿" },
+      indus_valley: { l: "Indus Valley", i: "🏺" }, contested: { l: "Contested", i: "❓" }
+    };
+    const yr = y => (y < 0 ? Math.abs(y) + " BCE" : y + " CE");
+    const fell = s => (s.destruction && s.destruction.primary && typeof s.destruction.primary.year === "number") ? s.destruction.primary.year : null;
+    // "gone": destroyed with nothing standing to scan
+    const isGone = s => s.status === "destroyed" || (s.is_event === true);
+    const isRuin = s => /ruin/.test(s.status || "");
+
+    let SITES = [], filter = "all", current = null;
+
+    fetch("heritage-sites.json").then(r => r.json()).then(d => {
+      SITES = (d.sites || []).filter(s => s.tradition !== "contested" || s.model3d);
+      renderNote(); renderRail();
+      // deep-link ?site=id or first with a curated model
+      const want = new URLSearchParams(location.search).get("site");
+      const start = (want && SITES.find(s => s.id === want)) || SITES.find(s => s.model3d) || SITES[0];
+      select(start);
+      wire();
+    }).catch(e => {
+      document.getElementById("viewer").innerHTML = `<div class="h3-empty"><div class="big">⚠️</div><p>Could not load heritage-sites.json — ${esc(e.message)}</p></div>`;
+    });
+
+    function scanState(s) { return s.model3d ? "scan" : (isGone(s) ? "gone" : "search"); }
+
+    function passesFilter(s) {
+      if (filter === "all") return true;
+      if (filter === "scan") return !!s.model3d;
+      if (filter === "ruin") return isRuin(s);
+      if (filter === "gone") return isGone(s);
+      return true;
+    }
+
+    function renderRail() {
+      const list = SITES.filter(passesFilter);
+      document.getElementById("rail-count").textContent = `${list.length} sites`;
+      const tagFor = s => {
+        const st = scanState(s);
+        if (st === "scan") return `<span class="tag scan">3D model</span>`;
+        if (st === "gone") return `<span class="tag gone">gone</span>`;
+        return `<span class="tag search">search</span>`;
+      };
+      document.getElementById("rail-list").innerHTML = list.map(s => {
+        const t = TRAD[s.tradition] || TRAD.contested;
+        return `<div class="h3-item${current && current.id === s.id ? " on" : ""}" data-id="${esc(s.id)}">
+          <span class="ic">${t.i}</span>
+          <span class="nm">${esc(s.name.split("(")[0].trim())}<small>${esc(s.state || "")} · ${yr(s.built_from ?? s.built_to)}</small></span>
+          ${tagFor(s)}
+        </div>`;
+      }).join("");
+      document.querySelectorAll(".h3-item").forEach(el => el.onclick = () => select(SITES.find(s => s.id === el.dataset.id)));
+    }
+
+    function embedURL(s) {
+      const common = "autospin=0.2&autostart=1&ui_theme=dark&ui_infos=0&ui_hint=2";
+      if (s.model3d && s.model3d.provider === "sketchfab") {
+        return `https://sketchfab.com/models/${s.model3d.id}/embed?${common}`;
+      }
+      // name-based gallery embed — surfaces whatever community scans exist (incl. ruins)
+      const q = encodeURIComponent(s.model_search || s.name.split("(")[0].trim());
+      return `https://sketchfab.com/playlists/embed?collection=&q=${q}`;
+    }
+
+    function select(s) {
+      if (!s) return;
+      current = s;
+      renderRail();
+      const viewer = document.getElementById("viewer");
+      const t = TRAD[s.tradition] || TRAD.contested;
+
+      if (isGone(s) && !s.model3d) {
+        const d = s.destruction && s.destruction.primary;
+        viewer.innerHTML = `<div class="h3-empty">
+          <div class="big">🕯️</div>
+          <h3>No 3D model — because it no longer stands</h3>
+          <p>${esc(s.name)} was destroyed${d ? ` by <b>${esc(d.actor)}</b> in ${yr(d.year)}` : ""}. There is nothing left to scan.
+          What it looked like survives only in descriptions and, sometimes, in the stones reused elsewhere.
+          Search Sketchfab for a <a href="https://sketchfab.com/search?q=${encodeURIComponent(s.name.split("(")[0].trim())}&type=models" target="_blank" rel="noopener">speculative reconstruction ↗</a>.</p>
+        </div>`;
+      } else {
+        // sandboxed iframe; Sketchfab embeds handle their own fallback if no model matches a search
+        viewer.innerHTML = `<iframe title="${esc(s.name)} 3D" allow="autoplay; fullscreen; xr-spatial-tracking" allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true" src="${embedURL(s)}"></iframe>`;
+      }
+
+      const d = s.destruction && s.destruction.primary;
+      document.getElementById("info").innerHTML =
+        `<h2>${esc(s.name)}</h2>` +
+        `<div class="sub">${t.i} ${esc(t.l)} · ${esc(s.region || "")} · ${esc(s.state || "")} · built ${yr(s.built_from ?? s.built_to)}${s.status ? " · " + esc(s.status) : ""}</div>` +
+        `<div class="builder"><b>Built by:</b> ${esc(s.builder || "—")}</div>` +
+        (s.lifespan_note ? `<div class="life">${esc(s.lifespan_note)}</div>` : "") +
+        (d ? `<div class="destroy">🔥 Destroyed by <b>${esc(d.actor)}</b> (${esc(d.actor_role || "")}), ${yr(d.year)}.</div>` : "") +
+        `<div class="links">` +
+          `<a href="heritage-atlas.html#site-${esc(s.id)}">↗ full record on the map</a>` +
+          (s.source && s.source[0] && s.source[0].url ? `<a href="${esc(s.source[0].url)}" target="_blank" rel="noopener">↗ source</a>` : "") +
+          (!s.model3d && !isGone(s) ? `<a href="https://sketchfab.com/search?q=${encodeURIComponent(s.name.split("(")[0].trim())}&type=models" target="_blank" rel="noopener">↗ browse all scans on Sketchfab</a>` : "") +
+        `</div>` +
+        (s.model3d ? `<div class="h3-attr">Model: ${esc(s.model3d.title || s.name)} — © <a href="https://sketchfab.com/3d-models/${esc(s.model3d.id)}" target="_blank" rel="noopener">${esc(s.model3d.attribution || "Sketchfab")}</a>, embedded under Sketchfab's terms.</div>`
+          : (!isGone(s) ? `<div class="h3-attr">Live Sketchfab search — models are their creators'; not a curated match. Some sites may have no scan yet.</div>` : ""));
+    }
+
+    function renderNote() {
+      document.getElementById("note").innerHTML =
+        `<b>How this works & its honest limits.</b> Accurate 3D of most heritage sites simply doesn't exist as open data. ` +
+        `This viewer embeds real <a href="https://sketchfab.com" target="_blank" rel="noopener">Sketchfab</a> photogrammetry: a curated model where we've verified one, else a live search by the site's name. ` +
+        `A search result is <b>not</b> a vetted reconstruction — it shows whatever creators have uploaded, which for famous ruins is often good, and for obscure ones may be nothing. ` +
+        `Destroyed sites deliberately show no model: they are gone, and pretending otherwise would be a fabrication. ` +
+        `For the sourced record — builder, dates and destruction — use the <a href="heritage-atlas.html">heritage atlas</a>.`;
+    }
+
+    function wire() {
+      document.querySelectorAll(".h3-fchip").forEach(b => b.onclick = () => {
+        document.querySelectorAll(".h3-fchip").forEach(x => x.classList.remove("on"));
+        b.classList.add("on"); filter = b.dataset.f; renderRail();
+      });
+    }
+  })();
+  </script>
+  <script src="command-palette.js"></script>
+  <script src="site-nav.js"></script>
+</body>
+</html>

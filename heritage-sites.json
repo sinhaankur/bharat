@@ -524,6 +524,7 @@
       "builder": "Suryavarman II, Khmer Empire",
       "built_from": 1113, "built_to": 1150,
       "status": "active",
+      "model3d": { "provider": "sketchfab", "id": "add92b9193a64b9cbb39d1c968ca86c8", "title": "Angkor Wat, Cambodia", "attribution": "utkarshbhanu (Sketchfab)" },
       "lifespan_note": "The largest religious monument in the world, built as a Vishnu temple by Suryavarman II and later converted to Buddhist use. Continuously significant; UNESCO World Heritage and Cambodia's national symbol.",
       "source": [
         { "label": "UNESCO — Angkor", "url": "https://whc.unesco.org/en/list/668/", "tier": 1 }
@@ -558,6 +559,7 @@
       "builder": "Sailendra dynasty, Mataram Kingdom",
       "built_from": 778, "built_to": 850,
       "status": "reconstructed",
+      "model3d": { "provider": "sketchfab", "id": "9b7a5910dc814ec59145d9723b68c769", "title": "Borobudur Temple, Indonesia", "attribution": "Andria Wahyudi (Sketchfab)" },
       "lifespan_note": "The world's largest Buddhist temple, a stone mandala of the Sailendras. Abandoned c. 14th c. as Java Islamised and buried under ash/jungle; rediscovered 1814, restored by UNESCO 1975–82. UNESCO World Heritage.",
       "source": [
         { "label": "UNESCO — Borobudur Temple Compounds", "url": "https://whc.unesco.org/en/list/592/", "tier": 1 }

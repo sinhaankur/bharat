@@ -24,6 +24,7 @@
       { href: "terrain-3d.html", text: "District terrain 3D", hint: "relief · river · flood plain (2D/3D)", icon: "🏔", rail: true },
       { href: "atlas-3d.html", text: "India by constraint", hint: "states by development constraint", icon: "⛰" },
       { href: "flood-3d.html", text: "Flood explorer", hint: "water over real terrain", icon: "🌊" },
+      { href: "heritage-3d.html", text: "Temples in 3D", hint: "photogrammetry of temples & ruins (Sketchfab)", icon: "🛕", rail: true },
       { href: "earth-3d.html", text: "Photoreal Earth", hint: "Google 3D tiles (your key)", icon: "🛰" },
     ]},
     { label: "Study", items: [
