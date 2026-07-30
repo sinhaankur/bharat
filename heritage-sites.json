@@ -1233,7 +1233,8 @@
         }
       ],
       "continent": "Asia",
-      "architecture_type": "nagara"
+      "architecture_type": "nagara",
+      "cyark_url": "https://www.cyark.org/projects/angkor-wat"
     },
     {
       "id": "prambanan",
@@ -2827,7 +2828,8 @@
           "tier": 1
         }
       ],
-      "architecture_type": "ethiopian"
+      "architecture_type": "ethiopian",
+      "cyark_url": "https://www.cyark.org/projects/church-of-st-george"
     },
     {
       "id": "great-zimbabwe",
@@ -2851,7 +2853,8 @@
           "url": "https://whc.unesco.org/en/list/364/",
           "tier": 1
         }
-      ]
+      ],
+      "cyark_url": "https://www.cyark.org/projects/great-zimbabwe"
     },
     {
       "id": "ile-ife",
@@ -3671,6 +3674,227 @@
           "label": "UNESCO — Bagan; CyArk / Open Heritage (aerial LiDAR)",
           "url": "https://whc.unesco.org/en/list/1588/",
           "tier": 1
+        }
+      ]
+    },
+    {
+      "id": "preah-vihear",
+      "name": "Preah Vihear Temple",
+      "tradition": "sanatan",
+      "deity": "Shiva (Khmer Hindu temple)",
+      "region": "Southeast Asia",
+      "continent": "Asia",
+      "state": "Cambodia",
+      "lat": 14.3906,
+      "lng": 104.6803,
+      "builder": "Khmer Empire (esp. Suryavarman I & II, 11th–12th c.)",
+      "built_from": 1006,
+      "built_to": 1150,
+      "status": "active",
+      "architecture_type": null,
+      "lifespan_note": "A cliff-top Shiva temple in the Dângrêk mountains, built along a rare 800 m north–south axis over four reigns. A UNESCO World Heritage site fought over by Cambodia and Thailand (an ICJ case). LiDAR-scanned by CyArk.",
+      "series": [],
+      "cyark_url": "https://www.cyark.org/projects/preah-vihear",
+      "source": [
+        {
+          "label": "UNESCO — Temple of Preah Vihear; CyArk",
+          "url": "https://whc.unesco.org/en/list/1224/",
+          "tier": 1
+        }
+      ]
+    },
+    {
+      "id": "lamanai",
+      "name": "Lamanai (High Temple)",
+      "tradition": "native_faith",
+      "deity": "Maya gods (Kinich Ahau / the Sun)",
+      "region": "Mesoamerica",
+      "continent": "North America",
+      "state": "Belize",
+      "lat": 17.7525,
+      "lng": -88.6544,
+      "builder": "The Maya (occupied 3,000+ years)",
+      "built_from": -100,
+      "built_to": 1600,
+      "status": "ruin",
+      "architecture_type": "mesoamerican",
+      "lifespan_note": "One of the longest continuously-occupied Maya cities (over 3,000 years, right up to European contact), on the New River Lagoon. Famous for the Mask Temple and the High Temple. CyArk-scanned.",
+      "series": [],
+      "cyark_url": "https://www.cyark.org/projects/lamanai",
+      "source": [
+        {
+          "label": "Wikipedia — Lamanai; CyArk",
+          "url": "https://en.wikipedia.org/wiki/Lamanai",
+          "tier": 2
+        }
+      ]
+    },
+    {
+      "id": "patan-durbar",
+      "name": "Patan Durbar Square (Krishna Mandir)",
+      "tradition": "sanatan",
+      "deity": "Krishna & Newar Hindu-Buddhist deities",
+      "region": "East Asia",
+      "continent": "Asia",
+      "state": "Nepal",
+      "lat": 27.6734,
+      "lng": 85.325,
+      "historical_region": "Kathmandu Valley (Newar)",
+      "builder": "Malla kings of Lalitpur (Newar architecture)",
+      "built_from": 1600,
+      "built_to": 1734,
+      "status": "active",
+      "architecture_type": null,
+      "lifespan_note": "A royal square of tiered Newar temples (the stone Krishna Mandir, 1637) in Lalitpur — one of the three Durbar Squares of the Kathmandu Valley, where Hindu and Buddhist Newar traditions blend. Damaged in the 2015 earthquake; CyArk-scanned for restoration. UNESCO World Heritage.",
+      "series": [],
+      "cyark_url": "https://www.cyark.org/projects/patan-durbar-square",
+      "source": [
+        {
+          "label": "UNESCO — Kathmandu Valley; CyArk",
+          "url": "https://whc.unesco.org/en/list/121/",
+          "tier": 1
+        }
+      ]
+    },
+    {
+      "id": "amarbayasgalant",
+      "name": "Amarbayasgalant Monastery",
+      "tradition": "buddhist",
+      "deity": "Tibetan (Gelug) Buddhism; tomb of Zanabazar",
+      "region": "East Asia",
+      "continent": "Asia",
+      "state": "Mongolia",
+      "lat": 49.48,
+      "lng": 105.085,
+      "builder": "Built by the Manchu Qing emperor Yongzheng (1727–1737)",
+      "built_from": 1727,
+      "built_to": 1737,
+      "status": "active",
+      "architecture_type": null,
+      "lifespan_note": "One of Mongolia's three great Buddhist monasteries, dedicated to Zanabazar (whose body was moved here). Rare among Mongolian monasteries in surviving the 1930s Stalinist religious purges. CyArk-scanned.",
+      "series": [],
+      "destruction": {
+        "primary": {
+          "year": 1937,
+          "actor": "Stalinist religious purge (Mongolia)",
+          "actor_role": "Soviet-backed communist state",
+          "account": "Mongolia's 1930s purges destroyed most of its ~700 monasteries and killed thousands of monks; Amarbayasgalant was among the few partly spared.",
+          "atrocity_link": "Joseph Stalin"
+        }
+      },
+      "cyark_url": "https://www.cyark.org/projects/amarbayasgalant-monastery",
+      "source": [
+        {
+          "label": "UNESCO tentative list — Amarbayasgalant; CyArk",
+          "url": "https://whc.unesco.org/en/tentativelists/5947/",
+          "tier": 2
+        }
+      ]
+    },
+    {
+      "id": "osun-osogbo",
+      "name": "Osun-Osogbo Sacred Grove",
+      "tradition": "native_faith",
+      "deity": "Osun (Yoruba river goddess) & the Orishas",
+      "region": "Africa",
+      "continent": "Africa",
+      "state": "Nigeria",
+      "lat": 7.7556,
+      "lng": 4.5522,
+      "builder": "The Yoruba people (living grove; shrines by artist Susanne Wenger, 20th c.)",
+      "built_from": 1700,
+      "built_to": 2026,
+      "status": "active",
+      "architecture_type": null,
+      "lifespan_note": "One of the last primary high forests in southern Nigeria — the sacred grove of the Yoruba goddess Osun, dense with shrines and sculptures. A living centre of the Yoruba religion (which also survives across the African diaspora). CyArk-scanned. UNESCO World Heritage.",
+      "series": [
+        "indigenous_sacred"
+      ],
+      "cyark_url": "https://www.cyark.org/projects/osun-osogbo-sacred-grove",
+      "source": [
+        {
+          "label": "UNESCO — Osun-Osogbo Sacred Grove; CyArk",
+          "url": "https://whc.unesco.org/en/list/1118/",
+          "tier": 1
+        }
+      ]
+    },
+    {
+      "id": "el-kurru",
+      "name": "El-Kurru (Nubian pyramids of Kush)",
+      "tradition": "native_faith",
+      "deity": "Kushite (Egyptian-Nubian) royal funerary religion",
+      "region": "Africa",
+      "continent": "Africa",
+      "state": "Sudan",
+      "lat": 18.41,
+      "lng": 31.7714,
+      "builder": "Kings of Kush (the 25th 'Nubian' Dynasty — Piye, Shabaka, Tanwetamani)",
+      "built_from": -800,
+      "built_to": -650,
+      "status": "ruin",
+      "architecture_type": "ziggurat",
+      "lifespan_note": "A royal cemetery of steep Nubian pyramids of the Kushite kings who ruled Egypt as the 25th Dynasty — Sudan has more pyramids than Egypt. CyArk-scanned the Tomb of Tanwetamani. Part of the Napatan region UNESCO listing.",
+      "series": [],
+      "cyark_url": "https://www.cyark.org/projects/tomb-of-tanwetamani",
+      "source": [
+        {
+          "label": "UNESCO — Gebel Barkal & Napatan region; CyArk",
+          "url": "https://whc.unesco.org/en/list/1073/",
+          "tier": 1
+        }
+      ]
+    },
+    {
+      "id": "bagerhat",
+      "name": "Mosque City of Bagerhat (Sixty Dome Mosque)",
+      "tradition": "native_faith",
+      "deity": "Islam (Bengal Sultanate architecture)",
+      "region": "East India",
+      "continent": "Asia",
+      "state": "Bangladesh",
+      "lat": 22.661,
+      "lng": 89.7586,
+      "historical_region": "Bengal (undivided India / Bharat)",
+      "builder": "Khan Jahan Ali, Bengal Sultanate (15th c.)",
+      "built_from": 1440,
+      "built_to": 1459,
+      "status": "active",
+      "architecture_type": null,
+      "lifespan_note": "A lost 15th-century city of 360 brick mosques and monuments (the Sixty Dome Mosque is the largest) in the Bengal delta. CyArk-scanned. UNESCO World Heritage.",
+      "series": [],
+      "cyark_url": "https://www.cyark.org/projects/mosque-city-of-bagerhat",
+      "source": [
+        {
+          "label": "UNESCO — Historic Mosque City of Bagerhat; CyArk",
+          "url": "https://whc.unesco.org/en/list/321/",
+          "tier": 1
+        }
+      ]
+    },
+    {
+      "id": "lukang-longshan",
+      "name": "Lukang Longshan Temple",
+      "tradition": "buddhist",
+      "deity": "Guanyin (Avalokiteśvara) — Chinese Buddhism",
+      "region": "East Asia",
+      "continent": "Asia",
+      "state": "Taiwan",
+      "lat": 24.0505,
+      "lng": 120.4356,
+      "builder": "Qing-dynasty Hokkien settlers (moved to present site 18th c.)",
+      "built_from": 1786,
+      "built_to": 1831,
+      "status": "active",
+      "architecture_type": null,
+      "lifespan_note": "The best-preserved Qing-dynasty building in Taiwan, a Guanyin temple famed for its woodcarving. Damaged in the 1999 earthquake and restored — CyArk-scanned as part of the recovery.",
+      "series": [],
+      "cyark_url": "https://www.cyark.org/projects/lukang-longshan-temple",
+      "source": [
+        {
+          "label": "Wikipedia — Lukang Longshan Temple; CyArk",
+          "url": "https://en.wikipedia.org/wiki/Lukang_Longshan_Temple",
+          "tier": 2
         }
       ]
     }

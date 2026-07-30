@@ -145,9 +145,11 @@
 
     function scanState(s) { return s.model3d ? "scan" : (isGone(s) ? "gone" : "search"); }
 
+    const hasLidar = s => (s.model3d && s.model3d.scan === "lidar") || !!s.cyark_url;
+
     function passesFilter(s) {
       if (filter === "all") return true;
-      if (filter === "lidar") return s.model3d && s.model3d.scan === "lidar";
+      if (filter === "lidar") return hasLidar(s);
       if (filter === "scan") return !!s.model3d;
       if (filter === "ruin") return isRuin(s);
       if (filter === "gone") return isGone(s);
@@ -162,6 +164,7 @@
         if (st === "scan") return s.model3d && s.model3d.scan === "lidar"
           ? `<span class="tag lidar">LiDAR ✦</span>`
           : `<span class="tag scan">3D scan</span>`;
+        if (s.cyark_url) return `<span class="tag lidar">LiDAR ✦</span>`;  // CyArk scan (opens on their site)
         if (st === "gone") return `<span class="tag gone">gone</span>`;
         return `<span class="tag search">search</span>`;
       };

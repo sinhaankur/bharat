@@ -7,6 +7,16 @@
   },
   "updates": [
     {
+      "id": "u_2026_07_30_cyark_worldwide",
+      "date": "2026-07-30",
+      "kind": "data",
+      "scope": "CyArk LiDAR · worldwide",
+      "title": "Mined CyArk's catalogue — 20 sites now link to real LiDAR scans",
+      "detail": "Pulled CyArk's project list and wired every match into the atlas. Added CyArk LiDAR links to sites already mapped (Great Zimbabwe, Lalibela/Bete Giyorgis, Angkor Wat) and added 8 new CyArk-scanned sacred sites across the world: Preah Vihear (Cambodian cliff-top Shiva temple), Lamanai (Maya, Belize), Patan Durbar Square (Newar, Nepal), Amarbayasgalant Monastery (Mongolia — a survivor of the 1930s Stalinist purges), Osun-Osogbo Sacred Grove (Yoruba, Nigeria), El-Kurru (Nubian pyramids of Kush, Sudan), Mosque City of Bagerhat (Bengal Sultanate) and Lukang Longshan Temple (Taiwan). The photogrammetry viewer's 'LiDAR ✦' filter now surfaces all 20 CyArk sites, each opening the real laser scan on CyArk. Atlas now 137 sites across all six continents.",
+      "source": "https://www.cyark.org/collections/",
+      "link": "heritage-3d.html"
+    },
+    {
       "id": "u_2026_07_30_cutaway",
       "date": "2026-07-30",
       "kind": "feature",
