@@ -2557,7 +2557,8 @@
           "url": "https://whc.unesco.org/en/list/414/",
           "tier": 1
         }
-      ]
+      ],
+      "architecture_type": "mesoamerican"
     },
     {
       "id": "templo-mayor",
@@ -2591,7 +2592,8 @@
           "url": "https://en.wikipedia.org/wiki/Templo_Mayor",
           "tier": 2
         }
-      ]
+      ],
+      "architecture_type": "mesoamerican"
     },
     {
       "id": "chichen-itza",
@@ -2615,7 +2617,8 @@
           "url": "https://whc.unesco.org/en/list/483/",
           "tier": 1
         }
-      ]
+      ],
+      "architecture_type": "mesoamerican"
     },
     {
       "id": "machu-picchu",
@@ -2639,7 +2642,8 @@
           "url": "https://whc.unesco.org/en/list/274/",
           "tier": 1
         }
-      ]
+      ],
+      "architecture_type": "andean"
     },
     {
       "id": "coricancha",
@@ -2672,7 +2676,8 @@
           "url": "https://en.wikipedia.org/wiki/Coricancha",
           "tier": 2
         }
-      ]
+      ],
+      "architecture_type": "andean"
     },
     {
       "id": "tiwanaku",
@@ -2696,7 +2701,8 @@
           "url": "https://whc.unesco.org/en/list/567/",
           "tier": 1
         }
-      ]
+      ],
+      "architecture_type": "andean"
     },
     {
       "id": "cahokia",
@@ -2772,7 +2778,8 @@
           "url": "https://whc.unesco.org/en/list/18/",
           "tier": 1
         }
-      ]
+      ],
+      "architecture_type": "ethiopian"
     },
     {
       "id": "great-zimbabwe",
@@ -2876,7 +2883,8 @@
           "url": "https://whc.unesco.org/en/list/1572/",
           "tier": 1
         }
-      ]
+      ],
+      "architecture_type": "megalithic_circle"
     },
     {
       "id": "karnak",
@@ -2902,7 +2910,8 @@
           "url": "https://whc.unesco.org/en/list/87/",
           "tier": 1
         }
-      ]
+      ],
+      "architecture_type": "egyptian"
     },
     {
       "id": "ur-ziggurat",
@@ -2928,7 +2937,8 @@
           "url": "https://en.wikipedia.org/wiki/Ziggurat_of_Ur",
           "tier": 2
         }
-      ]
+      ],
+      "architecture_type": "ziggurat"
     },
     {
       "id": "parthenon",
@@ -2954,7 +2964,8 @@
           "url": "https://whc.unesco.org/en/list/404/",
           "tier": 1
         }
-      ]
+      ],
+      "architecture_type": "greek"
     },
     {
       "id": "delphi",
@@ -2988,7 +2999,8 @@
           "url": "https://whc.unesco.org/en/list/393/",
           "tier": 1
         }
-      ]
+      ],
+      "architecture_type": "greek"
     },
     {
       "id": "stonehenge",
@@ -3014,7 +3026,8 @@
           "url": "https://whc.unesco.org/en/list/373/",
           "tier": 1
         }
-      ]
+      ],
+      "architecture_type": "megalithic_circle"
     },
     {
       "id": "st-basils",
@@ -3123,7 +3136,8 @@
           "url": "https://whc.unesco.org/en/list/715/",
           "tier": 1
         }
-      ]
+      ],
+      "architecture_type": "moai"
     },
     {
       "id": "uluru",
