@@ -7,6 +7,16 @@
   },
   "updates": [
     {
+      "id": "u_2026_07_30_jyotirlinga_chardham",
+      "date": "2026-07-30",
+      "kind": "data",
+      "scope": "Complete pilgrim circuits",
+      "title": "All 12 Jyotirlingas + Char Dham + Chota Char Dham — as complete sourced series",
+      "detail": "Completed the canonical pilgrim circuits and added a 'Pilgrim circuits' filter to the atlas: 12 of 12 Jyotirlingas, 4 of 4 Char Dham, 4 of 4 Chota Char Dham, each with a completeness count. Added the sites not already mapped — Mallikarjuna, Mahakaleshwar, Omkareshwar, Bhimashankar, Trimbakeshwar, Baidyanath, Nageshwar, Rameshwaram (both a Jyotirlinga & a Char Dham), Grishneshwar; plus Badrinath, Dwarkadhish, Yamunotri and Gangotri. A 'series' field tags each site's circuit membership. Atlas now 79 sites. All flow into the time-scrubber and the 3D viewer.",
+      "source": "https://en.wikipedia.org/wiki/Dwadasha_Jyotirlinga_Temple",
+      "link": "heritage-atlas.html"
+    },
+    {
       "id": "u_2026_07_30_living_temples",
       "date": "2026-07-30",
       "kind": "data",

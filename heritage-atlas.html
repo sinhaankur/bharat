@@ -158,6 +158,13 @@
       <button class="ha-chip generic" data-flt="active">🪔 Still active</button>
       <span class="ha-count" id="count"></span>
     </div>
+    <div class="ha-controls" id="series-controls">
+      <span class="ha-lbl">Pilgrim circuits</span>
+      <button class="ha-chip generic" data-series="jyotirlinga">🔱 12 Jyotirlingas</button>
+      <button class="ha-chip generic" data-series="char_dham">🛕 Char Dham</button>
+      <button class="ha-chip generic" data-series="chota_char_dham">⛰ Chota Char Dham</button>
+      <span class="ha-count" id="series-count"></span>
+    </div>
 
     <div class="ha-list" id="list"></div>
 
@@ -184,6 +191,9 @@
     let DATA = null, SITES = [], MAP = null, MARKERS = null;
     const activeTrad = new Set();     // empty = all
     let activeFlt = null;             // destroyed | ruin | active | null
+    let activeSeries = null;          // jyotirlinga | char_dham | chota_char_dham | null
+    const SERIES_TOTAL = { jyotirlinga: 12, char_dham: 4, chota_char_dham: 4 };
+    const SERIES_LABEL = { jyotirlinga: "Jyotirlingas", char_dham: "Char Dham", chota_char_dham: "Chota Char Dham" };
     let scrubYear = 2026, playTimer = null;
 
     const yr = y => (y < 0 ? Math.abs(y) + " BCE" : y + " CE");
@@ -243,6 +253,7 @@
         if (activeFlt === "destroyed" && !s.destruction) return false;
         if (activeFlt === "ruin" && !/ruin/.test(s.status || "")) return false;
         if (activeFlt === "active" && s.status !== "active" && s.status !== "reconstructed") return false;
+        if (activeSeries && !(Array.isArray(s.series) && s.series.includes(activeSeries))) return false;
         return true;
       });
     }
@@ -355,6 +366,12 @@
       const el = document.getElementById("list");
       el.innerHTML = list.length ? list.map(card).join("") : `<div class="ha-empty">No sites match these filters.</div>`;
       document.getElementById("count").textContent = `${list.length} of ${SITES.length} sites`;
+      // series completeness ("N of TOTAL mapped") — a full, sourced pilgrim circuit
+      const sc = document.getElementById("series-count");
+      if (activeSeries) {
+        const have = SITES.filter(s => Array.isArray(s.series) && s.series.includes(activeSeries)).length;
+        sc.textContent = `${have} of ${SERIES_TOTAL[activeSeries]} ${SERIES_LABEL[activeSeries]} mapped`;
+      } else { sc.textContent = ""; }
       drawMarkers(list);
       el.querySelectorAll(".ha-share").forEach(b => b.onclick = () => shareSite(b.dataset.id));
     }
@@ -399,6 +416,13 @@
         document.querySelectorAll("#status-controls .ha-chip").forEach(x => x.classList.remove("on"));
         if (activeFlt === f) { activeFlt = null; }
         else { activeFlt = f; ch.classList.add("on"); }
+        render();
+      });
+      document.querySelectorAll("#series-controls .ha-chip").forEach(ch => ch.onclick = () => {
+        const sname = ch.dataset.series;
+        document.querySelectorAll("#series-controls .ha-chip").forEach(x => x.classList.remove("on"));
+        if (activeSeries === sname) { activeSeries = null; }
+        else { activeSeries = sname; ch.classList.add("on"); }
         render();
       });
       const range = document.getElementById("scrub-range");
