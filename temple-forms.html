@@ -55,6 +55,21 @@
     .tf-compass .dot { top: 50%; left: 50%; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); transform: translate(-50%,-50%); }
     .tf-compass .ray { top: 50%; left: 50%; width: 30px; height: 2px; background: linear-gradient(90deg, var(--gold), transparent); transform-origin: left center; }
     .tf-hint { position: absolute; right: 12px; top: 12px; font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); background: oklch(0.13 0 0 / 0.6); padding: 3px 8px; border-radius: 999px; }
+    /* build (construction) scrubber overlay */
+    .tf-build { position: absolute; left: 12px; right: 12px; bottom: 12px; background: oklch(0.12 0 0 / 0.86); backdrop-filter: blur(6px); border: 1px solid var(--border-strong); border-radius: 10px; padding: 0.5rem 0.7rem; }
+    .tf-build-hd { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; font-family: var(--font-mono); font-size: 10px; color: var(--gold); }
+    .tf-play { background: none; border: 1px solid var(--gold-deep); color: var(--gold); font-family: var(--font-mono); font-size: 9px; padding: 3px 9px; border-radius: 999px; cursor: pointer; }
+    .tf-play:hover { background: var(--gold); color: oklch(0.16 0 0); }
+    .tf-build input[type=range] { width: 100%; margin: 0.4rem 0 0.35rem; accent-color: var(--gold); cursor: pointer; height: 5px; }
+    .tf-build-steps { display: flex; gap: 3px; }
+    .tf-build-steps span { flex: 1; height: 4px; border-radius: 2px; background: oklch(0.3 0 0); transition: background 0.2s; }
+    .tf-build-steps span.on { background: var(--gold); }
+    /* math panel */
+    .tf-math { margin: 0.8rem 0; padding: 0.6rem 0.75rem; border-radius: 8px; background: oklch(0.16 0.01 250 / 0.6); border: 1px solid oklch(0.4 0.08 250); }
+    .tf-math .lbl { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; color: oklch(0.78 0.12 250); }
+    .tf-math .part { font-weight: 700; color: var(--foreground); margin: 0.15rem 0; }
+    .tf-math .how { font-size: 0.86rem; line-height: 1.5; color: var(--muted-foreground); }
+    .tf-math .eq { font-family: var(--font-mono); font-size: 0.82rem; color: oklch(0.86 0.1 200); margin-top: 0.35rem; background: oklch(0.13 0 0); padding: 0.35rem 0.5rem; border-radius: 6px; border-left: 2px solid oklch(0.6 0.14 200); }
 
     .tf-info h2 { margin: 0 0 0.2rem; font-size: 1.3rem; }
     .tf-info .sub { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted-foreground); }
@@ -102,6 +117,11 @@
           <i class="dot"></i><i class="ray" id="ray"></i>
         </div>
         <div class="tf-hint">drag to rotate · scroll to zoom</div>
+        <div class="tf-build" id="build" hidden>
+          <div class="tf-build-hd"><span id="build-label">Watch it built</span><button class="tf-play" id="build-play">▶ build it</button></div>
+          <input type="range" id="build-range" min="0" max="1" step="1" value="0" />
+          <div class="tf-build-steps" id="build-steps"></div>
+        </div>
       </div>
       <div class="tf-info" id="info"></div>
     </div>
@@ -169,14 +189,72 @@
     ];
     const TYPE_LABEL = { nagara: "nagara", dravidian: "dravidian", stupa: "stupa", jain: "jain", kashmiri: "kashmiri", sun_temple: "sun_temple" };
 
-    let SITES = [], current = null;
+    // ── construction sequences: how each marvel is built, stage by stage, with the math ──
+    const STAGES = {
+      nagara: [
+        { part: "Jagati (plinth)", how: "A raised stone platform is laid, squared to the cardinal directions on a vastu-purusha-mandala grid.", math: "Plan = a square grid (mandala); the sanctum sits on the central pada (brahmasthana)." },
+        { part: "Garbhagriha (sanctum)", how: "The small dark cube of the womb-chamber is raised over the deity — thick walls, tiny interior.", math: "A cube: side ≈ the base module. The doorway is set on the east axis." },
+        { part: "Shikhara (tower)", how: "Courses of stone are corbelled inward in a smooth vertical curve to the peak.", math: "Curvilinear profile ≈ width w = W·(1−t)^1.35 as height fraction t → 1 — a power curve, not a straight taper." },
+        { part: "Amalaka + kalasha", how: "A ribbed stone disc (amalaka) caps the tower, topped by the pot finial (kalasha).", math: "The amalaka radius ≈ ⅕ of the base — a fixed proportional cap crowning the height." },
+        { part: "Mandapa (porch)", how: "A pillared hall is added on the entrance (east) axis for worshippers.", math: "Axial symmetry about the east–west line; hall width matches the sanctum." }
+      ],
+      dravidian: [
+        { part: "Plinth (adhisthana)", how: "A broad moulded base platform is laid for the whole complex.", math: "A rectangle; the vimana sits on a square module, the enclosure scales in whole multiples of it." },
+        { part: "Vimana tiers (talas)", how: "The sanctum tower is built as receding square storeys, each smaller than the last.", math: "Linear taper: storey width w ≈ W·(1 − 0.62·t) — a straight-sided pyramid, unlike the Nagara curve." },
+        { part: "Shikhara cap + kalasha", how: "An octagonal domed cap (the Dravidian 'shikhara') and finial crown the vimana.", math: "Octagon → the 8-sided cap approximates a circle atop the square tower (squaring the circle in stone)." },
+        { part: "Gopuram (gateway tower)", how: "A giant tapering gateway is raised in the enclosure wall — often taller than the vimana itself.", math: "Same linear taper, but far taller; height can be 2–3× the vimana — the signature of the style." },
+        { part: "Barrel-vault roof", how: "A wagon-vaulted (barrel) roof crowned with kalasha pots tops the gopuram.", math: "A half-cylinder — the vault's radius sets the crowning height." }
+      ],
+      stupa: [
+        { part: "Medhi (terrace)", how: "A circular raised terrace is built for the ritual circumambulation path (pradakshina).", math: "A circle — the whole monument is generated by rotating a profile about a central vertical axis." },
+        { part: "Drum", how: "A cylindrical drum is raised on the terrace to lift the dome.", math: "Cylinder radius < terrace radius, keeping the walking ring around it." },
+        { part: "Anda (dome)", how: "The solid hemispherical relic-mound is raised — a mound, not a hollow room.", math: "A hemisphere (here slightly flattened, ~0.62 height ratio) — the 'egg' (anda) symbolising the cosmos." },
+        { part: "Harmika + chhatra", how: "A square railing (harmika) and stacked parasols (chhatra) crown the summit on a central mast.", math: "The 3 shrinking parasols step down by a fixed ratio — a discrete cone of authority above the dome." },
+        { part: "Toranas (gateways)", how: "Four carved gateways are set at the cardinal points around the terrace.", math: "4-fold (90°) rotational symmetry — N, E, S, W — orienting the monument to the compass." }
+      ],
+      ziggurat: [
+        { part: "First terrace", how: "A vast solid platform of sun-dried mud brick with a fired-brick skin is built.", math: "A rectangle; the sloping (battered) walls resist collapse — the base carries all the load above." },
+        { part: "Second terrace", how: "A smaller rectangular platform is set back on top of the first.", math: "Each terrace recedes by a roughly constant proportion — a stepped, self-stable pyramid of ~⅔ scaling." },
+        { part: "Third terrace", how: "A third, smaller terrace continues the receding stack.", math: "Receding footprint → the centre of mass stays low and inside the base: inherently stable." },
+        { part: "High temple + stairs", how: "The god's shrine is placed on top, reached by a monumental triple stairway.", math: "Three converging stairs on one face — a ceremonial axis to the summit." }
+      ],
+      mesoamerican: [
+        { part: "Lower platforms", how: "The first receding platforms (talud-tablero: sloping panel + vertical panel) are raised.", math: "A stepped pyramid; each tier's setback is roughly constant — a linear-sided profile." },
+        { part: "Upper platforms", how: "Further tiers continue the stack toward the summit.", math: "Some pyramids encode the calendar — Chichén Itzá's 91 steps ×4 + top = 365 (the solar year)." },
+        { part: "Summit temple", how: "A temple shrine is built on the flat top — the stage for ritual, unlike an Egyptian tomb.", math: "The summit platform centres the shrine on the pyramid's vertical axis." },
+        { part: "Ceremonial staircase", how: "A steep central staircase climbs one (or all four) faces to the temple.", math: "Cardinal alignment → at the equinox, the stepped edge casts a serpent of light down the stair (Kukulcán)." }
+      ],
+      greek: [
+        { part: "Stylobate", how: "A stepped stone platform is levelled — subtly curved upward (entasis) to look straight.", math: "The stylobate curves up ~a few cm at the centre — an optical correction so it doesn't appear to sag." },
+        { part: "Colonnade (peristyle)", how: "A ring of columns is raised — the Parthenon's 8 × 17 Doric columns.", math: "Column count rule: fronts = n, flanks ≈ 2n+1 (8 → 17). Columns lean slightly inward for optical correction." },
+        { part: "Entablature", how: "The horizontal architrave, frieze and cornice are laid across the column tops.", math: "The whole facade is set out in a ratio close to 9:4 (width:height) — near the golden proportion." },
+        { part: "Pediment (gable)", how: "The triangular gable, once filled with sculpture, crowns the short ends.", math: "A low triangle (~13° pitch) — geometry tuned so the roof reads as calm, not steep." }
+      ]
+    };
+
+    let SITES = [], current = null, stage = 0, maxStage = 0;
 
     fetch("heritage-sites.json").then(r => r.json()).then(d => {
       SITES = d.sites || [];
-      buildTabs(); renderNote();
+      buildTabs(); renderNote(); wireBuild();
       const want = new URLSearchParams(location.search).get("type");
       select(TYPES.find(t => t.id === want) || TYPES[0]);
     });
+
+    let buildTimer = null;
+    function wireBuild() {
+      document.getElementById("build-range").oninput = e => { stopBuild(); setStage(parseInt(e.target.value, 10)); };
+      document.getElementById("build-play").onclick = () => {
+        if (buildTimer) return stopBuild();
+        document.getElementById("build-play").textContent = "⏸ pause";
+        setStage(0);
+        buildTimer = setInterval(() => {
+          if (stage >= maxStage) return stopBuild();
+          setStage(stage + 1);
+        }, 900);
+      };
+    }
+    function stopBuild() { if (buildTimer) { clearInterval(buildTimer); buildTimer = null; } const b = document.getElementById("build-play"); if (b) b.textContent = "▶ build it"; }
 
     function buildTabs() {
       const tab = t => `<button class="tf-tab" data-id="${t.id}"><span class="ic">${t.icon}</span><span class="lb"><b>${esc(t.name)}</b><span>${esc(t.sub)}</span></span></button>`;
@@ -197,12 +275,43 @@
       "cliff": { deg: 0, text: "Oriented to the <b>cliff face</b> it is carved into — the facade opens outward from the rock." }
     };
 
+    function setStage(s) {
+      const t = current; if (!t || !STAGES[t.id]) return;
+      stage = Math.max(0, Math.min(maxStage, s));
+      const isFull = stage >= maxStage;
+      // stage index 0..maxStage-1 maps to _s1.._sN; full model = the plain glb
+      const src = isFull ? `assets/temples-3d/${t.id}.glb` : `assets/temples-3d/${t.id}_s${stage + 1}.glb`;
+      document.getElementById("mv").setAttribute("src", src);
+      document.getElementById("build-range").value = stage;
+      const steps = STAGES[t.id];
+      const st = steps[Math.min(stage, steps.length - 1)];
+      document.getElementById("build-label").textContent = `Step ${Math.min(stage + 1, steps.length)} of ${steps.length}: ${st.part}`;
+      document.querySelectorAll("#build-steps span").forEach((el, i) => el.classList.toggle("on", i <= stage));
+      // math panel
+      const mp = document.getElementById("mathPanel");
+      if (mp) mp.innerHTML = `<div class="lbl">🧮 The build & the math — step ${Math.min(stage + 1, steps.length)}/${steps.length}</div>` +
+        `<div class="part">${esc(st.part)}</div><div class="how">${esc(st.how)}</div>` +
+        (st.math ? `<div class="eq">${esc(st.math)}</div>` : "");
+    }
+
     function select(t) {
       if (!t) return;
       current = t;
       document.querySelectorAll(".tf-tab").forEach(b => b.classList.toggle("on", b.dataset.id === t.id));
       const mv = document.getElementById("mv");
-      mv.setAttribute("src", "assets/temples-3d/" + t.id + ".glb");
+      const buildBox = document.getElementById("build");
+      const steps = STAGES[t.id];
+      if (steps) {
+        maxStage = steps.length;           // last position = full model
+        stage = maxStage;                  // start showing the finished marvel
+        buildBox.hidden = false;
+        const rng = document.getElementById("build-range"); rng.max = maxStage; rng.value = maxStage;
+        document.getElementById("build-steps").innerHTML = steps.map(() => `<span></span>`).join("");
+        mv.setAttribute("src", "assets/temples-3d/" + t.id + ".glb");
+      } else {
+        buildBox.hidden = true;
+        mv.setAttribute("src", "assets/temples-3d/" + t.id + ".glb");
+      }
 
       // compass ray points to the entrance direction (E = right)
       const f = FACING[t.facing] || FACING.east;
@@ -214,6 +323,7 @@
         `<h2>${t.icon} ${esc(t.name)}${/temple|stupa/i.test(t.name) ? "" : " temple"}</h2>` +
         `<div class="sub">${esc(t.sub)}</div>` +
         `<div class="tf-orient">🧭 ${f.text}</div>` +
+        (STAGES[t.id] ? `<div class="tf-math" id="mathPanel"></div>` : "") +
         `<div class="tf-desc">${esc(t.blurb)}</div>` +
         `<ul class="tf-feat">${t.features.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` +
         `<div class="tf-examples"><h3>Real sites in this style · ${examples.length}</h3>` +
@@ -221,7 +331,10 @@
             ? examples.slice(0, 40).map(s => `<a class="tf-ex" href="heritage-atlas.html#site-${esc(s.id)}">${esc(s.name.split("(")[0].trim())}<small>${esc(s.state || "")}</small></a>`).join("")
             : `<span style="color:var(--muted-foreground);font-size:0.85rem">—</span>`}</div>` +
         `</div>` +
-        `<div class="tf-dl" style="margin-top:0.8rem">Model: procedural, built in Blender · <a href="assets/temples-3d/${t.id}.glb" download>download .glb ↓</a></div>`;
+        `<div class="tf-dl" style="margin-top:0.8rem">Model: procedural, built in Blender${STAGES[t.id] ? " · drag <b>build it</b> to watch it rise" : ""} · <a href="assets/temples-3d/${t.id}.glb" download>download .glb ↓</a></div>`;
+
+      // populate the math panel for the finished marvel (and reset the build bar)
+      if (STAGES[t.id]) setStage(maxStage);
     }
 
     function renderNote() {

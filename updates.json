@@ -7,6 +7,16 @@
   },
   "updates": [
     {
+      "id": "u_2026_07_30_build_the_marvel",
+      "date": "2026-07-30",
+      "kind": "feature",
+      "scope": "3D · how it's built + the math",
+      "title": "Watch each marvel being built — construction sequence + the math behind it",
+      "detail": "Added a 'build it' scrubber to the Temple Forms 3D viewer: drag (or press play) to watch six archetypes rise stage by stage — Nagara, Dravidian, Stupa, Ziggurat, Mesoamerican pyramid, Greek temple. Each stage loads a separate Blender-exported glTF (plinth → sanctum → tower → finial → porch, etc.) and a math panel explains the part AND the geometry behind it: the shikhara's power-curve profile w=W(1−t)^1.35, the vimana's linear taper, the stupa's rotational symmetry, the ziggurat's receding-proportion stability, Chichén Itzá's 91×4+1=365 calendar steps, and the Greek temple's 9:4 near-golden facade with entasis optical correction. Answers 'how is each marvel built' and 'the math behind such structures'. 27 staged GLBs added.",
+      "source": "temple-forms.html",
+      "link": "temple-forms.html"
+    },
+    {
       "id": "u_2026_07_30_cyark_expand",
       "date": "2026-07-30",
       "kind": "data",
