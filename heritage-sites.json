@@ -22,7 +22,6 @@
     "updated_at": "2026-07-30",
     "coverage": "Growing set — representative, not exhaustive. Deepest in Kashmir (pre-Islamic Sanatan + Buddhist sites and their conquest) and includes smaller/local destroyed temples (Rudra Mahalaya, Bhojshala, Adina spolia, Warangal, Quwwat-ul-Islam, Chittor) alongside the monumental ones, plus Indus Valley / proto-historic sacred sites. The schema is the deliverable as much as the rows."
   },
-
   "sites": [
     {
       "id": "somnath",
@@ -31,21 +30,49 @@
       "deity": "Shiva (Jyotirlinga)",
       "region": "West India",
       "state": "Gujarat",
-      "lat": 20.888, "lng": 70.401,
+      "lat": 20.888,
+      "lng": 70.401,
       "builder": "Rebuilt many times; early temple attributed to the Maitraka / Solanki (Chaulukya) kings; present temple 1951 (Govt. of India / Sardar Patel).",
-      "built_from": 800, "built_to": 1951,
+      "built_from": 800,
+      "built_to": 1951,
       "status": "reconstructed",
       "lifespan_note": "One of the twelve Jyotirlingas. Repeatedly built, plundered and rebuilt over a millennium; the modern temple was completed in 1951 as an act of national reconstruction.",
       "destruction": {
-        "primary": { "year": 1026, "actor": "Mahmud of Ghazni", "actor_role": "Ghaznavid Sultan", "account": "Sacked and looted the temple; contemporary and later Persian chronicles (e.g. later accounts drawing on al-Biruni's era) claim tens of thousands killed defending it and the idol broken.", "toll_note": "Chronicles claim ~50,000 defenders killed; figure is a medieval estimate, not verified." },
+        "primary": {
+          "year": 1026,
+          "actor": "Mahmud of Ghazni",
+          "actor_role": "Ghaznavid Sultan",
+          "account": "Sacked and looted the temple; contemporary and later Persian chronicles (e.g. later accounts drawing on al-Biruni's era) claim tens of thousands killed defending it and the idol broken.",
+          "toll_note": "Chronicles claim ~50,000 defenders killed; figure is a medieval estimate, not verified."
+        },
         "later": [
-          { "year": 1299, "actor": "Alauddin Khilji's forces (Ulugh Khan)", "actor_role": "Delhi Sultanate" },
-          { "year": 1395, "actor": "Muzaffar Shah I of Gujarat", "actor_role": "Gujarat Sultanate" },
-          { "year": 1706, "actor": "Aurangzeb", "actor_role": "Mughal Emperor", "atrocity_link": "Aurangzeb" }
+          {
+            "year": 1299,
+            "actor": "Alauddin Khilji's forces (Ulugh Khan)",
+            "actor_role": "Delhi Sultanate"
+          },
+          {
+            "year": 1395,
+            "actor": "Muzaffar Shah I of Gujarat",
+            "actor_role": "Gujarat Sultanate"
+          },
+          {
+            "year": 1706,
+            "actor": "Aurangzeb",
+            "actor_role": "Mughal Emperor",
+            "atrocity_link": "Aurangzeb"
+          }
         ]
       },
       "source": [
-        { "label": "ASI — Somnath; Richard M. Eaton, 'Temple Desecration and Indo-Muslim States' (2000)", "url": "https://en.wikipedia.org/wiki/Somnath_temple", "tier": 2 }
+        {
+          "label": "ASI — Somnath; Richard M. Eaton, 'Temple Desecration and Indo-Muslim States' (2000)",
+          "url": "https://en.wikipedia.org/wiki/Somnath_temple",
+          "tier": 2
+        }
+      ],
+      "series": [
+        "jyotirlinga"
       ]
     },
     {
@@ -55,16 +82,28 @@
       "deity": "Surya (Sun)",
       "region": "Kashmir",
       "state": "Jammu & Kashmir",
-      "lat": 33.745, "lng": 75.219,
+      "lat": 33.745,
+      "lng": 75.219,
       "builder": "Lalitaditya Muktapida, Karkota dynasty",
-      "built_from": 725, "built_to": 756,
+      "built_from": 725,
+      "built_to": 756,
       "status": "ruin",
       "lifespan_note": "Built ~8th c. CE at the height of Karkota Kashmir; a masterwork blending Gandharan, Gupta and Graeco-Roman forms. Destroyed in the early 15th c.; today a protected ruin of 84 fluted columns on a plateau above the Kashmir Valley.",
       "destruction": {
-        "primary": { "year": 1400, "actor": "Sultan Sikandar Shah Miri ('Butshikan', the idol-breaker)", "actor_role": "Sultan of Kashmir (r. 1389–1413)", "account": "Kashmiri chronicles (Jonaraja's continuation of the Rajatarangini) record Sikandar's campaign to demolish Kashmir's temples; Martand's demolition reportedly took a year given the massive masonry.", "toll_note": "Sikandar's reign is recorded by Kashmiri Pandit chronicles as a period of forced conversion and temple destruction across the Valley." }
+        "primary": {
+          "year": 1400,
+          "actor": "Sultan Sikandar Shah Miri ('Butshikan', the idol-breaker)",
+          "actor_role": "Sultan of Kashmir (r. 1389–1413)",
+          "account": "Kashmiri chronicles (Jonaraja's continuation of the Rajatarangini) record Sikandar's campaign to demolish Kashmir's temples; Martand's demolition reportedly took a year given the massive masonry.",
+          "toll_note": "Sikandar's reign is recorded by Kashmiri Pandit chronicles as a period of forced conversion and temple destruction across the Valley."
+        }
       },
       "source": [
-        { "label": "ASI-protected monument; Jonaraja, Rajatarangini (continuation); J&K restoration report 2024", "url": "https://en.wikipedia.org/wiki/Martand_Sun_Temple", "tier": 2 }
+        {
+          "label": "ASI-protected monument; Jonaraja, Rajatarangini (continuation); J&K restoration report 2024",
+          "url": "https://en.wikipedia.org/wiki/Martand_Sun_Temple",
+          "tier": 2
+        }
       ]
     },
     {
@@ -74,16 +113,28 @@
       "deity": "Vishnu / Shiva",
       "region": "Kashmir",
       "state": "Jammu & Kashmir",
-      "lat": 33.921, "lng": 75.014,
+      "lat": 33.921,
+      "lng": 75.014,
       "builder": "Avantivarman, Utpala dynasty",
-      "built_from": 855, "built_to": 883,
+      "built_from": 855,
+      "built_to": 883,
       "status": "ruin",
       "lifespan_note": "Twin 9th-c. temples built by King Avantivarman as his new capital Avantipura. Ruined; excavated and conserved by the ASI.",
       "destruction": {
-        "primary": { "year": 1400, "actor": "Sikandar 'Butshikan' era iconoclasm (attributed)", "actor_role": "Sultanate of Kashmir", "account": "Grouped with the wider Valley temple destruction recorded in the Kashmiri chronicles; ASI notes the site was reduced to ruin.", "needs_source": true }
+        "primary": {
+          "year": 1400,
+          "actor": "Sikandar 'Butshikan' era iconoclasm (attributed)",
+          "actor_role": "Sultanate of Kashmir",
+          "account": "Grouped with the wider Valley temple destruction recorded in the Kashmiri chronicles; ASI notes the site was reduced to ruin.",
+          "needs_source": true
+        }
       },
       "source": [
-        { "label": "ASI Srinagar Circle — Avantipura group", "url": "https://en.wikipedia.org/wiki/Avantipura", "tier": 2 }
+        {
+          "label": "ASI Srinagar Circle — Avantipura group",
+          "url": "https://en.wikipedia.org/wiki/Avantipura",
+          "tier": 2
+        }
       ]
     },
     {
@@ -93,16 +144,31 @@
       "deity": "Shiva (Jyotirlinga)",
       "region": "North India",
       "state": "Uttar Pradesh",
-      "lat": 25.311, "lng": 83.010,
+      "lat": 25.311,
+      "lng": 83.01,
       "builder": "Ancient; medieval temple rebuilt under Raja Man Singh & Todar Mal (16th c.); present temple by Ahilyabai Holkar (1780).",
-      "built_from": 1585, "built_to": 1780,
+      "built_from": 1585,
+      "built_to": 1780,
       "status": "reconstructed",
       "lifespan_note": "Varanasi's principal Shiva shrine. The 16th-c. temple was demolished in 1669 under Aurangzeb and the Gyanvapi mosque raised on the site; the present temple was built adjacent by Ahilyabai Holkar in 1780.",
       "destruction": {
-        "primary": { "year": 1669, "actor": "Aurangzeb", "actor_role": "Mughal Emperor", "account": "The Maasir-i-Alamgiri (official court history) records the 1669 order to demolish the temple. The Gyanvapi mosque stands on the site.", "atrocity_link": "Aurangzeb" }
+        "primary": {
+          "year": 1669,
+          "actor": "Aurangzeb",
+          "actor_role": "Mughal Emperor",
+          "account": "The Maasir-i-Alamgiri (official court history) records the 1669 order to demolish the temple. The Gyanvapi mosque stands on the site.",
+          "atrocity_link": "Aurangzeb"
+        }
       },
       "source": [
-        { "label": "Maasir-i-Alamgiri; Richard M. Eaton temple-desecration list", "url": "https://en.wikipedia.org/wiki/Kashi_Vishwanath_Temple", "tier": 2 }
+        {
+          "label": "Maasir-i-Alamgiri; Richard M. Eaton temple-desecration list",
+          "url": "https://en.wikipedia.org/wiki/Kashi_Vishwanath_Temple",
+          "tier": 2
+        }
+      ],
+      "series": [
+        "jyotirlinga"
       ]
     },
     {
@@ -112,16 +178,28 @@
       "deity": "Krishna",
       "region": "North India",
       "state": "Uttar Pradesh",
-      "lat": 27.505, "lng": 77.669,
+      "lat": 27.505,
+      "lng": 77.669,
       "builder": "Medieval temple rebuilt by Bir Singh Bundela (1618); site claimed as Krishna's birthplace.",
-      "built_from": 1618, "built_to": 1618,
+      "built_from": 1618,
+      "built_to": 1618,
       "status": "partially_ruined",
       "lifespan_note": "A grand 17th-c. temple built by Raja Bir Singh Deo Bundela, demolished under Aurangzeb in 1670; the Shahi Idgah mosque adjoins the site, which remains contested.",
       "destruction": {
-        "primary": { "year": 1670, "actor": "Aurangzeb", "actor_role": "Mughal Emperor", "account": "The Maasir-i-Alamgiri records the demolition of the Keshava Rai temple at Mathura in 1670.", "atrocity_link": "Aurangzeb" }
+        "primary": {
+          "year": 1670,
+          "actor": "Aurangzeb",
+          "actor_role": "Mughal Emperor",
+          "account": "The Maasir-i-Alamgiri records the demolition of the Keshava Rai temple at Mathura in 1670.",
+          "atrocity_link": "Aurangzeb"
+        }
       },
       "source": [
-        { "label": "Maasir-i-Alamgiri; Eaton temple-desecration list", "url": "https://en.wikipedia.org/wiki/Krishna_Janmasthan_Temple_Complex", "tier": 2 }
+        {
+          "label": "Maasir-i-Alamgiri; Eaton temple-desecration list",
+          "url": "https://en.wikipedia.org/wiki/Krishna_Janmasthan_Temple_Complex",
+          "tier": 2
+        }
       ]
     },
     {
@@ -131,16 +209,28 @@
       "deity": "Buddhist monastic university",
       "region": "East India",
       "state": "Bihar",
-      "lat": 25.136, "lng": 85.444,
+      "lat": 25.136,
+      "lng": 85.444,
       "builder": "Gupta emperor Kumaragupta I; expanded by Harsha and the Pala kings",
-      "built_from": 427, "built_to": 1200,
+      "built_from": 427,
+      "built_to": 1200,
       "status": "ruin",
       "lifespan_note": "The great Buddhist university, active for ~700 years and drawing scholars from across Asia. Sacked c. 1193; a UNESCO World Heritage ruin today, with a modern revival university nearby.",
       "destruction": {
-        "primary": { "year": 1193, "actor": "Bakhtiyar Khilji", "actor_role": "Ghurid / Delhi Sultanate general", "account": "Persian chronicle Tabaqat-i-Nasiri records the sack of the monastic complex at Bihar; tradition holds the library burned for months and monks were killed. Modern scholars debate whether Nalanda specifically or Odantapuri was the primary target, but the destruction of Bihar's viharas c. 1193 is well attested.", "toll_note": "Chronicles describe monks slain; numbers not quantified reliably." }
+        "primary": {
+          "year": 1193,
+          "actor": "Bakhtiyar Khilji",
+          "actor_role": "Ghurid / Delhi Sultanate general",
+          "account": "Persian chronicle Tabaqat-i-Nasiri records the sack of the monastic complex at Bihar; tradition holds the library burned for months and monks were killed. Modern scholars debate whether Nalanda specifically or Odantapuri was the primary target, but the destruction of Bihar's viharas c. 1193 is well attested.",
+          "toll_note": "Chronicles describe monks slain; numbers not quantified reliably."
+        }
       },
       "source": [
-        { "label": "ASI; UNESCO World Heritage; Minhaj-i-Siraj, Tabaqat-i-Nasiri", "url": "https://whc.unesco.org/en/list/1502/", "tier": 1 }
+        {
+          "label": "ASI; UNESCO World Heritage; Minhaj-i-Siraj, Tabaqat-i-Nasiri",
+          "url": "https://whc.unesco.org/en/list/1502/",
+          "tier": 1
+        }
       ]
     },
     {
@@ -149,16 +239,27 @@
       "tradition": "buddhist",
       "region": "East India",
       "state": "Bihar",
-      "lat": 25.325, "lng": 87.290,
+      "lat": 25.325,
+      "lng": 87.29,
       "builder": "Pala emperor Dharmapala",
-      "built_from": 783, "built_to": 820,
+      "built_from": 783,
+      "built_to": 820,
       "status": "ruin",
       "lifespan_note": "A leading Pala-era Buddhist university, second to Nalanda. Destroyed c. 1193 in the same campaign; excavated by the ASI.",
       "destruction": {
-        "primary": { "year": 1193, "actor": "Bakhtiyar Khilji", "actor_role": "Ghurid / Delhi Sultanate general", "account": "Grouped with the c.1193 destruction of Bihar's monastic universities recorded in the Tabaqat-i-Nasiri." }
+        "primary": {
+          "year": 1193,
+          "actor": "Bakhtiyar Khilji",
+          "actor_role": "Ghurid / Delhi Sultanate general",
+          "account": "Grouped with the c.1193 destruction of Bihar's monastic universities recorded in the Tabaqat-i-Nasiri."
+        }
       },
       "source": [
-        { "label": "ASI Patna Circle — Vikramashila", "url": "https://en.wikipedia.org/wiki/Vikramashila", "tier": 2 }
+        {
+          "label": "ASI Patna Circle — Vikramashila",
+          "url": "https://en.wikipedia.org/wiki/Vikramashila",
+          "tier": 2
+        }
       ]
     },
     {
@@ -168,16 +269,28 @@
       "deity": "Vishnu (Vitthala)",
       "region": "Deccan",
       "state": "Karnataka",
-      "lat": 15.342, "lng": 76.475,
+      "lat": 15.342,
+      "lng": 76.475,
       "builder": "Vijayanagara Empire (Devaraya II onward; peak under Krishnadevaraya)",
-      "built_from": 1422, "built_to": 1565,
+      "built_from": 1422,
+      "built_to": 1565,
       "status": "partially_ruined",
       "lifespan_note": "Centrepiece of the Vijayanagara capital, famed for its stone chariot and musical pillars. The city was sacked in 1565 after the Battle of Talikota; a UNESCO World Heritage ruin today.",
       "destruction": {
-        "primary": { "year": 1565, "actor": "Deccan Sultanate confederacy", "actor_role": "Bijapur, Ahmadnagar, Golconda, Bidar sultanates", "account": "After defeating Vijayanagara at Talikota, the victorious armies looted and burned the capital over months, one of the largest such destructions of a medieval Indian city.", "atrocity_link": "Bahmani–Vijayanagara War" }
+        "primary": {
+          "year": 1565,
+          "actor": "Deccan Sultanate confederacy",
+          "actor_role": "Bijapur, Ahmadnagar, Golconda, Bidar sultanates",
+          "account": "After defeating Vijayanagara at Talikota, the victorious armies looted and burned the capital over months, one of the largest such destructions of a medieval Indian city.",
+          "atrocity_link": "Bahmani–Vijayanagara War"
+        }
       },
       "source": [
-        { "label": "ASI; UNESCO — Group of Monuments at Hampi", "url": "https://whc.unesco.org/en/list/241/", "tier": 1 }
+        {
+          "label": "ASI; UNESCO — Group of Monuments at Hampi",
+          "url": "https://whc.unesco.org/en/list/241/",
+          "tier": 1
+        }
       ]
     },
     {
@@ -187,13 +300,19 @@
       "deity": "Shiva",
       "region": "Deccan",
       "state": "Maharashtra",
-      "lat": 20.024, "lng": 75.179,
+      "lat": 20.024,
+      "lng": 75.179,
       "builder": "Krishna I, Rashtrakuta dynasty (possibly begun under Dantidurga)",
-      "built_from": 756, "built_to": 773,
+      "built_from": 756,
+      "built_to": 773,
       "status": "active",
       "lifespan_note": "The world's largest monolithic rock-cut temple, carved top-down from a single basalt cliff. Attributed by two 'Krishnaraja' epigraphs to the Rashtrakuta king Krishna I. Survives largely intact; a UNESCO World Heritage site.",
       "source": [
-        { "label": "ASI; UNESCO — Ellora Caves; Wikipedia (epigraphic attribution)", "url": "https://en.wikipedia.org/wiki/Kailasa_Temple,_Ellora", "tier": 2 }
+        {
+          "label": "ASI; UNESCO — Ellora Caves; Wikipedia (epigraphic attribution)",
+          "url": "https://en.wikipedia.org/wiki/Kailasa_Temple,_Ellora",
+          "tier": 2
+        }
       ]
     },
     {
@@ -203,13 +322,19 @@
       "deity": "Shiva",
       "region": "South India",
       "state": "Tamil Nadu",
-      "lat": 10.783, "lng": 79.132,
+      "lat": 10.783,
+      "lng": 79.132,
       "builder": "Rajaraja Chola I, Chola dynasty",
-      "built_from": 1003, "built_to": 1010,
+      "built_from": 1003,
+      "built_to": 1010,
       "status": "active",
       "lifespan_note": "The 'Great Living Chola Temple', built by Rajaraja Chola I; its 66 m vimana was the tallest of its age. Still in worship; UNESCO World Heritage.",
       "source": [
-        { "label": "ASI; UNESCO — Great Living Chola Temples", "url": "https://whc.unesco.org/en/list/250/", "tier": 1 }
+        {
+          "label": "ASI; UNESCO — Great Living Chola Temples",
+          "url": "https://whc.unesco.org/en/list/250/",
+          "tier": 1
+        }
       ]
     },
     {
@@ -219,13 +344,19 @@
       "deity": "Surya (Sun)",
       "region": "East India",
       "state": "Odisha",
-      "lat": 19.888, "lng": 86.094,
+      "lat": 19.888,
+      "lng": 86.094,
       "builder": "Narasimhadeva I, Eastern Ganga dynasty",
-      "built_from": 1238, "built_to": 1250,
+      "built_from": 1238,
+      "built_to": 1250,
       "status": "partially_ruined",
       "lifespan_note": "The Sun temple built as a colossal stone chariot. Partly collapsed / decayed over centuries (causes debated — structural, and possibly deliberate damage in the 16th–17th c.); the main tower is lost, the Jagamohana survives. UNESCO World Heritage.",
       "source": [
-        { "label": "ASI; UNESCO — Sun Temple, Konârak", "url": "https://whc.unesco.org/en/list/246/", "tier": 1 }
+        {
+          "label": "ASI; UNESCO — Sun Temple, Konârak",
+          "url": "https://whc.unesco.org/en/list/246/",
+          "tier": 1
+        }
       ]
     },
     {
@@ -235,13 +366,19 @@
       "deity": "Shiva / Vishnu / Shakti (and Jain temples nearby)",
       "region": "Central India",
       "state": "Madhya Pradesh",
-      "lat": 24.852, "lng": 79.919,
+      "lat": 24.852,
+      "lng": 79.919,
       "builder": "Chandela dynasty",
-      "built_from": 950, "built_to": 1050,
+      "built_from": 950,
+      "built_to": 1050,
       "status": "active",
       "lifespan_note": "About 25 surviving temples of an original ~85, built by the Chandelas; many fell into obscurity in the forest and so survived. UNESCO World Heritage; includes both Sanatan and Jain temples.",
       "source": [
-        { "label": "ASI; UNESCO — Khajuraho Group of Monuments", "url": "https://whc.unesco.org/en/list/240/", "tier": 1 }
+        {
+          "label": "ASI; UNESCO — Khajuraho Group of Monuments",
+          "url": "https://whc.unesco.org/en/list/240/",
+          "tier": 1
+        }
       ]
     },
     {
@@ -251,16 +388,28 @@
       "deity": "Surya (Sun)",
       "region": "West India",
       "state": "Gujarat",
-      "lat": 23.583, "lng": 72.132,
+      "lat": 23.583,
+      "lng": 72.132,
       "builder": "Bhima I, Chaulukya (Solanki) dynasty",
-      "built_from": 1026, "built_to": 1027,
+      "built_from": 1026,
+      "built_to": 1027,
       "status": "ruin",
       "lifespan_note": "Solanki-era Sun temple with its famed stepwell tank (Surya Kund). No longer in worship; damaged in later invasions; ASI-protected.",
       "destruction": {
-        "primary": { "year": 1026, "actor": "Mahmud of Ghazni (attributed, contested)", "actor_role": "Ghaznavid Sultan", "account": "Local tradition attributes damage to Ghazni's campaigns; the attribution is debated by scholars.", "needs_source": true }
+        "primary": {
+          "year": 1026,
+          "actor": "Mahmud of Ghazni (attributed, contested)",
+          "actor_role": "Ghaznavid Sultan",
+          "account": "Local tradition attributes damage to Ghazni's campaigns; the attribution is debated by scholars.",
+          "needs_source": true
+        }
       },
       "source": [
-        { "label": "ASI — Modhera Sun Temple", "url": "https://en.wikipedia.org/wiki/Modhera_Sun_Temple", "tier": 2 }
+        {
+          "label": "ASI — Modhera Sun Temple",
+          "url": "https://en.wikipedia.org/wiki/Modhera_Sun_Temple",
+          "tier": 2
+        }
       ]
     },
     {
@@ -270,13 +419,19 @@
       "deity": "Tirthankaras (Adinatha, Neminatha)",
       "region": "West India",
       "state": "Rajasthan",
-      "lat": 24.606, "lng": 72.722,
+      "lat": 24.606,
+      "lng": 72.722,
       "builder": "Vimal Shah (Vimal Vasahi, 1031) & the Solanki ministers Vastupala–Tejpal (Luna Vasahi, 1230)",
-      "built_from": 1031, "built_to": 1230,
+      "built_from": 1031,
+      "built_to": 1230,
       "status": "active",
       "lifespan_note": "Five marble Jain temples renowned for their intricate carving, built under the Chaulukya-era Jain merchant-ministers. Still in worship.",
       "source": [
-        { "label": "ASI; Dilwara Temples, Mount Abu", "url": "https://en.wikipedia.org/wiki/Dilwara_Temples", "tier": 2 }
+        {
+          "label": "ASI; Dilwara Temples, Mount Abu",
+          "url": "https://en.wikipedia.org/wiki/Dilwara_Temples",
+          "tier": 2
+        }
       ]
     },
     {
@@ -286,13 +441,19 @@
       "deity": "Bahubali",
       "region": "South India",
       "state": "Karnataka",
-      "lat": 12.857, "lng": 76.490,
+      "lat": 12.857,
+      "lng": 76.49,
       "builder": "Chavundaraya, minister of the Western Ganga dynasty",
-      "built_from": 981, "built_to": 983,
+      "built_from": 981,
+      "built_to": 983,
       "status": "active",
       "lifespan_note": "A 17 m monolithic statue of Bahubali, commissioned c. 981 CE. A living Jain pilgrimage site; the Mahamastakabhisheka is held every 12 years.",
       "source": [
-        { "label": "ASI; Shravanabelagola", "url": "https://en.wikipedia.org/wiki/Shravanabelagola", "tier": 2 }
+        {
+          "label": "ASI; Shravanabelagola",
+          "url": "https://en.wikipedia.org/wiki/Shravanabelagola",
+          "tier": 2
+        }
       ]
     },
     {
@@ -301,13 +462,19 @@
       "tradition": "buddhist",
       "region": "Central India",
       "state": "Madhya Pradesh",
-      "lat": 23.479, "lng": 77.740,
+      "lat": 23.479,
+      "lng": 77.74,
       "builder": "Emperor Ashoka, Maurya dynasty (enlarged under the Shungas & Satavahanas)",
-      "built_from": -300, "built_to": -100,
+      "built_from": -300,
+      "built_to": -100,
       "status": "active",
       "lifespan_note": "The Great Stupa commissioned by Ashoka in the 3rd c. BCE, one of the oldest stone structures in India. Rediscovered 1818, conserved by the ASI; UNESCO World Heritage.",
       "source": [
-        { "label": "ASI; UNESCO — Buddhist Monuments at Sanchi", "url": "https://whc.unesco.org/en/list/524/", "tier": 1 }
+        {
+          "label": "ASI; UNESCO — Buddhist Monuments at Sanchi",
+          "url": "https://whc.unesco.org/en/list/524/",
+          "tier": 1
+        }
       ]
     },
     {
@@ -316,13 +483,19 @@
       "tradition": "buddhist",
       "region": "East India",
       "state": "Bihar",
-      "lat": 24.696, "lng": 84.991,
+      "lat": 24.696,
+      "lng": 84.991,
       "builder": "Originally Ashoka (3rd c. BCE); present brick temple Gupta era (5th–6th c. CE)",
-      "built_from": -260, "built_to": 600,
+      "built_from": -260,
+      "built_to": 600,
       "status": "active",
       "lifespan_note": "Marks the site of the Buddha's enlightenment. The present tower is Gupta-era; restored in the 19th c. UNESCO World Heritage and a living pilgrimage centre.",
       "source": [
-        { "label": "ASI; UNESCO — Mahabodhi Temple Complex", "url": "https://whc.unesco.org/en/list/1056/", "tier": 1 }
+        {
+          "label": "ASI; UNESCO — Mahabodhi Temple Complex",
+          "url": "https://whc.unesco.org/en/list/1056/",
+          "tier": 1
+        }
       ]
     },
     {
@@ -332,13 +505,19 @@
       "region": "Silk Route",
       "historical_region": "Varendra, undivided Bengal / Bharat",
       "state": "undivided India (present-day Bangladesh, Rajshahi)",
-      "lat": 25.031, "lng": 88.977,
+      "lat": 25.031,
+      "lng": 88.977,
       "builder": "Pala emperor Dharmapala",
-      "built_from": 781, "built_to": 821,
+      "built_from": 781,
+      "built_to": 821,
       "status": "ruin",
       "lifespan_note": "One of the largest Buddhist monasteries south of the Himalayas, a Pala-era hub linked to the eastern Buddhist world. Declined after the 12th c.; UNESCO World Heritage ruin.",
       "source": [
-        { "label": "UNESCO — Ruins of the Buddhist Vihara at Paharpur", "url": "https://whc.unesco.org/en/list/322/", "tier": 1 }
+        {
+          "label": "UNESCO — Ruins of the Buddhist Vihara at Paharpur",
+          "url": "https://whc.unesco.org/en/list/322/",
+          "tier": 1
+        }
       ]
     },
     {
@@ -348,16 +527,28 @@
       "region": "Silk Route",
       "historical_region": "Gandhara (ancient Indic / Buddhist cultural sphere)",
       "state": "present-day Afghanistan (Bamyan)",
-      "lat": 34.831, "lng": 67.826,
+      "lat": 34.831,
+      "lng": 67.826,
       "builder": "Gandhara / Hephthalite-era Buddhist community",
-      "built_from": 550, "built_to": 620,
+      "built_from": 550,
+      "built_to": 620,
       "status": "destroyed",
       "lifespan_note": "Two colossal 6th–7th c. standing Buddhas carved into a Silk-Route cliff, described by the pilgrim Xuanzang. Survived 1,400 years until dynamited in 2001; empty niches remain, UNESCO World Heritage (in danger).",
       "destruction": {
-        "primary": { "year": 2001, "actor": "Taliban", "actor_role": "Islamic Emirate of Afghanistan", "account": "Demolished with explosives in March 2001 on orders of Mullah Omar, drawing global condemnation.", "toll_note": "No deaths from the demolition itself; a landmark act of cultural destruction." }
+        "primary": {
+          "year": 2001,
+          "actor": "Taliban",
+          "actor_role": "Islamic Emirate of Afghanistan",
+          "account": "Demolished with explosives in March 2001 on orders of Mullah Omar, drawing global condemnation.",
+          "toll_note": "No deaths from the demolition itself; a landmark act of cultural destruction."
+        }
       },
       "source": [
-        { "label": "UNESCO — Cultural Landscape of Bamiyan Valley", "url": "https://whc.unesco.org/en/list/208/", "tier": 1 }
+        {
+          "label": "UNESCO — Cultural Landscape of Bamiyan Valley",
+          "url": "https://whc.unesco.org/en/list/208/",
+          "tier": 1
+        }
       ]
     },
     {
@@ -367,13 +558,19 @@
       "region": "Silk Route",
       "historical_region": "Gandhara (ancient Indic / Buddhist cultural sphere)",
       "state": "present-day Afghanistan (Logar)",
-      "lat": 34.290, "lng": 69.483,
+      "lat": 34.29,
+      "lng": 69.483,
       "builder": "Kushan-to-Gandhara-era Buddhist community (on a copper-mining town)",
-      "built_from": 100, "built_to": 700,
+      "built_from": 100,
+      "built_to": 700,
       "status": "ruin",
       "lifespan_note": "A vast Silk-Route Buddhist monastic town on the Kabul–Gandhara road, buried for centuries and now excavated ahead of copper mining — a rescue-archaeology race.",
       "source": [
-        { "label": "Wikipedia — Mes Aynak (rescue archaeology)", "url": "https://en.wikipedia.org/wiki/Mes_Aynak", "tier": 3 }
+        {
+          "label": "Wikipedia — Mes Aynak (rescue archaeology)",
+          "url": "https://en.wikipedia.org/wiki/Mes_Aynak",
+          "tier": 3
+        }
       ]
     },
     {
@@ -383,16 +580,27 @@
       "region": "Silk Route",
       "historical_region": "Gandhara, undivided India / Bharat (Takshashila)",
       "state": "undivided India (present-day Pakistan, Punjab)",
-      "lat": 33.745, "lng": 72.787,
+      "lat": 33.745,
+      "lng": 72.787,
       "builder": "Achaemenid → Mauryan → Indo-Greek → Kushan city; great Buddhist learning centre",
-      "built_from": -600, "built_to": 500,
+      "built_from": -600,
+      "built_to": 500,
       "status": "ruin",
       "lifespan_note": "An ancient city and seat of learning on the Silk Route where the Gandhara school flourished; declined after the Hephthalite (White Hun) invasions of the 5th c. UNESCO World Heritage.",
       "destruction": {
-        "primary": { "year": 460, "actor": "Alchon Huns (Hephthalites)", "actor_role": "Central Asian invaders", "account": "Xuanzang and archaeology record the monasteries in ruin after the Hun invasions of the 5th c. CE." }
+        "primary": {
+          "year": 460,
+          "actor": "Alchon Huns (Hephthalites)",
+          "actor_role": "Central Asian invaders",
+          "account": "Xuanzang and archaeology record the monasteries in ruin after the Hun invasions of the 5th c. CE."
+        }
       },
       "source": [
-        { "label": "UNESCO — Taxila", "url": "https://whc.unesco.org/en/list/139/", "tier": 1 }
+        {
+          "label": "UNESCO — Taxila",
+          "url": "https://whc.unesco.org/en/list/139/",
+          "tier": 1
+        }
       ]
     },
     {
@@ -403,13 +611,19 @@
       "region": "Kashmir",
       "historical_region": "Sharada Desha, ancient Kashmir / Bharat",
       "state": "undivided India (present-day Pakistan-administered Kashmir, Neelum Valley)",
-      "lat": 34.799, "lng": 74.191,
+      "lat": 34.799,
+      "lng": 74.191,
       "builder": "Ancient; a renowned temple-university (one of the great Sharada Peethas)",
-      "built_from": 200, "built_to": 800,
+      "built_from": 200,
+      "built_to": 800,
       "status": "ruin",
       "lifespan_note": "An ancient temple and centre of learning that gave Kashmir the Sharada script; a leading seat of Sanskrit scholarship. Now a ruin near the Line of Control; a cross-LoC pilgrimage corridor has been discussed.",
       "source": [
-        { "label": "Wikipedia — Sharada Peeth", "url": "https://en.wikipedia.org/wiki/Sharada_Peeth", "tier": 3 }
+        {
+          "label": "Wikipedia — Sharada Peeth",
+          "url": "https://en.wikipedia.org/wiki/Sharada_Peeth",
+          "tier": 3
+        }
       ]
     },
     {
@@ -419,13 +633,19 @@
       "deity": "Shiva (Jyeshteshwara)",
       "region": "Kashmir",
       "state": "Jammu & Kashmir",
-      "lat": 34.072, "lng": 74.844,
+      "lat": 34.072,
+      "lng": 74.844,
       "builder": "Traditionally Jaluka (son of Ashoka, ~200 BCE) / King Gopaditya; the oldest temple in Kashmir",
-      "built_from": -371, "built_to": 371,
+      "built_from": -371,
+      "built_to": 371,
       "status": "active",
       "lifespan_note": "Kashmir's oldest surviving shrine, on the Gopadri hill above Srinagar — a Shiva temple linked in the Rajatarangini to Gopaditya/Jaluka and later to Adi Shankaracharya's 8th-c. visit. Repaired after earthquakes (Zain-ul-Abidin renovated the roof; Gulab Singh built the 243 steps). Still in worship.",
       "source": [
-        { "label": "ASI; Kalhana, Rajatarangini; Wikipedia — Shankaracharya Temple", "url": "https://en.wikipedia.org/wiki/Shankaracharya_Temple", "tier": 2 }
+        {
+          "label": "ASI; Kalhana, Rajatarangini; Wikipedia — Shankaracharya Temple",
+          "url": "https://en.wikipedia.org/wiki/Shankaracharya_Temple",
+          "tier": 2
+        }
       ]
     },
     {
@@ -435,20 +655,40 @@
       "deity": "Vishnu (Parihasakeshava & Muktakeshava) + Buddhist stupa/chaitya",
       "region": "Kashmir",
       "state": "Jammu & Kashmir",
-      "lat": 34.166, "lng": 74.653,
+      "lat": 34.166,
+      "lng": 74.653,
       "builder": "Lalitaditya Muktapida, Karkota dynasty",
-      "built_from": 724, "built_to": 760,
+      "built_from": 724,
+      "built_to": 760,
       "status": "ruin",
       "lifespan_note": "Lalitaditya's grand new capital, with BOTH Hindu temples (Kalhana says the Vishnu Parihasakeshava image used vast quantities of gold/silver) and a great Buddhist stupa, chaitya and monastery — a Hindu–Buddhist royal city. Its silver Vishnu image was later broken up by the Kashmiri Hindu king Harsha (r. 1089–1101) for treasure; King Shankaravarman earlier quarried its stone; Abul Fazl records Sikandar 'Butshikan' finishing the destruction. Now an ASI ruin ('Ancient Stupa, Chaitya and Monastery').",
       "destruction": {
-        "primary": { "year": 1099, "actor": "King Harsha of Kashmir", "actor_role": "Kashmiri Hindu ruler (temple-looter)", "account": "Kalhana's Rajatarangini records Harsha — a Hindu king — plundering and melting temple images across Kashmir for treasure, including the silver Parihasakeshava Vishnu. Included precisely to show destruction was not only inter-religious: Kalhana even coins the term 'devotpatana-nayaka' (superintendent of idol-uprooting) for Harsha's officials.", "toll_note": "A financial/temple-looting campaign by a Hindu ruler, per Kalhana." },
+        "primary": {
+          "year": 1099,
+          "actor": "King Harsha of Kashmir",
+          "actor_role": "Kashmiri Hindu ruler (temple-looter)",
+          "account": "Kalhana's Rajatarangini records Harsha — a Hindu king — plundering and melting temple images across Kashmir for treasure, including the silver Parihasakeshava Vishnu. Included precisely to show destruction was not only inter-religious: Kalhana even coins the term 'devotpatana-nayaka' (superintendent of idol-uprooting) for Harsha's officials.",
+          "toll_note": "A financial/temple-looting campaign by a Hindu ruler, per Kalhana."
+        },
         "later": [
-          { "year": 895, "actor": "Shankaravarman", "actor_role": "Kashmiri king (quarried the stone)" },
-          { "year": 1400, "actor": "Sikandar 'Butshikan' (per Abul Fazl)", "actor_role": "Sultan of Kashmir" }
+          {
+            "year": 895,
+            "actor": "Shankaravarman",
+            "actor_role": "Kashmiri king (quarried the stone)"
+          },
+          {
+            "year": 1400,
+            "actor": "Sikandar 'Butshikan' (per Abul Fazl)",
+            "actor_role": "Sultan of Kashmir"
+          }
         ]
       },
       "source": [
-        { "label": "ASI Srinagar Circle; Kalhana, Rajatarangini (M. A. Stein trans.); Abul Fazl, Ain-i-Akbari", "url": "https://en.wikipedia.org/wiki/Parihaspora", "tier": 2 }
+        {
+          "label": "ASI Srinagar Circle; Kalhana, Rajatarangini (M. A. Stein trans.); Abul Fazl, Ain-i-Akbari",
+          "url": "https://en.wikipedia.org/wiki/Parihaspora",
+          "tier": 2
+        }
       ]
     },
     {
@@ -458,13 +698,19 @@
       "deity": "Buddhist monastery & stupa (Fourth Buddhist Council site)",
       "region": "Kashmir",
       "state": "Jammu & Kashmir",
-      "lat": 34.148, "lng": 74.882,
+      "lat": 34.148,
+      "lng": 74.882,
       "builder": "Kushan-era Buddhist community (patronage of Kanishka I)",
-      "built_from": 100, "built_to": 500,
+      "built_from": 100,
+      "built_to": 500,
       "status": "ruin",
       "lifespan_note": "A Kushan-era monastery in the Zabarwan hills, identified by Aurel Stein as Sadarhadvana, home of the Bodhisattva Nagarjuna. Traditionally the site of the Fourth Buddhist Council under Kanishka I — pivotal for Mahayana Buddhism. Excavated 1923; its terracotta tiles depict Central-Asian faces (Yarkand/Kashgar), the 'only remains of their kind'. ASI-protected ruin.",
       "source": [
-        { "label": "ASI; A. Stein's Rajatarangini; R. C. Kak excavation (1923); LiveHistoryIndia", "url": "https://www.livehistoryindia.com/story/monuments/the-harwan-monastery-a-relic-of-kashmirs-buddhist-past", "tier": 2 }
+        {
+          "label": "ASI; A. Stein's Rajatarangini; R. C. Kak excavation (1923); LiveHistoryIndia",
+          "url": "https://www.livehistoryindia.com/story/monuments/the-harwan-monastery-a-relic-of-kashmirs-buddhist-past",
+          "tier": 2
+        }
       ]
     },
     {
@@ -474,13 +720,19 @@
       "deity": "Shiva (Bhuteshvara / Jyeshthesha)",
       "region": "Kashmir",
       "state": "Jammu & Kashmir",
-      "lat": 34.353, "lng": 74.976,
+      "lat": 34.353,
+      "lng": 74.976,
       "builder": "Ancient shrine (Jaluka ~2nd c. BCE); developed by Lalitaditya (8th c.) & Avantivarman (9th c.)",
-      "built_from": -137, "built_to": 883,
+      "built_from": -137,
+      "built_to": 883,
       "status": "ruin",
       "lifespan_note": "A group of stone Shiva temples at the foot of Harmukh, around the holy spring of Naranag — one of Kashmir's most important Shaiva sites per the Rajatarangini (Jaluka, then Lalitaditya's Jyeshthesha temple, then Avantivarman's silver bathing-conduit for Bhuteshvara). Now a forested ruin; ASI Monument of National Importance (N-JK-16).",
       "source": [
-        { "label": "ASI Srinagar Circle (N-JK-16); Kalhana, Rajatarangini", "url": "https://en.wikipedia.org/wiki/Wangath_temple_complex", "tier": 2 }
+        {
+          "label": "ASI Srinagar Circle (N-JK-16); Kalhana, Rajatarangini",
+          "url": "https://en.wikipedia.org/wiki/Wangath_temple_complex",
+          "tier": 2
+        }
       ]
     },
     {
@@ -490,13 +742,19 @@
       "deity": "Shiva (Meruvardhanaswami)",
       "region": "Kashmir",
       "state": "Jammu & Kashmir",
-      "lat": 34.049, "lng": 74.869,
+      "lat": 34.049,
+      "lng": 74.869,
       "builder": "Built by Meru, minister of King Partha, Utpala era",
-      "built_from": 913, "built_to": 921,
+      "built_from": 913,
+      "built_to": 921,
       "status": "ruin",
       "lifespan_note": "A small 10th-c. stone temple standing in a tank at Pandrethan (from 'Puranadhisthana', Kashmir's old capital), noted for its carved ceiling. Survives as a protected monument on an army cantonment; a rare intact example of the Kashmiri stone-temple form.",
       "source": [
-        { "label": "ASI; Kalhana, Rajatarangini; Wikipedia — Pandrethan Shiva Temple", "url": "https://en.wikipedia.org/wiki/Pandrethan_Shiva_Temple", "tier": 2 }
+        {
+          "label": "ASI; Kalhana, Rajatarangini; Wikipedia — Pandrethan Shiva Temple",
+          "url": "https://en.wikipedia.org/wiki/Pandrethan_Shiva_Temple",
+          "tier": 2
+        }
       ]
     },
     {
@@ -506,16 +764,28 @@
       "deity": "Shiva (Vijayeshvara — 'god of victory')",
       "region": "Kashmir",
       "state": "Jammu & Kashmir",
-      "lat": 33.795, "lng": 75.106,
+      "lat": 33.795,
+      "lng": 75.106,
       "builder": "Ancient shrine (Ashoka built a stone enclosure & two Ashokeshvara temples); refounded by King Vijaya",
-      "built_from": -250, "built_to": 500,
+      "built_from": -250,
+      "built_to": 500,
       "status": "destroyed",
       "lifespan_note": "One of the most ancient Shaiva shrines of Kashmir, giving Bijbehara ('Vijabror' < Vijayabhattaraka) its name. Ashoka is said to have enclosed the shrine and built two Ashokeshvara temples. The temple was destroyed in the medieval period; a later temple stands near the site on the Jhelum.",
       "destruction": {
-        "primary": { "year": 1400, "actor": "Medieval Sultanate-era destruction (attributed)", "actor_role": "Sultanate of Kashmir", "account": "Grouped with the Valley-wide temple destruction of the Sikandar 'Butshikan' era recorded in the Kashmiri chronicles; the ancient Vijayeshvara did not survive.", "needs_source": true }
+        "primary": {
+          "year": 1400,
+          "actor": "Medieval Sultanate-era destruction (attributed)",
+          "actor_role": "Sultanate of Kashmir",
+          "account": "Grouped with the Valley-wide temple destruction of the Sikandar 'Butshikan' era recorded in the Kashmiri chronicles; the ancient Vijayeshvara did not survive.",
+          "needs_source": true
+        }
       },
       "source": [
-        { "label": "Kalhana, Rajatarangini (M. A. Stein trans., notes on Vijayesvara)", "url": "https://en.wikipedia.org/wiki/Bijbehara", "tier": 3 }
+        {
+          "label": "Kalhana, Rajatarangini (M. A. Stein trans., notes on Vijayesvara)",
+          "url": "https://en.wikipedia.org/wiki/Bijbehara",
+          "tier": 3
+        }
       ]
     },
     {
@@ -526,12 +796,20 @@
       "region": "East Asia",
       "historical_region": "Tibet (dharma transmitted from India & Nepal)",
       "state": "Tibet (present-day China)",
-      "lat": 29.6531, "lng": 91.0475,
+      "lat": 29.6531,
+      "lng": 91.0475,
       "builder": "King Songtsen Gampo, Tibetan Empire",
-      "built_from": 647, "built_to": 652,
+      "built_from": 647,
+      "built_to": 652,
       "status": "active",
       "lifespan_note": "The holiest temple in Tibetan Buddhism, built by Songtsen Gampo to house Buddha images brought as dowry by his Nepali and Chinese queens. Its design fuses Indian vihara, Nepalese and Tibetan forms — a direct marker of Buddhism's spread out of India. UNESCO World Heritage (with the Potala).",
-      "source": [ { "label": "UNESCO — Historic Ensemble of the Potala Palace; Wikipedia — Jokhang", "url": "https://en.wikipedia.org/wiki/Jokhang", "tier": 2 } ]
+      "source": [
+        {
+          "label": "UNESCO — Historic Ensemble of the Potala Palace; Wikipedia — Jokhang",
+          "url": "https://en.wikipedia.org/wiki/Jokhang",
+          "tier": 2
+        }
+      ]
     },
     {
       "id": "potala",
@@ -541,12 +819,20 @@
       "region": "East Asia",
       "historical_region": "Tibet",
       "state": "Tibet (present-day China)",
-      "lat": 29.6558, "lng": 91.1170,
+      "lat": 29.6558,
+      "lng": 91.117,
       "builder": "Originally Songtsen Gampo (7th c.); present palace by the 5th Dalai Lama (1645)",
-      "built_from": 1645, "built_to": 1694,
+      "built_from": 1645,
+      "built_to": 1694,
       "status": "active",
       "lifespan_note": "The great dzong palace-temple on Marpo Ri hill, winter residence of the Dalai Lamas until 1959 and a supreme monument of Tibetan Buddhism. UNESCO World Heritage.",
-      "source": [ { "label": "UNESCO — Historic Ensemble of the Potala Palace, Lhasa", "url": "https://whc.unesco.org/en/list/707/", "tier": 1 } ]
+      "source": [
+        {
+          "label": "UNESCO — Historic Ensemble of the Potala Palace, Lhasa",
+          "url": "https://whc.unesco.org/en/list/707/",
+          "tier": 1
+        }
+      ]
     },
     {
       "id": "white-horse-temple",
@@ -556,12 +842,20 @@
       "region": "East Asia",
       "historical_region": "China (dharma carried from India, 1st c. CE)",
       "state": "China (Henan)",
-      "lat": 34.7239, "lng": 112.5997,
+      "lat": 34.7239,
+      "lng": 112.5997,
       "builder": "Emperor Ming of the Eastern Han; founded by the Indian monks Kashyapa Matanga & Dharmaratna",
-      "built_from": 68, "built_to": 68,
+      "built_from": 68,
+      "built_to": 68,
       "status": "active",
       "lifespan_note": "Traditionally the first Buddhist temple in China (68 CE), founded when two Indian monks arrived carrying sutras on a white horse — the literal beginning of Buddhism's transmission into China. Still active; now uniquely hosts Chinese, Indian, Thai and Burmese halls side by side.",
-      "source": [ { "label": "Wikipedia — White Horse Temple", "url": "https://en.wikipedia.org/wiki/White_Horse_Temple", "tier": 2 } ]
+      "source": [
+        {
+          "label": "Wikipedia — White Horse Temple",
+          "url": "https://en.wikipedia.org/wiki/White_Horse_Temple",
+          "tier": 2
+        }
+      ]
     },
     {
       "id": "leshan-buddha",
@@ -571,12 +865,20 @@
       "region": "East Asia",
       "historical_region": "China (Tang dynasty)",
       "state": "China (Sichuan)",
-      "lat": 29.5450, "lng": 103.7717,
+      "lat": 29.545,
+      "lng": 103.7717,
       "builder": "Begun by the monk Hai Tong, Tang dynasty",
-      "built_from": 713, "built_to": 803,
+      "built_from": 713,
+      "built_to": 803,
       "status": "active",
       "lifespan_note": "A 71 m Maitreya carved into a river cliff — the largest pre-modern Buddha statue in the world, built over 90 years to calm the turbulent waters below. UNESCO World Heritage.",
-      "source": [ { "label": "UNESCO — Mount Emei Scenic Area, incl. Leshan Giant Buddha", "url": "https://whc.unesco.org/en/list/779/", "tier": 1 } ]
+      "source": [
+        {
+          "label": "UNESCO — Mount Emei Scenic Area, incl. Leshan Giant Buddha",
+          "url": "https://whc.unesco.org/en/list/779/",
+          "tier": 1
+        }
+      ]
     },
     {
       "id": "todaiji",
@@ -586,12 +888,20 @@
       "region": "East Asia",
       "historical_region": "Japan (Kegon school, dharma via China & Korea from India)",
       "state": "Japan (Nara)",
-      "lat": 34.6890, "lng": 135.8398,
+      "lat": 34.689,
+      "lng": 135.8398,
       "builder": "Emperor Shōmu, Nara-period Japan",
-      "built_from": 745, "built_to": 752,
+      "built_from": 745,
+      "built_to": 752,
       "status": "active",
       "lifespan_note": "Head temple of all provincial temples of Japan, housing a 16 m bronze Vairocana (Daibutsu), unveiled 752. The Great Buddha Hall was long the world's largest wooden building. UNESCO World Heritage (Historic Monuments of Ancient Nara).",
-      "source": [ { "label": "UNESCO — Historic Monuments of Ancient Nara", "url": "https://whc.unesco.org/en/list/870/", "tier": 1 } ]
+      "source": [
+        {
+          "label": "UNESCO — Historic Monuments of Ancient Nara",
+          "url": "https://whc.unesco.org/en/list/870/",
+          "tier": 1
+        }
+      ]
     },
     {
       "id": "horyuji",
@@ -601,12 +911,20 @@
       "region": "East Asia",
       "historical_region": "Japan (Asuka period)",
       "state": "Japan (Nara Prefecture)",
-      "lat": 34.6144, "lng": 135.7352,
+      "lat": 34.6144,
+      "lng": 135.7352,
       "builder": "Prince Shōtoku",
-      "built_from": 607, "built_to": 607,
+      "built_from": 607,
+      "built_to": 607,
       "status": "active",
       "lifespan_note": "Founded 607 CE; its pagoda and main hall are the oldest surviving wooden buildings in the world. Japan's first UNESCO World Heritage site — living proof of how far the Indian dharma travelled and endured.",
-      "source": [ { "label": "UNESCO — Buddhist Monuments in the Hōryū-ji Area", "url": "https://whc.unesco.org/en/list/660/", "tier": 1 } ]
+      "source": [
+        {
+          "label": "UNESCO — Buddhist Monuments in the Hōryū-ji Area",
+          "url": "https://whc.unesco.org/en/list/660/",
+          "tier": 1
+        }
+      ]
     },
     {
       "id": "sensoji",
@@ -616,12 +934,20 @@
       "region": "East Asia",
       "historical_region": "Japan",
       "state": "Japan (Tokyo)",
-      "lat": 35.7148, "lng": 139.7967,
+      "lat": 35.7148,
+      "lng": 139.7967,
       "builder": "Founded 645 CE (rebuilt post-WWII)",
-      "built_from": 645, "built_to": 645,
+      "built_from": 645,
+      "built_to": 645,
       "status": "active",
       "lifespan_note": "Tokyo's oldest temple, dedicated to Kannon — the East-Asian form of the bodhisattva Avalokiteśvara. Destroyed in WWII bombing and rebuilt; one of the most-visited religious sites in the world.",
-      "source": [ { "label": "Wikipedia — Sensō-ji", "url": "https://en.wikipedia.org/wiki/Sens%C5%8D-ji", "tier": 2 } ]
+      "source": [
+        {
+          "label": "Wikipedia — Sensō-ji",
+          "url": "https://en.wikipedia.org/wiki/Sens%C5%8D-ji",
+          "tier": 2
+        }
+      ]
     },
     {
       "id": "angkor-wat",
@@ -630,14 +956,25 @@
       "deity": "Vishnu (later Buddhist)",
       "region": "Southeast Asia",
       "state": "Cambodia (Siem Reap)",
-      "lat": 13.412, "lng": 103.867,
+      "lat": 13.412,
+      "lng": 103.867,
       "builder": "Suryavarman II, Khmer Empire",
-      "built_from": 1113, "built_to": 1150,
+      "built_from": 1113,
+      "built_to": 1150,
       "status": "active",
-      "model3d": { "provider": "sketchfab", "id": "add92b9193a64b9cbb39d1c968ca86c8", "title": "Angkor Wat, Cambodia", "attribution": "utkarshbhanu (Sketchfab)" },
+      "model3d": {
+        "provider": "sketchfab",
+        "id": "add92b9193a64b9cbb39d1c968ca86c8",
+        "title": "Angkor Wat, Cambodia",
+        "attribution": "utkarshbhanu (Sketchfab)"
+      },
       "lifespan_note": "The largest religious monument in the world, built as a Vishnu temple by Suryavarman II and later converted to Buddhist use. Continuously significant; UNESCO World Heritage and Cambodia's national symbol.",
       "source": [
-        { "label": "UNESCO — Angkor", "url": "https://whc.unesco.org/en/list/668/", "tier": 1 }
+        {
+          "label": "UNESCO — Angkor",
+          "url": "https://whc.unesco.org/en/list/668/",
+          "tier": 1
+        }
       ]
     },
     {
@@ -647,16 +984,27 @@
       "deity": "Trimurti (Shiva, Vishnu, Brahma)",
       "region": "Southeast Asia",
       "state": "Indonesia (Java)",
-      "lat": -7.752, "lng": 110.491,
+      "lat": -7.752,
+      "lng": 110.491,
       "builder": "Rakai Pikatan, Sanjaya dynasty of the Mataram Kingdom",
-      "built_from": 850, "built_to": 856,
+      "built_from": 850,
+      "built_to": 856,
       "status": "reconstructed",
       "lifespan_note": "The largest Shaivite temple compound in Southeast Asia. Abandoned after the 10th-c. shift of power to East Java and damaged by earthquakes; extensively reconstructed in the 20th c. UNESCO World Heritage.",
       "destruction": {
-        "primary": { "year": 1549, "actor": "Earthquakes & abandonment", "actor_role": "Natural / decline", "account": "Collapsed largely through earthquakes and centuries of neglect after the political centre moved; a major 2006 quake also caused damage." }
+        "primary": {
+          "year": 1549,
+          "actor": "Earthquakes & abandonment",
+          "actor_role": "Natural / decline",
+          "account": "Collapsed largely through earthquakes and centuries of neglect after the political centre moved; a major 2006 quake also caused damage."
+        }
       },
       "source": [
-        { "label": "UNESCO — Prambanan Temple Compounds", "url": "https://whc.unesco.org/en/list/642/", "tier": 1 }
+        {
+          "label": "UNESCO — Prambanan Temple Compounds",
+          "url": "https://whc.unesco.org/en/list/642/",
+          "tier": 1
+        }
       ]
     },
     {
@@ -665,14 +1013,25 @@
       "tradition": "buddhist",
       "region": "Southeast Asia",
       "state": "Indonesia (Java)",
-      "lat": -7.608, "lng": 110.204,
+      "lat": -7.608,
+      "lng": 110.204,
       "builder": "Sailendra dynasty, Mataram Kingdom",
-      "built_from": 778, "built_to": 850,
+      "built_from": 778,
+      "built_to": 850,
       "status": "reconstructed",
-      "model3d": { "provider": "sketchfab", "id": "9b7a5910dc814ec59145d9723b68c769", "title": "Borobudur Temple, Indonesia", "attribution": "Andria Wahyudi (Sketchfab)" },
+      "model3d": {
+        "provider": "sketchfab",
+        "id": "9b7a5910dc814ec59145d9723b68c769",
+        "title": "Borobudur Temple, Indonesia",
+        "attribution": "Andria Wahyudi (Sketchfab)"
+      },
       "lifespan_note": "The world's largest Buddhist temple, a stone mandala of the Sailendras. Abandoned c. 14th c. as Java Islamised and buried under ash/jungle; rediscovered 1814, restored by UNESCO 1975–82. UNESCO World Heritage.",
       "source": [
-        { "label": "UNESCO — Borobudur Temple Compounds", "url": "https://whc.unesco.org/en/list/592/", "tier": 1 }
+        {
+          "label": "UNESCO — Borobudur Temple Compounds",
+          "url": "https://whc.unesco.org/en/list/592/",
+          "tier": 1
+        }
       ]
     },
     {
@@ -682,16 +1041,28 @@
       "deity": "Shiva (Bhadreshvara)",
       "region": "Southeast Asia",
       "state": "Vietnam (Quang Nam)",
-      "lat": 15.764, "lng": 108.124,
+      "lat": 15.764,
+      "lng": 108.124,
       "builder": "Champa kings (Cham civilisation)",
-      "built_from": 400, "built_to": 1300,
+      "built_from": 400,
+      "built_to": 1300,
       "status": "partially_ruined",
       "lifespan_note": "The sacred Shaivite temple city of the Hindu Cham kingdom, built over nine centuries. Damaged by centuries of decline and heavily by US bombing in the Vietnam War; UNESCO World Heritage.",
       "destruction": {
-        "primary": { "year": 1969, "actor": "Aerial bombing (Vietnam War)", "actor_role": "Wartime damage", "account": "Several major temple groups were destroyed by bombing in 1969; craters and unexploded ordnance remain.", "atrocity_link": "Vietnam War" }
+        "primary": {
+          "year": 1969,
+          "actor": "Aerial bombing (Vietnam War)",
+          "actor_role": "Wartime damage",
+          "account": "Several major temple groups were destroyed by bombing in 1969; craters and unexploded ordnance remain.",
+          "atrocity_link": "Vietnam War"
+        }
       },
       "source": [
-        { "label": "UNESCO — My Son Sanctuary", "url": "https://whc.unesco.org/en/list/949/", "tier": 1 }
+        {
+          "label": "UNESCO — My Son Sanctuary",
+          "url": "https://whc.unesco.org/en/list/949/",
+          "tier": 1
+        }
       ]
     },
     {
@@ -701,16 +1072,28 @@
       "deity": "Various (Saptakoteshwara & others; deities relocated inland)",
       "region": "West India",
       "state": "Goa",
-      "lat": 15.500, "lng": 73.912,
+      "lat": 15.5,
+      "lng": 73.912,
       "builder": "Kadamba / local Goan communities",
-      "built_from": 1000, "built_to": 1500,
+      "built_from": 1000,
+      "built_to": 1500,
       "status": "destroyed",
       "lifespan_note": "The temples of the Goan coastal talukas were systematically demolished after the Portuguese conquest (1510) and during the Goa Inquisition (1560–1812); many principal deities were carried inland and re-enshrined (e.g. Saptakoteshwara at Narve, Mangeshi, Shantadurga). Included here so the record of temple destruction is not attributed to a single actor.",
       "destruction": {
-        "primary": { "year": 1560, "actor": "Portuguese colonial authorities & the Goa Inquisition", "actor_role": "Portuguese Estado da Índia / Catholic Inquisition", "account": "Portuguese decrees ordered the demolition of Hindu temples in the Old Conquests; the Inquisition (1560–1812) prosecuted, tortured and executed converts and non-Christians. Estimates of temples destroyed run into the hundreds.", "toll_note": "Thousands tried by the Inquisition; hundreds executed (auto-da-fé). A documented non-Islamic destruction of Dharmic sites." }
+        "primary": {
+          "year": 1560,
+          "actor": "Portuguese colonial authorities & the Goa Inquisition",
+          "actor_role": "Portuguese Estado da Índia / Catholic Inquisition",
+          "account": "Portuguese decrees ordered the demolition of Hindu temples in the Old Conquests; the Inquisition (1560–1812) prosecuted, tortured and executed converts and non-Christians. Estimates of temples destroyed run into the hundreds.",
+          "toll_note": "Thousands tried by the Inquisition; hundreds executed (auto-da-fé). A documented non-Islamic destruction of Dharmic sites."
+        }
       },
       "source": [
-        { "label": "A.K. Priolkar, 'The Goa Inquisition' (1961); Portuguese colonial records", "url": "https://en.wikipedia.org/wiki/Goa_Inquisition", "tier": 2 }
+        {
+          "label": "A.K. Priolkar, 'The Goa Inquisition' (1961); Portuguese colonial records",
+          "url": "https://en.wikipedia.org/wiki/Goa_Inquisition",
+          "tier": 2
+        }
       ]
     },
     {
@@ -719,20 +1102,31 @@
       "tradition": "sanatan",
       "region": "All India",
       "state": "British India",
-      "lat": 13.083, "lng": 80.270,
+      "lat": 13.083,
+      "lng": 80.27,
       "builder": "n/a — administrative event",
-      "built_from": 1817, "built_to": 1947,
+      "built_from": 1817,
+      "built_to": 1947,
       "status": "active",
       "is_event": true,
       "lifespan_note": "The East India Company / Crown brought major temples under state financial control — the Madras Regulation VII of 1817 and the Religious Endowments Act 1863 — administering (and drawing revenue from) temple endowments. Post-independence, this became the state Hindu Religious & Charitable Endowments (HR&CE) departments, under which many large temples' finances are still government-administered — a live debate about the state's control of Dharmic institutions.",
       "destruction": {
-        "primary": { "year": 1817, "actor": "East India Company / British Crown", "actor_role": "Colonial administration", "account": "Regulation VII of 1817 and later the Religious Endowments Act 1863 placed temple endowments under colonial oversight; the framework carried into independent India's HR&CE Acts.", "atrocity_link": "Famines in British India" }
+        "primary": {
+          "year": 1817,
+          "actor": "East India Company / British Crown",
+          "actor_role": "Colonial administration",
+          "account": "Regulation VII of 1817 and later the Religious Endowments Act 1863 placed temple endowments under colonial oversight; the framework carried into independent India's HR&CE Acts.",
+          "atrocity_link": "Famines in British India"
+        }
       },
       "source": [
-        { "label": "Religious Endowments Act 1863; scholarship on colonial temple administration", "url": "https://en.wikipedia.org/wiki/Religious_Endowments_Act,_1863", "tier": 2 }
+        {
+          "label": "Religious Endowments Act 1863; scholarship on colonial temple administration",
+          "url": "https://en.wikipedia.org/wiki/Religious_Endowments_Act,_1863",
+          "tier": 2
+        }
       ]
     },
-
     {
       "id": "rudra-mahalaya",
       "name": "Rudra Mahalaya Temple, Siddhpur",
@@ -740,19 +1134,36 @@
       "deity": "Shiva (Rudra)",
       "region": "West India",
       "state": "Gujarat",
-      "lat": 23.919, "lng": 72.379,
+      "lat": 23.919,
+      "lng": 72.379,
       "builder": "Begun by Mularaja (943 CE), completed by Jayasimha Siddharaja, Chaulukya (Solanki) dynasty (1140 CE)",
-      "built_from": 943, "built_to": 1140,
+      "built_from": 943,
+      "built_to": 1140,
       "status": "partially_ruined",
       "lifespan_note": "A colossal three-storeyed Shiva temple — reportedly 1,600 pillars, 12 gateways and 11 Rudra shrines. Dismantled in 1296 by Alauddin Khilji's generals, then in 1414–15 its western part was converted into the Jami Masjid by Ahmed Shah I of Gujarat. Only two toranas and four pillars of the central structure survive; an ASI Monument of National Importance.",
       "destruction": {
-        "primary": { "year": 1296, "actor": "Alauddin Khilji (via Ulugh Khan & Nusrat Khan)", "actor_role": "Delhi Sultanate", "account": "Khilji's army dismantled the temple complex in 1296 CE (Samvat 1353).", "atrocity_link": "Timur" },
+        "primary": {
+          "year": 1296,
+          "actor": "Alauddin Khilji (via Ulugh Khan & Nusrat Khan)",
+          "actor_role": "Delhi Sultanate",
+          "account": "Khilji's army dismantled the temple complex in 1296 CE (Samvat 1353).",
+          "atrocity_link": "Timur"
+        },
         "later": [
-          { "year": 1414, "actor": "Ahmed Shah I of Gujarat", "actor_role": "Muzaffarid Sultanate", "account": "Converted the western part into the city's congregational mosque." }
+          {
+            "year": 1414,
+            "actor": "Ahmed Shah I of Gujarat",
+            "actor_role": "Muzaffarid Sultanate",
+            "account": "Converted the western part into the city's congregational mosque."
+          }
         ]
       },
       "source": [
-        { "label": "ASI Monument of National Importance; Wikipedia — Rudra Mahalaya Temple", "url": "https://en.wikipedia.org/wiki/Rudra_Mahalaya_Temple", "tier": 2 }
+        {
+          "label": "ASI Monument of National Importance; Wikipedia — Rudra Mahalaya Temple",
+          "url": "https://en.wikipedia.org/wiki/Rudra_Mahalaya_Temple",
+          "tier": 2
+        }
       ]
     },
     {
@@ -762,16 +1173,28 @@
       "deity": "Saraswati (Vagdevi)",
       "region": "Central India",
       "state": "Madhya Pradesh",
-      "lat": 22.599, "lng": 75.298,
+      "lat": 22.599,
+      "lng": 75.298,
       "builder": "Raja Bhoja, Paramara dynasty",
-      "built_from": 1010, "built_to": 1055,
+      "built_from": 1010,
+      "built_to": 1055,
       "status": "converted",
       "lifespan_note": "An 11th-century Paramara-era Sanskrit teaching hall and Saraswati temple built by Raja Bhoja; the presiding Vagdevi idol is now in the British Museum. The Kamal Maula mosque was raised using its parts. A 2024 ASI survey concluded the mosque structure was made from an earlier Paramara-period temple. A live, court-contested site (Places of Worship Act, 1991).",
       "destruction": {
-        "primary": { "year": 1305, "actor": "Delhi Sultanate era (attributed); mosque built from temple parts", "actor_role": "Sultanate", "account": "The ASI's 2024 survey found the Kamal Maula mosque was constructed from parts of an earlier Paramara-period temple (~1,700 relics, defaced idols recorded). Exact date/agent of the original demolition is debated.", "needs_source": true }
+        "primary": {
+          "year": 1305,
+          "actor": "Delhi Sultanate era (attributed); mosque built from temple parts",
+          "actor_role": "Sultanate",
+          "account": "The ASI's 2024 survey found the Kamal Maula mosque was constructed from parts of an earlier Paramara-period temple (~1,700 relics, defaced idols recorded). Exact date/agent of the original demolition is debated.",
+          "needs_source": true
+        }
       },
       "source": [
-        { "label": "ASI Bhojshala survey report (2024); Deccan Herald / Tribune coverage", "url": "https://en.wikipedia.org/wiki/Bhojshala", "tier": 2 }
+        {
+          "label": "ASI Bhojshala survey report (2024); Deccan Herald / Tribune coverage",
+          "url": "https://en.wikipedia.org/wiki/Bhojshala",
+          "tier": 2
+        }
       ]
     },
     {
@@ -781,16 +1204,27 @@
       "deity": "Various (temple/vihara spolia reused)",
       "region": "East India",
       "state": "West Bengal",
-      "lat": 25.147, "lng": 88.135,
+      "lat": 25.147,
+      "lng": 88.135,
       "builder": "Reused stone from Sena-era temples & viharas; mosque built by Sikandar Shah",
-      "built_from": 1100, "built_to": 1200,
+      "built_from": 1100,
+      "built_to": 1200,
       "status": "converted",
       "lifespan_note": "One of the largest medieval mosques in the subcontinent (Adina Masjid, 1373), built at the Bengal Sultanate capital Pandua. Its plinth and many carved basalt blocks are re-used spolia from destroyed Hindu and Buddhist temples of the Sena period — visible Dashavatara and other Sanatan carvings survive embedded in its fabric.",
       "destruction": {
-        "primary": { "year": 1373, "actor": "Sikandar Shah, Bengal Sultanate", "actor_role": "Bengal Sultanate", "account": "The mosque incorporates carved temple stone; scholars read the reused Hindu/Buddhist spolia as evidence of temples dismantled for its construction." }
+        "primary": {
+          "year": 1373,
+          "actor": "Sikandar Shah, Bengal Sultanate",
+          "actor_role": "Bengal Sultanate",
+          "account": "The mosque incorporates carved temple stone; scholars read the reused Hindu/Buddhist spolia as evidence of temples dismantled for its construction."
+        }
       },
       "source": [
-        { "label": "ASI; scholarship on temple spolia in Bengal Sultanate architecture", "url": "https://en.wikipedia.org/wiki/Adina_Mosque", "tier": 2 }
+        {
+          "label": "ASI; scholarship on temple spolia in Bengal Sultanate architecture",
+          "url": "https://en.wikipedia.org/wiki/Adina_Mosque",
+          "tier": 2
+        }
       ]
     },
     {
@@ -800,16 +1234,27 @@
       "deity": "Shiva (Svayambhu)",
       "region": "Deccan",
       "state": "Telangana",
-      "lat": 17.945, "lng": 79.617,
+      "lat": 17.945,
+      "lng": 79.617,
       "builder": "Kakatiya dynasty (Ganapati Deva / Rudrama Devi / Prataparudra)",
-      "built_from": 1163, "built_to": 1261,
+      "built_from": 1163,
+      "built_to": 1261,
       "status": "ruin",
       "lifespan_note": "The great Svayambhu temple at the heart of the Kakatiya capital Warangal, famed for its ornate carved toranas (the Kakatiya Kala Thoranam). Destroyed when the Delhi Sultanate annexed Warangal (1323); the shattered gateways and platform survive within the fort. On India's UNESCO tentative list.",
       "destruction": {
-        "primary": { "year": 1323, "actor": "Ulugh Khan (later Muhammad bin Tughlaq)", "actor_role": "Delhi Sultanate", "account": "The Kakatiya capital fell to the Delhi Sultanate in 1323; the temple was demolished and the kingdom annexed." }
+        "primary": {
+          "year": 1323,
+          "actor": "Ulugh Khan (later Muhammad bin Tughlaq)",
+          "actor_role": "Delhi Sultanate",
+          "account": "The Kakatiya capital fell to the Delhi Sultanate in 1323; the temple was demolished and the kingdom annexed."
+        }
       },
       "source": [
-        { "label": "ASI; UNESCO tentative list — Warangal Fort / Kakatiya monuments", "url": "https://en.wikipedia.org/wiki/Warangal_Fort", "tier": 2 }
+        {
+          "label": "ASI; UNESCO tentative list — Warangal Fort / Kakatiya monuments",
+          "url": "https://en.wikipedia.org/wiki/Warangal_Fort",
+          "tier": 2
+        }
       ]
     },
     {
@@ -819,16 +1264,28 @@
       "deity": "Jain Tirthankaras & Hindu deities (temple spolia reused)",
       "region": "North India",
       "state": "Delhi",
-      "lat": 28.524, "lng": 77.185,
+      "lat": 28.524,
+      "lng": 77.185,
       "builder": "Tomara & Chahamana-era temples; mosque by Qutb-ud-din Aibak",
-      "built_from": 1000, "built_to": 1180,
+      "built_from": 1000,
+      "built_to": 1180,
       "status": "converted",
       "lifespan_note": "Delhi's first congregational mosque (1192) stands on the razed remains of 27 Jain and Hindu temples of the Lal Kot citadel; its own foundation inscription records this. The reused carved pillars — with defaced Jain and Hindu figures — form the mosque's colonnade beside the Qutb Minar. UNESCO World Heritage.",
       "destruction": {
-        "primary": { "year": 1192, "actor": "Qutb-ud-din Aibak", "actor_role": "Ghurid general / first Delhi Sultan", "account": "The mosque's Persian foundation inscription states it was built from the materials of 27 demolished temples.", "atrocity_link": "Timur" }
+        "primary": {
+          "year": 1192,
+          "actor": "Qutb-ud-din Aibak",
+          "actor_role": "Ghurid general / first Delhi Sultan",
+          "account": "The mosque's Persian foundation inscription states it was built from the materials of 27 demolished temples.",
+          "atrocity_link": "Timur"
+        }
       },
       "source": [
-        { "label": "ASI; UNESCO — Qutb Minar complex; foundation inscription", "url": "https://en.wikipedia.org/wiki/Quwwat-ul-Islam_Mosque", "tier": 1 }
+        {
+          "label": "ASI; UNESCO — Qutb Minar complex; foundation inscription",
+          "url": "https://en.wikipedia.org/wiki/Quwwat-ul-Islam_Mosque",
+          "tier": 1
+        }
       ]
     },
     {
@@ -838,16 +1295,28 @@
       "deity": "Surya (originally), later Kali",
       "region": "West India",
       "state": "Rajasthan",
-      "lat": 24.886, "lng": 74.646,
+      "lat": 24.886,
+      "lng": 74.646,
       "builder": "Originally a Sun temple, Mewar (Bappa Rawal era / 8th c.)",
-      "built_from": 700, "built_to": 800,
+      "built_from": 700,
+      "built_to": 800,
       "status": "reconstructed",
       "lifespan_note": "An 8th-century Sun temple inside Chittor Fort, damaged during the sieges of Chittorgarh (notably Alauddin Khilji's 1303 siege and Akbar's 1568 siege, in which the jauhar and massacres are recorded). Rebuilt and rededicated to Kali. UNESCO World Heritage (Hill Forts of Rajasthan).",
       "destruction": {
-        "primary": { "year": 1303, "actor": "Alauddin Khilji (siege of Chittor)", "actor_role": "Delhi Sultanate", "account": "The 1303 siege of Chittor and later Akbar's 1568 siege saw the fort's temples damaged amid mass killing and jauhar; the temple was later restored.", "toll_note": "Chittor's sieges are among the most-recorded mass-death episodes in Rajput history (jauhar of women, massacre of defenders)." }
+        "primary": {
+          "year": 1303,
+          "actor": "Alauddin Khilji (siege of Chittor)",
+          "actor_role": "Delhi Sultanate",
+          "account": "The 1303 siege of Chittor and later Akbar's 1568 siege saw the fort's temples damaged amid mass killing and jauhar; the temple was later restored.",
+          "toll_note": "Chittor's sieges are among the most-recorded mass-death episodes in Rajput history (jauhar of women, massacre of defenders)."
+        }
       },
       "source": [
-        { "label": "ASI; UNESCO — Hill Forts of Rajasthan (Chittorgarh)", "url": "https://en.wikipedia.org/wiki/Chittorgarh_Fort", "tier": 2 }
+        {
+          "label": "ASI; UNESCO — Hill Forts of Rajasthan (Chittorgarh)",
+          "url": "https://en.wikipedia.org/wiki/Chittorgarh_Fort",
+          "tier": 2
+        }
       ]
     },
     {
@@ -857,17 +1326,29 @@
       "deity": "Various local shrines",
       "region": "Kashmir",
       "state": "Jammu & Kashmir",
-      "lat": 34.083, "lng": 74.797,
+      "lat": 34.083,
+      "lng": 74.797,
       "builder": "Local Kashmiri communities (Karkota, Utpala, Lohara eras)",
-      "built_from": 700, "built_to": 1300,
+      "built_from": 700,
+      "built_to": 1300,
       "status": "destroyed",
       "is_event": true,
       "lifespan_note": "Beyond the famous Martand and Avantipura ruins, Kashmir's smaller village and town temples were destroyed en masse during the reign of Sultan Sikandar 'Butshikan' (1389–1413), recorded in Jonaraja's continuation of the Rajatarangini and in Pandit chronicles. This entry marks the district-wide loss of small shrines that individually left no ruin — the 'sourced-or-gap' way to show a destruction that erased its own evidence.",
       "destruction": {
-        "primary": { "year": 1400, "actor": "Sultan Sikandar Shah Miri ('Butshikan')", "actor_role": "Sultan of Kashmir", "account": "Kashmiri chronicles record a systematic campaign against the Valley's temples and a wave of forced conversion during Sikandar's reign; his minister Suha Bhatta (a convert) is named as an enforcer.", "toll_note": "Chronicles describe destruction of shrines across the Valley and pressure that reduced the Pandit population — figures are chronicle estimates, not censused." }
+        "primary": {
+          "year": 1400,
+          "actor": "Sultan Sikandar Shah Miri ('Butshikan')",
+          "actor_role": "Sultan of Kashmir",
+          "account": "Kashmiri chronicles record a systematic campaign against the Valley's temples and a wave of forced conversion during Sikandar's reign; his minister Suha Bhatta (a convert) is named as an enforcer.",
+          "toll_note": "Chronicles describe destruction of shrines across the Valley and pressure that reduced the Pandit population — figures are chronicle estimates, not censused."
+        }
       },
       "source": [
-        { "label": "Jonaraja, Rajatarangini (continuation); modern histories of medieval Kashmir", "url": "https://en.wikipedia.org/wiki/Sikandar_Shah_Miri", "tier": 3 }
+        {
+          "label": "Jonaraja, Rajatarangini (continuation); modern histories of medieval Kashmir",
+          "url": "https://en.wikipedia.org/wiki/Sikandar_Shah_Miri",
+          "tier": 3
+        }
       ]
     },
     {
@@ -877,12 +1358,20 @@
       "deity": "Vishnu (Venkateswara / Balaji)",
       "region": "South India",
       "state": "Andhra Pradesh",
-      "lat": 13.6833, "lng": 79.3472,
+      "lat": 13.6833,
+      "lng": 79.3472,
       "builder": "Endowed over centuries by Pallava, Chola, Pandya & Vijayanagara kings",
-      "built_from": 300, "built_to": 1600,
+      "built_from": 300,
+      "built_to": 1600,
       "status": "active",
       "lifespan_note": "Atop the Seshachalam hills; among the most-visited and wealthiest temples on earth (tens of millions of pilgrims a year), administered by the Tirumala Tirupati Devasthanams. Continuously in worship for well over a millennium.",
-      "source": [ { "label": "TTD; Wikipedia — Venkateswara Temple, Tirumala", "url": "https://en.wikipedia.org/wiki/Venkateswara_Temple,_Tirumala", "tier": 2 } ]
+      "source": [
+        {
+          "label": "TTD; Wikipedia — Venkateswara Temple, Tirumala",
+          "url": "https://en.wikipedia.org/wiki/Venkateswara_Temple,_Tirumala",
+          "tier": 2
+        }
+      ]
     },
     {
       "id": "meenakshi",
@@ -891,12 +1380,20 @@
       "deity": "Meenakshi (Parvati) & Sundareswarar (Shiva)",
       "region": "South India",
       "state": "Tamil Nadu",
-      "lat": 9.9197, "lng": 78.1194,
+      "lat": 9.9197,
+      "lng": 78.1194,
       "builder": "Ancient shrine; present complex largely by the Nayak rulers (Vishwanatha & Tirumalai Nayak, 16th–17th c.)",
-      "built_from": 1190, "built_to": 1655,
+      "built_from": 1190,
+      "built_to": 1655,
       "status": "active",
       "lifespan_note": "A vast living temple-city of 14 towering gopurams on the Vaigai; the west gopuram is the emblem of Tamil Nadu. Ancient origins, rebuilt after Delhi-Sultanate-era damage, greatly expanded by the Nayaks. One of India's busiest temples.",
-      "source": [ { "label": "ASI; Wikipedia — Meenakshi Temple", "url": "https://en.wikipedia.org/wiki/Meenakshi_Temple", "tier": 2 } ]
+      "source": [
+        {
+          "label": "ASI; Wikipedia — Meenakshi Temple",
+          "url": "https://en.wikipedia.org/wiki/Meenakshi_Temple",
+          "tier": 2
+        }
+      ]
     },
     {
       "id": "padmanabhaswamy",
@@ -905,12 +1402,20 @@
       "deity": "Vishnu (Anantha-shayana / Padmanabha)",
       "region": "South India",
       "state": "Kerala",
-      "lat": 8.4828, "lng": 76.9436,
+      "lat": 8.4828,
+      "lng": 76.9436,
       "builder": "Ancient; rebuilt in stone by the Travancore royal house (Marthanda Varma, 18th c.)",
-      "built_from": 1050, "built_to": 1750,
+      "built_from": 1050,
+      "built_to": 1750,
       "status": "active",
       "lifespan_note": "A Kerala–Tamil fusion temple famed for its recovered hidden treasure vaults (once the richest temple in India). Still the deity of the erstwhile Travancore royal family; administered under Supreme Court oversight.",
-      "source": [ { "label": "Wikipedia — Padmanabhaswamy Temple", "url": "https://en.wikipedia.org/wiki/Padmanabhaswamy_Temple", "tier": 2 } ]
+      "source": [
+        {
+          "label": "Wikipedia — Padmanabhaswamy Temple",
+          "url": "https://en.wikipedia.org/wiki/Padmanabhaswamy_Temple",
+          "tier": 2
+        }
+      ]
     },
     {
       "id": "jagannath-puri",
@@ -919,12 +1424,23 @@
       "deity": "Jagannath (Vishnu/Krishna), Balabhadra & Subhadra",
       "region": "East India",
       "state": "Odisha",
-      "lat": 19.8048, "lng": 85.8180,
+      "lat": 19.8048,
+      "lng": 85.818,
       "builder": "Anantavarman Chodaganga Deva, Eastern Ganga dynasty (completed by Anangabhima Deva III, 1230)",
-      "built_from": 1112, "built_to": 1230,
+      "built_from": 1112,
+      "built_to": 1230,
       "status": "active",
       "lifespan_note": "A 65 m Kalinga-style temple and one of the Char Dham. Home of the annual Rath Yatra, when the deities are drawn through Puri on giant chariots. Continuously in worship for ~800 years.",
-      "source": [ { "label": "ASI; Wikipedia — Jagannath Temple, Puri", "url": "https://en.wikipedia.org/wiki/Jagannath_Temple,_Puri", "tier": 2 } ]
+      "source": [
+        {
+          "label": "ASI; Wikipedia — Jagannath Temple, Puri",
+          "url": "https://en.wikipedia.org/wiki/Jagannath_Temple,_Puri",
+          "tier": 2
+        }
+      ],
+      "series": [
+        "char_dham"
+      ]
     },
     {
       "id": "vaishno-devi",
@@ -933,12 +1449,20 @@
       "deity": "Vaishno Devi (Shakti — three natural rock Pindies)",
       "region": "North India",
       "state": "Jammu & Kashmir",
-      "lat": 33.0299, "lng": 74.9482,
+      "lat": 33.0299,
+      "lng": 74.9482,
       "builder": "Natural cave shrine — no single builder; venerated ~700+ years",
-      "built_from": 1300, "built_to": 1300,
+      "built_from": 1300,
+      "built_to": 1300,
       "status": "active",
       "lifespan_note": "A cave shrine at ~1,585 m in the Trikuta hills where the goddess is worshipped as three natural rock formations. One of the most-visited pilgrimage sites in India (millions of yatris a year).",
-      "source": [ { "label": "Shri Mata Vaishno Devi Shrine Board; Wikipedia", "url": "https://en.wikipedia.org/wiki/Vaishno_Devi_Temple", "tier": 2 } ]
+      "source": [
+        {
+          "label": "Shri Mata Vaishno Devi Shrine Board; Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Vaishno_Devi_Temple",
+          "tier": 2
+        }
+      ]
     },
     {
       "id": "ram-mandir-ayodhya",
@@ -947,12 +1471,20 @@
       "deity": "Rama (Ram Lalla)",
       "region": "North India",
       "state": "Uttar Pradesh",
-      "lat": 26.7956, "lng": 82.1943,
+      "lat": 26.7956,
+      "lng": 82.1943,
       "builder": "Shri Ram Janmabhoomi Teerth Kshetra Trust; designed by the Sompura family (Maru-Gurjara style)",
-      "built_from": 2020, "built_to": 2024,
+      "built_from": 2020,
+      "built_to": 2024,
       "status": "active",
       "lifespan_note": "Built on the disputed Ram Janmabhoomi site (where the Babri Masjid stood until its 1992 demolition; the 2019 Supreme Court verdict awarded the site for a temple). Consecrated (prana pratishtha) on 22 January 2024. The newest of India's major living temples.",
-      "source": [ { "label": "Britannica — Ram Mandir, Ayodhya; Supreme Court of India 2019 verdict", "url": "https://www.britannica.com/topic/Ram-Mandir-Ayodhya", "tier": 2 } ]
+      "source": [
+        {
+          "label": "Britannica — Ram Mandir, Ayodhya; Supreme Court of India 2019 verdict",
+          "url": "https://www.britannica.com/topic/Ram-Mandir-Ayodhya",
+          "tier": 2
+        }
+      ]
     },
     {
       "id": "akshardham-delhi",
@@ -961,12 +1493,20 @@
       "deity": "Swaminarayan (BAPS)",
       "region": "North India",
       "state": "Delhi",
-      "lat": 28.6125, "lng": 77.2772,
+      "lat": 28.6125,
+      "lng": 77.2772,
       "builder": "BAPS Swaminarayan Sanstha (Pramukh Swami Maharaj)",
-      "built_from": 2000, "built_to": 2005,
+      "built_from": 2000,
+      "built_to": 2005,
       "status": "active",
       "lifespan_note": "A 100-acre complex opened 6 Nov 2005; a Guinness record holder as the world's largest comprehensive Hindu temple. Modern, but built entirely in traditional carved stone (no structural steel) — a living statement that temple-building continues.",
-      "source": [ { "label": "Wikipedia — Swaminarayan Akshardham (Delhi)", "url": "https://en.wikipedia.org/wiki/Swaminarayan_Akshardham_(Delhi)", "tier": 2 } ]
+      "source": [
+        {
+          "label": "Wikipedia — Swaminarayan Akshardham (Delhi)",
+          "url": "https://en.wikipedia.org/wiki/Swaminarayan_Akshardham_(Delhi)",
+          "tier": 2
+        }
+      ]
     },
     {
       "id": "golden-temple",
@@ -975,12 +1515,20 @@
       "deity": "Sikhism — Guru Granth Sahib enshrined",
       "region": "North India",
       "state": "Punjab",
-      "lat": 31.6200, "lng": 74.8764,
+      "lat": 31.62,
+      "lng": 74.8764,
       "builder": "Founded by Guru Ram Das; completed by Guru Arjan (Adi Granth installed 1604)",
-      "built_from": 1581, "built_to": 1604,
+      "built_from": 1581,
+      "built_to": 1604,
       "status": "active",
       "lifespan_note": "The holiest shrine of Sikhism, on a sacred sarovar, later gold-plated under Maharaja Ranjit Singh. Included to represent Sikhism, a Dharmic tradition born in the subcontinent. A living centre serving one of the world's largest free community kitchens (langar).",
-      "source": [ { "label": "Britannica — Golden Temple (Harmandir Sahib)", "url": "https://www.britannica.com/topic/Golden-Temple", "tier": 2 } ]
+      "source": [
+        {
+          "label": "Britannica — Golden Temple (Harmandir Sahib)",
+          "url": "https://www.britannica.com/topic/Golden-Temple",
+          "tier": 2
+        }
+      ]
     },
     {
       "id": "ranakpur",
@@ -989,12 +1537,20 @@
       "deity": "Rishabhanatha (1st Tirthankara)",
       "region": "West India",
       "state": "Rajasthan",
-      "lat": 25.1157, "lng": 73.4728,
+      "lat": 25.1157,
+      "lng": 73.4728,
       "builder": "Dharna Shah (Jain merchant), under Rana Kumbha of Mewar",
-      "built_from": 1437, "built_to": 1458,
+      "built_from": 1437,
+      "built_to": 1458,
       "status": "active",
       "lifespan_note": "A 15th-century marble marvel of 1,444 uniquely carved pillars, no two alike. A living Śvetāmbara Jain temple between Udaipur and Jodhpur.",
-      "source": [ { "label": "ASI; Wikipedia — Ranakpur Jain temple", "url": "https://en.wikipedia.org/wiki/Ranakpur_Jain_temple", "tier": 2 } ]
+      "source": [
+        {
+          "label": "ASI; Wikipedia — Ranakpur Jain temple",
+          "url": "https://en.wikipedia.org/wiki/Ranakpur_Jain_temple",
+          "tier": 2
+        }
+      ]
     },
     {
       "id": "kedarnath",
@@ -1003,12 +1559,225 @@
       "deity": "Shiva (Jyotirlinga)",
       "region": "North India",
       "state": "Uttarakhand",
-      "lat": 30.7352, "lng": 79.0669,
+      "lat": 30.7352,
+      "lng": 79.0669,
       "builder": "Ancient; associated by tradition with the Pandavas and Adi Shankaracharya (8th c.)",
-      "built_from": 700, "built_to": 800,
+      "built_from": 700,
+      "built_to": 800,
       "status": "active",
       "lifespan_note": "A stone Shiva temple at ~3,580 m in the Himalaya, one of the twelve Jyotirlingas and part of the Chota Char Dham. Survived the catastrophic 2013 Uttarakhand floods that killed thousands around it. Open only in the pilgrimage season.",
-      "source": [ { "label": "Wikipedia — Kedarnath Temple", "url": "https://en.wikipedia.org/wiki/Kedarnath_Temple", "tier": 2 } ]
+      "source": [
+        {
+          "label": "Wikipedia — Kedarnath Temple",
+          "url": "https://en.wikipedia.org/wiki/Kedarnath_Temple",
+          "tier": 2
+        }
+      ],
+      "series": [
+        "jyotirlinga",
+        "chota_char_dham"
+      ]
+    },
+    {
+      "id": "mallikarjuna",
+      "name": "Mallikarjuna Jyotirlinga, Srisailam",
+      "tradition": "sanatan",
+      "deity": "Shiva (Mallikarjuna) & Bhramaramba (Shakti)",
+      "region": "South India",
+      "state": "Andhra Pradesh",
+      "lat": 16.0742, "lng": 78.8681,
+      "builder": "Ancient; expanded by the Reddi & Vijayanagara kings (Harihara, Krishnadevaraya)",
+      "built_from": 600, "built_to": 1500,
+      "status": "active",
+      "lifespan_note": "On the Nallamala hills above the Krishna river — uniquely both a Jyotirlinga (Shiva) and a Shakti Peetha (Bhramaramba). A living pilgrimage temple.",
+      "series": ["jyotirlinga"],
+      "source": [ { "label": "Wikipedia — Mallikarjuna Temple, Srisailam", "url": "https://en.wikipedia.org/wiki/Mallikarjuna_Temple,_Srisailam", "tier": 2 } ]
+    },
+    {
+      "id": "mahakaleshwar",
+      "name": "Mahakaleshwar Jyotirlinga, Ujjain",
+      "tradition": "sanatan",
+      "deity": "Shiva (Mahakala)",
+      "region": "Central India",
+      "state": "Madhya Pradesh",
+      "lat": 23.1828, "lng": 75.7683,
+      "builder": "Ancient; rebuilt by the Maratha commander Ranoji Shinde (18th c.) after Sultanate-era damage",
+      "built_from": 600, "built_to": 1750,
+      "status": "active",
+      "lifespan_note": "On the Shipra at Ujjain, the only south-facing (dakshinamukhi) Jyotirlinga, famed for the daily Bhasma Aarti. Damaged under Iltutmish (1235) and later rebuilt by the Marathas. A major living temple.",
+      "series": ["jyotirlinga"],
+      "destruction": {
+        "primary": { "year": 1235, "actor": "Iltutmish (Delhi Sultanate)", "actor_role": "Delhi Sultanate", "account": "The temple was plundered and damaged during Iltutmish's raid on Ujjain in 1234-35; rebuilt centuries later by the Marathas.", "atrocity_link": "Timur" }
+      },
+      "source": [ { "label": "Wikipedia — Mahakaleshwar Jyotirlinga", "url": "https://en.wikipedia.org/wiki/Mahakaleshwar_Jyotirlinga", "tier": 2 } ]
+    },
+    {
+      "id": "omkareshwar",
+      "name": "Omkareshwar Jyotirlinga, Mandhata",
+      "tradition": "sanatan",
+      "deity": "Shiva (Omkareshwar)",
+      "region": "Central India",
+      "state": "Madhya Pradesh",
+      "lat": 22.2450, "lng": 76.1517,
+      "builder": "Paramara-era and later; on a sacred Om-shaped river island",
+      "built_from": 1000, "built_to": 1200,
+      "status": "active",
+      "lifespan_note": "On Mandhata island in the Narmada, shaped like the syllable 'Om'. A living Jyotirlinga pilgrimage site.",
+      "series": ["jyotirlinga"],
+      "source": [ { "label": "Wikipedia — Omkareshwar / Mandhata", "url": "https://en.wikipedia.org/wiki/Mandhata", "tier": 2 } ]
+    },
+    {
+      "id": "bhimashankar",
+      "name": "Bhimashankar Jyotirlinga",
+      "tradition": "sanatan",
+      "deity": "Shiva (Bhimashankar)",
+      "region": "Deccan",
+      "state": "Maharashtra",
+      "lat": 19.0720, "lng": 73.5360,
+      "builder": "Nagara-style temple; developed under the Marathas (Nana Phadnavis funded the shikhara)",
+      "built_from": 1200, "built_to": 1800,
+      "status": "active",
+      "lifespan_note": "In the Sahyadri hills near Pune, the source of the Bhima river. A living Jyotirlinga (note: an Odisha site also claims the Jyotirlinga; the Maharashtra one is the widely-accepted seat).",
+      "series": ["jyotirlinga"],
+      "source": [ { "label": "Wikipedia — Bhimashankar", "url": "https://en.wikipedia.org/wiki/Bhimashankar_Jyotirlinga_(Dakinyam),_Bhimpur", "tier": 3 } ]
+    },
+    {
+      "id": "trimbakeshwar",
+      "name": "Trimbakeshwar Jyotirlinga, Nashik",
+      "tradition": "sanatan",
+      "deity": "Shiva (Tryambaka — Brahma-Vishnu-Shiva)",
+      "region": "Deccan",
+      "state": "Maharashtra",
+      "lat": 19.9322, "lng": 73.5308,
+      "builder": "Rebuilt by Peshwa Balaji Bajirao (Nanasaheb), 18th c.",
+      "built_from": 1755, "built_to": 1786,
+      "status": "active",
+      "lifespan_note": "At the source of the Godavari near Nashik; its linga uniquely shows three faces (Brahma, Vishnu, Shiva). Present temple built by the Peshwas. A living Jyotirlinga.",
+      "series": ["jyotirlinga"],
+      "source": [ { "label": "Wikipedia — Trimbakeshwar Temple", "url": "https://en.wikipedia.org/wiki/Trimbakeshwar_Temple", "tier": 2 } ]
+    },
+    {
+      "id": "baidyanath",
+      "name": "Baidyanath Jyotirlinga, Deoghar",
+      "tradition": "sanatan",
+      "deity": "Shiva (Baidyanath / Vaidyanath)",
+      "region": "East India",
+      "state": "Jharkhand",
+      "lat": 24.4925, "lng": 86.7000,
+      "builder": "Ancient temple complex (Baba Baidyanath Dham)",
+      "built_from": 1000, "built_to": 1500,
+      "status": "active",
+      "lifespan_note": "The 'Baba Dham' at Deoghar, one of the twelve Jyotirlingas and a hugely popular Shravan-month pilgrimage (kanwar yatra) destination.",
+      "series": ["jyotirlinga"],
+      "source": [ { "label": "Wikipedia — Baidyanath Temple", "url": "https://en.wikipedia.org/wiki/Baidyanath_Temple", "tier": 2 } ]
+    },
+    {
+      "id": "nageshwar",
+      "name": "Nageshwar Jyotirlinga, Dwarka",
+      "tradition": "sanatan",
+      "deity": "Shiva (Nageshwar)",
+      "region": "West India",
+      "state": "Gujarat",
+      "lat": 22.3359, "lng": 69.0869,
+      "builder": "Ancient; present temple modern",
+      "built_from": 1000, "built_to": 1996,
+      "status": "active",
+      "lifespan_note": "Near Dwarka on the Saurashtra coast, marked by a colossal seated Shiva statue. A living Jyotirlinga.",
+      "series": ["jyotirlinga"],
+      "source": [ { "label": "Wikipedia — Nageshwar Jyotirlinga", "url": "https://en.wikipedia.org/wiki/Nageshwar_Jyotirlinga", "tier": 2 } ]
+    },
+    {
+      "id": "rameshwaram",
+      "name": "Ramanathaswamy Temple, Rameswaram",
+      "tradition": "sanatan",
+      "deity": "Shiva (Ramanatha)",
+      "region": "South India",
+      "state": "Tamil Nadu",
+      "lat": 9.2881, "lng": 79.3173,
+      "builder": "Pandya & later Nayaka / Sethupathi rulers",
+      "built_from": 1200, "built_to": 1700,
+      "status": "active",
+      "lifespan_note": "On Rameswaram island, where Rama is said to have worshipped Shiva — BOTH one of the twelve Jyotirlingas AND one of the four Char Dham. Famed for the longest temple corridor in India.",
+      "series": ["jyotirlinga", "char_dham"],
+      "source": [ { "label": "Wikipedia — Ramanathaswamy Temple", "url": "https://en.wikipedia.org/wiki/Ramanathaswamy_Temple", "tier": 2 } ]
+    },
+    {
+      "id": "grishneshwar",
+      "name": "Grishneshwar Jyotirlinga, Verul",
+      "tradition": "sanatan",
+      "deity": "Shiva (Grishneshwar)",
+      "region": "Deccan",
+      "state": "Maharashtra",
+      "lat": 20.0250, "lng": 75.1699,
+      "builder": "Rebuilt by Ahilyabai Holkar (18th c.); near Ellora",
+      "built_from": 1700, "built_to": 1730,
+      "status": "active",
+      "lifespan_note": "The twelfth and last of the Jyotirlingas, beside the Ellora caves; rebuilt by the Maratha queen Ahilyabai Holkar after earlier destruction. A living temple.",
+      "series": ["jyotirlinga"],
+      "destruction": {
+        "primary": { "year": 1300, "actor": "Delhi Sultanate-era raids (attributed)", "actor_role": "Sultanate", "account": "Damaged in the medieval Deccan campaigns and later rebuilt (finally by Ahilyabai Holkar).", "needs_source": true }
+      },
+      "source": [ { "label": "Wikipedia — Grishneshwar Temple", "url": "https://en.wikipedia.org/wiki/Grishneshwar_Temple", "tier": 2 } ]
+    },
+    {
+      "id": "badrinath",
+      "name": "Badrinath Temple",
+      "tradition": "sanatan",
+      "deity": "Vishnu (Badrinarayana)",
+      "region": "North India",
+      "state": "Uttarakhand",
+      "lat": 30.7447, "lng": 79.4912,
+      "builder": "Ancient; re-established by Adi Shankaracharya (8th c.)",
+      "built_from": 800, "built_to": 800,
+      "status": "active",
+      "lifespan_note": "A Vishnu temple at ~3,100 m in the Garhwal Himalaya — BOTH one of the four Char Dham AND part of the Chota Char Dham. Re-established by Adi Shankaracharya; open only in season.",
+      "series": ["char_dham", "chota_char_dham"],
+      "source": [ { "label": "Wikipedia — Badrinath Temple", "url": "https://en.wikipedia.org/wiki/Badrinath_Temple", "tier": 2 } ]
+    },
+    {
+      "id": "dwarkadhish",
+      "name": "Dwarkadhish Temple (Jagat Mandir), Dwarka",
+      "tradition": "sanatan",
+      "deity": "Krishna (Dwarkadhish)",
+      "region": "West India",
+      "state": "Gujarat",
+      "lat": 22.2379, "lng": 68.9676,
+      "builder": "Attributed to Vajranabha (Krishna's descendant); present temple ~16th c. on older foundations",
+      "built_from": 400, "built_to": 1500,
+      "status": "active",
+      "lifespan_note": "Krishna's legendary city of Dwarka on the Gujarat coast — one of the four Char Dham. The 5-storey Jagat Mandir flies the world's largest temple flag, changed several times daily.",
+      "series": ["char_dham"],
+      "source": [ { "label": "Wikipedia — Dwarkadhish Temple", "url": "https://en.wikipedia.org/wiki/Dwarkadhish_Temple", "tier": 2 } ]
+    },
+    {
+      "id": "yamunotri",
+      "name": "Yamunotri Temple",
+      "tradition": "sanatan",
+      "deity": "Yamuna (river goddess)",
+      "region": "North India",
+      "state": "Uttarakhand",
+      "lat": 31.0100, "lng": 78.4500,
+      "builder": "Built by Maharani Gularia of Jaipur (19th c.); rebuilt after damage",
+      "built_from": 1839, "built_to": 1919,
+      "status": "active",
+      "lifespan_note": "The seat of the goddess Yamuna near the river's source at ~3,290 m — the first stop of the Chota Char Dham. Repeatedly damaged by Himalayan weather and rebuilt.",
+      "series": ["chota_char_dham"],
+      "source": [ { "label": "Wikipedia — Yamunotri", "url": "https://en.wikipedia.org/wiki/Yamunotri", "tier": 2 } ]
+    },
+    {
+      "id": "gangotri",
+      "name": "Gangotri Temple",
+      "tradition": "sanatan",
+      "deity": "Ganga (river goddess)",
+      "region": "North India",
+      "state": "Uttarakhand",
+      "lat": 30.9940, "lng": 78.9410,
+      "builder": "Built by the Gorkha general Amar Singh Thapa (18th c.)",
+      "built_from": 1780, "built_to": 1810,
+      "status": "active",
+      "lifespan_note": "The seat of the goddess Ganga near her source at ~3,415 m, in the Greater Himalaya — part of the Chota Char Dham. Open only in the pilgrimage season.",
+      "series": ["chota_char_dham"],
+      "source": [ { "label": "Wikipedia — Gangotri", "url": "https://en.wikipedia.org/wiki/Gangotri", "tier": 2 } ]
     },
     {
       "id": "indus-great-bath",
@@ -1018,13 +1787,19 @@
       "region": "Indus Valley",
       "historical_region": "Indus (Harappan) Civilisation, undivided India / Bharat",
       "state": "undivided India (present-day Pakistan, Sindh)",
-      "lat": 27.329, "lng": 68.139,
+      "lat": 27.329,
+      "lng": 68.139,
       "builder": "Indus (Harappan) Civilisation — no named ruler; the script is undeciphered",
-      "built_from": -2500, "built_to": -1900,
+      "built_from": -2500,
+      "built_to": -1900,
       "status": "ruin",
       "lifespan_note": "The 'earliest public water tank of the ancient world' (c. 2500 BCE), 12×7 m and 2.4 m deep, watertight with bitumen — widely read as a ritual bathing structure, a possible root of later Dharmic purification practice. Mohenjo-daro (pop. ~40,000) was abandoned c. 1700 BCE. NOTE: attributing a religion to the Indus Valley is speculative — the script is undeciphered and there are no confirmed temples; this is included as a proto-historic SACRED/ritual site, honestly labelled.",
       "source": [
-        { "label": "UNESCO — Archaeological Ruins at Moenjodaro; Britannica — Great Bath", "url": "https://whc.unesco.org/en/list/138/", "tier": 1 }
+        {
+          "label": "UNESCO — Archaeological Ruins at Moenjodaro; Britannica — Great Bath",
+          "url": "https://whc.unesco.org/en/list/138/",
+          "tier": 1
+        }
       ]
     },
     {
@@ -1034,13 +1809,19 @@
       "deity": "Unknown — fire-ritual platforms",
       "region": "Indus Valley",
       "state": "Rajasthan",
-      "lat": 29.474, "lng": 74.130,
+      "lat": 29.474,
+      "lng": 74.13,
       "builder": "Indus (Harappan) Civilisation",
-      "built_from": -2800, "built_to": -1900,
+      "built_from": -2800,
+      "built_to": -1900,
       "status": "ruin",
       "lifespan_note": "On the dried Ghaggar-Hakra (identified by some with the Vedic Sarasvati), Kalibangan yielded rows of mud-brick 'fire altars' — among the few Harappan sites with them — argued to preforeshadow Vedic fire (yajna) ritual, and the earliest known ploughed field (c. 2800 BCE). The fire-altar interpretation is debated. ASI-excavated (B. B. Lal / B. K. Thapar).",
       "source": [
-        { "label": "ASI (B. B. Lal); Wikipedia — Kalibangan", "url": "https://en.wikipedia.org/wiki/Kalibangan", "tier": 2 }
+        {
+          "label": "ASI (B. B. Lal); Wikipedia — Kalibangan",
+          "url": "https://en.wikipedia.org/wiki/Kalibangan",
+          "tier": 2
+        }
       ]
     },
     {
@@ -1050,13 +1831,19 @@
       "deity": "Unknown — urban ceremonial ground & reservoirs",
       "region": "Indus Valley",
       "state": "Gujarat",
-      "lat": 23.883, "lng": 70.216,
+      "lat": 23.883,
+      "lng": 70.216,
       "builder": "Indus (Harappan) Civilisation",
-      "built_from": -3000, "built_to": -1500,
+      "built_from": -3000,
+      "built_to": -1500,
       "status": "ruin",
       "lifespan_note": "A great Harappan city in the Rann of Kutch, famed for its cascade of stone reservoirs, a large ceremonial ground, and the still-undeciphered 'Dholavira signboard'. UNESCO World Heritage (2021). Included as a proto-historic site whose religion is unknown, not as a temple.",
       "source": [
-        { "label": "ASI; UNESCO — Dholavira: a Harappan City", "url": "https://whc.unesco.org/en/list/1645/", "tier": 1 }
+        {
+          "label": "ASI; UNESCO — Dholavira: a Harappan City",
+          "url": "https://whc.unesco.org/en/list/1645/",
+          "tier": 1
+        }
       ]
     },
     {
@@ -1066,13 +1853,19 @@
       "deity": "Unknown — ritual/burial evidence",
       "region": "Indus Valley",
       "state": "Haryana",
-      "lat": 29.293, "lng": 76.114,
+      "lat": 29.293,
+      "lng": 76.114,
       "builder": "Indus (Harappan) Civilisation",
-      "built_from": -3000, "built_to": -1500,
+      "built_from": -3000,
+      "built_to": -1500,
       "status": "ruin",
       "lifespan_note": "The largest Harappan settlement in the Indian subcontinent, on the Ghaggar-Hakra plain. Ancient-DNA work here (2019) informs the debate on the population ancestry of South Asia — relevant to the DNA/population-shift layer on the wishlist. ASI-documented since the 1960s; museum under construction.",
       "source": [
-        { "label": "ASI; Rakhigarhi ancient-DNA study (Shinde et al., 2019); Wikipedia", "url": "https://en.wikipedia.org/wiki/Rakhigarhi", "tier": 2 }
+        {
+          "label": "ASI; Rakhigarhi ancient-DNA study (Shinde et al., 2019); Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Rakhigarhi",
+          "tier": 2
+        }
       ]
     },
     {
@@ -1081,13 +1874,19 @@
       "tradition": "pre_vedic_megalithic",
       "region": "Deccan",
       "state": "Karnataka",
-      "lat": 15.395, "lng": 76.209,
+      "lat": 15.395,
+      "lng": 76.209,
       "builder": "Iron Age / megalithic ('aboriginal') communities of the Deccan",
-      "built_from": -1200, "built_to": -200,
+      "built_from": -1200,
+      "built_to": -200,
       "status": "ruin",
       "lifespan_note": "One of India's largest prehistoric megalithic necropolises — hundreds of dolmens ('mora angadi') on a hill, pre-dating Vedic temple culture. On India's UNESCO tentative list. Represents the 'aboriginal' / pre-temple sacred landscape the user asked to include.",
       "source": [
-        { "label": "ASI; UNESCO tentative list — Hire Benakal", "url": "https://whc.unesco.org/en/tentativelists/5896/", "tier": 2 }
+        {
+          "label": "ASI; UNESCO tentative list — Hire Benakal",
+          "url": "https://whc.unesco.org/en/tentativelists/5896/",
+          "tier": 2
+        }
       ]
     },
     {
@@ -1096,31 +1895,42 @@
       "tradition": "pre_vedic_megalithic",
       "region": "Central India",
       "state": "Maharashtra",
-      "lat": 21.198, "lng": 78.985,
+      "lat": 21.198,
+      "lng": 78.985,
       "builder": "Iron Age megalithic communities (Vidarbha)",
-      "built_from": -1000, "built_to": -300,
+      "built_from": -1000,
+      "built_to": -300,
       "status": "ruin",
       "lifespan_note": "Stone circles near Nagpur with enigmatic cup-marks, some argued to have astronomical alignments — among the pre-Vedic sacred/funerary sites of central India.",
       "source": [
-        { "label": "ASI — Junapani megaliths", "url": "https://en.wikipedia.org/wiki/Junapani", "tier": 3 }
+        {
+          "label": "ASI — Junapani megaliths",
+          "url": "https://en.wikipedia.org/wiki/Junapani",
+          "tier": 3
+        }
       ]
     },
-
     {
       "id": "contested-kailasa-machining",
       "name": "Kailasa Temple 'ancient machining' claim",
       "tradition": "contested",
       "region": "Deccan",
       "state": "Maharashtra",
-      "lat": 20.024, "lng": 75.179,
+      "lat": 20.024,
+      "lng": 75.179,
       "builder": "Claim popularised by Praveen Mohan (independent YouTuber)",
-      "built_from": 756, "built_to": 773,
+      "built_from": 756,
+      "built_to": 773,
       "status": "contested",
       "contested": true,
       "lifespan_note": "Praveen Mohan argues the smoothness of drill/tool marks at Kailasa implies lost high-powered machining technology and a far shorter build time.",
       "rebuttal": "Not accepted by academic archaeology. Mainstream consensus (ASI, art historians) attributes the temple to Rashtrakuta artisans using iron chisels, hammerstones and a planned top-down excavation over decades; experimental estimates show a few hundred labourers could complete it in years, and tool marks throughout are consistent with hand-carving. No physical or textual evidence of machinery exists.",
       "source": [
-        { "label": "Praveen Mohan (YouTube) — claim; Wikipedia & LiveHistoryIndia — mainstream rebuttal", "url": "https://en.wikipedia.org/wiki/Kailasa_Temple,_Ellora", "tier": 4 }
+        {
+          "label": "Praveen Mohan (YouTube) — claim; Wikipedia & LiveHistoryIndia — mainstream rebuttal",
+          "url": "https://en.wikipedia.org/wiki/Kailasa_Temple,_Ellora",
+          "tier": 4
+        }
       ]
     },
     {
@@ -1129,15 +1939,21 @@
       "tradition": "contested",
       "region": "South India",
       "state": "Tamil Nadu",
-      "lat": 9.183, "lng": 77.478,
+      "lat": 9.183,
+      "lng": 77.478,
       "builder": "Documented: Pandya dynasty rock-cut temple (~8th c.); claim popularised by Praveen Mohan",
-      "built_from": 700, "built_to": 800,
+      "built_from": 700,
+      "built_to": 800,
       "status": "contested",
       "contested": true,
       "lifespan_note": "A genuine Pandya-era monolithic rock-cut Shiva temple at Kalugumalai. Praveen Mohan and others describe it as a 'pyramid' with anomalous precision and speculate about advanced ancient technology.",
       "rebuttal": "The monument is a well-documented, unfinished 8th-c. Pandya rock-cut temple carved top-down (like Kailasa). The 'pyramid / lost technology' framing is not supported by archaeologists, who read it as an incomplete conventional temple.",
       "source": [
-        { "label": "ASI (Pandya rock-cut temple); Praveen Mohan (contested framing)", "url": "https://en.wikipedia.org/wiki/Vettuvan_Koil", "tier": 4 }
+        {
+          "label": "ASI (Pandya rock-cut temple); Praveen Mohan (contested framing)",
+          "url": "https://en.wikipedia.org/wiki/Vettuvan_Koil",
+          "tier": 4
+        }
       ]
     }
   ]
