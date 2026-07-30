@@ -216,6 +216,7 @@
         (d ? `<div class="destroy">🔥 Destroyed by <b>${esc(d.actor)}</b> (${esc(d.actor_role || "")}), ${yr(d.year)}.</div>` : "") +
         `<div class="links">` +
           `<a href="heritage-atlas.html#site-${esc(s.id)}">↗ full record on the map</a>` +
+          (s.cyark_url ? `<a href="${esc(s.cyark_url)}" target="_blank" rel="noopener" style="color:oklch(0.82 0.16 195)">✦ open the real CyArk LiDAR scan</a>` : "") +
           (s.source && s.source[0] && s.source[0].url ? `<a href="${esc(s.source[0].url)}" target="_blank" rel="noopener">↗ source</a>` : "") +
           (!s.model3d && !isGone(s) ? `<a href="https://sketchfab.com/search?q=${encodeURIComponent(s.name.split("(")[0].trim())}&type=models" target="_blank" rel="noopener">↗ browse all scans on Sketchfab</a>` : "") +
         `</div>` +
