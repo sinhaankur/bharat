@@ -73,7 +73,8 @@
       ],
       "series": [
         "jyotirlinga"
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "martand",
@@ -104,7 +105,8 @@
           "url": "https://en.wikipedia.org/wiki/Martand_Sun_Temple",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "avantipura",
@@ -135,7 +137,8 @@
           "url": "https://en.wikipedia.org/wiki/Avantipura",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "kashi-vishwanath",
@@ -169,7 +172,8 @@
       ],
       "series": [
         "jyotirlinga"
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "keshava-deva-mathura",
@@ -200,7 +204,8 @@
           "url": "https://en.wikipedia.org/wiki/Krishna_Janmasthan_Temple_Complex",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "nalanda",
@@ -231,7 +236,8 @@
           "url": "https://whc.unesco.org/en/list/1502/",
           "tier": 1
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "vikramashila",
@@ -260,7 +266,8 @@
           "url": "https://en.wikipedia.org/wiki/Vikramashila",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "hampi-vitthala",
@@ -291,7 +298,8 @@
           "url": "https://whc.unesco.org/en/list/241/",
           "tier": 1
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "kailasa-ellora",
@@ -313,7 +321,8 @@
           "url": "https://en.wikipedia.org/wiki/Kailasa_Temple,_Ellora",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "brihadeeswara",
@@ -335,7 +344,8 @@
           "url": "https://whc.unesco.org/en/list/250/",
           "tier": 1
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "konark",
@@ -357,7 +367,8 @@
           "url": "https://whc.unesco.org/en/list/246/",
           "tier": 1
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "khajuraho",
@@ -379,7 +390,8 @@
           "url": "https://whc.unesco.org/en/list/240/",
           "tier": 1
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "modhera",
@@ -410,7 +422,8 @@
           "url": "https://en.wikipedia.org/wiki/Modhera_Sun_Temple",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "dilwara",
@@ -432,7 +445,8 @@
           "url": "https://en.wikipedia.org/wiki/Dilwara_Temples",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "shravanabelagola",
@@ -454,7 +468,8 @@
           "url": "https://en.wikipedia.org/wiki/Shravanabelagola",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "sanchi",
@@ -475,7 +490,8 @@
           "url": "https://whc.unesco.org/en/list/524/",
           "tier": 1
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "mahabodhi",
@@ -496,7 +512,8 @@
           "url": "https://whc.unesco.org/en/list/1056/",
           "tier": 1
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "somapura",
@@ -518,7 +535,8 @@
           "url": "https://whc.unesco.org/en/list/322/",
           "tier": 1
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "bamiyan",
@@ -549,7 +567,8 @@
           "url": "https://whc.unesco.org/en/list/208/",
           "tier": 1
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "mes-aynak",
@@ -571,7 +590,8 @@
           "url": "https://en.wikipedia.org/wiki/Mes_Aynak",
           "tier": 3
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "taxila",
@@ -601,7 +621,8 @@
           "url": "https://whc.unesco.org/en/list/139/",
           "tier": 1
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "mahasthangarh",
@@ -624,7 +645,8 @@
           "url": "https://en.wikipedia.org/wiki/Sharada_Peeth",
           "tier": 3
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "shankaracharya",
@@ -646,7 +668,8 @@
           "url": "https://en.wikipedia.org/wiki/Shankaracharya_Temple",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "parihaspora",
@@ -689,7 +712,8 @@
           "url": "https://en.wikipedia.org/wiki/Parihaspora",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "harwan",
@@ -711,7 +735,8 @@
           "url": "https://www.livehistoryindia.com/story/monuments/the-harwan-monastery-a-relic-of-kashmirs-buddhist-past",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "naranag-wangath",
@@ -733,7 +758,8 @@
           "url": "https://en.wikipedia.org/wiki/Wangath_temple_complex",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "pandrethan",
@@ -755,7 +781,8 @@
           "url": "https://en.wikipedia.org/wiki/Pandrethan_Shiva_Temple",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "vijayeshvara-bijbehara",
@@ -786,7 +813,8 @@
           "url": "https://en.wikipedia.org/wiki/Bijbehara",
           "tier": 3
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "takht-i-bahi",
@@ -796,13 +824,22 @@
       "region": "Silk Route",
       "historical_region": "Gandhara, undivided India / Bharat",
       "state": "undivided India (present-day Pakistan, Mardan, KP)",
-      "lat": 34.3211, "lng": 71.9458,
+      "lat": 34.3211,
+      "lng": 71.9458,
       "builder": "Gandhara Buddhist community (Kushan era onward)",
-      "built_from": 46, "built_to": 700,
+      "built_from": 46,
+      "built_to": 700,
       "status": "ruin",
       "lifespan_note": "The most complete Buddhist monastery in Pakistan — a hilltop Gandhara complex that escaped invasions and survives largely intact. Founded 1st c. CE, abandoned 7th c. UNESCO World Heritage.",
       "series": [],
-      "source": [ { "label": "UNESCO — Buddhist Ruins of Takht-i-Bahi", "url": "https://whc.unesco.org/en/list/140/", "tier": 1 } ]
+      "source": [
+        {
+          "label": "UNESCO — Buddhist Ruins of Takht-i-Bahi",
+          "url": "https://whc.unesco.org/en/list/140/",
+          "tier": 1
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "kanishka-stupa",
@@ -812,13 +849,22 @@
       "region": "Silk Route",
       "historical_region": "Gandhara / Purushapura, undivided India / Bharat",
       "state": "undivided India (present-day Pakistan, Peshawar, KP)",
-      "lat": 33.9994, "lng": 71.5918,
+      "lat": 33.9994,
+      "lng": 71.5918,
       "builder": "Emperor Kanishka I, Kushan Empire",
-      "built_from": 127, "built_to": 150,
+      "built_from": 127,
+      "built_to": 150,
       "status": "ruin",
       "lifespan_note": "A monumental relic stupa raised by Kanishka at Purushapura (Peshawar) — among the tallest buildings of the ancient world, described by Chinese pilgrims. The Kanishka casket was found here in 1908–09. Now a mound (Shaji-ki-Dheri).",
       "series": [],
-      "source": [ { "label": "Wikipedia — Kanishka Stupa / Shaji-ki-Dheri", "url": "https://en.wikipedia.org/wiki/Kanishka_Stupa", "tier": 2 } ]
+      "source": [
+        {
+          "label": "Wikipedia — Kanishka Stupa / Shaji-ki-Dheri",
+          "url": "https://en.wikipedia.org/wiki/Kanishka_Stupa",
+          "tier": 2
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "tilla-jogian",
@@ -828,16 +874,30 @@
       "region": "North India",
       "historical_region": "Salt Range, undivided India / Bharat",
       "state": "undivided India (present-day Pakistan, Jhelum, Punjab)",
-      "lat": 32.8606, "lng": 73.4403,
+      "lat": 32.8606,
+      "lng": 73.4403,
       "builder": "Nath-yogi tradition, traced to Guru Gorakhnath (~2,000 yrs); temples rebuilt by Maharaja Ranjit Singh",
-      "built_from": -100, "built_to": 1830,
+      "built_from": -100,
+      "built_to": 1830,
       "status": "ruin",
       "lifespan_note": "The highest peak of the eastern Salt Range — a Hindu yogi (Nath) monastic complex ~2,000 years old, where Guru Nanak also meditated 40 days. Temples destroyed by Ahmad Shah Abdali's 18th-c. raids, rebuilt by Ranjit Singh, abandoned after 1947. A shared Hindu–Sikh–yogi sacred summit now at risk of vanishing.",
       "series": [],
       "destruction": {
-        "primary": { "year": 1748, "actor": "Ahmad Shah Abdali (Durrani raids)", "actor_role": "Durrani Empire", "account": "Temples on the hill were destroyed during the 18th-c. Afghan invasions; rebuilt by Maharaja Ranjit Singh, then abandoned at Partition." }
+        "primary": {
+          "year": 1748,
+          "actor": "Ahmad Shah Abdali (Durrani raids)",
+          "actor_role": "Durrani Empire",
+          "account": "Temples on the hill were destroyed during the 18th-c. Afghan invasions; rebuilt by Maharaja Ranjit Singh, then abandoned at Partition."
+        }
       },
-      "source": [ { "label": "Wikipedia — Tilla Jogian; DAWN", "url": "https://en.wikipedia.org/wiki/Tilla_Jogian", "tier": 2 } ]
+      "source": [
+        {
+          "label": "Wikipedia — Tilla Jogian; DAWN",
+          "url": "https://en.wikipedia.org/wiki/Tilla_Jogian",
+          "tier": 2
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "gor-khatri",
@@ -847,13 +907,22 @@
       "region": "Silk Route",
       "historical_region": "Purushapura / Gandhara, undivided India / Bharat",
       "state": "undivided India (present-day Pakistan, Peshawar, KP)",
-      "lat": 34.0086, "lng": 71.5817,
+      "lat": 34.0086,
+      "lng": 71.5817,
       "builder": "Layered: Buddhist monastery → Hindu (Gorakhnath) temple → Mughal caravanserai",
-      "built_from": -200, "built_to": 1851,
+      "built_from": -200,
+      "built_to": 1851,
       "status": "partially_ruined",
       "lifespan_note": "A single hill where 13 civilisations left their mark — believed to have once housed the Buddha's begging bowl, later a Gorakhnath temple, then Jahan Ara Begum's Mughal caravanserai. The living proof that these sacred grounds were shared and re-layered across faiths, not owned by one.",
       "series": [],
-      "source": [ { "label": "Britannica — Gor Khatri; Wikipedia — Goraknath Temple, Peshawar", "url": "https://en.wikipedia.org/wiki/Gor_Khatri", "tier": 2 } ]
+      "source": [
+        {
+          "label": "Britannica — Gor Khatri; Wikipedia — Goraknath Temple, Peshawar",
+          "url": "https://en.wikipedia.org/wiki/Gor_Khatri",
+          "tier": 2
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "hadda",
@@ -863,16 +932,30 @@
       "region": "Silk Route",
       "historical_region": "Gandhara (Nagarahara), ancient Indic Buddhist sphere",
       "state": "present-day Afghanistan (Nangarhar)",
-      "lat": 34.3617, "lng": 70.4708,
+      "lat": 34.3617,
+      "lng": 70.4708,
       "builder": "Gandhara Buddhist community (Sarvastivadin monastery at Tapa Shotor)",
-      "built_from": -100, "built_to": 800,
+      "built_from": -100,
+      "built_to": 800,
       "status": "destroyed",
       "lifespan_note": "One of the great Buddhist monastic centres of Gandhara near Jalalabad — ~23,000 Greco-Buddhist sculptures were unearthed here, the finest fusion of Greek and Indian art. Almost entirely destroyed in the Afghan civil war. A staggering loss of shared Indo-Hellenic Buddhist heritage.",
       "series": [],
       "destruction": {
-        "primary": { "year": 1992, "actor": "Afghan civil-war fighting & looting", "actor_role": "Wartime destruction", "account": "The site and its sculptures were almost entirely destroyed during the civil war of the late 20th c." }
+        "primary": {
+          "year": 1992,
+          "actor": "Afghan civil-war fighting & looting",
+          "actor_role": "Wartime destruction",
+          "account": "The site and its sculptures were almost entirely destroyed during the civil war of the late 20th c."
+        }
       },
-      "source": [ { "label": "Wikipedia — Hadda / Tapa Shotor; French Afghanistan heritage archive", "url": "https://en.wikipedia.org/wiki/Hadda,_Afghanistan", "tier": 2 } ]
+      "source": [
+        {
+          "label": "Wikipedia — Hadda / Tapa Shotor; French Afghanistan heritage archive",
+          "url": "https://en.wikipedia.org/wiki/Hadda,_Afghanistan",
+          "tier": 2
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "jokhang",
@@ -895,7 +978,8 @@
           "url": "https://en.wikipedia.org/wiki/Jokhang",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "potala",
@@ -918,7 +1002,8 @@
           "url": "https://whc.unesco.org/en/list/707/",
           "tier": 1
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "white-horse-temple",
@@ -941,7 +1026,8 @@
           "url": "https://en.wikipedia.org/wiki/White_Horse_Temple",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "leshan-buddha",
@@ -964,7 +1050,8 @@
           "url": "https://whc.unesco.org/en/list/779/",
           "tier": 1
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "todaiji",
@@ -987,7 +1074,8 @@
           "url": "https://whc.unesco.org/en/list/870/",
           "tier": 1
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "horyuji",
@@ -1010,7 +1098,8 @@
           "url": "https://whc.unesco.org/en/list/660/",
           "tier": 1
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "sensoji",
@@ -1033,7 +1122,8 @@
           "url": "https://en.wikipedia.org/wiki/Sens%C5%8D-ji",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "angkor-wat",
@@ -1061,7 +1151,8 @@
           "url": "https://whc.unesco.org/en/list/668/",
           "tier": 1
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "prambanan",
@@ -1091,7 +1182,8 @@
           "url": "https://whc.unesco.org/en/list/642/",
           "tier": 1
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "borobudur",
@@ -1118,7 +1210,8 @@
           "url": "https://whc.unesco.org/en/list/592/",
           "tier": 1
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "my-son",
@@ -1149,7 +1242,8 @@
           "url": "https://whc.unesco.org/en/list/949/",
           "tier": 1
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "goa-temples",
@@ -1180,7 +1274,8 @@
           "url": "https://en.wikipedia.org/wiki/Goa_Inquisition",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "temple-endowment-control",
@@ -1211,7 +1306,8 @@
           "url": "https://en.wikipedia.org/wiki/Religious_Endowments_Act,_1863",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "rudra-mahalaya",
@@ -1250,7 +1346,8 @@
           "url": "https://en.wikipedia.org/wiki/Rudra_Mahalaya_Temple",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "bhojshala",
@@ -1281,7 +1378,8 @@
           "url": "https://en.wikipedia.org/wiki/Bhojshala",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "adina-pandua",
@@ -1311,7 +1409,8 @@
           "url": "https://en.wikipedia.org/wiki/Adina_Mosque",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "warangal-fort-temple",
@@ -1341,7 +1440,8 @@
           "url": "https://en.wikipedia.org/wiki/Warangal_Fort",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "quwwat-ul-islam-delhi",
@@ -1372,7 +1472,8 @@
           "url": "https://en.wikipedia.org/wiki/Quwwat-ul-Islam_Mosque",
           "tier": 1
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "kalika-mata-chittorgarh",
@@ -1403,7 +1504,8 @@
           "url": "https://en.wikipedia.org/wiki/Chittorgarh_Fort",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "martand-village-shrines",
@@ -1435,7 +1537,8 @@
           "url": "https://en.wikipedia.org/wiki/Sikandar_Shah_Miri",
           "tier": 3
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "tirupati",
@@ -1457,7 +1560,8 @@
           "url": "https://en.wikipedia.org/wiki/Venkateswara_Temple,_Tirumala",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "meenakshi",
@@ -1479,7 +1583,8 @@
           "url": "https://en.wikipedia.org/wiki/Meenakshi_Temple",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "padmanabhaswamy",
@@ -1501,7 +1606,8 @@
           "url": "https://en.wikipedia.org/wiki/Padmanabhaswamy_Temple",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "jagannath-puri",
@@ -1526,7 +1632,8 @@
       ],
       "series": [
         "char_dham"
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "vaishno-devi",
@@ -1548,7 +1655,8 @@
           "url": "https://en.wikipedia.org/wiki/Vaishno_Devi_Temple",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "ram-mandir-ayodhya",
@@ -1570,7 +1678,8 @@
           "url": "https://www.britannica.com/topic/Ram-Mandir-Ayodhya",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "akshardham-delhi",
@@ -1592,7 +1701,8 @@
           "url": "https://en.wikipedia.org/wiki/Swaminarayan_Akshardham_(Delhi)",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "golden-temple",
@@ -1614,7 +1724,8 @@
           "url": "https://www.britannica.com/topic/Golden-Temple",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "ranakpur",
@@ -1636,7 +1747,8 @@
           "url": "https://en.wikipedia.org/wiki/Ranakpur_Jain_temple",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "kedarnath",
@@ -1662,7 +1774,8 @@
       "series": [
         "jyotirlinga",
         "chota_char_dham"
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "mallikarjuna",
@@ -1671,13 +1784,24 @@
       "deity": "Shiva (Mallikarjuna) & Bhramaramba (Shakti)",
       "region": "South India",
       "state": "Andhra Pradesh",
-      "lat": 16.0742, "lng": 78.8681,
+      "lat": 16.0742,
+      "lng": 78.8681,
       "builder": "Ancient; expanded by the Reddi & Vijayanagara kings (Harihara, Krishnadevaraya)",
-      "built_from": 600, "built_to": 1500,
+      "built_from": 600,
+      "built_to": 1500,
       "status": "active",
       "lifespan_note": "On the Nallamala hills above the Krishna river — uniquely both a Jyotirlinga (Shiva) and a Shakti Peetha (Bhramaramba). A living pilgrimage temple.",
-      "series": ["jyotirlinga"],
-      "source": [ { "label": "Wikipedia — Mallikarjuna Temple, Srisailam", "url": "https://en.wikipedia.org/wiki/Mallikarjuna_Temple,_Srisailam", "tier": 2 } ]
+      "series": [
+        "jyotirlinga"
+      ],
+      "source": [
+        {
+          "label": "Wikipedia — Mallikarjuna Temple, Srisailam",
+          "url": "https://en.wikipedia.org/wiki/Mallikarjuna_Temple,_Srisailam",
+          "tier": 2
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "mahakaleshwar",
@@ -1686,16 +1810,33 @@
       "deity": "Shiva (Mahakala)",
       "region": "Central India",
       "state": "Madhya Pradesh",
-      "lat": 23.1828, "lng": 75.7683,
+      "lat": 23.1828,
+      "lng": 75.7683,
       "builder": "Ancient; rebuilt by the Maratha commander Ranoji Shinde (18th c.) after Sultanate-era damage",
-      "built_from": 600, "built_to": 1750,
+      "built_from": 600,
+      "built_to": 1750,
       "status": "active",
       "lifespan_note": "On the Shipra at Ujjain, the only south-facing (dakshinamukhi) Jyotirlinga, famed for the daily Bhasma Aarti. Damaged under Iltutmish (1235) and later rebuilt by the Marathas. A major living temple.",
-      "series": ["jyotirlinga"],
+      "series": [
+        "jyotirlinga"
+      ],
       "destruction": {
-        "primary": { "year": 1235, "actor": "Iltutmish (Delhi Sultanate)", "actor_role": "Delhi Sultanate", "account": "The temple was plundered and damaged during Iltutmish's raid on Ujjain in 1234-35; rebuilt centuries later by the Marathas.", "atrocity_link": "Timur" }
+        "primary": {
+          "year": 1235,
+          "actor": "Iltutmish (Delhi Sultanate)",
+          "actor_role": "Delhi Sultanate",
+          "account": "The temple was plundered and damaged during Iltutmish's raid on Ujjain in 1234-35; rebuilt centuries later by the Marathas.",
+          "atrocity_link": "Timur"
+        }
       },
-      "source": [ { "label": "Wikipedia — Mahakaleshwar Jyotirlinga", "url": "https://en.wikipedia.org/wiki/Mahakaleshwar_Jyotirlinga", "tier": 2 } ]
+      "source": [
+        {
+          "label": "Wikipedia — Mahakaleshwar Jyotirlinga",
+          "url": "https://en.wikipedia.org/wiki/Mahakaleshwar_Jyotirlinga",
+          "tier": 2
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "omkareshwar",
@@ -1704,13 +1845,24 @@
       "deity": "Shiva (Omkareshwar)",
       "region": "Central India",
       "state": "Madhya Pradesh",
-      "lat": 22.2450, "lng": 76.1517,
+      "lat": 22.245,
+      "lng": 76.1517,
       "builder": "Paramara-era and later; on a sacred Om-shaped river island",
-      "built_from": 1000, "built_to": 1200,
+      "built_from": 1000,
+      "built_to": 1200,
       "status": "active",
       "lifespan_note": "On Mandhata island in the Narmada, shaped like the syllable 'Om'. A living Jyotirlinga pilgrimage site.",
-      "series": ["jyotirlinga"],
-      "source": [ { "label": "Wikipedia — Omkareshwar / Mandhata", "url": "https://en.wikipedia.org/wiki/Mandhata", "tier": 2 } ]
+      "series": [
+        "jyotirlinga"
+      ],
+      "source": [
+        {
+          "label": "Wikipedia — Omkareshwar / Mandhata",
+          "url": "https://en.wikipedia.org/wiki/Mandhata",
+          "tier": 2
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "bhimashankar",
@@ -1719,13 +1871,24 @@
       "deity": "Shiva (Bhimashankar)",
       "region": "Deccan",
       "state": "Maharashtra",
-      "lat": 19.0720, "lng": 73.5360,
+      "lat": 19.072,
+      "lng": 73.536,
       "builder": "Nagara-style temple; developed under the Marathas (Nana Phadnavis funded the shikhara)",
-      "built_from": 1200, "built_to": 1800,
+      "built_from": 1200,
+      "built_to": 1800,
       "status": "active",
       "lifespan_note": "In the Sahyadri hills near Pune, the source of the Bhima river. A living Jyotirlinga (note: an Odisha site also claims the Jyotirlinga; the Maharashtra one is the widely-accepted seat).",
-      "series": ["jyotirlinga"],
-      "source": [ { "label": "Wikipedia — Bhimashankar", "url": "https://en.wikipedia.org/wiki/Bhimashankar_Jyotirlinga_(Dakinyam),_Bhimpur", "tier": 3 } ]
+      "series": [
+        "jyotirlinga"
+      ],
+      "source": [
+        {
+          "label": "Wikipedia — Bhimashankar",
+          "url": "https://en.wikipedia.org/wiki/Bhimashankar_Jyotirlinga_(Dakinyam),_Bhimpur",
+          "tier": 3
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "trimbakeshwar",
@@ -1734,13 +1897,24 @@
       "deity": "Shiva (Tryambaka — Brahma-Vishnu-Shiva)",
       "region": "Deccan",
       "state": "Maharashtra",
-      "lat": 19.9322, "lng": 73.5308,
+      "lat": 19.9322,
+      "lng": 73.5308,
       "builder": "Rebuilt by Peshwa Balaji Bajirao (Nanasaheb), 18th c.",
-      "built_from": 1755, "built_to": 1786,
+      "built_from": 1755,
+      "built_to": 1786,
       "status": "active",
       "lifespan_note": "At the source of the Godavari near Nashik; its linga uniquely shows three faces (Brahma, Vishnu, Shiva). Present temple built by the Peshwas. A living Jyotirlinga.",
-      "series": ["jyotirlinga"],
-      "source": [ { "label": "Wikipedia — Trimbakeshwar Temple", "url": "https://en.wikipedia.org/wiki/Trimbakeshwar_Temple", "tier": 2 } ]
+      "series": [
+        "jyotirlinga"
+      ],
+      "source": [
+        {
+          "label": "Wikipedia — Trimbakeshwar Temple",
+          "url": "https://en.wikipedia.org/wiki/Trimbakeshwar_Temple",
+          "tier": 2
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "baidyanath",
@@ -1749,13 +1923,24 @@
       "deity": "Shiva (Baidyanath / Vaidyanath)",
       "region": "East India",
       "state": "Jharkhand",
-      "lat": 24.4925, "lng": 86.7000,
+      "lat": 24.4925,
+      "lng": 86.7,
       "builder": "Ancient temple complex (Baba Baidyanath Dham)",
-      "built_from": 1000, "built_to": 1500,
+      "built_from": 1000,
+      "built_to": 1500,
       "status": "active",
       "lifespan_note": "The 'Baba Dham' at Deoghar, one of the twelve Jyotirlingas and a hugely popular Shravan-month pilgrimage (kanwar yatra) destination.",
-      "series": ["jyotirlinga"],
-      "source": [ { "label": "Wikipedia — Baidyanath Temple", "url": "https://en.wikipedia.org/wiki/Baidyanath_Temple", "tier": 2 } ]
+      "series": [
+        "jyotirlinga"
+      ],
+      "source": [
+        {
+          "label": "Wikipedia — Baidyanath Temple",
+          "url": "https://en.wikipedia.org/wiki/Baidyanath_Temple",
+          "tier": 2
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "nageshwar",
@@ -1764,13 +1949,24 @@
       "deity": "Shiva (Nageshwar)",
       "region": "West India",
       "state": "Gujarat",
-      "lat": 22.3359, "lng": 69.0869,
+      "lat": 22.3359,
+      "lng": 69.0869,
       "builder": "Ancient; present temple modern",
-      "built_from": 1000, "built_to": 1996,
+      "built_from": 1000,
+      "built_to": 1996,
       "status": "active",
       "lifespan_note": "Near Dwarka on the Saurashtra coast, marked by a colossal seated Shiva statue. A living Jyotirlinga.",
-      "series": ["jyotirlinga"],
-      "source": [ { "label": "Wikipedia — Nageshwar Jyotirlinga", "url": "https://en.wikipedia.org/wiki/Nageshwar_Jyotirlinga", "tier": 2 } ]
+      "series": [
+        "jyotirlinga"
+      ],
+      "source": [
+        {
+          "label": "Wikipedia — Nageshwar Jyotirlinga",
+          "url": "https://en.wikipedia.org/wiki/Nageshwar_Jyotirlinga",
+          "tier": 2
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "rameshwaram",
@@ -1779,13 +1975,25 @@
       "deity": "Shiva (Ramanatha)",
       "region": "South India",
       "state": "Tamil Nadu",
-      "lat": 9.2881, "lng": 79.3173,
+      "lat": 9.2881,
+      "lng": 79.3173,
       "builder": "Pandya & later Nayaka / Sethupathi rulers",
-      "built_from": 1200, "built_to": 1700,
+      "built_from": 1200,
+      "built_to": 1700,
       "status": "active",
       "lifespan_note": "On Rameswaram island, where Rama is said to have worshipped Shiva — BOTH one of the twelve Jyotirlingas AND one of the four Char Dham. Famed for the longest temple corridor in India.",
-      "series": ["jyotirlinga", "char_dham"],
-      "source": [ { "label": "Wikipedia — Ramanathaswamy Temple", "url": "https://en.wikipedia.org/wiki/Ramanathaswamy_Temple", "tier": 2 } ]
+      "series": [
+        "jyotirlinga",
+        "char_dham"
+      ],
+      "source": [
+        {
+          "label": "Wikipedia — Ramanathaswamy Temple",
+          "url": "https://en.wikipedia.org/wiki/Ramanathaswamy_Temple",
+          "tier": 2
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "grishneshwar",
@@ -1794,16 +2002,33 @@
       "deity": "Shiva (Grishneshwar)",
       "region": "Deccan",
       "state": "Maharashtra",
-      "lat": 20.0250, "lng": 75.1699,
+      "lat": 20.025,
+      "lng": 75.1699,
       "builder": "Rebuilt by Ahilyabai Holkar (18th c.); near Ellora",
-      "built_from": 1700, "built_to": 1730,
+      "built_from": 1700,
+      "built_to": 1730,
       "status": "active",
       "lifespan_note": "The twelfth and last of the Jyotirlingas, beside the Ellora caves; rebuilt by the Maratha queen Ahilyabai Holkar after earlier destruction. A living temple.",
-      "series": ["jyotirlinga"],
+      "series": [
+        "jyotirlinga"
+      ],
       "destruction": {
-        "primary": { "year": 1300, "actor": "Delhi Sultanate-era raids (attributed)", "actor_role": "Sultanate", "account": "Damaged in the medieval Deccan campaigns and later rebuilt (finally by Ahilyabai Holkar).", "needs_source": true }
+        "primary": {
+          "year": 1300,
+          "actor": "Delhi Sultanate-era raids (attributed)",
+          "actor_role": "Sultanate",
+          "account": "Damaged in the medieval Deccan campaigns and later rebuilt (finally by Ahilyabai Holkar).",
+          "needs_source": true
+        }
       },
-      "source": [ { "label": "Wikipedia — Grishneshwar Temple", "url": "https://en.wikipedia.org/wiki/Grishneshwar_Temple", "tier": 2 } ]
+      "source": [
+        {
+          "label": "Wikipedia — Grishneshwar Temple",
+          "url": "https://en.wikipedia.org/wiki/Grishneshwar_Temple",
+          "tier": 2
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "badrinath",
@@ -1812,13 +2037,25 @@
       "deity": "Vishnu (Badrinarayana)",
       "region": "North India",
       "state": "Uttarakhand",
-      "lat": 30.7447, "lng": 79.4912,
+      "lat": 30.7447,
+      "lng": 79.4912,
       "builder": "Ancient; re-established by Adi Shankaracharya (8th c.)",
-      "built_from": 800, "built_to": 800,
+      "built_from": 800,
+      "built_to": 800,
       "status": "active",
       "lifespan_note": "A Vishnu temple at ~3,100 m in the Garhwal Himalaya — BOTH one of the four Char Dham AND part of the Chota Char Dham. Re-established by Adi Shankaracharya; open only in season.",
-      "series": ["char_dham", "chota_char_dham"],
-      "source": [ { "label": "Wikipedia — Badrinath Temple", "url": "https://en.wikipedia.org/wiki/Badrinath_Temple", "tier": 2 } ]
+      "series": [
+        "char_dham",
+        "chota_char_dham"
+      ],
+      "source": [
+        {
+          "label": "Wikipedia — Badrinath Temple",
+          "url": "https://en.wikipedia.org/wiki/Badrinath_Temple",
+          "tier": 2
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "dwarkadhish",
@@ -1827,13 +2064,24 @@
       "deity": "Krishna (Dwarkadhish)",
       "region": "West India",
       "state": "Gujarat",
-      "lat": 22.2379, "lng": 68.9676,
+      "lat": 22.2379,
+      "lng": 68.9676,
       "builder": "Attributed to Vajranabha (Krishna's descendant); present temple ~16th c. on older foundations",
-      "built_from": 400, "built_to": 1500,
+      "built_from": 400,
+      "built_to": 1500,
       "status": "active",
       "lifespan_note": "Krishna's legendary city of Dwarka on the Gujarat coast — one of the four Char Dham. The 5-storey Jagat Mandir flies the world's largest temple flag, changed several times daily.",
-      "series": ["char_dham"],
-      "source": [ { "label": "Wikipedia — Dwarkadhish Temple", "url": "https://en.wikipedia.org/wiki/Dwarkadhish_Temple", "tier": 2 } ]
+      "series": [
+        "char_dham"
+      ],
+      "source": [
+        {
+          "label": "Wikipedia — Dwarkadhish Temple",
+          "url": "https://en.wikipedia.org/wiki/Dwarkadhish_Temple",
+          "tier": 2
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "yamunotri",
@@ -1842,13 +2090,24 @@
       "deity": "Yamuna (river goddess)",
       "region": "North India",
       "state": "Uttarakhand",
-      "lat": 31.0100, "lng": 78.4500,
+      "lat": 31.01,
+      "lng": 78.45,
       "builder": "Built by Maharani Gularia of Jaipur (19th c.); rebuilt after damage",
-      "built_from": 1839, "built_to": 1919,
+      "built_from": 1839,
+      "built_to": 1919,
       "status": "active",
       "lifespan_note": "The seat of the goddess Yamuna near the river's source at ~3,290 m — the first stop of the Chota Char Dham. Repeatedly damaged by Himalayan weather and rebuilt.",
-      "series": ["chota_char_dham"],
-      "source": [ { "label": "Wikipedia — Yamunotri", "url": "https://en.wikipedia.org/wiki/Yamunotri", "tier": 2 } ]
+      "series": [
+        "chota_char_dham"
+      ],
+      "source": [
+        {
+          "label": "Wikipedia — Yamunotri",
+          "url": "https://en.wikipedia.org/wiki/Yamunotri",
+          "tier": 2
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "gangotri",
@@ -1857,13 +2116,24 @@
       "deity": "Ganga (river goddess)",
       "region": "North India",
       "state": "Uttarakhand",
-      "lat": 30.9940, "lng": 78.9410,
+      "lat": 30.994,
+      "lng": 78.941,
       "builder": "Built by the Gorkha general Amar Singh Thapa (18th c.)",
-      "built_from": 1780, "built_to": 1810,
+      "built_from": 1780,
+      "built_to": 1810,
       "status": "active",
       "lifespan_note": "The seat of the goddess Ganga near her source at ~3,415 m, in the Greater Himalaya — part of the Chota Char Dham. Open only in the pilgrimage season.",
-      "series": ["chota_char_dham"],
-      "source": [ { "label": "Wikipedia — Gangotri", "url": "https://en.wikipedia.org/wiki/Gangotri", "tier": 2 } ]
+      "series": [
+        "chota_char_dham"
+      ],
+      "source": [
+        {
+          "label": "Wikipedia — Gangotri",
+          "url": "https://en.wikipedia.org/wiki/Gangotri",
+          "tier": 2
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "hinglaj-mata",
@@ -1873,13 +2143,24 @@
       "region": "Balochistan",
       "historical_region": "Makran, ancient India / Bharat",
       "state": "undivided India (present-day Pakistan, Lasbela, Balochistan)",
-      "lat": 25.514, "lng": 65.518,
+      "lat": 25.514,
+      "lng": 65.518,
       "builder": "Ancient cave shrine in the Kirthar/Makran hills; one of the 51 Shakti Peethas",
-      "built_from": 500, "built_to": 500,
+      "built_from": 500,
+      "built_to": 500,
       "status": "active",
       "lifespan_note": "A cave shrine on the Hingol river in the Makran desert — one of the 51 Shakti Peethas and the largest Hindu pilgrimage in Pakistan (the Hinglaj Yatra draws ~250,000). Revered by local Muslims too, who call it 'Nani Mandir'. Living proof of a continuous Sanatan presence in Balochistan.",
-      "series": ["shakti_peetha"],
-      "source": [ { "label": "Wikipedia — Hinglaj Mata Temple", "url": "https://en.wikipedia.org/wiki/Hinglaj_Mata_Temple", "tier": 2 } ]
+      "series": [
+        "shakti_peetha"
+      ],
+      "source": [
+        {
+          "label": "Wikipedia — Hinglaj Mata Temple",
+          "url": "https://en.wikipedia.org/wiki/Hinglaj_Mata_Temple",
+          "tier": 2
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "katas-raj",
@@ -1889,16 +2170,31 @@
       "region": "North India",
       "historical_region": "Salt Range, undivided India / Bharat",
       "state": "undivided India (present-day Pakistan, Punjab)",
-      "lat": 32.7222, "lng": 72.9500,
+      "lat": 32.7222,
+      "lng": 72.95,
       "builder": "Hindu Shahi kings (~615–950 CE), around the sacred Katas pool",
-      "built_from": 615, "built_to": 950,
+      "built_from": 615,
+      "built_to": 950,
       "status": "partially_ruined",
       "lifespan_note": "A complex of seven temples around a holy pool said in legend to have formed from Shiva's tears; linked to the Pandavas' exile (Dvaitavana). A major pilgrimage site abandoned at the 1947 Partition; partly restored, worship resumed for pilgrim groups.",
       "destruction": {
-        "primary": { "year": 1947, "actor": "Partition of India (abandonment & neglect)", "actor_role": "1947 Partition", "account": "The Hindu community migrated to East Punjab in 1947 and the complex was abandoned; decades of neglect (and groundwater loss to nearby cement plants) damaged it. Not a deliberate demolition — a loss through displacement.", "atrocity_link": "Partition of India" }
+        "primary": {
+          "year": 1947,
+          "actor": "Partition of India (abandonment & neglect)",
+          "actor_role": "1947 Partition",
+          "account": "The Hindu community migrated to East Punjab in 1947 and the complex was abandoned; decades of neglect (and groundwater loss to nearby cement plants) damaged it. Not a deliberate demolition — a loss through displacement.",
+          "atrocity_link": "Partition of India"
+        }
       },
       "series": [],
-      "source": [ { "label": "Punjab Archaeology Dept; World History Encyclopedia — Katas Raj", "url": "https://www.worldhistory.org/Katas_Raj/", "tier": 2 } ]
+      "source": [
+        {
+          "label": "Punjab Archaeology Dept; World History Encyclopedia — Katas Raj",
+          "url": "https://www.worldhistory.org/Katas_Raj/",
+          "tier": 2
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "panchmukhi-hanuman-karachi",
@@ -1908,13 +2204,22 @@
       "region": "Sindh",
       "historical_region": "Sindh, undivided India / Bharat",
       "state": "undivided India (present-day Pakistan, Karachi, Sindh)",
-      "lat": 24.8700, "lng": 67.0300,
+      "lat": 24.87,
+      "lng": 67.03,
       "builder": "Ancient shrine (~500 CE) in Soldier Bazaar",
-      "built_from": 500, "built_to": 500,
+      "built_from": 500,
+      "built_to": 500,
       "status": "active",
       "lifespan_note": "Believed ~1,500 years old — among the oldest temples in Karachi, protected under the Sindh Cultural Heritage Act 1994. Houses a naturally-formed five-faced Hanuman murti; 2019 expansion uncovered centuries-old deity statues. A living temple answering directly your point that Karachi's Hindu heritage is real and present.",
       "series": [],
-      "source": [ { "label": "Wikipedia — Panchmukhi Hanuman Temple; Arab News (2019 discovery)", "url": "https://en.wikipedia.org/wiki/Panchmukhi_Hanuman_Temple", "tier": 2 } ]
+      "source": [
+        {
+          "label": "Wikipedia — Panchmukhi Hanuman Temple; Arab News (2019 discovery)",
+          "url": "https://en.wikipedia.org/wiki/Panchmukhi_Hanuman_Temple",
+          "tier": 2
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "swaminarayan-karachi",
@@ -1924,13 +2229,22 @@
       "region": "Sindh",
       "historical_region": "Sindh, undivided India / Bharat",
       "state": "undivided India (present-day Pakistan, Karachi, Sindh)",
-      "lat": 24.8607, "lng": 67.0099,
+      "lat": 24.8607,
+      "lng": 67.0099,
       "builder": "Swaminarayan Sampraday (completed 1788)",
-      "built_from": 1849, "built_to": 1849,
+      "built_from": 1849,
+      "built_to": 1849,
       "status": "active",
       "lifespan_note": "The only surviving Swaminarayan temple in Pakistan, on M. A. Jinnah Road. A refugee camp in 1947 (Jinnah himself visited); the Hinglaj Yatra still starts from here. An active temple at the heart of a Karachi Hindu neighbourhood.",
       "series": [],
-      "source": [ { "label": "Wikipedia — Shri Swaminarayan Mandir, Karachi", "url": "https://en.wikipedia.org/wiki/Shri_Swaminarayan_Mandir,_Karachi", "tier": 2 } ]
+      "source": [
+        {
+          "label": "Wikipedia — Shri Swaminarayan Mandir, Karachi",
+          "url": "https://en.wikipedia.org/wiki/Shri_Swaminarayan_Mandir,_Karachi",
+          "tier": 2
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "multan-sun-prahladpuri",
@@ -1940,16 +2254,31 @@
       "region": "North India",
       "historical_region": "Kashyapapura / Moolasthana, undivided India / Bharat",
       "state": "undivided India (present-day Pakistan, Multan, Punjab)",
-      "lat": 30.2004, "lng": 71.4768,
+      "lat": 30.2004,
+      "lng": 71.4768,
       "builder": "Ancient — the Sun Temple noted in Greek accounts (~515 BCE); Prahladpuri linked to the Narasimha/Prahlada legend",
-      "built_from": -500, "built_to": 800,
+      "built_from": -500,
+      "built_to": 800,
       "status": "destroyed",
       "lifespan_note": "Multan's celebrated Sun Temple was one of the most famous shrines of the ancient subcontinent, its wealth described by Arab and Greek writers. Destroyed after the Muslim conquest of Multan; the adjacent Prahladpuri temple was reduced over centuries and the last structure was lost in 1992.",
       "destruction": {
-        "primary": { "year": 1026, "actor": "Mahmud of Ghazni & later iconoclasm", "actor_role": "Ghaznavid / successive rulers", "account": "The Multan Sun Temple, hugely wealthy, was destroyed after the Muslim conquest; the Prahladpuri temple was damaged repeatedly and its final structure collapsed amid the 1992 communal violence.", "atrocity_link": "Timur" }
+        "primary": {
+          "year": 1026,
+          "actor": "Mahmud of Ghazni & later iconoclasm",
+          "actor_role": "Ghaznavid / successive rulers",
+          "account": "The Multan Sun Temple, hugely wealthy, was destroyed after the Muslim conquest; the Prahladpuri temple was damaged repeatedly and its final structure collapsed amid the 1992 communal violence.",
+          "atrocity_link": "Timur"
+        }
       },
       "series": [],
-      "source": [ { "label": "Wikipedia — Prahladpuri Temple; Multan Sun Temple", "url": "https://en.wikipedia.org/wiki/Prahladpuri_Temple", "tier": 2 } ]
+      "source": [
+        {
+          "label": "Wikipedia — Prahladpuri Temple; Multan Sun Temple",
+          "url": "https://en.wikipedia.org/wiki/Prahladpuri_Temple",
+          "tier": 2
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "amb-temples",
@@ -1959,13 +2288,22 @@
       "region": "North India",
       "historical_region": "Salt Range, undivided India / Bharat",
       "state": "undivided India (present-day Pakistan, Khushab, Punjab)",
-      "lat": 32.5084, "lng": 71.9365,
+      "lat": 32.5084,
+      "lng": 71.9365,
       "builder": "Odi Shahi dynasty (9th–10th c.)",
-      "built_from": 850, "built_to": 1000,
+      "built_from": 850,
+      "built_to": 1000,
       "status": "ruin",
       "lifespan_note": "A 9th–10th c. Hindu temple complex on Sakesar peak — the westernmost of the Salt Range string that includes Katas Raj and Tilla Jogian. The 15 m 'Temple B' is the loftiest Odi Shahi temple. Abandoned ruin.",
       "series": [],
-      "source": [ { "label": "Wikipedia — Amb Temples", "url": "https://en.wikipedia.org/wiki/Amb_Temples", "tier": 2 } ]
+      "source": [
+        {
+          "label": "Wikipedia — Amb Temples",
+          "url": "https://en.wikipedia.org/wiki/Amb_Temples",
+          "tier": 2
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "nagarparkar-jain",
@@ -1975,13 +2313,22 @@
       "region": "Sindh",
       "historical_region": "Tharparkar, undivided India / Bharat",
       "state": "undivided India (present-day Pakistan, Tharparkar, Sindh)",
-      "lat": 24.3558, "lng": 70.7544,
+      "lat": 24.3558,
+      "lng": 70.7544,
       "builder": "Śvetāmbara Jain community, Maru-Gurjara style (12th–15th c.; Gori Temple 1375)",
-      "built_from": 1100, "built_to": 1450,
+      "built_from": 1100,
+      "built_to": 1450,
       "status": "ruin",
       "lifespan_note": "A group of ~14 abandoned Śvetāmbara Jain temples in the Karoonjhar hills; the Gori Temple (1375) holds the oldest surviving Jain frescoes in the northern subcontinent. On the UNESCO tentative list — proof that Jain heritage, too, spanned what is now Pakistan.",
       "series": [],
-      "source": [ { "label": "Wikipedia — Nagarparkar Jain temples; Gori Temple", "url": "https://en.wikipedia.org/wiki/Nagarparkar_Jain_temples", "tier": 2 } ]
+      "source": [
+        {
+          "label": "Wikipedia — Nagarparkar Jain temples; Gori Temple",
+          "url": "https://en.wikipedia.org/wiki/Nagarparkar_Jain_temples",
+          "tier": 2
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "kalka-aror",
@@ -1991,13 +2338,24 @@
       "region": "Sindh",
       "historical_region": "Aror / Roruka, capital of ancient Sindh, undivided India",
       "state": "undivided India (present-day Pakistan, near Rohri, Sindh)",
-      "lat": 27.6261, "lng": 68.9309,
+      "lat": 27.6261,
+      "lng": 68.9309,
       "builder": "Rai dynasty (a great Shiva temple); cave shrine of Kalka Devi",
-      "built_from": 400, "built_to": 700,
+      "built_from": 400,
+      "built_to": 700,
       "status": "active",
       "lifespan_note": "At Aror (Roruka) — capital of the Sauvira kingdom and of Hindu Sindh under Raja Dahir until the Arab conquest (712 CE). A natural-cave Devi temple, among the holiest Hindu sites in Pakistan, still visited. Roruka is also named in early Buddhist literature — a genuinely multi-faith ancient city.",
-      "series": ["shakti_peetha"],
-      "source": [ { "label": "Wikipedia — Kalka Cave Temple; Aror", "url": "https://en.wikipedia.org/wiki/Kalka_Cave_Temple", "tier": 2 } ]
+      "series": [
+        "shakti_peetha"
+      ],
+      "source": [
+        {
+          "label": "Wikipedia — Kalka Cave Temple; Aror",
+          "url": "https://en.wikipedia.org/wiki/Kalka_Cave_Temple",
+          "tier": 2
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "indus-great-bath",
@@ -2020,7 +2378,8 @@
           "url": "https://whc.unesco.org/en/list/138/",
           "tier": 1
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "indus-kalibangan",
@@ -2042,7 +2401,8 @@
           "url": "https://en.wikipedia.org/wiki/Kalibangan",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "indus-dholavira",
@@ -2064,7 +2424,8 @@
           "url": "https://whc.unesco.org/en/list/1645/",
           "tier": 1
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "indus-rakhigarhi",
@@ -2086,6 +2447,298 @@
           "url": "https://en.wikipedia.org/wiki/Rakhigarhi",
           "tier": 2
         }
+      ],
+      "continent": "Asia"
+    },
+    {
+      "id": "teotihuacan",
+      "name": "Teotihuacan (Pyramid of the Sun)",
+      "tradition": "native_faith",
+      "deity": "Mesoamerican gods — the 'City of the Gods'",
+      "region": "Mesoamerica",
+      "continent": "North America",
+      "state": "Mexico",
+      "lat": 19.6925,
+      "lng": -98.8438,
+      "builder": "The Teotihuacano civilisation (unknown builders)",
+      "built_from": -100,
+      "built_to": 650,
+      "status": "ruin",
+      "lifespan_note": "A vast pre-Aztec ceremonial metropolis; the Pyramid of the Sun is the third-largest pyramid on Earth. The Aztecs, arriving later, named it 'the place where the gods were created'. The original city collapsed ~650 CE.",
+      "series": [
+        "pre_abrahamic"
+      ],
+      "source": [
+        {
+          "label": "UNESCO — Pre-Hispanic City of Teotihuacan",
+          "url": "https://whc.unesco.org/en/list/414/",
+          "tier": 1
+        }
+      ]
+    },
+    {
+      "id": "templo-mayor",
+      "name": "Templo Mayor, Tenochtitlan (Mexico City)",
+      "tradition": "native_faith",
+      "deity": "Huitzilopochtli & Tlaloc (Aztec/Mexica)",
+      "region": "Mesoamerica",
+      "continent": "North America",
+      "state": "Mexico",
+      "lat": 19.4352,
+      "lng": -99.1312,
+      "builder": "The Mexica (Aztec) empire",
+      "built_from": 1325,
+      "built_to": 1487,
+      "status": "destroyed",
+      "lifespan_note": "The great double pyramid at the heart of the Aztec capital Tenochtitlan. Razed by the Spanish after 1521; a cathedral and colonial city were built directly over it. Rediscovered under Mexico City in 1978. The clearest case of a temple erased and overbuilt by a colonial-Christian power.",
+      "series": [],
+      "destruction": {
+        "primary": {
+          "year": 1521,
+          "actor": "Hernán Cortés & the Spanish conquest",
+          "actor_role": "Spanish Empire / Catholic conquest",
+          "account": "After the fall of Tenochtitlan the temple was demolished and Mexico City's cathedral raised over the sacred precinct; the Mexica religion was suppressed.",
+          "atrocity_link": "Conquest of the Americas",
+          "toll_note": "The conquest of the Americas caused catastrophic indigenous death (war + disease); White's chart puts the toll at ~15 million."
+        }
+      },
+      "source": [
+        {
+          "label": "UNESCO — Historic Centre of Mexico City; Wikipedia — Templo Mayor",
+          "url": "https://en.wikipedia.org/wiki/Templo_Mayor",
+          "tier": 2
+        }
+      ]
+    },
+    {
+      "id": "chichen-itza",
+      "name": "Chichén Itzá (Temple of Kukulcán)",
+      "tradition": "native_faith",
+      "deity": "Kukulcán (the feathered serpent) — Maya",
+      "region": "Mesoamerica",
+      "continent": "North America",
+      "state": "Mexico",
+      "lat": 20.6829,
+      "lng": -88.5686,
+      "builder": "The Maya (and Toltec-influenced) civilisation",
+      "built_from": 600,
+      "built_to": 1200,
+      "status": "ruin",
+      "lifespan_note": "A great Maya city whose step-pyramid (El Castillo) is aligned so that a serpent of light descends its stairway at the equinoxes. Abandoned before the Spanish arrived; a surviving monument of Maya astronomy-religion.",
+      "series": [],
+      "source": [
+        {
+          "label": "UNESCO — Pre-Hispanic City of Chichen-Itza",
+          "url": "https://whc.unesco.org/en/list/483/",
+          "tier": 1
+        }
+      ]
+    },
+    {
+      "id": "machu-picchu",
+      "name": "Machu Picchu",
+      "tradition": "native_faith",
+      "deity": "Inca — Inti (Sun); the Intihuatana & Temple of the Sun",
+      "region": "Andes",
+      "continent": "South America",
+      "state": "Peru",
+      "lat": -13.1631,
+      "lng": -72.545,
+      "builder": "Inca emperor Pachacuti",
+      "built_from": 1450,
+      "built_to": 1460,
+      "status": "ruin",
+      "lifespan_note": "A royal Inca estate and sacred site in the Andes, with the Temple of the Sun and the Intihuatana ritual stone. Uniquely, the Spanish never found it, so it escaped the destruction inflicted on other Inca shrines — which is why it survives so intact.",
+      "series": [],
+      "source": [
+        {
+          "label": "UNESCO — Historic Sanctuary of Machu Picchu",
+          "url": "https://whc.unesco.org/en/list/274/",
+          "tier": 1
+        }
+      ]
+    },
+    {
+      "id": "coricancha",
+      "name": "Coricancha (Temple of the Sun), Cusco",
+      "tradition": "native_faith",
+      "deity": "Inti (Sun) — the holiest Inca temple",
+      "region": "Andes",
+      "continent": "South America",
+      "state": "Peru",
+      "lat": -13.5203,
+      "lng": -71.9769,
+      "builder": "The Inca Empire (its walls once sheathed in gold)",
+      "built_from": 1200,
+      "built_to": 1450,
+      "status": "converted",
+      "lifespan_note": "The most sacred temple of the Inca, its walls once covered in gold. After the conquest the Spanish stripped the gold and built the Santo Domingo convent directly on top of the Inca stonework — which still stands, and survived earthquakes that toppled the colonial church above it. A literal layering of colonial power over a native temple.",
+      "series": [],
+      "destruction": {
+        "primary": {
+          "year": 1533,
+          "actor": "Francisco Pizarro & the Spanish conquest",
+          "actor_role": "Spanish Empire / Catholic conquest",
+          "account": "The Inca sun temple was looted of its gold and a Dominican convent built over it; Inca religion was suppressed across the Andes.",
+          "atrocity_link": "Conquest of the Americas"
+        }
+      },
+      "source": [
+        {
+          "label": "Wikipedia — Coricancha",
+          "url": "https://en.wikipedia.org/wiki/Coricancha",
+          "tier": 2
+        }
+      ]
+    },
+    {
+      "id": "tiwanaku",
+      "name": "Tiwanaku (Kalasasaya & the Sun Gate)",
+      "tradition": "native_faith",
+      "deity": "Andean pre-Inca (the 'Staff God')",
+      "region": "Andes",
+      "continent": "South America",
+      "state": "Bolivia",
+      "lat": -16.5547,
+      "lng": -68.6733,
+      "builder": "The Tiwanaku civilisation",
+      "built_from": -200,
+      "built_to": 1000,
+      "status": "ruin",
+      "lifespan_note": "A monumental pre-Inca ceremonial centre near Lake Titicaca, with the Gateway of the Sun. One of the mother-cultures of the Andes, revered by the later Inca themselves.",
+      "series": [],
+      "source": [
+        {
+          "label": "UNESCO — Tiwanaku",
+          "url": "https://whc.unesco.org/en/list/567/",
+          "tier": 1
+        }
+      ]
+    },
+    {
+      "id": "cahokia",
+      "name": "Cahokia (Monks Mound)",
+      "tradition": "native_faith",
+      "deity": "Mississippian earthwork ceremonial centre",
+      "region": "North America",
+      "continent": "North America",
+      "state": "USA (Illinois)",
+      "lat": 38.6607,
+      "lng": -90.062,
+      "builder": "The Mississippian culture (Native American)",
+      "built_from": 900,
+      "built_to": 1350,
+      "status": "ruin",
+      "lifespan_note": "The largest pre-Columbian city north of Mexico (~18,000 people), centred on Monks Mound — the biggest earthwork pyramid in the Americas. A Native American sacred/ceremonial capital, largely abandoned before European contact. UNESCO World Heritage.",
+      "series": [
+        "indigenous_sacred"
+      ],
+      "source": [
+        {
+          "label": "UNESCO — Cahokia Mounds State Historic Site",
+          "url": "https://whc.unesco.org/en/list/198/",
+          "tier": 1
+        }
+      ]
+    },
+    {
+      "id": "chaco-canyon",
+      "name": "Chaco Canyon (Pueblo Bonito)",
+      "tradition": "native_faith",
+      "deity": "Ancestral Puebloan ceremonial great house (kivas)",
+      "region": "North America",
+      "continent": "North America",
+      "state": "USA (New Mexico)",
+      "lat": 36.0607,
+      "lng": -107.9617,
+      "builder": "The Ancestral Puebloans (Chacoan culture)",
+      "built_from": 828,
+      "built_to": 1126,
+      "status": "ruin",
+      "lifespan_note": "A monumental Ancestral Puebloan ceremonial centre of astronomically-aligned great houses and kivas. Sacred to today's Pueblo, Hopi and Navajo peoples. UNESCO World Heritage — a Native American holy landscape, still living in memory.",
+      "series": [
+        "indigenous_sacred"
+      ],
+      "source": [
+        {
+          "label": "UNESCO — Chaco Culture",
+          "url": "https://whc.unesco.org/en/list/353/",
+          "tier": 1
+        }
+      ]
+    },
+    {
+      "id": "lalibela",
+      "name": "Rock-Hewn Churches of Lalibela",
+      "tradition": "christian",
+      "deity": "Ethiopian Orthodox Christianity — the 'New Jerusalem'",
+      "region": "Africa",
+      "continent": "Africa",
+      "state": "Ethiopia",
+      "lat": 12.0317,
+      "lng": 39.0411,
+      "builder": "King Gebre Meskel Lalibela, Zagwe dynasty",
+      "built_from": 1181,
+      "built_to": 1221,
+      "status": "active",
+      "lifespan_note": "Eleven churches carved top-down from solid rock in the 12th–13th c. to recreate Jerusalem in Ethiopia — the Church of St George (Bete Giyorgis) is the most famous. A living centre of Ethiopian Orthodox Christianity, one of the world's oldest churches. UNESCO World Heritage.",
+      "series": [],
+      "source": [
+        {
+          "label": "UNESCO — Rock-Hewn Churches, Lalibela",
+          "url": "https://whc.unesco.org/en/list/18/",
+          "tier": 1
+        }
+      ]
+    },
+    {
+      "id": "great-zimbabwe",
+      "name": "Great Zimbabwe",
+      "tradition": "native_faith",
+      "deity": "Shona ancestral / Mwari religion",
+      "region": "Africa",
+      "continent": "Africa",
+      "state": "Zimbabwe",
+      "lat": -20.2731,
+      "lng": 30.9343,
+      "builder": "Ancestors of the Shona people",
+      "built_from": 1100,
+      "built_to": 1450,
+      "status": "ruin",
+      "lifespan_note": "The largest ancient stone city in sub-Saharan Africa, capital of a great kingdom, whose conical tower and enclosures had ritual significance. Colonial-era authorities long denied Africans built it — an erasure later overturned. The nation of Zimbabwe is named for it.",
+      "series": [],
+      "source": [
+        {
+          "label": "UNESCO — Great Zimbabwe National Monument",
+          "url": "https://whc.unesco.org/en/list/364/",
+          "tier": 1
+        }
+      ]
+    },
+    {
+      "id": "ile-ife",
+      "name": "Ile-Ife (Yoruba holy city)",
+      "tradition": "native_faith",
+      "deity": "Yoruba religion — Oduduwa; the Orishas",
+      "region": "Africa",
+      "continent": "Africa",
+      "state": "Nigeria",
+      "lat": 7.4833,
+      "lng": 4.5592,
+      "builder": "The Yoruba people (kingdom of Ife)",
+      "built_from": -500,
+      "built_to": 1400,
+      "status": "active",
+      "lifespan_note": "The Yoruba holy city, believed to be where creation began and humankind was founded by Oduduwa; famed for its naturalistic bronze and terracotta heads. Still the spiritual centre of the Yoruba religion, which also survives across the African diaspora (Santería, Candomblé).",
+      "series": [
+        "indigenous_sacred"
+      ],
+      "source": [
+        {
+          "label": "Britannica — Ile-Ife",
+          "url": "https://www.britannica.com/place/Ile-Ife",
+          "tier": 2
+        }
       ]
     },
     {
@@ -2096,13 +2749,306 @@
       "region": "West Asia",
       "historical_region": "Nineveh Plains, ancient Mesopotamia",
       "state": "Iraq (Kurdistan Region, Nineveh)",
-      "lat": 36.7714, "lng": 43.3033,
+      "lat": 36.7714,
+      "lng": 43.3033,
       "builder": "The Yazidi people — an ancient pre-Abrahamic faith of the Kurdish region",
-      "built_from": 1100, "built_to": 1200,
+      "built_from": 1100,
+      "built_to": 1200,
       "status": "active",
       "lifespan_note": "The spiritual heart of Yazidism, a native faith with roots older than Islam that blends ancient Iranian/Mesopotamian and nature-worship elements. The Yazidis were subjected to genocide by ISIS in 2014 (Sinjar) — a living example of a native people crushed between larger religious powers. Included because they, too, deserve to exist on the map.",
-      "series": ["indigenous_sacred", "pre_abrahamic"],
-      "source": [ { "label": "UNESCO tentative list — Lalish Temple; Wikipedia — Lalish", "url": "https://en.wikipedia.org/wiki/Lalish", "tier": 2 } ]
+      "series": [
+        "indigenous_sacred",
+        "pre_abrahamic"
+      ],
+      "source": [
+        {
+          "label": "UNESCO tentative list — Lalish Temple; Wikipedia — Lalish",
+          "url": "https://en.wikipedia.org/wiki/Lalish",
+          "tier": 2
+        }
+      ],
+      "continent": "Asia"
+    },
+    {
+      "id": "gobekli-tepe",
+      "name": "Göbekli Tepe — the world's oldest temple",
+      "tradition": "pre_vedic_megalithic",
+      "deity": "Unknown — Pre-Pottery Neolithic ritual enclosures",
+      "region": "West Asia",
+      "continent": "Asia",
+      "state": "Turkey",
+      "lat": 37.2233,
+      "lng": 38.9224,
+      "builder": "Pre-Pottery Neolithic hunter-gatherers",
+      "built_from": -9600,
+      "built_to": -8000,
+      "status": "ruin",
+      "lifespan_note": "The oldest known temple on Earth — monumental T-shaped pillars raised by hunter-gatherers ~9600 BCE, 6,000 years before Stonehenge and 7,000 before the pyramids. It rewrote the story of religion: temples may have come BEFORE farming and cities. Only ~5% excavated. UNESCO World Heritage.",
+      "series": [
+        "pre_abrahamic"
+      ],
+      "source": [
+        {
+          "label": "UNESCO — Göbekli Tepe",
+          "url": "https://whc.unesco.org/en/list/1572/",
+          "tier": 1
+        }
+      ]
+    },
+    {
+      "id": "karnak",
+      "name": "Karnak Temple (Precinct of Amun-Ra), Thebes",
+      "tradition": "native_faith",
+      "deity": "Amun-Ra — ancient Egyptian religion",
+      "region": "Africa",
+      "continent": "Africa",
+      "state": "Egypt",
+      "lat": 25.7188,
+      "lng": 32.6573,
+      "builder": "Successive pharaohs over ~2,000 years (Middle Kingdom → Ptolemaic)",
+      "built_from": -2000,
+      "built_to": -300,
+      "status": "ruin",
+      "lifespan_note": "The largest religious building ever constructed — a vast complex to Amun-Ra at Thebes (Luxor), built and expanded across two millennia of pharaohs. The Hypostyle Hall's 134 giant columns remain. The heart of ancient Egyptian religion. UNESCO World Heritage.",
+      "series": [
+        "pre_abrahamic"
+      ],
+      "source": [
+        {
+          "label": "UNESCO — Ancient Thebes with its Necropolis",
+          "url": "https://whc.unesco.org/en/list/87/",
+          "tier": 1
+        }
+      ]
+    },
+    {
+      "id": "ur-ziggurat",
+      "name": "Great Ziggurat of Ur",
+      "tradition": "native_faith",
+      "deity": "Nanna (the moon god) — Sumerian religion",
+      "region": "West Asia",
+      "continent": "Asia",
+      "state": "Iraq",
+      "lat": 30.9628,
+      "lng": 46.1031,
+      "builder": "King Ur-Nammu of the Third Dynasty of Ur (Sumer)",
+      "built_from": -2100,
+      "built_to": -2000,
+      "status": "ruin",
+      "lifespan_note": "A massive stepped Sumerian temple-platform to the moon god Nanna, ~4,100 years old, in one of humanity's first cities. Among the oldest monumental religious structures on Earth; partly reconstructed.",
+      "series": [
+        "pre_abrahamic"
+      ],
+      "source": [
+        {
+          "label": "Wikipedia — Ziggurat of Ur",
+          "url": "https://en.wikipedia.org/wiki/Ziggurat_of_Ur",
+          "tier": 2
+        }
+      ]
+    },
+    {
+      "id": "parthenon",
+      "name": "Parthenon, Acropolis of Athens",
+      "tradition": "native_faith",
+      "deity": "Athena — ancient Greek religion",
+      "region": "Europe",
+      "continent": "Europe",
+      "state": "Greece",
+      "lat": 37.9715,
+      "lng": 23.7266,
+      "builder": "Athenian democracy (Pericles; architects Iktinos & Kallikrates)",
+      "built_from": -447,
+      "built_to": -432,
+      "status": "ruin",
+      "lifespan_note": "The temple of Athena atop the Acropolis, the icon of classical Greece. Later a church, then a mosque; badly damaged in 1687 when a Venetian shell hit Ottoman gunpowder stored inside. A temple re-purposed by each ruling faith in turn.",
+      "series": [
+        "pre_abrahamic"
+      ],
+      "source": [
+        {
+          "label": "UNESCO — Acropolis, Athens",
+          "url": "https://whc.unesco.org/en/list/404/",
+          "tier": 1
+        }
+      ]
+    },
+    {
+      "id": "delphi",
+      "name": "Delphi — Temple of Apollo & the Oracle",
+      "tradition": "native_faith",
+      "deity": "Apollo — the Oracle of Delphi",
+      "region": "Europe",
+      "continent": "Europe",
+      "state": "Greece",
+      "lat": 38.4824,
+      "lng": 22.5011,
+      "builder": "The Panhellenic sanctuary (ancient Greek city-states)",
+      "built_from": -700,
+      "built_to": 390,
+      "status": "ruin",
+      "lifespan_note": "Considered by the Greeks the navel (omphalos) of the world; the Oracle here shaped decisions across the ancient Mediterranean. Closed in 393 CE when the Christian emperor Theodosius banned pagan cults.",
+      "series": [
+        "pre_abrahamic"
+      ],
+      "destruction": {
+        "primary": {
+          "year": 393,
+          "actor": "Emperor Theodosius I",
+          "actor_role": "Christian Roman Empire",
+          "account": "The oracle and sanctuary were shut down when Theodosius outlawed pagan worship across the empire — an early state suppression of a native faith by an Abrahamic one."
+        }
+      },
+      "source": [
+        {
+          "label": "UNESCO — Archaeological Site of Delphi",
+          "url": "https://whc.unesco.org/en/list/393/",
+          "tier": 1
+        }
+      ]
+    },
+    {
+      "id": "stonehenge",
+      "name": "Stonehenge",
+      "tradition": "pre_vedic_megalithic",
+      "deity": "Unknown — Neolithic/Bronze Age ritual & solar alignment",
+      "region": "Europe",
+      "continent": "Europe",
+      "state": "United Kingdom",
+      "lat": 51.1789,
+      "lng": -1.8262,
+      "builder": "Neolithic & Bronze Age peoples of Britain",
+      "built_from": -3000,
+      "built_to": -2000,
+      "status": "ruin",
+      "lifespan_note": "The most famous prehistoric monument in Europe — a ring of standing stones aligned to the solstices, built and rebuilt over ~1,500 years. Its builders' religion is unknown; it remains a living sacred site for modern Druids and pagans. UNESCO World Heritage.",
+      "series": [
+        "indigenous_sacred"
+      ],
+      "source": [
+        {
+          "label": "UNESCO — Stonehenge, Avebury and Associated Sites",
+          "url": "https://whc.unesco.org/en/list/373/",
+          "tier": 1
+        }
+      ]
+    },
+    {
+      "id": "st-basils",
+      "name": "St Basil's Cathedral, Moscow",
+      "tradition": "christian",
+      "deity": "Russian Orthodox Christianity",
+      "region": "Europe", "continent": "Europe",
+      "state": "Russia (Moscow)",
+      "lat": 55.7525, "lng": 37.6231,
+      "builder": "Tsar Ivan the Terrible (architects Barma & Postnik)",
+      "built_from": 1555, "built_to": 1561,
+      "status": "active",
+      "lifespan_note": "The iconic swirl of coloured onion domes on Red Square, built to mark the conquest of Kazan. A Russian Orthodox landmark; secularised as a museum under the USSR and preserved. UNESCO World Heritage (Kremlin & Red Square).",
+      "series": [],
+      "source": [ { "label": "UNESCO — Kremlin and Red Square, Moscow", "url": "https://whc.unesco.org/en/list/545/", "tier": 1 } ]
+    },
+    {
+      "id": "arkaim",
+      "name": "Arkaim (Bronze-Age Sintashta site)",
+      "tradition": "native_faith",
+      "deity": "Proto-Indo-Iranian (early Aryan / Steppe culture)",
+      "region": "Steppe", "continent": "Asia",
+      "state": "Russia (Chelyabinsk, southern Urals)",
+      "lat": 52.6494, "lng": 59.5636,
+      "builder": "The Sintashta culture (early Indo-Iranian / Steppe pastoralists)",
+      "built_from": -2100, "built_to": -1800,
+      "status": "ruin",
+      "lifespan_note": "A fortified Bronze-Age settlement of the Sintashta culture — the same Steppe / Indo-Iranian world the ancient-DNA layer links to the Yamnaya ancestry that reached both Europe and India. Often read as a proto-Aryan ritual/astronomical site. A tangible tie between the Steppe and the subcontinent's deep history.",
+      "series": [],
+      "source": [ { "label": "Wikipedia — Arkaim; Sintashta culture", "url": "https://en.wikipedia.org/wiki/Arkaim", "tier": 3 } ]
+    },
+    {
+      "id": "uppsala",
+      "name": "Temple at Uppsala (Norse)",
+      "tradition": "native_faith",
+      "deity": "Norse gods — Thor, Odin, Freyr",
+      "region": "Europe",
+      "continent": "Europe",
+      "state": "Sweden",
+      "lat": 59.8977,
+      "lng": 17.6338,
+      "builder": "Norse/Germanic pagans (Gamla Uppsala cult centre)",
+      "built_from": 500,
+      "built_to": 1080,
+      "status": "destroyed",
+      "lifespan_note": "The great pagan temple of Gamla Uppsala, described by Adam of Bremen as gold-adorned with idols of Thor, Odin and Freyr. Norse religion was suppressed as Sweden Christianised; the temple was destroyed/replaced by a church in the late 11th c. A royal burial-mound landscape survives.",
+      "series": [
+        "pre_abrahamic"
+      ],
+      "destruction": {
+        "primary": {
+          "year": 1087,
+          "actor": "Christianisation of Sweden",
+          "actor_role": "Medieval Christian conversion",
+          "account": "The pagan cult site was suppressed and a church built at Gamla Uppsala as Norse religion was replaced by Christianity.",
+          "needs_source": true
+        }
+      },
+      "source": [
+        {
+          "label": "Wikipedia — Temple at Uppsala",
+          "url": "https://en.wikipedia.org/wiki/Temple_at_Uppsala",
+          "tier": 3
+        }
+      ]
+    },
+    {
+      "id": "rapa-nui",
+      "name": "Rapa Nui (Easter Island) — the Moai & Ahu",
+      "tradition": "native_faith",
+      "deity": "Polynesian ancestor-worship (deified ancestors)",
+      "region": "Oceania",
+      "continent": "Oceania",
+      "state": "Chile (Rapa Nui)",
+      "lat": -27.115,
+      "lng": -109.395,
+      "builder": "The Rapa Nui (Polynesian) people",
+      "built_from": 1250,
+      "built_to": 1500,
+      "status": "ruin",
+      "lifespan_note": "Nearly 1,000 monumental moai statues on ceremonial platforms (ahu) representing deified ancestors — one of the most remote and remarkable sacred landscapes on Earth. Missionary contact and disease in the 19th c. nearly ended the native religion. UNESCO World Heritage.",
+      "series": [
+        "indigenous_sacred"
+      ],
+      "source": [
+        {
+          "label": "UNESCO — Rapa Nui National Park",
+          "url": "https://whc.unesco.org/en/list/715/",
+          "tier": 1
+        }
+      ]
+    },
+    {
+      "id": "uluru",
+      "name": "Uluru (Ayers Rock) — Anangu sacred site",
+      "tradition": "adivasi",
+      "deity": "Tjukurpa (the Dreaming) — Anangu Aboriginal law",
+      "region": "Oceania",
+      "continent": "Oceania",
+      "state": "Australia (Northern Territory)",
+      "lat": -25.345,
+      "lng": 131.0361,
+      "builder": "The Anangu (Pitjantjatjara & Yankunytjatjara) — sacred for tens of thousands of years",
+      "built_from": -30000,
+      "built_to": 2026,
+      "status": "active",
+      "lifespan_note": "A giant sandstone monolith sacred to the Anangu, woven through their Tjukurpa (creation law) — among the world's oldest continuous sacred sites, holy for tens of thousands of years. Climbing was permanently banned in 2019 out of respect. A living Aboriginal holy place. UNESCO World Heritage.",
+      "series": [
+        "indigenous_sacred"
+      ],
+      "source": [
+        {
+          "label": "UNESCO — Uluru-Kata Tjuta National Park",
+          "url": "https://whc.unesco.org/en/list/447/",
+          "tier": 1
+        }
+      ]
     },
     {
       "id": "yazd-atash-behram",
@@ -2112,13 +3058,24 @@
       "region": "West Asia",
       "historical_region": "Persia / ancient Iran",
       "state": "Iran (Yazd)",
-      "lat": 31.9056, "lng": 54.3392,
+      "lat": 31.9056,
+      "lng": 54.3392,
       "builder": "Zoroastrian community; sacred fire dated to ~470 CE (building 1934)",
-      "built_from": 470, "built_to": 1934,
+      "built_from": 470,
+      "built_to": 1934,
       "status": "active",
       "lifespan_note": "Enshrines a sacred fire burning since ~470 CE — the highest-grade Zoroastrian fire in Iran. Zoroastrianism, the ancient faith of pre-Islamic Persia, shaped ideas across many later religions; its followers are now a tiny, endangered minority in their homeland. A native faith that predates the Abrahamic religions.",
-      "series": ["pre_abrahamic"],
-      "source": [ { "label": "Wikipedia — Fire Temple of Yazd", "url": "https://en.wikipedia.org/wiki/Fire_Temple_of_Yazd", "tier": 2 } ]
+      "series": [
+        "pre_abrahamic"
+      ],
+      "source": [
+        {
+          "label": "Wikipedia — Fire Temple of Yazd",
+          "url": "https://en.wikipedia.org/wiki/Fire_Temple_of_Yazd",
+          "tier": 2
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "iranshah-udvada",
@@ -2127,13 +3084,24 @@
       "deity": "Zoroastrianism — the Iranshah sacred fire (Parsi)",
       "region": "West India",
       "state": "Gujarat",
-      "lat": 20.4875, "lng": 72.8706,
+      "lat": 20.4875,
+      "lng": 72.8706,
       "builder": "The Parsi (Zoroastrian) community who fled Persia to India (~8th c.)",
-      "built_from": 721, "built_to": 1742,
+      "built_from": 721,
+      "built_to": 1742,
       "status": "active",
       "lifespan_note": "The oldest Zoroastrian sacred fire in India, brought by Parsis fleeing Islamic conquest of Persia; consecrated at Sanjan in 721 CE, now at Udvada. A powerful case of India sheltering a persecuted native faith — the Parsis found refuge here and endure. Their fire has burned for ~1,300 years.",
-      "series": ["pre_abrahamic"],
-      "source": [ { "label": "Wikipedia — Iranshah Atash Behram", "url": "https://en.wikipedia.org/wiki/Iranshah_Atash_Behram", "tier": 2 } ]
+      "series": [
+        "pre_abrahamic"
+      ],
+      "source": [
+        {
+          "label": "Wikipedia — Iranshah Atash Behram",
+          "url": "https://en.wikipedia.org/wiki/Iranshah_Atash_Behram",
+          "tier": 2
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "niyamgiri",
@@ -2142,13 +3110,24 @@
       "deity": "Niyam Raja (the King of Law) — the mountain itself is sacred",
       "region": "East India",
       "state": "Odisha",
-      "lat": 19.65, "lng": 83.35,
+      "lat": 19.65,
+      "lng": 83.35,
       "builder": "No building — a living sacred landscape of the Dongria Kondh people (~8,000–10,000)",
-      "built_from": -3000, "built_to": 2026,
+      "built_from": -3000,
+      "built_to": 2026,
       "status": "active",
       "lifespan_note": "The Dongria Kondh worship Niyam Raja, who is believed to dwell at Niyam Dongar, the Mountain of the Law. They call themselves Jharnia, 'protectors of the streams'. In 2013, in a Supreme-Court-mandated vote, all 12 village councils rejected Vedanta's bauxite mine — a rare victory for an indigenous people defending a sacred site against industry. Included because native sacred sites are usually erased, not mapped.",
-      "series": ["indigenous_sacred"],
-      "source": [ { "label": "Survival International; Wikipedia — Niyamgiri; Sacred Land Project", "url": "https://en.wikipedia.org/wiki/Niyamgiri", "tier": 2 } ]
+      "series": [
+        "indigenous_sacred"
+      ],
+      "source": [
+        {
+          "label": "Survival International; Wikipedia — Niyamgiri; Sacred Land Project",
+          "url": "https://en.wikipedia.org/wiki/Niyamgiri",
+          "tier": 2
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "mawphlang",
@@ -2157,13 +3136,24 @@
       "deity": "Labasa — the guardian deity of the grove",
       "region": "East India",
       "state": "Meghalaya",
-      "lat": 25.4433, "lng": 91.7411,
+      "lat": 25.4433,
+      "lng": 91.7411,
       "builder": "Preserved by the Khasi people (Lyngdoh Mawphlang clan) for ~800+ years",
-      "built_from": 1200, "built_to": 2026,
+      "built_from": 1200,
+      "built_to": 2026,
       "status": "active",
       "lifespan_note": "The oldest and best-known Khasi sacred grove — a forest of 500+ species where taking even a leaf is taboo. A living, unbuilt 'temple' of Khasi indigenous religion, guarded by the deity Labasa. Sacred natural sites like this are Dharma of the land itself, older than any temple architecture.",
-      "series": ["indigenous_sacred"],
-      "source": [ { "label": "Meghalaya Tourism; Sahapedia — Mawphlang Sacred Grove", "url": "https://en.wikipedia.org/wiki/Mawphlang", "tier": 2 } ]
+      "series": [
+        "indigenous_sacred"
+      ],
+      "source": [
+        {
+          "label": "Meghalaya Tourism; Sahapedia — Mawphlang Sacred Grove",
+          "url": "https://en.wikipedia.org/wiki/Mawphlang",
+          "tier": 2
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "sarna-sthal",
@@ -2172,14 +3162,25 @@
       "deity": "Sarna Maa / the village goddess, worshipped under the sal tree",
       "region": "East India",
       "state": "Jharkhand",
-      "lat": 23.35, "lng": 85.33,
+      "lat": 23.35,
+      "lng": 85.33,
       "is_event": true,
       "builder": "Munda, Oraon, Santhal, Ho, Asur, Baiga and other Adivasi peoples",
-      "built_from": -2000, "built_to": 2026,
+      "built_from": -2000,
+      "built_to": 2026,
       "status": "active",
       "lifespan_note": "Sarnaism is the indigenous nature-religion of the Chhotanagpur plateau — worship under the sal tree in a sacred grove (sarna sthal), no idol, no building. Millions of Adivasis follow it; there is a long-standing demand for a separate 'Sarna' religion code in the Indian census. Marked as a tradition-wide entry (representative point at Ranchi), because it is a living faith of tens of millions that most maps simply omit.",
-      "series": ["indigenous_sacred"],
-      "source": [ { "label": "Mongabay India — Protecting sarna; Wikipedia — Sarnaism / Jaherthan", "url": "https://en.wikipedia.org/wiki/Sarnaism", "tier": 2 } ]
+      "series": [
+        "indigenous_sacred"
+      ],
+      "source": [
+        {
+          "label": "Mongabay India — Protecting sarna; Wikipedia — Sarnaism / Jaherthan",
+          "url": "https://en.wikipedia.org/wiki/Sarnaism",
+          "tier": 2
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "khejarli",
@@ -2188,13 +3189,24 @@
       "deity": "Bishnoi ecological dharma (Guru Jambheshwar's 29 tenets)",
       "region": "West India",
       "state": "Rajasthan",
-      "lat": 26.15, "lng": 73.15,
+      "lat": 26.15,
+      "lng": 73.15,
       "builder": "The Bishnoi community; memorial to Amrita Devi & 363 martyrs (1730)",
-      "built_from": 1730, "built_to": 1730,
+      "built_from": 1730,
+      "built_to": 1730,
       "status": "active",
       "lifespan_note": "In 1730, when the Maharaja of Jodhpur's men came to fell khejri trees, Amrita Devi and then 363 Bishnois were killed hugging the trees rather than let them fall — the earliest recorded environmental martyrdom, and the root of the later Chipko movement. A living tradition where protecting nature IS the religion.",
-      "series": ["indigenous_sacred"],
-      "source": [ { "label": "Wikipedia — Khejarli; Global Nonviolent Action Database", "url": "https://en.wikipedia.org/wiki/Khejarli", "tier": 2 } ]
+      "series": [
+        "indigenous_sacred"
+      ],
+      "source": [
+        {
+          "label": "Wikipedia — Khejarli; Global Nonviolent Action Database",
+          "url": "https://en.wikipedia.org/wiki/Khejarli",
+          "tier": 2
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "bhimbetka",
@@ -2203,13 +3215,24 @@
       "deity": "Prehistoric rock art — no known deity",
       "region": "Central India",
       "state": "Madhya Pradesh",
-      "lat": 22.9384, "lng": 77.6131,
+      "lat": 22.9384,
+      "lng": 77.6131,
       "builder": "Palaeolithic-to-historic peoples of the Vindhya range",
-      "built_from": -100000, "built_to": 1000,
+      "built_from": -100000,
+      "built_to": 1000,
       "status": "ruin",
       "lifespan_note": "Over 750 rock shelters with India's oldest known art, some shelters inhabited 100,000+ years ago — the deepest layer of human presence on the subcontinent, before any named religion. UNESCO World Heritage. The true 'aboriginal' baseline the whole atlas rests on.",
-      "series": ["indigenous_sacred"],
-      "source": [ { "label": "ASI; UNESCO — Rock Shelters of Bhimbetka", "url": "https://whc.unesco.org/en/list/925/", "tier": 1 } ]
+      "series": [
+        "indigenous_sacred"
+      ],
+      "source": [
+        {
+          "label": "ASI; UNESCO — Rock Shelters of Bhimbetka",
+          "url": "https://whc.unesco.org/en/list/925/",
+          "tier": 1
+        }
+      ],
+      "continent": "Asia"
     },
     {
       "id": "megalith-hire-benakal",
@@ -2230,7 +3253,8 @@
           "url": "https://whc.unesco.org/en/tentativelists/5896/",
           "tier": 2
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "megalith-junapani",
@@ -2251,7 +3275,8 @@
           "url": "https://en.wikipedia.org/wiki/Junapani",
           "tier": 3
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "contested-kailasa-machining",
@@ -2274,7 +3299,8 @@
           "url": "https://en.wikipedia.org/wiki/Kailasa_Temple,_Ellora",
           "tier": 4
         }
-      ]
+      ],
+      "continent": "Asia"
     },
     {
       "id": "contested-vettuvan-koil",
@@ -2297,7 +3323,8 @@
           "url": "https://en.wikipedia.org/wiki/Vettuvan_Koil",
           "tier": 4
         }
-      ]
+      ],
+      "continent": "Asia"
     }
   ]
 }

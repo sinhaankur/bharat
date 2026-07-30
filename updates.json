@@ -7,6 +7,16 @@
   },
   "updates": [
     {
+      "id": "u_2026_07_30_world_atlas",
+      "date": "2026-07-30",
+      "kind": "feature",
+      "scope": "Whole Earth · all six continents",
+      "title": "Sacred ground goes global — the heritage atlas becomes a whole-Earth atlas",
+      "detail": "Lifted the atlas from Bharat-centred to worldwide: added a continent field + continent filter (layered on top of tradition/status/series/search) and a world map view. New sites on every inhabited continent — Americas: Teotihuacan, Templo Mayor & Coricancha (both razed/overbuilt by the Spanish conquest, with destruction records), Chichén Itzá, Machu Picchu, Tiwanaku, Cahokia, Chaco Canyon. Africa: Karnak (Egypt), Lalibela, Great Zimbabwe, Ile-Ife. Europe/Near East: Göbekli Tepe (world's oldest temple, 9600 BCE), Parthenon, Delphi (closed by Christian Rome), Ziggurat of Ur, Stonehenge, Uppsala, St Basil's & Arkaim (Russia). Oceania: Rapa Nui, Uluru. New 'christian' tradition; time-scrubber extended back to 10,000 BCE with a non-linear scale so deep prehistory is legible. Atlas now 122 sites, 6 continents, 10 traditions — sourced or gap-flagged throughout.",
+      "source": "https://whc.unesco.org/en/list/1572/",
+      "link": "heritage-atlas.html"
+    },
+    {
       "id": "u_2026_07_30_native_faiths",
       "date": "2026-07-30",
       "kind": "data",
