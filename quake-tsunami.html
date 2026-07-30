@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Earthquake & tsunami tracker — India region (live USGS + historical) | India District Atlas</title>
+  <meta name="description" content="Live and historical earthquakes across the India region from the USGS public feed, plus a sourced catalogue of Indian Ocean tsunamis (2004 Sumatra–Andaman, 1945 Makran and more). Filter by magnitude and timeframe; see which quakes carried a tsunami flag." />
+  <meta name="keywords" content="India earthquake tracker, live earthquakes India, USGS feed, Indian Ocean tsunami, 2004 tsunami, Makran tsunami, seismic map India, INCOIS tsunami warning" />
+  <link rel="canonical" href="https://sinhaankur.github.io/india-fiscal-map/quake-tsunami.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="India District Atlas" />
+  <meta property="og:title" content="Earthquake & tsunami tracker — India region" />
+  <meta property="og:description" content="Live USGS earthquakes + a sourced Indian Ocean tsunami catalogue, on one map. Filter by magnitude & time; see which quakes flagged a tsunami." />
+  <meta property="og:url" content="https://sinhaankur.github.io/india-fiscal-map/quake-tsunami.html" />
+  <meta property="og:image" content="https://sinhaankur.github.io/india-fiscal-map/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://sinhaankur.github.io/india-fiscal-map/og-image.png" />
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .qt-wrap { max-width: 1120px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; }
+    .qt-head h1 { margin: 0.3rem 0 0.4rem; font-size: clamp(1.7rem, 3.6vw, 2.6rem); }
+    .qt-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.55; max-width: 74ch; }
+    .qt-head p a { color: oklch(0.74 0.16 75); }
+    .qt-stats { display: flex; flex-wrap: wrap; gap: 1.4rem; margin: 1.2rem 0 0.2rem; }
+    .qt-stat b { font-family: var(--font-mono); font-size: 1.5rem; color: oklch(0.82 0.16 40); display: block; line-height: 1; }
+    .qt-stat span { font-size: 0.78rem; color: var(--muted-foreground); }
+
+    .qt-controls { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin: 1.1rem 0 0.2rem; }
+    .qt-lbl { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted-foreground); margin-right: 0.2rem; }
+    .qt-chip { font-family: var(--font-mono); font-size: 10px; padding: 4px 11px; border-radius: 999px; border: 1px solid var(--border-strong); color: var(--muted-foreground); background: transparent; cursor: pointer; }
+    .qt-chip.on { color: oklch(0.16 0 0); font-weight: 600; }
+    .qt-chip.on.live { background: oklch(0.72 0.19 25); border-color: oklch(0.72 0.19 25); }
+    .qt-chip.on.hist { background: oklch(0.74 0.15 60); border-color: oklch(0.74 0.15 60); }
+    .qt-chip.on.tsu { background: oklch(0.7 0.15 230); border-color: oklch(0.7 0.15 230); }
+    .qt-chip.on.mag { background: oklch(0.78 0.13 90); border-color: oklch(0.78 0.13 90); }
+    .qt-status { margin-left: auto; font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
+    .qt-status .live-dot { color: oklch(0.72 0.19 25); }
+
+    #qt-map { height: 500px; border: 1px solid var(--border); border-radius: var(--radius); margin: 0.9rem 0 0.4rem; background: oklch(0.11 0 0); }
+    @media (max-width: 640px) { #qt-map { height: 380px; } }
+    .leaflet-container { background: oklch(0.11 0 0); font-family: inherit; }
+    .leaflet-popup-content-wrapper, .leaflet-popup-tip { background: oklch(0.16 0 0); color: var(--foreground); border: 1px solid var(--border-strong); }
+    .leaflet-popup-content { margin: 0.6rem 0.75rem; min-width: 200px; }
+    .qt-pop-t { font-weight: 700; }
+    .qt-pop-m { font-family: var(--font-mono); font-size: 1.15rem; }
+    .qt-pop-sub { font-size: 0.8rem; color: var(--muted-foreground); margin-top: 2px; }
+    .qt-pop-warn { font-size: 0.8rem; color: oklch(0.85 0.14 230); margin-top: 3px; }
+
+    .qt-legend { display: flex; flex-wrap: wrap; gap: 0.4rem 1.1rem; margin: 0.3rem 0 0.6rem; font-size: 0.78rem; color: var(--muted-foreground); }
+    .qt-legend i { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; }
+
+    .qt-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-top: 1.4rem; }
+    @media (max-width: 760px) { .qt-cols { grid-template-columns: 1fr; } }
+    .qt-panel { border: 1px solid var(--border); border-radius: var(--radius); background: oklch(0.15 0 0); padding: 0.85rem 1rem; }
+    .qt-panel h3 { margin: 0 0 0.6rem; font-size: 0.95rem; }
+    .qt-row { display: grid; grid-template-columns: auto 1fr auto; gap: 0.55rem; align-items: baseline; padding: 0.4rem 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+    .qt-row:last-child { border-bottom: none; }
+    .qt-row .mag { font-family: var(--font-mono); font-weight: 700; min-width: 2.6rem; }
+    .qt-row .pl { line-height: 1.3; }
+    .qt-row .pl small { display: block; color: var(--muted-foreground); font-size: 0.74rem; }
+    .qt-row .yr { font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted-foreground); }
+    .qt-row .toll { font-family: var(--font-mono); font-size: 0.8rem; color: oklch(0.84 0.14 30); text-align: right; }
+    .qt-note { font-size: 0.78rem; color: var(--muted-foreground); line-height: 1.6; margin-top: 1.7rem; border-top: 1px solid var(--border); padding-top: 1rem; }
+    .qt-note b { color: var(--foreground); } .qt-note a { color: oklch(0.74 0.16 75); }
+  </style>
+</head>
+<body>
+  <div id="site-nav"></div>
+
+  <main class="qt-wrap">
+    <header class="qt-head">
+      <div class="eyebrow">Hazard · live + historical · sourced</div>
+      <h1 class="display">Earthquake &amp; tsunami <em>tracker</em></h1>
+      <p>Live earthquakes from the <a href="https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php" target="_blank" rel="noopener">USGS public feed</a>,
+      the atlas's historical India-region catalogue (2000 quakes, 2000–2025), and a sourced record of the Indian Ocean
+      tsunamis that reached India. Circle size = magnitude; a ring marks a quake that carried a tsunami flag.
+      Official warnings come from <a href="https://tsunami.incois.gov.in" target="_blank" rel="noopener">INCOIS</a> — this page is for study, not warning.</p>
+      <div class="qt-stats" id="stats"></div>
+    </header>
+
+    <div class="qt-controls">
+      <span class="qt-lbl">Layers</span>
+      <button class="qt-chip live on" data-layer="live">🔴 Live (USGS)</button>
+      <button class="qt-chip hist on" data-layer="hist">🟠 Historical quakes</button>
+      <button class="qt-chip tsu on" data-layer="tsu">🌊 Tsunamis</button>
+      <span class="qt-status" id="status"></span>
+    </div>
+    <div class="qt-controls">
+      <span class="qt-lbl">Live window</span>
+      <button class="qt-chip" data-feed="all_day">past day</button>
+      <button class="qt-chip" data-feed="all_week">past week</button>
+      <button class="qt-chip" data-feed="4.5_month">M4.5+ · month</button>
+      <button class="qt-chip" data-feed="significant_month">significant · month</button>
+      <span class="qt-lbl" style="margin-left:1rem">Min magnitude</span>
+      <button class="qt-chip mag" data-mag="0">any</button>
+      <button class="qt-chip mag" data-mag="5">M5+</button>
+      <button class="qt-chip mag on" data-mag="6">M6+</button>
+      <button class="qt-chip mag" data-mag="7">M7+</button>
+    </div>
+
+    <div class="qt-legend">
+      <span><i style="background:oklch(0.72 0.19 25)"></i>Live quake (USGS)</span>
+      <span><i style="background:oklch(0.74 0.15 60)"></i>Historical quake</span>
+      <span><i style="background:oklch(0.7 0.15 230)"></i>Tsunami</span>
+      <span><i style="background:transparent;border:2px solid oklch(0.85 0.14 230)"></i>Carried tsunami flag</span>
+    </div>
+
+    <div id="qt-map"></div>
+
+    <div class="qt-cols">
+      <section class="qt-panel">
+        <h3>🌊 Indian Ocean tsunamis that reached India</h3>
+        <div id="tsu-list"></div>
+      </section>
+      <section class="qt-panel">
+        <h3 id="quake-list-title">Strongest quakes on the map</h3>
+        <div id="quake-list"></div>
+      </section>
+    </div>
+
+    <p class="qt-note" id="note"></p>
+  </main>
+
+  <script src="vendor/leaflet/leaflet.js"></script>
+  <script src="map-layers.js"></script>
+  <script>
+  (function () {
+    "use strict";
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const FEED_BASE = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/";
+    const COL = { live: "oklch(0.72 0.19 25)", hist: "oklch(0.74 0.15 60)", tsu: "oklch(0.7 0.15 230)" };
+
+    let MAP, LAYERS = {};
+    let HIST = [], TSU = [], LIVE = [];
+    const on = { live: true, hist: true, tsu: true };
+    let feed = "significant_month", minMag = 6;
+
+    const rFor = m => 3 + Math.max(0, (m - 4)) * 2.2;
+
+    fetch("tsunamis.json").then(r => r.json()).then(d => { TSU = d.tsunamis || []; renderTsuList(); draw(); });
+    fetch("india-earthquakes.json").then(r => r.json()).then(d => {
+      HIST = (d.quakes || []).map(q => ({ lat: q.ll[0], lng: q.ll[1], m: q.m, depth: q.d, year: q.y, place: q.p }));
+      renderStats(); draw(); renderQuakeList();
+    });
+
+    function initMap() {
+      MAP = L.map("qt-map", { scrollWheelZoom: true }).setView([15, 82], 4);
+      const base = (window.MapLayers && MapLayers.basemaps) ? MapLayers.basemaps(L)["Dark map"]
+        : L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png", { subdomains: "abcd", attribution: "&copy; OSM, &copy; CARTO" });
+      base.addTo(MAP);
+      LAYERS = { live: L.layerGroup().addTo(MAP), hist: L.layerGroup().addTo(MAP), tsu: L.layerGroup().addTo(MAP) };
+    }
+
+    function fetchLive() {
+      const url = FEED_BASE + feed + ".geojson";
+      setStatus("loading live feed…");
+      fetch(url).then(r => r.json()).then(g => {
+        LIVE = (g.features || []).map(f => ({
+          lat: f.geometry.coordinates[1], lng: f.geometry.coordinates[0], depth: f.geometry.coordinates[2],
+          m: f.properties.mag, place: f.properties.place, time: f.properties.time,
+          tsunami: f.properties.tsunami === 1, url: f.properties.url,
+          year: new Date(f.properties.time).getUTCFullYear()
+        }));
+        const t = g.metadata && g.metadata.title ? g.metadata.title : feed;
+        setStatus(`<span class="live-dot">●</span> live: ${LIVE.length} events · ${esc(t)}`);
+        draw(); renderQuakeList();
+      }).catch(e => setStatus("live feed unavailable — showing historical only"));
+    }
+    function setStatus(html) { document.getElementById("status").innerHTML = html; }
+
+    function magVisible(m) { return (m || 0) >= minMag; }
+
+    function draw() {
+      if (!MAP) return;
+      Object.values(LAYERS).forEach(l => l.clearLayers());
+      // historical
+      if (on.hist) for (const q of HIST) {
+        if (!magVisible(q.m)) continue;
+        mk(q, COL.hist, `Historical · ${q.year}`).addTo(LAYERS.hist);
+      }
+      // live
+      if (on.live) for (const q of LIVE) {
+        if (!magVisible(q.m)) continue;
+        const m = mk(q, COL.live, `Live${q.time ? " · " + new Date(q.time).toISOString().slice(0, 10) : ""}`, q.tsunami, q.url);
+        m.addTo(LAYERS.live);
+      }
+      // tsunamis
+      if (on.tsu) for (const t of TSU) {
+        const c = L.circleMarker(t.epicentre, { radius: 9, color: "oklch(0.85 0.14 230)", weight: 2, fillColor: COL.tsu, fillOpacity: 0.6 });
+        c.bindPopup(`<div class="qt-pop-t" style="color:${COL.tsu}">🌊 ${esc(t.name)}</div>` +
+          `<div class="qt-pop-sub">${t.year}${t.source_quake_mw ? " · source quake Mw " + t.source_quake_mw : ""}${t.run_up_m ? " · run-up ~" + t.run_up_m + " m" : ""}</div>` +
+          (t.deaths_total ? `<div class="qt-pop-warn">~${t.deaths_total.toLocaleString()} dead${t.deaths_india ? ` (India ~${t.deaths_india.toLocaleString()})` : ""}</div>` : "") +
+          `<div class="qt-pop-sub" style="margin-top:4px">${esc(t.india_impact || "")}</div>`);
+        c.addTo(LAYERS.tsu);
+      }
+    }
+
+    function mk(q, color, when, flagged, link) {
+      const m = L.circleMarker([q.lat, q.lng], {
+        radius: rFor(q.m), color: flagged ? "oklch(0.85 0.14 230)" : color, weight: flagged ? 2 : 1,
+        fillColor: color, fillOpacity: 0.5
+      });
+      m.bindPopup(`<div class="qt-pop-t" style="color:${color}"><span class="qt-pop-m">M${q.m}</span> ${esc(q.place || "")}</div>` +
+        `<div class="qt-pop-sub">${esc(when)}${q.depth != null ? " · depth " + q.depth + " km" : ""}</div>` +
+        (flagged ? `<div class="qt-pop-warn">🌊 carried a tsunami flag</div>` : "") +
+        (link ? `<div class="qt-pop-sub"><a href="${esc(link)}" target="_blank" rel="noopener" style="color:oklch(0.74 0.16 75)">USGS detail ↗</a></div>` : ""));
+      return m;
+    }
+
+    function renderStats() {
+      const big = HIST.filter(q => q.m >= 7).length;
+      document.getElementById("stats").innerHTML =
+        `<div class="qt-stat"><b>${HIST.length}</b><span>historical quakes (2000–2025)</span></div>` +
+        `<div class="qt-stat"><b>${big}</b><span>M7+ in the record</span></div>` +
+        `<div class="qt-stat"><b>${TSU.length}</b><span>tsunamis catalogued</span></div>` +
+        `<div class="qt-stat"><b>~2.4L</b><span>killed by the 2004 tsunami</span></div>`;
+    }
+
+    function renderTsuList() {
+      document.getElementById("tsu-list").innerHTML = TSU.slice().sort((a, b) => b.year - a.year).map(t =>
+        `<div class="qt-row"><span class="mag" style="color:${COL.tsu}">${t.source_quake_mw ? "M" + t.source_quake_mw : "🌊"}</span>` +
+        `<span class="pl">${esc(t.name)}<small>${esc((t.india_impact || "").slice(0, 90))}${(t.india_impact || "").length > 90 ? "…" : ""}</small></span>` +
+        `<span class="toll">${t.deaths_total ? "~" + (t.deaths_total >= 1000 ? Math.round(t.deaths_total / 1000) + "k" : t.deaths_total) : "—"}<br><span class="yr">${t.year}</span></span></div>`
+      ).join("");
+    }
+
+    function renderQuakeList() {
+      const pool = [].concat(on.live ? LIVE : [], on.hist ? HIST : []).filter(q => magVisible(q.m));
+      pool.sort((a, b) => b.m - a.m);
+      document.getElementById("quake-list-title").textContent = `Strongest quakes shown (${pool.length})`;
+      document.getElementById("quake-list").innerHTML = pool.slice(0, 12).map(q =>
+        `<div class="qt-row"><span class="mag" style="color:${q.time ? COL.live : COL.hist}">M${q.m}</span>` +
+        `<span class="pl">${esc(q.place || "")}<small>${q.depth != null ? "depth " + q.depth + " km" : ""}${q.tsunami ? " · 🌊 tsunami flag" : ""}</small></span>` +
+        `<span class="yr">${q.year}</span></div>`
+      ).join("") || `<div style="color:var(--muted-foreground);font-size:0.85rem">No quakes at this magnitude — lower the threshold.</div>`;
+    }
+
+    function renderNote() {
+      document.getElementById("note").innerHTML =
+        `<b>Sources & limits.</b> Live quakes come straight from the USGS GeoJSON summary feeds (public domain), refreshed when you pick a window; ` +
+        `historical quakes are a USGS FDSN pull (M5+, 2000–2025, capped at 2,000, India region). Tsunamis are a <b>sourced historical catalogue</b> ` +
+        `(INCOIS; Rastogi & Jaiswal 2006) — there is no reliable free real-time tsunami API, so the live tsunami signal is the USGS <code>tsunami</code> flag on a quake, ringed in blue. ` +
+        `This is a study tool, <b>not</b> an early-warning system — for real warnings use <a href="https://tsunami.incois.gov.in" target="_blank" rel="noopener">INCOIS</a>. ` +
+        `Death tolls vary by source and are given as representative figures. See also the <a href="heritage-atlas.html">heritage atlas</a> (e.g. Prambanan, damaged by earthquakes).`;
+    }
+
+    function wire() {
+      document.querySelectorAll("[data-layer]").forEach(b => b.onclick = () => {
+        const k = b.dataset.layer; on[k] = !on[k]; b.classList.toggle("on", on[k]); draw(); renderQuakeList();
+      });
+      document.querySelectorAll("[data-feed]").forEach(b => b.onclick = () => {
+        document.querySelectorAll("[data-feed]").forEach(x => x.classList.remove("on"));
+        b.classList.add("on"); feed = b.dataset.feed; fetchLive();
+      });
+      document.querySelectorAll("[data-mag]").forEach(b => b.onclick = () => {
+        document.querySelectorAll("[data-mag]").forEach(x => x.classList.remove("on"));
+        b.classList.add("on"); minMag = +b.dataset.mag; draw(); renderQuakeList();
+      });
+    }
+
+    initMap(); wire(); renderNote(); fetchLive();
+  })();
+  </script>
+  <script src="command-palette.js"></script>
+  <script src="site-nav.js"></script>
+</body>
+</html>

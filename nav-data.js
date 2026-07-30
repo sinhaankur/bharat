@@ -18,6 +18,7 @@
       { href: "feed.html", text: "News feed", hint: "bias vs the record, by place", icon: "📰", rail: true },
       { href: "timeline.html", text: "Timeline", hint: "events over time", icon: "🕐" },
       { href: "encroachment-atlas.html", text: "Built where water returns", hint: "illegal habitation", icon: "🏗" },
+      { href: "quake-tsunami.html", text: "Quake & tsunami tracker", hint: "live USGS + historical quakes + tsunamis", icon: "🌊", rail: true },
     ]},
     { label: "3D", items: [
       { href: "india-3d.html", text: "The globe", hint: "real Earth · 594 districts · layers", icon: "🌍" },
