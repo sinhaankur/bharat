@@ -27,7 +27,9 @@
     .tf-head p a { color: var(--gold); }
 
     /* type selector chips */
-    .tf-tabs { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.4rem 0 1rem; }
+    .tf-tabs { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.4rem 0 1rem; align-items: center; }
+    .tf-grp { width: 100%; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted-foreground); margin-top: 0.3rem; }
+    .tf-grp:first-child { margin-top: 0; }
     .tf-tab { display: flex; align-items: center; gap: 0.5rem; border: 1px solid var(--border-strong); border-radius: 12px; background: oklch(0.16 0 0);
       color: var(--foreground); padding: 0.5rem 0.85rem; cursor: pointer; transition: transform 0.15s, border-color 0.15s, background 0.15s; }
     .tf-tab:hover { transform: translateY(-2px); border-color: var(--gold-deep); }
@@ -131,7 +133,33 @@
         features: ["Steep peaked pyramidal roof (not a curved shikhara)", "Square cella on a tall stepped plinth", "Peristyle of fluted columns around a courtyard", "Trefoil (three-lobed) arched niches — e.g. Martand"] },
       { id: "sun_temple", icon: "☀", name: "Sun temple", sub: "east-facing stone chariot", facing: "east-strict",
         blurb: "A temple to Surya, conceived as the Sun god's colossal stone chariot: giant carved wheels, teams of horses, and an east-facing entrance so the first light strikes the deity.",
-        features: ["Built as a chariot — monumental wheels along the platform", "Teams of horses drawing it, at the eastern front", "Jagamohana (pyramidal audience hall) + deul (sanctum tower)", "Strictly east-facing: dawn light reaches the sanctum — e.g. Konark, Martand, Modhera"] }
+        features: ["Built as a chariot — monumental wheels along the platform", "Teams of horses drawing it, at the eastern front", "Jagamohana (pyramidal audience hall) + deul (sanctum tower)", "Strictly east-facing: dawn light reaches the sanctum — e.g. Konark, Martand, Modhera"] },
+
+      // ── world archetypes (the atlas is global) ──
+      { id: "egyptian", icon: "𓉴", name: "Egyptian pylon", sub: "Karnak · Amun-Ra", facing: "east", group: "World",
+        blurb: "Ancient Egyptian temple: twin sloping (battered) trapezoidal gateway towers — pylons — flanking the entrance, opening onto a forest of massive columns (the hypostyle hall) and obelisks.",
+        features: ["Twin battered pylons framing the entrance axis", "Hypostyle hall — dense columns with papyrus/lotus capitals", "Obelisks and a processional axis to the sanctuary", "Aligned to the sun / Nile — e.g. Karnak at Thebes"] },
+      { id: "greek", icon: "🏛", name: "Greek temple", sub: "Parthenon · peripteral", facing: "east", group: "World",
+        blurb: "Classical Greek temple: a rectangular cella ringed by a colonnade (peripteral), standing on a stepped platform (stylobate), crowned by a triangular pedimental gable roof.",
+        features: ["Peristyle — columns (Doric/Ionic) surrounding the cella", "Stylobate — the stepped stone platform", "Pediment — the triangular gable, once sculpted", "Faced east so dawn lit the cult statue — e.g. Parthenon, Delphi"] },
+      { id: "mesoamerican", icon: "🔺", name: "Mesoamerican pyramid", sub: "Teotihuacan · Maya", facing: "cardinal", group: "World",
+        blurb: "Mesoamerican step-pyramid: a stack of receding platforms climbed by a steep central staircase to a temple shrine on the summit — a stage for ritual, not a tomb.",
+        features: ["Stepped platforms (talud-tablero) rising to a summit temple", "Steep ceremonial staircase up one (or four) faces", "Astronomically aligned — equinox light effects (Chichén Itzá)", "e.g. Teotihuacan's Pyramid of the Sun, Templo Mayor"] },
+      { id: "ziggurat", icon: "🟫", name: "Ziggurat", sub: "Ur · Mesopotamia", facing: "cardinal", group: "World",
+        blurb: "Sumerian/Mesopotamian ziggurat: a massive solid mud-brick platform of receding rectangular terraces with a temple to the city god on top, reached by monumental stairways.",
+        features: ["Receding rectangular terraces of mud brick", "A triple monumental stairway to the first terrace", "A high temple (the god's house) on the summit", "Among the oldest monumental religion — e.g. Ziggurat of Ur (~2100 BCE)"] },
+      { id: "andean", icon: "⛰", name: "Andean stonework", sub: "Machu Picchu · Inca", facing: "solar", group: "World",
+        blurb: "Andean (Inca) sacred architecture: precision dry-stone masonry, agricultural terraces climbing the mountain, trapezoidal doors and windows, and curved sun-temple walls.",
+        features: ["Interlocking polygonal stonework — no mortar", "Terraces (andenes) shaping the sacred mountain", "Trapezoidal niches, doors and windows", "Solar alignments — Intihuatana, Temple of the Sun (Coricancha)"] },
+      { id: "moai", icon: "🗿", name: "Moai & ahu", sub: "Rapa Nui · Polynesia", facing: "inland", group: "World",
+        blurb: "Rapa Nui (Easter Island): rows of monolithic ancestor statues (moai) standing on stone ceremonial platforms (ahu), facing inland to watch over the community.",
+        features: ["Monolithic moai — carved deified ancestors", "Ahu — the stone platform they stand on", "They face inland (away from the sea), over the village", "~900 statues; a Polynesian ancestor cult"] },
+      { id: "ethiopian", icon: "✝", name: "Rock-hewn church", sub: "Lalibela · Ethiopia", facing: "east", group: "World",
+        blurb: "Ethiopian Orthodox rock-hewn church: an entire church carved DOWN into solid volcanic rock — like Bete Giyorgis, a Greek cross cut into the ground, a 'New Jerusalem'.",
+        features: ["Carved top-down out of a single mass of living rock", "Cruciform (Greek-cross) plan, e.g. Bete Giyorgis", "Sits in a sunken pit, reached by trenches and tunnels", "Living Ethiopian Christianity — the 11 churches of Lalibela"] },
+      { id: "megalithic_circle", icon: "🗿", name: "Megalithic circle", sub: "Stonehenge · Neolithic", facing: "solar", group: "World",
+        blurb: "Prehistoric megalithic monument: a ring of massive standing stones, some capped by lintels, with an inner setting — aligned to the solstice sun. Its builders' religion is unknown.",
+        features: ["Ring of upright sarsens with lintels across the top", "An inner horseshoe of trilithons", "Solstice alignment (midsummer sunrise / midwinter sunset)", "Built by Neolithic peoples ~3000–2000 BCE — e.g. Stonehenge"] }
     ];
     const TYPE_LABEL = { nagara: "nagara", dravidian: "dravidian", stupa: "stupa", jain: "jain", kashmiri: "kashmiri", sun_temple: "sun_temple" };
 
@@ -145,16 +173,21 @@
     });
 
     function buildTabs() {
-      document.getElementById("tabs").innerHTML = TYPES.map(t =>
-        `<button class="tf-tab" data-id="${t.id}"><span class="ic">${t.icon}</span><span class="lb"><b>${esc(t.name)}</b><span>${esc(t.sub)}</span></span></button>`
-      ).join("");
+      const tab = t => `<button class="tf-tab" data-id="${t.id}"><span class="ic">${t.icon}</span><span class="lb"><b>${esc(t.name)}</b><span>${esc(t.sub)}</span></span></button>`;
+      const indian = TYPES.filter(t => !t.group);
+      const world = TYPES.filter(t => t.group === "World");
+      document.getElementById("tabs").innerHTML =
+        `<span class="tf-grp">Indian forms</span>` + indian.map(tab).join("") +
+        `<span class="tf-grp">World forms</span>` + world.map(tab).join("");
       document.querySelectorAll(".tf-tab").forEach(b => b.onclick = () => select(TYPES.find(t => t.id === b.dataset.id)));
     }
 
     const FACING = {
-      "east": { deg: 0, text: "Faces <b>east</b> — the entrance opens to the sunrise, as most Hindu temples do." },
+      "east": { deg: 0, text: "Faces <b>east</b> — the entrance opens to the sunrise, as most temples do." },
       "east-strict": { deg: 0, text: "<b>Strictly east-facing</b> — aligned so the rising sun's first light reaches the deity in the sanctum." },
-      "cardinal": { deg: 45, text: "Oriented to the <b>four cardinal directions</b> — gateways (toranas) at N, E, S and W for circumambulation." }
+      "cardinal": { deg: 45, text: "Oriented to the <b>four cardinal directions</b> — often astronomically aligned." },
+      "solar": { deg: 0, text: "<b>Solar-aligned</b> — set to the sun's key positions (solstice / equinox), not a fixed entrance." },
+      "inland": { deg: 180, text: "Faces <b>inland</b> (west, away from the sea) — the ancestors watch over the living." }
     };
 
     function select(t) {
