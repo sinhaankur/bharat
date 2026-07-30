@@ -37,6 +37,8 @@
       { href: "engine-corruption.html", text: "· Corruption" },
       { href: "engine-news.html", text: "· News" },
       { href: "articles.html", text: "Analysis", hint: "written pieces", icon: "📝" },
+      { href: "heritage-atlas.html", text: "Sacred ground", hint: "temples, their builders & destruction · Sanatan/Jain/Buddhist", icon: "🛕", rail: true },
+      { href: "atrocities.html", text: "Atrocities timeline", hint: "history's 100 deadliest events (NYT/Matthew White)", icon: "💀" },
       { href: "history.html", text: "History race", hint: "states over time", icon: "🏁" },
       { href: "command-chain.html", text: "Chain of command", hint: "who answers to whom", icon: "🔗" },
       { href: "mesh.html", text: "The mesh", hint: "how it all connects", icon: "🕸" },

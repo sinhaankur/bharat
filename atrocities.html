@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Population Control, Marauder Style — an interactive atlas of history's 100 worst atrocities | India District Atlas</title>
+  <meta name="description" content="An interactive rebuild of the New York Times / Matthew White chart of history's 100 deadliest events — deaths and share of world population, by era, category and region. Genghis Khan, Timur, Aurangzeb, the famines in British India, WWII, Mao and more, with India-relevant events highlighted." />
+  <meta name="keywords" content="Great Big Book of Horrible Things, Matthew White, atrocities timeline, deadliest events history, Genghis Khan deaths, famines British India, An Lushan Rebellion, WWII deaths, population killed history, interactive data" />
+  <link rel="canonical" href="https://sinhaankur.github.io/india-fiscal-map/atrocities.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="India District Atlas" />
+  <meta property="og:title" content="Population Control, Marauder Style — interactive" />
+  <meta property="og:description" content="History's 100 deadliest events by deaths and share of humanity, by era and region — the NYT / Matthew White data, made interactive. India events highlighted." />
+  <meta property="og:url" content="https://sinhaankur.github.io/india-fiscal-map/atrocities.html" />
+  <meta property="og:image" content="https://sinhaankur.github.io/india-fiscal-map/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://sinhaankur.github.io/india-fiscal-map/og-image.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .at-wrap { max-width: 1160px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; }
+    .at-head h1 { margin: 0.3rem 0 0.4rem; font-size: clamp(1.7rem, 3.6vw, 2.6rem); }
+    .at-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.55; max-width: 76ch; }
+    .at-src { font-size: 0.8rem; color: var(--muted-foreground); margin-top: 0.6rem; }
+    .at-src a { color: oklch(0.74 0.16 75); }
+    .at-stats { display: flex; flex-wrap: wrap; gap: 1.4rem; margin: 1.2rem 0 0.2rem; }
+    .at-stat b { font-family: var(--font-mono); font-size: 1.5rem; color: oklch(0.82 0.16 40); display: block; line-height: 1; }
+    .at-stat span { font-size: 0.78rem; color: var(--muted-foreground); }
+
+    .at-controls { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin: 1.2rem 0 0.2rem; }
+    .at-lbl { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted-foreground); margin-right: 0.2rem; }
+    .at-chip { font-family: var(--font-mono); font-size: 10px; padding: 4px 11px; border-radius: 999px; border: 1px solid var(--border-strong); color: var(--muted-foreground); background: transparent; cursor: pointer; }
+    .at-chip.on { color: oklch(0.16 0 0); font-weight: 600; border-color: transparent; }
+    .at-toggle { margin-left: auto; display: flex; gap: 0.3rem; }
+
+    /* the plot: a horizontal time axis with proportional bubbles */
+    .at-plot-wrap { border: 1px solid var(--border); border-radius: var(--radius); background: oklch(0.13 0 0); margin: 1rem 0 0.4rem; padding: 0.4rem 0 0; overflow-x: auto; }
+    #at-plot { display: block; min-width: 900px; width: 100%; }
+    .at-axis-note { font-size: 0.74rem; color: var(--muted-foreground); padding: 0 0.9rem 0.6rem; }
+    .at-bubble { cursor: pointer; transition: opacity 0.15s; }
+    .at-bubble:hover { stroke: #fff; stroke-width: 1.5; }
+    .at-bubble--dim { opacity: 0.12; }
+    .at-bubble--india { stroke: oklch(0.9 0.16 90); stroke-width: 1.5; stroke-dasharray: 2 2; }
+
+    .at-tip { position: fixed; z-index: 50; pointer-events: none; background: oklch(0.15 0 0); border: 1px solid var(--border-strong); border-radius: 8px; padding: 0.55rem 0.7rem; max-width: 280px; font-size: 0.82rem; line-height: 1.45; box-shadow: 0 8px 30px oklch(0 0 0 / 0.5); opacity: 0; transition: opacity 0.12s; }
+    .at-tip b { color: oklch(0.86 0.15 45); }
+    .at-tip .deaths { font-family: var(--font-mono); font-size: 1.1rem; color: oklch(0.84 0.16 40); }
+    .at-tip .meta { color: var(--muted-foreground); font-size: 0.76rem; }
+
+    .at-legend { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; margin: 0.4rem 0 0; font-size: 0.78rem; color: var(--muted-foreground); }
+    .at-legend i { display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; }
+
+    .at-tables { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin: 1.8rem 0 0; }
+    @media (max-width: 720px) { .at-tables { grid-template-columns: 1fr; } .at-toggle { margin-left: 0; width: 100%; } }
+    .at-table { border: 1px solid var(--border); border-radius: var(--radius); padding: 0.8rem 0.95rem; background: oklch(0.15 0 0); }
+    .at-table h3 { margin: 0 0 0.6rem; font-size: 0.92rem; }
+    .at-table .row { display: flex; align-items: center; gap: 0.5rem; padding: 0.25rem 0; font-size: 0.84rem; }
+    .at-table .row .nm { flex: 1; }
+    .at-table .row .yr { font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); }
+    .at-table .row .barw { flex: 0 0 42%; height: 8px; background: var(--muted); border-radius: 999px; overflow: hidden; }
+    .at-table .row .barw i { display: block; height: 100%; background: oklch(0.72 0.16 40); border-radius: 999px; }
+    .at-table .row .v { font-family: var(--font-mono); font-size: 0.82rem; color: oklch(0.84 0.14 45); min-width: 3.4rem; text-align: right; }
+
+    .at-list { margin-top: 1.6rem; }
+    .at-list h3 { font-size: 0.92rem; margin: 0 0 0.5rem; }
+    .at-row { display: grid; grid-template-columns: 2.2rem 1fr auto; gap: 0.6rem; align-items: center; padding: 0.45rem 0.2rem; border-bottom: 1px solid var(--border); font-size: 0.88rem; }
+    .at-row .rank { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
+    .at-row .nm b { color: var(--foreground); }
+    .at-row .nm .m { color: var(--muted-foreground); font-size: 0.78rem; }
+    .at-row .nm .india { font-family: var(--font-mono); font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.04em; color: oklch(0.16 0 0); background: oklch(0.85 0.15 90); padding: 1px 6px; border-radius: 999px; margin-left: 0.4rem; }
+    .at-row .d { font-family: var(--font-mono); color: oklch(0.84 0.15 42); font-size: 0.95rem; white-space: nowrap; }
+    .at-note { font-size: 0.78rem; color: var(--muted-foreground); line-height: 1.6; margin-top: 1.8rem; border-top: 1px solid var(--border); padding-top: 1rem; }
+    .at-note a { color: oklch(0.74 0.16 75); }
+    .at-note b { color: var(--foreground); }
+  </style>
+</head>
+<body>
+  <div id="site-nav"></div>
+
+  <main class="at-wrap">
+    <header class="at-head">
+      <div class="eyebrow">Data Points · after The New York Times / Matthew White</div>
+      <h1 class="display">Population Control, <em>Marauder Style</em></h1>
+      <p>History's 100 deadliest events — wars, oppressions, failed states, despots, colonial and civil wars —
+      sized by the number of people killed and, where the span was under 40 years, by the share of all humanity
+      that died. This is an interactive rebuild of Bill Marsh's 2011 New York Times graphic, which visualised the
+      death-toll estimates catalogued by Matthew White. <b>Events that happened in or heavily struck the Indian
+      subcontinent are outlined in gold.</b></p>
+      <p class="at-src" id="src"></p>
+      <div class="at-stats" id="stats"></div>
+    </header>
+
+    <div class="at-controls" id="cat-controls">
+      <span class="at-lbl">Category</span>
+    </div>
+    <div class="at-controls" id="loc-controls">
+      <span class="at-lbl">Region</span>
+      <div class="at-toggle">
+        <button class="at-chip" id="india-only">🇮🇳 India-relevant only</button>
+        <button class="at-chip on" id="size-deaths">size: total deaths</button>
+        <button class="at-chip" id="size-rate">size: deaths / year</button>
+      </div>
+    </div>
+
+    <div class="at-legend" id="legend"></div>
+
+    <div class="at-plot-wrap">
+      <svg id="at-plot" role="img" aria-label="Timeline of atrocities by year and death toll"></svg>
+      <div class="at-axis-note">Horizontal axis = time (400 BCE → 2025 CE, non-linear near the crowded modern era). Circle area ∝ the selected measure. Hover or tap a bubble for detail.</div>
+    </div>
+
+    <div class="at-tables" id="tables"></div>
+
+    <section class="at-list">
+      <h3 id="list-title">Every event, deadliest first</h3>
+      <div id="list"></div>
+    </section>
+
+    <p class="at-note" id="note"></p>
+  </main>
+
+  <script>
+  (function () {
+    "use strict";
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const SVGNS = "http://www.w3.org/2000/svg";
+
+    const CAT = {
+      international_war:        { label: "International wars", color: "oklch(0.68 0.13 250)" },
+      institutional_oppression:{ label: "Institutional oppression", color: "oklch(0.6 0.14 30)" },
+      failed_state:            { label: "Failed states", color: "oklch(0.7 0.13 145)" },
+      despot:                  { label: "Despots", color: "oklch(0.72 0.17 40)" },
+      colonial_war:            { label: "Colonial wars", color: "oklch(0.66 0.12 300)" },
+      civil_war:               { label: "Civil wars", color: "oklch(0.75 0.15 90)" }
+    };
+
+    let DATA = null, EVENTS = [];
+    const activeCats = new Set();
+    let indiaOnly = false, sizeMode = "deaths";
+
+    const yr = y => (y < 0 ? Math.abs(y) + " BCE" : y + " CE");
+    const midYear = e => (e.year_start + (e.year_end ?? e.year_start)) / 2;
+    const sizeVal = e => (sizeMode === "rate" ? (e.deaths_per_year_millions || e.deaths_millions / Math.max(1, (e.year_end - e.year_start) || 1)) : e.deaths_millions);
+
+    fetch("atrocities.json").then(r => r.json()).then(d => {
+      DATA = d; EVENTS = d.events || [];
+      renderSrc(); renderStats(); buildCatChips(); renderLegend(); renderTables(); renderNote(); wire(); render();
+    }).catch(e => {
+      document.getElementById("list").innerHTML = `<div style="color:var(--muted-foreground)">Could not load atrocities.json — ${esc(e.message)}</div>`;
+    });
+
+    function renderSrc() {
+      const p = DATA._meta.primary_source, b = DATA._meta.book_source;
+      document.getElementById("src").innerHTML =
+        `Source: <a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.title)}</a>, ${esc(p.publication)}, ${esc(p.date)} · ` +
+        `data from <b>${esc(b.title)}</b> by ${esc(b.author)} (${esc(b.publisher)}, ${b.year}). ` +
+        `<a href="${esc(p.graphic_url)}" target="_blank" rel="noopener">Original graphic ↗</a>. ` +
+        `Figures are estimates reproduced faithfully — see the note below.`;
+    }
+
+    function renderStats() {
+      const total = EVENTS.reduce((s, e) => s + (e.deaths_millions || 0), 0);
+      const india = EVENTS.filter(e => e.india_region).length;
+      const worst = EVENTS.slice().sort((a, b) => b.deaths_millions - a.deaths_millions)[0];
+      document.getElementById("stats").innerHTML =
+        `<div class="at-stat"><b>${EVENTS.length}</b><span>events catalogued</span></div>` +
+        `<div class="at-stat"><b>${Math.round(total)}M</b><span>total estimated deaths</span></div>` +
+        `<div class="at-stat"><b>${worst.deaths_millions}M</b><span>deadliest: ${esc(worst.name)}</span></div>` +
+        `<div class="at-stat"><b>${india}</b><span>India-relevant events</span></div>`;
+    }
+
+    function buildCatChips() {
+      const host = document.getElementById("cat-controls");
+      for (const [k, v] of Object.entries(CAT)) {
+        const b = document.createElement("button");
+        b.className = "at-chip"; b.dataset.cat = k; b.textContent = v.label;
+        b.style.setProperty("--cc", v.color);
+        b.onclick = () => { if (activeCats.has(k)) { activeCats.delete(k); b.classList.remove("on"); b.style.background = ""; } else { activeCats.add(k); b.classList.add("on"); b.style.background = v.color; b.style.borderColor = v.color; } render(); };
+        host.appendChild(b);
+      }
+    }
+
+    function renderLegend() {
+      document.getElementById("legend").innerHTML =
+        Object.values(CAT).map(v => `<span><i style="background:${v.color}"></i>${esc(v.label)}</span>`).join("") +
+        `<span><i style="background:transparent;border:1.5px dashed oklch(0.9 0.16 90)"></i>India-relevant</span>`;
+    }
+
+    function visible() {
+      return EVENTS.filter(e => {
+        if (activeCats.size && !activeCats.has(e.category)) return false;
+        if (indiaOnly && !e.india_region) return false;
+        return true;
+      });
+    }
+
+    // Non-linear time scale: compress ancient, expand modern (matches the source's crowded right side).
+    function xScale(width) {
+      const pad = 54;
+      // piecewise: -400..1000 gets 32% of width, 1000..1900 gets 40%, 1900..2025 gets 28%
+      return y => {
+        const w = width - pad * 2;
+        let f;
+        if (y < 1000) f = ((y + 400) / 1400) * 0.32;
+        else if (y < 1900) f = 0.32 + ((y - 1000) / 900) * 0.40;
+        else f = 0.72 + ((y - 1900) / 125) * 0.28;
+        return pad + Math.max(0, Math.min(1, f)) * w;
+      };
+    }
+
+    let tip;
+    function showTip(e, evt) {
+      if (!tip) { tip = document.createElement("div"); tip.className = "at-tip"; document.body.appendChild(tip); }
+      const span = e.year_end && e.year_end !== e.year_start ? `${yr(e.year_start)} – ${yr(e.year_end)}` : yr(e.year_start);
+      tip.innerHTML =
+        `<b>#${e.rank} · ${esc(e.name)}</b><br>` +
+        `<span class="deaths">${e.deaths_millions}M</span> deaths<br>` +
+        `<span class="meta">${span} · ${esc(CAT[e.category].label)} · ${esc(e.location)}</span>` +
+        (e.pct_world_pop ? `<br><span class="meta">${e.pct_world_pop}% of all humanity then alive</span>` : "") +
+        (e.india_region ? `<br><span class="meta">🇮🇳 ${esc(e.india_region)}</span>` : "") +
+        (e.note ? `<br><span class="meta">${esc(e.note)}</span>` : "");
+      tip.style.opacity = "1";
+      const x = evt.clientX + 14, y = evt.clientY + 14;
+      tip.style.left = Math.min(x, window.innerWidth - 300) + "px";
+      tip.style.top = Math.min(y, window.innerHeight - 160) + "px";
+    }
+    function hideTip() { if (tip) tip.style.opacity = "0"; }
+
+    function renderPlot() {
+      const svg = document.getElementById("at-plot");
+      const width = Math.max(900, svg.clientWidth || svg.parentElement.clientWidth || 1000);
+      const cats = Object.keys(CAT);
+      const bandH = 92, top = 34, height = top + cats.length * bandH + 20;
+      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+      svg.setAttribute("height", height);
+      while (svg.firstChild) svg.removeChild(svg.firstChild);
+      const X = xScale(width);
+
+      // time gridlines
+      [-400, 1, 500, 1000, 1400, 1700, 1900, 1950, 2000].forEach(y => {
+        const gx = X(y);
+        const line = document.createElementNS(SVGNS, "line");
+        line.setAttribute("x1", gx); line.setAttribute("x2", gx); line.setAttribute("y1", top - 8); line.setAttribute("y2", height - 14);
+        line.setAttribute("stroke", "oklch(0.3 0 0)"); line.setAttribute("stroke-dasharray", "2 4");
+        svg.appendChild(line);
+        const lbl = document.createElementNS(SVGNS, "text");
+        lbl.setAttribute("x", gx); lbl.setAttribute("y", height - 2); lbl.setAttribute("text-anchor", "middle");
+        lbl.setAttribute("fill", "oklch(0.6 0 0)"); lbl.setAttribute("font-size", "9"); lbl.setAttribute("font-family", "var(--font-mono, monospace)");
+        lbl.textContent = y < 0 ? Math.abs(y) + "BC" : y;
+        svg.appendChild(lbl);
+      });
+
+      // band labels
+      cats.forEach((c, i) => {
+        const by = top + i * bandH;
+        const t = document.createElementNS(SVGNS, "text");
+        t.setAttribute("x", 6); t.setAttribute("y", by + 12); t.setAttribute("fill", CAT[c].color);
+        t.setAttribute("font-size", "10"); t.setAttribute("font-family", "var(--font-mono, monospace)");
+        t.textContent = CAT[c].label.toUpperCase();
+        svg.appendChild(t);
+      });
+
+      const vis = new Set(visible().map(e => e));
+      const maxSize = Math.max(...EVENTS.map(sizeVal));
+      const rScale = v => 4 + Math.sqrt(v / maxSize) * 34;
+
+      EVENTS.forEach(e => {
+        const bandIdx = cats.indexOf(e.category);
+        const cy = top + bandIdx * bandH + bandH / 2;
+        const cx = X(midYear(e));
+        const r = rScale(sizeVal(e));
+        const c = document.createElementNS(SVGNS, "circle");
+        c.setAttribute("cx", cx); c.setAttribute("cy", cy); c.setAttribute("r", r);
+        c.setAttribute("fill", CAT[e.category].color);
+        c.setAttribute("fill-opacity", "0.55");
+        c.setAttribute("class", "at-bubble" + (vis.has(e) ? "" : " at-bubble--dim") + (e.india_region ? " at-bubble--india" : ""));
+        c.addEventListener("mousemove", evt => showTip(e, evt));
+        c.addEventListener("mouseleave", hideTip);
+        c.addEventListener("click", evt => showTip(e, evt));
+        svg.appendChild(c);
+        if (r > 15) {
+          const lb = document.createElementNS(SVGNS, "text");
+          lb.setAttribute("x", cx); lb.setAttribute("y", cy + 3); lb.setAttribute("text-anchor", "middle");
+          lb.setAttribute("fill", "oklch(0.95 0 0)"); lb.setAttribute("font-size", "9"); lb.setAttribute("pointer-events", "none");
+          lb.textContent = e.deaths_millions;
+          svg.appendChild(lb);
+        }
+      });
+    }
+
+    function renderTables() {
+      const st = DATA.summary_table;
+      const maxPct = Math.max(...st.pct_of_world_population.map(r => r.pct));
+      const maxRate = Math.max(...st.deaths_per_year_millions.map(r => r.per_year));
+      const rows = (arr, key, unit, max) => arr.map(r => `
+        <div class="row"><span class="nm">${esc(r.event)}</span><span class="yr">${esc(r.years)}</span>
+        <span class="barw"><i style="width:${(r[key] / max) * 100}%"></i></span>
+        <span class="v">${r[key]}${unit}</span></div>`).join("");
+      document.getElementById("tables").innerHTML =
+        `<div class="at-table"><h3>Share of all humanity killed <span style="color:var(--muted-foreground);font-weight:400;font-size:0.8rem">(events under 40 yrs)</span></h3>${rows(st.pct_of_world_population, "pct", "%", maxPct)}</div>` +
+        `<div class="at-table"><h3>Deaths per year <span style="color:var(--muted-foreground);font-weight:400;font-size:0.8rem">(millions)</span></h3>${rows(st.deaths_per_year_millions, "per_year", "M", maxRate)}</div>`;
+    }
+
+    function renderList() {
+      const list = visible().slice().sort((a, b) => b.deaths_millions - a.deaths_millions);
+      document.getElementById("list-title").textContent = `${list.length} events, deadliest first`;
+      document.getElementById("list").innerHTML = list.map(e => {
+        const span = e.year_end && e.year_end !== e.year_start ? `${yr(e.year_start)}–${yr(e.year_end)}` : yr(e.year_start);
+        return `<div class="at-row" id="${encodeURIComponent(e.name)}">
+          <span class="rank">#${e.rank}</span>
+          <span class="nm"><b>${esc(e.name)}</b>${e.india_region ? `<span class="india">🇮🇳 ${esc(e.india_region)}</span>` : ""}
+            <div class="m">${span} · ${esc(CAT[e.category].label)} · ${esc(e.location)}${e.pct_world_pop ? ` · ${e.pct_world_pop}% of humanity` : ""}${e.note ? " · " + esc(e.note) : ""}</div></span>
+          <span class="d">${e.deaths_millions}M</span>
+        </div>`;
+      }).join("");
+    }
+
+    function renderNote() {
+      const m = DATA._meta;
+      document.getElementById("note").innerHTML =
+        `<b>How to read this — and its limits.</b> ${esc(m.honesty)} ` +
+        `These figures come from one popular-history compilation; historians differ, often by large margins, on pre-modern tolls. ` +
+        `We reproduce the chart's numbers faithfully and label the source rather than presenting them as settled fact. ` +
+        `The India-relevant events link back to the <a href="heritage-atlas.html">heritage atlas</a>, where a site's destruction can be read against its era. ` +
+        `Original: <a href="${esc(m.primary_source.url)}" target="_blank" rel="noopener">NYT, ${esc(m.primary_source.date)}</a>.`;
+    }
+
+    function render() { renderPlot(); renderList(); }
+
+    function wire() {
+      document.getElementById("india-only").onclick = function () { indiaOnly = !indiaOnly; this.classList.toggle("on", indiaOnly); render(); };
+      const bd = document.getElementById("size-deaths"), br = document.getElementById("size-rate");
+      bd.onclick = () => { sizeMode = "deaths"; bd.classList.add("on"); br.classList.remove("on"); render(); };
+      br.onclick = () => { sizeMode = "rate"; br.classList.add("on"); bd.classList.remove("on"); render(); };
+      window.addEventListener("resize", () => { clearTimeout(window.__atrz); window.__atrz = setTimeout(renderPlot, 200); });
+    }
+  })();
+  </script>
+  <script src="command-palette.js"></script>
+  <script src="site-nav.js"></script>
+</body>
+</html>
