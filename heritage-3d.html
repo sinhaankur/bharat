@@ -39,6 +39,7 @@
     .h3-item .nm small { display: block; color: var(--muted-foreground); font-size: 0.72rem; }
     .h3-item .tag { margin-left: auto; font-family: var(--font-mono); font-size: 8px; text-transform: uppercase; letter-spacing: 0.03em; padding: 1px 6px; border-radius: 999px; white-space: nowrap; }
     .h3-item .tag.scan { color: oklch(0.16 0 0); background: oklch(0.72 0.15 150); }
+    .h3-item .tag.lidar { color: oklch(0.16 0 0); background: oklch(0.8 0.16 195); font-weight: 700; }
     .h3-item .tag.search { color: oklch(0.85 0.1 210); border: 1px solid oklch(0.5 0.1 210); }
     .h3-item .tag.gone { color: oklch(0.85 0.12 32); border: 1px solid oklch(0.5 0.14 32); }
 
@@ -94,6 +95,7 @@
         <div class="h3-rail-hd" id="rail-count">sites</div>
         <div class="h3-filter" id="filter">
           <button class="h3-fchip on" data-f="all">all</button>
+          <button class="h3-fchip" data-f="lidar">LiDAR ✦</button>
           <button class="h3-fchip" data-f="scan">has model</button>
           <button class="h3-fchip" data-f="ruin">ruins</button>
           <button class="h3-fchip" data-f="gone">destroyed</button>
@@ -145,6 +147,7 @@
 
     function passesFilter(s) {
       if (filter === "all") return true;
+      if (filter === "lidar") return s.model3d && s.model3d.scan === "lidar";
       if (filter === "scan") return !!s.model3d;
       if (filter === "ruin") return isRuin(s);
       if (filter === "gone") return isGone(s);
@@ -156,7 +159,9 @@
       document.getElementById("rail-count").textContent = `${list.length} sites`;
       const tagFor = s => {
         const st = scanState(s);
-        if (st === "scan") return `<span class="tag scan">3D model</span>`;
+        if (st === "scan") return s.model3d && s.model3d.scan === "lidar"
+          ? `<span class="tag lidar">LiDAR ✦</span>`
+          : `<span class="tag scan">3D scan</span>`;
         if (st === "gone") return `<span class="tag gone">gone</span>`;
         return `<span class="tag search">search</span>`;
       };
@@ -214,17 +219,17 @@
           (s.source && s.source[0] && s.source[0].url ? `<a href="${esc(s.source[0].url)}" target="_blank" rel="noopener">↗ source</a>` : "") +
           (!s.model3d && !isGone(s) ? `<a href="https://sketchfab.com/search?q=${encodeURIComponent(s.name.split("(")[0].trim())}&type=models" target="_blank" rel="noopener">↗ browse all scans on Sketchfab</a>` : "") +
         `</div>` +
-        (s.model3d ? `<div class="h3-attr">Model: ${esc(s.model3d.title || s.name)} — © <a href="https://sketchfab.com/3d-models/${esc(s.model3d.id)}" target="_blank" rel="noopener">${esc(s.model3d.attribution || "Sketchfab")}</a>, embedded under Sketchfab's terms.</div>`
+        (s.model3d ? `<div class="h3-attr">${s.model3d.scan === "lidar" ? "✦ <b style='color:oklch(0.82 0.16 195)'>Verified LiDAR + photogrammetry scan</b> — " : "📷 Photogrammetry — "}${esc(s.model3d.title || s.name)} © <a href="https://sketchfab.com/3d-models/${esc(s.model3d.id)}" target="_blank" rel="noopener">${esc(s.model3d.attribution || "Sketchfab")}</a>${s.model3d.attribution === "CyArk" ? " (heritage-preservation nonprofit, founded after the Bamiyan Buddhas were destroyed)" : ""}.</div>`
           : (!isGone(s) ? `<div class="h3-attr">Live Sketchfab search — models are their creators'; not a curated match. Some sites may have no scan yet.</div>` : ""));
     }
 
     function renderNote() {
       document.getElementById("note").innerHTML =
-        `<b>How this works & its honest limits.</b> Accurate 3D of most heritage sites simply doesn't exist as open data. ` +
-        `This viewer embeds real <a href="https://sketchfab.com" target="_blank" rel="noopener">Sketchfab</a> photogrammetry: a curated model where we've verified one, else a live search by the site's name. ` +
-        `A search result is <b>not</b> a vetted reconstruction — it shows whatever creators have uploaded, which for famous ruins is often good, and for obscure ones may be nothing. ` +
-        `Destroyed sites deliberately show no model: they are gone, and pretending otherwise would be a fabrication. ` +
-        `For the sourced record — builder, dates and destruction — use the <a href="heritage-atlas.html">heritage atlas</a>.`;
+        `<b>How this works & its honest limits.</b> This viewer embeds real 3D scans. Sites tagged <b style="color:oklch(0.82 0.16 195)">LiDAR ✦</b> are verified laser-scan + photogrammetry models from <a href="https://sketchfab.com/CyArk" target="_blank" rel="noopener">CyArk</a> — the heritage-preservation nonprofit founded after the Bamiyan Buddhas were dynamited, which digitally archives world heritage before it's lost (Rani ki Vav, Teotihuacán, Rapa Nui and more). ` +
+        `Other sites show a curated <a href="https://sketchfab.com" target="_blank" rel="noopener">Sketchfab</a> photogrammetry model where we've verified one, else a live search by name (which is <b>not</b> a vetted reconstruction). ` +
+        `True open LiDAR point-clouds aren't downloadable for most sites, so this is the closest real-scan data available today. ` +
+        `Destroyed sites deliberately show no model — they are gone. ` +
+        `For the sourced record use the <a href="heritage-atlas.html">world atlas</a>; for the stylised architecture types, the <a href="temple-forms.html">temple forms in 3D</a>.`;
     }
 
     function wire() {

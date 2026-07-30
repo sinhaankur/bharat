@@ -7,6 +7,16 @@
   },
   "updates": [
     {
+      "id": "u_2026_07_30_lidar_scans",
+      "date": "2026-07-30",
+      "kind": "feature",
+      "scope": "Heritage · real 3D scans",
+      "title": "Real LiDAR / photogrammetry scans pinned — via CyArk",
+      "detail": "Pinned verified real 3D scans into the photogrammetry viewer (heritage-3d.html) so marquee sites load a guaranteed scan instead of a best-effort search. Sites with a laser-scan model from CyArk (the heritage nonprofit founded after the Bamiyan Buddhas were destroyed) now carry a 'LiDAR ✦' badge and a dedicated filter: Rani ki Vav (added as a new site — the LiDAR-scanned Chaulukya stepwell on the ₹100 note), Teotihuacán's Pyramid of Quetzalcoatl, and Rapa Nui. Also pinned Hampi's Stone Chariot (photogrammetry). True open LiDAR point-clouds aren't downloadable for most sites, so CyArk's scans are the closest real-scan data available; the viewer says so honestly. Cross-linked with the Temple Forms 3D page. Atlas now 123 sites.",
+      "source": "https://sketchfab.com/CyArk",
+      "link": "heritage-3d.html"
+    },
+    {
       "id": "u_2026_07_30_temple_forms_3d",
       "date": "2026-07-30",
       "kind": "feature",

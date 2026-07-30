@@ -307,7 +307,14 @@
         }
       ],
       "continent": "Asia",
-      "architecture_type": "dravidian"
+      "architecture_type": "dravidian",
+      "model3d": {
+        "provider": "sketchfab",
+        "id": "1e8e9212dc874323af8d21c14d553f85",
+        "title": "Hampi Stone Chariot",
+        "attribution": "Enormous (Sketchfab)",
+        "scan": "photogrammetry"
+      }
     },
     {
       "id": "kailasa-ellora",
@@ -437,6 +444,38 @@
       ],
       "continent": "Asia",
       "architecture_type": "sun_temple"
+    },
+    {
+      "id": "rani-ki-vav",
+      "name": "Rani ki Vav (the Queen's Stepwell), Patan",
+      "tradition": "sanatan",
+      "deity": "Vishnu (Dashavatara panels)",
+      "region": "West India",
+      "continent": "Asia",
+      "state": "Gujarat",
+      "lat": 23.8586,
+      "lng": 72.1017,
+      "builder": "Queen Udayamati of the Chaulukya (Solanki) dynasty",
+      "built_from": 1063,
+      "built_to": 1068,
+      "status": "active",
+      "architecture_type": "nagara",
+      "lifespan_note": "An inverted subterranean temple — a seven-storey stepwell carved with 500+ principal sculptures (Dashavatara, apsaras). Silted over for centuries, excavated by the ASI, now UNESCO World Heritage and on the ₹100 note. LiDAR-scanned by CyArk (the Scottish Ten).",
+      "series": [],
+      "model3d": {
+        "provider": "sketchfab",
+        "id": "1a4fee746a4449c9b67c833fefbf7f98",
+        "title": "Rani ki Vav, Gujarat",
+        "attribution": "CyArk",
+        "scan": "lidar"
+      },
+      "source": [
+        {
+          "label": "ASI; UNESCO — Rani-ki-Vav; CyArk (LiDAR)",
+          "url": "https://whc.unesco.org/en/list/922/",
+          "tier": 1
+        }
+      ]
     },
     {
       "id": "dilwara",
@@ -2558,7 +2597,14 @@
           "tier": 1
         }
       ],
-      "architecture_type": "mesoamerican"
+      "architecture_type": "mesoamerican",
+      "model3d": {
+        "provider": "sketchfab",
+        "id": "1191545483b04a82bbe63475c666b0e8",
+        "title": "Teotihuacán — Pyramid of Quetzalcoatl",
+        "attribution": "CyArk",
+        "scan": "lidar"
+      }
     },
     {
       "id": "templo-mayor",
@@ -3137,7 +3183,15 @@
           "tier": 1
         }
       ],
-      "architecture_type": "moai"
+      "architecture_type": "moai",
+      "model3d": {
+        "provider": "sketchfab",
+        "id": "",
+        "title": "Rapa Nui moai (CyArk)",
+        "attribution": "CyArk",
+        "scan": "lidar",
+        "search": "Rapa Nui moai CyArk"
+      }
     },
     {
       "id": "uluru",
