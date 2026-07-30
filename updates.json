@@ -7,6 +7,16 @@
   },
   "updates": [
     {
+      "id": "u_2026_07_30_model_detail",
+      "date": "2026-07-30",
+      "kind": "feature",
+      "scope": "3D · depth & detail",
+      "title": "Rebuilt the 3D temple models with real architectural detail",
+      "detail": "The 3D forms felt simple (raw boxes). Rebuilt the 10 flagship archetypes in Blender with real detail using bevel + weighted-normal modifiers: moulded plinths, recessed doorways, corniced tiers, corner pilasters (rathas), central tower projections (lata), ribbed amalaka + kalasha finials, gopuram niches, detailed toranas, spoked chariot wheels + horses (Konark), fluted columns with papyrus/Doric capitals (Egypt/Greece), triglyph friezes and pediments, talud-tablero + balustraded stairs (Mesoamerica), and buttressed terraces (ziggurat) — all bevel-smoothed, ~1.7-9k polys, still web-sized. Also fixed two UX issues: the Temple Forms 3D viewer is now the large hero of the page (was a small box under a text wall), and heritage-atlas #site-xxx deep-links now focus that single site (map pin + filter summary) instead of dumping you into the middle of a 137-card list.",
+      "source": "temple-forms.html",
+      "link": "temple-forms.html"
+    },
+    {
       "id": "u_2026_07_30_cyark_worldwide",
       "date": "2026-07-30",
       "kind": "data",
