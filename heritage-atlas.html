@@ -20,7 +20,20 @@
   <style>
     /* ── palette + motion tokens for this page ─────────────────────────── */
     .ha-page { --gold: oklch(0.84 0.13 75); --gold-deep: oklch(0.66 0.15 60); --ember: oklch(0.72 0.19 32); }
-    .ha-wrap { max-width: 1180px; margin: 0 auto; padding: 0 var(--pad-x) 5rem; }
+    .ha-wrap { max-width: 1320px; margin: 0 auto; padding: 0.8rem var(--pad-x) 4rem; }
+
+    /* ── compact top bar (title + search + view), replaces the full-screen hero ── */
+    .ha-topbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+      padding: 0.3rem 0 0.7rem; border-bottom: 1px solid var(--border); margin-bottom: 0.9rem; }
+    .ha-topbar-l h1 { margin: 0; font-size: clamp(1.3rem, 2.6vw, 1.9rem); line-height: 1.05; letter-spacing: -0.01em;
+      background: linear-gradient(180deg, oklch(0.99 0 0), oklch(0.86 0.10 70)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .ha-topbar-l h1 em { font-style: normal; background: linear-gradient(180deg, var(--gold), var(--ember)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .ha-tag { margin: 0.15rem 0 0; font-size: 0.82rem; color: var(--muted-foreground); }
+    .ha-about-t { background: none; border: none; color: var(--gold); font-family: var(--font-mono); font-size: 10px; cursor: pointer; padding: 0; }
+    .ha-topbar-r { display: flex; gap: 0.6rem; align-items: center; flex: 1; max-width: 560px; min-width: 260px; }
+    .ha-about { margin: 0 0 1rem; padding: 0.9rem 1rem; border: 1px solid var(--border); border-radius: var(--radius-lg); background: oklch(0.15 0.005 60); }
+    .ha-about .ha-lede { color: var(--muted-foreground); font-size: 0.9rem; line-height: 1.55; margin: 0; }
+    .ha-about .ha-lede b { color: oklch(0.92 0.02 80); }
 
     /* ── cinematic hero ────────────────────────────────────────────────── */
     .ha-hero { position: relative; margin: 0 calc(var(--pad-x) * -1) 1.6rem; padding: 3.4rem var(--pad-x) 2rem; overflow: hidden;
@@ -65,9 +78,9 @@
     .ha-view button { background: none; border: none; color: var(--muted-foreground); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.5rem 0.9rem; cursor: pointer; }
     .ha-view button.on { background: var(--gold); color: oklch(0.16 0 0); font-weight: 700; }
 
-    #ha-map { height: 500px; border: 1px solid var(--border-strong); border-radius: var(--radius-lg); margin: 0.7rem 0 0.5rem; background: oklch(0.12 0 0);
+    #ha-map { height: 440px; border: 1px solid var(--border-strong); border-radius: var(--radius-lg); margin: 0 0 0.5rem; background: oklch(0.12 0 0);
       box-shadow: 0 20px 60px -30px oklch(0 0 0 / 0.9), inset 0 0 0 1px oklch(1 0 0 / 0.02); overflow: hidden; }
-    @media (max-width: 640px) { #ha-map { height: 380px; } }
+    @media (max-width: 640px) { #ha-map { height: 340px; } }
     .ha-maplegend { display: flex; flex-wrap: wrap; gap: 0.3rem 1rem; font-size: 0.72rem; color: var(--muted-foreground); margin: 0 0.2rem 0.3rem; }
     .ha-maplegend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; }
     /* pulsing ring for destroyed markers */
@@ -175,111 +188,170 @@
     .ha-note a { color: oklch(0.74 0.16 75); }
     .ha-note b { color: var(--foreground); }
 
-    /* EMBED MODE (?embed=1, inside the hero app): trim the long intro so the map +
-       timeline + filters are reachable immediately, and let the map fill the panel. */
+    /* ── APP SHELL: sidebar of filters + main content ──────────────────── */
+    .ha-shell { display: grid; grid-template-columns: 264px 1fr; gap: 1.3rem; align-items: start; margin-top: 0.4rem; }
+    @media (max-width: 900px) { .ha-shell { grid-template-columns: 1fr; } }
+    .ha-side { position: sticky; top: 0.6rem; align-self: start; max-height: calc(100vh - 1.2rem); overflow-y: auto; padding-right: 0.2rem;
+      border: 1px solid var(--border); border-radius: var(--radius-lg); background: oklch(0.15 0 0); }
+    .ha-side::-webkit-scrollbar { width: 8px; } .ha-side::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 8px; }
+    .ha-side-hd { position: sticky; top: 0; z-index: 3; background: oklch(0.16 0 0); padding: 0.7rem 0.9rem; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 0.5rem; }
+    .ha-side-hd b { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted-foreground); }
+    .ha-side-hd .ha-reset2 { margin-left: auto; background: none; border: 1px solid var(--border-strong); color: var(--gold); font-family: var(--font-mono); font-size: 9px; padding: 3px 9px; border-radius: 999px; cursor: pointer; }
+    .ha-side-hd .ha-sidetog { display: none; background: none; border: 1px solid var(--border-strong); color: var(--muted-foreground); font-family: var(--font-mono); font-size: 9px; padding: 3px 9px; border-radius: 999px; cursor: pointer; margin-left: 0.4rem; }
+    /* on mobile the sidebar collapses to just its header until tapped, so the map is reachable */
+    @media (max-width: 900px) {
+      .ha-side-hd .ha-sidetog { display: inline-block; }
+      .ha-side.collapsed .ha-fg { display: none; }
+    }
+    /* collapsible filter groups */
+    .ha-fg { border-bottom: 1px solid var(--border); }
+    .ha-fg-h { display: flex; align-items: center; gap: 0.4rem; width: 100%; background: none; border: none; cursor: pointer;
+      padding: 0.65rem 0.9rem; color: var(--foreground); font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.06em; text-transform: uppercase; }
+    .ha-fg-h .caret { margin-left: auto; transition: transform 0.2s; color: var(--muted-foreground); }
+    .ha-fg.closed .caret { transform: rotate(-90deg); }
+    .ha-fg.closed .ha-fg-b { display: none; }
+    .ha-fg-b { display: flex; flex-wrap: wrap; gap: 0.35rem; padding: 0 0.9rem 0.85rem; }
+    .ha-fg-h .cnt { margin-left: 0.35rem; color: var(--gold); font-size: 9px; }
+    /* main column */
+    .ha-main { min-width: 0; }
+    /* active-filter summary bar */
+    .ha-summary { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin: 0 0 0.7rem; min-height: 26px; }
+    .ha-summary .lead { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
+    .ha-summary .big { font-family: var(--font-mono); font-size: 1rem; color: var(--gold); font-weight: 700; }
+    .ha-pill { display: inline-flex; align-items: center; gap: 5px; font-family: var(--font-mono); font-size: 9.5px; padding: 3px 6px 3px 10px; border-radius: 999px; border: 1px solid var(--border-strong); color: var(--foreground); background: oklch(0.18 0 0); }
+    .ha-pill button { background: none; border: none; color: var(--muted-foreground); cursor: pointer; font-size: 12px; line-height: 1; padding: 0; }
+    .ha-pill button:hover { color: var(--ember); }
+    /* continent-grouped list */
+    .ha-group { margin-bottom: 0.4rem; }
+    .ha-group-h { display: flex; align-items: center; gap: 0.5rem; width: 100%; background: linear-gradient(90deg, oklch(0.17 0.01 60), transparent); border: none; border-left: 3px solid var(--gold-deep); cursor: pointer;
+      padding: 0.5rem 0.8rem; margin: 0.9rem 0 0.6rem; color: var(--foreground); font-weight: 700; font-size: 1rem; border-radius: 0 8px 8px 0; }
+    .ha-group-h .gcount { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); font-weight: 400; }
+    .ha-group-h .caret { margin-left: auto; transition: transform 0.2s; color: var(--muted-foreground); }
+    .ha-group.closed .caret { transform: rotate(-90deg); }
+    .ha-group.closed .ha-list { display: none; }
+
+    /* EMBED MODE (?embed=1, inside the hero app): collapse the sidebar to a top
+       strip and let the map + results fill the panel. */
     html.embed-mode body { margin: 0; }
-    html.embed-mode .ha-wrap { padding: 0.7rem 0.9rem 2rem; max-width: none; }
-    html.embed-mode .eyebrow,
-    html.embed-mode .ha-head p,
-    html.embed-mode .ha-thesis { display: none; }
-    html.embed-mode .ha-head h1 { font-size: 1.15rem; margin: 0 0 0.5rem; }
-    html.embed-mode .ha-stats { margin: 0 0 0.6rem; gap: 1rem; }
-    html.embed-mode .ha-stat b { font-size: 1.15rem; }
-    html.embed-mode #ha-map { height: 52vh; min-height: 300px; margin: 0.4rem 0; }
-    html.embed-mode .ha-note { display: none; }
+    html.embed-mode .ha-wrap { padding: 0.5rem 0.8rem 2rem; max-width: none; }
+    html.embed-mode .ha-tag, html.embed-mode .ha-about, html.embed-mode .ha-note { display: none; }
+    html.embed-mode .ha-topbar { padding: 0.2rem 0 0.5rem; margin-bottom: 0.6rem; }
+    html.embed-mode .ha-topbar-l h1 { font-size: 1.05rem; }
+    html.embed-mode .ha-shell { grid-template-columns: 1fr; }
+    html.embed-mode .ha-side { position: static; max-height: none; margin-bottom: 0.6rem; }
+    html.embed-mode #ha-map { height: 44vh; min-height: 280px; }
   </style>
 </head>
 <body>
   <div id="site-nav"></div>
 
   <main class="ha-wrap ha-page">
-    <header class="ha-hero">
-      <div class="ha-eyebrow">Heritage · builders & their destruction · sourced-or-gap</div>
-      <h1>Sacred ground of <em>the world</em><br>who built it — and who destroyed it</h1>
+    <!-- compact header: title + one-line lede + search + view toggle, all in a slim band -->
+    <header class="ha-topbar">
+      <div class="ha-topbar-l">
+        <h1>Sacred ground of <em>the world</em></h1>
+        <p class="ha-tag">Who built it — and who destroyed it. <button class="ha-about-t" id="about-t">About &amp; method ▾</button></p>
+      </div>
+      <div class="ha-topbar-r">
+        <div class="ha-search">
+          <span class="ic">⌕</span>
+          <input id="ha-q" type="search" placeholder="Search site, deity, king, place…" autocomplete="off" aria-label="Search sites" />
+          <button class="clr" id="ha-q-clr" title="Clear" aria-label="Clear search">×</button>
+        </div>
+        <div class="ha-view" role="tablist" aria-label="View">
+          <button id="view-both" class="on">Split</button>
+          <button id="view-map">Map</button>
+          <button id="view-list">List</button>
+        </div>
+      </div>
+    </header>
+    <div class="ha-about" id="about" hidden>
       <p class="ha-lede">A geolocated atlas of the world's sacred sites — <b>Sanatan Dharma</b>, <b>Buddhist</b>, <b>Jain</b>, <b>Sikh</b>,
       <b>Adivasi</b> &amp; indigenous, ancient <b>native faiths</b> (Egyptian, Greek, Norse, Mesoamerican, Andean, African,
-      Zoroastrian, Yazidi), <b>Christian</b>, pre-Vedic <b>megalithic</b> and <b>Indus Valley</b> grounds — across all six
-      inhabited continents. For each: who built it, when, and its <em>lifespan</em> — built, damaged or destroyed,
-      and what stands today. Where a site fell, we name the actor and cite the record.</p>
-      <p class="ha-thesis">A temple is not only stone. Its lifespan is a ledger: who raised it, what it meant,
-      and — where it fell — who brought it down and at what human cost. Sourced from the ASI and scholarship, or
-      marked a gap. Claims not accepted by archaeology are shown separately and labelled contested.</p>
+      Zoroastrian, Yazidi), <b>Christian</b>, pre-Vedic <b>megalithic</b> and <b>Indus Valley</b> — across all six inhabited
+      continents. For each: who built it, when, its <em>lifespan</em>, and where it fell, who brought it down — sourced or gap-flagged.</p>
       <div class="ha-stats" id="stats"></div>
-    </header>
-
-    <div class="ha-toolbar">
-      <div class="ha-search">
-        <span class="ic">⌕</span>
-        <input id="ha-q" type="search" placeholder="Search temple, deity, king, dynasty, place…" autocomplete="off" aria-label="Search sites" />
-        <button class="clr" id="ha-q-clr" title="Clear" aria-label="Clear search">×</button>
-      </div>
-      <div class="ha-view" role="tablist" aria-label="View">
-        <button id="view-both" class="on">Map + list</button>
-        <button id="view-map">Map</button>
-        <button id="view-list">List</button>
-      </div>
     </div>
 
-    <div id="ha-map"></div>
-    <div class="ha-maplegend" id="ha-maplegend"></div>
+    <!-- app shell: filter sidebar + main (map, summary, results) -->
+    <div class="ha-shell">
+      <aside class="ha-side" id="side">
+        <div class="ha-side-hd"><b>Filters</b><button class="ha-reset2" id="ha-reset">↺ reset all</button><button class="ha-sidetog" id="ha-sidetog">show ▾</button></div>
 
-    <div class="ha-scrub" id="scrub">
-      <div class="ha-scrub-hd">
-        <span>🕰️ Walk the timeline — sites that existed in this year glow; destroyed sites fade after they fell</span>
-        <b id="scrub-year">2026 CE</b>
-      </div>
-      <input type="range" id="scrub-range" min="-10000" max="2026" step="10" value="2026" />
-      <div class="ha-scrub-foot">
-        <button class="ha-scrub-btn" id="scrub-play">▶ play the centuries</button>
-        <button class="ha-scrub-btn" id="scrub-reset">reset to today</button>
-        <span id="scrub-live"></span>
+        <div class="ha-fg" data-fg="cont">
+          <button class="ha-fg-h">🌍 Continent<span class="cnt" id="fg-cont-n"></span><span class="caret">▾</span></button>
+          <div class="ha-fg-b" id="cont-controls">
+            <button class="ha-chip generic" data-cont="Asia">Asia<span class="n"></span></button>
+            <button class="ha-chip generic" data-cont="Europe">Europe<span class="n"></span></button>
+            <button class="ha-chip generic" data-cont="Africa">Africa<span class="n"></span></button>
+            <button class="ha-chip generic" data-cont="North America">N. America<span class="n"></span></button>
+            <button class="ha-chip generic" data-cont="South America">S. America<span class="n"></span></button>
+            <button class="ha-chip generic" data-cont="Oceania">Oceania<span class="n"></span></button>
+          </div>
+        </div>
+
+        <div class="ha-fg" data-fg="trad">
+          <button class="ha-fg-h">🛕 Tradition<span class="cnt" id="fg-trad-n"></span><span class="caret">▾</span></button>
+          <div class="ha-fg-b" id="trad-controls">
+            <button class="ha-chip" data-trad="sanatan">🕉 Sanatan<span class="n"></span></button>
+            <button class="ha-chip" data-trad="buddhist">☸ Buddhist<span class="n"></span></button>
+            <button class="ha-chip" data-trad="jain">卐 Jain<span class="n"></span></button>
+            <button class="ha-chip" data-trad="sikh">☬ Sikh<span class="n"></span></button>
+            <button class="ha-chip" data-trad="adivasi">🌿 Adivasi<span class="n"></span></button>
+            <button class="ha-chip" data-trad="native_faith">🔥 Native / ancient<span class="n"></span></button>
+            <button class="ha-chip" data-trad="christian">✝ Christian<span class="n"></span></button>
+            <button class="ha-chip" data-trad="pre_vedic_megalithic">🗿 Megalithic<span class="n"></span></button>
+            <button class="ha-chip" data-trad="indus_valley">🏺 Indus Valley<span class="n"></span></button>
+            <button class="ha-chip" data-trad="contested">❓ Contested<span class="n"></span></button>
+          </div>
+        </div>
+
+        <div class="ha-fg" data-fg="status">
+          <button class="ha-fg-h">🪔 Status<span class="cnt" id="fg-status-n"></span><span class="caret">▾</span></button>
+          <div class="ha-fg-b" id="status-controls">
+            <button class="ha-chip generic" data-flt="destroyed">🔥 Destroyed<span class="n"></span></button>
+            <button class="ha-chip generic" data-flt="ruin">🏛 Ruins<span class="n"></span></button>
+            <button class="ha-chip generic" data-flt="active">🪔 Still active<span class="n"></span></button>
+          </div>
+        </div>
+
+        <div class="ha-fg closed" data-fg="series">
+          <button class="ha-fg-h">🔱 Pilgrim circuits<span class="cnt" id="fg-series-n"></span><span class="caret">▾</span></button>
+          <div class="ha-fg-b" id="series-controls">
+            <button class="ha-chip generic" data-series="jyotirlinga">🔱 12 Jyotirlingas</button>
+            <button class="ha-chip generic" data-series="char_dham">🛕 Char Dham</button>
+            <button class="ha-chip generic" data-series="chota_char_dham">⛰ Chota Char Dham</button>
+            <button class="ha-chip generic" data-series="shakti_peetha">🔻 Shakti Peethas</button>
+            <button class="ha-chip generic" data-series="indigenous_sacred">🌿 Native / indigenous</button>
+            <button class="ha-chip generic" data-series="pre_abrahamic">🔥 Pre-Abrahamic</button>
+          </div>
+        </div>
+      </aside>
+
+      <div class="ha-main">
+        <div id="ha-map"></div>
+        <div class="ha-maplegend" id="ha-maplegend"></div>
+
+        <div class="ha-scrub" id="scrub">
+          <div class="ha-scrub-hd">
+            <span>🕰️ Walk the timeline — sites glow when they existed; destroyed sites fade after they fell</span>
+            <b id="scrub-year">2026 CE</b>
+          </div>
+          <input type="range" id="scrub-range" min="-10000" max="2026" step="10" value="2026" />
+          <div class="ha-scrub-foot">
+            <button class="ha-scrub-btn" id="scrub-play">▶ play</button>
+            <button class="ha-scrub-btn" id="scrub-reset">reset to today</button>
+            <span id="scrub-live"></span>
+          </div>
+        </div>
+
+        <!-- active-filter summary: always shows what's applied + result count -->
+        <div class="ha-summary" id="summary"></div>
+
+        <div id="list"></div>
       </div>
     </div>
-
-    <div class="ha-filters" id="filters">
-      <div class="ha-controls" id="cont-controls">
-        <span class="ha-lbl">Continent</span>
-        <button class="ha-chip generic" data-cont="Asia">🌏 Asia<span class="n"></span></button>
-        <button class="ha-chip generic" data-cont="Europe">🌍 Europe<span class="n"></span></button>
-        <button class="ha-chip generic" data-cont="Africa">🌍 Africa<span class="n"></span></button>
-        <button class="ha-chip generic" data-cont="North America">🌎 N. America<span class="n"></span></button>
-        <button class="ha-chip generic" data-cont="South America">🌎 S. America<span class="n"></span></button>
-        <button class="ha-chip generic" data-cont="Oceania">🌏 Oceania<span class="n"></span></button>
-      </div>
-      <div class="ha-controls" id="trad-controls">
-        <span class="ha-lbl">Tradition</span>
-        <button class="ha-chip" data-trad="sanatan">🕉 Sanatan<span class="n"></span></button>
-        <button class="ha-chip" data-trad="buddhist">☸ Buddhist<span class="n"></span></button>
-        <button class="ha-chip" data-trad="jain">卐 Jain<span class="n"></span></button>
-        <button class="ha-chip" data-trad="sikh">☬ Sikh<span class="n"></span></button>
-        <button class="ha-chip" data-trad="adivasi">🌿 Adivasi / tribal<span class="n"></span></button>
-        <button class="ha-chip" data-trad="native_faith">🔥 Native / ancient<span class="n"></span></button>
-        <button class="ha-chip" data-trad="christian">✝ Christian<span class="n"></span></button>
-        <button class="ha-chip" data-trad="pre_vedic_megalithic">🗿 Megalithic<span class="n"></span></button>
-        <button class="ha-chip" data-trad="indus_valley">🏺 Indus Valley<span class="n"></span></button>
-        <button class="ha-chip" data-trad="contested">❓ Contested<span class="n"></span></button>
-      </div>
-      <div class="ha-controls" id="status-controls">
-        <span class="ha-lbl">Status</span>
-        <button class="ha-chip generic" data-flt="destroyed">🔥 Destroyed / desecrated<span class="n"></span></button>
-        <button class="ha-chip generic" data-flt="ruin">🏛 Ruins<span class="n"></span></button>
-        <button class="ha-chip generic" data-flt="active">🪔 Still active<span class="n"></span></button>
-        <span class="ha-count" id="count"></span>
-      </div>
-      <div class="ha-controls" id="series-controls">
-        <span class="ha-lbl">Pilgrim circuits</span>
-        <button class="ha-chip generic" data-series="jyotirlinga">🔱 12 Jyotirlingas</button>
-        <button class="ha-chip generic" data-series="char_dham">🛕 Char Dham</button>
-        <button class="ha-chip generic" data-series="chota_char_dham">⛰ Chota Char Dham</button>
-        <button class="ha-chip generic" data-series="shakti_peetha">🔻 Shakti Peethas</button>
-        <button class="ha-chip generic" data-series="indigenous_sacred">🌿 Native / indigenous</button>
-        <button class="ha-chip generic" data-series="pre_abrahamic">🔥 Pre-Abrahamic</button>
-        <button class="ha-chip" id="ha-reset" style="margin-left:auto;border-style:dashed">↺ reset</button>
-        <span class="ha-count" id="series-count"></span>
-      </div>
-    </div>
-
-    <div class="ha-list" id="list"></div>
 
     <p class="ha-note" id="note"></p>
   </main>
@@ -543,31 +615,69 @@
       document.querySelectorAll("#cont-controls .ha-chip").forEach(ch => {
         const span = ch.querySelector(".n"); if (span) span.textContent = byCont[ch.dataset.cont] ? byCont[ch.dataset.cont] : "";
       });
+      // sidebar group headers show count of ACTIVE selections in that group
+      const set = (id, n) => { const e = document.getElementById(id); if (e) e.textContent = n ? "· " + n : ""; };
+      set("fg-cont-n", activeCont.size);
+      set("fg-trad-n", activeTrad.size);
+      set("fg-status-n", activeFlt ? 1 : 0);
+      set("fg-series-n", activeSeries ? 1 : 0);
     }
+
+    const CONT_ORDER = ["Asia", "Europe", "Africa", "North America", "South America", "Oceania"];
+    const CONT_ICON = { "Asia": "🌏", "Europe": "🌍", "Africa": "🌍", "North America": "🌎", "South America": "🌎", "Oceania": "🌏" };
 
     function render(fit) {
       const list = visible();
-      // order: destroyed first (the record the page foregrounds), then by build date
       list.sort((a, b) => (Number(!!b.destruction) - Number(!!a.destruction)) || ((a.built_from ?? 0) - (b.built_from ?? 0)));
       const el = document.getElementById("list");
-      el.innerHTML = list.length ? list.map(card).join("") : `<div class="ha-empty">No sites match these filters. <a href="#" id="ha-clear-empty" style="color:var(--gold)">clear filters</a></div>`;
-      const ce = document.getElementById("ha-clear-empty"); if (ce) ce.onclick = e => { e.preventDefault(); resetAll(); };
-      document.getElementById("count").textContent = `${list.length} of ${SITES.length} sites`;
-      // series completeness ("N of TOTAL mapped") — a full, sourced pilgrim circuit
-      const sc = document.getElementById("series-count");
-      if (activeSeries) {
-        const have = SITES.filter(s => Array.isArray(s.series) && s.series.includes(activeSeries)).length;
-        const total = SERIES_TOTAL[activeSeries];
-        if (total) {
-          sc.textContent = `${have} of ${total} ${SERIES_LABEL[activeSeries]} mapped${have >= total ? " ✓" : ""}`;
-        } else {
-          sc.textContent = `${have} ${SERIES_LABEL[activeSeries]} mapped`;
-        }
-      } else { sc.textContent = ""; }
+
+      if (!list.length) {
+        el.innerHTML = `<div class="ha-empty">No sites match these filters. <a href="#" id="ha-clear-empty" style="color:var(--gold)">clear filters</a></div>`;
+        const ce = document.getElementById("ha-clear-empty"); if (ce) ce.onclick = e => { e.preventDefault(); resetAll(); };
+      } else {
+        // group by continent; only show a heading when >1 continent is present (avoids noise when filtered to one)
+        const groups = {};
+        list.forEach(s => { const c = s.continent || "Other"; (groups[c] = groups[c] || []).push(s); });
+        const conts = CONT_ORDER.filter(c => groups[c]).concat(Object.keys(groups).filter(c => !CONT_ORDER.includes(c)));
+        const multi = conts.length > 1;
+        el.innerHTML = conts.map(c => {
+          const cards = groups[c].map(card).join("");
+          if (!multi) return `<div class="ha-list">${cards}</div>`;
+          return `<section class="ha-group" data-cont="${esc(c)}">
+            <button class="ha-group-h">${CONT_ICON[c] || "🌐"} ${esc(c)} <span class="gcount">${groups[c].length} site${groups[c].length > 1 ? "s" : ""}</span><span class="caret">▾</span></button>
+            <div class="ha-list">${cards}</div>
+          </section>`;
+        }).join("");
+        el.querySelectorAll(".ha-group-h").forEach(h => h.onclick = () => h.closest(".ha-group").classList.toggle("closed"));
+      }
+
       drawMarkers(list, fit);
       updateChipCounts();
+      renderSummary(list.length);
       el.querySelectorAll(".ha-share").forEach(b => b.onclick = () => shareSite(b.dataset.id));
       revealCards();
+    }
+
+    // Active-filter summary: big result count + a removable pill per active filter.
+    function renderSummary(n) {
+      const pills = [];
+      const P = (label, onClear) => { pills.push({ label, onClear }); };
+      activeCont.forEach(c => P("🌍 " + c, () => { activeCont.delete(c); document.querySelector(`[data-cont="${c}"]`)?.classList.remove("on"); }));
+      activeTrad.forEach(t => P((TRAD[t] ? TRAD[t].icon + " " + TRAD[t].label : t), () => { activeTrad.delete(t); document.querySelector(`[data-trad="${t}"]`)?.classList.remove("on"); }));
+      if (activeFlt) P("● " + activeFlt, () => { activeFlt = null; document.querySelectorAll("#status-controls .ha-chip").forEach(x => x.classList.remove("on")); });
+      if (activeSeries) {
+        const have = SITES.filter(s => (s.series || []).includes(activeSeries)).length, tot = SERIES_TOTAL[activeSeries];
+        const lbl = SERIES_LABEL[activeSeries] + (tot ? ` (${have}/${tot}${have >= tot ? " ✓" : ""})` : ` (${have})`);
+        P("🔱 " + lbl, () => { activeSeries = null; document.querySelectorAll("#series-controls .ha-chip").forEach(x => x.classList.remove("on")); });
+      }
+      if (query) P('“' + query + '”', () => { query = ""; document.getElementById("ha-q").value = ""; document.getElementById("ha-q-clr").style.display = "none"; });
+
+      const host = document.getElementById("summary");
+      host.innerHTML = `<span class="big">${n}</span><span class="lead">of ${SITES.length} sites${pills.length ? " · filtered by" : " · worldwide"}</span>`
+        + pills.map((p, i) => `<span class="ha-pill" data-i="${i}">${esc(p.label)}<button title="remove">×</button></span>`).join("")
+        + (pills.length ? `<button class="ha-pill" id="sum-clear" style="cursor:pointer;border-style:dashed">clear all</button>` : "");
+      host.querySelectorAll(".ha-pill[data-i]").forEach(el => el.querySelector("button").onclick = () => { pills[+el.dataset.i].onClear(); render(true); });
+      const ca = document.getElementById("sum-clear"); if (ca) ca.onclick = resetAll;
     }
 
     function revealCards() {
@@ -583,7 +693,7 @@
       activeTrad.clear(); activeCont.clear(); activeFlt = null; activeSeries = null; query = "";
       document.getElementById("ha-q").value = "";
       document.getElementById("ha-q-clr").style.display = "none";
-      document.querySelectorAll(".ha-filters .ha-chip.on").forEach(c => c.classList.remove("on"));
+      document.querySelectorAll(".ha-side .ha-chip.on").forEach(c => c.classList.remove("on"));
       render(true);
     }
 
@@ -616,6 +726,16 @@
     }
 
     function wire() {
+      // about toggle
+      const aboutBtn = document.getElementById("about-t"), about = document.getElementById("about");
+      aboutBtn.onclick = () => { about.hidden = !about.hidden; aboutBtn.textContent = about.hidden ? "About & method ▾" : "Hide ▴"; };
+      // collapsible filter groups
+      document.querySelectorAll(".ha-fg-h").forEach(h => h.onclick = () => h.closest(".ha-fg").classList.toggle("closed"));
+      // mobile: collapse whole sidebar to a header until tapped, so the map is reachable
+      const side = document.getElementById("side"), sidetog = document.getElementById("ha-sidetog");
+      if (window.matchMedia("(max-width: 900px)").matches) side.classList.add("collapsed");
+      sidetog.onclick = () => { const c = side.classList.toggle("collapsed"); sidetog.textContent = c ? "show ▾" : "hide ▴"; };
+
       document.querySelectorAll("#cont-controls .ha-chip").forEach(ch => ch.onclick = () => {
         const c = ch.dataset.cont;
         if (activeCont.has(c)) { activeCont.delete(c); ch.classList.remove("on"); }
@@ -653,22 +773,19 @@
       });
       clr.onclick = () => { q.value = ""; query = ""; clr.style.display = "none"; render(true); q.focus(); };
 
-      // view toggle
+      // view toggle: split (map+list) | map (tall map only) | list (results only)
       const vb = document.getElementById("view-both"), vm = document.getElementById("view-map"), vl = document.getElementById("view-list");
       const setView = (mode, btn) => {
         [vb, vm, vl].forEach(b => b.classList.remove("on")); btn.classList.add("on");
-        document.getElementById("ha-map").style.display = mode === "list" ? "none" : "";
-        document.getElementById("ha-maplegend").style.display = mode === "list" ? "none" : "";
-        document.getElementById("list").style.display = mode === "map" ? "none" : "";
-        if (mode !== "list" && MAP) setTimeout(() => { MAP.invalidateSize(); render(true); }, 60);
+        const mapEl = document.getElementById("ha-map"), leg = document.getElementById("ha-maplegend"),
+          scr = document.getElementById("scrub"), sum = document.getElementById("summary"), lst = document.getElementById("list");
+        const showMap = mode !== "list", showList = mode !== "map";
+        [mapEl, leg, scr].forEach(e => e.style.display = showMap ? "" : "none");
+        [sum, lst].forEach(e => e.style.display = showList ? "" : "none");
+        mapEl.style.height = mode === "map" ? "calc(100vh - 200px)" : "";
+        if (showMap && MAP) setTimeout(() => { MAP.invalidateSize(); render(true); }, 60);
       };
       vb.onclick = () => setView("both", vb); vm.onclick = () => setView("map", vm); vl.onclick = () => setView("list", vl);
-
-      // sticky filter shadow
-      const filters = document.getElementById("filters");
-      const sentinel = document.createElement("div"); filters.parentNode.insertBefore(sentinel, filters);
-      new IntersectionObserver(([e]) => filters.classList.toggle("stuck", e.intersectionRatio < 1),
-        { threshold: [1] }).observe(sentinel);
 
       const range = document.getElementById("scrub-range");
       range.oninput = () => { stopPlay(); setScrub(parseInt(range.value, 10)); };
