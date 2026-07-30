@@ -7,6 +7,16 @@
   },
   "updates": [
     {
+      "id": "u_2026_07_30_build_all_plus_embed",
+      "date": "2026-07-30",
+      "kind": "feature",
+      "scope": "3D build sequences · embed UX",
+      "title": "Build-sequence + math for ALL 16 temple forms; fixed the embed view",
+      "detail": "Extended the 'build it' construction scrubber to every one of the 16 architecture types (61 staged Blender GLBs) — including the subtractive ones, which teach a real principle: Petra, Elephanta and the Ethiopian rock-church are shown being CARVED from solid rock (the building is what's left when stone is removed), and Konark's Sun-temple wheels are explained as working sundials (24 wheels, 7 horses = the sun's chariot). Also fixed the ?embed=1 heritage-atlas view, which had bad UX: the view toggle clipped off-screen and the page scrolled ~26,000px. Now a tight panel — map fills it, slim filter strip, a compact one-line result list, the toggle removed (split is the sensible embed default), scroll roughly halved.",
+      "source": "temple-forms.html",
+      "link": "temple-forms.html"
+    },
+    {
       "id": "u_2026_07_30_build_the_marvel",
       "date": "2026-07-30",
       "kind": "feature",

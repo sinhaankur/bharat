@@ -231,16 +231,45 @@
     .ha-group.closed .caret { transform: rotate(-90deg); }
     .ha-group.closed .ha-list { display: none; }
 
-    /* EMBED MODE (?embed=1, inside the hero app): collapse the sidebar to a top
-       strip and let the map + results fill the panel. */
+    /* EMBED MODE (?embed=1, inside the hero panel): a tight, single-purpose
+       explorer — compact header, map fills the panel, slim filter strip, and a
+       COMPACT result list (not the big card wall) so nothing runs off-screen. */
     html.embed-mode body { margin: 0; }
-    html.embed-mode .ha-wrap { padding: 0.5rem 0.8rem 2rem; max-width: none; }
+    html.embed-mode .ha-wrap { padding: 0.45rem 0.7rem 1rem; max-width: none; }
     html.embed-mode .ha-tag, html.embed-mode .ha-about, html.embed-mode .ha-note { display: none; }
-    html.embed-mode .ha-topbar { padding: 0.2rem 0 0.5rem; margin-bottom: 0.6rem; }
-    html.embed-mode .ha-topbar-l h1 { font-size: 1.05rem; }
-    html.embed-mode .ha-shell { grid-template-columns: 1fr; }
-    html.embed-mode .ha-side { position: static; max-height: none; margin-bottom: 0.6rem; }
-    html.embed-mode #ha-map { height: 44vh; min-height: 280px; }
+    /* header: keep title + search + toggle on one tidy row that never clips */
+    html.embed-mode .ha-topbar { padding: 0.15rem 0 0.45rem; margin-bottom: 0.5rem; gap: 0.5rem; }
+    html.embed-mode .ha-topbar-l h1 { font-size: 0.95rem; white-space: nowrap; }
+    html.embed-mode .ha-topbar-l { flex: 0 0 auto; }
+    html.embed-mode .ha-topbar-r { min-width: 0; flex: 1 1 auto; }
+    html.embed-mode .ha-search { min-width: 100px; }
+    /* in the tight embed panel, drop the view toggle (split is the right default)
+       and keep clear of the floating "Aa" accessibility button in the corner */
+    html.embed-mode .ha-view { display: none; }
+    html.embed-mode .ha-topbar-r { padding-right: 2.6rem; }
+    /* one-column shell; sidebar becomes a slim strip at the top */
+    html.embed-mode .ha-shell { grid-template-columns: 1fr; gap: 0.55rem; }
+    html.embed-mode .ha-side { position: static; max-height: none; margin-bottom: 0; }
+    html.embed-mode #ha-map { height: 46vh; min-height: 240px; margin-bottom: 0.4rem; }
+    html.embed-mode .ha-maplegend { font-size: 0.66rem; gap: 0.2rem 0.7rem; max-height: 2.2em; overflow: hidden; }
+    html.embed-mode .ha-scrub { padding: 0.5rem 0.6rem; }
+    html.embed-mode .ha-scrub-hd span { display: none; }  /* drop the long caption */
+    /* COMPACT LIST: collapse cards to a dense one-line list in the panel */
+    html.embed-mode .ha-group-h { margin: 0.5rem 0 0.3rem; font-size: 0.85rem; padding: 0.3rem 0.6rem; }
+    html.embed-mode .ha-list { grid-template-columns: 1fr; gap: 0.3rem; }
+    html.embed-mode .ha-card { border-radius: 8px; }
+    html.embed-mode .ha-card::before { height: 2px; }
+    html.embed-mode .ha-card-h { padding: 0.4rem 0.6rem; }
+    html.embed-mode .ha-name { font-size: 0.9rem; }
+    html.embed-mode .ha-yr { font-size: 9px; }
+    /* hide the heavy body of each card in the embed — keep it a scannable header row */
+    html.embed-mode .ha-cardbody { padding: 0 0.6rem 0.5rem; }
+    html.embed-mode .ha-cardbody .ha-builder, html.embed-mode .ha-cardbody .ha-life,
+    html.embed-mode .ha-cardbody .ha-span, html.embed-mode .ha-cardbody .ha-destroy,
+    html.embed-mode .ha-cardbody .ha-rebut, html.embed-mode .ha-cardbody .ha-series,
+    html.embed-mode .ha-cardbody .ha-foot { display: none; }
+    html.embed-mode .ha-cardbody .ha-place { margin: 0; }
+    html.embed-mode .ha-summary { margin-bottom: 0.4rem; }
   </style>
 </head>
 <body>
