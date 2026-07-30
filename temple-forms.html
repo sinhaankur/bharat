@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Temple forms in 3D — how each style is shaped and oriented | India District Atlas</title>
+  <meta name="description" content="Interactive 3D models of the major Indian temple architecture types — Nagara shikhara, Dravidian gopuram & vimana, Buddhist stupa, Jain marble temple, Kashmiri pyramidal roof, and the east-facing Sun temple chariot form. Rotate each form, see its orientation (sun-facing), defining features, and the real sourced sites that use it." />
+  <meta name="keywords" content="temple architecture 3D, Nagara shikhara, Dravidian gopuram vimana, stupa, Jain temple, Kashmiri temple, Sun temple Konark, temple orientation, east facing temple, 3D temple model" />
+  <link rel="canonical" href="https://sinhaankur.github.io/india-fiscal-map/temple-forms.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="India District Atlas" />
+  <meta property="og:title" content="Temple forms in 3D — how each style is shaped and oriented" />
+  <meta property="og:description" content="Rotate 3D models of Indian temple types — Nagara, Dravidian, stupa, Jain, Kashmiri, Sun temple — with orientation and the real sites that use each." />
+  <meta property="og:url" content="https://sinhaankur.github.io/india-fiscal-map/temple-forms.html" />
+  <meta property="og:image" content="https://sinhaankur.github.io/india-fiscal-map/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://sinhaankur.github.io/india-fiscal-map/og-image.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+  <style>
+    .tf-wrap { max-width: 1180px; margin: 0 auto; padding: 0.9rem var(--pad-x) 5rem; --gold: oklch(0.84 0.13 75); --gold-deep: oklch(0.66 0.15 60); }
+    .tf-head { padding: 0.3rem 0 0.8rem; border-bottom: 1px solid var(--border); margin-bottom: 1rem; }
+    .tf-head .eyebrow { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); }
+    .tf-head h1 { margin: 0.3rem 0 0.3rem; font-size: clamp(1.5rem, 3.4vw, 2.4rem); line-height: 1.05;
+      background: linear-gradient(180deg, oklch(0.99 0 0), oklch(0.86 0.10 70)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .tf-head p { color: var(--muted-foreground); font-size: 0.92rem; line-height: 1.55; max-width: 76ch; }
+    .tf-head p a { color: var(--gold); }
+
+    /* type selector chips */
+    .tf-tabs { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.4rem 0 1rem; }
+    .tf-tab { display: flex; align-items: center; gap: 0.5rem; border: 1px solid var(--border-strong); border-radius: 12px; background: oklch(0.16 0 0);
+      color: var(--foreground); padding: 0.5rem 0.85rem; cursor: pointer; transition: transform 0.15s, border-color 0.15s, background 0.15s; }
+    .tf-tab:hover { transform: translateY(-2px); border-color: var(--gold-deep); }
+    .tf-tab.on { border-color: var(--gold); background: linear-gradient(180deg, oklch(0.22 0.03 70), oklch(0.17 0.01 60)); box-shadow: 0 0 0 1px oklch(0.7 0.15 70 / 0.3); }
+    .tf-tab .ic { font-size: 1.15rem; }
+    .tf-tab .lb { display: flex; flex-direction: column; line-height: 1.15; }
+    .tf-tab .lb b { font-size: 0.9rem; } .tf-tab .lb span { font-size: 0.7rem; color: var(--muted-foreground); font-family: var(--font-mono); }
+
+    .tf-stage { display: grid; grid-template-columns: 1.4fr 1fr; gap: 1.2rem; align-items: start; }
+    @media (max-width: 820px) { .tf-stage { grid-template-columns: 1fr; } }
+
+    .tf-viewer { position: relative; border: 1px solid var(--border-strong); border-radius: var(--radius-lg); overflow: hidden;
+      background: radial-gradient(120% 90% at 50% 0%, oklch(0.2 0.02 70), oklch(0.11 0 0)); box-shadow: 0 24px 60px -34px oklch(0 0 0 / 0.9); }
+    model-viewer { width: 100%; height: 460px; --poster-color: transparent; background: transparent; }
+    @media (max-width: 820px) { model-viewer { height: 360px; } }
+    /* orientation compass overlay */
+    .tf-compass { position: absolute; left: 12px; bottom: 12px; width: 78px; height: 78px; border-radius: 50%; border: 1px solid var(--border-strong);
+      background: oklch(0.13 0 0 / 0.72); backdrop-filter: blur(4px); font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); }
+    .tf-compass span { position: absolute; left: 50%; transform: translateX(-50%); }
+    .tf-compass .n { top: 4px; } .tf-compass .s { bottom: 4px; }
+    .tf-compass .e { top: 50%; right: 5px; left: auto; transform: translateY(-50%); color: var(--gold); font-weight: 700; }
+    .tf-compass .w { top: 50%; left: 5px; transform: translateY(-50%); }
+    .tf-compass .dot { top: 50%; left: 50%; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); transform: translate(-50%,-50%); }
+    .tf-compass .ray { top: 50%; left: 50%; width: 30px; height: 2px; background: linear-gradient(90deg, var(--gold), transparent); transform-origin: left center; }
+    .tf-hint { position: absolute; right: 12px; top: 12px; font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); background: oklch(0.13 0 0 / 0.6); padding: 3px 8px; border-radius: 999px; }
+
+    .tf-info h2 { margin: 0 0 0.2rem; font-size: 1.3rem; }
+    .tf-info .sub { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted-foreground); }
+    .tf-orient { display: flex; align-items: center; gap: 0.5rem; margin: 0.7rem 0; padding: 0.5rem 0.7rem; border-radius: 8px; background: oklch(0.2 0.04 75 / 0.4); border: 1px solid oklch(0.5 0.1 75); font-size: 0.88rem; color: oklch(0.88 0.1 78); }
+    .tf-orient b { color: var(--gold); }
+    .tf-desc { font-size: 0.92rem; line-height: 1.6; color: var(--foreground); margin: 0.6rem 0; }
+    .tf-feat { list-style: none; padding: 0; margin: 0.5rem 0; }
+    .tf-feat li { font-size: 0.86rem; line-height: 1.5; color: var(--muted-foreground); padding-left: 1.1rem; position: relative; margin-bottom: 0.25rem; }
+    .tf-feat li::before { content: "▸"; position: absolute; left: 0; color: var(--gold-deep); }
+    .tf-examples { margin-top: 1rem; border-top: 1px solid var(--border); padding-top: 0.8rem; }
+    .tf-examples h3 { font-size: 0.8rem; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-foreground); margin: 0 0 0.5rem; }
+    .tf-ex-list { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .tf-ex { font-size: 0.82rem; color: var(--foreground); text-decoration: none; border: 1px solid var(--border); border-radius: 999px; padding: 3px 10px; background: oklch(0.16 0 0); transition: border-color 0.15s, color 0.15s; }
+    .tf-ex:hover { border-color: var(--gold); color: var(--gold); }
+    .tf-ex small { color: var(--muted-foreground); font-family: var(--font-mono); font-size: 9px; margin-left: 4px; }
+    .tf-note { font-size: 0.78rem; color: var(--muted-foreground); line-height: 1.6; margin-top: 1.8rem; border-top: 1px solid var(--border); padding-top: 1rem; }
+    .tf-note a { color: var(--gold); } .tf-note b { color: var(--foreground); }
+    .tf-dl { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
+    .tf-dl a { color: oklch(0.72 0.13 250); }
+  </style>
+</head>
+<body>
+  <div id="site-nav"></div>
+
+  <main class="tf-wrap">
+    <header class="tf-head">
+      <div class="eyebrow">Heritage · 3D forms · built in Blender</div>
+      <h1>Temple forms in 3D — shape &amp; orientation</h1>
+      <p>Every temple tradition has a signature form. These are procedural 3D models of the major Indian
+      architecture types — rotate each one, and see how it is <b>oriented</b> (most face east, to the rising sun),
+      what defines it, and the real sourced sites that were built this way. Pair with the
+      <a href="heritage-atlas.html">world atlas</a> and the <a href="heritage-3d.html">photogrammetry viewer</a>.</p>
+    </header>
+
+    <div class="tf-tabs" id="tabs"></div>
+
+    <div class="tf-stage">
+      <div class="tf-viewer">
+        <model-viewer id="mv" camera-controls auto-rotate auto-rotate-delay="0" rotation-per-second="18deg"
+          shadow-intensity="1" exposure="1.05" camera-orbit="45deg 68deg 16m" min-camera-orbit="auto auto 6m" interaction-prompt="none"
+          ar ar-modes="webxr scene-viewer quick-look" alt="3D temple form">
+        </model-viewer>
+        <div class="tf-compass" id="compass" title="Entrance orientation">
+          <span class="n">N</span><span class="s">S</span><span class="e">E ☀</span><span class="w">W</span>
+          <i class="dot"></i><i class="ray" id="ray"></i>
+        </div>
+        <div class="tf-hint">drag to rotate · scroll to zoom</div>
+      </div>
+      <div class="tf-info" id="info"></div>
+    </div>
+
+    <p class="tf-note" id="note"></p>
+  </main>
+
+  <script>
+  (function () {
+    "use strict";
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+    // The six archetypes: model file + description + defining features + orientation.
+    const TYPES = [
+      { id: "nagara", icon: "🛕", name: "Nagara", sub: "N-India shikhara", facing: "east",
+        blurb: "The North-Indian style: a curvilinear beehive tower (shikhara) rising over the sanctum (garbhagriha), crowned by a ribbed amalaka disc and a kalasha finial.",
+        features: ["Curvilinear shikhara — a smooth vertical curve to the peak", "Amalaka (ribbed stone disc) + kalasha (pot finial) on top", "Mandapa (pillared porch) projecting toward the entrance", "Sanctum is a small dark cella; height, not interior space, is the point"] },
+      { id: "dravidian", icon: "🏛", name: "Dravidian", sub: "S-India gopuram + vimana", facing: "east",
+        blurb: "The South-Indian style: a stepped pyramidal tower (vimana) over the sanctum, and — its signature — one or more towering gateway towers (gopurams) in the enclosure walls.",
+        features: ["Vimana — a stepped, storeyed pyramid over the sanctum", "Gopuram — a giant barrel-roofed gateway tower, often taller than the vimana", "Concentric walled enclosures (prakaram) with pillared halls", "Octagonal shikhara cap + kalasha atop the vimana"] },
+      { id: "stupa", icon: "☸", name: "Buddhist stupa", sub: "hemispherical dome", facing: "cardinal",
+        blurb: "The Buddhist form: a solid hemispherical mound (anda) enshrining relics, topped by a square railing (harmika) and tiered parasols (chhatra), ringed by gateways.",
+        features: ["Anda — the great hemispherical dome (a relic mound, not a hollow room)", "Harmika (square railing) + chhatra (stacked parasols) on the summit", "Toranas — carved gateways at the four cardinal directions", "Circular terrace (medhi) for pradakshina (circumambulation)"] },
+      { id: "jain", icon: "卐", name: "Jain temple", sub: "marble, domed mandapa", facing: "east",
+        blurb: "The Jain style: brilliant white marble, an intricately carved domed assembly hall (mandapa) on clustered pillars, and a spired shrine (shikhara) for the Tirthankara.",
+        features: ["White marble, densely carved ceilings and pillars", "Central domed mandapa on a ring of ornate pillars", "Shikhara shrine housing the Tirthankara image", "Often a symmetrical, multi-shrine plan (chaumukha)"] },
+      { id: "kashmiri", icon: "⛰", name: "Kashmiri", sub: "pyramidal peaked roof", facing: "east",
+        blurb: "The distinctive Kashmir style: a steep two-tiered pyramidal (peaked) roof over a square cella, ringed by a fluted colonnade, on a high plinth — blending Gandharan, Gupta and classical forms.",
+        features: ["Steep peaked pyramidal roof (not a curved shikhara)", "Square cella on a tall stepped plinth", "Peristyle of fluted columns around a courtyard", "Trefoil (three-lobed) arched niches — e.g. Martand"] },
+      { id: "sun_temple", icon: "☀", name: "Sun temple", sub: "east-facing stone chariot", facing: "east-strict",
+        blurb: "A temple to Surya, conceived as the Sun god's colossal stone chariot: giant carved wheels, teams of horses, and an east-facing entrance so the first light strikes the deity.",
+        features: ["Built as a chariot — monumental wheels along the platform", "Teams of horses drawing it, at the eastern front", "Jagamohana (pyramidal audience hall) + deul (sanctum tower)", "Strictly east-facing: dawn light reaches the sanctum — e.g. Konark, Martand, Modhera"] }
+    ];
+    const TYPE_LABEL = { nagara: "nagara", dravidian: "dravidian", stupa: "stupa", jain: "jain", kashmiri: "kashmiri", sun_temple: "sun_temple" };
+
+    let SITES = [], current = null;
+
+    fetch("heritage-sites.json").then(r => r.json()).then(d => {
+      SITES = d.sites || [];
+      buildTabs(); renderNote();
+      const want = new URLSearchParams(location.search).get("type");
+      select(TYPES.find(t => t.id === want) || TYPES[0]);
+    });
+
+    function buildTabs() {
+      document.getElementById("tabs").innerHTML = TYPES.map(t =>
+        `<button class="tf-tab" data-id="${t.id}"><span class="ic">${t.icon}</span><span class="lb"><b>${esc(t.name)}</b><span>${esc(t.sub)}</span></span></button>`
+      ).join("");
+      document.querySelectorAll(".tf-tab").forEach(b => b.onclick = () => select(TYPES.find(t => t.id === b.dataset.id)));
+    }
+
+    const FACING = {
+      "east": { deg: 0, text: "Faces <b>east</b> — the entrance opens to the sunrise, as most Hindu temples do." },
+      "east-strict": { deg: 0, text: "<b>Strictly east-facing</b> — aligned so the rising sun's first light reaches the deity in the sanctum." },
+      "cardinal": { deg: 45, text: "Oriented to the <b>four cardinal directions</b> — gateways (toranas) at N, E, S and W for circumambulation." }
+    };
+
+    function select(t) {
+      if (!t) return;
+      current = t;
+      document.querySelectorAll(".tf-tab").forEach(b => b.classList.toggle("on", b.dataset.id === t.id));
+      const mv = document.getElementById("mv");
+      mv.setAttribute("src", "assets/temples-3d/" + t.id + ".glb");
+
+      // compass ray points to the entrance direction (E = right)
+      const f = FACING[t.facing] || FACING.east;
+      document.getElementById("ray").style.transform = `translate(0,-50%) rotate(${f.deg}deg)`;
+      document.querySelector(".tf-compass .e").style.opacity = t.facing === "cardinal" ? "0.6" : "1";
+
+      const examples = SITES.filter(s => s.architecture_type === t.id);
+      document.getElementById("info").innerHTML =
+        `<h2>${t.icon} ${esc(t.name)}${/temple|stupa/i.test(t.name) ? "" : " temple"}</h2>` +
+        `<div class="sub">${esc(t.sub)}</div>` +
+        `<div class="tf-orient">🧭 ${f.text}</div>` +
+        `<div class="tf-desc">${esc(t.blurb)}</div>` +
+        `<ul class="tf-feat">${t.features.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` +
+        `<div class="tf-examples"><h3>Real sites in this style · ${examples.length}</h3>` +
+          `<div class="tf-ex-list">${examples.length
+            ? examples.slice(0, 40).map(s => `<a class="tf-ex" href="heritage-atlas.html#site-${esc(s.id)}">${esc(s.name.split("(")[0].trim())}<small>${esc(s.state || "")}</small></a>`).join("")
+            : `<span style="color:var(--muted-foreground);font-size:0.85rem">—</span>`}</div>` +
+        `</div>` +
+        `<div class="tf-dl" style="margin-top:0.8rem">Model: procedural, built in Blender · <a href="assets/temples-3d/${t.id}.glb" download>download .glb ↓</a></div>`;
+    }
+
+    function renderNote() {
+      document.getElementById("note").innerHTML =
+        `<b>What these models are — and are not.</b> They are <b>procedural, stylised</b> forms that capture the defining massing and orientation of each architecture type — ` +
+        `NOT scans of specific temples. For a real photorealistic scan of an actual site, use the <a href="heritage-3d.html">photogrammetry viewer</a>; ` +
+        `for the sourced record (builder, dates, destruction) use the <a href="heritage-atlas.html">world atlas</a>. ` +
+        `Orientation (sun-facing) reflects the general rule of the tradition; individual temples can vary. Models built with Blender and exported to glTF.`;
+    }
+  })();
+  </script>
+  <script src="command-palette.js"></script>
+  <script src="site-nav.js"></script>
+</body>
+</html>
