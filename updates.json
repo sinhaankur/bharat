@@ -7,6 +7,16 @@
   },
   "updates": [
     {
+      "id": "u_2026_07_30_pbr_stone",
+      "date": "2026-07-30",
+      "kind": "feature",
+      "scope": "3D · PBR materials & lighting",
+      "title": "Perfected the 3D depth — real carved-stone PBR textures + studio lighting",
+      "detail": "The flat-matte look is gone. Generated tileable procedural stone normal + roughness maps (numpy, 256px) that export INTO the glTF, so all 10 flagship models now show genuine weathered/carved-stone surface in the browser rather than plastic. The <model-viewer> uses an HDRI environment image, ACES tone-mapping and soft shadows so the PBR materials light realistically. Verified live: the carved surface reads clearly on the Nagara, Greek marble and others. Models stay web-sized (479 KB-1.5 MB). Note: Cycles isn't in this Blender build, so bump is baked as generated image maps instead of a node bake.",
+      "source": "temple-forms.html",
+      "link": "temple-forms.html"
+    },
+    {
       "id": "u_2026_07_30_model_detail",
       "date": "2026-07-30",
       "kind": "feature",
