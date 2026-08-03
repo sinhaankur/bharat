@@ -22,3 +22,7 @@ __pycache__/
 india_map.blend
 india_districts.blend
 *.blend1
+
+# temple-forms preview renders — dev verification only; render_temple_previews.py
+# regenerates them from the committed .glb models.
+assets/temples-3d/_preview/

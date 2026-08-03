@@ -95,6 +95,42 @@
     .tf-note a { color: var(--gold); } .tf-note b { color: var(--foreground); }
     .tf-dl { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
     .tf-dl a { color: oklch(0.72 0.13 250); }
+
+    /* view-preset buttons (front / 3-quarter / top / side) */
+    .tf-views { position: absolute; right: 12px; bottom: 12px; display: flex; gap: 4px; z-index: 2; }
+    .tf-views button { font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground);
+      background: oklch(0.13 0 0 / 0.72); border: 1px solid var(--border-strong); padding: 4px 8px; border-radius: 7px; cursor: pointer; transition: color 0.15s, border-color 0.15s; }
+    .tf-views button:hover, .tf-views button.on { color: var(--gold); border-color: var(--gold-deep); }
+
+    /* real, sourced dimensions block */
+    .tf-dims { margin: 0.7rem 0; padding: 0.6rem 0.75rem; border-radius: 8px; background: oklch(0.18 0.02 150 / 0.5); border: 1px solid oklch(0.45 0.09 155); }
+    .tf-dims .lbl { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; color: oklch(0.82 0.13 155); display: flex; justify-content: space-between; align-items: center; }
+    .tf-dims .ex { font-weight: 700; color: var(--foreground); margin: 0.25rem 0 0.1rem; font-size: 0.95rem; }
+    .tf-dims .ex small { font-weight: 400; color: var(--muted-foreground); font-family: var(--font-mono); font-size: 0.7rem; margin-left: 0.4rem; }
+    .tf-dims-grid { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0.45rem 0 0.3rem; }
+    .tf-dims-grid span { font-family: var(--font-mono); font-size: 0.72rem; color: oklch(0.9 0.02 155); background: oklch(0.13 0 0); border: 1px solid oklch(0.35 0.05 155); border-radius: 6px; padding: 3px 7px; }
+    .tf-dims-grid span b { color: oklch(0.86 0.14 155); }
+    .tf-dims .dnote { font-size: 0.8rem; line-height: 1.5; color: var(--muted-foreground); margin-top: 0.3rem; }
+    .tf-dims .dsrc { font-size: 0.7rem; font-family: var(--font-mono); margin-top: 0.35rem; }
+    .tf-dims .dsrc a { color: oklch(0.72 0.13 155); }
+    .tf-scan { display: inline-flex; align-items: center; gap: 5px; margin-top: 0.5rem; font-size: 0.78rem; font-family: var(--font-mono);
+      color: oklch(0.16 0 0); background: oklch(0.82 0.13 155); border-radius: 999px; padding: 4px 11px; text-decoration: none; font-weight: 700; }
+    .tf-scan:hover { background: oklch(0.9 0.14 155); }
+    .tf-scan.none { background: none; color: var(--muted-foreground); border: 1px dashed var(--border-strong); font-weight: 400; }
+
+    /* real-sites mini-map */
+    .tf-sitemap { margin-top: 0.8rem; }
+    .tf-sitemap h3 { font-size: 0.8rem; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-foreground); margin: 0 0 0.4rem; }
+    .tf-map { position: relative; width: 100%; aspect-ratio: 2 / 1; border: 1px solid var(--border-strong); border-radius: 10px; overflow: hidden;
+      background: radial-gradient(120% 120% at 50% 20%, oklch(0.19 0.02 240), oklch(0.11 0 0)); }
+    .tf-map svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .tf-map .coast { fill: none; stroke: oklch(0.4 0.02 240); stroke-width: 0.4; }
+    .tf-map .pin { fill: var(--gold); stroke: oklch(0.16 0 0); stroke-width: 0.4; cursor: pointer; transition: r 0.12s, fill 0.12s; }
+    .tf-map .pin:hover { fill: oklch(0.95 0.12 80); }
+    .tf-map .plabel { position: absolute; transform: translate(-50%, -140%); font-size: 10px; font-family: var(--font-mono); color: var(--foreground);
+      background: oklch(0.12 0 0 / 0.9); border: 1px solid var(--gold-deep); border-radius: 6px; padding: 2px 7px; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.12s; }
+    .tf-map .plabel.on { opacity: 1; }
+    .tf-map .legend { position: absolute; left: 8px; bottom: 6px; font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); }
   </style>
 </head>
 <body>
@@ -104,9 +140,11 @@
     <header class="tf-head">
       <div class="eyebrow">Heritage · 3D forms · built in Blender</div>
       <h1>Temple forms in 3D — shape &amp; orientation</h1>
-      <p>Every temple tradition has a signature form. These are procedural 3D models of the major Indian
-      architecture types — rotate each one, and see how it is <b>oriented</b> (most face east, to the rising sun),
-      what defines it, and the real sourced sites that were built this way. Pair with the
+      <p>Every temple tradition has a signature form. These are 3D models of the major architecture types,
+      <b>built to the real, sourced dimensions</b> of a canonical example — the actual heights, storeys, wheels and
+      columns (Konark's 24 wheels &amp; 7 horses; Brihadeeswarar's 66&nbsp;m vimana; the Parthenon's 8×17). Rotate each one,
+      switch <b>front / ¾ / top / side</b> views, watch it <b>built stage by stage</b>, see how it is <b>oriented</b>
+      (most face east, to the rising sun), and where its real sites stand on the map. Pair with the
       <a href="heritage-atlas.html">world atlas</a> and the <a href="heritage-3d.html">photogrammetry viewer</a>.</p>
     </header>
 
@@ -114,13 +152,19 @@
 
     <div class="tf-stage">
       <div class="tf-viewer">
-        <model-viewer id="mv" camera-controls auto-rotate auto-rotate-delay="0" rotation-per-second="16deg"
-          environment-image="https://modelviewer.dev/shared-assets/environments/moon_1k.hdr"
+        <model-viewer id="mv" camera-controls auto-rotate auto-rotate-delay="3500" rotation-per-second="14deg"
+          environment-image="https://modelviewer.dev/shared-assets/environments/lightroom_14b.hdr"
           skybox-image=""
-          shadow-intensity="1.4" shadow-softness="0.9" exposure="1.15" tone-mapping="aces"
-          camera-orbit="40deg 70deg 16m" min-camera-orbit="auto auto 7m" max-camera-orbit="auto auto 30m"
+          shadow-intensity="1.6" shadow-softness="0.75" exposure="1.05" tone-mapping="aces"
+          camera-orbit="35deg 68deg 17m" min-camera-orbit="auto auto 7m" max-camera-orbit="auto auto 60m"
           interaction-prompt="none" ar ar-modes="webxr scene-viewer quick-look" alt="3D temple form">
         </model-viewer>
+        <div class="tf-views" id="views">
+          <button data-o="0deg 78deg 17m" title="Front view">front</button>
+          <button data-o="35deg 68deg 17m" class="on" title="3-quarter view">¾</button>
+          <button data-o="0deg 8deg 20m" title="Top-down view">top</button>
+          <button data-o="90deg 82deg 18m" title="Side view">side</button>
+        </div>
         <div class="tf-compass" id="compass" title="Entrance orientation">
           <span class="n">N</span><span class="s">S</span><span class="e">E ☀</span><span class="w">W</span>
           <i class="dot"></i><i class="ray" id="ray"></i>
@@ -198,6 +242,20 @@
         features: ["Ring of upright sarsens with lintels across the top", "An inner horseshoe of trilithons", "Solstice alignment (midsummer sunrise / midwinter sunset)", "Built by Neolithic peoples ~3000–2000 BCE — e.g. Stonehenge"] }
     ];
     const TYPE_LABEL = { nagara: "nagara", dravidian: "dravidian", stupa: "stupa", jain: "jain", kashmiri: "kashmiri", sun_temple: "sun_temple" };
+
+    // Per-form default camera orbit — the angle that best reveals each form.
+    // The rock-cut/cave forms (elephanta, ethiopian, petra) open toward the
+    // viewer or read best from a specific side, so they override the default ¾.
+    const CAM = {
+      // azimuth 0deg = camera on −Y looking toward +Y (into a −Y-facing opening)
+      elephanta: "35deg 68deg 34m",    // ¾ view of the open pillared hall
+      ethiopian: "30deg 52deg 30m",    // look down into the sunken pit at the cross
+      petra:     "0deg 74deg 24m",     // face the carved cliff facade
+      moai:      "0deg 80deg 24m",     // face the row of statues
+      andean:    "20deg 60deg 26m",
+      megalithic_circle: "35deg 64deg 22m",
+    };
+    const DEFAULT_ORBIT = "35deg 68deg 17m";
 
     // ── construction sequences: how each marvel is built, stage by stage, with the math ──
     const STAGES = {
@@ -307,14 +365,28 @@
       andean: "Inside <b>Chavín de Huántar</b>: the <b>underground gallery</b> and the knife-shaped <b>Lanzón</b> monolith at the crossing — the deity. Pilgrims met it in near-total darkness; hidden ducts channelled water and sound to overwhelm the senses. (The definitive Andean interior.)"
     };
 
-    let SITES = [], current = null, stage = 0, maxStage = 0, cutOn = false;
+    let SITES = [], DIMS = {}, current = null, stage = 0, maxStage = 0, cutOn = false;
 
-    fetch("heritage-sites.json").then(r => r.json()).then(d => {
-      SITES = d.sites || [];
-      buildTabs(); renderNote(); wireBuild();
+    Promise.all([
+      fetch("heritage-sites.json").then(r => r.json()).catch(() => ({})),
+      fetch("temple_dims.json").then(r => r.json()).catch(() => ({}))
+    ]).then(([sitesData, dimsData]) => {
+      SITES = sitesData.sites || [];
+      DIMS = (dimsData && dimsData.forms) || {};
+      buildTabs(); renderNote(); wireBuild(); wireViews();
       const want = new URLSearchParams(location.search).get("type");
       select(TYPES.find(t => t.id === want) || TYPES[0]);
     });
+
+    // view-preset buttons set a fixed camera orbit and pause auto-rotate briefly
+    function wireViews() {
+      const mv = document.getElementById("mv");
+      document.querySelectorAll("#views button").forEach(b => b.onclick = () => {
+        document.querySelectorAll("#views button").forEach(x => x.classList.remove("on"));
+        b.classList.add("on");
+        mv.cameraOrbit = b.dataset.o;
+      });
+    }
 
     let buildTimer = null;
     function wireBuild() {
@@ -410,6 +482,13 @@
         mv.setAttribute("src", "assets/temples-3d/" + t.id + ".glb");
       }
 
+      // set the best default camera angle for this form + reset the ¾ preset
+      const orbit = CAM[t.id] || DEFAULT_ORBIT;
+      mv.setAttribute("camera-orbit", orbit);
+      document.querySelectorAll("#views button").forEach(x => x.classList.remove("on"));
+      const def = document.querySelector('#views button[data-o="35deg 68deg 17m"]');
+      if (def) def.classList.add("on");
+
       // compass ray points to the entrance direction (E = right)
       const f = FACING[t.facing] || FACING.east;
       document.getElementById("ray").style.transform = `translate(0,-50%) rotate(${f.deg}deg)`;
@@ -420,6 +499,7 @@
         `<h2>${t.icon} ${esc(t.name)}${/temple|stupa/i.test(t.name) ? "" : " temple"}</h2>` +
         `<div class="sub">${esc(t.sub)}</div>` +
         `<div class="tf-orient">🧭 ${f.text}</div>` +
+        dimsBlock(t.id) +
         (STAGES[t.id] ? `<div class="tf-math" id="mathPanel"></div>` : "") +
         `<div class="tf-desc">${esc(t.blurb)}</div>` +
         `<ul class="tf-feat">${t.features.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` +
@@ -428,18 +508,118 @@
             ? examples.slice(0, 40).map(s => `<a class="tf-ex" href="heritage-atlas.html#site-${esc(s.id)}">${esc(s.name.split("(")[0].trim())}<small>${esc(s.state || "")}</small></a>`).join("")
             : `<span style="color:var(--muted-foreground);font-size:0.85rem">—</span>`}</div>` +
         `</div>` +
-        `<div class="tf-dl" style="margin-top:0.8rem">Model: procedural, built in Blender${STAGES[t.id] ? " · drag <b>build it</b> to watch it rise" : ""} · <a href="assets/temples-3d/${t.id}.glb" download>download .glb ↓</a></div>`;
+        siteMap(examples) +
+        `<div class="tf-dl" style="margin-top:0.8rem">Model: built in Blender to the real dimensions above${STAGES[t.id] ? " · drag <b>build it</b> to watch it rise" : ""} · <a href="assets/temples-3d/${t.id}.glb" download>download .glb ↓</a></div>`;
 
+      drawSiteMap(examples);
       // populate the math panel for the finished marvel (and reset the build bar)
       if (STAGES[t.id]) setStage(maxStage);
     }
 
+    // ── real, sourced dimensions block (from temple_dims.json) ──
+    function dimsBlock(id) {
+      const d = DIMS[id];
+      if (!d) return "";
+      // pick the numeric/count fields worth showing as chips
+      const chips = [];
+      const push = (label, val, unit) => { if (val != null) chips.push(`<span><b>${esc(String(val))}${unit || ""}</b> ${esc(label)}</span>`); };
+      if (d.shikhara_height_m) push("shikhara", d.shikhara_height_m, " m");
+      if (d.vimana_height_m) push("vimana", d.vimana_height_m, " m");
+      if (d.vimana_storeys) push("storeys", d.vimana_storeys, "");
+      if (d.dome_diameter_m) push("dome ⌀", d.dome_diameter_m, " m");
+      if (d.dome_height_m) push("dome h", d.dome_height_m, " m");
+      if (d.deul_height_m) push("deul (was)", d.deul_height_m, " m");
+      if (d.jagamohana_height_m) push("hall", d.jagamohana_height_m, " m");
+      if (d.wheels) push("wheels", d.wheels, "");
+      if (d.horses) push("horses", d.horses, "");
+      if (d.pillars) push("pillars", d.pillars, "");
+      if (d.halls) push("halls", d.halls, "");
+      if (d.domes) push("domes", d.domes, "");
+      if (d.columns) push("columns", d.columns, "");
+      if (d.column_height_m) push("column h", d.column_height_m, " m");
+      if (d.base_m) push("base", Array.isArray(d.base_m) ? d.base_m.join("×") : d.base_m, " m");
+      if (d.height_m) push("height", d.height_m, " m" + (d.height_estimate ? "*" : ""));
+      if (d.stylobate_m) push("stylobate", d.stylobate_m.join("×"), " m");
+      if (d.levels) push("levels", d.levels, "");
+      if (d.steps) push("steps", d.steps, "");
+      if (d.terraces) push("terraces", d.terraces, "");
+      if (d.toranas) push("toranas", d.toranas, "");
+      if (d.sub_spires) push("sub-spires", d.sub_spires, "");
+      if (d.colonnade_columns) push("columns", d.colonnade_columns, "");
+      if (d.sarsen_count) push("sarsens", d.sarsen_count, "");
+      if (d.trilithons) push("trilithons", d.trilithons, "");
+      if (d.hypostyle_columns) push("columns", d.hypostyle_columns, "");
+      if (d.facade_height_m) push("facade", d.facade_height_m, " m");
+      if (d.hall_m) push("hall", d.hall_m.join("×"), " m");
+      if (d.statues_on_ahu) push("moai", d.statues_on_ahu, "");
+      if (d.tallest_moai_m) push("tallest", d.tallest_moai_m, " m");
+      if (d.depth_m) push("carved down", d.depth_m, " m");
+      if (d.elevation_m) push("elevation", d.elevation_m, " m");
+      if (d.facade_width_m) push("facade w", d.facade_width_m, " m");
+      if (d.trimurti_height_m) push("Trimurti", d.trimurti_height_m, " m");
+      const src = (d.source || "").split(" — ");
+      const url = src.length > 1 ? src[src.length - 1] : "";
+      return `<div class="tf-dims">` +
+        `<div class="lbl"><span>📐 Real dimensions · built to scale</span></div>` +
+        `<div class="ex">${esc(d.example || "")}<small>${esc(d.built || "")}</small></div>` +
+        (chips.length ? `<div class="tf-dims-grid">${chips.join("")}</div>` : "") +
+        (d.notes ? `<div class="dnote">${esc(d.notes)}</div>` : "") +
+        (d.real_scan
+          ? `<a class="tf-scan" href="${esc(d.real_scan)}" target="_blank" rel="noopener">📷 view a real 3D scan ↗</a>`
+          : `<span class="tf-scan none">no open 3D scan yet — model is built to the sourced figures</span>`) +
+        (url ? `<div class="dsrc">Source: <a href="${esc(url)}" target="_blank" rel="noopener">${esc((src[0] || "").slice(0, 60))} ↗</a>${d.height_estimate ? " · *height estimated (only foundations survive)" : ""}</div>` : "") +
+        `</div>`;
+    }
+
+    // ── real-sites mini-map ──
+    function siteMap(examples) {
+      const withCoords = examples.filter(s => typeof s.lat === "number" && typeof s.lng === "number");
+      if (!withCoords.length) return "";
+      return `<div class="tf-sitemap"><h3>Where these ${withCoords.length} sites stand</h3>` +
+        `<div class="tf-map" id="tfmap"><svg viewBox="0 0 100 50" preserveAspectRatio="none" id="tfmapsvg"></svg>` +
+        `<div class="plabel" id="tfmaplabel"></div>` +
+        `<div class="legend">● each pin = a real site · hover to name, click → atlas</div></div></div>`;
+    }
+
+    function drawSiteMap(examples) {
+      const svg = document.getElementById("tfmapsvg");
+      if (!svg) return;
+      const pts = examples.filter(s => typeof s.lat === "number" && typeof s.lng === "number");
+      if (!pts.length) return;
+      // fit the pins to the box with a little padding (equirectangular)
+      let minLng = Math.min(...pts.map(p => p.lng)), maxLng = Math.max(...pts.map(p => p.lng));
+      let minLat = Math.min(...pts.map(p => p.lat)), maxLat = Math.max(...pts.map(p => p.lat));
+      // pad, and guard against a single point / zero span
+      const padL = Math.max((maxLng - minLng) * 0.15, 3), padB = Math.max((maxLat - minLat) * 0.15, 3);
+      minLng -= padL; maxLng += padL; minLat -= padB; maxLat += padB;
+      const X = lng => ((lng - minLng) / (maxLng - minLng)) * 100;
+      const Y = lat => (1 - (lat - minLat) / (maxLat - minLat)) * 50;
+      const label = document.getElementById("tfmaplabel");
+      const map = document.getElementById("tfmap");
+      let dots = "";
+      pts.forEach((p, i) => { dots += `<circle class="pin" cx="${X(p.lng).toFixed(2)}" cy="${Y(p.lat).toFixed(2)}" r="1.1" data-i="${i}"></circle>`; });
+      svg.innerHTML = dots;
+      svg.querySelectorAll(".pin").forEach(c => {
+        const p = pts[+c.dataset.i];
+        c.addEventListener("mouseenter", () => {
+          const bx = c.getBoundingClientRect(), mr = map.getBoundingClientRect();
+          label.textContent = p.name.split("(")[0].trim() + (p.state ? " · " + p.state : (p.region ? " · " + p.region : ""));
+          label.style.left = (bx.left - mr.left + bx.width / 2) + "px";
+          label.style.top = (bx.top - mr.top) + "px";
+          label.classList.add("on"); c.setAttribute("r", "1.8");
+        });
+        c.addEventListener("mouseleave", () => { label.classList.remove("on"); c.setAttribute("r", "1.1"); });
+        c.addEventListener("click", () => { location.href = "heritage-atlas.html#site-" + p.id; });
+      });
+    }
+
     function renderNote() {
       document.getElementById("note").innerHTML =
-        `<b>What these models are — and are not.</b> They are <b>procedural, stylised</b> forms that capture the defining massing and orientation of each architecture type — ` +
-        `NOT scans of specific temples. For a real photorealistic scan of an actual site, use the <a href="heritage-3d.html">photogrammetry viewer</a>; ` +
-        `for the sourced record (builder, dates, destruction) use the <a href="heritage-atlas.html">world atlas</a>. ` +
-        `Orientation (sun-facing) reflects the general rule of the tradition; individual temples can vary. Models built with Blender and exported to glTF.`;
+        `<b>What these models are — and are not.</b> Each is a <b>procedural model built to the real, sourced dimensions</b> of a canonical example ` +
+        `(the “Real dimensions” box names it and cites the figure) — true proportions and counts (wheels, columns, storeys), but a <b>clean massing model, not a LiDAR point cloud</b>. ` +
+        `Where a genuine open 3D scan exists, the box links it (▶ “view a real 3D scan”); the rest have no free scan yet. ` +
+        `For photorealistic captures use the <a href="heritage-3d.html">photogrammetry viewer</a>; for the sourced record (builder, dates, destruction) use the <a href="heritage-atlas.html">world atlas</a>. ` +
+        `Orientation (sun-facing) reflects the general rule of the tradition; individual temples vary. Models built with Blender from <a href="https://github.com/sinhaankur/india-fiscal-map/blob/main/build_temple_forms.py">build_temple_forms.py</a> and exported to glTF.`;
     }
   })();
   </script>
