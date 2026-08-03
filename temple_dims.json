@@ -1,0 +1,192 @@
+{
+  "_meta": {
+    "purpose": "Real, sourced dimensions of a canonical example temple for each architecture form. The procedural 3D models on temple-forms.html are built to THESE proportions (base:height ratios, counts of wheels/columns/storeys), so the shapes are true to life, not invented. Figures are documented measurements, not LiDAR point clouds — where a figure is an estimate (e.g. a collapsed tower) it is flagged.",
+    "generated_by": "build_temple_forms.py reads this file",
+    "note": "All heights in metres. 'real_scan' links a genuine open 3D capture where one exists; null where the best available is AI-generated or non-free."
+  },
+  "forms": {
+    "nagara": {
+      "example": "Kandariya Mahadeva, Khajuraho",
+      "built": "c. 1030 CE",
+      "shikhara_height_m": 31,
+      "length_m": 30.5,
+      "width_m": 20,
+      "plinth_height_m": 3,
+      "sub_spires": 84,
+      "curve_exponent": 1.35,
+      "notes": "Nagara curvilinear shikhara clustered with 84 miniature towers (Mount Kailasa). ASI: 30.5 m long ≈ 30.5 m high, 20 m wide, on a ~3 m platform.",
+      "real_scan": null,
+      "source": "ASI; UNESCO; Britannica — https://en.wikipedia.org/wiki/Kandariya_Mahadeva_Temple"
+    },
+    "dravidian": {
+      "example": "Brihadeeswarar (Peruvudaiyar), Thanjavur",
+      "built": "completed 1010 CE (Rajaraja Chola I)",
+      "vimana_height_m": 66,
+      "vimana_storeys": 13,
+      "capstone_tonnes": 80,
+      "complex_m": [240, 122],
+      "taper": "linear",
+      "notes": "Tallest vimana of its age: a 13-storey stone pyramid ~66 m over the sanctum, octagonal griva + monolithic ~80-tonne capstone. Its gopurams are lower than the vimana here (unusual); most Dravidian temples have gopurams taller than the vimana.",
+      "real_scan": null,
+      "source": "ASI; UNESCO Great Living Chola Temples — https://en.wikipedia.org/wiki/Brihadeeswarar_Temple"
+    },
+    "stupa": {
+      "example": "Great Stupa (Stupa 1), Sanchi",
+      "built": "3rd c. BCE (Ashoka), enlarged 2nd–1st c. BCE",
+      "dome_diameter_m": 36.6,
+      "dome_height_m": 16.46,
+      "toranas": 4,
+      "chhatra_tiers": 3,
+      "notes": "Solid hemispherical anda 36.6 m across, 16.46 m high (dome only). Squared harmika + triple chhatra on the axis; four toranas at the cardinal points.",
+      "real_scan": null,
+      "source": "ASI; UNESCO — https://en.wikipedia.org/wiki/Sanchi_Stupa"
+    },
+    "jain": {
+      "example": "Chaumukha (Adinatha) temple, Ranakpur",
+      "built": "begun c. 1437 CE",
+      "pillars": 1444,
+      "halls": 29,
+      "domes": 80,
+      "storeys": 3,
+      "area_sqft": 48000,
+      "plan": "chaumukha (four-faced)",
+      "notes": "Light marble; 1,444 unique pillars, 29 pillared halls, 80 domes over a ~48,000 sq ft base. Four doorways to a four-faced Adinatha — a symmetrical chaumukha plan.",
+      "real_scan": null,
+      "source": "Rajasthan Tourism; ASI — https://en.wikipedia.org/wiki/Ranakpur_Jain_temple"
+    },
+    "kashmiri": {
+      "example": "Martand Sun Temple, Anantnag",
+      "built": "8th c. CE (Lalitaditya Muktapida)",
+      "colonnade_columns": 84,
+      "peristyle": true,
+      "roof": "steep two-tier pyramidal (peaked)",
+      "notes": "Square shrine on a high plinth inside a colonnaded courtyard of ~84 fluted columns; the Kashmiri signature is the steep PEAKED (pyramidal) roof and trefoil arches. Ruined; proportions from surviving plan.",
+      "real_scan": null,
+      "source": "ASI — https://en.wikipedia.org/wiki/Martand_Sun_Temple"
+    },
+    "sun_temple": {
+      "example": "Konark Sun Temple, Odisha",
+      "built": "13th c. CE (Narasimhadeva I)",
+      "deul_height_m": 70,
+      "deul_status": "collapsed — original ~68–70 m (estimate)",
+      "jagamohana_m": [30, 30],
+      "jagamohana_height_m": 30,
+      "wheels": 24,
+      "wheel_diameter_m": 3,
+      "wheel_spokes": 8,
+      "horses": 7,
+      "curve_exponent": 1.2,
+      "notes": "Chariot of Surya: 24 wheels (12 pairs = months, each an 8-spoke sundial) drawn by 7 horses (7 days / metres of prosody). Surviving jagamohana 30 m sq × ~30 m; the ~70 m deul collapsed.",
+      "real_scan": null,
+      "source": "ASI; UNESCO — https://asi.nic.in/pages/WorldHeritageKonarak"
+    },
+    "egyptian": {
+      "example": "Karnak (Temple of Amun-Ra), Thebes",
+      "built": "c. 2000–300 BCE (many reigns)",
+      "hypostyle_columns": 134,
+      "hypostyle_tallest_m": 21,
+      "pylons": 10,
+      "notes": "Great Hypostyle Hall: 134 massive columns (central 12 ~21 m tall) with papyrus/lotus capitals; twin battered pylons front the axis; obelisks mark the sun/Nile alignment.",
+      "real_scan": null,
+      "source": "https://en.wikipedia.org/wiki/Karnak"
+    },
+    "greek": {
+      "example": "Parthenon, Athens",
+      "built": "447–432 BCE",
+      "stylobate_m": [30.9, 69.5],
+      "columns": "8 × 17 (46 outer)",
+      "column_height_m": 10.4,
+      "building_height_m": 13.72,
+      "ratio": "4:9",
+      "entasis": true,
+      "notes": "Peripteral Doric: 8×17 columns on a 30.9×69.5 m stylobate, ~10.4 m columns, ~13.7 m to the ridge, pervasive 4:9 proportion, curved stylobate + column entasis (optical correction).",
+      "real_scan": "https://sketchfab.com/3d-models/parthenon-acropolis-athens-greece-d5cc54ccd57a4bdeb3c164a96c677b59",
+      "real_scan_credit": "Parthenon — Acropolis, Athens, by Nick G. Gizelis (@aumakua), drone photogrammetry, CC-BY",
+      "source": "https://en.wikipedia.org/wiki/Parthenon"
+    },
+    "mesoamerican": {
+      "example": "Pyramid of the Sun, Teotihuacan",
+      "built": "c. 100–200 CE",
+      "base_m": 225,
+      "height_m": 65,
+      "levels": 5,
+      "steps": 248,
+      "notes": "Stepped pyramid ~225 m per side, ~65 m high today (~71–75 m originally with its lost summit temple), 5 tiers, 248-step central stair. A stage for ritual, over a cave.",
+      "real_scan": null,
+      "source": "Sugiyama 1993; Britannica — https://en.wikipedia.org/wiki/Pyramid_of_the_Sun"
+    },
+    "ziggurat": {
+      "example": "Great Ziggurat of Ur",
+      "built": "c. 2100 BCE (Ur-Nammu / Shulgi)",
+      "base_m": [64, 45],
+      "height_m": 30,
+      "height_estimate": true,
+      "terraces": 3,
+      "stairways": 3,
+      "notes": "Mud-brick step pyramid, base 64×45 m, three receding terraces, triple converging stairway to the moon-god Nanna's shrine. Only the lower terraces survive; 30 m height is an estimate.",
+      "real_scan": null,
+      "source": "Woolley; Britannica — https://en.wikipedia.org/wiki/Ziggurat_of_Ur"
+    },
+    "andean": {
+      "example": "Machu Picchu (Temple of the Sun / Intihuatana)",
+      "built": "c. 1450 CE (Inca)",
+      "elevation_m": 2430,
+      "terraces": 700,
+      "notes": "Dry-stone polygonal masonry (no mortar), ~700 agricultural terraces at 2,430 m, trapezoidal doors/windows, curved Temple of the Sun aligned to the June solstice. Chavín de Huántar gives the definitive dark interior gallery + Lánzon.",
+      "real_scan": null,
+      "source": "https://en.wikipedia.org/wiki/Machu_Picchu"
+    },
+    "moai": {
+      "example": "Ahu Tongariki, Rapa Nui",
+      "built": "c. 1250–1500 CE",
+      "statues_on_ahu": 15,
+      "tallest_moai_m": 10,
+      "heaviest_tonnes": 86,
+      "face": "inland",
+      "notes": "The largest ahu: 15 moai in a row facing inland over the village. Tallest re-erected moai ~10 m; heaviest ~86 t. ~900 moai island-wide.",
+      "real_scan": null,
+      "source": "https://en.wikipedia.org/wiki/Ahu_Tongariki"
+    },
+    "ethiopian": {
+      "example": "Bete Giyorgis (Church of St George), Lalibela",
+      "built": "12th–13th c. CE",
+      "plan": "Greek cross",
+      "depth_m": 12,
+      "carved": "top-down monolith",
+      "notes": "A cruciform church cut ~12 m DOWN into living volcanic rock — one continuous stone, no joints, standing in a sunken pit reached by trenches. One of Lalibela's 11 rock churches.",
+      "real_scan": null,
+      "source": "https://en.wikipedia.org/wiki/Church_of_Saint_George,_Lalibela"
+    },
+    "petra": {
+      "example": "Al-Khazneh (The Treasury), Petra",
+      "built": "1st c. BCE–CE (Nabataean)",
+      "facade_height_m": 39,
+      "facade_width_m": 25,
+      "carved": "into sandstone cliff (subtractive)",
+      "notes": "A ~39 m tall, ~25 m wide classical facade carved back INTO the rose-red cliff, with a broken pediment framing a central round tholos crowned by an urn; a modest chamber behind.",
+      "real_scan": null,
+      "source": "https://en.wikipedia.org/wiki/Al-Khazneh"
+    },
+    "elephanta": {
+      "example": "Great Cave (Cave 1), Elephanta",
+      "built": "5th–8th c. CE",
+      "hall_m": [39, 39],
+      "trimurti_height_m": 5.45,
+      "carved": "excavated into basalt (subtractive)",
+      "notes": "A pillared hall ~39 m across excavated into basalt; pillars are left standing, not placed. The back wall carries the ~5.5 m three-headed Trimurti Shiva — sculpture and structure are one stone.",
+      "real_scan": null,
+      "source": "ASI; UNESCO — https://en.wikipedia.org/wiki/Elephanta_Caves"
+    },
+    "megalithic_circle": {
+      "example": "Stonehenge, Wiltshire",
+      "built": "c. 3000–2000 BCE",
+      "sarsen_circle_diameter_m": 33,
+      "sarsen_count": 30,
+      "lintels": true,
+      "trilithons": 5,
+      "notes": "Outer ring ~33 m across of ~30 upright sarsens capped by curved lintels (mortise-and-tenon), an inner horseshoe of 5 giant trilithons on the midsummer-sunrise / midwinter-sunset axis.",
+      "real_scan": null,
+      "source": "English Heritage — https://en.wikipedia.org/wiki/Stonehenge"
+    }
+  }
+}
