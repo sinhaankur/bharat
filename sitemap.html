@@ -32,10 +32,11 @@
     <header class="sm-head">
       <div class="eyebrow">Directory · find anything</div>
       <h1 class="display">Site map</h1>
-      <p>Everything on the atlas, grouped and described. The site is organised around the
-      <b>Engines</b> (the 7 lenses it reads India through), then <b>Explore</b> (see the data),
-      <b>Data</b> (get + reference + audit it), and <b>About</b>. New accountability layers are
-      being added over time; planned ones are marked.</p>
+      <p>Everything on the atlas, grouped and described. Start with the <b>Map</b> (the
+      interactive views), drop into <b>3D</b> (globe, terrain, temples), go deeper in
+      <b>Study</b> (the engines, history, heritage), then <b>Data</b> (get + reference +
+      audit it) and <b>About</b>. New accountability layers are being added over time;
+      planned ones are marked.</p>
     </header>
 
     <div class="sm-groups" id="sm-groups"><p style="color:var(--muted-foreground)">Loading the map of the site…</p></div>
@@ -53,8 +54,13 @@
     // One-line descriptions + group subtitles, keyed by href. The STRUCTURE comes
     // from site-nav.js (window.SiteNav.NAV) so there's a single source of truth.
     const DESC = {
+      "hero.html": "The whole atlas on one screen — a full globe, a slim rail of the key views, and a slide-in panel for the rest.",
+      "state-of-india.html": "Who carries the country: every state ranked on the active lens — money in, corruption findings, wealth per person.",
       "feed.html": "A curated stream of fiscal stories & headlines — money-driven and general.",
       "index.html": "The interactive map: 594 districts, switchable layers (money · land · health · wealth · civic · coverage).",
+      "encroachment-atlas.html": "Built where water returns — illegal habitation on flood plains and reclaimed land, case by sourced case.",
+      "india-3d.html": "The real globe: 594 districts on a true-scale Earth, with rivers, cities, sea-level shell and layered overlays.",
+      "library.html": "Reading room — read the primary sources: public-domain memoirs of the Nehru age in an in-page e-reader.",
       "explore.html": "Ask cross-cutting questions of all 594 districts — AND/OR facet queries, no backend.",
       "timeline.html": "Fund-lifecycle story chains on a timeline: promise → result → per-capita cost → human impact.",
       "articles.html": "Long-form analysis grounded in the sourced data.",
@@ -70,7 +76,9 @@
       "deep-history.html": "What ancient DNA reveals about the migrations & population shifts that made South Asia — strictly the peer-reviewed science, Aryan-migration debate flagged contested.",
       "history.html": "The Finance-Commission-by-Commission race + land-revenue history.",
       "global.html": "India vs the world — GDP, income and industry comparisons.",
+      "geopolitical-chess.html": "A framing: the US dollar is the board every country must play on. What each player brings, who really rules it, whose interests its party serves, what a win or loss looks like, and how they're all entangled — figures sourced, the 'chess' reading labelled framing.",
       "atlas-3d.html": "India extruded in 3D by physical-constraint index.",
+      "earth-3d.html": "Photoreal Earth over any district using Google's 3D tiles (bring your own API key).",
       "terrain-3d.html": "3D topography — terrain, elevation, and the Kolkata GPU flood simulation.",
       "flood-3d.html": "Raise the water over any district's real terrain in 3D — an exposure view (open DEM), not a forecast.",
       "knowledge.html": "The full auto-generated data catalog: every district, dimension, source and gap.",
@@ -91,18 +99,30 @@
       "usa.html": "The US map, kept only as a federal-structure comparison.",
     };
     const GROUP_SUB = {
-      Engines: "The 7 lenses the atlas reads India through — and the map that first drew it.",
-      Explore: "See the data — map, query, timeline, feed, 3D, comparisons.",
+      Map: "The interactive views — the 2D fiscal atlas, query engine, news feed and trackers.",
+      "3D": "See India for real — the globe, district terrain, flood, and temples modelled in 3D.",
+      Study: "Go deeper — the 7 engines, heritage, deep history, chain of command, comparisons.",
       Data: "Get the data, reference the sources, audit every figure.",
       About: "How it works, methodology, policy and the project itself.",
     };
-    const GROUP_ICON = { Engines: "⚙️", Explore: "🧭", Data: "🗄", About: "ℹ️" };
+    const GROUP_ICON = { Map: "🗺", "3D": "🧊", Study: "📖", Data: "🗄", About: "ℹ️" };
     // Planned pages surfaced in the sitemap so the roadmap is visible (marked planned).
     const PLANNED = {
       Data: [{ text: "Infrastructure layers", d: "Waterways vs water connections, sewage management, pipelines — dug up and clearly marked, sourced-or-gap. Coming as district dimensions." }],
     };
-    // Live-but-inside-another-page links worth surfacing directly.
+    // Live-but-inside-another-page links worth surfacing directly. The 7 engine
+    // deep-dives are collapsed out of the header (reached from the engines hub),
+    // but the site map lists them all so nothing is hidden from the directory.
     const EXTRA = {
+      Study: [
+        { href: "engine-survey.html", text: "↳ Engine · Survey (origin)", d: "The Great Trigonometrical Survey that first mapped India; its heirs still power the map." },
+        { href: "engine-country.html", text: "↳ Engine · Country", d: "How India is constituted — Union/State/UT/local, who answers to whom." },
+        { href: "engine-development.html", text: "↳ Engine · Development", d: "Money in → what it was for → what got built." },
+        { href: "engine-climate.html", text: "↳ Engine · Climate", d: "Flood, monsoon and low-lying exposure over the real open DEM." },
+        { href: "engine-zoning.html", text: "↳ Engine · Land-Zoning", d: "What can legally be built here — CRZ, encroachment, cadastral." },
+        { href: "engine-corruption.html", text: "↳ Engine · Corruption", d: "Established findings only — facts, never accusations." },
+        { href: "engine-news.html", text: "↳ Engine · News", d: "The moderated, attributed news feed + the 'What's new' strip." },
+      ],
       Data: [{ href: "knowledge.html#officials", text: "Officials accountability", d: "Named officials by office — sourced postings + issues cited to the naming authority, never an accusation. A young, growing dataset." }],
     };
 

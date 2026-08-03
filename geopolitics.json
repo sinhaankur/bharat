@@ -1,0 +1,542 @@
+{
+  "_meta": {
+    "title": "Geopolitical Chess",
+    "subtitle": "The dollar is the board. Every country is a player. See what each brings, who really rules it, whose interests its party serves, what counts as a win or a loss for it — and how they're all entangled.",
+    "rule": "Sourced, or it's a gap. Hard figures (reserves, debt held, trade, currency share) are pinned to IMF / BIS / SWIFT / World Bank / national treasuries. The 'chess' reading of each move is labelled FRAMING — an editorial interpretation, never presented as fact. Figures shift; each carries an as-of date and a source. Where we don't have a sourced number, it's an explicit gap.",
+    "as_of": "2026-08",
+    "framing_disclaimer": "WE ARE FRAMING ALL OF THIS. This whole page is a MODEL, not a prophecy or a verdict. 'The board', 'pieces', 'moves', 'nexus', 'client state', 'best/worst outcome' — these are lenses for thinking about interdependence, and they compress a messy, contested reality into a game metaphor. Nations are not unitary players; ruling parties are not monoliths and answer to backers of their own; some governments are, by many analysts' framing, clients of a patron or their own army rather than of their voters. The NUMBERS are sourced. The NARRATIVE is one honest interpretation among several — argue with it.",
+    "sources_master": [
+      { "id": "imf-cofer", "name": "IMF COFER (currency composition of reserves)", "tier": 1 },
+      { "id": "imf-weo", "name": "IMF World Economic Outlook", "tier": 1 },
+      { "id": "bis", "name": "BIS Triennial FX survey / statistics", "tier": 1 },
+      { "id": "swift-rmb", "name": "SWIFT RMB Tracker / payments data", "tier": 1 },
+      { "id": "us-treasury-tic", "name": "US Treasury TIC (foreign holdings of Treasuries)", "tier": 1 },
+      { "id": "worldbank", "name": "World Bank (GDP, trade, indicators)", "tier": 1 },
+      { "id": "wto", "name": "WTO (merchandise trade shares)", "tier": 1 },
+      { "id": "eia-iea", "name": "EIA / IEA (energy production & flows)", "tier": 1 },
+      { "id": "usgs", "name": "USGS Mineral Commodity Summaries (rare earths etc.)", "tier": 1 },
+      { "id": "sipri", "name": "SIPRI (military spending & arms trade)", "tier": 1 },
+      { "id": "un-comtrade", "name": "UN Comtrade (bilateral trade)", "tier": 1 }
+    ],
+    "sides": [
+      { "id": "us-bloc",     "label": "US-led bloc",      "color": "oklch(0.7 0.16 250)", "note": "The house and its allies/creditors — plays to keep the dollar central." },
+      { "id": "china-bloc",  "label": "China-led bloc",   "color": "oklch(0.63 0.2 25)",  "note": "The challenger and its partners — building a parallel board." },
+      { "id": "non-aligned", "label": "Swing / non-aligned", "color": "oklch(0.75 0.15 70)", "note": "Refuse to be captured — value comes from being un-cornered." },
+      { "id": "resource",    "label": "Resource / kingmaker", "color": "oklch(0.7 0.14 140)", "note": "Own the commodity or the chokepoint everyone needs." },
+      { "id": "junction",    "label": "Neutral junction",  "color": "oklch(0.74 0.11 100)", "note": "The clearing house where flows that can't touch each other re-route." }
+    ]
+  },
+
+  "board": {
+    "name": "The US dollar",
+    "icon": "💵",
+    "claim": "The board itself is not neutral. Roughly three fifths of the world's disclosed FX reserves are held in dollars, most cross-border payments and most oil are priced in dollars, and the rails that move them (SWIFT messaging, CHIPS/Fedwire clearing) sit under US legal reach. To trade globally is, mostly, to play on a board the United States can tilt.",
+    "facts": [
+      { "text": "≈57–59% of allocated global FX reserves are held in USD (down from ~72% in 2000, but still #1 by far).", "source": "imf-cofer", "as_of": "2024" },
+      { "text": "USD is on one side of ~88% of all FX trades (BIS, share out of 200%).", "source": "bis", "as_of": "2022" },
+      { "text": "USD's share of SWIFT payments messaging is ~45–50%, rivalled only by the euro.", "source": "swift-rmb", "as_of": "2024" },
+      { "text": "Most internationally traded oil is invoiced and settled in dollars — the 'petrodollar' habit dating to the 1970s.", "source": "eia-iea", "as_of": "2024", "framing": true, "framing_note": "The petrodollar is a convention, not a treaty; it is eroding at the margins (some China–Gulf oil in yuan)." }
+    ],
+    "levers": [
+      { "label": "Sanctions & de-listing", "note": "Cutting a country/bank off from dollar clearing (SWIFT/CHIPS) can freeze it out of global trade — used vs Iran, Russia, N. Korea." },
+      { "label": "Reserve-asset gravity", "note": "Because everyone must hold dollars, the US borrows cheaply and runs deficits others couldn't — the 'exorbitant privilege'." },
+      { "label": "Interest-rate spillover", "note": "When the Fed raises rates, dollar debt everywhere gets costlier — emerging markets import US monetary policy." }
+    ],
+    "counter": "The board is being nibbled at, not overturned: yuan swap lines, BRICS local-currency settlement, gold buying by central banks, and instant-payment systems (UPI, mBridge) route around the dollar at the edges. No rival is close to replacing it — the question is fragmentation, not overthrow."
+  },
+
+  "players": [
+    {
+      "slug": "usa", "name": "United States", "flag": "🇺🇸", "type": "sovereign", "side": "us-bloc", "square": "d8",
+      "role": "The house",
+      "accent": "oklch(0.7 0.16 250)",
+      "tagline": "Owns the board, and can tilt it.",
+      "politics": {
+        "ruling": "Two-party presidential system (Democratic / Republican); control alternates and is often divided between White House and Congress.",
+        "orientation": "Swing between free-trade internationalism and tariff-driven economic nationalism depending on the administration.",
+        "nexus": "Wall Street & the Fed, Big Tech, the defence-industrial base, the oil & shale lobby, and donor networks — whichever party wins, these backers shape the actual policy on sanctions, chips and rates.",
+        "shapes": "The party in power sets sanctions aggressiveness, tariff walls, alliance commitments (NATO, Indo-Pacific) and fiscal stance — so the same board is played very differently term to term. FRAMING: allies now hedge because US posture can reverse every 4 years."
+      },
+      "interest": {
+        "best": "Keep the dollar central and rivals fragmented — sanctions bite, allies stay dependent, capital flows home in every crisis.",
+        "worst": "Over-use the dollar weapon until credible alternatives (yuan rails, gold, BRICS settlement) reach scale, or a debt/political crisis dents the safe-asset status."
+      },
+      "pieces": [
+        { "label": "The reserve currency", "note": "Issues the dollar everyone must hold and clear.", "facts": [ { "text": "USD ≈57–59% of global reserves.", "source": "imf-cofer", "as_of": "2024" } ] },
+        { "label": "Deepest capital markets", "note": "US Treasuries are the world's default safe asset and collateral.", "facts": [ { "text": "Foreigners hold ~$8.5T of US Treasuries.", "source": "us-treasury-tic", "as_of": "2024" } ] },
+        { "label": "Military + tech + alliances", "note": "Largest defence budget; controls chip-design, cloud, and key chokepoint tech.", "facts": [ { "text": "US military spending is the world's largest, ~37% of the global total.", "source": "sipri", "as_of": "2023" } ] }
+      ],
+      "move": "Uses financial rails as a weapon: sanctions, export controls (advanced chips), and Fed policy. Its risk is over-use — every sanction is also an advertisement for alternatives.",
+      "move_framing": true
+    },
+    {
+      "slug": "china", "name": "China", "flag": "🇨🇳", "type": "sovereign", "side": "china-bloc", "square": "e1",
+      "role": "The challenger",
+      "accent": "oklch(0.63 0.2 25)",
+      "tagline": "Brings the factory and the mine; wants its own board.",
+      "politics": {
+        "ruling": "Chinese Communist Party (CCP), single-party state; Xi Jinping as General Secretary / President.",
+        "orientation": "State capitalism — party-directed industrial policy, capital controls, strategic self-reliance ('dual circulation').",
+        "nexus": "The Party itself, state-owned enterprises, the PLA, provincial-industrial champions and tech nationals — no independent Wall Street, so the state is the nexus.",
+        "shapes": "Party planning targets whole sectors (EVs, solar, chips, rare-earth processing) and controls the currency's convertibility, so China can subsidise at scale and use export dominance as leverage — but capital controls also cap the yuan's reserve ambitions. FRAMING: an authoritarian planner can move faster and longer-term, at the cost of trust and open convertibility."
+      },
+      "interest": {
+        "best": "A multipolar money system where the yuan and CIPS carry real weight, rare-earth and manufacturing chokeholds deter the US, and Taiwan is absorbed without a war.",
+        "worst": "Decoupling that strands its export model, a chip blockade that freezes its tech, capital flight testing its controls, or a Taiwan miscalculation that unites the West."
+      },
+      "pieces": [
+        { "label": "The world's factory", "note": "Largest manufacturer and merchandise exporter; the supply chain runs through it.", "facts": [ { "text": "China is the top merchandise exporter, ~14% of world exports.", "source": "wto", "as_of": "2023" } ] },
+        { "label": "Rare-earth processing", "note": "Dominates not the mining but the PROCESSING of rare earths — the real chokehold on magnets, EVs, defence.", "facts": [ { "text": "China refines the large majority of the world's rare earths (~85–90% of processing).", "source": "usgs", "as_of": "2024" } ] },
+        { "label": "US-debt holder", "note": "Holds a large stock of US Treasuries — often called a weapon, rarely usable without self-harm.", "facts": [ { "text": "China holds roughly $0.75–0.8T of US Treasuries (down from a 2013 peak ~$1.3T).", "source": "us-treasury-tic", "as_of": "2024" } ] }
+      ],
+      "move": "Build a parallel board — yuan oil deals, CIPS payment rails, BRI lending, mBridge CBDC bridge — while keeping full access to the dollar one. A hedge, not yet a replacement.",
+      "move_framing": true
+    },
+    {
+      "slug": "russia", "name": "Russia", "flag": "🇷🇺", "type": "sovereign", "side": "china-bloc", "square": "g2",
+      "role": "The spoiler",
+      "accent": "oklch(0.6 0.05 30)",
+      "tagline": "Brings energy, grain and a veto; now plays off-board.",
+      "politics": {
+        "ruling": "Dominant-party presidential system (United Russia); Vladimir Putin, highly centralised executive.",
+        "orientation": "Resource-nationalist and revisionist — energy as statecraft, hostile to Western alignment.",
+        "nexus": "The security services (siloviki), energy state-champions (Gazprom, Rosneft) and a loyal oligarch class — the presidency arbitrates among them.",
+        "shapes": "A centralised state can turn gas and oil taps on/off as coercion and redirect exports (to India, China) under sanction. FRAMING: sanctions pushed Russia OFF the dollar board — proving both that the board is a weapon and that a large commodity exporter can partly route around it."
+      },
+      "interest": {
+        "best": "Prove the dollar board is escapable — sell energy to Asia in local currencies, keep the war economy funded, split Western resolve.",
+        "worst": "Buyers of last resort (India, China) squeeze the discount deeper, technology and revenue decay under sanctions, and dependence on Beijing turns junior-partner."
+      },
+      "pieces": [
+        { "label": "Energy exporter", "note": "Top-tier oil & gas exporter; supplied much of Europe's gas before 2022.", "facts": [ { "text": "Among the world's top 3 crude oil producers and top natural-gas exporters.", "source": "eia-iea", "as_of": "2023" } ] },
+        { "label": "Grain & fertiliser", "note": "A leading wheat and fertiliser exporter — food-security leverage over the Global South.", "facts": [ { "text": "Russia is the world's largest wheat exporter.", "source": "un-comtrade", "as_of": "2023" } ] },
+        { "label": "UNSC veto + nukes", "note": "Permanent Security Council seat and the largest nuclear arsenal — a seat at the table that can't be removed.", "facts": [ { "text": "Holds one of five permanent UN Security Council vetoes.", "source": "worldbank", "as_of": "current", "framing": true, "framing_note": "UNSC membership is a treaty fact; its strategic weight is interpretation." } ] }
+      ],
+      "move": "Cut off from dollar clearing after 2022, it sells discounted oil to India and China in rupees/yuan/dirhams and leans on gold — the clearest live test of trading off the dollar board.",
+      "move_framing": true
+    },
+    {
+      "slug": "saudi", "name": "Saudi Arabia", "flag": "🇸🇦", "type": "sovereign", "side": "resource", "square": "b5",
+      "role": "The kingmaker",
+      "accent": "oklch(0.7 0.14 140)",
+      "tagline": "Prices the oil that keeps the dollar on the board.",
+      "politics": {
+        "ruling": "Absolute monarchy (House of Saud); Crown Prince Mohammed bin Salman as de-facto ruler.",
+        "orientation": "Autocratic modernisation ('Vision 2030'), transactional multi-alignment — courts US, China and Russia at once.",
+        "nexus": "The royal family, the state oil company (Aramco) and the sovereign wealth fund (PIF) — one household is the state, the oil and the investor.",
+        "shapes": "A monarchy can pivot fast and swing OPEC+ output to move world prices. FRAMING: because oil has been priced in dollars since the 1970s, Saudi choices quietly underwrite the whole board — any drift to yuan pricing would matter far beyond its size."
+      },
+      "interest": {
+        "best": "Sell to everyone, take security and tech from all sides, and keep enough leverage that neither Washington nor Beijing can dictate terms.",
+        "worst": "Get forced to choose a side, lose the US security umbrella, or let the petrodollar convention unravel faster than Vision-2030 diversification can replace oil rents."
+      },
+      "pieces": [
+        { "label": "Swing oil producer", "note": "Can raise or cut output enough to move global prices; leads OPEC+.", "facts": [ { "text": "Holds the world's largest spare crude capacity and among the largest reserves.", "source": "eia-iea", "as_of": "2024" } ] },
+        { "label": "The petrodollar", "note": "Oil priced in dollars is a pillar of dollar demand; any shift is systemic.", "facts": [ { "text": "The bulk of Saudi crude is still invoiced in USD.", "source": "eia-iea", "as_of": "2024", "framing": true, "framing_note": "Reports of some China-bound cargoes in yuan exist; scale is disputed." } ] }
+      ],
+      "move": "Multi-align: keep US security ties and dollar pricing, while flirting with yuan settlement and joining BRICS conversations — maximise leverage by refusing to pick a side.",
+      "move_framing": true
+    },
+    {
+      "slug": "india", "name": "India", "flag": "🇮🇳", "type": "sovereign", "side": "non-aligned", "square": "d5",
+      "role": "The swing player",
+      "accent": "oklch(0.75 0.15 70)",
+      "tagline": "Brings the market, the labour and the balance of power.",
+      "politics": {
+        "ruling": "Parliamentary democracy; currently BJP-led NDA coalition under PM Narendra Modi.",
+        "orientation": "Strategic autonomy / multi-alignment — buys Russian oil and US/French arms, in the Quad and BRICS at once.",
+        "nexus": "1.4bn voters, large domestic conglomerates, a growing tech/services diaspora, and a defence establishment diversifying away from Russian kit.",
+        "shapes": "An elected government answerable to 1.4bn voters prioritises cheap energy and jobs, so it takes discounted Russian crude despite Western pressure and builds rupee-settlement rails — while deepening US tech and defence ties. FRAMING: India's swing weight comes precisely from refusing to be captured by either board."
+      },
+      "interest": {
+        "best": "Stay un-cornered — cheap energy from Russia, capital and tech from the West, a growing market everyone courts, and homegrown rails (UPI, INR trade) that reduce dollar dependence.",
+        "worst": "Get forced to pick a side, a China-tilted Russia turning hostile on the border, or losing Western goodwill over the Russia trade before its own capacity matures."
+      },
+      "pieces": [
+        { "label": "The largest market of people", "note": "World's most populous country and a fast-growing consumer/labour base everyone wants access to.", "facts": [ { "text": "Most populous nation (~1.43bn) and among the fastest-growing large economies.", "source": "worldbank", "as_of": "2024" } ] },
+        { "label": "Payment rails of its own", "note": "UPI moves billions of real-time transactions; being extended cross-border (UAE, Singapore) — a route around card networks and, at the edge, the dollar.", "facts": [ { "text": "UPI processes well over 10bn transactions per month domestically.", "source": "worldbank", "as_of": "2024", "framing": true, "framing_note": "Volume is from NPCI/official reporting; cross-border scale is early." } ] },
+        { "label": "The non-aligned vote", "note": "Its alignment is contested — courted by the US (Quad) and by BRICS at once.", "facts": [ { "text": "Member of both the Quad (with US, Japan, Australia) and BRICS.", "source": "worldbank", "as_of": "current", "framing": true, "framing_note": "Membership is fact; 'swing' value is interpretation." } ] }
+      ],
+      "move": "Refuse to be captured: buy discounted Russian oil in rupees/dirhams, deepen US tech and defence ties, and build homegrown rails (UPI, INR trade) — value comes from being un-cornered.",
+      "move_framing": true
+    },
+    {
+      "slug": "eu", "name": "European Union", "flag": "🇪🇺", "type": "sovereign", "side": "us-bloc", "square": "f8",
+      "role": "The second currency",
+      "accent": "oklch(0.72 0.13 250)",
+      "tagline": "The only rival board — but a board without an army.",
+      "politics": {
+        "ruling": "Supranational bloc of 27 member states; European Commission + Council + Parliament, no single ruling party.",
+        "orientation": "Rules-based single market; regulatory power ('the Brussels effect') over hard/military power.",
+        "nexus": "27 national governments (Germany, France first among them), the Commission's regulators, and export-industry lobbies — consensus is the price of every move.",
+        "shapes": "Because power is shared across 27 governments and a Commission, the EU moves slowly and by consensus — strong on trade rules and standards, weak on unified foreign/military action. FRAMING: the euro is the only real reserve alternative, but a currency without a unified treasury or army can't fully rival the dollar."
+      },
+      "interest": {
+        "best": "Grow the euro's reserve role and 'strategic autonomy' while the US security umbrella still holds — regulate the world into its standards.",
+        "worst": "US retrenchment leaves it undefended, energy shocks (post-Russia) hollow out industry, and 27-way paralysis keeps it a rule-maker but never a power."
+      },
+      "pieces": [
+        { "label": "The euro", "note": "The world's #2 reserve currency and payment currency.", "facts": [ { "text": "EUR ≈20% of global reserves — a clear second to the dollar.", "source": "imf-cofer", "as_of": "2024" } ] },
+        { "label": "The regulatory superpower", "note": "Sets de-facto global rules (privacy, tech, chemicals) that others must follow to sell in the single market.", "facts": [ { "text": "The EU single market is among the largest by GDP and import volume.", "source": "worldbank", "as_of": "2024" } ] }
+      ],
+      "move": "Regulate rather than coerce; try to build 'strategic autonomy' and an alternative to SWIFT (INSTEX), mostly without success — dependent on US security guarantees.",
+      "move_framing": true
+    },
+    {
+      "slug": "japan", "name": "Japan", "flag": "🇯🇵", "type": "sovereign", "side": "us-bloc", "square": "b8",
+      "role": "The creditor",
+      "accent": "oklch(0.7 0.1 20)",
+      "tagline": "Brings the savings that fund the board.",
+      "politics": {
+        "ruling": "Parliamentary democracy long dominated by the Liberal Democratic Party (LDP).",
+        "orientation": "US-aligned; export-and-savings economy, cautious ultra-low-rate monetary policy.",
+        "nexus": "The LDP–bureaucracy–keiretsu triangle: long-governing party, powerful ministries (METI, MOF) and big industrial groups.",
+        "shapes": "Decades of near-zero rates push Japanese savings abroad, making Japan a top foreign holder of US debt and a source of global 'carry-trade' capital. FRAMING: a stable US ally that helps FUND the dollar board rather than challenge it."
+      },
+      "interest": {
+        "best": "A stable US alliance and open Asian trade — keep exporting, keep earning yield abroad, contain China without a war.",
+        "worst": "A disorderly yen or a rate-normalisation that unwinds the carry trade violently, or a Taiwan conflict that severs its supply lines."
+      },
+      "pieces": [
+        { "label": "Top US-debt holder", "note": "Frequently the #1 or #2 foreign holder of US Treasuries.", "facts": [ { "text": "Japan holds ~$1.1T of US Treasuries — typically the largest foreign holder.", "source": "us-treasury-tic", "as_of": "2024" } ] },
+        { "label": "The yen carry trade", "note": "Cheap yen funds leveraged bets worldwide; unwinding it can shake global markets.", "facts": [ { "text": "The yen is among the top traded currencies; carry-trade unwinds move global markets.", "source": "bis", "as_of": "2022", "framing": true, "framing_note": "Carry-trade scale is estimated, not officially tallied." } ] }
+      ],
+      "move": "Anchor the US alliance and keep funding the dollar board with its savings, while quietly diversifying supply chains ('China+1').",
+      "move_framing": true
+    },
+    {
+      "slug": "gulf-uae", "name": "UAE / Gulf hubs", "flag": "🇦🇪", "type": "sovereign", "side": "junction", "square": "e5",
+      "role": "The clearing house",
+      "accent": "oklch(0.74 0.11 100)",
+      "tagline": "Where sanctioned trade quietly re-routes.",
+      "politics": {
+        "ruling": "Federation of hereditary monarchies (UAE); ruling emirs, no electoral parties.",
+        "orientation": "Transactional, open-for-business neutrality; a financial and logistics entrepôt.",
+        "nexus": "Ruling families, sovereign wealth funds (ADIA, Mubadala), free-zone finance and the logistics/re-export trade.",
+        "shapes": "Small autocracies can stay open to everyone — Russian oil, Indian rupees, Chinese yuan, Western banks — becoming the neutral node where flows that can't touch each other directly are cleared. FRAMING: the dirham/Gulf hubs are becoming the 'grey-market' junction of a fragmenting board."
+      },
+      "interest": {
+        "best": "Stay indispensable to all sides as the neutral junction box — take fees on every flow a fragmenting system needs re-routed.",
+        "worst": "Get pressured by the US to close the grey channels, or a regional war (Iran, Red Sea) shuts the trade routes it lives on."
+      },
+      "pieces": [
+        { "label": "Neutral settlement hub", "note": "Dirham and Gulf banks settle trade that dollar rails won't — Russia–India oil, gold, commodities.", "facts": [ { "text": "The UAE has become a major re-export and settlement hub for sanctioned-adjacent trade.", "source": "un-comtrade", "as_of": "2024", "framing": true, "framing_note": "Re-export role is documented; 'sanction-routing' scale is contested." } ] }
+      ],
+      "move": "Stay neutral and open to all sides — become indispensable as the junction box of a fragmenting system.",
+      "move_framing": true
+    },
+    {
+      "slug": "taiwan", "name": "Taiwan", "flag": "🇹🇼", "type": "sovereign", "side": "resource", "square": "g6",
+      "role": "The single point of failure",
+      "accent": "oklch(0.7 0.13 190)",
+      "tagline": "Brings the chips the whole board runs on.",
+      "politics": {
+        "ruling": "Multiparty democracy (DPP / KMT alternate); self-governed, claimed by China.",
+        "orientation": "De-facto independent, US-security-dependent; the world's most sensitive geopolitical flashpoint.",
+        "nexus": "A democratic electorate split on China, TSMC and the chip complex, and the implicit US security guarantee.",
+        "shapes": "Its democratic government leans on chip dominance as a 'silicon shield' — the world's stake in TSMC deters a Chinese move. FRAMING: a tiny island holds a chokehold over the entire digital economy, which is exactly why it's the board's most dangerous square."
+      },
+      "interest": {
+        "best": "Keep the status quo — no war, no formal independence trigger — while its chip lead makes the world defend it out of self-interest.",
+        "worst": "A blockade or invasion; or, ironically, others (US, Japan) building enough fabs that its 'silicon shield' erodes and it becomes expendable."
+      },
+      "pieces": [
+        { "label": "Advanced chip fabrication", "note": "TSMC makes the great majority of the world's leading-edge chips — no substitute at scale.", "facts": [ { "text": "Taiwan (mainly TSMC) produces the large majority of the world's most advanced (sub-7nm) chips.", "source": "worldbank", "as_of": "2024", "framing": true, "framing_note": "Share figures come from industry analysts (e.g. TrendForce), not a single official series." } ] }
+      ],
+      "move": "The 'silicon shield': make itself so essential to everyone's economy that a conflict is unthinkable — a piece too valuable to capture intact.",
+      "move_framing": true
+    },
+    {
+      "slug": "pakistan", "name": "Pakistan", "flag": "🇵🇰", "type": "client", "side": "china-bloc", "square": "c2",
+      "role": "The rented board",
+      "accent": "oklch(0.58 0.09 150)",
+      "tagline": "A player whose party rarely holds the real pieces.",
+      "politics": {
+        "ruling": "Parliamentary democracy on paper; in practice the military establishment ('the establishment') sets foreign, nuclear and India policy, with civilian governments cycling under its watch.",
+        "orientation": "Rents its geography and army to whichever patron pays — historically the US, increasingly China (CPEC) and the Gulf.",
+        "nexus": "The army and ISI, external patrons (US aid, China's CPEC loans, Saudi/Gulf bailouts) and the IMF — voters and elected PMs sit below all of them. FRAMING: analysts widely describe it as a state where the army is the enduring sovereign and parties are interchangeable.",
+        "shapes": "Because the army — not the elected party — owns the strategic file, policy follows the patron and the institution, not the manifesto. Governments that cross the establishment tend not to finish their term. FRAMING: a 'client / hybrid' state, in the framing of many analysts — argue with it."
+      },
+      "interest": {
+        "best": "Keep the rents flowing — play the US, China and the Gulf against each other, secure IMF bailouts, and preserve the army's economic and political primacy.",
+        "worst": "Debt-trap dependence on a single patron (China), an economy in permanent IMF-crisis, and a client status that leaves it with no independent move at all."
+      },
+      "pieces": [
+        { "label": "Geography for rent", "note": "Sits astride Afghanistan, Iran, China and the Arabian Sea — strategic real estate patrons pay to access (CPEC, Gwadar).", "facts": [ { "text": "China's CPEC corridor commits tens of billions in loans/investment through Pakistan to the Arabian Sea.", "source": "worldbank", "as_of": "2024", "framing": true, "framing_note": "Headline CPEC figures are Chinese/Pakistani government announcements; disbursed totals are disputed." } ] },
+        { "label": "The nuclear + army card", "note": "A nuclear-armed military that outlasts every civilian government — the piece patrons actually negotiate with.", "facts": [ { "text": "One of nine nuclear-armed states; military spending is a large share of the budget.", "source": "sipri", "as_of": "2023" } ] }
+      ],
+      "move": "Rent the geography and the army to the highest bidder while surviving on serial IMF programmes — a client that trades access for solvency.",
+      "move_framing": true
+    },
+    {
+      "slug": "brics", "name": "BRICS+ bloc", "flag": "🧩", "type": "bloc", "side": "non-aligned", "square": "g4",
+      "role": "The alternative table",
+      "accent": "oklch(0.68 0.14 300)",
+      "tagline": "Trying to build a second board — slowly.",
+      "politics": {
+        "ruling": "A loose intergovernmental grouping (Brazil, Russia, India, China, South Africa + new members), no shared government.",
+        "orientation": "De-dollarisation at the margins, local-currency trade, a shared development bank — but members are rivals (India vs China).",
+        "nexus": "Its members' own nexuses pulling in different directions — Beijing wants a yuan bloc, Delhi wants autonomy, the Gulf wants optionality.",
+        "shapes": "Because it has no unified party or treasury and includes rivals, BRICS moves by lowest common denominator — real on local-currency settlement and gold, stalled on a shared currency. FRAMING: it can fragment the dollar board, not replace it."
+      },
+      "interest": {
+        "best": "Enough local-currency settlement, gold and parallel rails to give members an exit ramp from dollar coercion — optionality, not a single new hegemon.",
+        "worst": "Internal rivalry (India–China) and free-riding keep it a talking shop, so the dollar board stays unchallenged and members stay individually exposed."
+      },
+      "pieces": [
+        { "label": "Local-currency settlement", "note": "Bilateral trade in rupees, yuan, reais, dirhams; a New Development Bank; central-bank gold buying.", "facts": [ { "text": "Central banks (led by BRICS members) have been net gold buyers at multi-decade highs.", "source": "imf-weo", "as_of": "2024", "framing": true, "framing_note": "Gold-buying is measured; motive ('de-dollarisation') is interpretation." } ] }
+      ],
+      "move": "Chip away at the dollar's edges — settle bilateral trade locally, hold more gold — while internal rivalries (India–China) block a real common currency.",
+      "move_framing": true
+    },
+    {
+      "slug": "iran", "name": "Iran", "flag": "🇮🇷", "type": "sovereign", "side": "resource", "square": "c5",
+      "role": "The sanctioned player",
+      "accent": "oklch(0.6 0.12 150)",
+      "tagline": "Locked off the board, sells through the back door.",
+      "politics": {
+        "ruling": "Theocratic republic — a Supreme Leader (clergy) above an elected president and parliament; the Revolutionary Guard (IRGC) holds economic and military power.",
+        "orientation": "Anti-Western 'axis of resistance'; survives under the heaviest sanctions regime by trading off-dollar.",
+        "nexus": "The Supreme Leader's office, the IRGC (which runs large swathes of the economy), and clerical foundations — elected officials operate beneath them.",
+        "shapes": "Because the clergy and the IRGC — not the elected government — hold the strategic file, policy is regime-survival first: proxies, oil smuggling, and a nuclear hedge. FRAMING: a state cut off the dollar board that has learned to live off it, mostly via China and grey channels."
+      },
+      "interest": {
+        "best": "Sanctions relief or durable off-dollar trade (oil to China, barter, crypto) that funds the state and its proxies without giving up the nuclear hedge.",
+        "worst": "A tightening blockade, an Israeli/US strike on nuclear sites, or domestic unrest that the security state can't contain."
+      },
+      "pieces": [
+        { "label": "Oil the sanctions can't fully stop", "note": "Large reserves; exports (mostly to China) continue at a discount despite sanctions.", "facts": [ { "text": "Holds among the world's largest proven oil and gas reserves.", "source": "eia-iea", "as_of": "2024" } ] },
+        { "label": "Chokepoint & proxies", "note": "Sits on the Strait of Hormuz — ~a fifth of world oil passes through — and arms regional proxies.", "facts": [ { "text": "Roughly a fifth of global oil consumption transits the Strait of Hormuz.", "source": "eia-iea", "as_of": "2023", "framing": true, "framing_note": "Transit share is EIA-estimated; the strategic 'threat' framing is interpretation." } ] }
+      ],
+      "move": "Trade oil to China off the dollar rails, keep a nuclear-threshold hedge as bargaining chips, and use proxies to raise the cost of pressuring it.",
+      "move_framing": true
+    },
+    {
+      "slug": "brazil", "name": "Brazil", "flag": "🇧🇷", "type": "sovereign", "side": "non-aligned", "square": "f5",
+      "role": "The breadbasket",
+      "accent": "oklch(0.74 0.15 130)",
+      "tagline": "Feeds both blocs; picks neither.",
+      "politics": {
+        "ruling": "Presidential democracy with a fragmented multi-party congress; leadership swings left/right between elections.",
+        "orientation": "Non-aligned, agri-export led; a founding BRICS member that still trades heavily with the US and EU.",
+        "nexus": "The agribusiness ('ruralista') lobby, commodity exporters, and a powerful congress that any president must bargain with.",
+        "shapes": "An export economy answerable to the farm and mining lobbies keeps Brazil selling soy, beef and iron ore to everyone — so it champions BRICS local-currency trade without breaking with the West. FRAMING: a swing supplier that gains from a multipolar board, not from picking a side."
+      },
+      "interest": {
+        "best": "High commodity demand from both China and the West, a bigger voice via BRICS, and local-currency trade that cuts its dollar exposure.",
+        "worst": "A commodity bust, or great-power pressure forcing it to choose between its biggest customer (China) and its traditional partners (US/EU)."
+      },
+      "pieces": [
+        { "label": "Global food & ore supplier", "note": "Among the top exporters of soy, beef, sugar, coffee and iron ore — China's key food source.", "facts": [ { "text": "The world's largest exporter of soybeans and among the top food exporters.", "source": "un-comtrade", "as_of": "2023" } ] }
+      ],
+      "move": "Sell to everyone and align with none — push BRICS local-currency trade while keeping Western markets open.",
+      "move_framing": true
+    },
+    {
+      "slug": "uk", "name": "United Kingdom", "flag": "🇬🇧", "type": "sovereign", "side": "us-bloc", "square": "g8",
+      "role": "The banker's ally",
+      "accent": "oklch(0.68 0.13 260)",
+      "tagline": "Runs the plumbing of the board.",
+      "politics": {
+        "ruling": "Parliamentary democracy; Labour / Conservative alternate government.",
+        "orientation": "Firmly US-aligned (the 'special relationship'); post-Brexit, leans on finance and services.",
+        "nexus": "The City of London financial complex, and the US-security/intelligence alliance (Five Eyes, NATO).",
+        "shapes": "With the City as a top global financial centre, the UK's interest is an open, dollar-and-sterling financial system it helps run — so it enforces sanctions and clears trades rather than challenging the board. FRAMING: not a pole of its own, but a key operator of the existing one."
+      },
+      "interest": {
+        "best": "Stay indispensable as a financial and legal hub for global (dollar) capital, anchored to US security and open markets.",
+        "worst": "Financial business migrates elsewhere post-Brexit, or it's caught between US and EU regulation with no bloc of its own."
+      },
+      "pieces": [
+        { "label": "A top financial centre", "note": "London clears a huge share of global FX and derivatives — the board's plumbing.", "facts": [ { "text": "London is consistently the #1 or #2 global FX trading centre by turnover.", "source": "bis", "as_of": "2022" } ] }
+      ],
+      "move": "Operate the system rather than rival it — run the financial plumbing, enforce sanctions, and stay welded to the US.",
+      "move_framing": true
+    },
+    {
+      "slug": "north-korea", "name": "North Korea", "flag": "🇰🇵", "type": "client", "side": "china-bloc", "square": "a1",
+      "role": "The off-grid piece",
+      "accent": "oklch(0.55 0.08 30)",
+      "tagline": "Not on the board — and armed anyway.",
+      "politics": {
+        "ruling": "Totalitarian one-family dynasty (Kim) atop a single party and the military ('military-first').",
+        "orientation": "Isolated, nuclear-armed; survives on sanctions-evasion, aid, and now arms sales to Russia.",
+        "nexus": "The ruling family and the military — there is no independent economy or party to speak of.",
+        "shapes": "A totalitarian state whose only real card is its nuclear/missile programme uses provocation to extract aid and recognition. FRAMING: a piece almost entirely off the dollar board, kept alive by China's tolerance and, lately, Russia's need for munitions."
+      },
+      "interest": {
+        "best": "Recognition as a nuclear state, sanctions relief, and a steady patron (China, now Russia) that keeps the regime funded and armed.",
+        "worst": "A patron cutting it loose, a collapse of sanctions-evasion income, or a miscalculation that triggers war."
+      },
+      "pieces": [
+        { "label": "Nukes & missiles", "note": "A small nuclear arsenal and a growing missile programme — its one bargaining chip.", "facts": [ { "text": "One of nine nuclear-armed states, outside the Non-Proliferation Treaty.", "source": "sipri", "as_of": "2023" } ] }
+      ],
+      "move": "Provoke to extract — trade weapons to Russia, lean on China, and use its arsenal as leverage since it has nothing else on the board.",
+      "move_framing": true
+    }
+  ],
+
+  "entanglements": [
+    { "a": "china", "b": "usa", "kind": "mutual hold", "text": "China holds ~$0.8T of US debt; the US buys China's exports. Each can hurt the other only by hurting itself — 'mutually assured economic destruction'.", "framing": true },
+    { "a": "russia", "b": "india", "kind": "off-board trade", "text": "Sanctioned Russian oil sells to India at a discount, settled partly in rupees/dirhams — the clearest live case of trade routed off the dollar board.", "framing": false },
+    { "a": "saudi", "b": "usa", "kind": "petrodollar", "text": "Saudi oil priced in dollars underwrites dollar demand; in exchange, historically, US security guarantees. Any drift to yuan pricing is systemic.", "framing": true },
+    { "a": "taiwan", "b": "china", "kind": "chokepoint", "text": "China claims Taiwan; Taiwan makes the chips China (and everyone) needs. The most dangerous square on the board.", "framing": true },
+    { "a": "japan", "b": "usa", "kind": "creditor", "text": "Japan is usually the largest foreign holder of US Treasuries — an ally funding the board rather than challenging it.", "framing": false },
+    { "a": "gulf-uae", "b": "russia", "kind": "clearing", "text": "Gulf hubs (dirham, local banks) clear trade that dollar rails won't touch — the junction box of a fragmenting system.", "framing": true },
+    { "a": "eu", "b": "usa", "kind": "dependent rival", "text": "The euro is the only real reserve rival, yet the EU depends on US security and cannot field a unified foreign policy — a board without an army.", "framing": true },
+    { "a": "india", "b": "china", "kind": "rivals inside a bloc", "text": "Both in BRICS, yet strategic rivals with a disputed border — which is exactly why BRICS can't agree a common currency.", "framing": true },
+    { "a": "pakistan", "b": "china", "kind": "patron / client", "text": "China's CPEC loans and Gwadar port make Pakistan a strategic client; debt and infrastructure buy long-term alignment against India.", "framing": true },
+    { "a": "pakistan", "b": "saudi", "kind": "bailout patron", "text": "Gulf deposits and oil-credit keep Pakistan solvent between IMF programmes — solvency traded for loyalty and manpower.", "framing": true },
+    { "a": "iran", "b": "china", "kind": "off-board trade", "text": "China buys the bulk of Iran's sanctioned oil, often at a discount and off the dollar rails — keeping Tehran solvent and Beijing supplied.", "framing": true },
+    { "a": "north-korea", "b": "russia", "kind": "arms for aid", "text": "North Korea supplies munitions to Russia's war; in return it gets food, fuel and technology — two sanctioned states propping each other up.", "framing": true },
+    { "a": "brazil", "b": "china", "kind": "supplier", "text": "China is Brazil's biggest customer for soy and iron ore — a food-and-ore dependency that pulls Brasília toward the BRICS table.", "framing": false },
+    { "a": "uk", "b": "usa", "kind": "special relationship", "text": "The City of London clears the dollar system the US issues; intelligence and defence are deeply shared — an operator, not a rival, of the board.", "framing": true }
+  ],
+
+  "moves": [
+    { "date": "1971", "actor": "usa", "title": "Nixon closes the gold window", "text": "The US ends dollar-gold convertibility, floating the world onto a pure fiat dollar standard — the board as we know it is set.", "kind": "opening", "framing": true },
+    { "date": "1974", "actor": "saudi", "title": "The petrodollar handshake", "text": "Saudi Arabia agrees to price oil in dollars in exchange for US security — locking oil demand to the dollar for a generation.", "kind": "alliance", "framing": true },
+    { "date": "2015–18", "actor": "china", "title": "CIPS + Belt and Road", "text": "China launches its own cross-border payment system (CIPS) and lends across Asia and Africa — the first bricks of a parallel board.", "kind": "build", "framing": true },
+    { "date": "2022", "actor": "usa", "title": "Russia cut off from SWIFT", "text": "After the invasion of Ukraine, the US and allies freeze Russian reserves and cut major banks off dollar clearing — the board weaponised in the open.", "kind": "sanction", "framing": false },
+    { "date": "2022–24", "actor": "india", "title": "Rupee oil, UPI goes abroad", "text": "India buys discounted Russian crude settled partly in rupees/dirhams and extends UPI cross-border — routing around the dollar at the edges.", "kind": "off-board", "framing": false },
+    { "date": "2023", "actor": "brazil", "title": "Lula's local-currency push", "text": "Brazil and China agree to settle bilateral trade in their own currencies, and BRICS talks up de-dollarisation — chipping at the board's edge.", "kind": "off-board", "framing": true },
+    { "date": "2023–24", "actor": "north-korea", "title": "Munitions for Moscow", "text": "North Korea ships artillery and missiles to Russia in exchange for aid and technology — two off-board pieces reinforcing each other.", "kind": "alliance", "framing": true },
+    { "date": "2024", "actor": "usa", "title": "Advanced-chip export controls tighten", "text": "The US widens curbs on selling leading-edge chips and tools to China — moving the fight from money to technology.", "kind": "sanction", "framing": false },
+
+    { "date": "2025", "actor": "usa", "title": "Tariff walls go back up", "text": "A more protectionist Washington leans on broad tariffs and tighter tech controls — allies and rivals alike are pushed to hedge, and the incentive to hold assets outside the dollar rises.", "kind": "sanction", "framing": true, "live": true },
+    { "date": "2025", "actor": "china", "title": "Yuan oil & CIPS keep widening", "text": "More Gulf and Russian energy is invoiced or settled in yuan, and CIPS membership grows — the parallel board gains users, though the dollar still clears the vast majority.", "kind": "off-board", "framing": true, "live": true },
+    { "date": "2025", "actor": "russia", "title": "Trade fully redirected east", "text": "With Europe closed, the bulk of Russian oil now flows to India and China, settled in rupees, yuan and dirhams via Gulf hubs — the clearest running test of living off the dollar board.", "kind": "off-board", "framing": true, "live": true },
+    { "date": "2026", "actor": "brics", "title": "Local-currency push, no common coin", "text": "BRICS+ keeps expanding local-currency settlement and gold holdings, but India–China rivalry again blocks any shared currency — fragmentation at the edges, not a rival board.", "kind": "build", "framing": true, "live": true },
+    { "date": "2026", "actor": "india", "title": "Rupee rails go cross-border", "text": "India widens INR trade settlement and UPI links (UAE, Singapore and more) while still buying discounted Russian crude — deepening its un-cornered swing position.", "kind": "off-board", "framing": true, "live": true },
+    { "date": "2026", "actor": "saudi", "title": "Hedging both boards openly", "text": "Riyadh keeps dollar oil pricing and US security ties while courting yuan settlement and BRICS — maximising leverage by refusing to choose.", "kind": "alliance", "framing": true, "live": true },
+    { "date": "2026", "actor": "taiwan", "title": "The silicon shield under strain", "text": "US, Japanese and European fabs slowly ramp while cross-strait pressure stays high — the chip chokehold is still Taiwan's, but the board is racing to copy the key square.", "kind": "build", "framing": true, "live": true }
+  ],
+
+  "eras": [
+    {
+      "year": "1900", "label": "Empire & gold", "holder": "🇬🇧 Pound sterling",
+      "order": "multipolar", "order_label": "Multipolar — rival empires",
+      "dominance": 55, "dom_label": "Sterling on gold",
+      "headline": "Many empires, one currency of trade — the pound.",
+      "note": "Before the dollar, several empires (British, French, German, Russian, Ottoman, rising US & Japan) share a multipolar board, but sterling — on gold, backed by the largest empire and navy — is the money of trade. The US is a fast-rising debtor, not yet the house.",
+      "framing": true,
+      "poles": [
+        { "label": "British Empire", "color": "oklch(0.68 0.13 260)", "members": ["uk"] },
+        { "label": "Rising powers", "color": "oklch(0.72 0.15 70)", "members": ["usa", "japan"] },
+        { "label": "Continental empires", "color": "oklch(0.6 0.05 30)", "members": ["russia", "eu"] }
+      ]
+    },
+    {
+      "year": "1945", "label": "US & USSR emerge", "holder": "🇺🇸 Dollar (gold-backed)",
+      "order": "bipolar", "order_label": "Two poles forming",
+      "dominance": 72, "dom_label": "Dollar pegged to gold",
+      "headline": "Two superpowers left standing; the US writes the rules.",
+      "note": "WWII leaves the US and USSR as the two poles. At Bretton Woods the dollar is fixed to gold and every currency to the dollar; the IMF and World Bank are born. The old empires (Britain, France) are now junior partners in the US camp.",
+      "framing": false,
+      "poles": [
+        { "label": "US-led West", "color": "oklch(0.7 0.16 250)", "members": ["usa", "uk", "eu", "japan"] },
+        { "label": "Soviet bloc", "color": "oklch(0.63 0.2 25)", "members": ["russia", "china", "north-korea"] }
+      ]
+    },
+    {
+      "year": "1962", "label": "Cold War (bipolar)", "holder": "🇺🇸 Dollar vs 🇷🇺 ruble bloc",
+      "order": "bipolar", "order_label": "Bipolar — US vs USSR",
+      "dominance": 70, "dom_label": "Two boards, one line down the middle",
+      "headline": "The board is split clean in two.",
+      "note": "The classic bipolar world: a US-led capitalist bloc trading in dollars, and a Soviet-led bloc with its own ruble-based COMECON system. Most others are pressured to pick a side — or, like India, lead a 'non-aligned' third way.",
+      "framing": true,
+      "poles": [
+        { "label": "US-led West", "color": "oklch(0.7 0.16 250)", "members": ["usa", "uk", "eu", "japan", "saudi", "taiwan", "pakistan", "iran"] },
+        { "label": "Soviet bloc", "color": "oklch(0.63 0.2 25)", "members": ["russia", "china", "north-korea"] },
+        { "label": "Non-aligned", "color": "oklch(0.75 0.15 70)", "members": ["india", "brazil"] }
+      ]
+    },
+    {
+      "year": "1971", "label": "The fiat dollar", "holder": "🇺🇸 Dollar (fiat)",
+      "order": "bipolar", "order_label": "Bipolar — dollar cut loose",
+      "dominance": 85, "dom_label": "Peak dollar",
+      "headline": "Nixon cuts the gold cord — pure dollar power.",
+      "note": "The US ends dollar-gold convertibility; money is now backed only by the US state, its markets and its military. Oil is soon priced in dollars (petrodollar). The world is still bipolar, but the West's board reaches its most concentrated, US-run form.",
+      "framing": false,
+      "poles": [
+        { "label": "US-led West", "color": "oklch(0.7 0.16 250)", "members": ["usa", "uk", "eu", "japan", "saudi", "taiwan", "pakistan", "iran"] },
+        { "label": "Soviet bloc", "color": "oklch(0.63 0.2 25)", "members": ["russia", "china", "north-korea"] },
+        { "label": "Non-aligned", "color": "oklch(0.75 0.15 70)", "members": ["india", "brazil"] }
+      ]
+    },
+    {
+      "year": "1991", "label": "US unipolar moment", "holder": "🇺🇸 Dollar (unrivalled)",
+      "order": "unipolar", "order_label": "Unipolar — one pole",
+      "dominance": 88, "dom_label": "One pole, everyone orbits",
+      "headline": "The USSR falls — one pole is left.",
+      "note": "The Soviet Union collapses and the second board is switched off. For a generation there is effectively ONE pole: the US, its dollar, its markets and its alliances. China is opening up inside the system, not against it. Chess would say: checkmate.",
+      "framing": true,
+      "poles": [
+        { "label": "The single pole (US-led)", "color": "oklch(0.7 0.16 250)", "members": ["usa", "uk", "eu", "japan", "saudi", "taiwan", "pakistan", "india", "brazil", "gulf-uae", "china"] },
+        { "label": "Outside / sanctioned", "color": "oklch(0.55 0.08 30)", "members": ["russia", "iran", "north-korea"] }
+      ]
+    },
+    {
+      "year": "1999", "label": "The euro arrives", "holder": "🇺🇸 Dollar · 🇪🇺 euro #2",
+      "order": "unipolar", "order_label": "Unipolar — one economic rival",
+      "dominance": 80, "dom_label": "Dollar + a currency rival",
+      "headline": "A second currency, still one pole.",
+      "note": "The euro launches and becomes the world's #2 reserve currency — the first credible currency alternative. Power is still essentially unipolar (US security, US-led order), but for the first time reserves have somewhere else to go.",
+      "framing": false,
+      "poles": [
+        { "label": "US-led order", "color": "oklch(0.7 0.16 250)", "members": ["usa", "uk", "japan", "saudi", "taiwan", "pakistan", "india", "brazil", "gulf-uae"] },
+        { "label": "Europe (currency rival)", "color": "oklch(0.72 0.13 250)", "members": ["eu"] },
+        { "label": "Rising / outside", "color": "oklch(0.6 0.12 40)", "members": ["china", "russia", "iran", "north-korea"] }
+      ]
+    },
+    {
+      "year": "2015", "label": "China rises (multipolar)", "holder": "🇺🇸 Dollar · 🇨🇳 rising",
+      "order": "multipolar", "order_label": "Back to multipolar",
+      "dominance": 68, "dom_label": "Challenger tooling up",
+      "headline": "A second pole reappears — this time China.",
+      "note": "China launches CIPS payments and Belt & Road, pushes yuan trade, and the IMF adds the yuan to its basket. The world tips back toward multipolar: a US pole, a rising China pole, and a large non-aligned middle that refuses to pick.",
+      "framing": true,
+      "poles": [
+        { "label": "US-led bloc", "color": "oklch(0.7 0.16 250)", "members": ["usa", "uk", "eu", "japan", "taiwan"] },
+        { "label": "China-led bloc", "color": "oklch(0.63 0.2 25)", "members": ["china", "russia", "pakistan", "north-korea", "iran"] },
+        { "label": "Swing / non-aligned", "color": "oklch(0.75 0.15 70)", "members": ["india", "brazil", "saudi", "gulf-uae"] }
+      ]
+    },
+    {
+      "year": "2022", "label": "Blocs harden", "holder": "🇺🇸 Dollar (as a weapon)",
+      "order": "multipolar", "order_label": "Multipolar — blocs harden",
+      "dominance": 62, "dom_label": "Dollar wielded openly",
+      "headline": "Sanctions split the board into camps.",
+      "note": "Russia's reserves are frozen and its banks cut off dollar clearing — the clearest show of dollar power, and the loudest advertisement for alternatives. The three-pole world hardens: a Western bloc, a China–Russia axis, and a swing middle everyone courts.",
+      "framing": false,
+      "poles": [
+        { "label": "US-led bloc", "color": "oklch(0.7 0.16 250)", "members": ["usa", "uk", "eu", "japan", "taiwan"] },
+        { "label": "China–Russia axis", "color": "oklch(0.63 0.2 25)", "members": ["china", "russia", "pakistan", "north-korea", "iran"] },
+        { "label": "Swing / non-aligned", "color": "oklch(0.75 0.15 70)", "members": ["india", "brazil", "saudi", "gulf-uae"] }
+      ]
+    },
+    {
+      "year": "2026", "label": "Fragmenting", "holder": "🇺🇸 Dollar · multipolar edges",
+      "order": "multipolar", "order_label": "Multipolar — 3+ poles",
+      "dominance": 58, "dom_label": "Still #1, nibbled at",
+      "headline": "Many players, one fraying board.",
+      "note": "The dollar is still dominant — ~58% of reserves, most trade, most oil — but yuan rails, BRICS local-currency settlement, record gold buying and instant-payment systems route around it at the edges. Not two sides: a US pole, a China pole, resource kingmakers, neutral junctions and a large swing middle.",
+      "framing": false,
+      "poles": [
+        { "label": "US-led bloc", "color": "oklch(0.7 0.16 250)", "members": ["usa", "uk", "eu", "japan"] },
+        { "label": "China-led bloc", "color": "oklch(0.63 0.2 25)", "members": ["china", "russia", "pakistan", "north-korea"] },
+        { "label": "Swing / non-aligned", "color": "oklch(0.75 0.15 70)", "members": ["india", "brazil"] },
+        { "label": "Resource / kingmaker", "color": "oklch(0.7 0.14 140)", "members": ["saudi", "taiwan", "iran"] },
+        { "label": "Neutral junction", "color": "oklch(0.74 0.11 100)", "members": ["gulf-uae"] }
+      ]
+    }
+  ],
+
+  "flips": [
+    { "slug": "iran", "year": "1979", "from": "US ally", "to": "US adversary", "title": "The Islamic Revolution flips Iran", "text": "The Shah — a pillar of US power in the Gulf, armed and backed by Washington — is overthrown. Revolutionary Iran becomes a sworn US adversary; the embassy hostage crisis and decades of sanctions follow. One of the sharpest allegiance flips of the century.", "framing": false },
+    { "slug": "china", "year": "1972", "from": "Soviet bloc", "to": "opened to the US", "title": "Nixon goes to China", "text": "Nixon's visit splits China from the USSR and opens it to the West — the strategic 'triangle' that isolated Moscow. Decades later China integrates into the US-led economy, before emerging as its main challenger.", "framing": true },
+    { "slug": "russia", "year": "2022", "from": "on the dollar board", "to": "cut off / east-facing", "title": "Sanctions push Russia east", "text": "After the invasion of Ukraine, Russia is frozen out of dollar clearing and redirects its trade to China and India — moving decisively from an (uneasy) participant to an off-board adversary.", "framing": false },
+    { "slug": "saudi", "year": "2023", "from": "firmly US-aligned", "to": "hedging / multi-aligned", "title": "Saudi hedges toward Beijing", "text": "Historically anchored to the US by the petrodollar-for-security bargain, Riyadh openly courts China (which brokered its détente with Iran) and BRICS — sliding from ally toward a multi-aligned swing player.", "framing": true },
+    { "slug": "pakistan", "year": "2015", "from": "US client", "to": "China client (CPEC)", "title": "Pakistan tilts to China", "text": "Long a US client during the Cold War and War on Terror, Pakistan's growing debt and infrastructure dependence on China (CPEC, Gwadar) shifts its strategic alignment toward Beijing.", "framing": true }
+  ]
+}
