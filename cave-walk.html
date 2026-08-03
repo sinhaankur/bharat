@@ -3,73 +3,99 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Walk Inside — Ajanta &amp; the temples, as they were</title>
-  <meta name="description" content="Walk through India's rock-cut temples and caves in your browser — a first-person experience like Street View, but pure reconstruction: the Ajanta chaitya prayer hall rebuilt as it once was, painted and vivid. Move with WASD + mouse. Every temple will get this." />
+  <title>Walk Inside — India's temples, as they were</title>
+  <meta name="description" content="Walk through India's temples in your browser — first-person, like Street View but pure reconstruction: the Ajanta chaitya hall, the Ellora Kailasa temple, and a Nagara sanctum, rebuilt as they once were. Move with WASD + mouse. All procedural, no heavy files." />
   <link rel="stylesheet" href="styles.css" />
   <style>
     html, body { margin: 0; height: 100%; overflow: hidden; background: #0b0a09; }
     #cw-canvas { position: fixed; inset: 0; display: block; }
-    /* intro / lock overlay */
-    #cw-intro { position: fixed; inset: 0; z-index: 20; display: flex; align-items: center; justify-content: center;
-      background: radial-gradient(120% 120% at 50% 30%, oklch(0.2 0.03 60 / 0.55), oklch(0.07 0.01 40 / 0.92));
-      backdrop-filter: blur(3px); text-align: center; padding: 2rem; }
-    #cw-intro.hidden { display: none; }
-    .cw-card { max-width: 560px; }
+    #cw-overlay { position: fixed; inset: 0; z-index: 20; display: flex; align-items: center; justify-content: center;
+      background: radial-gradient(120% 120% at 50% 25%, oklch(0.2 0.03 60 / 0.5), oklch(0.06 0.01 40 / 0.94));
+      backdrop-filter: blur(3px); text-align: center; padding: 2rem; overflow-y: auto; }
+    #cw-overlay.hidden { display: none; }
+    .cw-card { max-width: 720px; }
     .cw-eyebrow { font-family: var(--font-mono, monospace); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: oklch(0.8 0.13 70); }
-    .cw-card h1 { font-family: var(--font-display, Georgia), serif; font-weight: 400; font-size: clamp(1.9rem, 4.5vw, 3rem); color: #f3ead9; margin: 0.5rem 0 0.4rem; line-height: 1.05; }
+    .cw-card h1 { font-family: var(--font-display, Georgia), serif; font-weight: 400; font-size: clamp(1.8rem, 4vw, 2.8rem); color: #f3ead9; margin: 0.5rem 0 0.5rem; line-height: 1.05; }
     .cw-card h1 em { font-style: italic; color: oklch(0.85 0.13 70); }
-    .cw-card p { color: #ccbfa8; font-size: 15px; line-height: 1.65; margin: 0 0 1.3rem; }
-    .cw-enter { font-family: var(--font-mono, monospace); font-size: 13px; letter-spacing: 0.05em; text-transform: uppercase;
-      background: oklch(0.78 0.15 62); color: #241a10; border: 0; border-radius: 999px; padding: 0.85rem 1.8rem; cursor: pointer; font-weight: 700; }
-    .cw-enter:hover { filter: brightness(1.08); }
-    .cw-keys { margin-top: 1.2rem; font-family: var(--font-mono, monospace); font-size: 11px; color: #9a8f7c; line-height: 1.9; }
+    .cw-card > p { color: #ccbfa8; font-size: 14.5px; line-height: 1.6; margin: 0 auto 1.4rem; max-width: 560px; }
+
+    /* temple picker cards */
+    .cw-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.8rem; margin: 0 0 1.4rem; }
+    .cw-pick { text-align: left; background: oklch(0.16 0.02 60 / 0.7); border: 1px solid oklch(0.4 0.03 60 / 0.6); border-radius: 12px;
+      padding: 1rem 1.1rem; cursor: pointer; color: #e8dcc6; transition: border-color .15s, transform .1s; }
+    .cw-pick:hover { border-color: oklch(0.78 0.15 62); transform: translateY(-2px); }
+    .cw-pick .cw-p-trad { font-family: var(--font-mono, monospace); font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase; color: oklch(0.78 0.13 70); }
+    .cw-pick h3 { font-family: var(--font-display, Georgia), serif; font-weight: 400; font-size: 1.2rem; color: #f3ead9; margin: 0.15rem 0 0.3rem; }
+    .cw-pick p { font-size: 12px; line-height: 1.5; color: #b3a892; margin: 0 0 0.5rem; }
+    .cw-pick .cw-p-real { font-family: var(--font-mono, monospace); font-size: 10px; color: #8f8672; }
+    .cw-pick .cw-p-go { display: inline-block; margin-top: 0.5rem; font-family: var(--font-mono, monospace); font-size: 10.5px;
+      letter-spacing: 0.05em; text-transform: uppercase; color: #241a10; background: oklch(0.8 0.15 62); border-radius: 999px; padding: 4px 12px; font-weight: 700; }
+
+    .cw-keys { margin-top: 0.4rem; font-family: var(--font-mono, monospace); font-size: 11px; color: #9a8f7c; line-height: 1.9; }
     .cw-keys kbd { background: oklch(0.25 0.01 60); border: 1px solid oklch(0.4 0.02 60); border-radius: 4px; padding: 1px 7px; color: #f3ead9; }
-    .cw-thennow { margin-top: 1.3rem; padding: 0.85rem 1rem; border: 1px solid oklch(0.4 0.06 250 / 0.5); border-radius: 10px;
-      background: oklch(0.18 0.03 250 / 0.5); font-size: 12.5px; line-height: 1.6; color: #cbbfa8; text-align: left; }
+
+    .cw-thennow { margin: 0.4rem auto 0; max-width: 600px; padding: 0.8rem 1rem; border: 1px solid oklch(0.4 0.06 250 / 0.5); border-radius: 10px;
+      background: oklch(0.18 0.03 250 / 0.45); font-size: 12px; line-height: 1.6; color: #cbbfa8; text-align: left; }
     .cw-thennow b { color: #f3ead9; font-weight: 600; }
     .cw-tn-label { display: inline-block; font-family: var(--font-mono, monospace); font-size: 9.5px; letter-spacing: 0.1em;
-      text-transform: uppercase; color: oklch(0.82 0.13 250); border: 1px solid oklch(0.5 0.1 250 / 0.6); border-radius: 999px;
-      padding: 1px 8px; margin-right: 6px; }
+      text-transform: uppercase; color: oklch(0.82 0.13 250); border: 1px solid oklch(0.5 0.1 250 / 0.6); border-radius: 999px; padding: 1px 8px; margin-right: 6px; }
     .cw-thennow a { color: oklch(0.82 0.14 250); text-decoration: none; border-bottom: 1px dotted; font-weight: 600; }
     .cw-thennow a:hover { color: #fff; }
-    .cw-tn-note { display: block; margin-top: 0.4rem; font-size: 10.5px; color: #9a8f7c; line-height: 1.5; }
-    /* HUD */
+    .cw-tn-note { display: block; margin-top: 0.35rem; font-size: 10px; color: #9a8f7c; line-height: 1.5; }
+
     #cw-hud { position: fixed; left: 12px; bottom: 12px; z-index: 10; font-family: var(--font-mono, monospace);
       font-size: 11px; color: #e8dcc6; text-shadow: 0 1px 3px #000; pointer-events: none; line-height: 1.6; }
     #cw-hud b { color: oklch(0.86 0.13 70); }
     #cw-crosshair { position: fixed; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px 0 0 -3px; z-index: 9;
-      border-radius: 50%; background: #fff6; pointer-events: none; }
-    #cw-back { position: fixed; top: 12px; left: 12px; z-index: 12; font-family: var(--font-mono, monospace); font-size: 11px;
+      border-radius: 50%; background: #fff6; pointer-events: none; display: none; }
+    #cw-back, #cw-menu { position: fixed; top: 12px; z-index: 12; font-family: var(--font-mono, monospace); font-size: 11px;
       letter-spacing: 0.05em; text-transform: uppercase; color: #e8dcc6; text-decoration: none; background: oklch(0.15 0.01 60 / 0.7);
-      border: 1px solid oklch(0.4 0.02 60 / 0.7); border-radius: 999px; padding: 5px 12px; }
-    #cw-back:hover { color: #fff; }
+      border: 1px solid oklch(0.4 0.02 60 / 0.7); border-radius: 999px; padding: 5px 12px; cursor: pointer; }
+    #cw-back { left: 12px; } #cw-menu { left: 150px; display: none; border-color: oklch(0.5 0.02 60); }
+    #cw-back:hover, #cw-menu:hover { color: #fff; }
     #cw-loading { position: fixed; inset: 0; z-index: 30; display: flex; align-items: center; justify-content: center;
-      background: #0b0a09; color: #cbbfa8; font-family: var(--font-mono, monospace); font-size: 13px; letter-spacing: 0.08em; }
+      background: #0b0a09; color: #cbbfa8; font-family: var(--font-mono, monospace); font-size: 13px; letter-spacing: 0.08em; text-align: center; padding: 1rem; }
+    /* on-screen movement pad */
+    #cw-move { position: fixed; right: 20px; bottom: 20px; z-index: 12; display: none;
+      grid-template-columns: repeat(3, 46px); grid-template-rows: repeat(3, 46px); gap: 5px;
+      grid-template-areas: ". fwd ." "left back right" ". . ."; }
+    .cw-mv { width: 46px; height: 46px; border-radius: 10px; font-size: 16px; cursor: pointer;
+      background: oklch(0.2 0.02 60 / 0.7); border: 1px solid oklch(0.5 0.03 60 / 0.8); color: #f3ead9;
+      user-select: none; -webkit-user-select: none; touch-action: none; }
+    .cw-mv:active { background: oklch(0.8 0.15 62); color: #241a10; }
+    #cw-mv-fwd { grid-area: fwd; } #cw-mv-left { grid-area: left; } #cw-mv-back { grid-area: back; } #cw-mv-right { grid-area: right; }
+    #cw-crosshair { display: none; }
   </style>
 </head>
 <body>
-  <div id="cw-loading">building the hall…</div>
+  <div id="cw-loading">preparing the temples…</div>
   <canvas id="cw-canvas"></canvas>
   <div id="cw-crosshair"></div>
-  <a id="cw-back" href="heritage-atlas.html">← heritage atlas</a>
+  <a id="cw-back" href="heritage-atlas.html">← exit</a>
+  <button id="cw-menu">⌂ choose temple</button>
   <div id="cw-hud"></div>
+  <!-- on-screen movement pad (works with mouse + touch; WASD still work) -->
+  <div id="cw-move">
+    <button id="cw-mv-fwd"   class="cw-mv" aria-label="forward">▲</button>
+    <button id="cw-mv-left"  class="cw-mv" aria-label="left">◀</button>
+    <button id="cw-mv-back"  class="cw-mv" aria-label="back">▼</button>
+    <button id="cw-mv-right" class="cw-mv" aria-label="right">▶</button>
+  </div>
 
-  <div id="cw-intro" class="hidden">
+  <div id="cw-overlay">
     <div class="cw-card">
       <div class="cw-eyebrow">Walk inside · reconstructed as it was</div>
-      <h1 id="cw-title">The <em>Ajanta</em> chaitya hall</h1>
-      <p id="cw-desc">A Buddhist prayer hall carved into the living rock — its horseshoe vault,
-      colonnade of pillars, and the votive stupa at the far apse, shown not as the weathered cave
-      of today but painted and vivid, as pilgrims once saw it by lamplight.</p>
-      <button class="cw-enter" id="cw-enter">▶ Enter &amp; walk</button>
+      <h1>Walk inside India's <em>temples</em></h1>
+      <p>First-person, like Street View — but pure reconstruction. Not today's weathered ruins:
+      each temple rebuilt as it once was, painted and lamp-lit. Pick one and walk in.</p>
+      <div class="cw-grid" id="cw-grid"></div>
       <div class="cw-keys">
-        <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> move &nbsp;·&nbsp; <kbd>mouse</kbd> look &nbsp;·&nbsp;
-        <kbd>Shift</kbd> walk faster &nbsp;·&nbsp; <kbd>Esc</kbd> release cursor
+        <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> move · <kbd>mouse</kbd> look ·
+        <kbd>Shift</kbd> faster · <kbd>Esc</kbd> release cursor
       </div>
       <div class="cw-thennow">
         <span class="cw-tn-label">Then ↔ Now</span>
-        This is a <b>reconstruction</b> of what the hall once was. To see the real
-        <b>ruin as it stands today</b>, open a genuine photogrammetry scan:
+        These are <b>reconstructions</b>. To see the real <b>ruins as they stand today</b>, open genuine photogrammetry:
         <a href="https://sketchfab.com/3d-models/ajanta-cave-01-0e0aa7dd247d4d818c9ecb1e7be3bcc6" target="_blank" rel="noopener">Ajanta Cave&nbsp;1 ↗</a> ·
         <a href="https://sketchfab.com/3d-models/kailasa-temple-at-ellora-c2d066f668034e1c893480e7f9190824" target="_blank" rel="noopener">Ellora Kailasa ↗</a>
         <span class="cw-tn-note">Community photogrammetry (Sketchfab), quality varies — the ruin as-is, not restored. No authoritative ASI/CyArk LiDAR is openly published for these caves.</span>
@@ -87,16 +113,18 @@
   </script>
   <script type="module">
     import * as THREE from 'three';
-    import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+    import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-    // ---------------------------------------------------------------- scene
+    // ================================================================ engine
     const canvas = document.getElementById('cw-canvas');
     let renderer;
     try {
       renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
     } catch (err) {
       document.getElementById('cw-loading').innerHTML =
-        'This walkthrough needs WebGL (3D in the browser).<br>Try a recent Chrome/Firefox/Safari on a device with graphics enabled.';
+        'This walkthrough needs WebGL (3D in the browser).<br>Try a recent Chrome/Firefox/Safari with graphics enabled.';
       throw err;
     }
     renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
@@ -104,204 +132,597 @@
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.outputColorSpace = THREE.SRGBColorSpace;
+    // cinematic tone-mapping: warm filmic response so lamps glow + shadows deepen
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.15;
 
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0b0a09);
-    scene.fog = new THREE.Fog(0x140f0a, 10, 46);
+    const camera = new THREE.PerspectiveCamera(70, innerWidth / innerHeight, 0.05, 300);
+    camera.rotation.order = 'YXZ';   // yaw then pitch — no roll
+    const EYE = 1.65;
 
-    const camera = new THREE.PerspectiveCamera(70, innerWidth / innerHeight, 0.05, 200);
-    const EYE = 1.65;                       // eye height (m)
-    camera.position.set(0, EYE, 15);        // start near the entrance, facing the stupa (-z)
+    // ---- forgiving look controls: cursor stays visible; DRAG to look (Street-View style) ----
+    let yaw = 0, pitch = 0, walking = false, dragging = false;
+    const look = { onCanvas: false };
+    function applyLook() { camera.rotation.set(pitch, yaw, 0); }
 
-    // ------------------------------------------------------------- materials
-    // "as it was" — warm painted stone: ochre plaster, red/indigo mural bands, gold.
-    const M = {
-      floor:   new THREE.MeshStandardMaterial({ color: 0x6b5636, roughness: 0.95 }),
-      wall:    new THREE.MeshStandardMaterial({ color: 0xcaa36a, roughness: 0.9 }),   // ochre plaster
-      wallRed: new THREE.MeshStandardMaterial({ color: 0x9c3b2a, roughness: 0.9 }),   // red mural band
-      wallInd: new THREE.MeshStandardMaterial({ color: 0x35507e, roughness: 0.9 }),   // indigo band
-      vault:   new THREE.MeshStandardMaterial({ color: 0xb98b52, roughness: 0.95 }),  // ribbed ceiling
-      pillar:  new THREE.MeshStandardMaterial({ color: 0xd8b57e, roughness: 0.85 }),
-      pillarCap:new THREE.MeshStandardMaterial({ color: 0xb5824a, roughness: 0.85 }),
-      stupa:   new THREE.MeshStandardMaterial({ color: 0xe7dcc2, roughness: 0.7 }),   // pale votive stupa
-      gold:    new THREE.MeshStandardMaterial({ color: 0xd9a441, roughness: 0.35, metalness: 0.6, emissive: 0x3a2606, emissiveIntensity: 0.4 }),
-      lampGlow:new THREE.MeshStandardMaterial({ color: 0xffd27a, emissive: 0xffab40, emissiveIntensity: 2.2 }),
+    let scene, colliders, bounds;   // rebuilt per temple
+
+    // ---- procedural STONE texture: canvas fractal noise → colour + bump. Cached. ----
+    const _texCache = {};
+    function stoneTexture(base, contrast = 0.18, key = base) {
+      if (_texCache[key]) return _texCache[key];
+      const S = 256, c = document.createElement('canvas'); c.width = c.height = S;
+      const g = c.getContext('2d'), img = g.createImageData(S, S), d = img.data;
+      const br = (base >> 16 & 255), bg = (base >> 8 & 255), bb = (base & 255);
+      // layered value noise → grainy, blotchy stone
+      function noise(x, y) {
+        let v = 0, amp = 1, f = 0.06;
+        for (let o = 0; o < 4; o++) {
+          v += amp * (Math.sin(x*f*1.3 + y*f*0.7) * Math.cos(x*f*0.5 - y*f*1.1)
+                    + Math.sin((x+y)*f*2.1)) * 0.5;
+          amp *= 0.5; f *= 2.2;
+        }
+        return v;
+      }
+      for (let y = 0; y < S; y++) for (let x = 0; x < S; x++) {
+        const n = noise(x, y) + (Math.random() - 0.5) * 0.6;
+        const k = 1 + n * contrast;
+        const i = (y*S + x) * 4;
+        d[i]   = Math.max(0, Math.min(255, br * k));
+        d[i+1] = Math.max(0, Math.min(255, bg * k));
+        d[i+2] = Math.max(0, Math.min(255, bb * k));
+        d[i+3] = 255;
+      }
+      g.putImageData(img, 0, 0);
+      const tex = new THREE.CanvasTexture(c);
+      tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+      tex.repeat.set(3, 3);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      _texCache[key] = tex;
+      return tex;
+    }
+    function stoneMat(base, { rough = 0.9, contrast = 0.18, repeat = 3, bump = 0.35 } = {}) {
+      const tex = stoneTexture(base, contrast, base + '_' + repeat);
+      tex.repeat.set(repeat, repeat);
+      return new THREE.MeshStandardMaterial({
+        map: tex, bumpMap: tex, bumpScale: bump, roughness: rough,
+      });
+    }
+
+    // shared "as it was" textured-stone palette
+    const MAT = () => ({
+      floor:   stoneMat(0x6b5636, { rough: 0.96, repeat: 5, contrast: 0.22 }),
+      stone:   stoneMat(0xcaa36a, { rough: 0.9,  repeat: 3 }),
+      red:     stoneMat(0x9c3b2a, { rough: 0.9,  repeat: 3, contrast: 0.14 }),
+      indigo:  stoneMat(0x35507e, { rough: 0.9,  repeat: 3, contrast: 0.14 }),
+      lightst: stoneMat(0xd8b57e, { rough: 0.85, repeat: 2 }),
+      darkst:  stoneMat(0xb5824a, { rough: 0.85, repeat: 2 }),
+      pale:    stoneMat(0xe7dcc2, { rough: 0.72, repeat: 2, contrast: 0.12 }),
+      granite: stoneMat(0x8a8580, { rough: 0.8,  repeat: 3, contrast: 0.28 }),
+      gold:    new THREE.MeshStandardMaterial({ color: 0xd9a441, roughness: 0.3, metalness: 0.7, emissive: 0x3a2606, emissiveIntensity: 0.5 }),
+      glow:    new THREE.MeshStandardMaterial({ color: 0xffd27a, emissive: 0xffab40, emissiveIntensity: 2.6 }),
+      cella:   new THREE.MeshStandardMaterial({ color: 0x1a140d, roughness: 1.0 }),
+      murti:   new THREE.MeshStandardMaterial({ color: 0x1c1a17, roughness: 0.42, metalness: 0.35, emissive: 0x1a1205, emissiveIntensity: 0.25 }),  // dark stone/bronze idol
+      // painted polychrome — the temple in its PRIME (not bare stone)
+      paint_red:   stoneMat(0xb23a2a, { rough: 0.75, repeat: 2, contrast: 0.1 }),
+      paint_ochre: stoneMat(0xe0a63c, { rough: 0.75, repeat: 2, contrast: 0.1 }),
+      paint_teal:  stoneMat(0x2f7d78, { rough: 0.75, repeat: 2, contrast: 0.1 }),
+      paint_blue:  stoneMat(0x2d5aa0, { rough: 0.75, repeat: 2, contrast: 0.1 }),
+      paint_green: stoneMat(0x4f8a3a, { rough: 0.75, repeat: 2, contrast: 0.1 }),
+      paint_cream: stoneMat(0xefe2c2, { rough: 0.7,  repeat: 2, contrast: 0.08 }),
+      skin_deity:  new THREE.MeshStandardMaterial({ color: 0x3a5a86, roughness: 0.5, emissive: 0x0a1220, emissiveIntensity: 0.2 }),  // blue deity (Vishnu/Krishna)
+    });
+
+    // ---- builder API handed to each temple's build() ----
+    function makeApi(scn, cols) {
+      const M = MAT();
+      const g = new THREE.Group(); scn.add(g);
+      const api = {
+        M, group: g,
+        box(w, h, d, x, y, z, mat, collide = false) {
+          const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+          m.position.set(x, y, z); m.castShadow = true; m.receiveShadow = true; g.add(m);
+          if (collide) cols.push({ minX: x-w/2, maxX: x+w/2, minZ: z-d/2, maxZ: z+d/2 });
+          return m;
+        },
+        cyl(r, h, x, y, z, mat, seg = 24, collide = false) {
+          const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, h, seg), mat);
+          m.position.set(x, y, z); m.castShadow = true; m.receiveShadow = true; g.add(m);
+          if (collide) cols.push({ minX: x-r, maxX: x+r, minZ: z-r, maxZ: z+r });
+          return m;
+        },
+        mesh(geo, mat, x, y, z) { const m = new THREE.Mesh(geo, mat); m.position.set(x,y,z); m.castShadow = true; m.receiveShadow = true; g.add(m); return m; },
+        pillar(x, z, h = 3.4, r = 0.34, collide = true) {   // octagonal shaft + base + capital
+          this.box(r*2.6, 0.4, r*2.6, x, 0.2, z, M.darkst);
+          this.cyl(r, h, x, h/2 + 0.4, z, M.lightst, 8);
+          this.cyl(r*1.5, 0.5, x, h + 0.65, z, M.darkst, 8);
+          this.box(r*2.8, 0.28, r*2.8, x, h + 1.0, z, M.gold);
+          if (collide) cols.push({ minX: x-0.5, maxX: x+0.5, minZ: z-0.5, maxZ: z+0.5 });
+        },
+        stupa(x, z, s = 1.0) {   // votive stupa: drum + dome + harmika + finial
+          this.cyl(1.5*s, 1.6*s, x, 0.8*s, z, M.pale, 40);
+          this.mesh(new THREE.SphereGeometry(1.55*s, 40, 24, 0, Math.PI*2, 0, Math.PI/2), M.pale, x, 1.6*s, z);
+          this.box(0.9*s, 0.5*s, 0.9*s, x, 3.15*s, z, M.darkst);
+          for (let i=0;i<3;i++) this.cyl((0.7-i*0.18)*s, 0.12*s, x, (3.5+i*0.28)*s, z, M.gold, 20);
+          this.mesh(new THREE.ConeGeometry(0.14*s, 0.6*s, 16), M.gold, x, 4.35*s, z);
+          cols.push({ minX: x-1.7*s, maxX: x+1.7*s, minZ: z-1.7*s, maxZ: z+1.7*s });
+        },
+        lamp(x, y, z, intensity = 14) {
+          const L = new THREE.PointLight(0xffb154, intensity, 10, 2.0); L.position.set(x,y,z); scn.add(L);
+          this.mesh(new THREE.SphereGeometry(0.09, 12, 12), M.glow, x, y, z);
+        },
+        murti(x, z, facing = 0) {   // the deity idol enshrined in the garbhagriha — painted, vivid
+          const grp = new THREE.Group(); grp.position.set(x, 0, z); grp.rotation.y = facing;
+          const skin = M.skin_deity;   // blue-skinned deity (Vishnu/Krishna tradition)
+          const add = (geo, mat, px, py, pz, rx=0) => { const m = new THREE.Mesh(geo, mat); m.position.set(px,py,pz); m.rotation.x=rx; m.castShadow=true; grp.add(m); return m; };
+          // lotus pedestal (pitha) — carved petals + gold
+          add(new THREE.CylinderGeometry(0.7, 0.85, 0.3, 24), M.paint_cream, 0, 0.15, 0);
+          for (let a=0;a<12;a++){ const ang=a/12*Math.PI*2; add(new THREE.ConeGeometry(0.12,0.28,6), M.paint_red, Math.cos(ang)*0.72, 0.32, Math.sin(ang)*0.72, 1.2); }
+          add(new THREE.CylinderGeometry(0.6, 0.7, 0.25, 16), M.gold, 0, 0.42, 0);
+          // prabhavali (flaming arch halo) — gold with painted flame tips
+          add(new THREE.TorusGeometry(1.05, 0.09, 10, 32, Math.PI*1.35), M.gold, 0, 1.4, -0.15, 0);
+          for (let a=0;a<10;a++){ const ang=(0.2+a/10*1.35)*Math.PI; add(new THREE.ConeGeometry(0.07,0.22,6), M.paint_ochre, Math.cos(ang)*1.15, 1.4+Math.sin(ang)*1.15, -0.15, 0); }
+          // seated body (blue skin) + red garment lap
+          add(new THREE.CylinderGeometry(0.62, 0.72, 0.42, 20), M.paint_red, 0, 0.75, 0);          // dhoti/lap
+          add(new THREE.CylinderGeometry(0.34, 0.5, 0.95, 20), skin, 0, 1.35, 0);                  // torso (skin)
+          add(new THREE.CylinderGeometry(0.36, 0.4, 0.12, 20), M.gold, 0, 1.02, 0);                // waist belt
+          add(new THREE.TorusGeometry(0.3, 0.05, 8, 20), M.gold, 0, 1.55, 0.28, Math.PI/2);        // necklace
+          // four arms (skin), gold armlets
+          for (const sx of [-1, 1]) {
+            add(new THREE.CylinderGeometry(0.11, 0.13, 0.7, 10), skin, sx*0.42, 1.2, 0.12, 0.5);
+            add(new THREE.CylinderGeometry(0.11, 0.13, 0.7, 10), skin, sx*0.5, 1.55, -0.05, -0.4);
+            add(new THREE.TorusGeometry(0.13, 0.03, 6, 12), M.gold, sx*0.5, 1.35, 0.05);
+          }
+          // neck + head (skin) + gold crown (kirita mukuta) + jewel
+          add(new THREE.CylinderGeometry(0.14, 0.16, 0.18, 12), skin, 0, 1.9, 0);
+          add(new THREE.SphereGeometry(0.26, 20, 16), skin, 0, 2.15, 0);
+          add(new THREE.ConeGeometry(0.24, 0.5, 16), M.gold, 0, 2.55, 0);
+          add(new THREE.SphereGeometry(0.06, 8, 8), M.paint_red, 0, 2.9, 0);
+          g.add(grp);
+          // warm focused light on the deity (the one bright point in the dark sanctum)
+          const L = new THREE.PointLight(0xffcf8a, 10, 7, 2.0); L.position.set(x, 2.0, z + 0.6); scn.add(L);
+          cols.push({ minX: x-0.9, maxX: x+0.9, minZ: z-0.9, maxZ: z+0.9 });
+        },
+        // ---- DEPTH: carved detail that breaks up flat surfaces ----
+        figure(x, y, z, h = 1.1, mat = M.darkst) {   // a small standing sculpted figure (in a niche)
+          const gp = new THREE.Group(); gp.position.set(x, y, z);
+          const a = (geo, px, py, pz) => { const m = new THREE.Mesh(geo, mat); m.position.set(px,py,pz); m.castShadow=true; gp.add(m); };
+          const s = h / 1.1;
+          a(new THREE.CylinderGeometry(0.12*s, 0.16*s, 0.6*s, 8), 0, 0.3*s, 0);      // legs/lower body
+          a(new THREE.CylinderGeometry(0.10*s, 0.14*s, 0.5*s, 8), 0, 0.75*s, 0);     // torso
+          for (const sx of [-1,1]) a(new THREE.CylinderGeometry(0.04*s,0.05*s,0.45*s,6), sx*0.16*s, 0.7*s, 0.02*s);  // arms
+          a(new THREE.SphereGeometry(0.11*s, 10, 8), 0, 1.05*s, 0);                   // head
+          g.add(gp);
+        },
+        niche(x, y, z, faceX) {   // a recessed niche (with a figure) set into a wall facing +/-x
+          // recess frame: two pilasters + a lintel + a small figure inside
+          const d = 0.12 * faceX;
+          this.box(0.14, 1.7, 0.14, x - d, y + 0.85, z - 0.45, M.darkst);
+          this.box(0.14, 1.7, 0.14, x - d, y + 0.85, z + 0.45, M.darkst);
+          this.box(0.16, 0.2, 1.1, x - d, y + 1.75, z, M.gold);       // carved lintel
+          this.box(0.16, 0.12, 1.1, x - d, y + 0.06, z, M.darkst);    // base
+          this.figure(x - d*1.6, y, z, 1.1, M.darkst);
+        },
+        friezeBand(x, y, z, len, along = 'z', mat = M.gold) {   // repeating carved dentil band
+          const n = Math.floor(len / 0.5);
+          for (let i = 0; i < n; i++) {
+            const off = -len/2 + 0.25 + i * 0.5;
+            const px = along === 'x' ? x + off : x;
+            const pz = along === 'z' ? z + off : z;
+            this.box(along==='x'?0.34:0.14, 0.18, along==='z'?0.34:0.14, px, y, pz, mat);   // block
+            this.mesh(new THREE.SphereGeometry(0.09, 8, 6), mat, px, y + 0.16, pz);         // boss
+          }
+        },
+        carvedPillar(x, z, h = 3.6, r = 0.4) {   // richer pillar: base cube, fluted shaft, kalasha bands, bracket capital
+          this.box(r*2.8, 0.5, r*2.8, x, 0.25, z, M.darkst);              // square base
+          this.box(r*2.3, 0.35, r*2.3, x, 0.6, z, M.stone);
+          this.cyl(r*1.05, 0.5, x, 0.95, z, M.gold, 16);                   // ghata (pot) band
+          this.cyl(r, h*0.62, x, 0.95 + h*0.31, z, M.lightst, 16);         // round shaft
+          // vertical flutes (thin ribs around the shaft)
+          for (let a = 0; a < 8; a++) {
+            const ang = a/8 * Math.PI*2;
+            this.box(0.05, h*0.6, 0.05, x + Math.cos(ang)*r, 0.95 + h*0.3, z + Math.sin(ang)*r, M.darkst);
+          }
+          this.cyl(r*1.2, 0.4, x, 0.95 + h*0.62 + 0.2, z, M.gold, 16);     // necking
+          this.box(r*3.0, 0.3, r*3.0, x, 0.95 + h*0.62 + 0.55, z, M.darkst);  // abacus
+          // corbel brackets flaring out under the beam (the deep-shadow detail)
+          for (const [dx,dz] of [[1,0],[-1,0],[0,1],[0,-1]])
+            this.mesh(new THREE.BoxGeometry(0.5, 0.25, 0.18), M.stone, x + dx*r*1.3, 0.95 + h*0.62 + 0.75, z + dz*r*1.3);
+          cols.push({ minX: x-0.55, maxX: x+0.55, minZ: z-0.55, maxZ: z+0.55 });
+        },
+        ceilingLotus(x, y, z) {   // carved lotus medallion on a ceiling
+          for (let i = 0; i < 3; i++) this.cyl(1.2 - i*0.32, 0.12, x, y - i*0.1, z, i%2?M.gold:M.darkst, 24);
+          this.mesh(new THREE.SphereGeometry(0.22, 12, 10), M.gold, x, y - 0.3, z);   // central boss (pendant)
+        },
+        shikhara(x, z, baseR, topR, h, tiers = 8) {   // curvilinear Nagara tower (stacked rings)
+          for (let i = 0; i <= tiers; i++) {
+            const t = i / tiers;
+            const r = baseR * Math.pow(1 - t, 1.35) + topR;
+            this.cyl(r, h/tiers + 0.05, x, (t)*h + 0.2, z, i%2 ? M.darkst : M.stone, 24);
+          }
+          this.mesh(new THREE.SphereGeometry(topR*1.4, 16, 12), M.pale, x, h + 0.2, z);   // amalaka
+          this.mesh(new THREE.ConeGeometry(topR*0.6, topR*1.6, 12), M.gold, x, h + 0.2 + topR, z);  // kalasha
+        },
+        vimana(x, z, baseHW, h, storeys = 5) {   // Dravidian stepped pyramid tower
+          for (let i = 0; i < storeys; i++) {
+            const t = i / storeys, hw = baseHW * (1 - t*0.85);
+            this.box(hw*2, h/storeys, hw*2, x, i*(h/storeys) + (h/storeys)/2 + 0.2, z, i%2 ? M.stone : M.darkst);
+          }
+          this.mesh(new THREE.SphereGeometry(baseHW*0.3, 16, 12, 0, Math.PI*2, 0, Math.PI/2), M.gold, x, h + 0.2, z);  // stupi
+        },
+      };
+      return api;
+    }
+
+    // ================================================================ TEMPLES
+    // Each: id, name, tradition, real (a real example), scan (a real photogrammetry link),
+    // spawn {x,z,heading}, and build(api) that fills the scene + returns nothing (colliders via api).
+    const TEMPLES = {
+
+      // ---------- Ajanta chaitya prayer hall (Buddhist) ----------
+      ajanta: {
+        name: "Ajanta chaitya hall", tradition: "Buddhist · rock-cut",
+        real: "after Ajanta Cave 26, Maharashtra (c. 5th c. CE)",
+        blurb: "A prayer hall carved into living rock: horseshoe vault, pillared nave, a votive stupa at the apse.",
+        scan: "https://sketchfab.com/3d-models/ajanta-cave-01-0e0aa7dd247d4d818c9ecb1e7be3bcc6",
+        spawn: { x: 0, z: 12, heading: Math.PI },
+        fog: [0x140f0a, 10, 46],
+        build(api) {
+          const M = api.M, LEN = 26, WID = 11, WALLH = 4.2, AISLE = 2.2;
+          const halfW = WID/2, zF = LEN/2, zB = -LEN/2;
+          api.box(WID+1, 0.4, LEN+2, 0, -0.2, 0, M.floor);
+          for (const sx of [-1,1]) {
+            const x = sx*(halfW+0.25);
+            api.box(0.5,1.6,LEN,x,0.8,0,M.stone,true);
+            api.box(0.5,1.2,LEN,x,2.2,0,M.red);
+            api.box(0.5,1.4,LEN,x,3.5,0,M.indigo);
+          }
+          api.box(halfW-1.2,WALLH,0.5,-(1.6+(halfW-1.2)/2),WALLH/2,zF,M.stone,true);
+          api.box(halfW-1.2,WALLH,0.5, (1.6+(halfW-1.2)/2),WALLH/2,zF,M.stone,true);
+          api.box(4.0,1.0,0.5,0,WALLH-0.5,zF,M.red);
+          // barrel vault + ribs
+          const vg = new THREE.CylinderGeometry(halfW, halfW, LEN, 40, 1, true, 0, Math.PI);
+          const v = new THREE.Mesh(vg, M.darkst); v.rotation.z = Math.PI/2; v.rotation.y = Math.PI/2;
+          v.position.set(0, WALLH, 0); v.receiveShadow = true; api.group.add(v);
+          for (let z = zB+1; z <= zF-1; z += 1.6) {
+            const rib = new THREE.Mesh(new THREE.TorusGeometry(halfW, 0.08, 6, 24, Math.PI), M.gold);
+            rib.rotation.y = Math.PI/2; rib.position.set(0, WALLH, z); api.group.add(rib);
+          }
+          const colX = halfW - AISLE;
+          for (let z = zF-2.5; z > zB+3; z -= 2.4) { api.pillar(-colX, z); api.pillar(colX, z); }
+          api.stupa(0, zB+2.6, 1.0);
+          for (let z = zF-3; z > zB+3; z -= 4.5) api.lamp(0, 3.0, z, 14);
+          api.lamp(0, 3.2, zB+4, 20);
+          return { bounds: { halfW, zF, zB } };
+        }
+      },
+
+      // ---------- Ellora Kailasa temple (Hindu, monolithic) ----------
+      kailasa: {
+        name: "Ellora Kailasa", tradition: "Hindu · Shaiva · monolithic",
+        real: "after Kailasa Temple, Ellora Cave 16 (c. 8th c. CE)",
+        blurb: "The colossal Shiva temple carved top-down from one rock — a walled courtyard, Nandi shrine, pillared mandapa and towering vimana.",
+        scan: "https://sketchfab.com/3d-models/kailasa-temple-at-ellora-c2d066f668034e1c893480e7f9190824",
+        spawn: { x: 0, z: 20, heading: Math.PI },
+        fog: [0x161009, 22, 90],
+        build(api) {
+          const M = api.M;
+          // open sky (courtyard is roofless — the monolith is cut into a pit)
+          // courtyard floor
+          api.box(34, 0.4, 46, 0, -0.2, 0, M.floor);
+          // high rock walls enclosing the courtyard (you're inside the excavated pit)
+          for (const [w,d,x,z] of [[1,46,-16.5,0],[1,46,16.5,0],[34,1,0,-22.5],[34,1,0,22.5]])
+            api.box(w>1? w:1, 12, d>1? d:1, x, 6, z, M.darkst, true);
+          // gopuram-like gateway gap at the front (z=+22.5) — leave centre open (handled by spawn inside)
+          // Nandi mandapa (bull shrine) near the entrance
+          api.box(5, 5, 5, 0, 2.5, 15, M.stone, true);
+          api.box(6, 0.5, 6, 0, 5.1, 15, M.darkst);
+          // main plinth (the temple sits on a tall base carved with elephants)
+          api.box(16, 3, 26, 0, 1.5, -3, M.stone, true);
+          // grand staircase up the plinth (front)
+          for (let i=0;i<6;i++) api.box(6, 0.5, 1, 0, 0.25+i*0.5, 9.5 - i*0.9, M.granite);
+          // pillared mandapa hall on the plinth
+          const py = 3;
+          api.box(14, 0.3, 20, 0, py+0.15, -3, M.pale);   // hall floor
+          for (const sx of [-1,1]) for (let z = 4; z >= -10; z -= 3.5)
+            api.pillar(sx*5, z, 3.8, 0.4);
+          // hall roof
+          api.box(14, 0.6, 20, 0, py+5.1, -3, M.darkst);
+          // the vimana (pyramidal tower) rising over the sanctum at the back
+          api.vimana(0, -12, 5, 12, 6);
+          // Dravida-style sanctum doorway (dark garbhagriha within the plinth back)
+          api.box(3, 3.4, 0.4, 0, py+1.7, -11.7, M.gold);
+          api.box(2, 2.6, 2, 0, py+1.3, -12.6, M.cella);   // dark inner cell
+          // Shiva's lingam enshrined (Kailasa is a Shaiva temple) + a warm glow on it
+          api.cyl(0.5, 0.28, 0, py+0.14, -12.6, M.granite, 24);
+          const kling = api.cyl(0.3, 0.95, 0, py+0.6, -12.6, M.pale, 24);
+          kling.material = new THREE.MeshStandardMaterial({ color: 0xe7dcc2, emissive: 0x6a4212, emissiveIntensity: 0.7, roughness: 0.55 });
+          api.lamp(0, py+1.6, -11.6, 8);
+          // warm light: open daylight + lamps in the mandapa
+          for (const sx of [-1,1]) for (let z = 3; z >= -9; z -= 6) api.lamp(sx*5, py+4, z, 12);
+          api.lamp(0, py+2, -11, 16);
+          return { bounds: { halfW: 15.5, zF: 21.5, zB: -21.5 } };
+        }
+      },
+
+      // ---------- Nagara sanctum (North Indian, Khajuraho-style) ----------
+      nagara: {
+        name: "Nagara sanctum", tradition: "Hindu · North Indian",
+        real: "after Kandariya Mahadeva, Khajuraho (c. 1030 CE)",
+        blurb: "A North-Indian temple: climb the plinth, cross the pillared mandapa into the dark garbhagriha where the lingam waits, the curved shikhara soaring above.",
+        scan: null,
+        spawn: { x: 0, z: 16, heading: Math.PI },
+        fog: [0x12100c, 14, 60],
+        build(api) {
+          const M = api.M;
+          api.box(20, 0.4, 40, 0, -0.2, 0, M.floor);
+          api.box(14, 3, 30, 0, 1.5, -3, M.stone, true);          // plinth (jagati)
+          for (let i=0;i<6;i++) api.box(5, 0.5, 1, 0, 0.25+i*0.5, 11.5 - i*0.9, M.darkst);  // steps
+          const py = 3;
+          api.box(12, 0.3, 24, 0, py+0.15, -4, M.pale);           // hall floor
+
+          // ---- CARVED, PAINTED WALLS (depth + colour) ----
+          const wallPaints = [M.paint_red, M.paint_ochre, M.paint_teal, M.paint_blue, M.paint_green];
+          for (const sx of [-1,1]) {
+            const x = sx*6;
+            // base dado + three painted mural registers (each a different colour band)
+            api.box(0.5, 1.0, 20, x, py+0.5, -4, M.stone, true);
+            api.box(0.4, 1.3, 20, x, py+1.65, -4, M.paint_red);      // lower register (red)
+            api.box(0.4, 1.2, 20, x, py+2.9, -4, M.paint_ochre);     // upper register (ochre)
+            api.box(0.5, 0.4, 20, x, py+3.7, -4, M.paint_blue);      // cornice
+            // recessed NICHES with sculpted figures, evenly along the wall
+            for (let k = 0; k < 5; k++) {
+              const z = 4 - k*3.4;
+              api.niche(x, py+1.0, z, sx);
+              // paint each niche figure a different colour (polychrome sculpture)
+              api.figure(x - sx*0.28, py+1.0, z, 1.15, wallPaints[k % wallPaints.length]);
+            }
+            // a carved frieze band running the length of the wall, at register join
+            api.friezeBand(x - sx*0.28, py+2.35, -4, 20, 'z', M.gold);
+          }
+
+          // ---- CARVED PILLARS (deep detail, brackets) ----
+          for (const sx of [-1,1]) for (let z = 3.5; z >= -8; z -= 3.5) api.carvedPillar(sx*4, z, 3.6, 0.4);
+
+          // ---- CORBELLED CEILING with a carved LOTUS medallion ----
+          for (let i=0;i<4;i++) api.box(10-i*2, 0.4, 10-i*2, 0, py+4.2+i*0.4, 0, i%2?M.paint_cream:M.darkst);
+          api.ceilingLotus(0, py+4.1, 0);
+
+          // ---- GARBHAGRIHA: ornate doorway + enshrined painted MURTI ----
+          api.box(6, 5, 6, 0, py+2.5, -13, M.stone, true);
+          // multi-band ornate doorframe (the deep-carved threshold)
+          api.box(2.6, 3.6, 0.3, 0, py+1.8, -10.0, M.gold);
+          api.box(2.1, 3.1, 0.4, 0, py+1.55, -10.05, M.paint_red);
+          api.box(1.7, 2.7, 0.5, 0, py+1.35, -10.1, M.darkst);
+          // door guardians (dvarapalas) flanking the entrance
+          api.figure(-1.1, py, -10.0, 1.5, M.paint_teal);
+          api.figure( 1.1, py, -10.0, 1.5, M.paint_teal);
+          api.box(1.6, 2.4, 1.6, 0, py+1.2, -13, M.cella);        // dark inner cell
+          api.murti(0, -13, 0);                                   // the deity (painted inside murti())
+
+          // shikhara + sub-spires above
+          api.shikhara(0, -13, 5, 0.4, 16, 9);
+          for (const [sx,sz] of [[-3,-13],[3,-13],[0,-16]]) api.shikhara(sx, sz, 1.6, 0.2, 6, 6);
+          // light
+          for (const sx of [-1,1]) for (let z = 2; z >= -7; z -= 5) api.lamp(sx*4, py+4, z, 12);
+          api.lamp(0, py+2.2, -12, 9);
+          return { bounds: { halfW: 9, zF: 19, zB: -19 } };
+        }
+      },
+
+      // ---------- Ellora Kailasa — REAL photogrammetry scan (orbit, not walk) ----------
+      ellora_scan: {
+        name: "Ellora Kailasa — real scan", tradition: "Hindu · monolithic · PHOTOGRAMMETRY",
+        real: "actual 3D capture of Kailasa Temple, Ellora Cave 16",
+        blurb: "The real monument, not a reconstruction — an exact photogrammetry scan you can orbit and zoom. This is the temple as it stands today.",
+        credit: 'Scan: <a href="https://sketchfab.com/3d-models/ellora-caves-india-1a5ec1e212f9451e80dc051e97164d17" target="_blank" rel="noopener">GSXNet</a>, CC BY 4.0',
+        scan: "https://sketchfab.com/3d-models/ellora-caves-india-1a5ec1e212f9451e80dc051e97164d17",
+        type: "scan",
+        model: "assets/temples-3d/ellora_scan.glb",
+      },
     };
 
-    // -------------------------------------------------------- the chaitya hall
-    // Apsidal Buddhist prayer hall: a long nave with a rounded (apsidal) far end,
-    // a barrel (horseshoe) vault, two rows of pillars separating nave from side aisles,
-    // and a votive stupa in the apse. Dimensions loosely after Ajanta Cave 26.
-    const HALL = { len: 26, width: 11, wallH: 4.2, vaultH: 3.2, aisle: 2.2 };  // metres
-    const colliders = [];   // {minX,maxX,minZ,maxZ} axis-aligned no-go boxes (pillars/walls)
-    const group = new THREE.Group();
-    scene.add(group);
+    // ================================================================ load a temple
+    let mode = 'walk';        // 'walk' (first-person) or 'orbit' (real scan)
+    let orbit = null;         // OrbitControls instance (scan mode)
+    const gltfLoader = new GLTFLoader();
+    { const d = new DRACOLoader(); d.setDecoderPath('https://unpkg.com/three@0.160.0/examples/jsm/libs/draco/'); gltfLoader.setDRACOLoader(d); }
 
-    function addBox(w, h, d, x, y, z, mat, collide=false) {
-      const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
-      m.position.set(x, y, z); m.castShadow = true; m.receiveShadow = true;
-      group.add(m);
-      if (collide) colliders.push({ minX:x-w/2, maxX:x+w/2, minZ:z-d/2, maxZ:z+d/2 });
-      return m;
-    }
+    function loadTemple(id) {
+      const T = TEMPLES[id]; if (!T) return;
+      if (orbit) { orbit.dispose(); orbit = null; }
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(T.type === 'scan' ? 0x0c0d10 : 0x0b0a09);
+      history.replaceState(null, '', '?temple=' + id);
 
-    const halfW = HALL.width / 2, zFront = HALL.len / 2, zBack = -HALL.len / 2;
-
-    // floor
-    addBox(HALL.width + 1, 0.4, HALL.len + 2, 0, -0.2, 0, M.floor).receiveShadow = true;
-
-    // side walls with painted mural bands (three stacked strips: ochre / red / indigo)
-    for (const sx of [-1, 1]) {
-      const x = sx * (halfW + 0.25);
-      addBox(0.5, 1.6, HALL.len, x, 0.8, 0, M.wall, true);       // lower ochre
-      addBox(0.5, 1.2, HALL.len, x, 2.2, 0, M.wallRed, false);   // red mural band
-      addBox(0.5, 1.4, HALL.len, x, 3.5, 0, M.wallInd, false);   // indigo upper
-    }
-    // front wall (entrance) with a doorway gap — two jambs + lintel
-    addBox(halfW - 1.2, HALL.wallH, 0.5, -(1.6 + (halfW-1.2)/2), HALL.wallH/2, zFront, M.wall, true);
-    addBox(halfW - 1.2, HALL.wallH, 0.5,  (1.6 + (halfW-1.2)/2), HALL.wallH/2, zFront, M.wall, true);
-    addBox(4.0, 1.0, 0.5, 0, HALL.wallH - 0.5, zFront, M.wallRed, false);   // lintel
-
-    // barrel-vaulted ceiling: ribbed half-cylinder over the nave
-    (function vault() {
-      const R = halfW;                       // vault radius ≈ half width
-      const geo = new THREE.CylinderGeometry(R, R, HALL.len, 40, 1, true, 0, Math.PI);
-      const m = new THREE.Mesh(geo, M.vault);
-      m.rotation.z = Math.PI / 2;            // lay it along Z
-      m.rotation.y = Math.PI / 2;
-      m.position.set(0, HALL.wallH, 0);
-      m.receiveShadow = true;
-      group.add(m);
-      // wooden-look ribs across the vault (a hallmark of chaitya halls)
-      for (let z = zBack + 1; z <= zFront - 1; z += 1.6) {
-        const rib = new THREE.Mesh(new THREE.TorusGeometry(R, 0.08, 6, 24, Math.PI), M.pillarCap);
-        rib.rotation.y = Math.PI / 2; rib.position.set(0, HALL.wallH, z);
-        group.add(rib);
+      if (T.type === 'scan') {
+        // ---- REAL SCAN mode: load the .glb, auto-frame, orbit controls ----
+        mode = 'orbit';
+        scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+        const sun = new THREE.DirectionalLight(0xfff2d8, 2.2); sun.position.set(1, 2, 1); scene.add(sun);
+        const sun2 = new THREE.DirectionalLight(0x88aaff, 0.6); sun2.position.set(-1, 0.5, -1); scene.add(sun2);
+        document.getElementById('cw-hud').innerHTML =
+          `<b>${T.name}</b> · ${T.tradition}<br>${T.real}<br><b>drag</b> to orbit · <b>scroll</b> to zoom · ${T.credit || ''}`;
+        document.getElementById('cw-loading').style.display = 'flex';
+        document.getElementById('cw-loading').textContent = 'loading the real scan…';
+        gltfLoader.load(T.model, gltf => {
+          const m = gltf.scene;
+          // auto-frame: centre it at origin + scale to a comfortable size
+          const box = new THREE.Box3().setFromObject(m);
+          const size = box.getSize(new THREE.Vector3());
+          const ctr = box.getCenter(new THREE.Vector3());
+          const maxDim = Math.max(size.x, size.y, size.z) || 1;
+          const s = 30 / maxDim;                       // normalise to ~30 units
+          m.position.sub(ctr.multiplyScalar(s)); m.scale.setScalar(s);
+          m.traverse(o => { if (o.isMesh) { o.castShadow = o.receiveShadow = true; } });
+          scene.add(m);
+          // orbit controls around the centred model
+          orbit = new OrbitControls(camera, canvas);
+          orbit.enableDamping = true; orbit.dampingFactor = 0.08;
+          orbit.minDistance = 6; orbit.maxDistance = 90;
+          orbit.target.set(0, 0, 0);
+          camera.position.set(22, 14, 26); camera.lookAt(0, 0, 0);
+          orbit.update();
+          document.getElementById('cw-loading').style.display = 'none';
+        }, undefined, err => {
+          document.getElementById('cw-loading').textContent = 'could not load the scan.';
+          console.error(err);
+        });
+        return;
       }
-    })();
 
-    // two rows of pillars (nave colonnade) — octagonal shafts + capitals
-    function pillar(x, z) {
-      const g = new THREE.Group();
-      const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.36, 3.2, 8), M.pillar);
-      shaft.position.y = 1.6; shaft.castShadow = true; g.add(shaft);
-      const base = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.4, 0.9), M.pillarCap);
-      base.position.y = 0.2; g.add(base);
-      const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.34, 0.5, 8), M.pillarCap);
-      cap.position.y = 3.4; g.add(cap);
-      const abacus = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.28, 0.95), M.gold);
-      abacus.position.y = 3.75; g.add(abacus);
-      g.position.set(x, 0, z);
-      group.add(g);
-      colliders.push({ minX:x-0.5, maxX:x+0.5, minZ:z-0.5, maxZ:z+0.5 });
-    }
-    const colX = halfW - HALL.aisle;         // pillar rows inset from walls by aisle width
-    for (let z = zFront - 2.5; z > zBack + 3; z -= 2.4) {
-      pillar(-colX, z); pillar(colX, z);
-    }
-    // curve the colonnade around the apse (a few pillars on an arc near the stupa)
-    const apseR = colX;
-    for (let a = 20; a <= 160; a += 28) {
-      const rad = a * Math.PI / 180;
-      pillar(Math.cos(rad) * apseR * -1 + 0, zBack + 3 - Math.sin(rad) * 0);  // (kept subtle)
+      // ---- WALK mode: procedural reconstruction ----
+      mode = 'walk';
+      scene.fog = new THREE.Fog(...(T.fog || [0x140f0a, 12, 60]));
+      colliders = [];
+      const api = makeApi(scene, colliders);
+      const meta = T.build(api) || {};
+      bounds = meta.bounds || { halfW: 20, zF: 30, zB: -30 };
+      scene.add(new THREE.AmbientLight(0x4a3c28, 0.4));    // dimmer ambient → deeper shadows = more mood
+      const day = new THREE.DirectionalLight(0xffe6b0, 1.35);
+      day.position.set(4, 12, (bounds.zF || 20) + 8); day.castShadow = true;
+      day.shadow.mapSize.set(2048, 2048); day.shadow.bias = -0.0005;
+      Object.assign(day.shadow.camera, { near: 1, far: 90, left: -30, right: 30, top: 30, bottom: -30 });
+      scene.add(day);
+      // GOD-RAY light shaft pouring in from the entrance — the cinematic centrepiece
+      (function godray() {
+        const zf = bounds.zF || 20;
+        const shaft = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.6, 3.4, zf * 0.9, 24, 1, true),
+          new THREE.MeshBasicMaterial({ color: 0xffdca0, transparent: true, opacity: 0.06,
+            side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending })
+        );
+        shaft.position.set(1.5, 4.5, zf * 0.35);
+        shaft.rotation.x = Math.PI * 0.13;   // slant like sun through a doorway
+        scene.add(shaft);
+      })();
+      camera.position.set(T.spawn.x, EYE, T.spawn.z);
+      yaw = T.spawn.heading || 0; pitch = 0; applyLook();
+      document.getElementById('cw-hud').innerHTML =
+        `<b>${T.name}</b> · ${T.tradition} · reconstructed “as it was”<br>${T.real}<br>` +
+        `<b>drag</b> to look · <b>W A S D</b> / arrows to move · buttons below also work`;
+      curBounds = bounds;
     }
 
-    // the votive STUPA at the apse — drum + dome + harmika + gold finial
-    (function stupa() {
-      const cz = zBack + 2.6;
-      const drum = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.6, 1.6, 40), M.stupa);
-      drum.position.set(0, 0.8, cz); drum.castShadow = true; group.add(drum);
-      const dome = new THREE.Mesh(new THREE.SphereGeometry(1.55, 40, 24, 0, Math.PI*2, 0, Math.PI/2), M.stupa);
-      dome.position.set(0, 1.6, cz); dome.castShadow = true; group.add(dome);
-      const harmika = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.5, 0.9), M.pillarCap);
-      harmika.position.set(0, 3.15, cz); group.add(harmika);
-      for (let i=0;i<3;i++){
-        const um = new THREE.Mesh(new THREE.CylinderGeometry(0.7-i*0.18, 0.75-i*0.18, 0.12, 24), M.gold);
-        um.position.set(0, 3.5+i*0.28, cz); group.add(um);
-      }
-      const finial = new THREE.Mesh(new THREE.ConeGeometry(0.14, 0.6, 16), M.gold);
-      finial.position.set(0, 4.35, cz); group.add(finial);
-      colliders.push({ minX:-1.7, maxX:1.7, minZ:cz-1.7, maxZ:cz+1.7 });
-    })();
+    // ================================================================ picker UI
+    const overlay = document.getElementById('cw-overlay');
+    const grid = document.getElementById('cw-grid');
+    grid.innerHTML = Object.entries(TEMPLES).map(([id, T]) => `
+      <button class="cw-pick${T.type === 'scan' ? ' cw-pick-scan' : ''}" data-id="${id}">
+        <div class="cw-p-trad">${T.tradition}</div>
+        <h3>${T.name}</h3>
+        <p>${T.blurb}</p>
+        <div class="cw-p-real">${T.real}</div>
+        <span class="cw-p-go">${T.type === 'scan' ? '◍ Orbit the real scan' : '▶ Walk in'}</span>
+      </button>`).join('');
 
-    // ---------------------------------------------------------------- lighting
-    // warm oil-lamp glow + a soft shaft of daylight from the entrance arch.
-    scene.add(new THREE.AmbientLight(0x5a4a34, 0.55));
-    const daylight = new THREE.DirectionalLight(0xffe6b0, 1.1);
-    daylight.position.set(3, 8, zFront + 6);      // pours in from the doorway
-    daylight.castShadow = true;
-    daylight.shadow.mapSize.set(1024, 1024);
-    daylight.shadow.camera.near = 1; daylight.shadow.camera.far = 60;
-    daylight.shadow.camera.left = -18; daylight.shadow.camera.right = 18;
-    daylight.shadow.camera.top = 18; daylight.shadow.camera.bottom = -18;
-    scene.add(daylight);
-    // hanging oil lamps down the nave (warm point lights + a glowing bead)
-    for (let z = zFront - 3; z > zBack + 3; z -= 4.5) {
-      const lamp = new THREE.PointLight(0xffb154, 14, 9, 2.0);
-      lamp.position.set(0, 3.0, z); scene.add(lamp);
-      const bead = new THREE.Mesh(new THREE.SphereGeometry(0.09, 12, 12), M.lampGlow);
-      bead.position.copy(lamp.position); group.add(bead);
+    function enter(id) {
+      loadTemple(id);
+      overlay.classList.add('hidden');
+      document.getElementById('cw-menu').style.display = 'block';
+      const scan = (TEMPLES[id] || {}).type === 'scan';
+      document.getElementById('cw-crosshair').style.display = scan ? 'none' : 'block';
+      document.getElementById('cw-move').style.display = scan ? 'none' : 'grid';
+      walking = !scan;   // orbit mode drives its own controls
     }
-    // a focused warm light on the stupa
-    const stupaLight = new THREE.PointLight(0xffd08a, 20, 12, 2.0);
-    stupaLight.position.set(0, 3.2, zBack + 4); scene.add(stupaLight);
+    function toMenu() {
+      walking = false; dragging = false;
+      overlay.classList.remove('hidden');
+      document.getElementById('cw-move').style.display = 'none';
+      document.getElementById('cw-crosshair').style.display = 'none';
+    }
+    grid.addEventListener('click', e => {
+      const b = e.target.closest('[data-id]'); if (b) enter(b.dataset.id);
+    });
+    document.getElementById('cw-menu').addEventListener('click', toMenu);
+    addEventListener('keydown', e => { if (e.code === 'Escape' && walking) toMenu(); });
 
-    // ------------------------------------------------------------- controls
-    const controls = new PointerLockControls(camera, canvas);
-    const intro = document.getElementById('cw-intro');
-    const hud = document.getElementById('cw-hud');
+    // ---- DRAG to look (mouse + touch), cursor stays visible ----
+    let px = 0, py2 = 0;
+    function dragStart(x, y) { if (mode !== 'walk') return; dragging = true; px = x; py2 = y; canvas.style.cursor = 'grabbing'; }
+    function dragMove(x, y) {
+      if (!dragging) return;
+      const dx = x - px, dy = y - py2; px = x; py2 = y;
+      yaw   -= dx * 0.0032;
+      pitch -= dy * 0.0032;
+      pitch = Math.max(-1.3, Math.min(1.3, pitch));
+      applyLook();
+    }
+    function dragEnd() { dragging = false; canvas.style.cursor = 'grab'; }
+    canvas.style.cursor = 'grab';
+    canvas.addEventListener('mousedown', e => dragStart(e.clientX, e.clientY));
+    addEventListener('mousemove', e => dragMove(e.clientX, e.clientY));
+    addEventListener('mouseup', dragEnd);
+    canvas.addEventListener('touchstart', e => { const t=e.touches[0]; dragStart(t.clientX,t.clientY); }, {passive:true});
+    canvas.addEventListener('touchmove',  e => { const t=e.touches[0]; dragMove(t.clientX,t.clientY); }, {passive:true});
+    canvas.addEventListener('touchend', dragEnd);
+
     document.getElementById('cw-loading').style.display = 'none';
-    intro.classList.remove('hidden');
 
-    document.getElementById('cw-enter').addEventListener('click', () => controls.lock());
-    controls.addEventListener('lock', () => intro.classList.add('hidden'));
-    controls.addEventListener('unlock', () => intro.classList.remove('hidden'));
-
+    // ================================================================ movement + render loop
     const keys = {};
     addEventListener('keydown', e => keys[e.code] = true);
     addEventListener('keyup',   e => keys[e.code] = false);
-
-    // movement with simple AABB wall/pillar collision + hall bounds
-    const vel = new THREE.Vector3();
+    let curBounds = { halfW: 20, zF: 30, zB: -30 };
     const dir = new THREE.Vector3();
+
     function blocked(x, z) {
-      const r = 0.35;
-      // hall outer bounds
-      if (Math.abs(x) > halfW - 0.4 || z > zFront - 0.4 || z < zBack - 0.4) return true;
+      const r = 0.35, b = curBounds;
+      if (Math.abs(x) > b.halfW - 0.4 || z > b.zF - 0.4 || z < b.zB - 0.4) return true;
       for (const c of colliders)
         if (x > c.minX - r && x < c.maxX + r && z > c.minZ - r && z < c.maxZ + r) return true;
       return false;
     }
 
+    // on-screen move buttons set these flags (touch / mouse-friendly)
+    const btn = { fwd:false, back:false, left:false, right:false };
     let last = performance.now();
     function frame(now) {
       const dt = Math.min((now - last) / 1000, 0.05); last = now;
-      if (controls.isLocked) {
-        const speed = (keys['ShiftLeft'] || keys['ShiftRight'] ? 6.5 : 3.4) * dt;
-        dir.set(0, 0, 0);
-        if (keys['KeyW'] || keys['ArrowUp'])    dir.z += 1;
-        if (keys['KeyS'] || keys['ArrowDown'])  dir.z -= 1;
-        if (keys['KeyA'] || keys['ArrowLeft'])  dir.x -= 1;
-        if (keys['KeyD'] || keys['ArrowRight']) dir.x += 1;
-        dir.normalize();
-        const before = camera.position.clone();
-        // move along camera-facing plane
-        controls.moveForward(dir.z * speed);
-        controls.moveRight(dir.x * speed);
-        camera.position.y = EYE;
-        if (blocked(camera.position.x, camera.position.z)) camera.position.copy(before);
+      if (mode === 'orbit' && orbit) orbit.update();
+      if (mode === 'walk' && walking && scene) {
+        const speed = (keys['ShiftLeft'] || keys['ShiftRight'] ? 6.5 : 3.2) * dt;
+        let f = 0, s = 0;
+        if (keys['KeyW'] || keys['ArrowUp']    || btn.fwd)   f += 1;
+        if (keys['KeyS'] || keys['ArrowDown']  || btn.back)  f -= 1;
+        if (keys['KeyA'] || keys['ArrowLeft']  || btn.left)  s -= 1;
+        if (keys['KeyD'] || keys['ArrowRight'] || btn.right) s += 1;
+        if (f || s) {
+          // move relative to where you're looking (yaw)
+          const sin = Math.sin(yaw), cos = Math.cos(yaw);
+          const nx = camera.position.x + (-sin * f + cos * s) * speed;
+          const nz = camera.position.z + (-cos * f - sin * s) * speed;
+          // axis-separated so you slide along walls instead of sticking
+          if (!blocked(nx, camera.position.z)) camera.position.x = nx;
+          if (!blocked(camera.position.x, nz)) camera.position.z = nz;
+          camera.position.y = EYE;
+        }
       }
-      renderer.render(scene, camera);
+      if (scene) renderer.render(scene, camera);
       requestAnimationFrame(frame);
     }
     requestAnimationFrame(frame);
 
-    hud.innerHTML = '<b>Ajanta chaitya hall</b> · reconstructed “as it was”<br>WASD move · mouse look · Shift faster · Esc to release';
+    // wire the on-screen movement pad
+    (function wirePad() {
+      const map = { 'cw-mv-fwd':'fwd', 'cw-mv-back':'back', 'cw-mv-left':'left', 'cw-mv-right':'right' };
+      for (const [elid, k] of Object.entries(map)) {
+        const el = document.getElementById(elid); if (!el) continue;
+        const on = e => { e.preventDefault(); btn[k] = true; };
+        const off = e => { e.preventDefault(); btn[k] = false; };
+        el.addEventListener('mousedown', on); el.addEventListener('mouseup', off); el.addEventListener('mouseleave', off);
+        el.addEventListener('touchstart', on, {passive:false}); el.addEventListener('touchend', off, {passive:false});
+      }
+    })();
 
     addEventListener('resize', () => {
       camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
       renderer.setSize(innerWidth, innerHeight);
     });
+
+    // deep link ?temple=nagara — jump straight in (after everything is initialised)
+    const want = new URLSearchParams(location.search).get('temple');
+    if (want && TEMPLES[want]) enter(want);
   </script>
 </body>
 </html>
