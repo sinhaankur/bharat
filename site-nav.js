@@ -38,6 +38,16 @@
       m.setAttribute(attr, k); m.setAttribute("content", v);
       head.appendChild(m);
     }
+    // favicon — the site shipped without one (every page 404'd favicon.ico). Inject an
+    // SVG pin, derived from this script's own folder, unless the page already set one.
+    if (!head.querySelector('link[rel~="icon"]')) {
+      let base = "";
+      const me = document.currentScript || [...document.scripts].find(s => /site-nav\.js/.test(s.src));
+      if (me && me.src) base = me.src.replace(/site-nav\.js.*$/, "");
+      const fav = document.createElement("link");
+      fav.rel = "icon"; fav.type = "image/svg+xml"; fav.href = base + "favicon.svg";
+      head.appendChild(fav);
+    }
     // canonical
     if (!head.querySelector('link[rel="canonical"]')) {
       const l = document.createElement("link"); l.rel = "canonical"; l.href = url; head.appendChild(l);
@@ -56,16 +66,18 @@
     }
   }
 
-  // ---- Information Architecture: engines-led, 4 groups ------------------
-  // The atlas is framed as composable ENGINES (see engines.html / ENGINES.md), so
-  // the engines are the nav SPINE — first group, the 7 lenses + the hub. The other
-  // groups stay pragmatic: Explore (the views/tools), Data (get it + audit it),
-  // About (the project). No page is orphaned; the old "Understand" group dissolved
-  // into the engines (its conceptual pages) + Explore (its 3D/comparison views).
+  // ---- Information Architecture: task-based, 5 groups -------------------
+  // Grouped by what the reader wants to DO, not by internal framing:
+  //   Map   — the interactive views (2D atlas, query, feed, trackers) · the front door
+  //   3D    — see India for real (globe, terrain, flood, temples)
+  //   Study — go deeper (the 7 engines, heritage, deep history, chain of command, compare)
+  //   Data  — get it, reference it, audit it
+  //   About — how it works, methodology, policy, the project
   // The view catalog is the SINGLE SOURCE OF TRUTH in nav-data.js (window.ATLAS_NAV),
-  // shared with the hero app's rail + launcher so the two can never drift. This nav
-  // just renders it. If nav-data.js failed to load, fall back to a minimal set so the
-  // header never disappears entirely.
+  // shared with the hero app's rail + launcher so the two can never drift, and with
+  // sitemap.html (via window.SiteNav.NAV) so the site map never drifts either. This
+  // file just renders it. If nav-data.js failed to load, fall back to a minimal set so
+  // the header never disappears entirely.
   const FALLBACK_NAV = [
     { label: "Map", items: [{ href: "index.html", text: "The map" }, { href: "hero.html", text: "One screen" }] },
     { label: "About", items: [{ href: "sitemap.html", text: "Site map" }] },
@@ -86,19 +98,28 @@
         const cls = [here ? "snav-cur" : "", i.hint ? "snav-has-hint" : ""].filter(Boolean).join(" ");
         const cur = (here ? ' aria-current="page"' : "") + (cls ? ` class="${cls}"` : "");
         const ext = i.ext ? ' target="_blank" rel="noopener"' : "";
+        // icon column (emoji, or a subtle bullet so text stays aligned) + text + one-line hint
+        const icon = `<span class="snav-ico">${i.icon || "›"}</span>`;
+        const arrow = i.ext ? ' <span class="snav-ext">↗</span>' : "";
         const hint = i.hint ? `<span class="snav-hint">${i.hint}</span>` : "";
-        return `<a href="${i.href}"${ext}${cur}><span class="snav-t">${i.text}</span>${hint}</a>`;
+        return `<a href="${i.href}"${ext}${cur}>${icon}<span class="snav-body"><span class="snav-t">${i.text}${arrow}</span>${hint}</span></a>`;
       }).join("");
       return `<div class="snav-group${open}">
         <button class="snav-top" aria-expanded="false">${g.label} <span class="snav-caret">▾</span></button>
         <div class="snav-menu">${items}</div>
       </div>`;
     }).join("");
+    // breadcrumb: "Group › Current page" so the reader always sees where they are
+    const curItem = activeGroup && activeGroup.items.find(i => isHere(i.href));
+    const crumb = (activeGroup && curItem)
+      ? `<div class="snav-here" aria-hidden="true"><span class="snav-here-g">${activeGroup.label}</span><span class="snav-here-sep">›</span><span class="snav-here-p">${(curItem.icon ? curItem.icon + " " : "") + curItem.text}</span></div>`
+      : "";
     return `
       <nav id="nav" class="snav">
         <a class="brand" href="index.html"><span class="brand-dot"></span> 🇮🇳 INDIA FISCAL MAP</a>
         <button class="snav-burger" aria-label="Menu" aria-expanded="false">☰</button>
         <div class="snav-groups">${groups}</div>
+        ${crumb}
       </nav>`;
   }
 

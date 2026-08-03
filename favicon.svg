@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="7" fill="#141414"/>
+  <!-- map pin in the India-saffron/green brand palette -->
+  <path d="M16 4.5c-4.4 0-8 3.5-8 7.9 0 5.6 7.1 14 7.4 14.4a.8.8 0 0 0 1.2 0C16.9 26.4 24 18 24 12.4c0-4.4-3.6-7.9-8-7.9z" fill="#e8862e"/>
+  <circle cx="16" cy="12.2" r="3.1" fill="#141414"/>
+  <circle cx="16" cy="12.2" r="1.5" fill="#3aa76d"/>
+</svg>

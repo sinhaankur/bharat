@@ -56,8 +56,8 @@ a:hover { border-color: var(--foreground); }
 
 #nav {
   position: sticky; top: 0; z-index: 1000;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0.875rem var(--pad-x);
+  display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
+  padding: 0.55rem var(--pad-x);
   background: oklch(0.145 0 0 / 0.85);
   backdrop-filter: saturate(150%) blur(14px);
   -webkit-backdrop-filter: saturate(150%) blur(14px);
@@ -102,7 +102,11 @@ a:hover { border-color: var(--foreground); }
   color: var(--muted-foreground); padding: 0.4rem 0.7rem; border-radius: var(--radius-sm);
 }
 .snav-top:hover { color: var(--foreground); }
-.snav-group.is-current .snav-top { color: var(--foreground); }
+/* current group: highlighted pill so you can see which section you're in */
+.snav-group.is-current .snav-top {
+  color: var(--foreground); background: oklch(0.24 0 0);
+  box-shadow: inset 0 -2px 0 oklch(0.84 0.15 78);
+}
 .snav-caret { font-size: 8px; opacity: 0.6; }
 .snav-menu {
   position: absolute; top: 100%; left: 0; min-width: 230px;
@@ -114,25 +118,53 @@ a:hover { border-color: var(--foreground); }
 .snav-group:hover .snav-menu, .snav-group.open .snav-menu { display: flex; }
 .snav-menu a {
   font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.02em;
-  color: var(--muted-foreground); text-decoration: none; padding: 0.4rem 0.6rem;
-  border-radius: 4px; border: none; display: flex; flex-direction: column; gap: 1px;
+  color: var(--muted-foreground); text-decoration: none; padding: 0.45rem 0.6rem;
+  border-radius: 4px; border: none; display: flex; align-items: flex-start; gap: 0.5rem;
 }
 .snav-menu a:hover { color: var(--foreground); background: oklch(0.22 0 0); }
-.snav-menu a.snav-cur .snav-t { color: oklch(0.84 0.15 78); }
+.snav-ico { flex: none; width: 1.15em; text-align: center; font-size: 12.5px; line-height: 1.25; opacity: 0.9; }
+.snav-menu a:not(.snav-has-hint) .snav-ico { opacity: 0.4; }   /* bare bullet items */
+.snav-body { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+/* current PAGE: filled highlight + left accent bar so it's unmistakable */
+.snav-menu a.snav-cur { background: oklch(0.24 0.03 78 / 0.55); box-shadow: inset 2px 0 0 oklch(0.84 0.15 78); }
+.snav-menu a.snav-cur .snav-t { color: oklch(0.88 0.15 78); font-weight: 600; }
 .snav-menu a .snav-t { display: block; }
+.snav-ext { font-size: 0.85em; opacity: 0.6; }
 .snav-menu a .snav-hint { font-size: 9.5px; color: oklch(0.6 0.02 250); letter-spacing: 0.01em; line-height: 1.3; }
 .snav-menu a:hover .snav-hint { color: oklch(0.72 0.03 250); }
+
+/* breadcrumb "you are here" — pushed to the right of the group bar on desktop */
+.snav-here { margin-left: auto; display: flex; align-items: center; gap: 0.4rem;
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.03em; color: var(--muted-foreground); white-space: nowrap; }
+.snav-here-g { text-transform: uppercase; opacity: 0.75; }
+.snav-here-sep { opacity: 0.5; }
+.snav-here-p { color: oklch(0.84 0.15 78); }
+
 .snav-burger { display: none; background: transparent; border: none; color: var(--foreground); font-size: 18px; cursor: pointer; }
 
 @media (max-width: 760px) {
-  .snav-burger { display: block; }
-  .snav-groups { display: none; position: absolute; top: 100%; left: 0; right: 0;
+  .snav-burger { display: block; order: 3; }
+  .snav .brand { order: 1; margin-right: auto; }   /* brand first, pinned left */
+  .snav-here { display: none; }   /* burger replaces the breadcrumb on mobile */
+  .snav-groups { order: 4; display: none; position: absolute; top: 100%; left: 0; right: 0;
+    max-height: calc(100vh - 52px); overflow-y: auto;
     background: oklch(0.145 0 0); border-bottom: 1px solid var(--border);
-    flex-direction: column; align-items: stretch; gap: 0; padding: 0.5rem var(--pad-x) 1rem; }
+    flex-direction: column; align-items: stretch; gap: 0; padding: 0.25rem var(--pad-x) 1rem; }
   .snav.snav-open .snav-groups { display: flex; }
-  .snav-group { width: 100%; }
-  .snav-top { width: 100%; text-align: left; }
-  .snav-menu { position: static; display: flex; border: none; box-shadow: none; padding-left: 1rem; margin: 0; background: transparent; }
+  .snav-group { width: 100%; border-bottom: 1px solid var(--border); }
+  .snav-group:last-child { border-bottom: 0; }
+  /* group header is a full-width tap target; the caret shows open/closed */
+  .snav-top { width: 100%; text-align: left; display: flex; justify-content: space-between; align-items: center;
+    padding: 0.85rem 0.4rem; font-size: 13px; }
+  .snav-top .snav-caret { transition: transform 0.15s ease; }
+  .snav-group.open .snav-top .snav-caret { transform: rotate(180deg); }
+  .snav-group.is-current .snav-top { box-shadow: inset 3px 0 0 oklch(0.84 0.15 78); }
+  /* ACCORDION: items hidden until the group is tapped open (no 1800px dump) */
+  .snav-menu { position: static; display: none; border: none; box-shadow: none; padding: 0 0 0.5rem 0.6rem; margin: 0; background: transparent; }
+  .snav-group.open .snav-menu { display: flex; }
+  .snav-group:hover .snav-menu { display: none; }   /* no hover-open on touch */
+  .snav-group.open .snav-menu { display: flex; }
+  .snav-menu a { padding: 0.6rem 0.5rem; }
 }
 
 /* ───────── Shared footer (site-nav.js) ───────── */
@@ -1872,8 +1904,8 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
    Dense, technical, monospace numbers. Computed live by stats-bar.js — the
    sourced-or-gap discipline made visible (see "Gaps logged"). */
 .sb-bar {
-  display: flex; align-items: center; flex-wrap: wrap; gap: 0.25rem 1.1rem;
-  padding: 0.5rem var(--pad-x); background: oklch(0.125 0 0);
+  display: flex; align-items: center; flex-wrap: wrap; gap: 0.2rem 1.1rem;
+  padding: 0.35rem var(--pad-x); background: oklch(0.125 0 0);
   border-bottom: 1px solid var(--border-strong); font-family: var(--font-mono);
 }
 .sb-live {

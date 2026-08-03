@@ -30,6 +30,7 @@
     ['history.html', 'History race'], ['data.html', 'Data & API'],
     ['references.html', 'Sources'], ['about.html', 'Methodology & disclaimer'],
     ['global.html', 'India vs world'],
+    ['geopolitical-chess.html', 'Geopolitical chess — the dollar is the board (a framing)'],
     // the engines: hub + 7 deep pages
     ['engines.html', 'The engines — all 7'],
     ['engine-survey.html', 'Engine: Survey (origin — the map that mapped India)'],

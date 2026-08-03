@@ -31,14 +31,7 @@
     ]},
     { label: "Study", items: [
       { href: "library.html", text: "Reading room", hint: "read the primary sources", icon: "📖", rail: true },
-      { href: "engines.html", text: "The 7 engines", hint: "the composable lenses", icon: "⚙" },
-      { href: "engine-survey.html", text: "· Survey · origin" },
-      { href: "engine-country.html", text: "· Country" },
-      { href: "engine-development.html", text: "· Development" },
-      { href: "engine-climate.html", text: "· Climate" },
-      { href: "engine-zoning.html", text: "· Land-Zoning" },
-      { href: "engine-corruption.html", text: "· Corruption" },
-      { href: "engine-news.html", text: "· News" },
+      { href: "engines.html", text: "The 7 engines", hint: "the composable lenses — Survey · Country · Development · Climate · Zoning · Corruption · News", icon: "⚙" },
       { href: "articles.html", text: "Analysis", hint: "written pieces", icon: "📝" },
       { href: "heritage-atlas.html", text: "Sacred ground", hint: "temples, their builders & destruction · Sanatan/Jain/Buddhist", icon: "🛕", rail: true },
       { href: "atrocities.html", text: "Atrocities timeline", hint: "history's 100 deadliest events (NYT/Matthew White)", icon: "💀" },
@@ -47,6 +40,7 @@
       { href: "command-chain.html", text: "Chain of command", hint: "who answers to whom", icon: "🔗" },
       { href: "mesh.html", text: "The mesh", hint: "how it all connects", icon: "🕸" },
       { href: "global.html", text: "India vs world", hint: "global comparison", icon: "🌐" },
+      { href: "geopolitical-chess.html", text: "Geopolitical chess", hint: "the dollar is the board — who rules each player, what they bring, how it's entangled (a framing)", icon: "♟" },
     ]},
     { label: "Data", items: [
       { href: "knowledge.html", text: "Knowledge base", hint: "the data catalog", icon: "📚", rail: true },
