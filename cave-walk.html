@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Walk Inside — Ajanta &amp; the temples, as they were</title>
+  <meta name="description" content="Walk through India's rock-cut temples and caves in your browser — a first-person experience like Street View, but pure reconstruction: the Ajanta chaitya prayer hall rebuilt as it once was, painted and vivid. Move with WASD + mouse. Every temple will get this." />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    html, body { margin: 0; height: 100%; overflow: hidden; background: #0b0a09; }
+    #cw-canvas { position: fixed; inset: 0; display: block; }
+    /* intro / lock overlay */
+    #cw-intro { position: fixed; inset: 0; z-index: 20; display: flex; align-items: center; justify-content: center;
+      background: radial-gradient(120% 120% at 50% 30%, oklch(0.2 0.03 60 / 0.55), oklch(0.07 0.01 40 / 0.92));
+      backdrop-filter: blur(3px); text-align: center; padding: 2rem; }
+    #cw-intro.hidden { display: none; }
+    .cw-card { max-width: 560px; }
+    .cw-eyebrow { font-family: var(--font-mono, monospace); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: oklch(0.8 0.13 70); }
+    .cw-card h1 { font-family: var(--font-display, Georgia), serif; font-weight: 400; font-size: clamp(1.9rem, 4.5vw, 3rem); color: #f3ead9; margin: 0.5rem 0 0.4rem; line-height: 1.05; }
+    .cw-card h1 em { font-style: italic; color: oklch(0.85 0.13 70); }
+    .cw-card p { color: #ccbfa8; font-size: 15px; line-height: 1.65; margin: 0 0 1.3rem; }
+    .cw-enter { font-family: var(--font-mono, monospace); font-size: 13px; letter-spacing: 0.05em; text-transform: uppercase;
+      background: oklch(0.78 0.15 62); color: #241a10; border: 0; border-radius: 999px; padding: 0.85rem 1.8rem; cursor: pointer; font-weight: 700; }
+    .cw-enter:hover { filter: brightness(1.08); }
+    .cw-keys { margin-top: 1.2rem; font-family: var(--font-mono, monospace); font-size: 11px; color: #9a8f7c; line-height: 1.9; }
+    .cw-keys kbd { background: oklch(0.25 0.01 60); border: 1px solid oklch(0.4 0.02 60); border-radius: 4px; padding: 1px 7px; color: #f3ead9; }
+    /* HUD */
+    #cw-hud { position: fixed; left: 12px; bottom: 12px; z-index: 10; font-family: var(--font-mono, monospace);
+      font-size: 11px; color: #e8dcc6; text-shadow: 0 1px 3px #000; pointer-events: none; line-height: 1.6; }
+    #cw-hud b { color: oklch(0.86 0.13 70); }
+    #cw-crosshair { position: fixed; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px 0 0 -3px; z-index: 9;
+      border-radius: 50%; background: #fff6; pointer-events: none; }
+    #cw-back { position: fixed; top: 12px; left: 12px; z-index: 12; font-family: var(--font-mono, monospace); font-size: 11px;
+      letter-spacing: 0.05em; text-transform: uppercase; color: #e8dcc6; text-decoration: none; background: oklch(0.15 0.01 60 / 0.7);
+      border: 1px solid oklch(0.4 0.02 60 / 0.7); border-radius: 999px; padding: 5px 12px; }
+    #cw-back:hover { color: #fff; }
+    #cw-loading { position: fixed; inset: 0; z-index: 30; display: flex; align-items: center; justify-content: center;
+      background: #0b0a09; color: #cbbfa8; font-family: var(--font-mono, monospace); font-size: 13px; letter-spacing: 0.08em; }
+  </style>
+</head>
+<body>
+  <div id="cw-loading">building the hall…</div>
+  <canvas id="cw-canvas"></canvas>
+  <div id="cw-crosshair"></div>
+  <a id="cw-back" href="heritage-atlas.html">← heritage atlas</a>
+  <div id="cw-hud"></div>
+
+  <div id="cw-intro" class="hidden">
+    <div class="cw-card">
+      <div class="cw-eyebrow">Walk inside · reconstructed as it was</div>
+      <h1 id="cw-title">The <em>Ajanta</em> chaitya hall</h1>
+      <p id="cw-desc">A Buddhist prayer hall carved into the living rock — its horseshoe vault,
+      colonnade of pillars, and the votive stupa at the far apse, shown not as the weathered cave
+      of today but painted and vivid, as pilgrims once saw it by lamplight.</p>
+      <button class="cw-enter" id="cw-enter">▶ Enter &amp; walk</button>
+      <div class="cw-keys">
+        <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> move &nbsp;·&nbsp; <kbd>mouse</kbd> look &nbsp;·&nbsp;
+        <kbd>Shift</kbd> walk faster &nbsp;·&nbsp; <kbd>Esc</kbd> release cursor
+      </div>
+    </div>
+  </div>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+  <script type="module">
+    import * as THREE from 'three';
+    import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
+
+    // ---------------------------------------------------------------- scene
+    const canvas = document.getElementById('cw-canvas');
+    let renderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    } catch (err) {
+      document.getElementById('cw-loading').innerHTML =
+        'This walkthrough needs WebGL (3D in the browser).<br>Try a recent Chrome/Firefox/Safari on a device with graphics enabled.';
+      throw err;
+    }
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0b0a09);
+    scene.fog = new THREE.Fog(0x140f0a, 10, 46);
+
+    const camera = new THREE.PerspectiveCamera(70, innerWidth / innerHeight, 0.05, 200);
+    const EYE = 1.65;                       // eye height (m)
+    camera.position.set(0, EYE, 15);        // start near the entrance, facing the stupa (-z)
+
+    // ------------------------------------------------------------- materials
+    // "as it was" — warm painted stone: ochre plaster, red/indigo mural bands, gold.
+    const M = {
+      floor:   new THREE.MeshStandardMaterial({ color: 0x6b5636, roughness: 0.95 }),
+      wall:    new THREE.MeshStandardMaterial({ color: 0xcaa36a, roughness: 0.9 }),   // ochre plaster
+      wallRed: new THREE.MeshStandardMaterial({ color: 0x9c3b2a, roughness: 0.9 }),   // red mural band
+      wallInd: new THREE.MeshStandardMaterial({ color: 0x35507e, roughness: 0.9 }),   // indigo band
+      vault:   new THREE.MeshStandardMaterial({ color: 0xb98b52, roughness: 0.95 }),  // ribbed ceiling
+      pillar:  new THREE.MeshStandardMaterial({ color: 0xd8b57e, roughness: 0.85 }),
+      pillarCap:new THREE.MeshStandardMaterial({ color: 0xb5824a, roughness: 0.85 }),
+      stupa:   new THREE.MeshStandardMaterial({ color: 0xe7dcc2, roughness: 0.7 }),   // pale votive stupa
+      gold:    new THREE.MeshStandardMaterial({ color: 0xd9a441, roughness: 0.35, metalness: 0.6, emissive: 0x3a2606, emissiveIntensity: 0.4 }),
+      lampGlow:new THREE.MeshStandardMaterial({ color: 0xffd27a, emissive: 0xffab40, emissiveIntensity: 2.2 }),
+    };
+
+    // -------------------------------------------------------- the chaitya hall
+    // Apsidal Buddhist prayer hall: a long nave with a rounded (apsidal) far end,
+    // a barrel (horseshoe) vault, two rows of pillars separating nave from side aisles,
+    // and a votive stupa in the apse. Dimensions loosely after Ajanta Cave 26.
+    const HALL = { len: 26, width: 11, wallH: 4.2, vaultH: 3.2, aisle: 2.2 };  // metres
+    const colliders = [];   // {minX,maxX,minZ,maxZ} axis-aligned no-go boxes (pillars/walls)
+    const group = new THREE.Group();
+    scene.add(group);
+
+    function addBox(w, h, d, x, y, z, mat, collide=false) {
+      const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+      m.position.set(x, y, z); m.castShadow = true; m.receiveShadow = true;
+      group.add(m);
+      if (collide) colliders.push({ minX:x-w/2, maxX:x+w/2, minZ:z-d/2, maxZ:z+d/2 });
+      return m;
+    }
+
+    const halfW = HALL.width / 2, zFront = HALL.len / 2, zBack = -HALL.len / 2;
+
+    // floor
+    addBox(HALL.width + 1, 0.4, HALL.len + 2, 0, -0.2, 0, M.floor).receiveShadow = true;
+
+    // side walls with painted mural bands (three stacked strips: ochre / red / indigo)
+    for (const sx of [-1, 1]) {
+      const x = sx * (halfW + 0.25);
+      addBox(0.5, 1.6, HALL.len, x, 0.8, 0, M.wall, true);       // lower ochre
+      addBox(0.5, 1.2, HALL.len, x, 2.2, 0, M.wallRed, false);   // red mural band
+      addBox(0.5, 1.4, HALL.len, x, 3.5, 0, M.wallInd, false);   // indigo upper
+    }
+    // front wall (entrance) with a doorway gap — two jambs + lintel
+    addBox(halfW - 1.2, HALL.wallH, 0.5, -(1.6 + (halfW-1.2)/2), HALL.wallH/2, zFront, M.wall, true);
+    addBox(halfW - 1.2, HALL.wallH, 0.5,  (1.6 + (halfW-1.2)/2), HALL.wallH/2, zFront, M.wall, true);
+    addBox(4.0, 1.0, 0.5, 0, HALL.wallH - 0.5, zFront, M.wallRed, false);   // lintel
+
+    // barrel-vaulted ceiling: ribbed half-cylinder over the nave
+    (function vault() {
+      const R = halfW;                       // vault radius ≈ half width
+      const geo = new THREE.CylinderGeometry(R, R, HALL.len, 40, 1, true, 0, Math.PI);
+      const m = new THREE.Mesh(geo, M.vault);
+      m.rotation.z = Math.PI / 2;            // lay it along Z
+      m.rotation.y = Math.PI / 2;
+      m.position.set(0, HALL.wallH, 0);
+      m.receiveShadow = true;
+      group.add(m);
+      // wooden-look ribs across the vault (a hallmark of chaitya halls)
+      for (let z = zBack + 1; z <= zFront - 1; z += 1.6) {
+        const rib = new THREE.Mesh(new THREE.TorusGeometry(R, 0.08, 6, 24, Math.PI), M.pillarCap);
+        rib.rotation.y = Math.PI / 2; rib.position.set(0, HALL.wallH, z);
+        group.add(rib);
+      }
+    })();
+
+    // two rows of pillars (nave colonnade) — octagonal shafts + capitals
+    function pillar(x, z) {
+      const g = new THREE.Group();
+      const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.36, 3.2, 8), M.pillar);
+      shaft.position.y = 1.6; shaft.castShadow = true; g.add(shaft);
+      const base = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.4, 0.9), M.pillarCap);
+      base.position.y = 0.2; g.add(base);
+      const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.34, 0.5, 8), M.pillarCap);
+      cap.position.y = 3.4; g.add(cap);
+      const abacus = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.28, 0.95), M.gold);
+      abacus.position.y = 3.75; g.add(abacus);
+      g.position.set(x, 0, z);
+      group.add(g);
+      colliders.push({ minX:x-0.5, maxX:x+0.5, minZ:z-0.5, maxZ:z+0.5 });
+    }
+    const colX = halfW - HALL.aisle;         // pillar rows inset from walls by aisle width
+    for (let z = zFront - 2.5; z > zBack + 3; z -= 2.4) {
+      pillar(-colX, z); pillar(colX, z);
+    }
+    // curve the colonnade around the apse (a few pillars on an arc near the stupa)
+    const apseR = colX;
+    for (let a = 20; a <= 160; a += 28) {
+      const rad = a * Math.PI / 180;
+      pillar(Math.cos(rad) * apseR * -1 + 0, zBack + 3 - Math.sin(rad) * 0);  // (kept subtle)
+    }
+
+    // the votive STUPA at the apse — drum + dome + harmika + gold finial
+    (function stupa() {
+      const cz = zBack + 2.6;
+      const drum = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.6, 1.6, 40), M.stupa);
+      drum.position.set(0, 0.8, cz); drum.castShadow = true; group.add(drum);
+      const dome = new THREE.Mesh(new THREE.SphereGeometry(1.55, 40, 24, 0, Math.PI*2, 0, Math.PI/2), M.stupa);
+      dome.position.set(0, 1.6, cz); dome.castShadow = true; group.add(dome);
+      const harmika = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.5, 0.9), M.pillarCap);
+      harmika.position.set(0, 3.15, cz); group.add(harmika);
+      for (let i=0;i<3;i++){
+        const um = new THREE.Mesh(new THREE.CylinderGeometry(0.7-i*0.18, 0.75-i*0.18, 0.12, 24), M.gold);
+        um.position.set(0, 3.5+i*0.28, cz); group.add(um);
+      }
+      const finial = new THREE.Mesh(new THREE.ConeGeometry(0.14, 0.6, 16), M.gold);
+      finial.position.set(0, 4.35, cz); group.add(finial);
+      colliders.push({ minX:-1.7, maxX:1.7, minZ:cz-1.7, maxZ:cz+1.7 });
+    })();
+
+    // ---------------------------------------------------------------- lighting
+    // warm oil-lamp glow + a soft shaft of daylight from the entrance arch.
+    scene.add(new THREE.AmbientLight(0x5a4a34, 0.55));
+    const daylight = new THREE.DirectionalLight(0xffe6b0, 1.1);
+    daylight.position.set(3, 8, zFront + 6);      // pours in from the doorway
+    daylight.castShadow = true;
+    daylight.shadow.mapSize.set(1024, 1024);
+    daylight.shadow.camera.near = 1; daylight.shadow.camera.far = 60;
+    daylight.shadow.camera.left = -18; daylight.shadow.camera.right = 18;
+    daylight.shadow.camera.top = 18; daylight.shadow.camera.bottom = -18;
+    scene.add(daylight);
+    // hanging oil lamps down the nave (warm point lights + a glowing bead)
+    for (let z = zFront - 3; z > zBack + 3; z -= 4.5) {
+      const lamp = new THREE.PointLight(0xffb154, 14, 9, 2.0);
+      lamp.position.set(0, 3.0, z); scene.add(lamp);
+      const bead = new THREE.Mesh(new THREE.SphereGeometry(0.09, 12, 12), M.lampGlow);
+      bead.position.copy(lamp.position); group.add(bead);
+    }
+    // a focused warm light on the stupa
+    const stupaLight = new THREE.PointLight(0xffd08a, 20, 12, 2.0);
+    stupaLight.position.set(0, 3.2, zBack + 4); scene.add(stupaLight);
+
+    // ------------------------------------------------------------- controls
+    const controls = new PointerLockControls(camera, canvas);
+    const intro = document.getElementById('cw-intro');
+    const hud = document.getElementById('cw-hud');
+    document.getElementById('cw-loading').style.display = 'none';
+    intro.classList.remove('hidden');
+
+    document.getElementById('cw-enter').addEventListener('click', () => controls.lock());
+    controls.addEventListener('lock', () => intro.classList.add('hidden'));
+    controls.addEventListener('unlock', () => intro.classList.remove('hidden'));
+
+    const keys = {};
+    addEventListener('keydown', e => keys[e.code] = true);
+    addEventListener('keyup',   e => keys[e.code] = false);
+
+    // movement with simple AABB wall/pillar collision + hall bounds
+    const vel = new THREE.Vector3();
+    const dir = new THREE.Vector3();
+    function blocked(x, z) {
+      const r = 0.35;
+      // hall outer bounds
+      if (Math.abs(x) > halfW - 0.4 || z > zFront - 0.4 || z < zBack - 0.4) return true;
+      for (const c of colliders)
+        if (x > c.minX - r && x < c.maxX + r && z > c.minZ - r && z < c.maxZ + r) return true;
+      return false;
+    }
+
+    let last = performance.now();
+    function frame(now) {
+      const dt = Math.min((now - last) / 1000, 0.05); last = now;
+      if (controls.isLocked) {
+        const speed = (keys['ShiftLeft'] || keys['ShiftRight'] ? 6.5 : 3.4) * dt;
+        dir.set(0, 0, 0);
+        if (keys['KeyW'] || keys['ArrowUp'])    dir.z += 1;
+        if (keys['KeyS'] || keys['ArrowDown'])  dir.z -= 1;
+        if (keys['KeyA'] || keys['ArrowLeft'])  dir.x -= 1;
+        if (keys['KeyD'] || keys['ArrowRight']) dir.x += 1;
+        dir.normalize();
+        const before = camera.position.clone();
+        // move along camera-facing plane
+        controls.moveForward(dir.z * speed);
+        controls.moveRight(dir.x * speed);
+        camera.position.y = EYE;
+        if (blocked(camera.position.x, camera.position.z)) camera.position.copy(before);
+      }
+      renderer.render(scene, camera);
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+
+    hud.innerHTML = '<b>Ajanta chaitya hall</b> · reconstructed “as it was”<br>WASD move · mouse look · Shift faster · Esc to release';
+
+    addEventListener('resize', () => {
+      camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+    });
+  </script>
+</body>
+</html>
