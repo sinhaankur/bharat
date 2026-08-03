@@ -24,6 +24,15 @@
     .cw-enter:hover { filter: brightness(1.08); }
     .cw-keys { margin-top: 1.2rem; font-family: var(--font-mono, monospace); font-size: 11px; color: #9a8f7c; line-height: 1.9; }
     .cw-keys kbd { background: oklch(0.25 0.01 60); border: 1px solid oklch(0.4 0.02 60); border-radius: 4px; padding: 1px 7px; color: #f3ead9; }
+    .cw-thennow { margin-top: 1.3rem; padding: 0.85rem 1rem; border: 1px solid oklch(0.4 0.06 250 / 0.5); border-radius: 10px;
+      background: oklch(0.18 0.03 250 / 0.5); font-size: 12.5px; line-height: 1.6; color: #cbbfa8; text-align: left; }
+    .cw-thennow b { color: #f3ead9; font-weight: 600; }
+    .cw-tn-label { display: inline-block; font-family: var(--font-mono, monospace); font-size: 9.5px; letter-spacing: 0.1em;
+      text-transform: uppercase; color: oklch(0.82 0.13 250); border: 1px solid oklch(0.5 0.1 250 / 0.6); border-radius: 999px;
+      padding: 1px 8px; margin-right: 6px; }
+    .cw-thennow a { color: oklch(0.82 0.14 250); text-decoration: none; border-bottom: 1px dotted; font-weight: 600; }
+    .cw-thennow a:hover { color: #fff; }
+    .cw-tn-note { display: block; margin-top: 0.4rem; font-size: 10.5px; color: #9a8f7c; line-height: 1.5; }
     /* HUD */
     #cw-hud { position: fixed; left: 12px; bottom: 12px; z-index: 10; font-family: var(--font-mono, monospace);
       font-size: 11px; color: #e8dcc6; text-shadow: 0 1px 3px #000; pointer-events: none; line-height: 1.6; }
@@ -56,6 +65,14 @@
       <div class="cw-keys">
         <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> move &nbsp;·&nbsp; <kbd>mouse</kbd> look &nbsp;·&nbsp;
         <kbd>Shift</kbd> walk faster &nbsp;·&nbsp; <kbd>Esc</kbd> release cursor
+      </div>
+      <div class="cw-thennow">
+        <span class="cw-tn-label">Then ↔ Now</span>
+        This is a <b>reconstruction</b> of what the hall once was. To see the real
+        <b>ruin as it stands today</b>, open a genuine photogrammetry scan:
+        <a href="https://sketchfab.com/3d-models/ajanta-cave-01-0e0aa7dd247d4d818c9ecb1e7be3bcc6" target="_blank" rel="noopener">Ajanta Cave&nbsp;1 ↗</a> ·
+        <a href="https://sketchfab.com/3d-models/kailasa-temple-at-ellora-c2d066f668034e1c893480e7f9190824" target="_blank" rel="noopener">Ellora Kailasa ↗</a>
+        <span class="cw-tn-note">Community photogrammetry (Sketchfab), quality varies — the ruin as-is, not restored. No authoritative ASI/CyArk LiDAR is openly published for these caves.</span>
       </div>
     </div>
   </div>
