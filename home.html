@@ -57,7 +57,7 @@
 
   <main>
     <!-- ============ FEATURED ============ -->
-    <section class="ed-section ed-page">
+    <section class="ed-section ed-page" data-reveal>
       <div class="ed-kicker">Featured</div>
       <a class="ed-feature" href="atrocities.html">
         <div class="ed-feature-art">📊</div>
@@ -84,14 +84,14 @@
     </section>
 
     <!-- ============ BY THE NUMBERS ============ -->
-    <section class="ed-section ed-page">
+    <section class="ed-section ed-page" data-reveal>
       <div class="ed-kicker">By the numbers</div>
       <h2 class="ed-h2" style="margin-bottom:1.2rem">The atlas at a glance</h2>
       <div class="ed-stats">
-        <div class="ed-stat"><b>594</b><span>districts, each sourced or flagged</span></div>
-        <div class="ed-stat"><b>36</b><span>states &amp; union territories</span></div>
-        <div class="ed-stat"><b>7</b><span>composable engines / lenses</span></div>
-        <div class="ed-stat"><b>100%</b><span>figures cited — or marked a gap</span></div>
+        <div class="ed-stat"><b data-count="594">594</b><span>districts, each sourced or flagged</span></div>
+        <div class="ed-stat"><b data-count="36">36</b><span>states &amp; union territories</span></div>
+        <div class="ed-stat"><b data-count="7">7</b><span>composable engines / lenses</span></div>
+        <div class="ed-stat"><b data-count="100" data-count-suffix="%">100%</b><span>figures cited — or marked a gap</span></div>
       </div>
     </section>
 
@@ -111,6 +111,7 @@
   <div id="site-footer"></div>
 
   <script src="nav-data.js"></script>
+  <script src="motion.js"></script>
   <script>
   // Build story cards from the shared nav — the curated "rail" items, so the hub never drifts.
   (function () {
@@ -126,10 +127,10 @@
     const flat = (window.ATLAS_NAV || []).flatMap(g => g.items);
     const byHref = Object.fromEntries(flat.map(i => [i.href, i]));
     const host = document.getElementById("story-cards");
-    host.innerHTML = order.map(href => {
+    host.innerHTML = order.map((href, i) => {
       const it = byHref[href]; if (!it) return "";
       const a = ART[href] || { cls: "ed-card-art--mist", ico: "•", tag: "Tool" };
-      return `<a class="ed-card" href="${href}">
+      return `<a class="ed-card" href="${href}" data-reveal data-reveal-delay="${i * 70}">
         <div class="ed-card-art ${a.cls}">${a.ico}</div>
         <div class="ed-card-body">
           <span class="ed-tag ${a.cls.includes('teal')?'ed-tag--teal':''}">${a.tag}</span>
@@ -138,6 +139,8 @@
           <span class="ed-card-meta">Open <span class="arrow">→</span></span>
         </div></a>`;
     }).join("");
+    // cards were injected after motion.js ran — let it observe the new nodes
+    if (window.Motion) window.Motion.refresh();
   })();
   </script>
   <script src="site-nav.js"></script>
