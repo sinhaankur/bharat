@@ -116,7 +116,7 @@
       : "";
     return `
       <nav id="nav" class="snav">
-        <a class="brand" href="index.html"><span class="brand-dot"></span> 🇮🇳 INDIA FISCAL MAP</a>
+        <a class="brand" href="index.html"><img class="brand-logo" src="favicon.svg" alt="" width="22" height="22" /><span class="brand-word">India Fiscal Map</span><span class="brand-dot" title="live"></span></a>
         <button class="snav-burger" aria-label="Menu" aria-expanded="false">☰</button>
         <div class="snav-groups">${groups}</div>
         ${crumb}
@@ -136,7 +136,7 @@
       <footer id="sfoot">
         <div class="sfoot-grid">
           <div class="sfoot-col sfoot-brand">
-            <div class="sfoot-name">🇮🇳 India Fiscal Map</div>
+            <div class="sfoot-name"><img src="favicon.svg" alt="" width="20" height="20" style="vertical-align:-4px;margin-right:6px" />India Fiscal Map</div>
             <p>Tracing public money to every Indian district — what came in, who's
             accountable, and what the record shows happened. Source-cited, or it's a gap.</p>
           </div>

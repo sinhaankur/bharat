@@ -17,85 +17,126 @@
   <meta name="twitter:image" content="https://sinhaankur.github.io/india-fiscal-map/og-image.png" />
   <link rel="stylesheet" href="styles.css" />
   <style>
-    .at-wrap { max-width: 1160px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; }
-    .at-head h1 { margin: 0.3rem 0 0.4rem; font-size: clamp(1.7rem, 3.6vw, 2.6rem); }
-    .at-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.55; max-width: 76ch; }
-    .at-src { font-size: 0.8rem; color: var(--muted-foreground); margin-top: 0.6rem; }
-    .at-src a { color: oklch(0.74 0.16 75); }
-    .at-stats { display: flex; flex-wrap: wrap; gap: 1.4rem; margin: 1.2rem 0 0.2rem; }
-    .at-stat b { font-family: var(--font-mono); font-size: 1.5rem; color: oklch(0.82 0.16 40); display: block; line-height: 1; }
-    .at-stat span { font-size: 0.78rem; color: var(--muted-foreground); }
+    /* ============================================================
+       NYT "Population Control, Marauder Style" newspaper look.
+       Scoped to THIS page only — overrides the site's dark tokens
+       locally so the rest of the atlas stays dark. Cream paper,
+       black serif, muted category circles, thin rules.
+       ============================================================ */
+    :root {
+      --paper:      #f4f1ea;   /* cream newsprint */
+      --paper-2:    #ece7dc;   /* panel fill */
+      --ink:        #1a1712;   /* near-black text */
+      --ink-soft:   #5c554a;   /* muted grey-brown */
+      --rule:       #cfc7b6;   /* hairline rules */
+      --rule-strong:#b3a992;
+      --accent:     #8a1c1c;   /* newspaper red (India / emphasis) */
+    }
+    /* recolour the shared tokens the existing CSS relies on, page-local */
+    body {
+      --foreground: var(--ink);
+      --muted-foreground: var(--ink-soft);
+      --muted: #ded7c7;
+      --border: var(--rule);
+      --border-strong: var(--rule-strong);
+      --radius: 3px;
+      background: var(--paper);
+      color: var(--ink);
+    }
+    /* keep the site nav readable on cream */
+    #site-nav { background: var(--paper); border-bottom: 1px solid var(--rule); }
 
-    .at-controls { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin: 1.2rem 0 0.2rem; }
-    .at-lbl { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted-foreground); margin-right: 0.2rem; }
-    .at-chip { font-family: var(--font-mono); font-size: 10px; padding: 4px 11px; border-radius: 999px; border: 1px solid var(--border-strong); color: var(--muted-foreground); background: transparent; cursor: pointer; }
-    .at-chip.on { color: oklch(0.16 0 0); font-weight: 600; border-color: transparent; }
-    /* region + view chips carry their own active fill (no --cc set on them) */
-    #loc-controls [data-region].on, #view-controls .at-chip.on { color: oklch(0.16 0 0); background: oklch(0.8 0.13 75); border-color: transparent; }
+    .at-wrap { max-width: 1100px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; background: var(--paper); }
+    .at-head .eyebrow { color: var(--accent); font-weight: 600; letter-spacing: 0.02em; }
+    .at-head .eyebrow { display: inline-block; background: var(--ink); color: var(--paper); font-family: var(--font-mono, monospace);
+      font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; padding: 3px 8px; font-weight: 700; }
+    .at-head h1 { margin: 0.5rem 0 0.6rem; font-size: clamp(2.2rem, 6vw, 4rem); font-family: Georgia, "Times New Roman", serif;
+      font-weight: 400; color: var(--ink); line-height: 0.98; letter-spacing: -0.01em; }
+    .at-head h1 em { font-style: italic; }
+    /* the intro sits in newspaper columns, like the original */
+    .at-head p { color: var(--ink); font-size: 0.95rem; line-height: 1.5; max-width: none; columns: 2; column-gap: 2.4rem; }
+    @media (max-width: 620px) { .at-head p { columns: 1; } }
+    .at-head p b { font-weight: 600; }
+    .at-src { font-size: 0.78rem; color: var(--ink-soft); margin-top: 0.8rem; border-top: 1px solid var(--rule); padding-top: 0.6rem; }
+    .at-src a { color: var(--accent); }
+    .at-stats { display: flex; flex-wrap: wrap; gap: 1.6rem; margin: 1.1rem 0 0.2rem; }
+    .at-stat b { font-family: Georgia, serif; font-size: 1.6rem; color: var(--ink); display: block; line-height: 1; }
+    .at-stat span { font-size: 0.76rem; color: var(--ink-soft); }
+
+    .at-controls { display: flex; flex-wrap: wrap; gap: 0.45rem; align-items: center; margin: 1rem 0 0.2rem; }
+    .at-lbl { font-family: var(--font-mono, monospace); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); margin-right: 0.2rem; }
+    .at-chip { font-family: var(--font-mono, monospace); font-size: 10.5px; padding: 4px 11px; border-radius: 2px;
+      border: 1px solid var(--rule-strong); color: var(--ink-soft); background: transparent; cursor: pointer; }
+    .at-chip:hover { border-color: var(--ink-soft); color: var(--ink); }
+    .at-chip.on { color: var(--paper); font-weight: 600; background: var(--ink); border-color: var(--ink); }
+    #loc-controls [data-region].on, #view-controls .at-chip.on { color: var(--paper); background: var(--ink); border-color: var(--ink); }
     .at-toggle { margin-left: auto; display: flex; gap: 0.3rem; }
 
-    /* the plot: a horizontal time axis with proportional bubbles */
-    .at-plot-wrap { border: 1px solid var(--border); border-radius: var(--radius); background: oklch(0.13 0 0); margin: 1rem 0 0.4rem; padding: 0.4rem 0 0; overflow-x: auto; }
-    #at-plot { display: block; min-width: 900px; width: 100%; }
-    .at-axis-note { font-size: 0.74rem; color: var(--muted-foreground); padding: 0 0.9rem 0.6rem; }
-    .at-bubble { cursor: pointer; transition: opacity 0.15s; }
-    .at-bubble:hover { stroke: #fff; stroke-width: 1.5; }
-    .at-bubble--dim { opacity: 0.12; }
-    .at-bubble--india { stroke: oklch(0.9 0.16 90); stroke-width: 1.5; stroke-dasharray: 2 2; }
+    /* the plot: cream paper, thin rules — the newspaper graphic */
+    .at-plot-wrap { border: 1px solid var(--rule); border-radius: var(--radius); background: var(--paper); margin: 1rem 0 0.4rem; padding: 0.4rem 0 0; overflow-x: auto; }
+    #at-plot, #at-map { display: block; min-width: 900px; width: 100%; }
+    .at-axis-note { font-size: 0.74rem; color: var(--ink-soft); padding: 0 0.9rem 0.6rem; }
+    .at-bubble { cursor: pointer; transition: opacity 0.15s; stroke: rgba(60,50,35,0.55); stroke-width: 0.6; }
+    .at-bubble:hover { stroke: var(--ink); stroke-width: 1.4; }
+    .at-bubble--dim { opacity: 0.1; }
+    .at-bubble--india { stroke: var(--accent); stroke-width: 1.4; stroke-dasharray: 2 2; }
 
-    .at-tip { position: fixed; z-index: 50; pointer-events: none; background: oklch(0.15 0 0); border: 1px solid var(--border-strong); border-radius: 8px; padding: 0.55rem 0.7rem; max-width: 280px; font-size: 0.82rem; line-height: 1.45; box-shadow: 0 8px 30px oklch(0 0 0 / 0.5); opacity: 0; transition: opacity 0.12s; }
-    .at-tip b { color: oklch(0.86 0.15 45); }
-    .at-tip .deaths { font-family: var(--font-mono); font-size: 1.1rem; color: oklch(0.84 0.16 40); }
-    .at-tip .meta { color: var(--muted-foreground); font-size: 0.76rem; }
+    .at-tip { position: fixed; z-index: 50; pointer-events: none; background: var(--paper); border: 1px solid var(--ink);
+      border-radius: 3px; padding: 0.55rem 0.7rem; max-width: 280px; font-size: 0.82rem; line-height: 1.45; color: var(--ink);
+      box-shadow: 0 6px 22px rgba(40,30,15,0.28); opacity: 0; transition: opacity 0.12s; }
+    .at-tip b { color: var(--ink); }
+    .at-tip .deaths { font-family: Georgia, serif; font-size: 1.2rem; color: var(--accent); }
+    .at-tip .meta { color: var(--ink-soft); font-size: 0.76rem; }
 
-    .at-legend { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; margin: 0.4rem 0 0; font-size: 0.78rem; color: var(--muted-foreground); }
-    .at-legend i { display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; }
+    /* Location legend — matches the original's colour key */
+    .at-legend { display: flex; flex-wrap: wrap; gap: 0.4rem 1.1rem; margin: 0.5rem 0 0; font-size: 0.8rem; color: var(--ink); }
+    .at-legend i { display: inline-block; width: 13px; height: 13px; border-radius: 50%; margin-right: 5px; vertical-align: -2px; border: 0.6px solid rgba(60,50,35,0.5); }
 
     /* regional breakdown — "how each action killed, in which region" */
-    .at-breakdown { margin: 1rem 0 0; }
+    .at-breakdown { margin: 1.2rem 0 0; padding: 1rem 1.1rem; background: var(--paper-2); border: 1px solid var(--rule); border-radius: var(--radius); }
     .at-bd-head { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; margin: 0 0 0.7rem; }
-    .at-bd-head h3 { margin: 0; font-size: 1.02rem; }
-    .at-bd-head .tot { font-family: var(--font-mono); color: oklch(0.84 0.16 40); font-size: 1.1rem; }
-    .at-bd-head .sub { color: var(--muted-foreground); font-size: 0.8rem; }
+    .at-bd-head h3 { margin: 0; font-size: 1.05rem; font-family: Georgia, serif; font-weight: 700; color: var(--ink); }
+    .at-bd-head .tot { font-family: Georgia, serif; color: var(--accent); font-size: 1.3rem; }
+    .at-bd-head .sub { color: var(--ink-soft); font-size: 0.8rem; }
     /* stacked 100%-of-region bar showing category shares */
-    .at-bd-stack { display: flex; height: 26px; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); margin: 0 0 0.9rem; }
+    .at-bd-stack { display: flex; height: 26px; border-radius: 3px; overflow: hidden; border: 1px solid var(--rule-strong); margin: 0 0 0.9rem; }
     .at-bd-stack .seg { position: relative; min-width: 2px; }
-    .at-bd-stack .seg span { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 9px; color: oklch(0.14 0 0 / 0.85); font-weight: 700; overflow: hidden; }
+    .at-bd-stack .seg span { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono, monospace); font-size: 9px; color: rgba(20,15,5,0.8); font-weight: 700; overflow: hidden; }
     /* per-category rows */
     .at-bd-rows { display: grid; gap: 0.35rem; }
     .at-bd-row { display: grid; grid-template-columns: 12rem 1fr 5.5rem; gap: 0.6rem; align-items: center; font-size: 0.85rem; }
     @media (max-width: 620px) { .at-bd-row { grid-template-columns: 8rem 1fr 4.4rem; font-size: 0.8rem; } }
-    .at-bd-row .cat { display: flex; align-items: center; gap: 0.4rem; color: var(--foreground); }
-    .at-bd-row .cat i { width: 10px; height: 10px; border-radius: 3px; flex: 0 0 auto; }
-    .at-bd-row .bar { height: 10px; background: var(--muted); border-radius: 999px; overflow: hidden; }
+    .at-bd-row .cat { display: flex; align-items: center; gap: 0.4rem; color: var(--ink); }
+    .at-bd-row .cat i { width: 11px; height: 11px; border-radius: 50%; flex: 0 0 auto; border: 0.6px solid rgba(60,50,35,0.5); }
+    .at-bd-row .bar { height: 10px; background: #d8d0bf; border-radius: 999px; overflow: hidden; }
     .at-bd-row .bar i { display: block; height: 100%; border-radius: 999px; }
-    .at-bd-row .val { font-family: var(--font-mono); text-align: right; color: oklch(0.84 0.15 45); }
-    .at-bd-row .val small { color: var(--muted-foreground); font-size: 0.72rem; }
-    .at-bd-lead { font-size: 0.82rem; color: var(--muted-foreground); margin: 0.7rem 0 0; line-height: 1.5; }
-    .at-bd-lead b { color: var(--foreground); }
+    .at-bd-row .val { font-family: var(--font-mono, monospace); text-align: right; color: var(--ink); }
+    .at-bd-row .val small { color: var(--ink-soft); font-size: 0.72rem; }
+    .at-bd-lead { font-size: 0.85rem; color: var(--ink); margin: 0.8rem 0 0; line-height: 1.5; }
+    .at-bd-lead b { color: var(--ink); font-weight: 700; }
 
-    .at-tables { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin: 1.8rem 0 0; }
+    /* the two summary tables — in a grey box like the original's footer */
+    .at-tables { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin: 1.8rem 0 0; padding: 1.1rem 1.2rem; background: var(--paper-2); border: 1px solid var(--rule); border-radius: var(--radius); }
     @media (max-width: 720px) { .at-tables { grid-template-columns: 1fr; } .at-toggle { margin-left: 0; width: 100%; } }
-    .at-table { border: 1px solid var(--border); border-radius: var(--radius); padding: 0.8rem 0.95rem; background: oklch(0.15 0 0); }
-    .at-table h3 { margin: 0 0 0.6rem; font-size: 0.92rem; }
-    .at-table .row { display: flex; align-items: center; gap: 0.5rem; padding: 0.25rem 0; font-size: 0.84rem; }
-    .at-table .row .nm { flex: 1; }
-    .at-table .row .yr { font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); }
-    .at-table .row .barw { flex: 0 0 42%; height: 8px; background: var(--muted); border-radius: 999px; overflow: hidden; }
-    .at-table .row .barw i { display: block; height: 100%; background: oklch(0.72 0.16 40); border-radius: 999px; }
-    .at-table .row .v { font-family: var(--font-mono); font-size: 0.82rem; color: oklch(0.84 0.14 45); min-width: 3.4rem; text-align: right; }
+    .at-table h3 { margin: 0 0 0.6rem; font-size: 0.92rem; font-family: Georgia, serif; font-weight: 700; color: var(--ink); }
+    .at-table .row { display: flex; align-items: center; gap: 0.5rem; padding: 0.22rem 0; font-size: 0.84rem; border-bottom: 1px dotted var(--rule); }
+    .at-table .row .nm { flex: 1; color: var(--ink); }
+    .at-table .row .yr { font-family: var(--font-mono, monospace); font-size: 9px; color: var(--ink-soft); }
+    .at-table .row .barw { flex: 0 0 38%; height: 8px; background: #d8d0bf; border-radius: 999px; overflow: hidden; }
+    .at-table .row .barw i { display: block; height: 100%; background: var(--accent); border-radius: 999px; }
+    .at-table .row .v { font-family: Georgia, serif; font-size: 0.9rem; color: var(--ink); min-width: 3.4rem; text-align: right; font-weight: 700; }
 
-    .at-list { margin-top: 1.6rem; }
-    .at-list h3 { font-size: 0.92rem; margin: 0 0 0.5rem; }
-    .at-row { display: grid; grid-template-columns: 2.2rem 1fr auto; gap: 0.6rem; align-items: center; padding: 0.45rem 0.2rem; border-bottom: 1px solid var(--border); font-size: 0.88rem; }
-    .at-row .rank { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
-    .at-row .nm b { color: var(--foreground); }
-    .at-row .nm .m { color: var(--muted-foreground); font-size: 0.78rem; }
-    .at-row .nm .india { font-family: var(--font-mono); font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.04em; color: oklch(0.16 0 0); background: oklch(0.85 0.15 90); padding: 1px 6px; border-radius: 999px; margin-left: 0.4rem; }
-    .at-row .d { font-family: var(--font-mono); color: oklch(0.84 0.15 42); font-size: 0.95rem; white-space: nowrap; }
-    .at-note { font-size: 0.78rem; color: var(--muted-foreground); line-height: 1.6; margin-top: 1.8rem; border-top: 1px solid var(--border); padding-top: 1rem; }
-    .at-note a { color: oklch(0.74 0.16 75); }
-    .at-note b { color: var(--foreground); }
+    .at-list { margin-top: 1.8rem; }
+    .at-list h3 { font-size: 0.98rem; margin: 0 0 0.5rem; font-family: Georgia, serif; font-weight: 700; color: var(--ink); }
+    .at-row { display: grid; grid-template-columns: 2.2rem 1fr auto; gap: 0.6rem; align-items: center; padding: 0.45rem 0.2rem; border-bottom: 1px solid var(--rule); font-size: 0.88rem; }
+    .at-row .rank { font-family: var(--font-mono, monospace); font-size: 10px; color: var(--ink-soft); }
+    .at-row .nm b { color: var(--ink); }
+    .at-row .nm .m { color: var(--ink-soft); font-size: 0.78rem; }
+    .at-row .nm .india { font-family: var(--font-mono, monospace); font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--paper); background: var(--accent); padding: 1px 6px; border-radius: 2px; margin-left: 0.4rem; }
+    .at-row .d { font-family: Georgia, serif; color: var(--accent); font-size: 1rem; font-weight: 700; white-space: nowrap; }
+    .at-note { font-size: 0.78rem; color: var(--ink-soft); line-height: 1.6; margin-top: 1.8rem; border-top: 1px solid var(--rule); padding-top: 1rem; }
+    .at-note a { color: var(--accent); }
+    .at-note b { color: var(--ink); }
 
     html.embed-mode body { margin: 0; }
     html.embed-mode .at-wrap { padding: 0.7rem 0.9rem 2rem; max-width: none; }
@@ -114,9 +155,10 @@
       <p>History's 100 deadliest events — wars, oppressions, failed states, despots, colonial and civil wars —
       sized by the number of people killed and, where the span was under 40 years, by the share of all humanity
       that died. This is an interactive rebuild of Bill Marsh's 2011 New York Times graphic, which visualised the
-      death-toll estimates catalogued by Matthew White. Switch between the <b>timeline</b> and a <b>world map</b>
-      that plots each event where it happened. <b>Events that happened in or heavily struck the Indian
-      subcontinent are outlined in gold.</b></p>
+      death-toll estimates catalogued by Matthew White. Circles are coloured by <b>location</b> and grouped into
+      the category bands; circle area shows the scale of deaths. Switch between the <b>timeline</b> and a
+      <b>world map</b> that plots each event where it happened. <b>Events that struck the Indian subcontinent are
+      outlined in red.</b></p>
       <p class="at-src" id="src"></p>
       <div class="at-stats" id="stats"></div>
     </header>
@@ -176,14 +218,25 @@
     const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
     const SVGNS = "http://www.w3.org/2000/svg";
 
+    // Category = the row BANDS (the original's bold left labels). `color` is used only for the
+    // breakdown bars/dots; on the timeline & map the CIRCLES are coloured by LOCATION (see LOC).
     const CAT = {
-      international_war:        { label: "International wars", color: "oklch(0.68 0.13 250)" },
-      institutional_oppression:{ label: "Institutional oppression", color: "oklch(0.6 0.14 30)" },
-      failed_state:            { label: "Failed states", color: "oklch(0.7 0.13 145)" },
-      despot:                  { label: "Despots", color: "oklch(0.72 0.17 40)" },
-      colonial_war:            { label: "Colonial wars", color: "oklch(0.66 0.12 300)" },
-      civil_war:               { label: "Civil wars", color: "oklch(0.75 0.15 90)" }
+      international_war:        { label: "Deaths from international wars", color: "#7a6a52" },
+      institutional_oppression:{ label: "Institutional oppression", color: "#8a5a3c" },
+      failed_state:            { label: "Failed states", color: "#5f7264" },
+      despot:                  { label: "Despots", color: "#9a6b34" },
+      colonial_war:            { label: "Colonial wars", color: "#6d5a78" },
+      civil_war:               { label: "Civil wars", color: "#8a7a3a" }
     };
+    // LOCATION = the CIRCLE COLOUR (the original's "Location" key). This is the real colour axis.
+    const LOC = {
+      Europe:   { label: "Europe",   color: "#9bb0c4" },   // slate blue-grey
+      Asia:     { label: "Asia",     color: "#e5c07a" },   // tan / gold
+      Americas: { label: "Americas", color: "#b0ac8e" },   // olive-grey
+      Africa:   { label: "Africa",   color: "#c08268" },   // terracotta
+      multiple: { label: "Multiple continents", color: "#c9b9a3" } // neutral sand
+    };
+    const locColor = e => (LOC[e.location] || LOC.multiple).color;
 
     let DATA = null, EVENTS = [];
     const activeCats = new Set();
@@ -232,9 +285,11 @@
     }
 
     function renderLegend() {
+      // the colour key is LOCATION (matches the original graphic); category = the row bands
       document.getElementById("legend").innerHTML =
-        Object.values(CAT).map(v => `<span><i style="background:${v.color}"></i>${esc(v.label)}</span>`).join("") +
-        `<span><i style="background:transparent;border:1.5px dashed oklch(0.9 0.16 90)"></i>India-relevant</span>`;
+        `<span style="color:var(--ink-soft);font-family:var(--font-mono,monospace);font-size:10px;text-transform:uppercase;letter-spacing:0.06em">Location&nbsp;</span>` +
+        Object.values(LOC).map(v => `<span><i style="background:${v.color}"></i>${esc(v.label)}</span>`).join("") +
+        `<span><i style="background:transparent;border:1.5px dashed var(--accent)"></i>India-relevant</span>`;
     }
 
     function visible() {
@@ -282,49 +337,67 @@
       const svg = document.getElementById("at-plot");
       const width = Math.max(900, svg.clientWidth || svg.parentElement.clientWidth || 1000);
       const cats = Object.keys(CAT);
-      const bandH = 92, top = 34, height = top + cats.length * bandH + 20;
+      const bandH = 96, top = 44, height = top + cats.length * bandH + 22;
       svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
       svg.setAttribute("height", height);
       while (svg.firstChild) svg.removeChild(svg.firstChild);
       const X = xScale(width);
 
-      // time gridlines
-      [-400, 1, 500, 1000, 1400, 1700, 1900, 1950, 2000].forEach(y => {
+      // time gridlines — dotted vertical rules + serif year labels top & bottom (newspaper style)
+      [-400, -200, 1, 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000].forEach(y => {
         const gx = X(y);
         const line = document.createElementNS(SVGNS, "line");
-        line.setAttribute("x1", gx); line.setAttribute("x2", gx); line.setAttribute("y1", top - 8); line.setAttribute("y2", height - 14);
-        line.setAttribute("stroke", "oklch(0.3 0 0)"); line.setAttribute("stroke-dasharray", "2 4");
+        line.setAttribute("x1", gx); line.setAttribute("x2", gx); line.setAttribute("y1", top - 4); line.setAttribute("y2", height - 16);
+        line.setAttribute("stroke", "#c4bba6"); line.setAttribute("stroke-dasharray", "1 4");
         svg.appendChild(line);
-        const lbl = document.createElementNS(SVGNS, "text");
-        lbl.setAttribute("x", gx); lbl.setAttribute("y", height - 2); lbl.setAttribute("text-anchor", "middle");
-        lbl.setAttribute("fill", "oklch(0.6 0 0)"); lbl.setAttribute("font-size", "9"); lbl.setAttribute("font-family", "var(--font-mono, monospace)");
-        lbl.textContent = y < 0 ? Math.abs(y) + "BC" : y;
-        svg.appendChild(lbl);
+        const label = y < 0 ? Math.abs(y) : (y === 1 ? "1" : y);
+        for (const yy of [16, height - 3]) {
+          const lbl = document.createElementNS(SVGNS, "text");
+          lbl.setAttribute("x", gx); lbl.setAttribute("y", yy); lbl.setAttribute("text-anchor", "middle");
+          lbl.setAttribute("fill", "#3a3226"); lbl.setAttribute("font-size", "12"); lbl.setAttribute("font-family", "Georgia, serif");
+          lbl.textContent = label;
+          svg.appendChild(lbl);
+        }
       });
 
-      // band labels
+      // band labels — bold serif, dark ink (the original's left-hand category headings)
       cats.forEach((c, i) => {
         const by = top + i * bandH;
         const t = document.createElementNS(SVGNS, "text");
-        t.setAttribute("x", 6); t.setAttribute("y", by + 12); t.setAttribute("fill", CAT[c].color);
-        t.setAttribute("font-size", "10"); t.setAttribute("font-family", "var(--font-mono, monospace)");
-        t.textContent = CAT[c].label.toUpperCase();
+        t.setAttribute("x", 6); t.setAttribute("y", by + 14); t.setAttribute("fill", "#1a1712");
+        t.setAttribute("font-size", "13"); t.setAttribute("font-family", "Georgia, serif"); t.setAttribute("font-weight", "700");
+        t.textContent = CAT[c].label;
         svg.appendChild(t);
+        // a hairline rule under each band, like the newspaper graphic
+        const rule = document.createElementNS(SVGNS, "line");
+        rule.setAttribute("x1", 6); rule.setAttribute("x2", width - 10);
+        rule.setAttribute("y1", by + 2); rule.setAttribute("y2", by + 2);
+        rule.setAttribute("stroke", "#cfc7b6"); rule.setAttribute("stroke-width", "1");
+        svg.appendChild(rule);
       });
 
       const vis = new Set(visible().map(e => e));
       const maxSize = Math.max(...EVENTS.map(sizeVal));
       const rScale = v => 4 + Math.sqrt(v / maxSize) * 34;
 
-      EVENTS.forEach(e => {
+      // draw largest circles first so small ones stay on top & clickable
+      EVENTS.slice().sort((a, b) => sizeVal(b) - sizeVal(a)).forEach(e => {
         const bandIdx = cats.indexOf(e.category);
         const cy = top + bandIdx * bandH + bandH / 2;
         const cx = X(midYear(e));
         const r = rScale(sizeVal(e));
+        // duration line through the circle (the original's "horizontal line = duration")
+        if (e.year_end && e.year_end - e.year_start > 25) {
+          const x2 = X(e.year_end), x1 = X(e.year_start);
+          const dl = document.createElementNS(SVGNS, "line");
+          dl.setAttribute("x1", x1); dl.setAttribute("x2", x2); dl.setAttribute("y1", cy); dl.setAttribute("y2", cy);
+          dl.setAttribute("stroke", "#6b5f4a"); dl.setAttribute("stroke-width", "0.8");
+          svg.appendChild(dl);
+        }
         const c = document.createElementNS(SVGNS, "circle");
         c.setAttribute("cx", cx); c.setAttribute("cy", cy); c.setAttribute("r", r);
-        c.setAttribute("fill", CAT[e.category].color);
-        c.setAttribute("fill-opacity", "0.55");
+        c.setAttribute("fill", locColor(e));
+        c.setAttribute("fill-opacity", "0.82");
         c.setAttribute("class", "at-bubble" + (vis.has(e) ? "" : " at-bubble--dim") + (e.india_region ? " at-bubble--india" : ""));
         c.addEventListener("mousemove", evt => showTip(e, evt));
         c.addEventListener("mouseleave", hideTip);
@@ -332,8 +405,9 @@
         svg.appendChild(c);
         if (r > 15) {
           const lb = document.createElementNS(SVGNS, "text");
-          lb.setAttribute("x", cx); lb.setAttribute("y", cy + 3); lb.setAttribute("text-anchor", "middle");
-          lb.setAttribute("fill", "oklch(0.95 0 0)"); lb.setAttribute("font-size", "9"); lb.setAttribute("pointer-events", "none");
+          lb.setAttribute("x", cx); lb.setAttribute("y", cy + 4); lb.setAttribute("text-anchor", "middle");
+          lb.setAttribute("fill", "#2a2114"); lb.setAttribute("font-size", "11"); lb.setAttribute("font-family", "Georgia, serif");
+          lb.setAttribute("font-weight", "700"); lb.setAttribute("pointer-events", "none");
           lb.textContent = e.deaths_millions;
           svg.appendChild(lb);
         }
@@ -370,25 +444,27 @@
       svg.setAttribute("height", height);
       while (svg.firstChild) svg.removeChild(svg.firstChild);
 
-      // ocean backdrop
+      // ocean backdrop — pale paper-blue (newspaper map)
       const bg = document.createElementNS(SVGNS, "rect");
-      bg.setAttribute("width", width); bg.setAttribute("height", height); bg.setAttribute("fill", "oklch(0.16 0.02 250)");
+      bg.setAttribute("width", width); bg.setAttribute("height", height); bg.setAttribute("fill", "#dfe4e2");
       svg.appendChild(bg);
       // graticule (every 30°)
       for (let lon = -150; lon <= 150; lon += 30) { const [x] = mapProject(lon, 0, width, height); line(svg, x, 0, x, height); }
       for (let lat = -60; lat <= 60; lat += 30) { const [, y] = mapProject(0, lat, width, height); line(svg, 0, y, width, y); }
 
-      // land — each continent's silhouette; the selected region lights up
+      // land — each continent's silhouette; the selected region's landmass is tinted its LOC colour
       const regionOfLand = { Americas: "Americas", Europe: "Europe", Africa: "Africa", Asia: "Asia", Oceania: "Asia" };
       for (const [name, polys] of Object.entries(LAND)) {
-        const sel = activeRegion !== "all" && regionOfLand[name] === activeRegion;
+        const reg = regionOfLand[name];
+        const sel = activeRegion !== "all" && reg === activeRegion;
         for (const pts of polys) {
           const d = pts.map((p, i) => (i ? "L" : "M") + mapProject(p[0], p[1], width, height).map(n => n.toFixed(1)).join(" ")).join(" ") + " Z";
           const path = document.createElementNS(SVGNS, "path");
           path.setAttribute("d", d);
-          path.setAttribute("fill", sel ? "oklch(0.32 0.04 90)" : "oklch(0.24 0.01 250)");
-          path.setAttribute("stroke", sel ? "oklch(0.7 0.14 90)" : "oklch(0.34 0.01 250)");
-          path.setAttribute("stroke-width", sel ? "1.4" : "0.8");
+          path.setAttribute("fill", sel ? ((LOC[reg] || {}).color || "#e4dccb") : "#e7dfce");
+          path.setAttribute("fill-opacity", sel ? "0.55" : "1");
+          path.setAttribute("stroke", sel ? "#8a1c1c" : "#c3b9a0");
+          path.setAttribute("stroke-width", sel ? "1.2" : "0.7");
           svg.appendChild(path);
         }
       }
@@ -403,8 +479,8 @@
         const r = rScale(sizeVal(e));
         const c = document.createElementNS(SVGNS, "circle");
         c.setAttribute("cx", cx.toFixed(1)); c.setAttribute("cy", cy.toFixed(1)); c.setAttribute("r", r.toFixed(1));
-        c.setAttribute("fill", CAT[e.category].color);
-        c.setAttribute("fill-opacity", vis.has(e) ? "0.7" : "0.08");
+        c.setAttribute("fill", locColor(e));
+        c.setAttribute("fill-opacity", vis.has(e) ? "0.82" : "0.08");
         c.setAttribute("class", "at-bubble" + (vis.has(e) ? "" : " at-bubble--dim") + (e.india_region ? " at-bubble--india" : ""));
         c.addEventListener("mousemove", evt => showTip(e, evt));
         c.addEventListener("mouseleave", hideTip);
@@ -415,7 +491,7 @@
     function line(svg, x1, y1, x2, y2) {
       const l = document.createElementNS(SVGNS, "line");
       l.setAttribute("x1", x1); l.setAttribute("y1", y1); l.setAttribute("x2", x2); l.setAttribute("y2", y2);
-      l.setAttribute("stroke", "oklch(0.28 0.02 250)"); l.setAttribute("stroke-width", "0.5"); l.setAttribute("stroke-dasharray", "2 5");
+      l.setAttribute("stroke", "#c6ccca"); l.setAttribute("stroke-width", "0.5"); l.setAttribute("stroke-dasharray", "2 5");
       svg.appendChild(l);
     }
 
