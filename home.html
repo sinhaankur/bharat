@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>India Fiscal Map — understand where India's public money goes</title>
+  <meta name="description" content="A data-driven newsroom and atlas for India: where public money flows across 594 districts, how land and law shape it, and the record behind the headlines. Sourced, or it's a gap." />
+  <link rel="canonical" href="https://sinhaankur.github.io/india-fiscal-map/home.html" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="India Fiscal Map" />
+  <meta property="og:title" content="India Fiscal Map — understand where India's public money goes" />
+  <meta property="og:description" content="A data-driven newsroom and atlas for India: public money by district, land & law, and the record behind the headlines." />
+  <meta property="og:image" content="https://sinhaankur.github.io/india-fiscal-map/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="site-nav"></div>
+
+  <!-- ============ HERO ============ -->
+  <header class="ed-hero">
+    <div class="ed-page">
+      <div class="ed-hero-grid">
+        <div class="ed-hero-copy">
+          <div class="ed-kicker">The atlas · the newsroom</div>
+          <h1 class="ed-h1">Understand where India's<br><em>public money</em> actually goes.</h1>
+          <p class="ed-lede">We trace every rupee to the district it lands in, show how land and law shape
+          what gets built, and read the record behind the headlines — sourced, or we mark it a gap.</p>
+          <div class="ed-cta-row">
+            <a class="ed-btn ed-btn--primary" href="index.html">Open the map →</a>
+            <a class="ed-btn ed-btn--ghost" href="#stories">Read the explainers</a>
+          </div>
+        </div>
+        <a class="ed-hero-art" href="index.html" aria-label="Open the interactive district map"
+           style="text-decoration:none; display:flex; align-items:center; justify-content:center;">
+          <svg viewBox="0 0 400 300" width="100%" height="100%" style="display:block">
+            <defs>
+              <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse">
+                <path d="M28 0H0V28" fill="none" stroke="#ffffff" stroke-opacity="0.14" stroke-width="1"/>
+              </pattern>
+            </defs>
+            <rect width="400" height="300" fill="url(#grid)"/>
+            <g class="hero-pins">
+              <circle cx="120" cy="90"  r="7" fill="#e0663b"><animate attributeName="r" values="7;11;7" dur="3s" repeatCount="indefinite"/></circle>
+              <circle cx="250" cy="150" r="10" fill="#e0663b"><animate attributeName="r" values="10;15;10" dur="3.4s" begin="0.5s" repeatCount="indefinite"/></circle>
+              <circle cx="180" cy="210" r="6" fill="#ffffff" fill-opacity="0.85"><animate attributeName="r" values="6;9;6" dur="2.6s" begin="1s" repeatCount="indefinite"/></circle>
+              <circle cx="310" cy="80"  r="5" fill="#ffffff" fill-opacity="0.7"><animate attributeName="r" values="5;8;5" dur="3.1s" begin="1.4s" repeatCount="indefinite"/></circle>
+            </g>
+            <text x="200" y="285" text-anchor="middle" fill="#ffffff" fill-opacity="0.6"
+                  font-family="monospace" font-size="12">594 districts · click to explore</text>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============ FEATURED ============ -->
+    <section class="ed-section ed-page">
+      <div class="ed-kicker">Featured</div>
+      <a class="ed-feature" href="atrocities.html">
+        <div class="ed-feature-art">📊</div>
+        <div class="ed-feature-body">
+          <span class="ed-tag">Data explainer</span>
+          <h2>Population Control, Marauder Style — history's 100 deadliest events, mapped</h2>
+          <p style="color:var(--muted-foreground);margin:0">The NYT / Matthew White chart, rebuilt interactive:
+          a timeline, a world map, and how each kind of killing broke down by region.</p>
+          <span class="ed-card-meta">Explainer · interactive <span class="arrow">→</span></span>
+        </div>
+      </a>
+    </section>
+
+    <!-- ============ STORY CARDS ============ -->
+    <section class="ed-section ed-page" id="stories">
+      <div class="ed-section-head">
+        <div>
+          <div class="ed-kicker">Start here</div>
+          <h2 class="ed-h2">Six ways to read India</h2>
+          <p>Each is a live, sourced tool — pick a lens and dig in.</p>
+        </div>
+      </div>
+      <div class="ed-cards ed-cards--feature" id="story-cards"><!-- injected --></div>
+    </section>
+
+    <!-- ============ BY THE NUMBERS ============ -->
+    <section class="ed-section ed-page">
+      <div class="ed-kicker">By the numbers</div>
+      <h2 class="ed-h2" style="margin-bottom:1.2rem">The atlas at a glance</h2>
+      <div class="ed-stats">
+        <div class="ed-stat"><b>594</b><span>districts, each sourced or flagged</span></div>
+        <div class="ed-stat"><b>36</b><span>states &amp; union territories</span></div>
+        <div class="ed-stat"><b>7</b><span>composable engines / lenses</span></div>
+        <div class="ed-stat"><b>100%</b><span>figures cited — or marked a gap</span></div>
+      </div>
+    </section>
+
+    <!-- ============ PROMISE ============ -->
+    <section class="ed-section ed-page">
+      <div class="ed-article" style="text-align:center">
+        <p class="ed-pullquote" style="border:none;padding:0;text-align:center;color:var(--brand)">
+          “We trace public money to the pixel, and the chain of command behind it — sourced, or it's a gap.”</p>
+        <div class="ed-cta-row" style="justify-content:center">
+          <a class="ed-btn ed-btn--dark" href="how-it-works.html">How it works</a>
+          <a class="ed-btn ed-btn--ghost" href="references.html">Every source</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="nav-data.js"></script>
+  <script>
+  // Build story cards from the shared nav — the curated "rail" items, so the hub never drifts.
+  (function () {
+    const ART = { // per-card art style + emoji, keyed by href
+      "index.html":        { cls: "ed-card-art--teal", ico: "🗺", tag: "Map" },
+      "state-of-india.html": { cls: "ed-card-art--mist", ico: "🏛", tag: "States" },
+      "explore.html":      { cls: "ed-card-art--mist", ico: "🔎", tag: "Query" },
+      "feed.html":         { cls: "ed-card-art--clay", ico: "📰", tag: "News" },
+      "heritage-atlas.html": { cls: "ed-card-art--teal", ico: "🛕", tag: "Heritage" },
+      "atrocities.html":   { cls: "ed-card-art--clay", ico: "📊", tag: "History" },
+    };
+    const order = ["index.html","feed.html","explore.html","state-of-india.html","heritage-atlas.html","atrocities.html"];
+    const flat = (window.ATLAS_NAV || []).flatMap(g => g.items);
+    const byHref = Object.fromEntries(flat.map(i => [i.href, i]));
+    const host = document.getElementById("story-cards");
+    host.innerHTML = order.map(href => {
+      const it = byHref[href]; if (!it) return "";
+      const a = ART[href] || { cls: "ed-card-art--mist", ico: "•", tag: "Tool" };
+      return `<a class="ed-card" href="${href}">
+        <div class="ed-card-art ${a.cls}">${a.ico}</div>
+        <div class="ed-card-body">
+          <span class="ed-tag ${a.cls.includes('teal')?'ed-tag--teal':''}">${a.tag}</span>
+          <h3>${it.text.replace(/^[★☆]\s*/, '')}</h3>
+          <p>${it.hint || ''}</p>
+          <span class="ed-card-meta">Open <span class="arrow">→</span></span>
+        </div></a>`;
+    }).join("");
+  })();
+  </script>
+  <script src="site-nav.js"></script>
+  <script src="command-palette.js"></script>
+</body>
+</html>

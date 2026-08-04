@@ -2280,3 +2280,107 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 .pat-val { font-family: var(--font-mono); font-size: 10.5px; color: var(--foreground); white-space: nowrap; text-align: right; }
 .pat-rank { color: var(--muted-foreground); font-size: 9px; }
 .pat-insight { font-size: 11px; line-height: 1.45; color: oklch(0.48 0.050 60); background: oklch(0.22 0.03 60 / 0.35); border-left: 2px solid oklch(0.66 0.13 60); border-radius: 0 4px 4px 0; padding: 5px 8px; margin: 4px 0 6px; }
+
+/* ============================================================
+   EDITORIAL COMPONENTS — the professional "explainer" layer.
+   Card grids, section eyebrows, hero, pull-quotes, article body.
+   All Teal & Ink tokens; reusable across pages. (ed- prefix)
+   ============================================================ */
+
+/* page container for editorial pages */
+.ed-page { max-width: 1180px; margin: 0 auto; padding: 0 var(--pad-x); }
+.ed-wide { max-width: 1320px; }
+
+/* section eyebrow — small teal kicker above a heading */
+.ed-kicker {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--brand);
+  margin: 0 0 0.6rem;
+}
+.ed-kicker::before { content: ""; width: 22px; height: 2px; background: var(--accent); display: inline-block; }
+
+/* editorial headlines */
+.ed-h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(2.2rem, 5.5vw, 4rem);
+  line-height: 1.02; letter-spacing: -0.02em; color: var(--foreground); margin: 0 0 1rem; }
+.ed-h1 em { font-family: var(--font-italic); font-style: italic; color: var(--brand); }
+.ed-h2 { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.5rem, 3.2vw, 2.2rem);
+  line-height: 1.08; letter-spacing: -0.01em; color: var(--foreground); margin: 0 0 0.7rem; }
+.ed-lede { font-size: clamp(1.05rem, 1.6vw, 1.3rem); line-height: 1.55; color: var(--muted-foreground);
+  max-width: var(--measure); margin: 0 0 1.5rem; }
+
+/* ---- HERO ---- */
+.ed-hero { padding: clamp(3rem, 8vh, 6rem) 0 clamp(2rem, 5vh, 4rem); border-bottom: 1px solid var(--border); }
+.ed-hero-grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: clamp(1.5rem, 4vw, 4rem); align-items: center; }
+@media (max-width: 860px) { .ed-hero-grid { grid-template-columns: 1fr; } }
+.ed-hero-art { position: relative; aspect-ratio: 4/3; border-radius: var(--radius-lg); overflow: hidden;
+  background: linear-gradient(140deg, var(--brand) 0%, var(--brand-ink) 100%); box-shadow: 0 24px 60px -20px rgba(15,92,92,0.45); }
+.ed-cta-row { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 1.2rem; }
+
+/* ---- BUTTONS ---- */
+.ed-btn { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--font-sans); font-weight: 600;
+  font-size: 0.95rem; padding: 0.7rem 1.3rem; border-radius: 999px; border: 1.5px solid transparent; cursor: pointer;
+  text-decoration: none; transition: transform 0.12s, background 0.15s, box-shadow 0.15s; }
+.ed-btn:hover { transform: translateY(-1px); }
+.ed-btn--primary { background: var(--accent); color: #fff; box-shadow: 0 8px 20px -8px rgba(224,102,59,0.6); }
+.ed-btn--primary:hover { background: var(--accent-ink); color: #fff; border-color: transparent; }
+.ed-btn--ghost { background: transparent; color: var(--brand); border-color: var(--border-strong); }
+.ed-btn--ghost:hover { border-color: var(--brand); color: var(--brand-ink); }
+.ed-btn--dark { background: var(--brand); color: #fff; }
+.ed-btn--dark:hover { background: var(--brand-ink); color: #fff; border-color: transparent; }
+
+/* ---- SECTION ---- */
+.ed-section { padding: clamp(2.5rem, 6vh, 4.5rem) 0; }
+.ed-section-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; margin-bottom: 1.8rem; flex-wrap: wrap; }
+.ed-section-head p { color: var(--muted-foreground); max-width: 40rem; margin: 0.3rem 0 0; }
+
+/* ---- CARD GRID (the Vox-style story cards) ---- */
+.ed-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.4rem; }
+.ed-cards--feature { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); }
+.ed-card { display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); overflow: hidden; text-decoration: none; color: inherit;
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s; }
+.ed-card:hover { transform: translateY(-3px); box-shadow: 0 18px 40px -22px rgba(20,23,26,0.35); border-color: var(--border-strong); }
+.ed-card-art { aspect-ratio: 16/9; background: var(--muted); position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center; font-size: 2.4rem; }
+.ed-card-art--teal { background: linear-gradient(135deg, var(--brand), var(--brand-ink)); color: #fff; }
+.ed-card-art--clay { background: linear-gradient(135deg, var(--accent), var(--accent-ink)); color: #fff; }
+.ed-card-art--mist { background: var(--brand-tint); color: var(--brand); }
+.ed-card-body { padding: 1.1rem 1.2rem 1.3rem; display: flex; flex-direction: column; gap: 0.5rem; flex: 1; }
+.ed-tag { align-self: flex-start; font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--accent-ink); background: var(--accent-tint); padding: 3px 9px; border-radius: 999px; }
+.ed-tag--teal { color: var(--brand); background: var(--brand-tint); }
+.ed-card h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.25rem; line-height: 1.15;
+  letter-spacing: -0.01em; margin: 0.1rem 0 0; color: var(--foreground); }
+.ed-card:hover h3 { color: var(--brand); }
+.ed-card p { font-size: 0.9rem; color: var(--muted-foreground); margin: 0; line-height: 1.5; }
+.ed-card-meta { margin-top: auto; padding-top: 0.4rem; font-family: var(--font-mono); font-size: 10.5px;
+  color: var(--muted-foreground); display: flex; align-items: center; gap: 0.4rem; }
+.ed-card-meta .arrow { margin-left: auto; color: var(--accent); transition: transform 0.15s; }
+.ed-card:hover .arrow { transform: translateX(3px); }
+
+/* ---- STAT STRIP ---- */
+.ed-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;
+  padding: 1.5rem; background: var(--muted); border-radius: var(--radius-lg); }
+.ed-stat b { display: block; font-family: var(--font-display); font-weight: 600; font-size: 2rem; color: var(--brand); line-height: 1; }
+.ed-stat span { font-size: 0.82rem; color: var(--muted-foreground); }
+
+/* ---- PULL QUOTE / article body ---- */
+.ed-article { max-width: var(--measure); margin: 0 auto; }
+.ed-article p { font-size: 1.08rem; line-height: 1.75; margin: 0 0 1.3rem; color: var(--foreground); }
+.ed-article h2 { font-family: var(--font-display); font-weight: 600; font-size: 1.7rem; margin: 2.2rem 0 0.8rem; letter-spacing: -0.01em; }
+.ed-pullquote { font-family: var(--font-display); font-weight: 500; font-size: clamp(1.4rem, 3vw, 2rem); line-height: 1.25;
+  color: var(--brand); border-left: 4px solid var(--accent); padding: 0.3rem 0 0.3rem 1.4rem; margin: 2rem 0; }
+.ed-figure { margin: 1.8rem 0; }
+.ed-figure figcaption { font-size: 0.82rem; color: var(--muted-foreground); margin-top: 0.5rem; font-family: var(--font-mono); }
+
+/* ---- BIG FEATURE (asymmetric hero card) ---- */
+.ed-feature { display: grid; grid-template-columns: 1.4fr 1fr; gap: 0; border: 1px solid var(--border);
+  border-radius: var(--radius-lg); overflow: hidden; background: var(--card); text-decoration: none; color: inherit; }
+@media (max-width: 760px) { .ed-feature { grid-template-columns: 1fr; } }
+.ed-feature-art { min-height: 280px; background: linear-gradient(135deg, var(--brand), var(--brand-ink));
+  display: flex; align-items: center; justify-content: center; color: #fff; font-size: 4rem; }
+.ed-feature-body { padding: clamp(1.4rem, 3vw, 2.4rem); display: flex; flex-direction: column; justify-content: center; gap: 0.7rem; }
+.ed-feature-body h2 { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.5rem, 3vw, 2.3rem);
+  line-height: 1.1; letter-spacing: -0.015em; margin: 0; }
+.ed-feature:hover .ed-feature-body h2 { color: var(--brand); }
