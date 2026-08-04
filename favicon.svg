@@ -1,7 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="7" fill="#141414"/>
-  <!-- map pin in the India-saffron/green brand palette -->
-  <path d="M16 4.5c-4.4 0-8 3.5-8 7.9 0 5.6 7.1 14 7.4 14.4a.8.8 0 0 0 1.2 0C16.9 26.4 24 18 24 12.4c0-4.4-3.6-7.9-8-7.9z" fill="#e8862e"/>
-  <circle cx="16" cy="12.2" r="3.1" fill="#141414"/>
-  <circle cx="16" cy="12.2" r="1.5" fill="#3aa76d"/>
+  <!-- Teal & Ink brand mark: teal tile, clay locator pin over a district grid -->
+  <rect width="32" height="32" rx="7" fill="#0f5c5c"/>
+  <!-- faint district grid (the "atlas" idea) -->
+  <g stroke="#ffffff" stroke-opacity="0.16" stroke-width="1">
+    <path d="M6 11h20 M6 16h20 M6 21h20 M11 6v20 M16 6v20 M21 6v20"/>
+  </g>
+  <!-- clay locator pin -->
+  <path d="M16 5.5c-3.9 0-7 2.9-7 6.6 0 4.8 6.2 12 6.5 12.3a.7.7 0 0 0 1 0C16.8 24.1 23 16.9 23 12.1c0-3.7-3.1-6.6-7-6.6z" fill="#e0663b"/>
+  <circle cx="16" cy="12" r="2.6" fill="#0f5c5c"/>
+  <circle cx="16" cy="12" r="1.2" fill="#ffffff"/>
 </svg>

@@ -3,25 +3,49 @@
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 
+/* ============================================================
+   TEAL & INK — the atlas's editorial brand (light theme).
+   A clean, data-forward explainer look. Every page reads from
+   these tokens, so the whole site re-skins from this one block.
+     primary  #0f5c5c  deep teal   (headlines, brand, links)
+     accent   #e0663b  clay orange (calls-to-action, emphasis)
+     ink      near-black text · paper white · mist panels
+   ============================================================ */
 :root {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --border: oklch(0.269 0 0);
-  --border-strong: oklch(0.35 0 0);
-  --card: oklch(0.18 0 0);
-  --warm: oklch(0.769 0.188 70.08);
-  --positive: oklch(0.696 0.17 162.48);
-  --pop: oklch(0.645 0.246 16.439);
+  /* brand */
+  --brand:            #0f5c5c;   /* deep teal — the primary */
+  --brand-ink:        #0a3f3f;   /* darker teal for hovers/headlines */
+  --brand-tint:       #e6f0ef;   /* pale teal wash */
+  --accent:           #e0663b;   /* clay orange — CTAs & emphasis */
+  --accent-ink:       #b84f28;   /* darker clay for hovers */
+  --accent-tint:      #fbeee7;   /* pale clay wash */
+
+  /* editorial neutrals (light) */
+  --background:       #ffffff;   /* paper */
+  --foreground:       #14171a;   /* near-black ink */
+  --muted:            #eef2f1;   /* mist panel fill */
+  --muted-foreground: #5b6b6b;   /* muted slate text */
+  --border:           #e2e8e6;   /* hairline */
+  --border-strong:    #c9d4d1;
+  --card:             #ffffff;
+
+  /* semantic (kept for existing pages) */
+  --warm:     var(--accent);
+  --positive: #1f8a70;
+  --pop:      var(--accent);
+
   --radius: 0.625rem;
   --radius-sm: 0.375rem;
   --radius-lg: 0.875rem;
+
+  /* type — editorial: bold display serif + clean sans body + mono labels */
   --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
   --font-display: 'Fraunces', 'Iowan Old Style', Georgia, serif;
   --font-italic: 'Instrument Serif', Georgia, serif;
+
   --pad-x: 1.5rem;
+  --measure: 42rem;              /* comfortable reading measure */
 }
 @media (min-width: 768px) { :root { --pad-x: 3rem; } }
 
@@ -30,13 +54,13 @@ html, body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
-  font-size: 14px;
-  line-height: 1.55;
+  font-size: 15px;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-a { color: inherit; text-decoration: none; border-bottom: 1px solid oklch(0.4 0 0); transition: border-color 0.15s; }
-a:hover { border-color: var(--foreground); }
+a { color: var(--brand); text-decoration: none; border-bottom: 1px solid var(--border-strong); transition: color 0.15s, border-color 0.15s; }
+a:hover { color: var(--brand-ink); border-color: var(--brand); }
 
 .mono { font-family: var(--font-mono); }
 .display {
@@ -58,24 +82,31 @@ a:hover { border-color: var(--foreground); }
   position: sticky; top: 0; z-index: 1000;
   display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
   padding: 0.55rem var(--pad-x);
-  background: oklch(0.145 0 0 / 0.85);
+  background: oklch(0.985 0 0 / 0.85);
   backdrop-filter: saturate(150%) blur(14px);
   -webkit-backdrop-filter: saturate(150%) blur(14px);
   border-bottom: 1px solid var(--border);
 }
 .brand {
-  font-family: var(--font-mono);
-  font-size: 12.5px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  display: flex; align-items: center; gap: 10px;
+  display: flex; align-items: center; gap: 9px;
+  border: none; text-decoration: none;
 }
+.brand-logo { display: block; border-radius: 5px; flex: none; }
+.brand-word {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--foreground);
+  line-height: 1;
+}
+.brand:hover .brand-word { color: var(--brand); }
 .brand-dot {
   display: inline-block;
   width: 7px; height: 7px;
   border-radius: 50%;
-  background: var(--pop);
-  box-shadow: 0 0 0 4px oklch(0.645 0.246 16.439 / 0.15);
+  background: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-tint);
   animation: pulse 2.4s ease-in-out infinite;
 }
 @keyframes pulse {
@@ -104,13 +135,13 @@ a:hover { border-color: var(--foreground); }
 .snav-top:hover { color: var(--foreground); }
 /* current group: highlighted pill so you can see which section you're in */
 .snav-group.is-current .snav-top {
-  color: var(--foreground); background: oklch(0.24 0 0);
-  box-shadow: inset 0 -2px 0 oklch(0.84 0.15 78);
+  color: var(--foreground); background: oklch(0.94 0 0);
+  box-shadow: inset 0 -2px 0 var(--brand);
 }
 .snav-caret { font-size: 8px; opacity: 0.6; }
 .snav-menu {
   position: absolute; top: 100%; left: 0; min-width: 230px;
-  background: oklch(0.16 0 0); border: 1px solid var(--border-strong);
+  background: oklch(0.985 0 0); border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm); padding: 0.35rem; margin-top: 0.3rem;
   display: none; flex-direction: column; gap: 1px; z-index: 1100;
   box-shadow: 0 8px 24px oklch(0 0 0 / 0.4);
@@ -121,13 +152,13 @@ a:hover { border-color: var(--foreground); }
   color: var(--muted-foreground); text-decoration: none; padding: 0.45rem 0.6rem;
   border-radius: 4px; border: none; display: flex; align-items: flex-start; gap: 0.5rem;
 }
-.snav-menu a:hover { color: var(--foreground); background: oklch(0.22 0 0); }
+.snav-menu a:hover { color: var(--foreground); background: oklch(0.94 0 0); }
 .snav-ico { flex: none; width: 1.15em; text-align: center; font-size: 12.5px; line-height: 1.25; opacity: 0.9; }
 .snav-menu a:not(.snav-has-hint) .snav-ico { opacity: 0.4; }   /* bare bullet items */
 .snav-body { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
 /* current PAGE: filled highlight + left accent bar so it's unmistakable */
-.snav-menu a.snav-cur { background: oklch(0.24 0.03 78 / 0.55); box-shadow: inset 2px 0 0 oklch(0.84 0.15 78); }
-.snav-menu a.snav-cur .snav-t { color: oklch(0.88 0.15 78); font-weight: 600; }
+.snav-menu a.snav-cur { background: var(--brand-tint); box-shadow: inset 2px 0 0 var(--brand); }
+.snav-menu a.snav-cur .snav-t { color: var(--brand-ink); font-weight: 600; }
 .snav-menu a .snav-t { display: block; }
 .snav-ext { font-size: 0.85em; opacity: 0.6; }
 .snav-menu a .snav-hint { font-size: 9.5px; color: oklch(0.6 0.02 250); letter-spacing: 0.01em; line-height: 1.3; }
@@ -138,7 +169,7 @@ a:hover { border-color: var(--foreground); }
   font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.03em; color: var(--muted-foreground); white-space: nowrap; }
 .snav-here-g { text-transform: uppercase; opacity: 0.75; }
 .snav-here-sep { opacity: 0.5; }
-.snav-here-p { color: oklch(0.84 0.15 78); }
+.snav-here-p { color: var(--brand-ink); }
 
 .snav-burger { display: none; background: transparent; border: none; color: var(--foreground); font-size: 18px; cursor: pointer; }
 
@@ -148,7 +179,7 @@ a:hover { border-color: var(--foreground); }
   .snav-here { display: none; }   /* burger replaces the breadcrumb on mobile */
   .snav-groups { order: 4; display: none; position: absolute; top: 100%; left: 0; right: 0;
     max-height: calc(100vh - 52px); overflow-y: auto;
-    background: oklch(0.145 0 0); border-bottom: 1px solid var(--border);
+    background: oklch(0.985 0 0); border-bottom: 1px solid var(--border);
     flex-direction: column; align-items: stretch; gap: 0; padding: 0.25rem var(--pad-x) 1rem; }
   .snav.snav-open .snav-groups { display: flex; }
   .snav-group { width: 100%; border-bottom: 1px solid var(--border); }
@@ -168,7 +199,7 @@ a:hover { border-color: var(--foreground); }
 }
 
 /* ───────── Shared footer (site-nav.js) ───────── */
-#sfoot { border-top: 1px solid var(--border); margin-top: 4rem; padding: 2.5rem var(--pad-x) 1.5rem; background: oklch(0.13 0 0); }
+#sfoot { border-top: 1px solid var(--border); margin-top: 4rem; padding: 2.5rem var(--pad-x) 1.5rem; background: oklch(1 0 0); }
 .sfoot-grid { display: grid; grid-template-columns: 1.6fr repeat(4, 1fr); gap: 1.5rem; max-width: 1180px; margin: 0 auto; }
 @media (max-width: 760px) { .sfoot-grid { grid-template-columns: 1fr 1fr; } }
 .sfoot-col { display: flex; flex-direction: column; gap: 0.4rem; }
@@ -180,27 +211,27 @@ a:hover { border-color: var(--foreground); }
 .sfoot-base { max-width: 1180px; margin: 1.8rem auto 0; padding-top: 1rem; border-top: 1px solid var(--border);
   display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem;
   font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
-.sfoot-base a { color: oklch(0.74 0.16 75); text-decoration: none; }
+.sfoot-base a { color: oklch(0.48 0.160 75); text-decoration: none; }
 
 /* ───────── News-bubble map layer ───────── */
 .news-toggle-ctl { margin: 8px; }
 .news-toggle-btn {
-  background: oklch(0.16 0 0 / 0.92); color: var(--foreground);
+  background: oklch(0.985 0 0 / 0.92); color: var(--foreground);
   border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
   font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.03em;
   padding: 0.4rem 0.7rem; cursor: pointer; backdrop-filter: blur(8px);
 }
 .news-toggle-btn:hover { border-color: var(--foreground); }
-.news-toggle-btn.on { background: var(--warm); color: oklch(0.18 0 0); border-color: transparent; font-weight: 600; }
+.news-toggle-btn.on { background: var(--warm); color: oklch(0.97 0 0); border-color: transparent; font-weight: 600; }
 .news-bubble { animation: bubblePulse 2.6s ease-in-out infinite; }
 .news-bubble--flag { animation: bubblePulse 1.6s ease-in-out infinite; }
 @keyframes bubblePulse { 0%,100% { opacity: 0.85; } 50% { opacity: 0.45; } }
 .news-bubble-tip {
-  background: oklch(0.16 0 0); color: var(--foreground);
+  background: oklch(0.985 0 0); color: var(--foreground);
   border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
   font-family: var(--font-sans); font-size: 11px; line-height: 1.4; padding: 6px 9px;
 }
-.news-bubble-tip b { color: oklch(0.84 0.15 78); }
+.news-bubble-tip b { color: oklch(0.48 0.150 78); }
 .leaflet-tooltip.news-bubble-tip::before { display: none; }
 
 /* Hazard & zoning pins — annotate the map with pinned CRZ/unsafe/flood/channel data */
@@ -233,7 +264,7 @@ a:hover { border-color: var(--foreground); }
 
 .country-pick {
   display: inline-flex; align-items: center; margin-left: 0.6rem;
-  background: oklch(0.18 0 0); border: 1px solid var(--border-strong);
+  background: oklch(0.97 0 0); border: 1px solid var(--border-strong);
   border-radius: 999px; padding: 0 0.25rem;
 }
 .country-pick select {
@@ -245,12 +276,12 @@ a:hover { border-color: var(--foreground); }
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><path d='M2 3.5l3 3 3-3' stroke='%23b3b3b3' stroke-width='1.2' fill='none' stroke-linecap='round'/></svg>");
   background-repeat: no-repeat; background-position: right 0.5rem center;
 }
-.country-pick select option { background: oklch(0.16 0 0); color: var(--foreground); }
+.country-pick select option { background: oklch(0.985 0 0); color: var(--foreground); }
 .country-pick:hover { border-color: var(--foreground); }
 
 /* ─────── India fiscal section — single-screen ─────── */
 .india-fullbleed {
-  background: oklch(0.115 0 0);
+  background: oklch(1 0 0);
   max-width: none;
   padding: 0;
   margin: 0;
@@ -285,7 +316,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   height: 100%;
   min-height: 0;
   padding: 0;                 /* full-bleed map (Worldmonitor-style) */
-  background: oklch(0.115 0 0);
+  background: oklch(1 0 0);
 }
 @media (max-width: 980px) {
   .india-map-side { padding: 0; height: 62vh; min-height: 460px; }
@@ -306,7 +337,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   gap: 0.85rem;
 }
 @media (max-width: 980px) {
-  .india-side-panel { height: auto; overflow: visible; border-left: none; border-top: 1px solid var(--border); background: oklch(0.105 0 0); backdrop-filter: none; }
+  .india-side-panel { height: auto; overflow: visible; border-left: none; border-top: 1px solid var(--border); background: oklch(1 0 0); backdrop-filter: none; }
 }
 
 .india-side-header {
@@ -350,7 +381,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   flex-direction: column;
   gap: 0.55rem;
   padding: 0.75rem;
-  background: oklch(0.155 0 0);
+  background: oklch(0.985 0 0);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
 }
@@ -371,7 +402,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 .ind-btn:hover { color: var(--foreground); border-color: var(--muted-foreground); }
 /* Active layer button carries the warm accent (matching the map's active-layer badge
    + the "map is colouring by" panel) so the eye locks onto what's currently shown. */
-.ind-btn.active { background: var(--warm); color: oklch(0.18 0 0); border-color: var(--warm); font-weight: 600; box-shadow: 0 0 0 3px oklch(0.82 0.16 78 / 0.18); }
+.ind-btn.active { background: var(--warm); color: oklch(0.97 0 0); border-color: var(--warm); font-weight: 600; box-shadow: 0 0 0 3px oklch(0.82 0.16 78 / 0.18); }
 
 .india-year-group {
   display: flex;
@@ -407,7 +438,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   width: 16px; height: 16px;
   border-radius: 50%;
   background: var(--foreground);
-  border: 2px solid oklch(0.145 0 0);
+  border: 2px solid oklch(0.985 0 0);
   cursor: pointer;
   box-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
@@ -415,7 +446,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   width: 14px; height: 14px;
   border-radius: 50%;
   background: var(--foreground);
-  border: 2px solid oklch(0.145 0 0);
+  border: 2px solid oklch(0.985 0 0);
   cursor: pointer;
 }
 
@@ -465,25 +496,25 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   border-radius: 0;              /* full-bleed */
   overflow: hidden;
   border: none;
-  background: oklch(0.16 0 0);
+  background: oklch(0.985 0 0);
 }
-#india-map { height: 100%; width: 100%; background: oklch(0.13 0 0); }
-.leaflet-control-attribution { background: oklch(0.18 0 0 / 0.7) !important; color: var(--muted-foreground) !important; font-size: 9.5px !important; padding: 2px 6px !important; }
+#india-map { height: 100%; width: 100%; background: oklch(1 0 0); }
+.leaflet-control-attribution { background: oklch(0.97 0 0 / 0.7) !important; color: var(--muted-foreground) !important; font-size: 9.5px !important; padding: 2px 6px !important; }
 .leaflet-control-attribution a { color: var(--muted-foreground) !important; }
 .leaflet-control-zoom a {
-  background: oklch(0.18 0 0) !important;
+  background: oklch(0.97 0 0) !important;
   color: var(--foreground) !important;
   border: 1px solid var(--border) !important;
 }
 /* basemap layer control (dark theme) */
 .leaflet-control-layers {
-  background: oklch(0.16 0 0 / 0.95) !important;
+  background: oklch(0.985 0 0 / 0.95) !important;
   border: 1px solid var(--border-strong) !important;
   color: var(--foreground) !important;
   border-radius: var(--radius-sm) !important;
   font-family: var(--font-mono) !important; font-size: 11px !important;
 }
-.leaflet-control-layers-toggle { background-color: oklch(0.18 0 0) !important; border: 1px solid var(--border) !important; }
+.leaflet-control-layers-toggle { background-color: oklch(0.97 0 0) !important; border: 1px solid var(--border) !important; }
 .leaflet-control-layers label { color: var(--foreground) !important; margin: 2px 0 !important; }
 .leaflet-control-layers-separator { border-top: 1px solid var(--border) !important; }
 /* ── Unified LAYERS panel (top-left of the map) ───────────────────────────── */
@@ -502,7 +533,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 }
 .mlp-toggle:hover { border-color: var(--warm); }
 .mlp-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
-.mlp-title { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.84 0.12 78); }
+.mlp-title { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.48 0.120 78); }
 .mlp-collapse { background: none; border: none; color: var(--muted-foreground); cursor: pointer; font-size: 12px; line-height: 1; padding: 2px 4px; }
 .mlp-collapse:hover { color: var(--foreground); }
 .mlp-sec-h { font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted-foreground); margin: 8px 0 4px; }
@@ -514,16 +545,16 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   cursor: pointer; transition: border-color .12s, background .12s, color .12s;
 }
 .mlp-preset:hover { border-color: var(--border-strong); }
-.mlp-preset.on { background: oklch(0.66 0.16 250 / 0.25); border-color: oklch(0.66 0.16 250); color: oklch(0.85 0.10 250); }
+.mlp-preset.on { background: oklch(0.66 0.16 250 / 0.25); border-color: oklch(0.66 0.16 250); color: oklch(0.48 0.100 250); }
 .mlp-base, .mlp-data-btn, .mlp-facet {
   font-family: var(--font-mono); font-size: 9.5px; padding: 3px 7px; border-radius: 5px;
-  border: 1px solid var(--border); background: oklch(0.19 0 0); color: var(--foreground);
+  border: 1px solid var(--border); background: oklch(0.97 0 0); color: var(--foreground);
   cursor: pointer; transition: border-color .12s, background .12s, color .12s;
 }
 .mlp-base:hover, .mlp-data-btn:hover, .mlp-facet:hover { border-color: var(--border-strong); }
-.mlp-base.on, .mlp-data-btn.on { background: oklch(0.78 0.16 70 / 0.2); border-color: oklch(0.78 0.16 70); color: oklch(0.86 0.15 76); }
+.mlp-base.on, .mlp-data-btn.on { background: oklch(0.78 0.16 70 / 0.2); border-color: oklch(0.48 0.160 70); color: oklch(0.48 0.150 76); }
 .mlp-facet { font-size: 9px; padding: 2px 6px; border-radius: 999px; }
-.mlp-facet.on { background: oklch(0.72 0.13 200 / 0.22); border-color: oklch(0.72 0.13 200); color: oklch(0.86 0.11 200); }
+.mlp-facet.on { background: oklch(0.72 0.13 200 / 0.22); border-color: oklch(0.48 0.130 200); color: oklch(0.48 0.110 200); }
 .mlp-facets { margin-top: 5px; }
 .mlp-check { display: flex; align-items: center; gap: 6px; font-size: 10.5px; color: var(--foreground); margin: 3px 0; cursor: pointer; }
 .mlp-check input { accent-color: oklch(0.74 0.16 70); }
@@ -546,17 +577,17 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 .mlp-elev-legend { margin: 0 0 4px 22px; }
 .mlp-elev-bar { height: 8px; border-radius: 3px; border: 1px solid var(--border); }
 .mlp-elev-ticks { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 8px; color: var(--muted-foreground); margin-top: 1px; }
-.mlp-tip { font-size: 9px; line-height: 1.4; color: oklch(0.82 0.1 78); background: oklch(0.3 0.08 78 / 0.18); border-radius: 4px; padding: 3px 6px; margin: 2px 0 4px 22px; }
-.mlp-tip b { color: oklch(0.88 0.12 78); }
+.mlp-tip { font-size: 9px; line-height: 1.4; color: oklch(0.48 0.100 78); background: oklch(0.3 0.08 78 / 0.18); border-radius: 4px; padding: 3px 6px; margin: 2px 0 4px 22px; }
+.mlp-tip b { color: oklch(0.48 0.120 78); }
 .mlp-base { white-space: nowrap; }
 .mlp-hd-add {
   margin-top: 4px; width: 100%; cursor: pointer; text-align: left;
-  background: oklch(0.22 0.03 250 / 0.5); color: oklch(0.78 0.09 230);
+  background: oklch(0.22 0.03 250 / 0.5); color: oklch(0.48 0.090 230);
   border: 1px dashed oklch(0.5 0.08 240 / 0.7); border-radius: 4px;
   padding: 3px 7px; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.02em;
 }
-.mlp-hd-add:hover { border-color: var(--warm); color: oklch(0.86 0.13 210); }
-.mlp-live { font-family: var(--font-mono); font-size: 8px; color: oklch(0.72 0.2 25); letter-spacing: 0.05em; animation: mlp-pulse 2s ease-in-out infinite; }
+.mlp-hd-add:hover { border-color: var(--warm); color: oklch(0.48 0.130 210); }
+.mlp-live { font-family: var(--font-mono); font-size: 8px; color: oklch(0.48 0.200 25); letter-spacing: 0.05em; animation: mlp-pulse 2s ease-in-out infinite; }
 @keyframes mlp-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
 .mlp-wx-time { font-family: var(--font-mono); font-size: 8px; color: var(--muted-foreground); margin-left: auto; }
 .mlp-check { justify-content: flex-start; }
@@ -566,12 +597,12 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   font-family: var(--font-mono); font-size: 11px; padding: 5px 9px; cursor: pointer;
   backdrop-filter: blur(4px); box-shadow: 0 2px 8px oklch(0 0 0 / 0.4);
 }
-.map-home-btn:hover { border-color: var(--warm); color: oklch(0.86 0.15 78); }
+.map-home-btn:hover { border-color: var(--warm); color: oklch(0.48 0.150 78); }
 /* Deep-zoom honesty note — bottom-centre when past the source's real resolution */
 .deep-zoom-note {
   position: absolute; bottom: 62px; left: 50%; transform: translateX(-50%);
   z-index: 500; display: none; pointer-events: none;
-  background: oklch(0.16 0.03 60 / 0.92); color: oklch(0.86 0.11 78);
+  background: oklch(0.16 0.03 60 / 0.92); color: oklch(0.48 0.110 78);
   border: 1px solid oklch(0.5 0.12 70 / 0.6); border-radius: 999px;
   padding: 4px 12px; font-family: var(--font-mono); font-size: 10px;
   backdrop-filter: blur(4px); max-width: 90vw; text-align: center;
@@ -609,8 +640,8 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   transition: width .15s ease;
 }
 .zoom-readout .zr-scale-lbl { font-size: 9px; color: var(--foreground); letter-spacing: 0.02em; }
-.zoom-readout .zr-z { color: oklch(0.80 0.02 240); }
-.zoom-readout .zr-z--past { color: oklch(0.82 0.13 70); }   /* upscaled past native */
+.zoom-readout .zr-z { color: oklch(0.45 0.02 240); }
+.zoom-readout .zr-z--past { color: oklch(0.48 0.130 70); }   /* upscaled past native */
 @media (max-width: 640px) { .zoom-readout { bottom: 8px; } .deep-zoom-note { bottom: 56px; } }
 
 /* Map query — cross-India facet filter (top-right of the map) */
@@ -625,8 +656,8 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 .mq-x:hover { color: var(--foreground); border-color: var(--warm); }
 .mq-mode { display: flex; align-items: center; gap: 5px; margin-bottom: 8px; }
 .mq-mode-btn { background: transparent; color: var(--muted-foreground); border: 1px solid var(--border-strong); border-radius: 999px; padding: 2px 10px; font-family: var(--font-mono); font-size: 10px; cursor: pointer; }
-.mq-mode-btn.on { background: var(--warm); color: oklch(0.18 0 0); border-color: var(--warm); font-weight: 600; }
-.mq-clear { margin-left: auto; background: none; border: none; color: oklch(0.72 0.16 30); font-size: 10px; cursor: pointer; text-decoration: underline; }
+.mq-mode-btn.on { background: var(--warm); color: oklch(0.97 0 0); border-color: var(--warm); font-weight: 600; }
+.mq-clear { margin-left: auto; background: none; border: none; color: oklch(0.48 0.160 30); font-size: 10px; cursor: pointer; text-decoration: underline; }
 .mq-share { background: none; border: 1px solid var(--border-strong); border-radius: 999px; color: var(--muted-foreground); font-size: 9.5px; padding: 1px 8px; cursor: pointer; }
 .mq-share:hover { color: var(--foreground); border-color: var(--warm); }
 .mq-group { margin-bottom: 6px; }
@@ -636,11 +667,11 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 .mq-facet.on { background: oklch(0.30 0.06 78 / 0.22); }
 .mq-facet .mq-n { margin-left: auto; font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); }
 .mq-result-h { font-size: 11px; color: var(--muted-foreground); border-top: 1px solid var(--border); padding-top: 6px; margin-top: 4px; }
-.mq-result-h b { color: oklch(0.86 0.15 78); }
+.mq-result-h b { color: oklch(0.48 0.150 78); }
 .mq-results { margin-top: 5px; }
 .mq-empty { font-size: 10px; color: var(--muted-foreground); font-style: italic; line-height: 1.5; }
 .mq-state { margin-bottom: 5px; }
-.mq-state-h { font-size: 10px; font-weight: 600; color: oklch(0.82 0.06 230); }
+.mq-state-h { font-size: 10px; font-weight: 600; color: oklch(0.48 0.060 230); }
 .mq-state-n { font-family: var(--font-mono); font-size: 8.5px; color: var(--muted-foreground); }
 .mq-res { display: flex; align-items: center; gap: 6px; padding: 2px 4px 2px 8px; cursor: pointer; border-radius: 4px; }
 .mq-res:hover { background: oklch(0.24 0.02 250); }
@@ -653,7 +684,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 /* Query hint badge — shown over a drilled state when the query matches districts there */
 .query-hint-badge {
   position: absolute; bottom: 44px; left: 50%; transform: translateX(-50%); z-index: 560;
-  background: oklch(0.30 0.08 90 / 0.92); color: oklch(0.92 0.12 95); pointer-events: none;
+  background: oklch(0.30 0.08 90 / 0.92); color: oklch(0.48 0.120 95); pointer-events: none;
   border: 1px solid oklch(0.6 0.14 90 / 0.7); border-radius: 999px; padding: 4px 13px;
   font-size: 11px; backdrop-filter: blur(4px); display: flex; align-items: center; gap: 6px;
 }
@@ -676,7 +707,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 }
 .time-scrubber .ts-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
 .time-scrubber .ts-title { font-weight: 600; color: var(--foreground); }
-.time-scrubber .ts-year { font-family: var(--font-mono); font-size: 13px; color: oklch(0.84 0.15 78); margin-left: auto; }
+.time-scrubber .ts-year { font-family: var(--font-mono); font-size: 13px; color: oklch(0.48 0.150 78); margin-left: auto; }
 .time-scrubber .ts-play, .time-scrubber .ts-close {
   cursor: pointer; background: none; border: 1px solid var(--border-strong); border-radius: 5px;
   color: var(--muted-foreground); width: 22px; height: 20px; font-size: 10px; padding: 0;
@@ -685,8 +716,8 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 .time-scrubber #ts-range { width: 100%; accent-color: oklch(0.78 0.16 78); margin: 2px 0; }
 .time-scrubber .ts-caption { font-size: 10.5px; line-height: 1.5; color: var(--muted-foreground); margin-top: 4px; min-height: 1.5em; }
 .time-scrubber .ts-caption b { color: var(--foreground); }
-.time-scrubber .ts-delta.down { color: oklch(0.72 0.19 30); font-weight: 700; }
-.time-scrubber .ts-delta.up { color: oklch(0.78 0.15 150); font-weight: 700; }
+.time-scrubber .ts-delta.down { color: oklch(0.48 0.190 30); font-weight: 700; }
+.time-scrubber .ts-delta.up { color: oklch(0.48 0.150 150); font-weight: 700; }
 .time-scrubber .ts-since { opacity: 0.7; }
 .ts-pulse { animation: bubblePulse 2.4s ease-in-out infinite; }
 @media (max-width: 640px) { .time-scrubber { bottom: 44px; right: 8px; } }
@@ -717,7 +748,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 .msr-item:last-child { border-bottom: none; }
 .msr-item:hover, .msr-item.sel { background: oklch(0.2 0.02 250); }
 .msr-kind { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.05em; text-transform: uppercase; padding: 1px 6px; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
-.msr-kind.k-state { color: oklch(0.80 0.14 285); } .msr-kind.k-district { color: oklch(0.82 0.15 78); }
+.msr-kind.k-state { color: oklch(0.48 0.140 285); } .msr-kind.k-district { color: oklch(0.48 0.150 78); }
 .msr-name { color: var(--foreground); font-weight: 600; }
 .msr-ctx { color: var(--muted-foreground); font-family: var(--font-mono); font-size: 10px; margin-left: auto; }
 .msr-vuln { font-family: var(--font-mono); font-size: 9px; }
@@ -733,8 +764,8 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   backdrop-filter: blur(4px); box-shadow: 0 2px 8px oklch(0 0 0 / 0.4);
   transition: border-color .15s, color .15s, background .15s;
 }
-#map-expand-btn:hover { border-color: var(--warm); color: oklch(0.86 0.15 78); }
-.india-shell.map-expanded #map-expand-btn { color: oklch(0.86 0.15 78); border-color: var(--warm); }
+#map-expand-btn:hover { border-color: var(--warm); color: oklch(0.48 0.150 78); }
+.india-shell.map-expanded #map-expand-btn { color: oklch(0.48 0.150 78); border-color: var(--warm); }
 /* the "View as" format switcher (2D map / globe / terrain) is a shared module —
    see view-switch.js, which injects #vsw + its own styles on the three view pages. */
 @media (max-width: 640px) { .mlp { width: 168px; top: 8px; left: 8px; padding: 6px 7px; } }
@@ -747,13 +778,13 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground);
   pointer-events: none; backdrop-filter: blur(3px); max-width: 92vw;
 }
-.msl-readout b { color: oklch(0.86 0.13 150); font-weight: 600; }
+.msl-readout b { color: oklch(0.48 0.130 150); font-weight: 600; }
 .msl-ico { opacity: 0.8; margin-right: 2px; }
 .msl-src { font-size: 8.5px; opacity: 0.6; margin-left: 3px; }
 .msl-gap { font-style: italic; opacity: 0.7; }
 /* sub-district (taluk/tehsil) tooltip */
 .subdistrict-tip {
-  background: oklch(0.15 0.01 200 / 0.95) !important; color: oklch(0.9 0.06 200) !important;
+  background: oklch(0.15 0.01 200 / 0.95) !important; color: oklch(0.48 0.060 200) !important;
   border: 1px solid oklch(0.55 0.1 200) !important; border-radius: 3px !important;
   font-family: var(--font-mono) !important; font-size: 10px !important; padding: 2px 6px !important;
 }
@@ -763,7 +794,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   position: absolute;
   top: 14px; left: 14px;
   transition: opacity .2s;
-  background: oklch(0.145 0 0 / 0.92);
+  background: oklch(0.985 0 0 / 0.92);
   backdrop-filter: blur(10px);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
@@ -851,14 +882,14 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 .readout-value {
   font-family: var(--font-mono);
   font-size: 13px;
-  color: oklch(0.78 0.16 70);
+  color: oklch(0.48 0.160 70);
   letter-spacing: 0.02em;
 }
 
 #india-map-legend {
   position: absolute;
   bottom: 14px; left: 14px; right: 14px;
-  background: oklch(0.145 0 0 / 0.92);
+  background: oklch(0.985 0 0 / 0.92);
   backdrop-filter: blur(10px);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
@@ -905,7 +936,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   stroke: var(--foreground);
   stroke-width: 1.6;
 }
-.india-state-path.no-data { fill: oklch(0.22 0 0); cursor: default; }
+.india-state-path.no-data { fill: oklch(0.94 0 0); cursor: default; }
 
 .india-main { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
 .india-detail {
@@ -944,7 +975,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   background: oklch(0.78 0.16 70 / 0.12);
   border: 1px solid oklch(0.78 0.16 70 / 0.4);
   border-radius: 999px;
-  color: oklch(0.78 0.16 70);
+  color: oklch(0.48 0.160 70);
   padding: 4px 12px;
   cursor: pointer;
 }
@@ -961,7 +992,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   opacity: 0.7;
   transition: color 0.12s, opacity 0.12s;
 }
-.src-link:hover { color: oklch(0.78 0.16 70); opacity: 1; }
+.src-link:hover { color: oklch(0.48 0.160 70); opacity: 1; }
 
 .district-list {
   display: flex;
@@ -975,7 +1006,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   align-items: center;
   gap: 0.5rem;
   padding: 0.3rem 0.5rem;
-  background: oklch(0.17 0 0);
+  background: oklch(0.985 0 0);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   font-size: 11.5px;
@@ -984,10 +1015,10 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   text-align: left;
   font-family: inherit;
 }
-.district-row:hover { background: oklch(0.21 0 0); border-color: var(--border-strong); }
+.district-row:hover { background: oklch(0.94 0 0); border-color: var(--border-strong); }
 .district-row .rnk { font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); }
 .district-row .name { color: var(--foreground); }
-.district-row .bar-wrap { background: oklch(0.22 0 0); height: 6px; border-radius: 3px; overflow: hidden; }
+.district-row .bar-wrap { background: oklch(0.94 0 0); height: 6px; border-radius: 3px; overflow: hidden; }
 .district-row .bar { display: block; height: 100%; background: oklch(0.55 0.13 70); border-radius: 3px; }
 .district-row .val { font-family: var(--font-mono); font-size: 10.5px; color: var(--muted-foreground); }
 
@@ -1005,7 +1036,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   align-items: center;
   gap: 0.4rem;
   padding: 0.32rem 0.55rem;
-  background: oklch(0.17 0 0);
+  background: oklch(0.985 0 0);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   font-size: 11.5px;
@@ -1014,7 +1045,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   text-align: left;
   font-family: inherit;
 }
-.block-row:hover { background: oklch(0.21 0 0); border-color: var(--border-strong); }
+.block-row:hover { background: oklch(0.94 0 0); border-color: var(--border-strong); }
 .block-row .rnk { font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); }
 .block-row .name { color: var(--foreground); }
 .block-row .lbl {
@@ -1023,7 +1054,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 }
 
 .block-empty {
-  background: oklch(0.17 0 0); border: 1px solid var(--border);
+  background: oklch(0.985 0 0); border: 1px solid var(--border);
   border-left: 2px solid oklch(0.65 0.18 250);
   border-radius: var(--radius-sm);
   padding: 0.7rem 0.85rem;
@@ -1082,7 +1113,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   margin-bottom: 0.85rem;
 }
 .india-stat {
-  background: oklch(0.18 0 0);
+  background: oklch(0.97 0 0);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 0.5rem 0.65rem;
@@ -1144,7 +1175,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   margin-bottom: 0.75rem;
 }
 .india-gov-cell {
-  background: oklch(0.18 0 0);
+  background: oklch(0.97 0 0);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 0.45rem 0.6rem;
@@ -1179,7 +1210,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   margin-bottom: 0.5rem;
 }
 .india-dept-col {
-  background: oklch(0.17 0 0);
+  background: oklch(0.985 0 0);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 0.55rem 0.7rem;
@@ -1232,7 +1263,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   font-size: 11px;
   line-height: 1.5;
   color: var(--foreground);
-  background: oklch(0.19 0 0);
+  background: oklch(0.97 0 0);
   border-left: 2px solid oklch(0.55 0.16 30);
   border-radius: 3px;
   padding: 0.5rem 0.6rem;
@@ -1246,12 +1277,12 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   font-size: 8.5px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: oklch(0.78 0.16 70);
+  color: oklch(0.48 0.160 70);
   margin-right: 0.4rem;
 }
 .ledger-list { display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.3rem; }
 .ledger-row {
-  background: oklch(0.18 0 0);
+  background: oklch(0.97 0 0);
   border: 1px solid var(--border);
   border-radius: 4px;
   padding: 0.5rem 0.6rem;
@@ -1270,7 +1301,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   padding: 1px 5px;
   border-radius: 3px;
 }
-.ledger-flag--bad { background: oklch(0.3 0.12 30); color: oklch(0.85 0.14 40); }
+.ledger-flag--bad { background: oklch(0.3 0.12 30); color: oklch(0.48 0.140 40); }
 .ledger-row-body { display: flex; flex-wrap: wrap; gap: 0.8rem; font-size: 11.5px; }
 .ledger-cell b {
   font-family: var(--font-mono);
@@ -1288,7 +1319,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   margin-top: 0.35rem;
 }
 .ledger-rownote { font-size: 10.5px; line-height: 1.45; color: var(--muted-foreground); margin-top: 0.35rem; }
-.ledger-tier-warn { color: oklch(0.78 0.16 70); font-size: 10px; margin-left: 1px; cursor: help; }
+.ledger-tier-warn { color: oklch(0.48 0.160 70); font-size: 10px; margin-left: 1px; cursor: help; }
 
 /* ───────── Governance-protocol badges (panel) ───────── */
 .ledger-proto { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem; margin-top: 0.3rem; }
@@ -1298,23 +1329,23 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   border: 1px solid currentColor; white-space: nowrap; cursor: help; line-height: 1.5;
 }
 /* constitutional list — mirrors command-chain.html palette */
-.cl-union  { color: oklch(0.74 0.16 35);  background: oklch(0.62 0.21 28 / 0.12); }
-.cl-state  { color: oklch(0.82 0.15 75);  background: oklch(0.74 0.16 75 / 0.12); }
-.cl-conc   { color: oklch(0.78 0.12 285); background: oklch(0.62 0.16 285 / 0.14); }
-.cl-local  { color: oklch(0.80 0.16 162); background: oklch(0.70 0.15 162 / 0.12); }
+.cl-union  { color: oklch(0.48 0.160 35);  background: oklch(0.62 0.21 28 / 0.12); }
+.cl-state  { color: oklch(0.48 0.150 75);  background: oklch(0.74 0.16 75 / 0.12); }
+.cl-conc   { color: oklch(0.48 0.120 285); background: oklch(0.62 0.16 285 / 0.14); }
+.cl-local  { color: oklch(0.48 0.160 162); background: oklch(0.70 0.15 162 / 0.12); }
 /* appointing authority */
-.au-union   { color: oklch(0.74 0.16 35);  background: oklch(0.62 0.21 28 / 0.12); }
-.au-state   { color: oklch(0.82 0.15 75);  background: oklch(0.74 0.16 75 / 0.12); }
-.au-elected { color: oklch(0.80 0.16 162); background: oklch(0.70 0.15 162 / 0.12); }
+.au-union   { color: oklch(0.48 0.160 35);  background: oklch(0.62 0.21 28 / 0.12); }
+.au-state   { color: oklch(0.48 0.150 75);  background: oklch(0.74 0.16 75 / 0.12); }
+.au-elected { color: oklch(0.48 0.160 162); background: oklch(0.70 0.15 162 / 0.12); }
 .proto-fund { font-family: var(--font-mono); font-size: 8.5px; color: var(--muted-foreground); letter-spacing: 0.02em; }
-.proto-gap  { font-family: var(--font-mono); font-size: 8.5px; color: oklch(0.78 0.16 70); font-style: italic; }
+.proto-gap  { font-family: var(--font-mono); font-size: 8.5px; color: oklch(0.48 0.160 70); font-style: italic; }
 .ledger-row--applic { opacity: 0.92; }
 .ledger-cell--gap { color: var(--muted-foreground); }
 .roster-name--vacant { font-weight: 500; color: var(--muted-foreground); }
-.roster-namegap { margin-left: auto; font-family: var(--font-mono); font-size: 9px; color: oklch(0.78 0.16 70); font-style: italic; }
+.roster-namegap { margin-left: auto; font-family: var(--font-mono); font-size: 9px; color: oklch(0.48 0.160 70); font-style: italic; }
 
 /* ───────── District timeline / story chains (map-as-hub) ───────── */
-.dev-more { float: right; font-family: var(--font-mono); font-size: 9px; color: oklch(0.74 0.16 75); text-transform: none; letter-spacing: 0; }
+.dev-more { float: right; font-family: var(--font-mono); font-size: 9px; color: oklch(0.48 0.160 75); text-transform: none; letter-spacing: 0; }
 /* Source-coverage meter — sourced-or-gap made visible (data density per district) */
 .cov-meter { margin: 0.6rem 0 0.2rem; }
 .cov-top { display: flex; align-items: center; gap: 0.5rem; }
@@ -1338,17 +1369,17 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 .ln-item { display: block; text-decoration: none; padding: 0.45rem 0.6rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: oklch(0.16 0.005 250); transition: border-color .12s; }
 .ln-item:hover { border-color: var(--warm); }
 .ln-head { display: flex; align-items: center; gap: 0.4rem; margin-bottom: 2px; }
-.ln-outlet { font-family: var(--font-mono); font-size: 9.5px; color: oklch(0.82 0.06 230); letter-spacing: 0.02em; }
+.ln-outlet { font-family: var(--font-mono); font-size: 9.5px; color: oklch(0.48 0.060 230); letter-spacing: 0.02em; }
 .ln-lean { font-family: var(--font-mono); font-size: 8px; text-transform: uppercase; letter-spacing: 0.04em; padding: 0 5px; border-radius: 999px; border: 1px solid currentColor; }
-.ln-lean.lean-left { color: oklch(0.72 0.15 25); } .ln-lean.lean-right { color: oklch(0.70 0.14 250); }
-.ln-lean.lean-centre { color: oklch(0.78 0.10 130); } .ln-lean.lean-unknown { color: var(--muted-foreground); }
+.ln-lean.lean-left { color: oklch(0.48 0.150 25); } .ln-lean.lean-right { color: oklch(0.70 0.14 250); }
+.ln-lean.lean-centre { color: oklch(0.48 0.100 130); } .ln-lean.lean-unknown { color: var(--muted-foreground); }
 .ln-date { margin-left: auto; font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); }
 .ln-title { font-size: 11.5px; line-height: 1.4; color: var(--foreground); }
 .ln-more { font-size: 9.5px; color: var(--muted-foreground); margin-top: 0.35rem; font-style: italic; }
-.dev-chain { border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 0.7rem 0.8rem; margin-bottom: 0.6rem; background: oklch(0.165 0 0); }
+.dev-chain { border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 0.7rem 0.8rem; margin-bottom: 0.6rem; background: oklch(0.985 0 0); }
 .dev-chain-head { font-weight: 600; font-size: 12px; line-height: 1.3; }
 .dev-chain-status { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.05em; text-transform: uppercase; padding: 1px 6px; border-radius: 999px; border: 1px solid currentColor; margin-right: 0.3rem; }
-.dev-chain-status--open { color: oklch(0.80 0.14 60); } .dev-chain-status--resolved { color: oklch(0.80 0.16 150); } .dev-chain-status--dormant { color: var(--muted-foreground); }
+.dev-chain-status--open { color: oklch(0.48 0.140 60); } .dev-chain-status--resolved { color: oklch(0.48 0.160 150); } .dev-chain-status--dormant { color: var(--muted-foreground); }
 .dev-chain-line { font-size: 10.5px; color: var(--muted-foreground); line-height: 1.5; margin: 0.35rem 0 0.6rem; }
 /* Accountability arc: promise -> result -> actual per-capita cost -> human impact. */
 .acc-arc { display: flex; flex-direction: column; gap: 0.4rem; margin: 0 0 0.7rem; padding: 0.55rem 0.6rem;
@@ -1356,76 +1387,76 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 .acc-row { display: grid; grid-template-columns: 66px 1fr; gap: 0.5rem; font-size: 10.5px; line-height: 1.45; }
 .acc-key { font-family: var(--font-mono); font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.04em;
   color: var(--muted-foreground); padding-top: 1px; }
-.acc-row--promise .acc-key { color: oklch(0.78 0.12 250); }
-.acc-row--result .acc-key { color: oklch(0.80 0.12 90); }
-.acc-row--cost .acc-key { color: oklch(0.82 0.16 75); }
-.acc-row--impact .acc-key { color: oklch(0.80 0.15 150); }
+.acc-row--promise .acc-key { color: oklch(0.48 0.120 250); }
+.acc-row--result .acc-key { color: oklch(0.48 0.120 90); }
+.acc-row--cost .acc-key { color: oklch(0.48 0.160 75); }
+.acc-row--impact .acc-key { color: oklch(0.48 0.150 150); }
 .acc-val { color: var(--foreground); }
-.acc-percap { font-family: var(--font-mono); font-weight: 700; font-size: 14px; color: oklch(0.86 0.17 75); }
+.acc-percap { font-family: var(--font-mono); font-weight: 700; font-size: 14px; color: oklch(0.48 0.170 75); }
 .acc-percap-unit { font-size: 8.5px; font-weight: 400; color: var(--muted-foreground); margin-left: 1px; }
 .acc-total { font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); }
 .acc-note { font-size: 9px; color: var(--muted-foreground); font-style: italic; }
 .acc-row--impact .acc-val { font-style: italic; }
-.acc-src { font-family: var(--font-mono); font-size: 8.5px; color: oklch(0.72 0.10 230); text-decoration: none;
+.acc-src { font-family: var(--font-mono); font-size: 8.5px; color: oklch(0.48 0.100 230); text-decoration: none;
   border: 1px solid currentColor; border-radius: 3px; padding: 0 3px; white-space: nowrap; }
-.acc-src:hover { color: oklch(0.85 0.13 230); }
+.acc-src:hover { color: oklch(0.48 0.130 230); }
 .acc-conf { font-family: var(--font-mono); font-size: 8px; text-transform: uppercase; letter-spacing: 0.04em;
   padding: 0 4px; border-radius: 999px; border: 1px solid currentColor; }
-.acc-conf--pos { color: oklch(0.80 0.16 150); } .acc-conf--warm { color: oklch(0.80 0.14 75); } .acc-conf--bad { color: oklch(0.72 0.18 25); }
-.acc-gap { font-family: var(--font-mono); font-size: 9px; color: oklch(0.78 0.16 70); font-style: italic; }
+.acc-conf--pos { color: oklch(0.48 0.160 150); } .acc-conf--warm { color: oklch(0.48 0.140 75); } .acc-conf--bad { color: oklch(0.48 0.180 25); }
+.acc-gap { font-family: var(--font-mono); font-size: 9px; color: oklch(0.48 0.160 70); font-style: italic; }
 .dev-rail { border-left: 2px solid var(--border-strong); padding-left: 0.7rem; display: flex; flex-direction: column; gap: 0.55rem; }
 .dev-ev { position: relative; }
-.dev-ev::before { content: ""; position: absolute; left: calc(-0.7rem - 5px); top: 4px; width: 7px; height: 7px; border-radius: 50%; background: currentColor; box-shadow: 0 0 0 3px oklch(0.165 0 0); }
-.dev-stage--sanction { color: oklch(0.80 0.13 200); } .dev-stage--release { color: oklch(0.80 0.16 162); }
-.dev-stage--delay { color: oklch(0.80 0.14 60); } .dev-stage--shortfall { color: oklch(0.80 0.15 45); }
-.dev-stage--audit_flag { color: oklch(0.78 0.16 35); } .dev-stage--cag_para { color: oklch(0.74 0.18 28); }
-.dev-stage--action { color: oklch(0.80 0.14 285); } .dev-stage--outcome { color: oklch(0.82 0.16 150); }
-.dev-stage--implementation { color: oklch(0.78 0.10 230); } .dev-stage--investigation { color: oklch(0.74 0.18 20); }
+.dev-ev::before { content: ""; position: absolute; left: calc(-0.7rem - 5px); top: 4px; width: 7px; height: 7px; border-radius: 50%; background: currentColor; box-shadow: 0 0 0 3px oklch(0.985 0 0); }
+.dev-stage--sanction { color: oklch(0.48 0.130 200); } .dev-stage--release { color: oklch(0.48 0.160 162); }
+.dev-stage--delay { color: oklch(0.48 0.140 60); } .dev-stage--shortfall { color: oklch(0.48 0.150 45); }
+.dev-stage--audit_flag { color: oklch(0.48 0.160 35); } .dev-stage--cag_para { color: oklch(0.48 0.180 28); }
+.dev-stage--action { color: oklch(0.48 0.140 285); } .dev-stage--outcome { color: oklch(0.48 0.160 150); }
+.dev-stage--implementation { color: oklch(0.48 0.100 230); } .dev-stage--investigation { color: oklch(0.48 0.180 20); }
 .dev-ev-top { display: flex; gap: 0.5rem; align-items: baseline; }
 .dev-date { font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); }
 .dev-stage { font-family: var(--font-mono); font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.04em; }
 .dev-title { font-size: 11.5px; font-weight: 600; color: var(--foreground); margin-top: 1px; line-height: 1.35; }
 .dev-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin-top: 0.25rem; }
 .dev-conf { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.04em; text-transform: uppercase; padding: 1px 6px; border-radius: 999px; border: 1px solid currentColor; }
-.dev-conf--pos { color: oklch(0.80 0.16 150); } .dev-conf--warm { color: oklch(0.80 0.14 60); } .dev-conf--bad { color: oklch(0.76 0.16 28); }
-.ev-amt { font-family: var(--font-mono); font-size: 9.5px; color: oklch(0.82 0.16 70); }
-.ev-gap { font-family: var(--font-mono); font-size: 8.5px; color: oklch(0.78 0.16 70); font-style: italic; }
+.dev-conf--pos { color: oklch(0.48 0.160 150); } .dev-conf--warm { color: oklch(0.48 0.140 60); } .dev-conf--bad { color: oklch(0.48 0.160 28); }
+.ev-amt { font-family: var(--font-mono); font-size: 9.5px; color: oklch(0.48 0.160 70); }
+.ev-gap { font-family: var(--font-mono); font-size: 8.5px; color: oklch(0.48 0.160 70); font-style: italic; }
 .ev-news { display: flex; flex-direction: column; gap: 0.25rem; margin-top: 0.4rem; }
-.ev-news-item { display: flex; flex-direction: column; font-family: var(--font-mono); font-size: 9px; color: oklch(0.74 0.16 75); text-decoration: none; padding: 0.25rem 0.4rem; border: 1px solid var(--border); border-radius: var(--radius-sm); }
+.ev-news-item { display: flex; flex-direction: column; font-family: var(--font-mono); font-size: 9px; color: oklch(0.48 0.160 75); text-decoration: none; padding: 0.25rem 0.4rem; border: 1px solid var(--border); border-radius: var(--radius-sm); }
 .ev-news-item:hover { border-color: oklch(0.74 0.16 75 / 0.5); }
 .ev-news-snip { color: var(--muted-foreground); font-family: var(--font-sans); font-size: 10px; line-height: 1.4; margin-top: 2px; }
 
 /* ───────── District dimensions (language, etc.) ───────── */
 .dim-list { display: flex; flex-direction: column; gap: 0.3rem; }
-.dim-row { display: flex; gap: 0.6rem; align-items: baseline; font-size: 11.5px; padding: 0.3rem 0; border-bottom: 1px solid oklch(0.22 0 0); }
+.dim-row { display: flex; gap: 0.6rem; align-items: baseline; font-size: 11.5px; padding: 0.3rem 0; border-bottom: 1px solid oklch(0.94 0 0); }
 .dim-key { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted-foreground); min-width: 4.5rem; }
 .dim-val { color: var(--foreground); line-height: 1.5; }
 .dim-val b { font-weight: 600; }
 /* An explicit "no figure" value — muted so a gap reads as absent, not as data. */
 .dim-val--gap { color: var(--muted-foreground); font-style: italic; }
-.dim-gap { font-family: var(--font-mono); font-size: 9px; color: oklch(0.78 0.16 70); font-style: italic; }
+.dim-gap { font-family: var(--font-mono); font-size: 9px; color: oklch(0.48 0.160 70); font-style: italic; }
 .dim-src { color: var(--muted-foreground); cursor: help; font-size: 10px; margin-left: 2px; }
 .dim-align { font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.03em; padding: 1px 6px; border-radius: 999px; border: 1px solid currentColor; cursor: help; }
-.dim-align-yes { color: oklch(0.80 0.16 150); } .dim-align-no { color: oklch(0.76 0.16 28); } .dim-align-neutral { color: var(--muted-foreground); }
+.dim-align-yes { color: oklch(0.48 0.160 150); } .dim-align-no { color: oklch(0.48 0.160 28); } .dim-align-neutral { color: var(--muted-foreground); }
 .dim-geo-tag { font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.03em; padding: 1px 6px; border-radius: 999px; border: 1px solid currentColor; margin-right: 2px; cursor: help; }
-.dim-geo-coast { color: oklch(0.78 0.13 200); } .dim-geo-flood { color: oklch(0.74 0.16 250); } .dim-geo-terrain { color: oklch(0.80 0.10 90); text-transform: capitalize; }
+.dim-geo-coast { color: oklch(0.48 0.130 200); } .dim-geo-flood { color: oklch(0.48 0.160 250); } .dim-geo-terrain { color: oklch(0.48 0.100 90); text-transform: capitalize; }
 .dim-row--note { border-bottom: none; padding-top: 0.15rem; }
 .dim-hinder { font-size: 10.5px; line-height: 1.5; color: var(--muted-foreground); font-style: italic; }
 .dim-unit { font-size: 8.5px; color: var(--muted-foreground); margin-left: 1px; }
 .dim-tier { font-family: var(--font-mono); font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.03em; padding: 1px 6px; border-radius: 999px; border: 1px solid currentColor; margin-left: 3px; }
-.dim-tier--high { color: oklch(0.80 0.15 150); } .dim-tier--upper-middle { color: oklch(0.80 0.12 175); }
-.dim-tier--middle { color: oklch(0.80 0.12 90); } .dim-tier--lower-middle { color: oklch(0.80 0.13 60); }
-.dim-tier--low { color: oklch(0.76 0.16 30); }
+.dim-tier--high { color: oklch(0.48 0.150 150); } .dim-tier--upper-middle { color: oklch(0.48 0.120 175); }
+.dim-tier--middle { color: oklch(0.48 0.120 90); } .dim-tier--lower-middle { color: oklch(0.48 0.130 60); }
+.dim-tier--low { color: oklch(0.48 0.160 30); }
 /* Number-plate chip for the vehicles / RTO dimension. */
 .dim-plate { font-family: var(--font-mono); font-size: 9.5px; font-weight: 600; letter-spacing: 0.04em;
-  color: oklch(0.16 0 0); background: oklch(0.92 0.02 110); padding: 1px 5px; border-radius: 3px;
-  border: 1px solid oklch(0.16 0 0); margin: 0 2px 2px 0; display: inline-block; }
+  color: oklch(0.985 0 0); background: oklch(0.92 0.02 110); padding: 1px 5px; border-radius: 3px;
+  border: 1px solid oklch(0.985 0 0); margin: 0 2px 2px 0; display: inline-block; }
 /* Airport class chip for the aviation dimension. */
 .dim-air { font-family: var(--font-mono); font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.03em;
   padding: 1px 6px; border-radius: 999px; border: 1px solid currentColor; margin-left: 4px; }
-.dim-air--international { color: oklch(0.78 0.14 210); }
-.dim-air--customs { color: oklch(0.80 0.12 160); }
-.dim-air--domestic { color: oklch(0.78 0.10 90); }
+.dim-air--international { color: oklch(0.48 0.140 210); }
+.dim-air--customs { color: oklch(0.48 0.120 160); }
+.dim-air--domestic { color: oklch(0.48 0.100 90); }
 /* Legal-zone headline — "what can be built here" leads the geography section */
 .dim-row--zone { border-bottom: none; padding-bottom: 0.15rem; }
 .zone-badge {
@@ -1436,43 +1467,43 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 }
 .zone-legal { font-size: 10.5px; line-height: 1.5; color: var(--muted-foreground); margin-top: 3px; }
 .geo-stats { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
-.geo-stats b { color: oklch(0.84 0.12 200); font-weight: 600; }
-.geo-tl-subj { font-size: 10.5px; color: oklch(0.82 0.10 200); }
+.geo-stats b { color: oklch(0.48 0.120 200); font-weight: 600; }
+.geo-tl-subj { font-size: 10.5px; color: oklch(0.48 0.100 200); }
 .geo-tl-pt { font-family: var(--font-mono); font-size: 10px; }
 .geo-tl-arrow { color: var(--muted-foreground); margin: 0 4px; }
 .geo-tl-unit { color: var(--muted-foreground); font-size: 9px; }
-.geo-tl-event { color: oklch(0.76 0.16 28); }
-.geo-tl-src { color: oklch(0.72 0.13 250); text-decoration: none; margin-left: 2px; }
+.geo-tl-event { color: oklch(0.48 0.160 28); }
+.geo-tl-src { color: oklch(0.48 0.130 250); text-decoration: none; margin-left: 2px; }
 .geo-tl-range { font-size: 9.5px; line-height: 1.4; color: var(--muted-foreground); font-style: italic; }
 .geo-enc-case { margin: 0.25rem 0; padding-left: 0.5rem; border-left: 2px solid oklch(0.55 0.14 28 / 0.5); }
-.geo-enc-type { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.03em; color: oklch(0.78 0.14 28); }
-.geo-enc-status { font-family: var(--font-mono); font-size: 8.5px; color: oklch(0.80 0.12 150); margin-left: 4px; }
+.geo-enc-type { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.03em; color: oklch(0.48 0.140 28); }
+.geo-enc-status { font-family: var(--font-mono); font-size: 8.5px; color: oklch(0.48 0.120 150); margin-left: 4px; }
 .geo-enc-ref { font-size: 9.5px; color: var(--muted-foreground); margin-top: 1px; }
-.geo-enc-ref a { color: oklch(0.72 0.13 250); }
+.geo-enc-ref a { color: oklch(0.48 0.130 250); }
 /* Prominent "built where water returns" encroachment cases */
-.dim-row--enc .dim-key { color: oklch(0.80 0.15 35); }
+.dim-row--enc .dim-key { color: oklch(0.48 0.150 35); }
 .geo-enc-case--rich { margin: 0.45rem 0; padding: 0.5rem 0.6rem; border-left: 3px solid oklch(0.62 0.19 32); border-radius: 0 6px 6px 0; background: oklch(0.22 0.05 32 / 0.28); }
 .geo-enc-top { line-height: 1.35; margin-bottom: 0.2rem; }
 .geo-enc-case--rich .geo-enc-type { font-size: 10px; }
-.geo-enc-wb { font-size: 0.82rem; font-weight: 600; color: oklch(0.86 0.10 220); }
+.geo-enc-wb { font-size: 0.82rem; font-weight: 600; color: oklch(0.48 0.100 220); }
 .geo-enc-yr { font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); }
 .geo-enc-detail { font-size: 0.82rem; line-height: 1.5; color: var(--foreground); margin: 0.15rem 0 0.3rem; }
 .geo-enc-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.7rem; }
 .geo-enc-case--rich .geo-enc-ref { font-size: 9.5px; margin-top: 0; }
-.geo-enc-why { font-size: 0.76rem; font-style: italic; line-height: 1.5; color: oklch(0.80 0.10 220); margin-top: 0.45rem; padding-top: 0.4rem; border-top: 1px dashed oklch(0.5 0.06 220 / 0.4); }
+.geo-enc-why { font-size: 0.76rem; font-style: italic; line-height: 1.5; color: oklch(0.48 0.100 220); margin-top: 0.45rem; padding-top: 0.4rem; border-top: 1px dashed oklch(0.5 0.06 220 / 0.4); }
 /* Four official-data risk layers (paleochannel / unsafe-zone / monsoon / encroach-zone) */
 .geo-sub { font-size: 9.5px; line-height: 1.45; color: var(--muted-foreground); margin: 1px 0; }
-.geo-why { font-size: 9.5px; line-height: 1.45; color: oklch(0.80 0.13 40); margin-top: 1px; }
-.geo-paleo-river { font-family: var(--font-mono); font-size: 9.5px; color: oklch(0.80 0.12 210); }
-.geo-unsafe-kind { font-family: var(--font-mono); font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.03em; color: oklch(0.80 0.15 25); }
-.geo-monsoon-season { font-family: var(--font-mono); font-size: 9px; color: oklch(0.80 0.12 250); }
+.geo-why { font-size: 9.5px; line-height: 1.45; color: oklch(0.48 0.130 40); margin-top: 1px; }
+.geo-paleo-river { font-family: var(--font-mono); font-size: 9.5px; color: oklch(0.48 0.120 210); }
+.geo-unsafe-kind { font-family: var(--font-mono); font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.03em; color: oklch(0.48 0.150 25); }
+.geo-monsoon-season { font-family: var(--font-mono); font-size: 9px; color: oklch(0.48 0.120 250); }
 .ledger-statectx { font-size: 10px; line-height: 1.45; color: var(--muted-foreground); margin-top: 0.35rem; padding-left: 0.5rem; border-left: 2px solid oklch(0.5 0.08 250 / 0.5); }
-.ledger-statectx-tag { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.05em; text-transform: uppercase; color: oklch(0.78 0.10 250); margin-right: 0.3rem; }
+.ledger-statectx-tag { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.05em; text-transform: uppercase; color: oklch(0.48 0.100 250); margin-right: 0.3rem; }
 .roster-list { display: flex; flex-direction: column; gap: 0.25rem; }
 .roster-row {
   display: flex; align-items: baseline; gap: 0.5rem;
   font-size: 11.5px; padding: 0.25rem 0;
-  border-bottom: 1px solid oklch(0.22 0 0);
+  border-bottom: 1px solid oklch(0.94 0 0);
 }
 .roster-name { font-weight: 600; color: var(--foreground); }
 .roster-post { font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); }
@@ -1488,7 +1519,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 
 /* Interactive charts */
 .ledger-chart {
-  background: oklch(0.17 0 0);
+  background: oklch(0.985 0 0);
   border: 1px solid var(--border);
   border-radius: 5px;
   padding: 0.5rem 0.55rem;
@@ -1512,7 +1543,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   position: fixed;
   z-index: 9999;
   pointer-events: none;
-  background: oklch(0.12 0 0 / 0.97);
+  background: oklch(1 0 0 / 0.97);
   border: 1px solid var(--border-strong);
   border-radius: 4px;
   padding: 0.35rem 0.5rem;
@@ -1542,7 +1573,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   flex-wrap: wrap;
   gap: 0.6rem;
   padding: 0.3rem 0.4rem;
-  background: oklch(0.16 0 0);
+  background: oklch(0.985 0 0);
   border: 1px solid var(--border);
   border-radius: 4px;
 }
@@ -1564,7 +1595,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 /* Industrial plants — district economic base */
 .plants-list { display: flex; flex-direction: column; gap: 0.4rem; }
 .plant-row {
-  background: oklch(0.18 0 0);
+  background: oklch(0.97 0 0);
   border: 1px solid var(--border);
   border-left: 2px solid oklch(0.7 0.13 250);
   border-radius: 4px;
@@ -1577,7 +1608,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   font-size: 9px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: oklch(0.72 0.13 250);
+  color: oklch(0.48 0.130 250);
 }
 .plant-meta { display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap; margin-top: 0.3rem; }
 .plant-tag {
@@ -1585,25 +1616,25 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   font-size: 9px;
   padding: 1px 6px;
   border-radius: 3px;
-  background: oklch(0.22 0 0);
+  background: oklch(0.94 0 0);
   color: var(--muted-foreground);
 }
-.plant-tag--cap { background: oklch(0.3 0.08 250); color: oklch(0.82 0.1 250); }
+.plant-tag--cap { background: oklch(0.3 0.08 250); color: oklch(0.48 0.100 250); }
 .plant-note { font-size: 10.5px; line-height: 1.45; color: var(--muted-foreground); margin-top: 0.3rem; }
-.plant-note--emp { color: oklch(0.75 0.12 150); }
+.plant-note--emp { color: oklch(0.48 0.120 150); }
 .plant-founded {
   font-family: var(--font-mono);
   font-size: 9px;
   padding: 0 5px;
   border-radius: 3px;
   background: oklch(0.26 0.04 50);
-  color: oklch(0.82 0.12 60);
+  color: oklch(0.48 0.120 60);
 }
 
 /* Industrial-heritage timeline */
 .heritage-timeline {
   display: flex; flex-direction: column; gap: 0.25rem;
-  background: oklch(0.17 0 0);
+  background: oklch(0.985 0 0);
   border: 1px solid var(--border);
   border-radius: 5px;
   padding: 0.5rem 0.6rem;
@@ -1618,7 +1649,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 .heritage-dot {
   position: absolute; top: 50%; width: 8px; height: 8px;
   border-radius: 50%; transform: translate(-50%, -50%);
-  border: 1px solid oklch(0.145 0 0);
+  border: 1px solid oklch(0.985 0 0);
 }
 .heritage-name { font-size: 10px; color: var(--muted-foreground); flex: 0 0 38%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .heritage-legend { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 0.35rem; }
@@ -1641,14 +1672,14 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   padding: 1px 6px;
   border-radius: 3px;
   background: oklch(0.26 0.05 50);
-  color: oklch(0.85 0.1 60);
+  color: oklch(0.48 0.100 60);
   white-space: nowrap;
 }
-.plant-control--indian_managing_agency { background: oklch(0.28 0.08 160); color: oklch(0.85 0.13 160); }
+.plant-control--indian_managing_agency { background: oklch(0.28 0.08 160); color: oklch(0.48 0.130 160); }
 .plant-control--british_colonial_parent,
-.plant-control--colonial_state { background: oklch(0.3 0.1 30); color: oklch(0.85 0.12 40); }
-.plant-control--pre_colonial_state { background: oklch(0.28 0.09 300); color: oklch(0.85 0.12 300); }
-.plant-control--central_psu { background: oklch(0.28 0.07 250); color: oklch(0.84 0.12 250); }
+.plant-control--colonial_state { background: oklch(0.3 0.1 30); color: oklch(0.48 0.120 40); }
+.plant-control--pre_colonial_state { background: oklch(0.28 0.09 300); color: oklch(0.48 0.120 300); }
+.plant-control--central_psu { background: oklch(0.28 0.07 250); color: oklch(0.48 0.120 250); }
 .plant-founder-by { color: var(--foreground); }
 .plant-lineage-chain { color: var(--muted-foreground); flex-basis: 100%; }
 .plant-agency-note {
@@ -1660,7 +1691,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 
 /* Baseline (skeleton) district state */
 .ledger-baseline {
-  background: oklch(0.17 0 0);
+  background: oklch(0.985 0 0);
   border: 1px dashed var(--border-strong);
   border-radius: 5px;
   padding: 0.6rem 0.7rem;
@@ -1683,7 +1714,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   font-size: 10.5px;
   line-height: 1.45;
   color: var(--muted-foreground);
-  background: oklch(0.18 0 0);
+  background: oklch(0.97 0 0);
   border-left: 2px solid oklch(0.7 0.13 250);
   border-radius: 3px;
   padding: 0.4rem 0.5rem;
@@ -1698,12 +1729,12 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   font-size: 10px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: oklch(0.78 0.16 70);
+  color: oklch(0.48 0.160 70);
   display: flex; align-items: center; gap: 0.4rem;
 }
 .feat-count {
   background: oklch(0.78 0.16 70 / 0.18);
-  color: oklch(0.85 0.16 75);
+  color: oklch(0.48 0.160 75);
   border-radius: 10px;
   padding: 0 6px;
   font-size: 9px;
@@ -1713,17 +1744,17 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 .feat-card {
   display: flex; flex-direction: column; gap: 1px;
   text-align: left;
-  background: oklch(0.18 0 0);
+  background: oklch(0.97 0 0);
   border: 1px solid var(--border);
   border-radius: 5px;
   padding: 0.45rem 0.55rem;
   cursor: pointer;
   transition: border-color .15s, background .15s, transform .1s;
 }
-.feat-card:hover { border-color: oklch(0.78 0.16 70); background: oklch(0.21 0 0); transform: translateY(-1px); }
+.feat-card:hover { border-color: oklch(0.78 0.16 70); background: oklch(0.94 0 0); transform: translateY(-1px); }
 .feat-name { font-weight: 600; font-size: 12.5px; color: var(--foreground); }
 .feat-sub { font-family: var(--font-mono); font-size: 8.5px; color: var(--muted-foreground); text-transform: uppercase; letter-spacing: 0.03em; }
-.feat-stats { font-family: var(--font-mono); font-size: 10px; color: oklch(0.78 0.16 70); margin-top: 2px; }
+.feat-stats { font-family: var(--font-mono); font-size: 10px; color: oklch(0.48 0.160 70); margin-top: 2px; }
 .feat-method {
   margin-top: 0.55rem;
   width: 100%;
@@ -1738,7 +1769,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   cursor: pointer;
   transition: color .15s, border-color .15s;
 }
-.feat-method:hover { color: oklch(0.85 0.16 75); border-color: oklch(0.78 0.16 70); }
+.feat-method:hover { color: oklch(0.48 0.160 75); border-color: oklch(0.48 0.160 70); }
 
 /* Methodology overlay */
 .method-overlay {
@@ -1749,7 +1780,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 }
 .method-box {
   position: relative;
-  background: oklch(0.16 0 0);
+  background: oklch(0.985 0 0);
   border: 1px solid var(--border-strong);
   border-radius: 8px;
   max-width: 560px;
@@ -1759,10 +1790,10 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   box-shadow: 0 10px 40px oklch(0 0 0 / 0.6);
 }
 .method-box h2 { font-size: 17px; margin: 0 0 0.5rem; color: var(--foreground); }
-.method-box h3 { font-size: 12px; font-family: var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; color: oklch(0.78 0.16 70); margin: 1rem 0 0.3rem; }
+.method-box h3 { font-size: 12px; font-family: var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; color: oklch(0.48 0.160 70); margin: 1rem 0 0.3rem; }
 .method-box p { font-size: 12.5px; line-height: 1.55; color: var(--muted-foreground); margin: 0.4rem 0; }
 .method-box b { color: var(--foreground); }
-.method-box code { font-family: var(--font-mono); font-size: 11px; color: oklch(0.85 0.1 160); }
+.method-box code { font-family: var(--font-mono); font-size: 11px; color: oklch(0.48 0.100 160); }
 .method-tiers { margin: 0.3rem 0 0.3rem 1rem; padding: 0; }
 .method-tiers li { font-size: 12px; line-height: 1.6; color: var(--muted-foreground); }
 .method-rule {
@@ -1772,7 +1803,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   padding: 0.5rem 0.6rem !important;
 }
 .method-foot { font-size: 11px !important; opacity: 0.8; margin-top: 0.9rem !important; }
-.method-foot a { color: oklch(0.78 0.16 70); }
+.method-foot a { color: oklch(0.48 0.160 70); }
 .method-close {
   position: absolute; top: 0.6rem; right: 0.8rem;
   background: transparent; border: none;
@@ -1792,13 +1823,13 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   padding: 2px 8px;
   border-radius: 4px;
   border: 1px solid var(--border);
-  background: oklch(0.18 0 0);
+  background: oklch(0.97 0 0);
   color: var(--foreground);
   cursor: pointer;
   transition: border-color .15s, background .15s;
 }
 .dmt-btn:hover:not(:disabled) { border-color: var(--border-strong); }
-.dmt-btn.on { background: oklch(0.78 0.16 70 / 0.18); border-color: oklch(0.78 0.16 70); color: oklch(0.85 0.16 75); }
+.dmt-btn.on { background: oklch(0.78 0.16 70 / 0.18); border-color: oklch(0.48 0.160 70); color: oklch(0.48 0.160 75); }
 .dmt-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 .dmt-facets { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0 4px; padding-top: 5px; border-top: 1px dashed var(--border); }
 .dmt-facet {
@@ -1807,9 +1838,9 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   cursor: pointer; transition: border-color .15s, background .15s, color .15s;
 }
 .dmt-facet:hover { border-color: var(--border-strong); }
-.dmt-facet.on { background: oklch(0.72 0.13 200 / 0.20); border-color: oklch(0.72 0.13 200); color: oklch(0.86 0.11 200); }
+.dmt-facet.on { background: oklch(0.72 0.13 200 / 0.20); border-color: oklch(0.48 0.130 200); color: oklch(0.48 0.110 200); }
 .india-pc {
-  background: oklch(0.17 0 0);
+  background: oklch(0.985 0 0);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 0.55rem 0.7rem;
@@ -1885,7 +1916,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   cursor: pointer;
   transition: background 0.1s ease;
 }
-.india-rank-row:hover { background: oklch(0.18 0 0); }
+.india-rank-row:hover { background: oklch(0.97 0 0); }
 .india-rank-row:last-child { border-bottom: 0; }
 .india-rank-row .rnk {
   font-family: var(--font-mono);
@@ -1905,7 +1936,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
    sourced-or-gap discipline made visible (see "Gaps logged"). */
 .sb-bar {
   display: flex; align-items: center; flex-wrap: wrap; gap: 0.2rem 1.1rem;
-  padding: 0.35rem var(--pad-x); background: oklch(0.125 0 0);
+  padding: 0.35rem var(--pad-x); background: oklch(1 0 0);
   border-bottom: 1px solid var(--border-strong); font-family: var(--font-mono);
 }
 .sb-live {
@@ -1953,9 +1984,9 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 .en-hero-name em { font-style: normal; color: var(--en-accent); }
 .en-hero-tag { font-family: var(--font-italic); font-style: italic; font-size: clamp(1rem, 2vw, 1.35rem); color: var(--foreground); margin: 0 0 1.2rem; opacity: 0.92; }
 .en-hero-lede { font-size: 15px; line-height: 1.7; color: oklch(0.86 0 0); max-width: 720px; margin: 0 0 1.3rem; }
-.en-factsonly { display: inline-block; font-size: 12.5px; line-height: 1.5; color: oklch(0.86 0.05 40); background: oklch(0.72 0.17 30 / 0.12); border: 1px solid oklch(0.72 0.17 30 / 0.4); border-radius: var(--radius-sm); padding: 0.6rem 0.9rem; margin-bottom: 1.3rem; }
+.en-factsonly { display: inline-block; font-size: 12.5px; line-height: 1.5; color: oklch(0.48 0.050 40); background: oklch(0.72 0.17 30 / 0.12); border: 1px solid oklch(0.72 0.17 30 / 0.4); border-radius: var(--radius-sm); padding: 0.6rem 0.9rem; margin-bottom: 1.3rem; }
 .en-factsonly em { font-family: var(--font-italic); font-style: italic; }
-.en-hero-stat { display: inline-flex; align-items: baseline; gap: 0.7rem; padding: 0.7rem 1.1rem; border: 1px solid var(--border-strong); border-left: 3px solid var(--en-accent); border-radius: var(--radius-sm); background: oklch(0.16 0 0); }
+.en-hero-stat { display: inline-flex; align-items: baseline; gap: 0.7rem; padding: 0.7rem 1.1rem; border: 1px solid var(--border-strong); border-left: 3px solid var(--en-accent); border-radius: var(--radius-sm); background: oklch(0.985 0 0); }
 .en-stat-value { font-family: var(--font-mono); font-size: 24px; font-weight: 500; color: var(--en-accent); letter-spacing: -0.01em; }
 .en-stat-label { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.03em; text-transform: uppercase; color: var(--muted-foreground); }
 
@@ -1966,7 +1997,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 
 /* what it maps */
 .en-maps { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.75rem; }
-.en-map { border: 1px solid var(--border); border-radius: var(--radius-sm); background: oklch(0.145 0 0); padding: 0.9rem 1rem; }
+.en-map { border: 1px solid var(--border); border-radius: var(--radius-sm); background: oklch(0.985 0 0); padding: 0.9rem 1rem; }
 .en-map b { display: block; font-size: 13.5px; color: var(--foreground); margin-bottom: 0.3rem; }
 .en-map span { display: block; font-size: 12.5px; line-height: 1.55; color: var(--muted-foreground); }
 
@@ -1979,7 +2010,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 .en-how-body p { font-size: 13.5px; line-height: 1.65; color: oklch(0.82 0 0); margin: 0; }
 
 /* worked example */
-.en-example { border: 1px solid var(--border); border-left: 3px solid var(--en-accent); border-radius: var(--radius-sm); background: linear-gradient(180deg, color-mix(in oklch, var(--en-accent) 7%, oklch(0.145 0 0)) 0%, oklch(0.145 0 0) 100%); padding: 1.3rem 1.4rem; }
+.en-example { border: 1px solid var(--border); border-left: 3px solid var(--en-accent); border-radius: var(--radius-sm); background: linear-gradient(180deg, color-mix(in oklch, var(--en-accent) 7%, oklch(0.985 0 0)) 0%, oklch(0.985 0 0) 100%); padding: 1.3rem 1.4rem; }
 .en-example-k { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--en-accent); margin-bottom: 0.5rem; }
 .en-example-title { font-family: var(--font-display); font-weight: 400; font-size: 20px; letter-spacing: -0.01em; margin: 0 0 0.5rem; color: var(--foreground); }
 .en-example-body { font-size: 13.5px; line-height: 1.65; color: oklch(0.86 0 0); margin: 0; max-width: 760px; }
@@ -1996,14 +2027,14 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 .en-sources li { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem 0; border-bottom: 1px dashed oklch(0.985 0 0 / 0.07); font-size: 13px; color: var(--foreground); }
 .en-sources li:last-child { border-bottom: 0; }
 .en-tier { font-family: var(--font-mono); font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 3px; flex: 0 0 auto; }
-.en-tier-1 { background: oklch(0.72 0.15 155 / 0.18); color: oklch(0.82 0.15 155); }
-.en-tier-2 { background: oklch(0.7 0.12 200 / 0.18); color: oklch(0.78 0.12 200); }
-.en-tier-3 { background: oklch(0.78 0.16 70 / 0.18); color: oklch(0.84 0.16 72); }
-.en-tier-4 { background: oklch(0.7 0.18 30 / 0.18); color: oklch(0.82 0.16 40); }
+.en-tier-1 { background: oklch(0.72 0.15 155 / 0.18); color: oklch(0.48 0.150 155); }
+.en-tier-2 { background: oklch(0.7 0.12 200 / 0.18); color: oklch(0.48 0.120 200); }
+.en-tier-3 { background: oklch(0.78 0.16 70 / 0.18); color: oklch(0.48 0.160 72); }
+.en-tier-4 { background: oklch(0.7 0.18 30 / 0.18); color: oklch(0.48 0.160 40); }
 .en-tier-label { margin-left: auto; font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
 .en-prov { font-family: var(--font-mono); font-size: 11.5px; color: var(--en-accent); border-bottom-color: color-mix(in oklch, var(--en-accent) 40%, transparent); }
 .en-rels { display: flex; flex-direction: column; gap: 0.6rem; }
-.en-rel { display: flex; align-items: center; gap: 0.7rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: oklch(0.145 0 0); padding: 0.7rem 0.9rem; text-decoration: none; }
+.en-rel { display: flex; align-items: center; gap: 0.7rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: oklch(0.985 0 0); padding: 0.7rem 0.9rem; text-decoration: none; }
 .en-rel:hover { border-color: var(--en-accent); }
 .en-rel-icon { font-size: 18px; }
 .en-rel-body { display: flex; flex-direction: column; }
@@ -2013,7 +2044,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 
 /* prev / next */
 .en-seq { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
-.en-seq a { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.9rem 1.1rem; background: oklch(0.145 0 0); text-decoration: none; display: flex; flex-direction: column; gap: 0.2rem; }
+.en-seq a { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.9rem 1.1rem; background: oklch(0.985 0 0); text-decoration: none; display: flex; flex-direction: column; gap: 0.2rem; }
 .en-seq a:hover { border-color: var(--border-strong); }
 .en-seq-next { text-align: right; }
 .en-seq-k { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted-foreground); }
@@ -2026,7 +2057,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 
 /* ============ What's new strip (whats-new.js) ============ */
 .wn-strip {
-  display: flex; align-items: stretch; gap: 0; background: oklch(0.11 0 0);
+  display: flex; align-items: stretch; gap: 0; background: oklch(1 0 0);
   border-bottom: 1px solid var(--border-strong); font-family: var(--font-mono);
   overflow: hidden; position: relative;
 }
@@ -2034,7 +2065,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 .wn-label {
   display: inline-flex; align-items: center; gap: 0.4rem; flex: 0 0 auto;
   padding: 0 0.9rem; font-size: 9.5px; letter-spacing: 0.09em; font-weight: 600;
-  color: var(--warm); background: oklch(0.14 0 0); border: 0; border-right: 1px solid var(--border-strong);
+  color: var(--warm); background: oklch(0.985 0 0); border: 0; border-right: 1px solid var(--border-strong);
   cursor: default; white-space: nowrap;
 }
 .wn-live-dot {
@@ -2053,17 +2084,17 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   border: 0; border-right: 1px solid oklch(0.985 0 0 / 0.06); font-size: 12px;
   color: var(--foreground); text-decoration: none;
 }
-.wn-item:hover { background: oklch(0.16 0 0); border-color: oklch(0.985 0 0 / 0.06); }
+.wn-item:hover { background: oklch(0.985 0 0); border-color: oklch(0.985 0 0 / 0.06); }
 .wn-tag {
   font-size: 8.5px; letter-spacing: 0.06em; font-weight: 700; padding: 2px 6px;
   border-radius: 3px; flex: 0 0 auto;
 }
 .wn-tag-data, .wn-tag-source, .wn-tag-fix, .wn-tag-new {
-  background: oklch(0.72 0.15 155 / 0.18); color: oklch(0.82 0.15 155);
+  background: oklch(0.72 0.15 155 / 0.18); color: oklch(0.48 0.150 155);
 }
-.wn-tag-fix { background: oklch(0.7 0.18 30 / 0.18); color: oklch(0.82 0.16 40); }
-.wn-tag-new { background: oklch(0.7 0.12 260 / 0.2); color: oklch(0.82 0.13 265); }
-.wn-tag-news { background: oklch(0.78 0.16 70 / 0.16); color: oklch(0.84 0.16 72); }
+.wn-tag-fix { background: oklch(0.7 0.18 30 / 0.18); color: oklch(0.48 0.160 40); }
+.wn-tag-new { background: oklch(0.7 0.12 260 / 0.2); color: oklch(0.48 0.130 265); }
+.wn-tag-news { background: oklch(0.78 0.16 70 / 0.16); color: oklch(0.48 0.160 72); }
 .wn-place { color: var(--muted-foreground); font-size: 10.5px; letter-spacing: 0.02em; }
 .wn-title { color: var(--foreground); }
 .wn-update .wn-title { font-weight: 500; }
@@ -2072,15 +2103,15 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 .wn-more {
   flex: 0 0 auto; display: inline-flex; align-items: center; padding: 0 0.9rem;
   font-size: 9.5px; letter-spacing: 0.05em; color: var(--muted-foreground);
-  background: oklch(0.14 0 0); border: 0; border-left: 1px solid var(--border-strong);
+  background: oklch(0.985 0 0); border: 0; border-left: 1px solid var(--border-strong);
   text-decoration: none; white-space: nowrap;
 }
 .wn-more:hover { color: var(--foreground); }
 .wn-close {
   flex: 0 0 auto; width: 30px; border: 0; border-left: 1px solid var(--border-strong);
-  background: oklch(0.14 0 0); color: var(--muted-foreground); font-size: 15px; cursor: pointer;
+  background: oklch(0.985 0 0); color: var(--muted-foreground); font-size: 15px; cursor: pointer;
 }
-.wn-close:hover { color: var(--foreground); background: oklch(0.17 0 0); }
+.wn-close:hover { color: var(--foreground); background: oklch(0.985 0 0); }
 .wn-viewport:hover .wn-track, .wn-track:focus-within { animation-play-state: paused; }
 @media (prefers-reduced-motion: reduce) {
   .wn-track { animation: none; padding-left: 0; overflow-x: auto; }
@@ -2097,11 +2128,11 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 .cp-overlay {
   position: fixed; inset: 0; z-index: 3000; display: flex; justify-content: center;
   align-items: flex-start; padding-top: 12vh;
-  background: oklch(0.1 0 0 / 0.55); backdrop-filter: blur(3px);
+  background: oklch(1 0 0 / 0.55); backdrop-filter: blur(3px);
 }
 .cp-box {
   width: min(620px, 92vw); max-height: 66vh; display: flex; flex-direction: column;
-  background: oklch(0.16 0 0); border: 1px solid var(--border-strong);
+  background: oklch(0.985 0 0); border: 1px solid var(--border-strong);
   border-radius: var(--radius-lg); box-shadow: 0 24px 70px oklch(0 0 0 / 0.6); overflow: hidden;
 }
 .cp-input {
@@ -2134,7 +2165,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 
 /* ============ District officials section (accountability layer) ============ */
 .doff-list { display: flex; flex-direction: column; gap: 0.5rem; }
-.doff-card { border: 1px solid var(--border); border-radius: var(--radius-sm); background: oklch(0.165 0 0); padding: 0.6rem 0.75rem; }
+.doff-card { border: 1px solid var(--border); border-radius: var(--radius-sm); background: oklch(0.985 0 0); padding: 0.6rem 0.75rem; }
 .doff-head { display: flex; align-items: baseline; gap: 0.5rem; }
 .doff-name { font-weight: 600; font-size: 0.9rem; color: var(--foreground); }
 .doff-svc { font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); text-transform: uppercase; letter-spacing: 0.04em; }
@@ -2153,7 +2184,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 .sd-pop-stats { display: flex; flex-direction: column; gap: 2px; font-size: 11px; margin-bottom: 6px; }
 .sd-pop-dim { opacity: 0.6; }
 .sd-pop-btn { font-family: var(--font-mono); font-size: 10px; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border-strong); background: oklch(0.22 0.01 250); color: var(--foreground); cursor: pointer; }
-.sd-pop-btn:hover { border-color: oklch(0.66 0.16 250); color: oklch(0.85 0.10 250); }
+.sd-pop-btn:hover { border-color: oklch(0.66 0.16 250); color: oklch(0.48 0.100 250); }
 .sd-pop-src { font-size: 9px; color: var(--muted-foreground); margin-top: 6px; }
 
 /* Map breadcrumb — always-visible "India › State › District" trail on the map */
@@ -2164,21 +2195,21 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 #map-crumb .crumb { border: none; background: none; color: var(--muted-foreground); cursor: pointer;
   padding: 2px 6px; border-radius: 999px; font: inherit; transition: color .12s, background .12s; }
 #map-crumb .crumb:hover { color: var(--foreground); background: oklch(0.25 0.01 250); }
-#map-crumb .crumb-here { color: oklch(0.86 0.15 76); cursor: default; }
+#map-crumb .crumb-here { color: oklch(0.48 0.150 76); cursor: default; }
 #map-crumb .crumb-here:hover { background: none; }
 #map-crumb .crumb-sep { color: var(--muted-foreground); opacity: 0.6; }
 
 /* Layer story — the side panel's explainer + ranking for whatever the map is colouring by */
 .layer-story { background: oklch(0.17 0.008 250); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; margin: 10px 0; }
 .layer-story .ls-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; }
-.layer-story .ls-head b { font-size: 13px; color: oklch(0.85 0.10 250); }
+.layer-story .ls-head b { font-size: 13px; color: oklch(0.48 0.100 250); }
 .layer-story .ls-desc { font-size: 11.5px; color: var(--muted-foreground); line-height: 1.45; }
 .layer-story .ls-top { margin: 8px 0 4px; padding-left: 1.4em; font-size: 12px; }
 .layer-story .ls-top li { margin: 2px 0; display: flex; align-items: baseline; gap: 6px; }
 .layer-story .ls-go, .layer-story .vs-go { border: none; background: none; padding: 0; color: var(--foreground); cursor: pointer; font: inherit; text-decoration: underline dotted; text-underline-offset: 2px; }
-.layer-story .ls-go:hover, .layer-story .vs-go:hover { color: oklch(0.85 0.10 250); }
+.layer-story .ls-go:hover, .layer-story .vs-go:hover { color: oklch(0.48 0.100 250); }
 .layer-story .ls-st { font-size: 10px; color: var(--muted-foreground); }
-.layer-story .ls-val { margin-left: auto; font-family: var(--font-mono); font-size: 10.5px; color: oklch(0.80 0.12 220); }
+.layer-story .ls-val { margin-left: auto; font-family: var(--font-mono); font-size: 10.5px; color: oklch(0.48 0.120 220); }
 .layer-story .ls-count { font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); margin-top: 2px; }
 .layer-story .ls-src { font-size: 9.5px; color: var(--muted-foreground); opacity: 0.8; margin-top: 6px; }
 
@@ -2191,12 +2222,12 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
    "risk" lenses read distinctly from the fiscal ones). */
 .ind-group-sep { width: 1px; align-self: stretch; margin: 2px 3px; background: var(--border-strong); flex: none; }
 .ind-btn--safety.active { background: oklch(0.62 0.20 25); border-color: oklch(0.62 0.20 25); color: oklch(0.99 0 0); }
-.ind-btn--safety:not(.active) { border-color: oklch(0.45 0.10 25 / 0.6); color: oklch(0.80 0.09 32); }
-.ind-btn--safety:not(.active):hover { border-color: oklch(0.62 0.18 25); color: oklch(0.86 0.12 32); }
+.ind-btn--safety:not(.active) { border-color: oklch(0.45 0.10 25 / 0.6); color: oklch(0.48 0.090 32); }
+.ind-btn--safety:not(.active):hover { border-color: oklch(0.62 0.18 25); color: oklch(0.48 0.120 32); }
 
 /* Safety & justice strip in the state detail — mirrors .india-gov-strip. */
 .india-safety-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4rem; margin-bottom: 0.6rem; }
-.sf-cell { background: oklch(0.18 0 0); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.45rem 0.6rem; position: relative; }
+.sf-cell { background: oklch(0.97 0 0); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.45rem 0.6rem; position: relative; }
 .sf-cell.is-gap { border-style: dashed; opacity: 0.82; }
 .sf-cell.is-unrest { border-color: oklch(0.55 0.16 30 / 0.7); background: oklch(0.20 0.03 30); }
 .sf-cell .label { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted-foreground); margin-bottom: 1px; display: flex; align-items: center; gap: 4px; }
@@ -2224,10 +2255,10 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 @keyframes unrestPulse { 0%,100% { stroke-opacity: 0.9; } 50% { stroke-opacity: 0.35; } }
 .leaflet-tooltip.unrest-tip { background: oklch(0.15 0.01 30 / 0.97); border: 1px solid oklch(0.5 0.14 30); color: var(--foreground); font-size: 11px; max-width: 260px; padding: 7px 9px; border-radius: 6px; box-shadow: 0 6px 20px oklch(0 0 0 / 0.5); }
 .leaflet-tooltip.unrest-tip::before { display: none; }
-.unrest-tip-h { font-weight: 600; color: oklch(0.84 0.13 40); margin-bottom: 4px; }
+.unrest-tip-h { font-weight: 600; color: oklch(0.48 0.130 40); margin-bottom: 4px; }
 .unrest-tip-spread { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
 .up-legend { font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); }
-.up-item { display: flex; align-items: flex-start; gap: 5px; font-size: 10px; color: oklch(0.86 0.01 250); line-height: 1.35; margin: 2px 0; }
+.up-item { display: flex; align-items: flex-start; gap: 5px; font-size: 10px; color: var(--muted-foreground); line-height: 1.35; margin: 2px 0; }
 .up-lean { width: 8px; height: 8px; border-radius: 2px; flex: none; margin-top: 3px; }
 .up-left { background: oklch(0.62 0.17 25); } .up-centre { background: oklch(0.72 0.02 250); }
 .up-right { background: oklch(0.62 0.15 250); } .up-gov { background: oklch(0.70 0.15 90); }
@@ -2237,7 +2268,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 /* Layers-panel: source micro-link + a hotspots section accent. */
 .mlp-src { margin-left: auto; font-size: 8px; }
 .mlp-src a { color: oklch(0.66 0.12 40); text-decoration: none; border-bottom: 1px dotted; }
-.mlp-src a:hover { color: oklch(0.80 0.13 40); }
+.mlp-src a:hover { color: oklch(0.48 0.130 40); }
 
 /* Patterns / relation block — wealth × crime × density percentile bars. */
 .india-pattern { display: flex; flex-direction: column; gap: 5px; margin-bottom: 0.4rem; }
@@ -2248,4 +2279,4 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 .pat-gap { position: absolute; left: 6px; top: -3px; font-size: 9px; color: var(--muted-foreground); }
 .pat-val { font-family: var(--font-mono); font-size: 10.5px; color: var(--foreground); white-space: nowrap; text-align: right; }
 .pat-rank { color: var(--muted-foreground); font-size: 9px; }
-.pat-insight { font-size: 11px; line-height: 1.45; color: oklch(0.84 0.05 60); background: oklch(0.22 0.03 60 / 0.35); border-left: 2px solid oklch(0.66 0.13 60); border-radius: 0 4px 4px 0; padding: 5px 8px; margin: 4px 0 6px; }
+.pat-insight { font-size: 11px; line-height: 1.45; color: oklch(0.48 0.050 60); background: oklch(0.22 0.03 60 / 0.35); border-left: 2px solid oklch(0.66 0.13 60); border-radius: 0 4px 4px 0; padding: 5px 8px; margin: 4px 0 6px; }
