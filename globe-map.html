@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Globe → Map — Bharat</title>
+  <meta name="description" content="Watch the globe unroll into a flat map — a live projection morph. Drag to rotate, scrub the slider, and see India's places located on both the sphere and the plane." />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .gm-wrap { max-width: 1100px; margin: 0 auto; padding: 1.4rem var(--pad-x) 4rem; }
+    .gm-head h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.8rem, 4vw, 2.8rem);
+      letter-spacing: -0.02em; margin: 0.2rem 0 0.4rem; }
+    .gm-head h1 em { font-style: italic; color: var(--accent); }
+    .gm-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.55; max-width: 70ch; margin: 0 0 1rem; }
+    .gm-stage { position: relative; border: 1px solid var(--border-strong); border-radius: var(--radius-lg);
+      background: radial-gradient(ellipse at 50% 35%, #1b1a20, #0f0e12); overflow: hidden; }
+    #gm-svg { display: block; width: 100%; height: auto; cursor: grab; touch-action: none; }
+    #gm-svg:active { cursor: grabbing; }
+    .gm-controls { position: absolute; left: 0; right: 0; bottom: 0; display: flex; align-items: center; gap: 1rem;
+      padding: 0.9rem 1.1rem; background: linear-gradient(transparent, rgba(10,9,12,0.85)); }
+    .gm-slider { flex: 1; accent-color: var(--accent); }
+    .gm-btn { font-family: var(--font-sans); font-weight: 600; font-size: 0.85rem; padding: 0.5rem 1.1rem;
+      border-radius: 999px; border: none; cursor: pointer; background: var(--accent); color: #fff; white-space: nowrap; }
+    .gm-btn:hover { background: var(--accent-ink); }
+    .gm-btn--ghost { background: transparent; color: #eee; border: 1px solid rgba(255,255,255,0.25); }
+    .gm-label { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase;
+      color: #b7b4ac; white-space: nowrap; min-width: 46px; text-align: center; }
+    .gm-note { font-size: 0.8rem; color: var(--muted-foreground); line-height: 1.6; margin-top: 1rem;
+      border-top: 1px solid var(--border); padding-top: 0.9rem; }
+    .gm-loading { position: absolute; inset: 0; display: grid; place-items: center; color: #b7b4ac;
+      font-family: var(--font-mono); font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div id="site-nav"></div>
+
+  <main class="gm-wrap">
+    <header class="gm-head">
+      <div class="ed-kicker">3D · geography</div>
+      <h1>Watch the globe <em>unroll</em> into a map.</h1>
+      <p>The same Earth, two ways of seeing it. Drag the slider — or hit play — and the sphere flattens
+      into a flat map through a live projection morph. Drag the Earth itself to spin it. The crimson
+      nodes are places in India, located on both the globe and the plane.</p>
+    </header>
+
+    <div class="gm-stage" id="gm-stage">
+      <div class="gm-loading" id="gm-loading">loading the Earth…</div>
+      <svg id="gm-svg" role="img" aria-label="A globe morphing into a flat world map"></svg>
+      <div class="gm-controls">
+        <button class="gm-btn" id="gm-play">▶ Unroll</button>
+        <span class="gm-label" id="gm-label">Globe</span>
+        <input type="range" class="gm-slider" id="gm-slider" min="0" max="100" value="0" />
+        <button class="gm-btn gm-btn--ghost" id="gm-reset">Reset spin</button>
+      </div>
+    </div>
+
+    <p class="gm-note">A vanilla reimplementation of the classic d3 projection morph — the map projection is
+    interpolated between an orthographic sphere and an equirectangular plane. World outlines: Natural Earth
+    (public domain) via world-atlas. Built for <a href="index.html">Bharat</a>.</p>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/d3-geo@3/dist/d3-geo.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
+  <script>
+  (function () {
+    "use strict";
+    var SVGNS = "http://www.w3.org/2000/svg";
+    var svg = document.getElementById("gm-svg");
+    var W = 900, H = 560;
+    svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+
+    var INK_LAND = "#2b2a31", LAND_STROKE = "#4a4954", GRAT = "#3a3942", SPHERE = "#5a5963", CRIMSON = "#d33a2c";
+
+    // major Indian places (lon, lat) — the crimson located nodes
+    var PLACES = [
+      { n: "Delhi", c: [77.1, 28.6] }, { n: "Mumbai", c: [72.9, 19.1] },
+      { n: "Kolkata", c: [88.4, 22.6] }, { n: "Chennai", c: [80.3, 13.1] },
+      { n: "Bengaluru", c: [77.6, 12.97] }, { n: "Hyderabad", c: [78.5, 17.4] },
+      { n: "Ahmedabad", c: [72.6, 23.0] }, { n: "Guwahati", c: [91.7, 26.1] },
+      { n: "Jaipur", c: [75.8, 26.9] }, { n: "Kochi", c: [76.3, 10.0] },
+    ];
+
+    // --- projection morph: interpolate raw ortho <-> equirectangular by alpha ---
+    function interpolateProjection(raw0, raw1) {
+      var mutate = d3.geoProjectionMutator(function (t) {
+        return function (x, y) {
+          var a = raw0(x, y), b = raw1(x, y);
+          return [a[0] + t * (b[0] - a[0]), a[1] + t * (b[1] - a[1])];
+        };
+      });
+      var t = 0, p = mutate(t);
+      p.alpha = function (_) { return arguments.length ? mutate(t = +_) : t; };
+      return p;
+    }
+
+    var projection = interpolateProjection(d3.geoOrthographicRaw, d3.geoEquirectangularRaw)
+      .scale(190).translate([W / 2, H / 2]).clipAngle(null).precision(0.2);
+    var path = d3.geoPath(projection);
+    var graticule = d3.geoGraticule10();
+
+    var rotation = [0, -12], alpha = 0, world = null;
+
+    function scaleFor(a) { return 190 * (1 - a) + 150 * a; } // shrink a touch as it flattens
+
+    function render() {
+      var a = Math.pow(alpha, 0.6);   // ease
+      projection.alpha(a).scale(scaleFor(a)).rotate([rotation[0], rotation[1]]);
+      while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+      // sphere fill
+      var sph = document.createElementNS(SVGNS, "path");
+      sph.setAttribute("d", path({ type: "Sphere" }) || "");
+      sph.setAttribute("fill", "#151419"); sph.setAttribute("stroke", SPHERE); sph.setAttribute("stroke-width", "1");
+      svg.appendChild(sph);
+
+      // graticule
+      var gr = document.createElementNS(SVGNS, "path");
+      gr.setAttribute("d", path(graticule) || ""); gr.setAttribute("fill", "none");
+      gr.setAttribute("stroke", GRAT); gr.setAttribute("stroke-width", "0.6"); gr.setAttribute("opacity", "0.7");
+      svg.appendChild(gr);
+
+      // land
+      if (world) {
+        var lp = document.createElementNS(SVGNS, "path");
+        lp.setAttribute("d", path(world) || ""); lp.setAttribute("fill", INK_LAND);
+        lp.setAttribute("stroke", LAND_STROKE); lp.setAttribute("stroke-width", "0.5");
+        svg.appendChild(lp);
+      }
+
+      // located crimson nodes (only render if on the visible hemisphere in globe mode)
+      PLACES.forEach(function (pl) {
+        var xy = projection(pl.c); if (!xy) return;
+        // in globe mode, hide points on the far side (d3 still projects them)
+        var g = d3.geoDistance(pl.c, [-rotation[0], -rotation[1]]);
+        var onFar = a < 0.5 && g > Math.PI / 2;
+        if (onFar) return;
+        var c = document.createElementNS(SVGNS, "circle");
+        c.setAttribute("cx", xy[0].toFixed(1)); c.setAttribute("cy", xy[1].toFixed(1));
+        c.setAttribute("r", "3.4"); c.setAttribute("fill", CRIMSON);
+        c.setAttribute("stroke", "#fff"); c.setAttribute("stroke-width", "0.8"); c.setAttribute("stroke-opacity", "0.5");
+        svg.appendChild(c);
+      });
+    }
+
+    // --- load world ---
+    fetch("https://cdn.jsdelivr.net/npm/world-atlas@2/land-110m.json")
+      .then(function (r) { return r.json(); })
+      .then(function (topo) {
+        world = topojson.feature(topo, topo.objects.land);
+        document.getElementById("gm-loading").style.display = "none";
+        render();
+      })
+      .catch(function () {
+        document.getElementById("gm-loading").textContent = "couldn't load world outlines (offline?) — the morph still runs.";
+        render();
+      });
+
+    // --- slider + play ---
+    var slider = document.getElementById("gm-slider"), label = document.getElementById("gm-label"),
+        playBtn = document.getElementById("gm-play");
+    function setAlpha(v) { alpha = Math.max(0, Math.min(1, v)); slider.value = Math.round(alpha * 100);
+      label.textContent = alpha < 0.5 ? "Globe" : "Map"; render(); }
+    slider.addEventListener("input", function () { setAlpha(+this.value / 100); });
+
+    var animating = false;
+    playBtn.addEventListener("click", function () {
+      if (animating) return; animating = true;
+      var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      var start = alpha, end = start < 0.5 ? 1 : 0, t0 = performance.now(), dur = reduce ? 1 : 1600;
+      playBtn.textContent = end === 1 ? "⏳ Unrolling…" : "⏳ Rolling…";
+      (function step(now) {
+        var t = Math.min((now - t0) / dur, 1);
+        var e = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;   // ease-in-out
+        setAlpha(start + (end - start) * e);
+        if (t < 1) requestAnimationFrame(step);
+        else { animating = false; playBtn.textContent = end === 1 ? "◱ Roll to globe" : "▶ Unroll"; }
+      })(t0);
+    });
+
+    // --- drag to rotate (globe) / rotate longitude (map) ---
+    var dragging = false, lastX = 0, lastY = 0;
+    svg.addEventListener("pointerdown", function (e) { dragging = true; lastX = e.clientX; lastY = e.clientY; svg.setPointerCapture(e.pointerId); });
+    svg.addEventListener("pointermove", function (e) {
+      if (!dragging) return;
+      var dx = e.clientX - lastX, dy = e.clientY - lastY; lastX = e.clientX; lastY = e.clientY;
+      var sens = alpha < 0.5 ? 0.4 : 0.25;
+      rotation[0] += dx * sens;
+      rotation[1] = Math.max(-90, Math.min(90, rotation[1] - dy * sens));
+      render();
+    });
+    svg.addEventListener("pointerup", function () { dragging = false; });
+    svg.addEventListener("pointerleave", function () { dragging = false; });
+
+    document.getElementById("gm-reset").addEventListener("click", function () { rotation = [0, -12]; render(); });
+
+    render();
+  })();
+  </script>
+  <script src="site-nav.js"></script>
+</body>
+</html>
