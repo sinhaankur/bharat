@@ -46,7 +46,7 @@
     .leaflet-popup-content { margin: 0.65rem 0.8rem; min-width: 200px; }
     .ea-pop-t { font-weight: 700; color: oklch(0.48 0.130 45); }
     .ea-pop-wb { font-size: 0.82rem; color: oklch(0.48 0.100 220); margin: 2px 0; }
-    .ea-pop-open { display: inline-block; margin-top: 5px; font-family: var(--font-mono); font-size: 9.5px; color: oklch(0.48 0.160 75); text-decoration: none; }
+    .ea-pop-open { display: inline-block; margin-top: 5px; font-family: var(--font-mono); font-size: 9.5px; color: var(--accent); text-decoration: none; }
 
     /* time scrubber */
     .ea-scrub { border: 1px solid var(--border); border-radius: var(--radius); padding: 0.7rem 0.9rem; margin: 0.7rem 0 0.2rem; background: oklch(0.15 0.01 220); }
@@ -54,7 +54,7 @@
     .ea-scrub-hd b { font-family: var(--font-mono); font-size: 1.5rem; color: oklch(0.48 0.120 210); }
     .ea-scrub input[type=range] { width: 100%; margin: 0.5rem 0 0.35rem; accent-color: oklch(0.66 0.16 210); cursor: pointer; }
     .ea-scrub-foot { font-size: 0.74rem; color: var(--muted-foreground); line-height: 1.45; }
-    .ea-scrub-reset { background: none; border: none; color: oklch(0.48 0.160 75); font-size: 0.74rem; cursor: pointer; text-decoration: underline; padding: 0; }
+    .ea-scrub-reset { background: none; border: none; color: var(--accent); font-size: 0.74rem; cursor: pointer; text-decoration: underline; padding: 0; }
     /* the "as of year" state on a card's loss bar */
     .ea-loss-now { font-family: var(--font-mono); font-size: 0.8rem; color: oklch(0.48 0.120 210); }
     .ea-loss-bar .now { position: relative; }
@@ -90,7 +90,7 @@
     .ea-card--hl { border-color: oklch(0.7 0.17 40); box-shadow: 0 0 0 2px oklch(0.66 0.19 32 / 0.4); }
     .ea-empty { grid-column: 1/-1; color: var(--muted-foreground); text-align: center; padding: 2rem 0; }
     .ea-note { font-size: 0.78rem; color: var(--muted-foreground); line-height: 1.55; margin-top: 1.8rem; }
-    .ea-note a { color: oklch(0.48 0.160 75); }
+    .ea-note a { color: var(--accent); }
   </style>
 </head>
 <body>
@@ -248,7 +248,7 @@
         { n: districts, unit: `across ${states} states`, lb: `<b>districts</b> in ${states} states/UTs <span>— from Srinagar's Dal Lake to Chennai's Pallikaranai marsh</span>`, lc: "oklch(0.7 0.15 55)", lk: "where" },
         { n: ramsar, lb: `sit on <b>internationally-protected Ramsar wetlands</b> <span>— the strongest legal protection a wetland can carry, built on anyway</span>`, lc: "oklch(0.62 0.13 200)", lk: "what's protected" },
         { n: medianLoss != null ? medianLoss + "%" : "—", lb: `<b>median water-body loss</b> where measured <span>— worst: ${worst ? esc(worst.district) + " " + Math.abs(worst.loss.pct) + "% (" + worst.loss.label + ")" : "—"}, over ${span}</span>`, lc: "oklch(0.6 0.16 25)", lk: "how much lost" },
-        { n: stuck, lb: `still <b>unactioned or contested</b> <span>— an order exists, but the encroachment or the flooding continues</span>`, lc: "oklch(0.72 0.16 70)", lk: "is anyone enforcing" },
+        { n: stuck, lb: `still <b>unactioned or contested</b> <span>— an order exists, but the encroachment or the flooding continues</span>`, lc: "var(--accent)", lk: "is anyone enforcing" },
       ];
       document.getElementById("rollup").innerHTML = layers.map(L => `
         <div class="ea-layer" style="--lc:${L.lc}">

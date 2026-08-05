@@ -17,7 +17,7 @@
     .i3-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.55; max-width: 74ch; }
     #i3-canvas { width: 100%; height: 72vh; min-height: 520px; border: 1px solid var(--border-strong); border-radius: var(--radius); background: radial-gradient(ellipse at 50% 30%, oklch(0.19 0.02 250), oklch(0.11 0 0)); display: block; margin: 0.6rem 0 0.5rem; cursor: grab; }
     .i3-lede { font-size: 1rem !important; color: var(--foreground) !important; margin: 0.2rem 0 0.6rem; }
-    .i3-more { background: none; border: 0; color: oklch(0.78 0.16 72); font-family: var(--font-mono); font-size: 12px; cursor: pointer; padding: 0; margin-left: 0.3rem; }
+    .i3-more { background: none; border: 0; color: var(--accent); font-family: var(--font-mono); font-size: 12px; cursor: pointer; padding: 0; margin-left: 0.3rem; }
     .i3-more:hover { text-decoration: underline; }
     .i3-about { max-width: 78ch; }
     .i3-about p { color: var(--muted-foreground); font-size: 0.9rem; line-height: 1.6; margin: 0.3rem 0 0; }
@@ -25,7 +25,7 @@
     .i3-drawer-btn { background: oklch(0.19 0.03 250); color: var(--foreground); border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 7px 14px; font-family: var(--font-mono); font-size: 12px; cursor: pointer; }
     .i3-drawer-btn:hover { border-color: var(--warm); }
     #i3-canvas:active { cursor: grabbing; }
-    #i3-status { font-family: var(--font-mono); font-size: 11.5px; color: oklch(0.82 0.14 78); min-height: 1.2em; margin-bottom: 0.3rem; }
+    #i3-status { font-family: var(--font-mono); font-size: 11.5px; color: var(--accent); min-height: 1.2em; margin-bottom: 0.3rem; }
     /* one-click view presets — set a coherent layer story so the ~19 toggles are navigable */
     .i3-presets { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin: 0.3rem 0 0.1rem; }
     .i3-presets-h { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: oklch(0.72 0.05 250); }
@@ -39,17 +39,17 @@
     .i3-grp-h { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: oklch(0.72 0.05 250); width: 100%; margin-bottom: 0.1rem; }
     .i3-grp label { color: var(--muted-foreground); font-family: var(--font-mono); font-size: 11px; display: inline-flex; align-items: center; gap: 0.35rem; cursor: pointer; }
     .i3-grp select { background: oklch(0.18 0 0); color: var(--foreground); border: 1px solid var(--border-strong); border-radius: 5px; padding: 2px 6px; font-family: var(--font-mono); font-size: 11px; }
-    .i3-grp input[type=range] { accent-color: oklch(0.74 0.16 70); width: 92px; }
+    .i3-grp input[type=range] { accent-color: var(--accent); width: 92px; }
     .i3-btn { background: oklch(0.2 0.03 250); color: oklch(0.8 0.12 210); border: 1px solid var(--border-strong); border-radius: 5px; padding: 3px 9px; font-family: var(--font-mono); font-size: 10px; cursor: pointer; }
     .i3-btn:hover { border-color: var(--warm); }
     .i3-legend { display: flex; flex-wrap: wrap; gap: 0.4rem 0.9rem; align-items: center; font-size: 11px; color: var(--muted-foreground); margin: 0.4rem 0 1rem; font-family: var(--font-mono); }
     .i3-chip { display: inline-block; width: 13px; height: 9px; border-radius: 2px; vertical-align: middle; margin-right: 4px; }
     .i3-note { font-size: 0.82rem; color: var(--muted-foreground); line-height: 1.6; margin-top: 1.3rem; border-top: 1px solid var(--border); padding-top: 1rem; }
-    .i3-note a { color: oklch(0.74 0.16 75); }
+    .i3-note a { color: var(--accent); }
     .i3-gap { border-left: 3px solid oklch(0.6 0.16 60); padding: 0.55rem 0.9rem; background: oklch(0.2 0.03 60 / 0.3); border-radius: var(--radius-sm); margin: 1rem 0; font-size: 0.85rem; line-height: 1.55; }
     /* first-visit tour — a dim veil + a coaching card that spotlights one control at a time */
     .i3-tour-veil { position: fixed; inset: 0; z-index: 60; background: oklch(0.05 0 0 / 0.55); backdrop-filter: blur(1px); }
-    .i3-tour-ring { position: absolute; z-index: 61; border: 2px solid var(--warm); border-radius: 10px; box-shadow: 0 0 0 4px oklch(0.74 0.16 70 / 0.25), 0 0 0 9999px oklch(0.05 0 0 / 0.55); pointer-events: none; transition: all .25s ease; }
+    .i3-tour-ring { position: absolute; z-index: 61; border: 2px solid var(--warm); border-radius: 10px; box-shadow: 0 0 0 4px oklch(0.55 0.20 27 / 0.25), 0 0 0 9999px oklch(0.05 0 0 / 0.55); pointer-events: none; transition: all .25s ease; }
     .i3-tour-card { position: absolute; z-index: 62; max-width: 300px; background: oklch(0.17 0.02 250); color: var(--foreground); border: 1px solid var(--warm); border-radius: var(--radius); padding: 0.85rem 1rem; box-shadow: 0 8px 30px oklch(0.05 0 0 / 0.6); transition: all .25s ease; }
     .i3-tour-card h4 { margin: 0 0 0.35rem; font-size: 0.95rem; }
     .i3-tour-card p { margin: 0 0 0.7rem; font-size: 0.83rem; line-height: 1.5; color: var(--muted-foreground); }
@@ -72,7 +72,7 @@
     .i3-tier h5 { margin: 0 0 0.25rem; font-size: 0.85rem; color: var(--tier-text, var(--foreground)); }
     .i3-tier p { margin: 0; font-size: 0.82rem; line-height: 1.55; color: var(--muted-foreground); }
     .i3-tier--real { --tier: oklch(0.7 0.16 150); --tier-text: oklch(0.82 0.14 150); }
-    .i3-tier--illus { --tier: oklch(0.74 0.16 70); --tier-text: oklch(0.85 0.14 78); }
+    .i3-tier--illus { --tier: var(--accent); --tier-text: var(--accent); }
     .i3-tier--gap { --tier: oklch(0.62 0.16 30); --tier-text: oklch(0.8 0.14 40); }
     .i3-real-foot { font-size: 0.8rem; color: var(--muted-foreground); margin-top: 0.6rem; line-height: 1.5; }
 
@@ -230,14 +230,14 @@
     <div id="i3-stage" style="position:relative">
       <canvas id="i3-canvas"></canvas>
       <div id="i3-tip" hidden style="position:absolute;z-index:6;pointer-events:none;background:oklch(0.15 0.01 250 / 0.95);color:var(--foreground);border:1px solid var(--border-strong);border-radius:6px;padding:4px 8px;font-family:var(--font-mono);font-size:11px;white-space:nowrap;transform:translate(-50%,-140%)"></div>
-      <button id="i3-drop" hidden style="position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:5;background:oklch(0.2 0.04 250 / 0.95);color:oklch(0.86 0.13 78);border:1px solid var(--warm);border-radius:999px;padding:7px 15px;font-family:var(--font-mono);font-size:12px;cursor:pointer;backdrop-filter:blur(8px)">🔻 drop to street level here</button>
+      <button id="i3-drop" hidden style="position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:5;background:oklch(0.2 0.04 250 / 0.95);color:var(--accent);border:1px solid var(--warm);border-radius:999px;padding:7px 15px;font-family:var(--font-mono);font-size:12px;cursor:pointer;backdrop-filter:blur(8px)">🔻 drop to street level here</button>
       <button id="i3-bldg" style="position:absolute;right:12px;bottom:18px;z-index:5;background:oklch(0.2 0.04 30 / 0.95);color:oklch(0.86 0.13 45);border:1px solid oklch(0.6 0.16 40);border-radius:999px;padding:7px 13px;font-family:var(--font-mono);font-size:11px;cursor:pointer;backdrop-filter:blur(8px)">🏢 real 3D buildings (Gandhinagar)</button>
       <div id="i3-street" hidden style="position:absolute;inset:0;z-index:10;border-radius:var(--radius);overflow:hidden;background:oklch(0.13 0 0)">
         <div id="i3-street-map" style="position:absolute;inset:0"></div>
         <button id="i3-up" style="position:absolute;left:12px;top:12px;z-index:20;background:oklch(0.18 0.02 250 / 0.95);color:var(--foreground);border:1px solid var(--border-strong);border-radius:999px;padding:6px 13px;font-family:var(--font-mono);font-size:12px;cursor:pointer">↑ back to globe</button>
         <button id="i3-bridges" style="position:absolute;left:12px;bottom:18px;z-index:20;background:oklch(0.2 0.04 45 / 0.95);color:oklch(0.86 0.13 60);border:1px solid oklch(0.6 0.16 50);border-radius:999px;padding:7px 14px;font-family:var(--font-mono);font-size:11px;cursor:pointer;backdrop-filter:blur(8px)">🌉 show real bridges here</button>
         <button id="i3-osmbld" style="position:absolute;left:12px;bottom:54px;z-index:20;background:oklch(0.2 0.04 30 / 0.95);color:oklch(0.86 0.13 45);border:1px solid oklch(0.6 0.16 40);border-radius:999px;padding:7px 14px;font-family:var(--font-mono);font-size:11px;cursor:pointer;backdrop-filter:blur(8px)">🏢 real buildings here</button>
-        <button id="i3-pmbld" style="position:absolute;left:12px;bottom:90px;z-index:20;background:oklch(0.2 0.05 60 / 0.95);color:oklch(0.88 0.12 72);border:1px solid oklch(0.62 0.15 65);border-radius:999px;padding:7px 14px;font-family:var(--font-mono);font-size:11px;cursor:pointer;backdrop-filter:blur(8px)">🏙 all-India buildings</button>
+        <button id="i3-pmbld" style="position:absolute;left:12px;bottom:90px;z-index:20;background:oklch(0.2 0.05 60 / 0.95);color:var(--accent);border:1px solid oklch(0.62 0.15 65);border-radius:999px;padding:7px 14px;font-family:var(--font-mono);font-size:11px;cursor:pointer;backdrop-filter:blur(8px)">🏙 all-India buildings</button>
         <div id="i3-street-label" style="position:absolute;right:12px;top:12px;z-index:20;background:oklch(0.15 0 0 / 0.9);color:var(--muted-foreground);border:1px solid var(--border);border-radius:6px;padding:4px 9px;font-family:var(--font-mono);font-size:10px"></div>
       </div>
     </div>

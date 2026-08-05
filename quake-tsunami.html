@@ -21,7 +21,7 @@
     .qt-wrap { max-width: 1120px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; }
     .qt-head h1 { margin: 0.3rem 0 0.4rem; font-size: clamp(1.7rem, 3.6vw, 2.6rem); }
     .qt-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.55; max-width: 74ch; }
-    .qt-head p a { color: oklch(0.74 0.16 75); }
+    .qt-head p a { color: var(--accent); }
     .qt-stats { display: flex; flex-wrap: wrap; gap: 1.4rem; margin: 1.2rem 0 0.2rem; }
     .qt-stat b { font-family: var(--font-mono); font-size: 1.5rem; color: oklch(0.82 0.16 40); display: block; line-height: 1; }
     .qt-stat span { font-size: 0.78rem; color: var(--muted-foreground); }
@@ -62,7 +62,7 @@
     .qt-row .yr { font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted-foreground); }
     .qt-row .toll { font-family: var(--font-mono); font-size: 0.8rem; color: oklch(0.84 0.14 30); text-align: right; }
     .qt-note { font-size: 0.78rem; color: var(--muted-foreground); line-height: 1.6; margin-top: 1.7rem; border-top: 1px solid var(--border); padding-top: 1rem; }
-    .qt-note b { color: var(--foreground); } .qt-note a { color: oklch(0.74 0.16 75); }
+    .qt-note b { color: var(--foreground); } .qt-note a { color: var(--accent); }
 
     html.embed-mode body { margin: 0; }
     html.embed-mode .qt-wrap { padding: 0.7rem 0.9rem 2rem; max-width: none; }
@@ -211,7 +211,7 @@
       m.bindPopup(`<div class="qt-pop-t" style="color:${color}"><span class="qt-pop-m">M${q.m}</span> ${esc(q.place || "")}</div>` +
         `<div class="qt-pop-sub">${esc(when)}${q.depth != null ? " · depth " + q.depth + " km" : ""}</div>` +
         (flagged ? `<div class="qt-pop-warn">🌊 carried a tsunami flag</div>` : "") +
-        (link ? `<div class="qt-pop-sub"><a href="${esc(link)}" target="_blank" rel="noopener" style="color:oklch(0.74 0.16 75)">USGS detail ↗</a></div>` : ""));
+        (link ? `<div class="qt-pop-sub"><a href="${esc(link)}" target="_blank" rel="noopener" style="color:var(--accent)">USGS detail ↗</a></div>` : ""));
       return m;
     }
 

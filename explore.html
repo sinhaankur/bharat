@@ -27,7 +27,7 @@
     .ex-r { display: flex; align-items: baseline; gap: 0.6rem; padding: 0.5rem 0.2rem; border-bottom: 1px solid var(--border); cursor: pointer; text-decoration: none; }
     .ex-r:hover { background: var(--card); }
     .ex-r .kind { font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.05em; text-transform: uppercase; padding: 1px 7px; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
-    .k-district{color:oklch(0.48 0.150 78)} .k-scheme{color:oklch(0.48 0.160 162)} .k-official{color:oklch(0.48 0.160 35)} .k-story{color:oklch(0.48 0.140 285)}
+    .k-district{color:var(--accent)} .k-scheme{color:oklch(0.48 0.160 162)} .k-official{color:oklch(0.48 0.160 35)} .k-story{color:oklch(0.48 0.140 285)}
     .ex-r .name { font-weight: 600; font-size: 0.9rem; color: var(--foreground); }
     .ex-r .ctx { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); margin-left: auto; }
     .ex-deep { font-family: var(--font-mono); font-size: 8px; color: oklch(0.48 0.160 162); border: 1px solid currentColor; border-radius: 999px; padding: 0 5px; }
@@ -44,20 +44,20 @@
     .rank-n { font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); width: 1.4rem; }
     .rank-name { font-weight: 600; font-size: 0.9rem; }
     .rank-name a { color: var(--foreground); text-decoration: none; }
-    .rank-name a:hover { color: oklch(0.48 0.150 78); }
+    .rank-name a:hover { color: var(--accent); }
     .rank-ctx { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
     .rank-bar { flex: 1; height: 7px; background: var(--muted); border-radius: 999px; overflow: hidden; max-width: 320px; margin-left: auto; }
-    .rank-fill { height: 100%; background: oklch(0.48 0.160 70); }
-    .rank-val { font-family: var(--font-mono); font-size: 11px; color: oklch(0.48 0.160 70); width: 6.5rem; text-align: right; }
+    .rank-fill { height: 100%; background: var(--accent); }
+    .rank-val { font-family: var(--font-mono); font-size: 11px; color: var(--accent); width: 6.5rem; text-align: right; }
     .flag { color: oklch(0.48 0.180 28); }
 
     .chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
     .chip { font-family: var(--font-mono); font-size: 10px; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--border-strong); color: var(--muted-foreground); cursor: pointer; text-decoration: none; }
-    .chip:hover, .chip.on { border-color: var(--warm); color: oklch(0.48 0.150 78); }
+    .chip:hover, .chip.on { border-color: var(--warm); color: var(--accent); }
     .sec-list { columns: 2; column-gap: 1.5rem; margin-top: 0.6rem; }
     @media (max-width: 640px){ .sec-list{columns:1} }
     .sec-list a { display: block; padding: 0.3rem 0; color: var(--foreground); text-decoration: none; font-size: 0.86rem; break-inside: avoid; }
-    .sec-list a:hover { color: oklch(0.48 0.150 78); }
+    .sec-list a:hover { color: var(--accent); }
     .sec-list .muted { color: var(--muted-foreground); font-family: var(--font-mono); font-size: 9px; }
     .ex-note { color: var(--muted-foreground); font-size: 0.8rem; line-height: 1.55; margin-top: 0.6rem; }
     .ex-empty { color: var(--muted-foreground); padding: 2rem 0; text-align: center; }
@@ -92,7 +92,7 @@
     .cmp-drop .name { color: var(--foreground); font-weight: 600; font-size: 0.86rem; }
     .cmp-drop .ctx { font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); margin-left: auto; }
     .cmp-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.7rem 0 0.3rem; }
-    .cmp-pill { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 12px; padding: 3px 4px 3px 10px; border-radius: 999px; border: 1px solid var(--warm); color: oklch(0.48 0.140 78); }
+    .cmp-pill { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 12px; padding: 3px 4px 3px 10px; border-radius: 999px; border: 1px solid var(--warm); color: var(--accent); }
     .cmp-pill button { background: none; border: none; color: currentColor; cursor: pointer; font-size: 13px; line-height: 1; padding: 0 5px; opacity: 0.7; }
     .cmp-pill button:hover { opacity: 1; }
     .cmp-scroll { overflow-x: auto; margin-top: 1rem; border: 1px solid var(--border); border-radius: var(--radius); }
@@ -102,7 +102,7 @@
     table.cmp th.metric, table.cmp td.metric { text-align: left; position: sticky; left: 0; background: var(--card); z-index: 1; color: var(--muted-foreground); font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.02em; text-transform: uppercase; }
     table.cmp thead th.metric { z-index: 3; }
     table.cmp thead .dcol { color: var(--foreground); }
-    table.cmp thead .dcol a { color: oklch(0.48 0.150 78); text-decoration: none; }
+    table.cmp thead .dcol a { color: var(--accent); text-decoration: none; }
     table.cmp thead .dcol .sub { display: block; font-family: var(--font-mono); font-size: 9px; font-weight: 400; color: var(--muted-foreground); text-transform: none; letter-spacing: 0; }
     table.cmp .grp td { background: oklch(0.19 0.02 250); color: var(--muted-foreground); font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase; text-align: left; padding: 0.35rem 0.75rem; }
     table.cmp td.best { color: oklch(0.48 0.170 145); font-weight: 600; }
@@ -507,7 +507,7 @@
         <div class="chips">${chips}</div>
         <div class="ex-section-label">Water-body loss &amp; encroachment hotspots — ${hs.length} documented</div>
         ${cards}
-        <p class="ex-note">Each is pinned to published figures + specific NGT/court/CAG orders (the change-over-time timeline &amp; cases live on the district page). These are the rain→encroachment→flood stories; the other ${594 - hs.length} districts stay honest gaps rather than fabricated. Watch live rain over them with the map's <a href="index.html" style="color:oklch(0.74 0.16 75)">rain radar</a>.</p>`;
+        <p class="ex-note">Each is pinned to published figures + specific NGT/court/CAG orders (the change-over-time timeline &amp; cases live on the district page). These are the rain→encroachment→flood stories; the other ${594 - hs.length} districts stay honest gaps rather than fabricated. Watch live rain over them with the map's <a href="index.html" style="color:var(--accent)">rain radar</a>.</p>`;
       wireGeoChips(p);
     }
 
@@ -563,7 +563,7 @@
       p.innerHTML = `
         <div class="chips">${chips}</div>
         ${sections}
-        <p class="ex-note">These are OFFICIAL-DATA risk layers, each pinned to a published gov/court source or left an honest gap — never a fabricated risk score. They feed the map's <a href="index.html" style="color:oklch(0.74 0.16 75)">vulnerability signal-stack</a>. Every other district stays a gap until a source is pinned.</p>`;
+        <p class="ex-note">These are OFFICIAL-DATA risk layers, each pinned to a published gov/court source or left an honest gap — never a fabricated risk score. They feed the map's <a href="index.html" style="color:var(--accent)">vulnerability signal-stack</a>. Every other district stays a gap until a source is pinned.</p>`;
       wireGeoChips(p);
     }
 
@@ -602,7 +602,7 @@
           <span class="rank-n">${i + 1}</span>
           <span class="rank-name"><a href="${r.href}">${esc(r.dn)}</a>
             <span class="rank-ctx">${esc(r.sn)}${r.coastal ? ` · <span style="color:oklch(0.78 0.13 200)">coastal</span>` : ""}${r.floodLevel === "district-chronic" ? ` · <span class="flag">⚑ flood</span>` : ""}</span></span>
-          <span class="rank-bar"><span class="rank-fill" style="width:${(Math.abs(V.metric(r)) / max * 100).toFixed(1)}%;background:${view === "lowest" ? "oklch(0.66 0.16 250)" : "oklch(0.74 0.16 70)"}"></span></span>
+          <span class="rank-bar"><span class="rank-fill" style="width:${(Math.abs(V.metric(r)) / max * 100).toFixed(1)}%;background:${view === "lowest" ? "oklch(0.66 0.16 250)" : "var(--accent)"}"></span></span>
           <span class="rank-val">${showVal(r)}</span>
         </div>`).join("");
 
@@ -610,7 +610,7 @@
         <div class="chips">${chips}</div>
         <div class="ex-section-label">${esc(V.label)} — top ${top.length}</div>
         ${rowsHtml || `<p class="ex-empty">No data for this view.</p>`}
-        <p class="ex-note">${esc(V.note)} Elevation is real per-district (open SRTM); coastal &amp; flood are district-precise; rainfall band is state-level (district mm = gap). Click a district to open its full page. See the <a href="terrain-3d.html" style="color:oklch(0.74 0.16 75)">3D relief</a> and the map's <a href="index.html" style="color:oklch(0.74 0.16 75)">Flood &amp; coast</a> layer.</p>`;
+        <p class="ex-note">${esc(V.note)} Elevation is real per-district (open SRTM); coastal &amp; flood are district-precise; rainfall band is state-level (district mm = gap). Click a district to open its full page. See the <a href="terrain-3d.html" style="color:var(--accent)">3D relief</a> and the map's <a href="index.html" style="color:var(--accent)">Flood &amp; coast</a> layer.</p>`;
 
       wireGeoChips(p);
     }
@@ -648,7 +648,7 @@
       const items = Object.entries(reg).filter(([k]) => !k.startsWith("_")).map(([k, e]) =>
         `<a href="how-it-works.html"><b>${esc(k)}</b> <span class="muted">${esc(e.const_list || "")} · ${esc((e.ministry || "").split("(")[0].trim())}</span></a>`).join("");
       p.innerHTML = `<div class="ex-section-label">Flagship schemes — by constitutional list &amp; ministry</div><div class="sec-list">${items}</div>
-        <p class="ex-note">Click through to <a href="how-it-works.html" style="color:oklch(0.74 0.16 75)">How it works</a> for each scheme's full money+protocol pipeline.</p>`;
+        <p class="ex-note">Click through to <a href="how-it-works.html" style="color:var(--accent)">How it works</a> for each scheme's full money+protocol pipeline.</p>`;
     }
 
     function renderStories(p) {
@@ -662,7 +662,7 @@
           <span class="name">${esc(c.title)}</span>
           <span class="ctx">${esc(c.geo?.district || "")} · ${(c.event_ids || []).length} events</span></a>`).join("")}`).join("");
       p.innerHTML = (chains.length ? sections : `<p class="ex-empty">No story chains yet.</p>`) +
-        `<p class="ex-note">Story chains group fund-lifecycle events over time. Full timelines + source-coverage bars on the <a href="timeline.html" style="color:oklch(0.74 0.16 75)">Timeline</a>.</p>`;
+        `<p class="ex-note">Story chains group fund-lifecycle events over time. Full timelines + source-coverage bars on the <a href="timeline.html" style="color:var(--accent)">Timeline</a>.</p>`;
     }
   </script>
   <script src="command-palette.js"></script>
