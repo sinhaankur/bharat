@@ -50,6 +50,7 @@
         <button class="gm-btn" id="gm-play">▶ Unroll</button>
         <span class="gm-label" id="gm-label">Globe</span>
         <input type="range" class="gm-slider" id="gm-slider" min="0" max="100" value="0" />
+        <button class="gm-btn gm-btn--ghost" id="gm-dots">◦ Dots</button>
         <button class="gm-btn gm-btn--ghost" id="gm-reset">Reset spin</button>
       </div>
     </div>
@@ -100,9 +101,24 @@
     var path = d3.geoPath(projection);
     var graticule = d3.geoGraticule10();
 
-    var rotation = [0, -12], alpha = 0, world = null;
+    var rotation = [0, -12], alpha = 0, world = null, landDots = [], dotMode = true;
+    var reduceMotion = (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) ||
+      document.documentElement.getAttribute("data-reduce-motion") === "1";
 
     function scaleFor(a) { return 190 * (1 - a) + 150 * a; } // shrink a touch as it flattens
+
+    // precompute a lon/lat grid of points that fall on land → the dot-matrix map
+    function buildDots(feature) {
+      landDots = [];
+      var step = 2.4;   // degrees between dots (density)
+      for (var lat = -84; lat <= 84; lat += step) {
+        // fewer dots near the poles so density looks even on the sphere
+        var lonStep = step / Math.max(0.2, Math.cos(lat * Math.PI / 180));
+        for (var lon = -180; lon <= 180; lon += lonStep) {
+          if (d3.geoContains(feature, [lon, lat])) landDots.push([lon, lat]);
+        }
+      }
+    }
 
     function render() {
       var a = Math.pow(alpha, 0.6);   // ease
@@ -121,8 +137,23 @@
       gr.setAttribute("stroke", GRAT); gr.setAttribute("stroke-width", "0.6"); gr.setAttribute("opacity", "0.7");
       svg.appendChild(gr);
 
-      // land
-      if (world) {
+      // land — either a dot-matrix or a solid fill
+      if (world && dotMode && landDots.length) {
+        var antipode = [-rotation[0], -rotation[1]];
+        var frag = document.createDocumentFragment();
+        for (var i = 0; i < landDots.length; i++) {
+          var d = landDots[i];
+          // hide dots on the far hemisphere in globe mode
+          if (a < 0.55 && d3.geoDistance(d, antipode) > Math.PI / 2) continue;
+          var xy = projection(d); if (!xy) continue;
+          var r = document.createElementNS(SVGNS, "rect");
+          r.setAttribute("x", (xy[0] - 1.3).toFixed(1)); r.setAttribute("y", (xy[1] - 1.3).toFixed(1));
+          r.setAttribute("width", "2.6"); r.setAttribute("height", "2.6"); r.setAttribute("rx", "0.6");
+          r.setAttribute("fill", "#6f6d78"); r.setAttribute("fill-opacity", "0.85");
+          frag.appendChild(r);
+        }
+        svg.appendChild(frag);
+      } else if (world) {
         var lp = document.createElementNS(SVGNS, "path");
         lp.setAttribute("d", path(world) || ""); lp.setAttribute("fill", INK_LAND);
         lp.setAttribute("stroke", LAND_STROKE); lp.setAttribute("stroke-width", "0.5");
@@ -136,6 +167,16 @@
         var g = d3.geoDistance(pl.c, [-rotation[0], -rotation[1]]);
         var onFar = a < 0.5 && g > Math.PI / 2;
         if (onFar) return;
+        // a soft pulsing halo + the solid node
+        if (!reduceMotion) {
+          var halo = document.createElementNS(SVGNS, "circle");
+          halo.setAttribute("cx", xy[0].toFixed(1)); halo.setAttribute("cy", xy[1].toFixed(1));
+          halo.setAttribute("r", "3.4"); halo.setAttribute("fill", "none");
+          halo.setAttribute("stroke", CRIMSON); halo.setAttribute("stroke-width", "1");
+          halo.innerHTML = '<animate attributeName="r" values="3.4;9;3.4" dur="2.4s" repeatCount="indefinite"/>' +
+                           '<animate attributeName="stroke-opacity" values="0.7;0;0.7" dur="2.4s" repeatCount="indefinite"/>';
+          svg.appendChild(halo);
+        }
         var c = document.createElementNS(SVGNS, "circle");
         c.setAttribute("cx", xy[0].toFixed(1)); c.setAttribute("cy", xy[1].toFixed(1));
         c.setAttribute("r", "3.4"); c.setAttribute("fill", CRIMSON);
@@ -149,6 +190,7 @@
       .then(function (r) { return r.json(); })
       .then(function (topo) {
         world = topojson.feature(topo, topo.objects.land);
+        buildDots(world);
         document.getElementById("gm-loading").style.display = "none";
         render();
       })
@@ -194,6 +236,9 @@
     svg.addEventListener("pointerleave", function () { dragging = false; });
 
     document.getElementById("gm-reset").addEventListener("click", function () { rotation = [0, -12]; render(); });
+    document.getElementById("gm-dots").addEventListener("click", function () {
+      dotMode = !dotMode; this.textContent = dotMode ? "◦ Dots" : "▧ Solid"; render();
+    });
 
     render();
   })();
