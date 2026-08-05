@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Analysis — India Fiscal Map</title>
+  <title>Analysis — Bharat Atlas</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
     .at-wrap { max-width: 720px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; }
@@ -77,7 +77,7 @@
       const a = (doc.articles || []).find(x => x.slug === slug && x.status === "published");
       const el = document.getElementById("art");
       if (!a) { el.innerHTML = `<p class="at-empty">Article not found. <a href="articles.html" style="color:oklch(0.74 0.16 75)">All analysis →</a></p>`; return; }
-      document.title = `${a.title} — India Fiscal Map`;
+      document.title = `${a.title} — Bharat Atlas`;
       const districtChips = (a.districts || []).map(([s, d]) =>
         `<a href="index.html?state=${encodeURIComponent(s)}&district=${encodeURIComponent(d)}">📍 ${esc(d)}, ${esc(s)}</a>`).join("");
       const schemeChips = (a.schemes || []).map(s => `<a href="how-it-works.html">${esc(s)}</a>`).join("");
