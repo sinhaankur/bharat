@@ -2570,3 +2570,25 @@ html.theme-dark #sfoot { background: var(--brand); }
 .ed-rc h4 { font-family: var(--font-display); font-weight: 600; font-size: 1.02rem; line-height: 1.18; margin: 0 0 0.25rem; letter-spacing: -0.01em; }
 .ed-rc:hover h4 { color: var(--brand); }
 .ed-rc .byline { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
+
+/* ============================================================
+   BHARAT ATLAS landing — hybrid hero → live map → stories.
+   ============================================================ */
+.ba-hero { background: linear-gradient(160deg, var(--brand) 0%, var(--brand-ink) 100%); border-bottom: none;
+  color: #eaf3f2; text-align: center; padding: clamp(3.5rem, 10vh, 7rem) 0 clamp(3rem, 7vh, 5rem); }
+.ba-hero-inner { max-width: 900px; }
+.ba-hero .ed-kicker { color: #ffd9c8; justify-content: center; }
+.ba-hero .ed-kicker::before { background: var(--accent); }
+.ba-hero-h { color: #fff; }
+.ba-hero-h em { color: #ffd9c8; }
+.ba-hero-lede { color: #cfe3e1; margin-left: auto; margin-right: auto; }
+.ba-hero .ed-cta-row { justify-content: center; }
+
+/* live map band */
+.ba-mapwrap { padding: clamp(2rem,5vh,3.5rem) 0 0; }
+.ba-mapwrap-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; margin-bottom: 1.1rem; flex-wrap: wrap; }
+.ba-mapframe { position: relative; max-width: 1320px; margin: 0 auto; padding: 0 var(--pad-x); }
+.ba-mapframe iframe { width: 100%; height: min(70vh, 640px); border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg); background: var(--muted); display: block; }
+/* click overlay opens full map (the embed's own interactions still work via the "Open full map" btn) */
+.ba-mapoverlay { position: absolute; inset: 0 var(--pad-x); border-radius: var(--radius-lg); }

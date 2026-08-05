@@ -18,45 +18,35 @@
 <body>
   <div id="site-nav"></div>
 
-  <!-- ============ HERO ============ -->
-  <header class="ed-hero">
-    <div class="ed-page">
-      <div class="ed-hero-grid">
-        <div class="ed-hero-copy">
-          <div class="ed-kicker">The atlas · the newsroom</div>
-          <h1 class="ed-h1">Understand where India's<br><em>public money</em> actually goes.</h1>
-          <p class="ed-lede">We trace every rupee to the district it lands in, show how land and law shape
-          what gets built, and read the record behind the headlines — sourced, or we mark it a gap.</p>
-          <div class="ed-cta-row">
-            <a class="ed-btn ed-btn--primary" href="index.html">Open the map →</a>
-            <a class="ed-btn ed-btn--ghost" href="#stories">Read the explainers</a>
-          </div>
-        </div>
-        <a class="ed-hero-art" href="index.html" aria-label="Open the interactive district map"
-           data-parallax="0.12"
-           style="text-decoration:none; display:flex; align-items:center; justify-content:center;">
-          <svg viewBox="0 0 400 300" width="100%" height="100%" style="display:block">
-            <defs>
-              <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse">
-                <path d="M28 0H0V28" fill="none" stroke="#ffffff" stroke-opacity="0.14" stroke-width="1"/>
-              </pattern>
-            </defs>
-            <rect width="400" height="300" fill="url(#grid)"/>
-            <g class="hero-pins">
-              <circle cx="120" cy="90"  r="7" fill="#e0663b"><animate attributeName="r" values="7;11;7" dur="3s" repeatCount="indefinite"/></circle>
-              <circle cx="250" cy="150" r="10" fill="#e0663b"><animate attributeName="r" values="10;15;10" dur="3.4s" begin="0.5s" repeatCount="indefinite"/></circle>
-              <circle cx="180" cy="210" r="6" fill="#ffffff" fill-opacity="0.85"><animate attributeName="r" values="6;9;6" dur="2.6s" begin="1s" repeatCount="indefinite"/></circle>
-              <circle cx="310" cy="80"  r="5" fill="#ffffff" fill-opacity="0.7"><animate attributeName="r" values="5;8;5" dur="3.1s" begin="1.4s" repeatCount="indefinite"/></circle>
-            </g>
-            <text x="200" y="285" text-anchor="middle" fill="#ffffff" fill-opacity="0.6"
-                  font-family="monospace" font-size="12">594 districts · click to explore</text>
-          </svg>
-        </a>
+  <!-- ============ 1 · BRAND HERO ============ -->
+  <header class="ed-hero ba-hero">
+    <div class="ed-page ba-hero-inner">
+      <div class="ed-kicker" data-reveal>Bharat Atlas · understand India, by the evidence</div>
+      <h1 class="ed-h1 ba-hero-h" data-reveal data-reveal-delay="80">Understand India —<br><em>by the evidence.</em></h1>
+      <p class="ed-lede ba-hero-lede" data-reveal data-reveal-delay="160">Money, land, law, heritage, history and the record behind the
+      headlines — traced to every one of 594 districts. Sourced, or we mark it a gap.</p>
+      <div class="ed-cta-row" data-reveal data-reveal-delay="240">
+        <a class="ed-btn ed-btn--primary" href="#map">Explore the map ↓</a>
+        <a class="ed-btn ed-btn--ghost" href="#stories">Read the explainers</a>
       </div>
     </div>
   </header>
 
   <main>
+    <!-- ============ 2 · LIVE MAP ============ -->
+    <section id="map" class="ba-mapwrap" data-reveal>
+      <div class="ba-mapwrap-head ed-page">
+        <div>
+          <div class="ed-kicker">The map · live</div>
+          <h2 class="ed-h2">Every district, on one map</h2>
+        </div>
+        <a class="ed-btn ed-btn--dark" href="index.html">Open full map ↗</a>
+      </div>
+      <div class="ba-mapframe">
+        <iframe src="index.html?embed=1" title="Bharat Atlas interactive district map" loading="lazy"></iframe>
+      </div>
+    </section>
+
     <!-- ============ FEATURED ============ -->
     <section class="ed-section ed-page" data-reveal>
       <div class="ed-kicker">Featured</div>
