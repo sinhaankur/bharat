@@ -2412,25 +2412,49 @@ html[data-reduce-motion="1"] .brand-dot, html[data-reduce-motion="1"] .hero-pins
    pages; it restores the dark token values so each page's own
    inline dark styles read correctly again.
    ============================================================ */
+/* A DESIGNED dark counterpart of Ink & Crimson — NOT a pure inversion.
+   The crimson accent stays (it pops on dark); the ink "primary" flips to a
+   warm off-white so headlines/wordmark stay visible; neutrals are warm charcoal.
+   --brand is REMAPPED to the light ink so text/marks that used it read on dark. */
 html.theme-dark {
-  --background:       oklch(0.145 0 0);
-  --foreground:       oklch(0.985 0 0);
-  --muted:            oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --border:           oklch(0.269 0 0);
-  --border-strong:    oklch(0.35 0 0);
-  --card:             oklch(0.18 0 0);
-  --brand-tint:       oklch(0.28 0.06 190);
-  --accent-tint:      oklch(0.28 0.08 40);
+  --background:       #131215;   /* warm near-black paper */
+  --foreground:       #ece9e3;   /* warm off-white ink */
+  --brand:            #ece9e3;   /* the "primary voice" is now light on dark (was near-black) */
+  --brand-ink:        #ffffff;   /* hover */
+  --brand-tint:       #26242a;   /* dark panel wash (was pale) */
+  --accent:           #ef5442;   /* crimson, lifted a touch so it glows on dark */
+  --accent-ink:       #ff6a58;   /* hover crimson */
+  --accent-tint:      #3a1f1c;   /* deep crimson wash */
+  --muted:            #1d1c21;   /* charcoal panel */
+  --muted-foreground: #a7a39b;   /* warm grey text */
+  --border:           #2a282f;   /* hairline */
+  --border-strong:    #3b3942;
+  --card:             #1a181d;
+  --positive:         #4bbf8a;
 }
 html.theme-dark, html.theme-dark body { background: var(--background); color: var(--foreground); }
-html.theme-dark a { color: var(--foreground); border-bottom-color: oklch(0.4 0 0); }
-html.theme-dark a:hover { color: var(--foreground); border-color: var(--foreground); }
-/* nav on dark pages: dark bar */
-html.theme-dark #nav { background: oklch(0.145 0 0 / 0.85); }
+html.theme-dark a { color: var(--accent); border-bottom-color: var(--border-strong); }
+html.theme-dark a:hover { color: var(--accent-ink); border-color: var(--accent); }
+/* nav on dark: warm-black bar, light wordmark, crimson current-state */
+html.theme-dark .snav { background: var(--background); border-bottom-color: var(--foreground); }
+html.theme-dark #nav { background: color-mix(in oklch, var(--background) 88%, transparent); }
 html.theme-dark .brand-word { color: var(--foreground); }
-html.theme-dark .snav-menu { background: oklch(0.16 0 0); box-shadow: 0 8px 24px oklch(0 0 0 / 0.5); }
-html.theme-dark .snav-menu a:hover, html.theme-dark .snav-group.is-current .snav-top { background: oklch(0.24 0 0); }
+html.theme-dark .snav-menu { background: var(--card); box-shadow: 0 8px 24px rgba(0,0,0,0.55); }
+html.theme-dark .snav-menu a:hover, html.theme-dark .snav-group.is-current .snav-top { background: var(--muted); }
+html.theme-dark .snav-topics a { color: var(--foreground); }
+html.theme-dark .snav-topics a:hover { color: var(--accent); }
+/* "brand-colored" feature blocks (hero, feature art, stat band) use --brand as a BACKGROUND
+   expecting it to be dark. In dark mode --brand flips to light, so pin these to a dark surface. */
+html.theme-dark .ba-hero, html.theme-dark .ed-band { background: #0d0c0f; }
+html.theme-dark .ed-feature-art, html.theme-dark .ed-lead-art,
+html.theme-dark .ed-card-art--teal { background: linear-gradient(135deg, #23222a, #14131a); }
+html.theme-dark .ed-hero-art { background: linear-gradient(140deg, #23222a, #14131a); }
+html.theme-dark .ed-btn--dark { background: var(--muted); color: var(--foreground); border: 1px solid var(--border-strong); }
+html.theme-dark .ed-btn--dark:hover { background: var(--card); color: #fff; }
+/* footer already renders on --brand; on dark that's now light, so flip its text back to ink */
+html.theme-dark #sfoot { background: #0d0c0f; color: #d9d6d0; }
+html.theme-dark #sfoot .brand-word, html.theme-dark #sfoot a:hover { color: #fff; }
+/* the meridian-B favicon strokes are white-on-ink → already fine on dark */
 
 /* theme-light: explicitly re-assert the light editorial tokens, so the a11y
    toggle can force light even on a page that ships class="theme-dark", and so
@@ -2520,7 +2544,7 @@ html.theme-light, html.theme-light body { background: var(--background); color: 
 .sfoot-base { max-width: 1320px; margin: 0.7rem auto 0; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem;
   font-family: var(--font-mono); font-size: 10.5px; color: #a8a5a0; }
 /* footer stays branded ink even in dark theme (it's a deliberate block) */
-html.theme-dark #sfoot { background: var(--brand); }
+/* (dark-mode footer handled above in the theme-dark block) */
 
 /* ============================================================
    MAGAZINE FRONT — 3-column front block + horizontal story rows.
