@@ -55,7 +55,31 @@
     items.forEach(el => io.observe(el));
   }
 
-  window.Motion = { countUp, reduced, refresh: init };
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
-  else init();
+  // ---- PARALLAX: elements with data-parallax drift as you scroll ----
+  // data-parallax="0.3" → moves at 30% of scroll speed (negative = opposite). Disabled under reduce-motion.
+  function initParallax() {
+    var els = Array.prototype.slice.call(document.querySelectorAll("[data-parallax]"));
+    if (!els.length || reduced()) return;
+    var ticking = false;
+    function frame() {
+      var vh = window.innerHeight;
+      els.forEach(function (el) {
+        var speed = parseFloat(el.getAttribute("data-parallax")) || 0.2;
+        var r = el.getBoundingClientRect();
+        var center = r.top + r.height / 2;
+        var offset = (center - vh / 2) * -speed;   // distance from viewport centre × speed
+        el.style.transform = "translate3d(0," + offset.toFixed(1) + "px,0)";
+      });
+      ticking = false;
+    }
+    function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(frame); } }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    frame();
+  }
+
+  function boot() { init(); initParallax(); }
+  window.Motion = { countUp: countUp, reduced: reduced, refresh: boot };
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
 })();

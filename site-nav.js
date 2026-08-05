@@ -128,13 +128,47 @@
     const crumb = (activeGroup && curItem)
       ? `<div class="snav-here" aria-hidden="true"><span class="snav-here-g">${activeGroup.label}</span><span class="snav-here-sep">›</span><span class="snav-here-p">${(curItem.icon ? curItem.icon + " " : "") + curItem.text}</span></div>`
       : "";
+    // topics strip — "making sense of it all:" quick jumps (like the Vox topics line)
+    const topics = [
+      { t: "The map", h: "index.html" }, { t: "News", h: "feed.html" },
+      { t: "States", h: "state-of-india.html" }, { t: "Heritage", h: "heritage-atlas.html" },
+      { t: "History", h: "atrocities.html" }, { t: "3D India", h: "india-3d.html" },
+    ].map(x => `<a href="${x.h}">${x.t}</a>`).join("<span class=\"snav-topic-sep\">·</span>");
+
     return `
       <nav id="nav" class="snav">
-        <a class="brand" href="index.html"><img class="brand-logo" src="favicon.svg" alt="" width="22" height="22" /><span class="brand-word">India Fiscal Map</span><span class="brand-dot" title="live"></span></a>
-        <button class="snav-burger" aria-label="Menu" aria-expanded="false">☰</button>
-        <div class="snav-groups">${groups}</div>
-        ${crumb}
-      </nav>`;
+        <div class="snav-bar">
+          <button class="snav-burger" aria-label="Open menu" aria-expanded="false">☰</button>
+          <a class="brand" href="home.html"><img class="brand-logo" src="favicon.svg" alt="" width="24" height="24" /><span class="brand-word">India Fiscal Map</span><span class="brand-dot" title="live"></span></a>
+          <div class="snav-groups">${groups}</div>
+          <div class="snav-actions">
+            <a class="snav-cta" href="index.html">Open the map</a>
+          </div>
+        </div>
+        <div class="snav-topics"><span class="snav-topics-lbl">Making sense of it all:</span> ${topics}</div>
+      </nav>
+      <div class="snav-drawer" id="snav-drawer" hidden>
+        <div class="snav-drawer-panel">
+          <div class="snav-drawer-head">
+            <span class="brand-word">India Fiscal Map</span>
+            <button class="snav-drawer-close" aria-label="Close menu">✕</button>
+          </div>
+          <div class="snav-drawer-links">${drawerLinks()}</div>
+        </div>
+        <div class="snav-drawer-scrim"></div>
+      </div>`;
+  }
+
+  // big category links for the slide-out drawer (Vox-style full-list menu)
+  function drawerLinks() {
+    return getNav().map(g => `
+      <div class="snav-dl-group">
+        <div class="snav-dl-h">${g.label}</div>
+        ${g.items.map(i => {
+          const ext = i.ext ? ' target="_blank" rel="noopener"' : "";
+          return `<a href="${i.href}"${ext}>${i.icon ? i.icon + " " : ""}${i.text}</a>`;
+        }).join("")}
+      </div>`).join("");
   }
 
   function footerHTML() {
@@ -148,17 +182,28 @@
       </div>`).join("");
     return `
       <footer id="sfoot">
-        <div class="sfoot-grid">
-          <div class="sfoot-col sfoot-brand">
-            <div class="sfoot-name"><img src="favicon.svg" alt="" width="20" height="20" style="vertical-align:-4px;margin-right:6px" />India Fiscal Map</div>
-            <p>Tracing public money to every Indian district — what came in, who's
-            accountable, and what the record shows happened. Source-cited, or it's a gap.</p>
+        <div class="sfoot-top">
+          <a class="sfoot-mark" href="home.html"><img src="favicon.svg" alt="" width="30" height="30" /><span class="brand-word">India Fiscal Map</span></a>
+          <div class="sfoot-social" aria-label="Social links">
+            <a href="https://github.com/sinhaankur/india-fiscal-map" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub">⌥</a>
+            <a href="feed.html" title="News feed" aria-label="News feed">✍</a>
+            <a href="data.html" title="Data & API" aria-label="Data">⛁</a>
+            <a href="share.html" title="Share" aria-label="Share">↗</a>
           </div>
-          ${cols}
+        </div>
+        <div class="sfoot-rule"></div>
+        <div class="sfoot-grid">${cols}</div>
+        <div class="sfoot-legal">
+          <a href="about.html">About &amp; methodology</a><span>·</span>
+          <a href="how-it-works.html">How it works</a><span>·</span>
+          <a href="references.html">Sources</a><span>·</span>
+          <a href="provenance.html">Provenance</a><span>·</span>
+          <a href="privacy-policy.html">Privacy</a><span>·</span>
+          <a href="sitemap.html">Site map</a>
         </div>
         <div class="sfoot-base">
-          <span>Independent civic-data project · not affiliated with any government body.</span>
-          <span><a href="sitemap.xml">sitemap</a> · <a href="about.html">methodology</a> · <a href="https://github.com/sinhaankur/india-fiscal-map" target="_blank" rel="noopener">open source ↗</a></span>
+          <span>© ${new Date().getFullYear()} India Fiscal Map · independent civic-data project · sourced, or it's a gap.</span>
+          <span>Not affiliated with any government body.</span>
         </div>
       </footer>`;
   }
@@ -217,14 +262,28 @@
         else btn.setAttribute("aria-expanded", "false");
       });
     });
-    // mobile burger toggles the whole group list
+    // burger opens the slide-out category drawer (Vox-style full menu)
     const burger = document.querySelector(".snav-burger");
-    burger?.addEventListener("click", () => {
-      const nav = document.querySelector(".snav");
-      const open = nav.classList.toggle("snav-open");
-      burger.setAttribute("aria-expanded", open ? "true" : "false");
-    });
-    // click-away closes dropdowns
+    const drawer = document.getElementById("snav-drawer");
+    function openDrawer() {
+      if (!drawer) return;
+      drawer.hidden = false;
+      requestAnimationFrame(() => drawer.classList.add("open"));
+      burger?.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+    }
+    function closeDrawer() {
+      if (!drawer) return;
+      drawer.classList.remove("open");
+      burger?.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+      setTimeout(() => { drawer.hidden = true; }, 320);
+    }
+    burger?.addEventListener("click", openDrawer);
+    drawer?.querySelector(".snav-drawer-close")?.addEventListener("click", closeDrawer);
+    drawer?.querySelector(".snav-drawer-scrim")?.addEventListener("click", closeDrawer);
+    document.addEventListener("keydown", e => { if (e.key === "Escape") closeDrawer(); });
+    // click-away closes desktop dropdowns
     document.addEventListener("click", e => {
       if (!e.target.closest(".snav-group")) document.querySelectorAll(".snav-group.open").forEach(x => x.classList.remove("open"));
     });

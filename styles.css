@@ -2440,3 +2440,82 @@ html.theme-light {
   --brand-tint: #e6f0ef; --accent-tint: #fbeee7;
 }
 html.theme-light, html.theme-light body { background: var(--background); color: var(--foreground); }
+
+/* ============================================================
+   MASTHEAD HEADER + TOPICS + SLIDE-OUT DRAWER (editorial).
+   Vox-structured information architecture, Teal & Ink brand.
+   ============================================================ */
+.snav { position: sticky; top: 0; z-index: 1000; background: var(--background);
+  border-bottom: 2px solid var(--foreground); }
+.snav-bar { display: flex; align-items: center; gap: 1rem; padding: 0.6rem var(--pad-x); max-width: 1320px; margin: 0 auto; }
+.snav-burger { order: -1; background: none; border: 1.5px solid var(--border-strong); border-radius: 6px;
+  width: 38px; height: 34px; font-size: 15px; cursor: pointer; color: var(--foreground); flex: none; }
+.snav-burger:hover { border-color: var(--brand); color: var(--brand); }
+.snav .brand { flex: none; }
+.snav .brand-word { font-family: var(--font-display); font-size: 21px; font-weight: 600; letter-spacing: -0.015em; }
+.snav-groups { display: flex; gap: 0.2rem; margin-left: 0.6rem; }
+.snav-actions { margin-left: auto; display: flex; align-items: center; gap: 0.6rem; }
+.snav-cta { background: var(--accent); color: #fff; border: none; font-family: var(--font-sans); font-weight: 600;
+  font-size: 0.85rem; padding: 0.5rem 1rem; border-radius: 999px; text-decoration: none; white-space: nowrap; }
+.snav-cta:hover { background: var(--accent-ink); color: #fff; }
+
+/* topics strip — "making sense of it all:" */
+.snav-topics { border-top: 1px solid var(--border); padding: 0.4rem var(--pad-x); max-width: 1320px; margin: 0 auto;
+  font-family: var(--font-mono); font-size: 11.5px; color: var(--muted-foreground); display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+.snav-topics-lbl { font-weight: 600; color: var(--brand); text-transform: none; letter-spacing: 0; }
+.snav-topics a { color: var(--foreground); border: none; }
+.snav-topics a:hover { color: var(--accent); }
+.snav-topic-sep { color: var(--border-strong); }
+@media (max-width: 760px) { .snav-topics { display: none; } }
+
+/* the slide-out drawer — big category menu (the interaction you liked) */
+.snav-drawer { position: fixed; inset: 0; z-index: 2000; }
+.snav-drawer[hidden] { display: none; }
+.snav-drawer-scrim { position: absolute; inset: 0; background: rgba(10,20,20,0.45); opacity: 0; transition: opacity 0.3s; }
+.snav-drawer.open .snav-drawer-scrim { opacity: 1; }
+.snav-drawer-panel { position: absolute; top: 0; left: 0; bottom: 0; width: min(420px, 88vw); background: var(--background);
+  border-right: 2px solid var(--foreground); padding: 1.2rem 1.4rem 2rem; overflow-y: auto;
+  transform: translateX(-100%); transition: transform 0.32s cubic-bezier(.2,.7,.2,1); box-shadow: 0 0 60px rgba(10,20,20,0.25); }
+.snav-drawer.open .snav-drawer-panel { transform: translateX(0); }
+.snav-drawer-head { display: flex; align-items: center; justify-content: space-between; padding-bottom: 0.9rem;
+  border-bottom: 2px solid var(--foreground); margin-bottom: 1rem; }
+.snav-drawer-head .brand-word { font-family: var(--font-display); font-size: 20px; font-weight: 600; }
+.snav-drawer-close { background: var(--muted); border: 1px solid var(--border-strong); border-radius: 999px;
+  width: 32px; height: 32px; cursor: pointer; font-size: 14px; color: var(--foreground); }
+.snav-dl-group { margin-bottom: 1.3rem; }
+.snav-dl-h { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted-foreground); margin-bottom: 0.5rem; }
+.snav-dl-group a { display: block; font-family: var(--font-display); font-size: 1.35rem; font-weight: 500;
+  letter-spacing: -0.01em; color: var(--foreground); padding: 0.28rem 0; border: none; line-height: 1.2; }
+.snav-dl-group a:hover { color: var(--accent); padding-left: 0.4rem; transition: padding 0.12s, color 0.12s; }
+
+/* the desktop dropdown menus keep working (styles above), just re-home the caret spacing */
+.snav-groups .snav-top { font-family: var(--font-sans); font-weight: 600; font-size: 0.9rem; }
+@media (max-width: 900px) { .snav-groups { display: none; } .snav-actions .snav-cta { display: none; } }
+
+/* ============================================================
+   EDITORIAL FOOTER — wordmark + social + dotted rule + columns.
+   ============================================================ */
+#sfoot { background: var(--brand); color: #eaf3f2; margin-top: 4rem; padding: 2.5rem var(--pad-x) 2rem; }
+#sfoot a { color: #eaf3f2; border: none; }
+#sfoot a:hover { color: #fff; }
+.sfoot-top { max-width: 1320px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.sfoot-mark { display: flex; align-items: center; gap: 10px; }
+.sfoot-mark .brand-word { font-family: var(--font-display); font-size: 26px; font-weight: 600; color: #fff; letter-spacing: -0.015em; }
+.sfoot-mark img { border-radius: 6px; background: #fff; }
+.sfoot-social { display: flex; gap: 0.5rem; }
+.sfoot-social a { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.35); font-size: 15px; }
+.sfoot-social a:hover { background: var(--accent); border-color: var(--accent); }
+.sfoot-rule { max-width: 1320px; margin: 1.1rem auto; border-top: 1px dotted rgba(255,255,255,0.4); }
+#sfoot .sfoot-grid { max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1.4rem; }
+#sfoot .sfoot-col { display: flex; flex-direction: column; gap: 0.35rem; }
+#sfoot .sfoot-h { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #a9cfcb; margin-bottom: 0.3rem; }
+#sfoot .sfoot-col a { font-size: 0.86rem; }
+.sfoot-legal { max-width: 1320px; margin: 1.6rem auto 0; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;
+  font-family: var(--font-mono); font-size: 11.5px; color: #cfe3e1; }
+.sfoot-legal span { opacity: 0.5; }
+.sfoot-base { max-width: 1320px; margin: 0.7rem auto 0; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem;
+  font-family: var(--font-mono); font-size: 10.5px; color: #a9cfcb; }
+/* footer stays branded teal even in dark theme (it's a deliberate block) */
+html.theme-dark #sfoot { background: var(--brand); }
