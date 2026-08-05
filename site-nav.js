@@ -222,9 +222,22 @@
     document.head.appendChild(s);
   }
 
+  // load motion.js once on every page so micro-interactions, scroll-reveal, parallax,
+  // animated graphs + tap ripples work site-wide (same self-pathing trick as a11y).
+  function ensureMotion() {
+    if (window.Motion || document.getElementById("motion-script")) return;
+    let base = "";
+    const me = document.currentScript || [...document.scripts].find(s => /site-nav\.js/.test(s.src));
+    if (me && me.src) base = me.src.replace(/site-nav\.js.*$/, "");
+    const s = document.createElement("script");
+    s.id = "motion-script"; s.src = base + "motion.js"; s.defer = true;
+    document.head.appendChild(s);
+  }
+
   function mount() {
     injectSEO();
     ensureA11y();
+    ensureMotion();
     // EMBED MODE: when a page is loaded inside the hero app (?embed=1), suppress the site
     // header + footer so the hero's own chrome is the only navigation. The page's own
     // content fills the panel. A body class lets pages trim their own margins if they like.

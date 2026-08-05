@@ -2592,3 +2592,43 @@ html.theme-dark #sfoot { background: var(--brand); }
   border-radius: var(--radius-lg); background: var(--muted); display: block; }
 /* click overlay opens full map (the embed's own interactions still work via the "Open full map" btn) */
 .ba-mapoverlay { position: absolute; inset: 0 var(--pad-x); border-radius: var(--radius-lg); }
+
+/* ============================================================
+   MICRO-INTERACTIONS — site-wide tactile feedback. Applied by
+   element type so every page gets it for free. Reduce-motion safe.
+   ============================================================ */
+/* buttons & CTAs: lift + press */
+.ed-btn, .snav-cta, .at-chip, .ind-btn, button.a11y-opt {
+  transition: transform .12s cubic-bezier(.2,.7,.2,1), box-shadow .15s, background .15s, border-color .15s, color .15s; }
+.ed-btn:active, .snav-cta:active, .at-chip:active, .ind-btn:active { transform: translateY(1px) scale(.98); }
+/* cards: hover lift already on .ed-card; add a subtle image zoom + arrow nudge */
+.ed-card, .ed-rc, .ed-rail-item, .ed-lead, .ed-feature { transition: transform .18s cubic-bezier(.2,.7,.2,1), box-shadow .18s, border-color .18s; }
+.ed-card-art > *, .ed-lead-art > *, .ed-rc-art > * { transition: transform .3s ease; }
+.ed-card:hover .ed-card-art > *, .ed-lead:hover .ed-lead-art > *, .ed-rc:hover .ed-rc-art > * { transform: scale(1.08); }
+/* links: animated underline sweep (editorial pages) */
+.ed-article a, .ed-lede a, .ba-hero-lede a { background-image: linear-gradient(var(--accent), var(--accent));
+  background-size: 0% 2px; background-repeat: no-repeat; background-position: 0 100%; transition: background-size .25s; border-bottom: none; padding-bottom: 1px; }
+.ed-article a:hover, .ed-lede a:hover, .ba-hero-lede a:hover { background-size: 100% 2px; }
+/* topics + drawer links: slide on hover (already partial) */
+.snav-topics a { transition: color .12s; }
+/* a soft "tap ripple" utility any button can add via .ripple */
+.ripple { position: relative; overflow: hidden; }
+.ripple > .rip { position: absolute; border-radius: 50%; transform: scale(0); background: currentColor; opacity: .25;
+  animation: rip .5s ease-out; pointer-events: none; }
+@keyframes rip { to { transform: scale(3); opacity: 0; } }
+/* animated-graph draw-in classes (motion.js sets --draw 0→1) */
+.ag-bar { transform-box: fill-box; transform-origin: bottom; transform: scaleY(var(--draw, 0)); transition: transform .8s cubic-bezier(.2,.8,.2,1); }
+.ag-line { stroke-dasharray: var(--len, 1000); stroke-dashoffset: calc(var(--len, 1000) * (1 - var(--draw, 0))); transition: stroke-dashoffset 1s ease; }
+.ag-donut { stroke-dasharray: var(--circ, 314); stroke-dashoffset: calc(var(--circ, 314) * (1 - var(--draw, 0))); transition: stroke-dashoffset .9s ease; }
+.ag-fade { opacity: var(--draw, 0); transition: opacity .6s ease; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ed-btn, .ed-card, .ed-rc, .ed-lead, .ed-feature, .ed-card-art > *, .ag-bar, .ag-line, .ag-donut, .ag-fade { transition: none !important; }
+  .ed-card:hover .ed-card-art > * { transform: none !important; }
+  .ripple > .rip { animation: none !important; display: none; }
+}
+html[data-reduce-motion="1"] .ag-bar, html[data-reduce-motion="1"] .ag-line, html[data-reduce-motion="1"] .ag-donut, html[data-reduce-motion="1"] .ag-fade { --draw: 1 !important; transition: none !important; }
+
+/* enable ripple on primary buttons (position+overflow already set on .ed-btn) */
+.ed-btn { position: relative; }
+.ed-btn, .snav-cta, .ind-btn { }  /* ripple applied via JS pointerdown on .ripple hosts */
