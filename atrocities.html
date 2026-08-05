@@ -186,6 +186,7 @@
       <span class="at-lbl">View</span>
       <button class="at-chip on" id="view-timeline">🕐 Timeline</button>
       <button class="at-chip" id="view-map">🗺 World map</button>
+      <button class="at-chip on" id="toggle-spread" title="Fan out overlapping events at the same place so dense clusters stay readable">⇲ Spread clusters</button>
     </div>
 
     <div class="at-legend" id="legend"></div>
@@ -241,7 +242,7 @@
 
     let DATA = null, EVENTS = [];
     const activeCats = new Set();
-    let indiaOnly = false, sizeMode = "deaths", activeRegion = "all", view = "timeline";
+    let indiaOnly = false, sizeMode = "deaths", activeRegion = "all", view = "timeline", spread = true;
 
     const yr = y => (y < 0 ? Math.abs(y) + " BCE" : y + " CE");
     const midYear = e => (e.year_start + (e.year_end ?? e.year_start)) / 2;
@@ -473,16 +474,48 @@
       const vis = new Set(visible());
       const maxSize = Math.max(...EVENTS.map(sizeVal));
       const rScale = v => 3 + Math.sqrt(v / maxSize) * 30;
-      // draw largest first so small bubbles stay clickable on top
-      EVENTS.slice().sort((a, b) => sizeVal(b) - sizeVal(a)).forEach(e => {
-        if (e.lat == null || e.lon == null) return;
-        const [cx, cy] = mapProject(e.lon, e.lat, width, height);
-        const r = rScale(sizeVal(e));
+
+      // ---- SEGMENT WITH SPREAD: place bubbles, fanning out any that collide ----
+      // project each event, then (if spread is on) nudge overlapping circles apart with a
+      // few relaxation passes + a leader line back to the true location, so dense clusters
+      // (China, Europe) become readable instead of one opaque blob.
+      const placed = EVENTS.slice()
+        .filter(e => e.lat != null && e.lon != null)
+        .sort((a, b) => sizeVal(b) - sizeVal(a))
+        .map(e => { const [x, y] = mapProject(e.lon, e.lat, width, height); return { e, x, y, ox: x, oy: y, r: rScale(sizeVal(e)) }; });
+
+      if (spread) {
+        for (let pass = 0; pass < 60; pass++) {
+          for (let i = 0; i < placed.length; i++) for (let j = i + 1; j < placed.length; j++) {
+            const a = placed[i], b = placed[j];
+            let dx = b.x - a.x, dy = b.y - a.y;
+            let d = Math.hypot(dx, dy) || 0.01;
+            const min = a.r + b.r + 1.5;
+            if (d < min) {
+              const push = (min - d) / 2;
+              dx /= d; dy /= d;
+              a.x -= dx * push; a.y -= dy * push;
+              b.x += dx * push; b.y += dy * push;
+            }
+          }
+        }
+      }
+
+      placed.forEach(p => {
+        const e = p.e, on = vis.has(e);
+        // leader line from the displaced bubble back to its true location
+        if (spread && on && (Math.abs(p.x - p.ox) > 1 || Math.abs(p.y - p.oy) > 1)) {
+          const ln = document.createElementNS(SVGNS, "line");
+          ln.setAttribute("x1", p.ox.toFixed(1)); ln.setAttribute("y1", p.oy.toFixed(1));
+          ln.setAttribute("x2", p.x.toFixed(1)); ln.setAttribute("y2", p.y.toFixed(1));
+          ln.setAttribute("stroke", locColor(e)); ln.setAttribute("stroke-width", "0.6"); ln.setAttribute("stroke-opacity", "0.4");
+          svg.appendChild(ln);
+        }
         const c = document.createElementNS(SVGNS, "circle");
-        c.setAttribute("cx", cx.toFixed(1)); c.setAttribute("cy", cy.toFixed(1)); c.setAttribute("r", r.toFixed(1));
+        c.setAttribute("cx", p.x.toFixed(1)); c.setAttribute("cy", p.y.toFixed(1)); c.setAttribute("r", p.r.toFixed(1));
         c.setAttribute("fill", locColor(e));
-        c.setAttribute("fill-opacity", vis.has(e) ? "0.82" : "0.08");
-        c.setAttribute("class", "at-bubble" + (vis.has(e) ? "" : " at-bubble--dim") + (e.india_region ? " at-bubble--india" : ""));
+        c.setAttribute("fill-opacity", on ? "0.82" : "0.08");
+        c.setAttribute("class", "at-bubble" + (on ? "" : " at-bubble--dim") + (e.india_region ? " at-bubble--india" : ""));
         c.addEventListener("mousemove", evt => showTip(e, evt));
         c.addEventListener("mouseleave", hideTip);
         c.addEventListener("click", evt => showTip(e, evt));
@@ -613,8 +646,13 @@
       // view toggle — timeline vs world map
       const vt = document.getElementById("view-timeline"), vm = document.getElementById("view-map");
       const tv = document.getElementById("timeline-view"), mv = document.getElementById("map-view");
-      vt.onclick = () => { view = "timeline"; vt.classList.add("on"); vm.classList.remove("on"); tv.hidden = false; mv.hidden = true; render(); };
-      vm.onclick = () => { view = "map"; vm.classList.add("on"); vt.classList.remove("on"); mv.hidden = false; tv.hidden = true; render(); };
+      vt.onclick = () => { view = "timeline"; vt.classList.add("on"); vm.classList.remove("on"); tv.hidden = false; mv.hidden = true; sp.hidden = true; render(); };
+      vm.onclick = () => { view = "map"; vm.classList.add("on"); vt.classList.remove("on"); mv.hidden = false; tv.hidden = true; sp.hidden = false; render(); };
+
+      // spread toggle — fan out overlapping bubbles on the map (only relevant in map view)
+      const sp = document.getElementById("toggle-spread");
+      sp.hidden = true;   // hidden until the map view is on
+      sp.onclick = () => { spread = !spread; sp.classList.toggle("on", spread); render(); };
 
       window.addEventListener("resize", () => { clearTimeout(window.__atrz); window.__atrz = setTimeout(render, 200); });
     }
