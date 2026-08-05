@@ -11,7 +11,7 @@
     .kb-head h1 { margin: 0.3rem 0 0.5rem; font-size: clamp(1.7rem, 4vw, 2.6rem); }
     .kb-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.6; max-width: 78ch; }
     .kb-search { position: sticky; top: 0; z-index: 10; background: var(--background); padding: 0.9rem 0; margin: 1rem 0 0.5rem; }
-    .kb-search input { width: 100%; background: oklch(0.17 0 0); color: var(--foreground); border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 0.75rem 1rem; font-size: 1rem; outline: none; }
+    .kb-search input { width: 100%; background: var(--card); color: var(--foreground); border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 0.75rem 1rem; font-size: 1rem; outline: none; }
     .kb-search input:focus { border-color: var(--warm); }
     .kb-toc { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.4rem 0 1.4rem; }
     .kb-toc a { font-family: var(--font-mono); font-size: 11px; padding: 0.3rem 0.7rem; border: 1px solid var(--border-strong); border-radius: 999px; color: var(--muted-foreground); text-decoration: none; }
@@ -19,12 +19,12 @@
     .kb-sec { margin: 2.2rem 0; scroll-margin-top: 5rem; }
     .kb-sec > h2 { font-size: 1.3rem; border-bottom: 1px solid var(--border-strong); padding-bottom: 0.4rem; }
     .kb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.7rem; }
-    .kb-card { border: 1px solid var(--border); border-radius: var(--radius-sm); background: oklch(0.165 0 0); padding: 0.7rem 0.85rem; }
+    .kb-card { border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--card); padding: 0.7rem 0.85rem; }
     .kb-card h3 { margin: 0 0 0.35rem; font-size: 0.95rem; }
     .kb-card p { margin: 0; font-size: 0.82rem; color: var(--muted-foreground); line-height: 1.5; }
     .kb-tier { font-family: var(--font-mono); font-size: 9px; padding: 1px 6px; border-radius: 999px; border: 1px solid currentColor; }
-    .kb-t1 { color: oklch(0.80 0.16 150); } .kb-t2 { color: oklch(0.80 0.13 200); } .kb-t3 { color: oklch(0.80 0.13 90); } .kb-t4 { color: oklch(0.76 0.16 40); }
-    .kb-state { border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 0.5rem; background: oklch(0.15 0 0); }
+    .kb-t1 { color: oklch(0.48 0.160 150); } .kb-t2 { color: oklch(0.48 0.130 200); } .kb-t3 { color: oklch(0.48 0.130 90); } .kb-t4 { color: oklch(0.48 0.160 40); }
+    .kb-state { border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 0.5rem; background: var(--card); }
     .kb-state > summary { cursor: pointer; padding: 0.6rem 0.9rem; font-weight: 600; font-size: 0.92rem; list-style: none; display: flex; align-items: center; gap: 0.6rem; }
     .kb-state > summary::-webkit-details-marker { display: none; }
     .kb-state > summary::before { content: "▸"; color: var(--muted-foreground); }
@@ -41,7 +41,7 @@
     .kb-chain a { color: var(--warm); font-size: 0.8rem; }
     .kb-hide { display: none !important; }
     .kb-empty { color: var(--muted-foreground); font-size: 0.9rem; padding: 1rem 0; }
-    a.kb-src { color: oklch(0.75 0.12 220); word-break: break-all; font-size: 0.8rem; }
+    a.kb-src { color: oklch(0.48 0.120 220); word-break: break-all; font-size: 0.8rem; }
     /* Officials accountability cards */
     .kb-off { grid-column: 1 / -1; }
     .kb-mono { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
@@ -52,11 +52,11 @@
     .kb-issue p { margin: 0.2rem 0 0; font-size: 0.83rem; line-height: 1.5; color: var(--foreground); }
     .kb-issue-meta { color: var(--muted-foreground) !important; font-size: 0.78rem !important; }
     .kb-issue-kind { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--warm); margin-left: 0.4rem; }
-    .conf-documented { color: oklch(0.80 0.16 150); } .conf-reported { color: oklch(0.80 0.13 90); } .conf-alleged { color: oklch(0.76 0.16 40); }
+    .conf-documented { color: oklch(0.48 0.160 150); } .conf-reported { color: oklch(0.48 0.130 90); } .conf-alleged { color: oklch(0.48 0.160 40); }
     .kb-off-refs { margin-top: 0.5rem; display: flex; flex-wrap: wrap; gap: 0.3rem; }
     .kb-dchip { font-family: var(--font-mono); font-size: 10px; padding: 2px 8px; border: 1px solid var(--border-strong); border-radius: 999px; color: var(--foreground); text-decoration: none; }
     .kb-dchip:hover { border-color: var(--warm); }
-    .kb-src2 { color: oklch(0.72 0.12 220); text-decoration: none; font-size: 0.9rem; }
+    .kb-src2 { color: oklch(0.48 0.120 220); text-decoration: none; font-size: 0.9rem; }
   </style>
 </head>
 <body>

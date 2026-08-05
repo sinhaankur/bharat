@@ -25,26 +25,26 @@
     .soi-metrics { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 1rem 0 0.4rem; }
     .soi-mbtn { font-family: var(--font-mono); font-size: 12px; padding: 5px 13px; border-radius: 999px; background: oklch(0.18 0.02 250); color: var(--muted-foreground); border: 1px solid var(--border-strong); cursor: pointer; }
     .soi-mbtn:hover { color: var(--foreground); border-color: var(--warm); }
-    .soi-mbtn.active { background: oklch(0.28 0.07 78); border-color: var(--warm); color: oklch(0.94 0.05 90); }
+    .soi-mbtn.active { background: oklch(0.28 0.07 78); border-color: var(--warm); color: oklch(0.48 0.050 90); }
     .soi-metric-note { font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); min-height: 1.1em; margin-bottom: 0.6rem; }
     /* the ranked bars */
     .soi-list { display: flex; flex-direction: column; gap: 2px; }
     .soi-row { display: grid; grid-template-columns: 22px 150px 1fr auto 26px; align-items: center; gap: 0.6rem; padding: 0.32rem 0.5rem; border-radius: 6px; cursor: pointer; transition: background .12s; }
     .soi-share { background: none; border: 0; color: var(--muted-foreground); font-size: 14px; cursor: pointer; opacity: 0; padding: 2px 4px; border-radius: 5px; transition: opacity .12s, color .12s, background .12s; }
     .soi-row:hover .soi-share { opacity: 1; }
-    .soi-share:hover { color: oklch(0.84 0.15 78); background: oklch(0.24 0.04 250); }
+    .soi-share:hover { color: oklch(0.48 0.150 78); background: oklch(0.24 0.04 250); }
     .soi-row:hover { background: oklch(0.2 0.02 250); }
     .soi-rank { font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); text-align: right; }
     .soi-name { font-size: 0.9rem; }
     .soi-name .rg { font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); }
-    .soi-bar-wrap { height: 15px; background: oklch(0.2 0 0); border-radius: 4px; overflow: hidden; position: relative; }
+    .soi-bar-wrap { height: 15px; background: var(--card); border-radius: 4px; overflow: hidden; position: relative; }
     .soi-bar { height: 100%; border-radius: 4px; transition: width .35s ease; }
     .soi-bar.neg { background: linear-gradient(90deg, oklch(0.55 0.16 30), oklch(0.62 0.18 25)); }
-    .soi-bar.pos { background: linear-gradient(90deg, oklch(0.55 0.1 210), oklch(0.72 0.15 145)); }
+    .soi-bar.pos { background: linear-gradient(90deg, oklch(0.55 0.1 210), oklch(0.48 0.150 145)); }
     .soi-val { font-family: var(--font-mono); font-size: 12px; color: var(--foreground); white-space: nowrap; }
-    .soi-val.negc { color: oklch(0.72 0.16 35); }
+    .soi-val.negc { color: oklch(0.48 0.160 35); }
     .soi-note { font-size: 0.83rem; color: var(--muted-foreground); line-height: 1.6; margin-top: 1.6rem; border-top: 1px solid var(--border); padding-top: 1rem; }
-    .soi-note a { color: oklch(0.78 0.16 72); }
+    .soi-note a { color: oklch(0.48 0.160 72); }
     .soi-gap { border-left: 3px solid oklch(0.6 0.16 60); padding: 0.55rem 0.9rem; background: oklch(0.2 0.03 60 / 0.3); border-radius: var(--radius-sm); margin: 1.2rem 0; font-size: 0.85rem; line-height: 1.55; }
     @media (max-width: 640px) { .soi-row { grid-template-columns: 20px 96px 1fr auto; } .soi-name { font-size: 0.8rem; } }
   </style>

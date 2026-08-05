@@ -19,14 +19,14 @@
   <link rel="stylesheet" href="styles.css" />
   <style>
     /* ── palette + motion tokens for this page ─────────────────────────── */
-    .ha-page { --gold: oklch(0.84 0.13 75); --gold-deep: oklch(0.66 0.15 60); --ember: oklch(0.72 0.19 32); }
+    .ha-page { --gold: oklch(0.48 0.130 75); --gold-deep: oklch(0.66 0.15 60); --ember: oklch(0.48 0.190 32); }
     .ha-wrap { max-width: 1320px; margin: 0 auto; padding: 0.8rem var(--pad-x) 4rem; }
 
     /* ── compact top bar (title + search + view), replaces the full-screen hero ── */
     .ha-topbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
       padding: 0.3rem 0 0.7rem; border-bottom: 1px solid var(--border); margin-bottom: 0.9rem; }
     .ha-topbar-l h1 { margin: 0; font-size: clamp(1.3rem, 2.6vw, 1.9rem); line-height: 1.05; letter-spacing: -0.01em;
-      background: linear-gradient(180deg, oklch(0.99 0 0), oklch(0.86 0.10 70)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+      background: linear-gradient(180deg, var(--foreground), oklch(0.48 0.100 70)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
     .ha-topbar-l h1 em { font-style: normal; background: linear-gradient(180deg, var(--gold), var(--ember)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
     .ha-tag { margin: 0.15rem 0 0; font-size: 0.82rem; color: var(--muted-foreground); }
     .ha-about-t { background: none; border: none; color: var(--gold); font-family: var(--font-mono); font-size: 10px; cursor: pointer; padding: 0; }
@@ -40,7 +40,7 @@
       background:
         radial-gradient(1200px 340px at 80% -10%, oklch(0.66 0.15 60 / 0.22), transparent 60%),
         radial-gradient(900px 300px at 5% 120%, oklch(0.5 0.14 30 / 0.18), transparent 55%),
-        linear-gradient(180deg, oklch(0.12 0.01 60), oklch(0.145 0 0)); }
+        linear-gradient(180deg, oklch(0.12 0.01 60), var(--card)); }
     /* faint shikhara skyline drawn in CSS, no image needed */
     .ha-hero::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 120px; pointer-events: none; opacity: 0.5;
       background:
@@ -52,11 +52,11 @@
     .ha-hero > * { position: relative; z-index: 1; }
     .ha-eyebrow { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); }
     .ha-hero h1 { margin: 0.5rem 0 0.5rem; font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1.02; letter-spacing: -0.02em;
-      background: linear-gradient(180deg, oklch(0.99 0 0), oklch(0.84 0.10 70)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+      background: linear-gradient(180deg, var(--foreground), oklch(0.48 0.100 70)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
     .ha-hero h1 em { font-style: normal; background: linear-gradient(180deg, var(--gold), var(--ember)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
     .ha-lede { color: var(--muted-foreground); font-size: 1rem; line-height: 1.6; max-width: 66ch; }
     .ha-lede b { color: oklch(0.92 0.02 80); font-weight: 600; }
-    .ha-thesis { border-left: 2px solid var(--gold-deep); padding: 0.15rem 0 0.15rem 0.85rem; margin: 1rem 0 0; color: oklch(0.85 0.10 70); font-size: 0.92rem; line-height: 1.5; font-style: italic; max-width: 64ch; }
+    .ha-thesis { border-left: 2px solid var(--gold-deep); padding: 0.15rem 0 0.15rem 0.85rem; margin: 1rem 0 0; color: oklch(0.48 0.100 70); font-size: 0.92rem; line-height: 1.5; font-style: italic; max-width: 64ch; }
 
     /* animated stat pills */
     .ha-stats { display: flex; flex-wrap: wrap; gap: 0.7rem; margin: 1.6rem 0 0; }
@@ -69,16 +69,16 @@
     /* ── toolbar: search + view toggle ─────────────────────────────────── */
     .ha-toolbar { display: flex; gap: 0.7rem; align-items: center; flex-wrap: wrap; margin: 0.4rem 0 0.2rem; }
     .ha-search { position: relative; flex: 1; min-width: 220px; }
-    .ha-search input { width: 100%; background: oklch(0.16 0 0); border: 1px solid var(--border-strong); border-radius: 999px;
+    .ha-search input { width: 100%; background: var(--card); border: 1px solid var(--border-strong); border-radius: 999px;
       color: var(--foreground); font-size: 0.9rem; padding: 0.6rem 2.2rem 0.6rem 2.2rem; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
     .ha-search input:focus { border-color: var(--gold-deep); box-shadow: 0 0 0 3px oklch(0.66 0.15 60 / 0.18); }
     .ha-search .ic { position: absolute; left: 0.8rem; top: 50%; transform: translateY(-50%); color: var(--muted-foreground); font-size: 0.9rem; }
     .ha-search .clr { position: absolute; right: 0.6rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--muted-foreground); cursor: pointer; font-size: 1rem; display: none; }
     .ha-view { display: flex; border: 1px solid var(--border-strong); border-radius: 999px; overflow: hidden; }
     .ha-view button { background: none; border: none; color: var(--muted-foreground); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.5rem 0.9rem; cursor: pointer; }
-    .ha-view button.on { background: var(--gold); color: oklch(0.16 0 0); font-weight: 700; }
+    .ha-view button.on { background: var(--gold); color: var(--card); font-weight: 700; }
 
-    #ha-map { height: 440px; border: 1px solid var(--border-strong); border-radius: var(--radius-lg); margin: 0 0 0.5rem; background: oklch(0.12 0 0);
+    #ha-map { height: 440px; border: 1px solid var(--border-strong); border-radius: var(--radius-lg); margin: 0 0 0.5rem; background: var(--background);
       box-shadow: 0 20px 60px -30px oklch(0 0 0 / 0.9), inset 0 0 0 1px oklch(1 0 0 / 0.02); overflow: hidden; }
     @media (max-width: 640px) { #ha-map { height: 340px; } }
     .ha-maplegend { display: flex; flex-wrap: wrap; gap: 0.3rem 1rem; font-size: 0.72rem; color: var(--muted-foreground); margin: 0 0.2rem 0.3rem; }
@@ -86,13 +86,13 @@
     /* pulsing ring for destroyed markers */
     @keyframes ha-pulse { 0% { transform: scale(1); opacity: 0.55; } 70% { transform: scale(2.4); opacity: 0; } 100% { opacity: 0; } }
     .ha-pulse { animation: ha-pulse 2.4s ease-out infinite; transform-origin: center; }
-    .leaflet-container { background: oklch(0.13 0 0); font-family: inherit; }
-    .leaflet-popup-content-wrapper, .leaflet-popup-tip { background: oklch(0.16 0 0); color: var(--foreground); border: 1px solid var(--border-strong); }
+    .leaflet-container { background: var(--background); font-family: inherit; }
+    .leaflet-popup-content-wrapper, .leaflet-popup-tip { background: var(--card); color: var(--foreground); border: 1px solid var(--border-strong); }
     .leaflet-popup-content { margin: 0.65rem 0.8rem; min-width: 210px; }
-    .ha-pop-t { font-weight: 700; color: oklch(0.86 0.12 75); }
+    .ha-pop-t { font-weight: 700; color: oklch(0.48 0.120 75); }
     .ha-pop-sub { font-size: 0.8rem; color: var(--muted-foreground); margin: 2px 0; }
-    .ha-pop-x { font-size: 0.8rem; color: oklch(0.78 0.16 30); margin-top: 3px; }
-    .ha-pop-open { display: inline-block; margin-top: 5px; font-family: var(--font-mono); font-size: 9.5px; color: oklch(0.74 0.16 75); text-decoration: none; cursor: pointer; }
+    .ha-pop-x { font-size: 0.8rem; color: oklch(0.48 0.160 30); margin-top: 3px; }
+    .ha-pop-open { display: inline-block; margin-top: 5px; font-family: var(--font-mono); font-size: 9.5px; color: oklch(0.48 0.160 75); text-decoration: none; cursor: pointer; }
 
     /* time scrubber */
     .ha-scrub { border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 0.75rem 0.95rem; margin: 0.7rem 0 0.2rem;
@@ -102,32 +102,32 @@
     .ha-scrub input[type=range] { width: 100%; margin: 0.55rem 0 0.35rem; accent-color: var(--gold-deep); cursor: pointer; height: 6px; }
     .ha-scrub-foot { font-size: 0.74rem; color: var(--muted-foreground); line-height: 1.45; display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap; }
     .ha-scrub-btn { background: none; border: 1px solid var(--border-strong); color: var(--gold); font-family: var(--font-mono); font-size: 10px; padding: 5px 12px; border-radius: 999px; cursor: pointer; transition: background 0.2s, color 0.2s; }
-    .ha-scrub-btn:hover { background: var(--gold); color: oklch(0.16 0 0); }
+    .ha-scrub-btn:hover { background: var(--gold); color: var(--card); }
 
     /* sticky filter rack */
-    .ha-filters { position: sticky; top: 0; z-index: 20; margin: 0.8rem 0 0.2rem; padding: 0.6rem 0.2rem; background: oklch(0.145 0 0 / 0.82); backdrop-filter: blur(8px); border-bottom: 1px solid transparent; transition: border-color 0.2s, box-shadow 0.2s; }
+    .ha-filters { position: sticky; top: 0; z-index: 20; margin: 0.8rem 0 0.2rem; padding: 0.6rem 0.2rem; background: var(--card); backdrop-filter: blur(8px); border-bottom: 1px solid transparent; transition: border-color 0.2s, box-shadow 0.2s; }
     .ha-filters.stuck { border-color: var(--border); box-shadow: 0 8px 24px -18px oklch(0 0 0 / 0.9); }
     .ha-controls { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; margin: 0.28rem 0; }
     .ha-lbl { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted-foreground); margin-right: 0.2rem; min-width: 84px; }
     .ha-chip { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.03em; padding: 5px 12px; border-radius: 999px; border: 1px solid var(--border-strong); color: var(--muted-foreground); background: transparent; cursor: pointer; transition: transform 0.12s, border-color 0.15s, color 0.15s, background 0.15s; }
     .ha-chip:hover { transform: translateY(-1px); border-color: var(--foreground); color: var(--foreground); }
     .ha-chip .n { opacity: 0.6; margin-left: 0.35rem; }
-    .ha-chip.on { color: oklch(0.16 0 0); font-weight: 600; }
-    .ha-chip[data-trad="sanatan"].on { border-color: oklch(0.7 0.17 40); background: oklch(0.74 0.16 55); }
-    .ha-chip[data-trad="buddhist"].on { border-color: oklch(0.7 0.15 75); background: oklch(0.78 0.14 80); }
-    .ha-chip[data-trad="jain"].on { border-color: oklch(0.7 0.15 145); background: oklch(0.76 0.13 150); }
-    .ha-chip[data-trad="sikh"].on { border-color: oklch(0.66 0.16 25); background: oklch(0.72 0.16 25); }
+    .ha-chip.on { color: var(--card); font-weight: 600; }
+    .ha-chip[data-trad="sanatan"].on { border-color: oklch(0.7 0.17 40); background: oklch(0.48 0.160 55); }
+    .ha-chip[data-trad="buddhist"].on { border-color: oklch(0.7 0.15 75); background: oklch(0.48 0.140 80); }
+    .ha-chip[data-trad="jain"].on { border-color: oklch(0.7 0.15 145); background: oklch(0.48 0.130 150); }
+    .ha-chip[data-trad="sikh"].on { border-color: oklch(0.66 0.16 25); background: oklch(0.48 0.160 25); }
     .ha-chip[data-trad="adivasi"].on { border-color: oklch(0.62 0.15 130); background: oklch(0.7 0.15 130); }
-    .ha-chip[data-trad="native_faith"].on { border-color: oklch(0.66 0.15 100); background: oklch(0.74 0.15 100); }
-    .ha-chip[data-trad="christian"].on { border-color: oklch(0.6 0.13 250); background: oklch(0.68 0.13 250); color: oklch(0.99 0 0); }
-    .ha-chip[data-trad="pre_vedic_megalithic"].on { border-color: oklch(0.65 0.05 250); background: oklch(0.72 0.06 250); }
+    .ha-chip[data-trad="native_faith"].on { border-color: oklch(0.66 0.15 100); background: oklch(0.48 0.150 100); }
+    .ha-chip[data-trad="christian"].on { border-color: oklch(0.6 0.13 250); background: oklch(0.68 0.13 250); color: var(--foreground); }
+    .ha-chip[data-trad="pre_vedic_megalithic"].on { border-color: oklch(0.65 0.05 250); background: oklch(0.48 0.060 250); }
     .ha-chip[data-trad="indus_valley"].on { border-color: oklch(0.6 0.11 190); background: oklch(0.7 0.12 190); }
     .ha-chip[data-trad="contested"].on { border-color: oklch(0.6 0.02 300); background: oklch(0.66 0.03 300); }
-    .ha-chip.on.generic { border-color: oklch(0.66 0.16 75); background: oklch(0.74 0.15 75); }
+    .ha-chip.on.generic { border-color: oklch(0.66 0.16 75); background: oklch(0.48 0.150 75); }
     .ha-count { margin-left: auto; font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
 
     .ha-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.1rem; margin-top: 1.1rem; }
-    .ha-card { position: relative; border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 0; background: oklch(0.155 0 0); overflow: hidden;
+    .ha-card { position: relative; border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 0; background: var(--card); overflow: hidden;
       transition: transform 0.28s cubic-bezier(.2,.7,.3,1), box-shadow 0.28s, border-color 0.28s; }
     .ha-card::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 3px; background: var(--tc, var(--gold)); opacity: 0.9; }
     .ha-card:hover { transform: translateY(-5px); border-color: color-mix(in oklch, var(--tc, var(--gold)) 55%, var(--border-strong)); box-shadow: 0 24px 50px -30px oklch(0 0 0 / 0.9), 0 0 0 1px color-mix(in oklch, var(--tc, var(--gold)) 22%, transparent); }
@@ -140,38 +140,38 @@
     .ha-yr { margin-left: auto; font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); white-space: nowrap; padding-top: 2px; }
     /* status ribbon */
     .ha-ribbon { font-family: var(--font-mono); font-size: 8px; text-transform: uppercase; letter-spacing: 0.05em; padding: 2px 8px; border-radius: 999px; display: inline-flex; align-items: center; gap: 3px; }
-    .ha-ribbon.active { color: oklch(0.16 0 0); background: oklch(0.78 0.15 150); }
-    .ha-ribbon.ruin { color: oklch(0.86 0.06 80); background: oklch(0.35 0.05 70); }
-    .ha-ribbon.destroyed, .ha-ribbon.converted { color: oklch(0.95 0.04 30); background: oklch(0.45 0.16 30); }
-    .ha-ribbon.reconstructed { color: oklch(0.16 0 0); background: oklch(0.76 0.13 200); }
+    .ha-ribbon.active { color: var(--card); background: oklch(0.48 0.150 150); }
+    .ha-ribbon.ruin { color: oklch(0.48 0.060 80); background: oklch(0.35 0.05 70); }
+    .ha-ribbon.destroyed, .ha-ribbon.converted { color: oklch(0.48 0.040 30); background: oklch(0.45 0.16 30); }
+    .ha-ribbon.reconstructed { color: var(--card); background: oklch(0.48 0.130 200); }
     .ha-ribbon.contested { color: oklch(0.9 0 0); background: oklch(0.4 0.02 300); }
     .ha-place { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; color: var(--muted-foreground); margin: 0 0 0.35rem; letter-spacing: 0.02em; }
     .ha-series { display: flex; flex-wrap: wrap; gap: 0.3rem; margin: 0.2rem 0 0.1rem; }
-    .ha-seriestag { font-family: var(--font-mono); font-size: 8px; text-transform: uppercase; letter-spacing: 0.04em; padding: 2px 7px; border-radius: 999px; border: 1px solid oklch(0.6 0.14 60); color: oklch(0.84 0.13 70); }
+    .ha-seriestag { font-family: var(--font-mono); font-size: 8px; text-transform: uppercase; letter-spacing: 0.04em; padding: 2px 7px; border-radius: 999px; border: 1px solid oklch(0.6 0.14 60); color: oklch(0.48 0.130 70); }
     .ha-builder { font-size: 0.85rem; line-height: 1.5; color: var(--foreground); margin: 0.5rem 0 0; }
     .ha-builder b { color: var(--gold); }
     .ha-life { font-size: 0.84rem; line-height: 1.5; color: var(--muted-foreground); margin: 0.4rem 0; }
     /* lifespan bar: built → destroyed → now */
     .ha-span { margin: 0.65rem 0 0.4rem; }
-    .ha-span-track { position: relative; height: 7px; background: oklch(0.24 0 0); border-radius: 999px; overflow: hidden; }
+    .ha-span-track { position: relative; height: 7px; background: var(--muted); border-radius: 999px; overflow: hidden; }
     .ha-span-fill { position: absolute; top: 0; bottom: 0; border-radius: 999px; background: linear-gradient(90deg, oklch(0.55 0.13 150), var(--gold)); }
     .ha-span-fill::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, oklch(1 0 0 / 0.35), transparent); transform: translateX(-100%); animation: ha-shimmer 3.2s ease-in-out infinite; }
     @keyframes ha-shimmer { 0% { transform: translateX(-100%); } 60%,100% { transform: translateX(220%); } }
     .ha-span-x { position: absolute; top: -3px; width: 2px; height: 13px; background: var(--ember); z-index: 2; }
     .ha-span-x::after { content: "✕"; position: absolute; top: -13px; left: -3px; font-size: 8px; color: var(--ember); }
     .ha-span-lbls { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 8.5px; color: var(--muted-foreground); margin-top: 3px; }
-    .ha-destroy { font-size: 0.83rem; line-height: 1.5; color: oklch(0.85 0.10 32); background: oklch(0.2 0.06 30 / 0.35); border-radius: 6px; padding: 0.4rem 0.55rem; margin: 0.4rem 0; }
-    .ha-destroy b { color: oklch(0.86 0.15 32); }
+    .ha-destroy { font-size: 0.83rem; line-height: 1.5; color: oklch(0.48 0.100 32); background: oklch(0.2 0.06 30 / 0.35); border-radius: 6px; padding: 0.4rem 0.55rem; margin: 0.4rem 0; }
+    .ha-destroy b { color: oklch(0.48 0.150 32); }
     .ha-destroy .who { font-weight: 700; }
-    .ha-destroy .link { display: inline-block; margin-top: 3px; font-family: var(--font-mono); font-size: 9px; color: oklch(0.74 0.16 75); text-decoration: none; }
-    .ha-rebut { font-size: 0.82rem; line-height: 1.5; color: oklch(0.8 0.06 300); background: oklch(0.2 0.02 300 / 0.4); border-radius: 6px; padding: 0.4rem 0.55rem; margin: 0.4rem 0; }
-    .ha-rebut b { color: oklch(0.86 0.05 300); }
+    .ha-destroy .link { display: inline-block; margin-top: 3px; font-family: var(--font-mono); font-size: 9px; color: oklch(0.48 0.160 75); text-decoration: none; }
+    .ha-rebut { font-size: 0.82rem; line-height: 1.5; color: oklch(0.48 0.060 300); background: oklch(0.2 0.02 300 / 0.4); border-radius: 6px; padding: 0.4rem 0.55rem; margin: 0.4rem 0; }
+    .ha-rebut b { color: oklch(0.48 0.050 300); }
     .ha-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.6rem; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px dashed var(--border); }
     .ha-src { font-size: 0.76rem; color: var(--muted-foreground); }
-    .ha-src a { color: oklch(0.72 0.13 250); }
-    .ha-gap { font-family: var(--font-mono); font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.03em; padding: 1px 7px; border-radius: 999px; border: 1px dashed oklch(0.6 0.14 60); color: oklch(0.78 0.14 70); }
+    .ha-src a { color: oklch(0.48 0.130 250); }
+    .ha-gap { font-family: var(--font-mono); font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.03em; padding: 1px 7px; border-radius: 999px; border: 1px dashed oklch(0.6 0.14 60); color: oklch(0.48 0.140 70); }
     .ha-share { margin-left: auto; background: none; border: 1px solid var(--border-strong); color: var(--muted-foreground); font-family: var(--font-mono); font-size: 10px; padding: 6px 12px; border-radius: 999px; cursor: pointer; }
-    .ha-share:hover { border-color: oklch(0.72 0.15 70); color: oklch(0.84 0.13 75); }
+    .ha-share:hover { border-color: oklch(0.48 0.150 70); color: oklch(0.48 0.130 75); }
     .ha-card--dim { opacity: 0.34; filter: saturate(0.5); }
     .ha-card--hl { border-color: var(--gold) !important; box-shadow: 0 0 0 2px oklch(0.7 0.16 70 / 0.5), 0 24px 50px -28px oklch(0 0 0 / 0.9) !important; }
     /* scroll reveal */
@@ -185,16 +185,16 @@
       .ha-stat:hover, .ha-card:hover, .ha-chip:hover { transform: none; }
     }
     .ha-note { font-size: 0.78rem; color: var(--muted-foreground); line-height: 1.6; margin-top: 1.8rem; border-top: 1px solid var(--border); padding-top: 1rem; }
-    .ha-note a { color: oklch(0.74 0.16 75); }
+    .ha-note a { color: oklch(0.48 0.160 75); }
     .ha-note b { color: var(--foreground); }
 
     /* ── APP SHELL: sidebar of filters + main content ──────────────────── */
     .ha-shell { display: grid; grid-template-columns: 264px 1fr; gap: 1.3rem; align-items: start; margin-top: 0.4rem; }
     @media (max-width: 900px) { .ha-shell { grid-template-columns: 1fr; } }
     .ha-side { position: sticky; top: 0.6rem; align-self: start; max-height: calc(100vh - 1.2rem); overflow-y: auto; padding-right: 0.2rem;
-      border: 1px solid var(--border); border-radius: var(--radius-lg); background: oklch(0.15 0 0); }
+      border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--card); }
     .ha-side::-webkit-scrollbar { width: 8px; } .ha-side::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 8px; }
-    .ha-side-hd { position: sticky; top: 0; z-index: 3; background: oklch(0.16 0 0); padding: 0.7rem 0.9rem; border-bottom: 1px solid var(--border);
+    .ha-side-hd { position: sticky; top: 0; z-index: 3; background: var(--card); padding: 0.7rem 0.9rem; border-bottom: 1px solid var(--border);
       display: flex; align-items: center; gap: 0.5rem; }
     .ha-side-hd b { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted-foreground); }
     .ha-side-hd .ha-reset2 { margin-left: auto; background: none; border: 1px solid var(--border-strong); color: var(--gold); font-family: var(--font-mono); font-size: 9px; padding: 3px 9px; border-radius: 999px; cursor: pointer; }
@@ -219,7 +219,7 @@
     .ha-summary { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin: 0 0 0.7rem; min-height: 26px; }
     .ha-summary .lead { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
     .ha-summary .big { font-family: var(--font-mono); font-size: 1rem; color: var(--gold); font-weight: 700; }
-    .ha-pill { display: inline-flex; align-items: center; gap: 5px; font-family: var(--font-mono); font-size: 9.5px; padding: 3px 6px 3px 10px; border-radius: 999px; border: 1px solid var(--border-strong); color: var(--foreground); background: oklch(0.18 0 0); }
+    .ha-pill { display: inline-flex; align-items: center; gap: 5px; font-family: var(--font-mono); font-size: 9.5px; padding: 3px 6px 3px 10px; border-radius: 999px; border: 1px solid var(--border-strong); color: var(--foreground); background: var(--card); }
     .ha-pill button { background: none; border: none; color: var(--muted-foreground); cursor: pointer; font-size: 12px; line-height: 1; padding: 0; }
     .ha-pill button:hover { color: var(--ember); }
     /* continent-grouped list */

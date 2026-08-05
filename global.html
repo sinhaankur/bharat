@@ -12,11 +12,11 @@
     .gl-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.55; max-width: 72ch; }
     .gl-india { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 0.7rem; margin: 1.4rem 0; }
     .gl-stat { border: 1px solid var(--border-strong); border-radius: var(--radius); background: oklch(0.18 0.04 75 / 0.25); padding: 0.9rem 1rem; }
-    .gl-stat .v { font-family: var(--font-mono); font-size: 1.25rem; color: oklch(0.84 0.15 78); }
+    .gl-stat .v { font-family: var(--font-mono); font-size: 1.25rem; color: oklch(0.48 0.150 78); }
     .gl-stat .l { font-size: 9.5px; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-foreground); margin-top: 2px; }
-    .gl-stat .rank { font-size: 10px; color: oklch(0.80 0.16 150); font-family: var(--font-mono); margin-top: 3px; }
+    .gl-stat .rank { font-size: 10px; color: oklch(0.48 0.160 150); font-family: var(--font-mono); margin-top: 3px; }
     .gl-controls { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin: 1rem 0; }
-    .gl-controls select, .gl-controls input { background: oklch(0.18 0 0); color: var(--foreground); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 0.45rem 0.7rem; font-family: var(--font-mono); font-size: 11px; }
+    .gl-controls select, .gl-controls input { background: var(--card); color: var(--foreground); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 0.45rem 0.7rem; font-family: var(--font-mono); font-size: 11px; }
     table.gl-tbl { width: 100%; border-collapse: collapse; font-size: 12.5px; }
     .gl-tbl th { text-align: right; font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted-foreground); padding: 0.6rem 0.7rem; border-bottom: 1px solid var(--border-strong); cursor: pointer; }
     .gl-tbl th:nth-child(1), .gl-tbl th:nth-child(2) { text-align: left; }
@@ -24,10 +24,10 @@
     .gl-tbl td:nth-child(1), .gl-tbl td:nth-child(2) { text-align: left; }
     .gl-tbl td:nth-child(1) { font-family: var(--font-mono); color: var(--muted-foreground); }
     .gl-tbl tr.is-india td { background: oklch(0.22 0.05 78 / 0.5); color: var(--foreground); font-weight: 600; }
-    .gl-tbl tr:hover td { background: oklch(0.2 0 0); }
-    .gl-bar { display: inline-block; height: 7px; border-radius: 999px; background: oklch(0.74 0.16 70); vertical-align: middle; margin-left: 6px; }
+    .gl-tbl tr:hover td { background: var(--card); }
+    .gl-bar { display: inline-block; height: 7px; border-radius: 999px; background: oklch(0.48 0.160 70); vertical-align: middle; margin-left: 6px; }
     .gl-note { font-size: 0.8rem; color: var(--muted-foreground); line-height: 1.55; margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1rem; }
-    .gl-note a { color: oklch(0.74 0.16 75); }
+    .gl-note a { color: oklch(0.48 0.160 75); }
     .gl-empty { color: var(--muted-foreground); padding: 2rem 0; }
   </style>
 </head>
