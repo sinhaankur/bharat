@@ -2402,3 +2402,30 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 }
 html[data-reduce-motion="1"] .will-reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
 html[data-reduce-motion="1"] .brand-dot, html[data-reduce-motion="1"] .hero-pins circle { animation: none !important; }
+
+/* ============================================================
+   THEME: DARK CANVAS pages (map / 3D globe / walkthroughs).
+   Pro data-viz convention: these keep a dark canvas + dark
+   control panels. Add class="theme-dark" to <html> on those
+   pages; it restores the dark token values so each page's own
+   inline dark styles read correctly again.
+   ============================================================ */
+html.theme-dark {
+  --background:       oklch(0.145 0 0);
+  --foreground:       oklch(0.985 0 0);
+  --muted:            oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --border:           oklch(0.269 0 0);
+  --border-strong:    oklch(0.35 0 0);
+  --card:             oklch(0.18 0 0);
+  --brand-tint:       oklch(0.28 0.06 190);
+  --accent-tint:      oklch(0.28 0.08 40);
+}
+html.theme-dark, html.theme-dark body { background: var(--background); color: var(--foreground); }
+html.theme-dark a { color: var(--foreground); border-bottom-color: oklch(0.4 0 0); }
+html.theme-dark a:hover { color: var(--foreground); border-color: var(--foreground); }
+/* nav on dark pages: dark bar */
+html.theme-dark #nav { background: oklch(0.145 0 0 / 0.85); }
+html.theme-dark .brand-word { color: var(--foreground); }
+html.theme-dark .snav-menu { background: oklch(0.16 0 0); box-shadow: 0 8px 24px oklch(0 0 0 / 0.5); }
+html.theme-dark .snav-menu a:hover, html.theme-dark .snav-group.is-current .snav-top { background: oklch(0.24 0 0); }
