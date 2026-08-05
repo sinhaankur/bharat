@@ -78,7 +78,47 @@
     frame();
   }
 
-  function boot() { init(); initParallax(); }
+  // ---- ANIMATED GRAPHS: draw bars/lines/donuts in when they enter view ----
+  // Any element with class ag-bar / ag-line / ag-donut / ag-fade animates via its
+  // --draw variable (0→1). We just flip --draw to 1 when it scrolls into view.
+  function initGraphs() {
+    var els = Array.prototype.slice.call(document.querySelectorAll(".ag-bar, .ag-line, .ag-donut, .ag-fade"));
+    if (!els.length) return;
+    if (reduced() || !("IntersectionObserver" in window)) {
+      els.forEach(function (el) { el.style.setProperty("--draw", "1"); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var el = e.target;
+        var d = parseInt(el.getAttribute("data-graph-delay") || "0", 10);
+        setTimeout(function () { el.style.setProperty("--draw", "1"); }, d);
+        io.unobserve(el);
+      });
+    }, { threshold: 0.25 });
+    els.forEach(function (el) { el.style.setProperty("--draw", "0"); io.observe(el); });
+  }
+
+  // ---- TAP RIPPLE: buttons/cards with class .ripple get a material-style ripple ----
+  function initRipple() {
+    if (reduced()) return;
+    document.addEventListener("pointerdown", function (e) {
+      var host = e.target.closest && e.target.closest(".ripple");
+      if (!host) return;
+      var r = host.getBoundingClientRect();
+      var rip = document.createElement("span");
+      rip.className = "rip";
+      var size = Math.max(r.width, r.height);
+      rip.style.width = rip.style.height = size + "px";
+      rip.style.left = (e.clientX - r.left - size / 2) + "px";
+      rip.style.top = (e.clientY - r.top - size / 2) + "px";
+      host.appendChild(rip);
+      setTimeout(function () { rip.remove(); }, 520);
+    }, { passive: true });
+  }
+
+  function boot() { init(); initParallax(); initGraphs(); initRipple(); }
   window.Motion = { countUp: countUp, reduced: reduced, refresh: boot };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
   else boot();
