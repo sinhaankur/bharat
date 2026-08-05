@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bharat Atlas — understand where India's public money goes</title>
+  <title>Bharat — understand where India's public money goes</title>
   <meta name="description" content="A data-driven newsroom and atlas for India: where public money flows across 594 districts, how land and law shape it, and the record behind the headlines. Sourced, or it's a gap." />
   <link rel="canonical" href="https://sinhaankur.github.io/india-fiscal-map/home.html" />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="Bharat Atlas" />
-  <meta property="og:title" content="Bharat Atlas — understand where India's public money goes" />
+  <meta property="og:site_name" content="Bharat" />
+  <meta property="og:title" content="Bharat — understand where India's public money goes" />
   <meta property="og:description" content="A data-driven newsroom and atlas for India: public money by district, land & law, and the record behind the headlines." />
   <meta property="og:image" content="https://sinhaankur.github.io/india-fiscal-map/og-image.png" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -21,7 +21,7 @@
   <!-- ============ 1 · BRAND HERO ============ -->
   <header class="ed-hero ba-hero">
     <div class="ed-page ba-hero-inner">
-      <div class="ed-kicker" data-reveal>Bharat Atlas · understand India, by the evidence</div>
+      <div class="ed-kicker" data-reveal>Bharat · understand India, by the evidence</div>
       <h1 class="ed-h1 ba-hero-h" data-reveal data-reveal-delay="80">Understand India —<br><em>by the evidence.</em></h1>
       <p class="ed-lede ba-hero-lede" data-reveal data-reveal-delay="160">Money, land, law, heritage, history and the record behind the
       headlines — traced to every one of 594 districts. Sourced, or we mark it a gap.</p>
@@ -43,7 +43,7 @@
         <a class="ed-btn ed-btn--dark" href="index.html">Open full map ↗</a>
       </div>
       <div class="ba-mapframe">
-        <iframe src="index.html?embed=1" title="Bharat Atlas interactive district map" loading="lazy"></iframe>
+        <iframe src="index.html?embed=1" title="Bharat interactive district map" loading="lazy"></iframe>
       </div>
     </section>
 
@@ -104,33 +104,57 @@
   <script src="nav-data.js"></script>
   <script src="motion.js"></script>
   <script>
-  // Build story cards from the shared nav — the curated "rail" items, so the hub never drifts.
+  // Build story cards from the shared nav. Each card shows a VECTOR SNAPSHOT of the tool
+  // (a mini map / feed / chart / etc.) — not an emoji — in a curated masonry grid.
   (function () {
-    const ART = { // per-card art style + emoji, keyed by href
-      "index.html":        { cls: "ed-card-art--teal", ico: "🗺", tag: "Map" },
-      "state-of-india.html": { cls: "ed-card-art--mist", ico: "🏛", tag: "States" },
-      "explore.html":      { cls: "ed-card-art--mist", ico: "🔎", tag: "Query" },
-      "feed.html":         { cls: "ed-card-art--clay", ico: "📰", tag: "News" },
-      "heritage-atlas.html": { cls: "ed-card-art--teal", ico: "🛕", tag: "Heritage" },
-      "atrocities.html":   { cls: "ed-card-art--clay", ico: "📊", tag: "History" },
+    const INK = "#16151a", CRIMSON = "#d33a2c", PAPER = "#ffffff", GREY = "#e6e4e0";
+    // mini vector "snapshots" of each tool, drawn in the brand palette (0 0 100 62 viewbox)
+    const SNAP = {
+      map: `<svg viewBox="0 0 100 62" preserveAspectRatio="xMidYMid slice"><rect width="100" height="62" fill="${INK}"/>
+        <path d="M40 8 L55 6 L62 16 L58 30 L64 44 L52 54 L42 44 L46 30 L38 18 Z" fill="#2a2830"/>
+        <circle cx="50" cy="24" r="3.4" fill="${CRIMSON}"/><circle cx="56" cy="40" r="2.6" fill="${CRIMSON}"/><circle cx="44" cy="36" r="2" fill="#fff"/></svg>`,
+      feed: `<svg viewBox="0 0 100 62"><rect width="100" height="62" fill="${PAPER}"/>
+        <rect x="10" y="12" width="34" height="8" rx="2" fill="${INK}"/><rect x="10" y="24" width="80" height="3" rx="1.5" fill="${GREY}"/>
+        <rect x="10" y="31" width="72" height="3" rx="1.5" fill="${GREY}"/><rect x="10" y="42" width="26" height="10" rx="2" fill="${CRIMSON}"/>
+        <rect x="40" y="42" width="26" height="10" rx="2" fill="${INK}"/></svg>`,
+      query: `<svg viewBox="0 0 100 62"><rect width="100" height="62" fill="#f4f3f1"/>
+        <rect x="14" y="18" width="60" height="12" rx="6" fill="#fff" stroke="${GREY}" stroke-width="1.5"/>
+        <circle cx="80" cy="24" r="7" fill="none" stroke="${INK}" stroke-width="2.5"/><line x1="85" y1="29" x2="90" y2="34" stroke="${INK}" stroke-width="2.5"/>
+        <rect x="14" y="38" width="18" height="4" rx="2" fill="${CRIMSON}"/><rect x="36" y="38" width="30" height="4" rx="2" fill="${GREY}"/></svg>`,
+      states: `<svg viewBox="0 0 100 62"><rect width="100" height="62" fill="#f4f3f1"/>
+        ${[14,26,38,50,62].map((y,i)=>`<rect x="12" y="${y}" width="${[70,54,40,30,18][i]}" height="7" rx="2" fill="${i===0?CRIMSON:INK}" opacity="${1-i*0.14}"/>`).join("")}</svg>`,
+      heritage: `<svg viewBox="0 0 100 62"><rect width="100" height="62" fill="${INK}"/>
+        <path d="M50 8 L58 22 L54 22 L60 34 L56 34 L64 50 L36 50 L44 34 L40 34 L46 22 L42 22 Z" fill="#3a3730"/>
+        <path d="M50 8 L54 16 L46 16 Z" fill="${CRIMSON}"/><rect x="30" y="50" width="40" height="4" fill="#2a2830"/></svg>`,
+      history: `<svg viewBox="0 0 100 62"><rect width="100" height="62" fill="${PAPER}"/>
+        ${[[18,40,10,INK],[32,28,22,INK],[46,46,4,CRIMSON],[60,20,30,INK],[74,34,16,INK]].map(([x,y,h,c])=>`<rect x="${x}" y="${y}" width="8" height="${h}" rx="1.5" fill="${c}"/>`).join("")}
+        <line x1="10" y1="52" x2="90" y2="52" stroke="${GREY}" stroke-width="1.5"/></svg>`,
     };
-    const order = ["index.html","feed.html","explore.html","state-of-india.html","heritage-atlas.html","atrocities.html"];
+    const ART = {
+      "index.html":          { snap: "map",      tag: "Map" },
+      "feed.html":           { snap: "feed",     tag: "News" },
+      "explore.html":        { snap: "query",    tag: "Query" },
+      "state-of-india.html": { snap: "states",   tag: "States" },
+      "heritage-atlas.html": { snap: "heritage", tag: "Heritage" },
+      "atrocities.html":     { snap: "history",  tag: "History" },
+    };
+    const order = ["index.html","atrocities.html","feed.html","heritage-atlas.html","explore.html","state-of-india.html"];
     const flat = (window.ATLAS_NAV || []).flatMap(g => g.items);
     const byHref = Object.fromEntries(flat.map(i => [i.href, i]));
     const host = document.getElementById("story-cards");
+    host.className = "ba-masonry";   // Pinterest-style masonry
     host.innerHTML = order.map((href, i) => {
       const it = byHref[href]; if (!it) return "";
-      const a = ART[href] || { cls: "ed-card-art--mist", ico: "•", tag: "Tool" };
-      return `<a class="ed-card" href="${href}" data-reveal data-reveal-delay="${i * 70}">
-        <div class="ed-card-art ${a.cls}">${a.ico}</div>
-        <div class="ed-card-body">
-          <span class="ed-tag ${a.cls.includes('teal')?'ed-tag--teal':''}">${a.tag}</span>
+      const a = ART[href] || { snap: "query", tag: "Tool" };
+      return `<a class="ba-tile" href="${href}" data-reveal data-reveal-delay="${i * 70}">
+        <div class="ba-tile-art">${SNAP[a.snap] || ""}</div>
+        <div class="ba-tile-body">
+          <span class="ed-tag">${a.tag}</span>
           <h3>${it.text.replace(/^[★☆]\s*/, '')}</h3>
           <p>${it.hint || ''}</p>
           <span class="ed-card-meta">Open <span class="arrow">→</span></span>
         </div></a>`;
     }).join("");
-    // cards were injected after motion.js ran — let it observe the new nodes
     if (window.Motion) window.Motion.refresh();
   })();
   </script>

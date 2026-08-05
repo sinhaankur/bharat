@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Built where the water returns — India's encroachment cases | Bharat Atlas</title>
+  <title>Built where the water returns — India's encroachment cases | Bharat</title>
   <meta name="description" content="Documented cases where construction sits on land the water reclaims — floodplains, lakebeds and wetlands — each ruled on by the NGT, a court or CAG. Bengaluru's Bellandur, Delhi's Yamuna O-zone, Chennai's Pallikaranai, Mumbai's Mithi and more, sourced or marked a gap." />
   <meta name="keywords" content="encroachment India, floodplain construction, lakebed encroachment, NGT demolition, wetland fill, why cities flood, Bellandur, Yamuna floodplain, Pallikaranai" />
   <link rel="canonical" href="https://sinhaankur.github.io/india-fiscal-map/encroachment-atlas.html" />
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="Bharat Atlas" />
+  <meta property="og:site_name" content="Bharat" />
   <meta property="og:title" content="Built where the water returns — India's encroachment cases" />
   <meta property="og:description" content="Where construction sits on land the water reclaims — floodplains, lakebeds, wetlands — each ruled on by the NGT, a court or CAG. Sourced or marked a gap." />
   <meta property="og:url" content="https://sinhaankur.github.io/india-fiscal-map/encroachment-atlas.html" />
@@ -360,7 +360,7 @@
     function shareText(c) {
       const L = c.loss;
       const lost = (L && typeof L.pct === "number") ? ` — ${L.label} ${L.pct < 0 ? "down " + Math.abs(L.pct) + "%" : "up " + L.pct + "%"} (${L.from_year}→${L.to_year})` : "";
-      return `Built where the water returns: ${c.type} on ${c.water_body}, ${c.district}${lost}. Ruled on by ${c.order_ref || "NGT/court"}. — Bharat Atlas`;
+      return `Built where the water returns: ${c.type} on ${c.water_body}, ${c.district}${lost}. Ruled on by ${c.order_ref || "NGT/court"}. — Bharat`;
     }
 
     function initMap() {

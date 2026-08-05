@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Reading Room — study the primary sources | Bharat Atlas</title>
+  <title>Reading Room — study the primary sources | Bharat</title>
   <meta name="description" content="A reading room of public-domain primary sources on India's history and governance — read them in full, page by page, in an embedded book reader. First on the shelf: M.O. Mathai's memoirs of the Nehru age." />
   <link rel="canonical" href="https://sinhaankur.github.io/india-fiscal-map/library.html" />
   <link rel="stylesheet" href="styles.css" />
@@ -510,7 +510,7 @@
       pageInput.value = currentPage;
       if (b.pages) pageInput.max = b.pages;
       document.querySelectorAll('.lib-book').forEach((el, k) => el.classList.toggle('active', k === i));
-      document.title = `${b.title} — Reading Room | Bharat Atlas`;
+      document.title = `${b.title} — Reading Room | Bharat`;
       if (typeof renderAnalysis === 'function') renderAnalysis();
       renderAbout(b);
     }
