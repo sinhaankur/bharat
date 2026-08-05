@@ -21,7 +21,8 @@
   // Derived from each page's existing <title> + meta[description]; the domain is
   // brandable so SEO comes from content + rich social cards, not the name.
   const SITE = {
-    name: "India Fiscal Map",
+    name: "Bharat Atlas",
+    tagline: "understand India, by the evidence",
     base: "https://sinhaankur.github.io/india-fiscal-map",   // update to custom domain when bought
     image: "https://sinhaankur.github.io/india-fiscal-map/og-image.png",
     twitter: "",   // add @handle once social accounts exist
@@ -139,7 +140,7 @@
       <nav id="nav" class="snav">
         <div class="snav-bar">
           <button class="snav-burger" aria-label="Open menu" aria-expanded="false">☰</button>
-          <a class="brand" href="home.html"><img class="brand-logo" src="favicon.svg" alt="" width="24" height="24" /><span class="brand-word">India Fiscal Map</span><span class="brand-dot" title="live"></span></a>
+          <a class="brand" href="home.html"><img class="brand-logo" src="favicon.svg" alt="" width="24" height="24" /><span class="brand-word">Bharat Atlas</span><span class="brand-dot" title="live"></span></a>
           <div class="snav-groups">${groups}</div>
           <div class="snav-actions">
             <a class="snav-cta" href="index.html">Open the map</a>
@@ -150,7 +151,7 @@
       <div class="snav-drawer" id="snav-drawer" hidden>
         <div class="snav-drawer-panel">
           <div class="snav-drawer-head">
-            <span class="brand-word">India Fiscal Map</span>
+            <span class="brand-word">Bharat Atlas</span>
             <button class="snav-drawer-close" aria-label="Close menu">✕</button>
           </div>
           <div class="snav-drawer-links">${drawerLinks()}</div>
@@ -183,7 +184,7 @@
     return `
       <footer id="sfoot">
         <div class="sfoot-top">
-          <a class="sfoot-mark" href="home.html"><img src="favicon.svg" alt="" width="30" height="30" /><span class="brand-word">India Fiscal Map</span></a>
+          <a class="sfoot-mark" href="home.html"><img src="favicon.svg" alt="" width="30" height="30" /><span class="brand-word">Bharat Atlas</span></a>
           <div class="sfoot-social" aria-label="Social links">
             <a href="https://github.com/sinhaankur/india-fiscal-map" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub">⌥</a>
             <a href="feed.html" title="News feed" aria-label="News feed">✍</a>
@@ -202,7 +203,7 @@
           <a href="sitemap.html">Site map</a>
         </div>
         <div class="sfoot-base">
-          <span>© ${new Date().getFullYear()} India Fiscal Map · independent civic-data project · sourced, or it's a gap.</span>
+          <span>© ${new Date().getFullYear()} Bharat Atlas · independent civic-data project · sourced, or it's a gap.</span>
           <span>Not affiliated with any government body.</span>
         </div>
       </footer>`;
