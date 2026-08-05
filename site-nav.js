@@ -3,6 +3,20 @@
    #site-footer on every page, and injects SEO/social meta into <head>.
    Edit the IA + SEO defaults here, once. */
 (function () {
+  // ---- THEME bootstrap: apply the reader's saved light/dark choice ASAP -----
+  // a11y.js owns the toggle + persistence; this just re-asserts it early so a
+  // saved override (e.g. "light" on a dark-canvas page) settles quickly. "auto"
+  // honours the page's own class="theme-dark" already in the HTML (no flash).
+  try {
+    var pref = (JSON.parse(localStorage.getItem("atlas_a11y") || "{}") || {}).theme || "auto";
+    if (pref !== "auto") {
+      var root = document.documentElement;
+      root.classList.toggle("theme-dark", pref === "dark");
+      root.classList.toggle("theme-light", pref === "light");
+      root.setAttribute("data-theme", pref);
+    }
+  } catch (e) {}
+
   // ---- SEO: inject Open Graph / Twitter cards / canonical / JSON-LD --------
   // Derived from each page's existing <title> + meta[description]; the domain is
   // brandable so SEO comes from content + rich social cards, not the name.
