@@ -2702,3 +2702,48 @@ html[data-reduce-motion="1"] .ag-bar, html[data-reduce-motion="1"] .ag-line, htm
 .ed-statement-sticky h2 em { color: var(--accent); font-style: italic; }
 .ed-statement-sub { text-align: center; padding: 2rem 6vw 6rem; }
 .ed-statement-sub p { font-size: clamp(1.1rem, 2vw, 1.6rem); line-height: 1.5; color: var(--muted-foreground); max-width: 44ch; margin: 0 auto; }
+
+/* ============================================================
+   INTERACTIVE ID BADGE (id-badge.js) — a "press credential" that
+   swings on a lanyard, tilts to the cursor, flips on click.
+   ============================================================ */
+.idb { position: relative; width: 100%; height: 480px; perspective: 1200px; overflow: hidden; user-select: none; }
+.idb-rope { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+.idb-card { position: absolute; width: 240px; height: 360px; will-change: transform; transform-origin: top center;
+  transform-style: preserve-3d; z-index: 3; cursor: grab; top: 0; left: 0; }
+.idb-card:active { cursor: grabbing; }
+.idb-flip { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; border-radius: 16px;
+  box-shadow: 0 40px 90px rgba(20,20,25,0.5), inset 0 0 0 1px rgba(255,255,255,0.06); }
+.idb-face { position: absolute; inset: 0; border-radius: 16px; overflow: hidden; backface-visibility: hidden;
+  -webkit-backface-visibility: hidden; background: #1c1b20; color: #fff; }
+.idb-back { transform: rotateY(180deg); }
+.idb-front::after { content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 10; border-radius: 16px;
+  background: radial-gradient(ellipse at var(--sx,50%) var(--sy,50%), rgba(255,255,255,0.10) 0%, transparent 60%); }
+.idb-hole { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: 13px; height: 13px;
+  border-radius: 50%; background: #000; border: 1.5px solid #333; z-index: 11; }
+.idb-top { position: absolute; top: 30px; left: 0; right: 0; display: flex; justify-content: space-between; padding: 0 16px; z-index: 6; }
+.idb-mark { font-family: var(--font-display); font-weight: 700; font-size: 14px; }
+.idb-code { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.08em; color: #9a978f; }
+.idb-big { position: absolute; top: 44px; left: 0; right: 0; text-align: center; font-size: 120px; line-height: 1;
+  color: #d33a2c; opacity: 0.9; z-index: 2; pointer-events: none; }
+.idb-bottom { position: absolute; bottom: 40px; left: 0; right: 0; padding: 0 18px; z-index: 7; }
+.idb-bottom h3 { font-family: var(--font-display); font-weight: 700; font-size: 30px; line-height: 1.05; margin: 0; letter-spacing: -0.02em; }
+.idb-role { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; color: #c9463a; margin: 6px 0 0; }
+.idb-rule { height: 1px; background: rgba(255,255,255,0.1); margin: 10px 0; }
+.idb-meta { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.1em; color: #b7b4ac; margin: 0; line-height: 1.6; }
+.idb-meta.idb-dim { opacity: 0.6; }
+.idb-foot { position: absolute; bottom: 0; left: 0; right: 0; height: 34px; display: flex; align-items: center; justify-content: center;
+  background: #d33a2c; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; color: #fff; }
+.idb-accentbar { height: 4px; background: #d33a2c; }
+.idb-backbody { padding: 30px 18px 0; display: flex; flex-direction: column; gap: 8px; }
+.idb-backbody h3 { margin: 0; }
+.idb-barcode { fill: #d33a2c; opacity: 0.8; margin-top: 4px; }
+.idb-hint { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); z-index: 20;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; color: var(--muted-foreground); text-transform: uppercase; pointer-events: none; }
+
+/* credential block on the About page (badge + note, side by side) */
+.ab-credential { display: grid; grid-template-columns: 320px 1fr; gap: 2rem; align-items: center; margin: 1.5rem 0 2rem;
+  padding: 1.4rem; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--muted); }
+@media (max-width: 700px) { .ab-credential { grid-template-columns: 1fr; } }
+.ab-credential-note h2 { font-family: var(--font-display); font-weight: 600; font-size: 1.6rem; letter-spacing: -0.01em; }
+.ab-credential-note p { color: var(--muted-foreground); line-height: 1.6; margin: 0; }
