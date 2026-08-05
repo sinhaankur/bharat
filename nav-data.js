@@ -22,6 +22,7 @@
     ]},
     { label: "3D", items: [
       { href: "india-3d.html", text: "The globe", hint: "real Earth · 594 districts · layers", icon: "🌍" },
+      { href: "globe-map.html", text: "Globe → map", hint: "watch the globe unroll into a flat map — a live projection morph", icon: "◐", rail: true },
       { href: "terrain-3d.html", text: "District terrain 3D", hint: "relief · river · flood plain (2D/3D)", icon: "🏔", rail: true },
       { href: "atlas-3d.html", text: "India by constraint", hint: "states by development constraint", icon: "⛰" },
       { href: "flood-3d.html", text: "Flood explorer", hint: "water over real terrain", icon: "🌊" },
