@@ -45,6 +45,38 @@
     }
     /* the shared masthead keeps its own (dark) styling — it sits above the cream broadsheet. */
 
+    /* THESIS HOOK — a dark full-bleed opener that states the point of view */
+    .at-hook { background: #16151a; color: #ece9e3; padding: clamp(3rem, 9vh, 6rem) var(--pad-x); }
+    .at-hook-inner { max-width: 820px; margin: 0 auto; }
+    .at-hook-kicker { font-family: var(--font-mono, monospace); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #ef5442; margin: 0 0 0.8rem; }
+    .at-hook-h { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(2.6rem, 8vw, 5.5rem);
+      line-height: 0.98; letter-spacing: -0.02em; margin: 0 0 1.2rem; color: #fff; }
+    .at-hook-h em { font-style: italic; color: #ef5442; }
+    .at-hook-lede { font-size: clamp(1.05rem, 2vw, 1.4rem); line-height: 1.55; color: #cbc8c1; max-width: 62ch; margin: 0 0 1.4rem; }
+    .at-hook-note { font-family: Georgia, serif; font-style: italic; font-size: clamp(1rem, 1.8vw, 1.25rem); color: #ece9e3;
+      border-left: 3px solid #ef5442; padding-left: 1rem; margin: 0 0 1.8rem; }
+    .at-hook-scroll { font-family: var(--font-mono, monospace); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: #16151a; background: #ef5442; padding: 0.7rem 1.3rem; border-radius: 999px; text-decoration: none; border: none; display: inline-block; }
+    .at-hook-scroll:hover { background: #fff; color: #16151a; }
+
+    /* INDIA CUT — the subcontinent's events as their own story */
+    .at-indiacut { margin: 2.4rem 0 0; padding: 1.4rem 1.5rem; border: 2px solid var(--ink); border-radius: var(--radius); background: var(--paper-2); }
+    .at-indiacut h3 { font-family: Georgia, serif; font-weight: 700; font-size: 1.4rem; margin: 0 0 0.3rem; color: var(--ink); }
+    .at-indiacut .ic-sub { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 1rem; max-width: 70ch; line-height: 1.5; }
+    .at-ic-row { display: grid; grid-template-columns: 1fr auto; gap: 0.6rem 1rem; align-items: baseline; padding: 0.55rem 0; border-bottom: 1px dotted var(--rule); }
+    .at-ic-row .ic-nm { font-family: Georgia, serif; font-weight: 700; font-size: 1rem; color: var(--ink); }
+    .at-ic-row .ic-yr { font-family: var(--font-mono, monospace); font-size: 10px; color: var(--ink-soft); margin-left: 0.5rem; }
+    .at-ic-row .ic-note { font-size: 0.82rem; color: var(--ink-soft); line-height: 1.45; grid-column: 1 / -1; margin-top: 0.15rem; }
+    .at-ic-row .ic-d { font-family: Georgia, serif; font-weight: 700; font-size: 1.1rem; color: var(--accent); white-space: nowrap; }
+    .at-ic-foot { margin-top: 0.9rem; font-size: 0.82rem; }
+    .at-ic-foot a { color: var(--accent); }
+
+    /* HUMAN CLOSER — the personal beat at the end */
+    .at-closer { background: #16151a; color: #ece9e3; padding: clamp(3rem, 8vh, 5rem) var(--pad-x); margin-top: 2rem; text-align: center; }
+    .at-closer h2 { font-family: Georgia, serif; font-weight: 400; font-size: clamp(1.8rem, 4vw, 3rem); line-height: 1.1; margin: 0 auto 1rem; max-width: 20ch; color: #fff; }
+    .at-closer h2 em { font-style: italic; color: #ef5442; }
+    .at-closer p { color: #b7b4ac; max-width: 52ch; margin: 0 auto; line-height: 1.6; font-size: 1rem; }
+
     .at-wrap { max-width: 1100px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; background: var(--paper); }
     .at-head .eyebrow { color: var(--accent); font-weight: 600; letter-spacing: 0.02em; }
     .at-head .eyebrow { display: inline-block; background: var(--ink); color: var(--paper); font-family: var(--font-mono, monospace);
@@ -148,7 +180,20 @@
 <body>
   <div id="site-nav"></div>
 
-  <main class="at-wrap">
+  <!-- thesis hook: a point of view before the data -->
+  <section class="at-hook">
+    <div class="at-hook-inner">
+      <p class="at-hook-kicker">A history of violence</p>
+      <h1 class="at-hook-h">Humans have been <em>violent.</em></h1>
+      <p class="at-hook-lede">Here are the hundred deadliest things people have ever done to each other —
+      sized by the dead. The biggest cluster in recent centuries. And yet, measured against how many
+      of us were alive, the killing is probably in decline.</p>
+      <p class="at-hook-note">If you're reading this, your grandparents survived all of it.</p>
+      <a class="at-hook-scroll" href="#chart">See the record ↓</a>
+    </div>
+  </section>
+
+  <main class="at-wrap" id="chart">
     <header class="at-head">
       <div class="eyebrow">Data Points · after The New York Times / Matthew White</div>
       <h1 class="display">Population Control, <em>Marauder Style</em></h1>
@@ -210,8 +255,18 @@
       <div id="list"></div>
     </section>
 
+    <!-- India cut — the subcontinent's events pulled into their own story -->
+    <section class="at-indiacut" id="india-cut"></section>
+
     <p class="at-note" id="note"></p>
   </main>
+
+  <!-- HUMAN CLOSER — the personal beat -->
+  <section class="at-closer">
+    <h2>If you have lived until now, your grandparents <em>survived all of this.</em></h2>
+    <p>Every name on this chart is someone's ancestor's worst year. That we're here to read it is not
+    nothing. The record is grim — and, measured against all of us alive, slowly getting less so.</p>
+  </section>
 
   <script>
   (function () {
@@ -249,7 +304,7 @@
 
     fetch("atrocities.json").then(r => r.json()).then(d => {
       DATA = d; EVENTS = d.events || [];
-      renderSrc(); renderStats(); buildCatChips(); renderLegend(); renderTables(); renderNote(); wire(); render();
+      renderSrc(); renderStats(); buildCatChips(); renderLegend(); renderTables(); renderIndiaCut(); renderNote(); wire(); render();
     }).catch(e => {
       document.getElementById("list").innerHTML = `<div style="color:var(--muted-foreground)">Could not load atrocities.json — ${esc(e.message)}</div>`;
     });
@@ -608,6 +663,29 @@
           <span class="d">${e.deaths_millions}M</span>
         </div>`;
       }).join("");
+    }
+
+    function renderIndiaCut() {
+      const host = document.getElementById("india-cut");
+      const ind = EVENTS.filter(e => e.india_region).sort((a, b) => b.deaths_millions - a.deaths_millions);
+      if (!ind.length) { host.style.display = "none"; return; }
+      const total = ind.reduce((s, e) => s + (e.deaths_millions || 0), 0);
+      const rows = ind.map(e => {
+        const span = e.year_end && e.year_end !== e.year_start ? `${yr(e.year_start)}–${yr(e.year_end)}` : yr(e.year_start);
+        return `<div class="at-ic-row">
+          <span><span class="ic-nm">${esc(e.name)}</span><span class="ic-yr">${span} · ${esc(e.india_region)}</span>
+          ${e.note ? `<div class="ic-note">${esc(e.note)}</div>` : ""}</span>
+          <span class="ic-d">${e.deaths_millions}M</span>
+        </div>`;
+      }).join("");
+      host.innerHTML =
+        `<h3>The subcontinent's share</h3>
+         <p class="ic-sub">Of the hundred, ${ind.length} struck the Indian subcontinent — roughly
+         <b>${Math.round(total)} million</b> dead across two-and-a-half millennia: conquest, famine under
+         colonial rule, and the wound of Partition. Deadliest first.</p>
+         ${rows}
+         <p class="at-ic-foot">These link to the <a href="heritage-atlas.html">heritage atlas</a> —
+         where a temple's destruction can be read against the era that took it.</p>`;
     }
 
     function renderNote() {
