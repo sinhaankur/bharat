@@ -16,22 +16,22 @@
 
     /* honest coverage bar */
     .prov-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; margin-bottom: 1.5rem; }
-    .prov-stat { background: oklch(0.16 0 0); padding: 0.9rem 1rem; }
+    .prov-stat { background: var(--card); padding: 0.9rem 1rem; }
     .prov-stat .num { font-family: var(--font-mono); font-size: 22px; font-weight: 500; color: var(--foreground); letter-spacing: -0.01em; line-height: 1; }
-    .prov-stat .num.good { color: oklch(0.72 0.15 155); }
-    .prov-stat .num.warn { color: oklch(0.78 0.16 70); }
+    .prov-stat .num.good { color: oklch(0.48 0.150 155); }
+    .prov-stat .num.warn { color: oklch(0.48 0.160 70); }
     .prov-stat .lbl { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted-foreground); margin-top: 6px; }
 
     /* pinned vs gap ratio bar */
-    .prov-ratio { height: 10px; border-radius: 999px; overflow: hidden; display: flex; margin-bottom: 0.4rem; background: oklch(0.2 0 0); }
-    .prov-ratio .fill-pin { background: oklch(0.72 0.15 155); }
+    .prov-ratio { height: 10px; border-radius: 999px; overflow: hidden; display: flex; margin-bottom: 0.4rem; background: var(--card); }
+    .prov-ratio .fill-pin { background: oklch(0.48 0.150 155); }
     .prov-ratio .fill-gap { background: oklch(0.42 0.02 250); }
     .prov-ratio-cap { font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); margin-bottom: 1.8rem; }
-    .prov-ratio-cap b.pin { color: oklch(0.72 0.15 155); } .prov-ratio-cap b.gap { color: oklch(0.7 0.02 250); }
+    .prov-ratio-cap b.pin { color: oklch(0.48 0.150 155); } .prov-ratio-cap b.gap { color: oklch(0.7 0.02 250); }
 
     /* controls */
     .prov-controls { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; margin-bottom: 1.25rem; }
-    .prov-search { flex: 1 1 240px; min-width: 200px; background: oklch(0.13 0 0); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); color: var(--foreground); font-family: var(--font-sans); font-size: 13px; padding: 8px 12px; }
+    .prov-search { flex: 1 1 240px; min-width: 200px; background: var(--background); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); color: var(--foreground); font-family: var(--font-sans); font-size: 13px; padding: 8px 12px; }
     .prov-search:focus { outline: none; border-color: var(--foreground); }
     .prov-chip { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.03em; color: var(--muted-foreground); border: 1px solid var(--border-strong); background: transparent; border-radius: 999px; padding: 5px 12px; cursor: pointer; }
     .prov-chip:hover { color: var(--foreground); border-color: var(--foreground); }
@@ -44,24 +44,24 @@
     .prov-scope-row:last-child { border-bottom: 0; }
     .prov-scope-name { font-family: var(--font-mono); font-size: 12px; color: var(--foreground); }
     .prov-scope-name .sub { color: var(--muted-foreground); }
-    .prov-scope-bar { height: 8px; border-radius: 999px; background: oklch(0.2 0 0); overflow: hidden; display: flex; }
-    .prov-scope-bar .p { background: oklch(0.72 0.15 155); } .prov-scope-bar .g { background: oklch(0.4 0.02 250); }
+    .prov-scope-bar { height: 8px; border-radius: 999px; background: var(--card); overflow: hidden; display: flex; }
+    .prov-scope-bar .p { background: oklch(0.48 0.150 155); } .prov-scope-bar .g { background: oklch(0.4 0.02 250); }
     .prov-scope-num { font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); text-align: right; }
 
     /* source cards */
-    .prov-source { border: 1px solid var(--border); border-radius: var(--radius-sm); background: oklch(0.145 0 0); margin-bottom: 0.75rem; overflow: hidden; }
-    .prov-source.unattr { border-left: 3px solid oklch(0.78 0.16 70); }
+    .prov-source { border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--card); margin-bottom: 0.75rem; overflow: hidden; }
+    .prov-source.unattr { border-left: 3px solid oklch(0.48 0.160 70); }
     .prov-src-head { display: flex; flex-wrap: wrap; gap: 0.5rem 0.75rem; align-items: baseline; padding: 0.85rem 1.1rem; cursor: pointer; }
-    .prov-src-head:hover { background: oklch(0.17 0 0); }
+    .prov-src-head:hover { background: var(--card); }
     .prov-tier { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.04em; padding: 2px 7px; border-radius: 4px; white-space: nowrap; }
-    .tier-1 { background: oklch(0.72 0.15 155 / 0.18); color: oklch(0.8 0.15 155); }
-    .tier-2 { background: oklch(0.7 0.12 200 / 0.18); color: oklch(0.78 0.12 200); }
-    .tier-3 { background: oklch(0.78 0.16 70 / 0.18); color: oklch(0.82 0.16 70); }
-    .tier-4 { background: oklch(0.7 0.18 30 / 0.18); color: oklch(0.8 0.16 40); }
+    .tier-1 { background: oklch(0.48 0.150 155 / 0.18); color: oklch(0.48 0.150 155); }
+    .tier-2 { background: oklch(0.7 0.12 200 / 0.18); color: oklch(0.48 0.120 200); }
+    .tier-3 { background: oklch(0.48 0.160 70 / 0.18); color: oklch(0.48 0.160 70); }
+    .tier-4 { background: oklch(0.7 0.18 30 / 0.18); color: oklch(0.48 0.160 40); }
     .prov-src-name { flex: 1 1 320px; font-family: var(--font-sans); font-size: 13.5px; color: var(--foreground); word-break: break-word; }
-    .prov-src-name a { color: oklch(0.78 0.16 70); border-bottom-color: oklch(0.78 0.16 70 / 0.4); }
+    .prov-src-name a { color: oklch(0.48 0.160 70); border-bottom-color: oklch(0.48 0.160 70 / 0.4); }
     .prov-src-count { font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); white-space: nowrap; }
-    .prov-src-count b.pin { color: oklch(0.72 0.15 155); } .prov-src-count b.gap { color: oklch(0.7 0.02 250); }
+    .prov-src-count b.pin { color: oklch(0.48 0.150 155); } .prov-src-count b.gap { color: oklch(0.7 0.02 250); }
     .prov-src-body { padding: 0 1.1rem 1rem; display: none; }
     .prov-source.open .prov-src-body { display: block; }
     .prov-tier-label { font-size: 12px; color: var(--muted-foreground); line-height: 1.5; margin: 0 0 0.75rem; }
@@ -70,16 +70,16 @@
     .prov-samples li:last-child { border-bottom: 0; }
     .prov-samp-place { color: var(--muted-foreground); font-family: var(--font-mono); font-size: 11px; }
     .prov-samp-field { color: var(--foreground); }
-    .prov-samp-val { font-family: var(--font-mono); font-size: 11.5px; color: oklch(0.72 0.15 155); text-align: right; white-space: nowrap; }
+    .prov-samp-val { font-family: var(--font-mono); font-size: 11.5px; color: oklch(0.48 0.150 155); text-align: right; white-space: nowrap; }
     .prov-samp-val.gap { color: var(--muted-foreground); }
     .prov-scopes-inline { font-family: var(--font-mono); font-size: 10.5px; color: var(--muted-foreground); margin-top: 0.6rem; }
 
-    .prov-note { background: oklch(0.16 0 0); border: 1px solid var(--border); border-left: 3px solid oklch(0.72 0.15 155); border-radius: var(--radius-sm); padding: 1rem 1.2rem; margin: 2rem 0 0; }
+    .prov-note { background: var(--card); border: 1px solid var(--border); border-left: 3px solid oklch(0.48 0.150 155); border-radius: var(--radius-sm); padding: 1rem 1.2rem; margin: 2rem 0 0; }
     .prov-note h3 { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted-foreground); margin: 0 0 0.5rem; }
     .prov-note p { font-size: 13px; line-height: 1.6; color: var(--foreground); margin: 0 0 0.6rem; }
     .prov-note p:last-child { margin: 0; }
     .prov-note em { font-family: var(--font-italic); font-style: italic; }
-    .prov-note a { color: oklch(0.78 0.16 70); border-bottom-color: oklch(0.78 0.16 70 / 0.4); }
+    .prov-note a { color: oklch(0.48 0.160 70); border-bottom-color: oklch(0.48 0.160 70 / 0.4); }
     .prov-empty { font-family: var(--font-mono); font-size: 12px; color: var(--muted-foreground); padding: 2rem 0; text-align: center; }
     @media (max-width: 640px) { .prov-scope-row { grid-template-columns: 130px 1fr 64px; } }
   </style>

@@ -11,21 +11,21 @@
     .sh-head h1 { margin: 0.3rem 0 0.5rem; font-size: clamp(1.6rem, 3.5vw, 2.4rem); }
     .sh-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.55; max-width: 70ch; }
     .sh-pick { margin: 1.2rem 0; }
-    .sh-pick select { background: oklch(0.18 0 0); color: var(--foreground); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 0.5rem 0.8rem; font-family: var(--font-mono); font-size: 12px; min-width: 280px; }
+    .sh-pick select { background: var(--card); color: var(--foreground); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 0.5rem 0.8rem; font-family: var(--font-mono); font-size: 12px; min-width: 280px; }
     .sh-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
-    .sh-card { border: 1px solid var(--border-strong); border-radius: var(--radius); background: oklch(0.165 0 0); padding: 1rem 1.1rem; display: flex; flex-direction: column; }
+    .sh-card { border: 1px solid var(--border-strong); border-radius: var(--radius); background: var(--card); padding: 1rem 1.1rem; display: flex; flex-direction: column; }
     .sh-plat { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.6rem; }
     .sh-plat .ic { font-size: 16px; }
     .sh-plat .nm { font-weight: 600; font-size: 0.9rem; }
     .sh-plat .len { margin-left: auto; font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
     .sh-plat .len.over { color: oklch(0.7 0.2 28); }
-    .sh-text { flex: 1; white-space: pre-wrap; font-size: 0.85rem; line-height: 1.5; color: var(--foreground); background: oklch(0.13 0 0); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.7rem 0.8rem; margin-bottom: 0.6rem; }
+    .sh-text { flex: 1; white-space: pre-wrap; font-size: 0.85rem; line-height: 1.5; color: var(--foreground); background: var(--background); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.7rem 0.8rem; margin-bottom: 0.6rem; }
     .sh-actions { display: flex; gap: 0.4rem; flex-wrap: wrap; }
     .sh-btn { font-family: var(--font-mono); font-size: 11px; padding: 0.4rem 0.8rem; border-radius: var(--radius-sm); border: 1px solid var(--border-strong); background: transparent; color: var(--foreground); cursor: pointer; text-decoration: none; }
     .sh-btn:hover { border-color: var(--warm); }
-    .sh-btn.primary { background: var(--warm); color: oklch(0.18 0 0); border-color: transparent; font-weight: 600; }
+    .sh-btn.primary { background: var(--warm); color: var(--card); border-color: transparent; font-weight: 600; }
     .sh-note { font-size: 0.8rem; color: var(--muted-foreground); line-height: 1.55; margin-top: 1.6rem; border-top: 1px solid var(--border); padding-top: 1rem; }
-    .sh-note code { font-family: var(--font-mono); font-size: 11px; background: oklch(0.22 0 0); padding: 1px 5px; border-radius: 3px; }
+    .sh-note code { font-family: var(--font-mono); font-size: 11px; background: var(--muted); padding: 1px 5px; border-radius: 3px; }
     .sh-empty { color: var(--muted-foreground); padding: 2rem 0; }
   </style>
 </head>

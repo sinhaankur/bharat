@@ -15,14 +15,14 @@
     .lib-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.6; max-width: 74ch; }
     /* the shelf — a row of selectable book cards */
     .lib-lede { font-size: 1.05rem !important; color: var(--foreground) !important; margin: 0.2rem 0 0.4rem; }
-    .lib-more { background: none; border: 0; color: oklch(0.78 0.16 72); font-family: var(--font-mono); font-size: 12px; cursor: pointer; padding: 0; margin-left: 0.3rem; }
+    .lib-more { background: none; border: 0; color: oklch(0.48 0.160 72); font-family: var(--font-mono); font-size: 12px; cursor: pointer; padding: 0; margin-left: 0.3rem; }
     .lib-more:hover { text-decoration: underline; }
     .lib-intro-more p { color: var(--muted-foreground); font-size: 0.9rem; line-height: 1.65; max-width: 74ch; margin: 0.3rem 0 0; }
     /* sticky section nav — the map of the room */
-    .lib-secnav { position: sticky; top: 0; z-index: 30; display: flex; flex-wrap: wrap; gap: 0.3rem; padding: 0.6rem 0; margin: 0.6rem 0 0.4rem; background: oklch(0.11 0 0 / 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
+    .lib-secnav { position: sticky; top: 0; z-index: 30; display: flex; flex-wrap: wrap; gap: 0.3rem; padding: 0.6rem 0; margin: 0.6rem 0 0.4rem; background: var(--background); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
     .lib-secnav a { font-family: var(--font-mono); font-size: 12px; padding: 5px 12px; border-radius: 999px; color: var(--muted-foreground); border: 1px solid transparent; text-decoration: none; transition: color .15s, background .15s, border-color .15s; }
     .lib-secnav a:hover { color: var(--foreground); border-color: var(--border-strong); }
-    .lib-secnav a.active { color: oklch(0.94 0.05 90); background: oklch(0.26 0.06 78); border-color: var(--warm); }
+    .lib-secnav a.active { color: oklch(0.48 0.050 90); background: oklch(0.26 0.06 78); border-color: var(--warm); }
     .lib-sec { scroll-margin-top: 60px; margin: 2.2rem 0; }
     #sec-read { margin-top: 0.6rem; }
     .lib-sec-h { font-size: 1.2rem; margin: 0 0 0.8rem; display: flex; align-items: baseline; gap: 0.6rem; }
@@ -33,12 +33,12 @@
     .lib-book:hover { border-color: var(--warm); }
     .lib-book.active { border-color: var(--warm); background: oklch(0.22 0.04 78); }
     .lib-book .bk-title { font-family: var(--font-display); font-size: 1.05rem; line-height: 1.25; margin-bottom: 0.2rem; }
-    .lib-book .bk-author { font-family: var(--font-mono); font-size: 11px; color: oklch(0.82 0.11 78); letter-spacing: 0.03em; }
+    .lib-book .bk-author { font-family: var(--font-mono); font-size: 11px; color: oklch(0.48 0.110 78); letter-spacing: 0.03em; }
     .lib-book .bk-note { font-size: 0.8rem; color: var(--muted-foreground); line-height: 1.5; margin-top: 0.45rem; }
     /* the reader */
-    .lib-reader { position: relative; margin: 0.6rem 0 0.4rem; border: 1px solid var(--border-strong); border-radius: var(--radius); overflow: hidden; background: oklch(0.1 0 0); }
+    .lib-reader { position: relative; margin: 0.6rem 0 0.4rem; border: 1px solid var(--border-strong); border-radius: var(--radius); overflow: hidden; background: var(--background); }
     .lib-reader iframe { display: block; width: 100%; height: 78vh; min-height: 560px; border: 0; }
-    .lib-fold { margin: 0.6rem 0; border: 1px solid var(--border); border-radius: var(--radius-sm); background: oklch(0.14 0 0); }
+    .lib-fold { margin: 0.6rem 0; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--card); }
     .lib-fold > summary { cursor: pointer; padding: 0.55rem 0.8rem; font-family: var(--font-mono); font-size: 12px; color: var(--muted-foreground); list-style: none; }
     .lib-fold > summary::-webkit-details-marker { display: none; }
     .lib-fold[open] > summary { color: var(--foreground); }
@@ -46,19 +46,19 @@
     .lib-fold-body p { font-size: 0.85rem; line-height: 1.6; color: var(--muted-foreground); margin: 0.3rem 0; }
     .lib-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1rem; margin: 0.7rem 0; font-family: var(--font-mono); font-size: 11.5px; color: var(--muted-foreground); }
     .lib-bar .now { color: var(--foreground); }
-    .lib-bar a { color: oklch(0.78 0.16 72); }
-    .lib-btn { background: oklch(0.2 0.03 250); color: oklch(0.84 0.11 210); border: 1px solid var(--border-strong); border-radius: 999px; padding: 4px 12px; font-family: var(--font-mono); font-size: 11px; cursor: pointer; }
+    .lib-bar a { color: oklch(0.48 0.160 72); }
+    .lib-btn { background: oklch(0.2 0.03 250); color: oklch(0.48 0.110 210); border: 1px solid var(--border-strong); border-radius: 999px; padding: 4px 12px; font-family: var(--font-mono); font-size: 11px; cursor: pointer; }
     .lib-btn:hover { border-color: var(--warm); }
     .lib-note { font-size: 0.83rem; color: var(--muted-foreground); line-height: 1.6; margin-top: 1.6rem; border-top: 1px solid var(--border); padding-top: 1rem; }
-    .lib-note a { color: oklch(0.78 0.16 72); }
+    .lib-note a { color: oklch(0.48 0.160 72); }
     .lib-gap { border-left: 3px solid oklch(0.6 0.16 60); padding: 0.55rem 0.9rem; background: oklch(0.2 0.03 60 / 0.3); border-radius: var(--radius-sm); margin: 1.2rem 0; font-size: 0.85rem; line-height: 1.55; }
     /* "what kind of book is this?" — the measured content analysis */
     .lib-analysis { border: 1px solid var(--border-strong); border-radius: var(--radius); background: oklch(0.15 0.005 250); padding: 0.9rem 1rem; margin: 0.6rem 0 0.4rem; }
     .lib-analysis .la-head { font-family: var(--font-mono); font-size: 0.9rem; color: var(--foreground); margin-bottom: 0.7rem; }
     .lib-analysis .la-sub { color: var(--muted-foreground); font-size: 0.78rem; }
     .la-mix { display: flex; height: 26px; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); }
-    .la-mix .seg { display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 10px; color: oklch(0.12 0 0); font-weight: 700; }
-    .la-seg-tech { background: oklch(0.7 0.13 210); } .la-seg-pol { background: oklch(0.72 0.16 60); } .la-seg-pers { background: oklch(0.66 0.18 20); }
+    .la-mix .seg { display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 10px; color: var(--background); font-weight: 700; }
+    .la-seg-tech { background: oklch(0.7 0.13 210); } .la-seg-pol { background: oklch(0.48 0.160 60); } .la-seg-pers { background: oklch(0.66 0.18 20); }
     .la-meta { display: flex; flex-wrap: wrap; gap: 0.5rem 1.2rem; font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); margin: 0.6rem 0; }
     .la-meta b { color: var(--foreground); }
     .la-verdict { font-size: 0.86rem; line-height: 1.6; color: var(--muted-foreground); margin: 0.3rem 0 0; border-left: 3px solid oklch(0.7 0.16 78); padding-left: 0.8rem; }
@@ -66,23 +66,23 @@
     /* "about this book" — detailed explanation + true references */
     .lib-about { border: 1px solid var(--border-strong); border-radius: var(--radius); background: oklch(0.15 0.005 250); padding: 1rem 1.1rem; margin: 0.6rem 0 0.4rem; }
     .lib-about .lb-cols { display: grid; grid-template-columns: 1.6fr 1fr; gap: 1.4rem; }
-    .lib-about .lb-head { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em; color: oklch(0.82 0.13 78); margin-bottom: 0.5rem; }
+    .lib-about .lb-head { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em; color: oklch(0.48 0.130 78); margin-bottom: 0.5rem; }
     .lib-about .lb-body p { font-size: 0.9rem; line-height: 1.65; color: var(--muted-foreground); margin: 0 0 0.7rem; }
-    .lib-about .lb-why { border-left: 3px solid oklch(0.66 0.16 30); padding: 0.4rem 0 0.4rem 0.8rem; font-size: 0.85rem; line-height: 1.55; color: oklch(0.86 0.05 60); background: oklch(0.2 0.03 30 / 0.25); border-radius: var(--radius-sm); }
-    .lib-about .lb-refs-h { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: oklch(0.74 0.14 145); margin-bottom: 0.6rem; }
+    .lib-about .lb-why { border-left: 3px solid oklch(0.66 0.16 30); padding: 0.4rem 0 0.4rem 0.8rem; font-size: 0.85rem; line-height: 1.55; color: oklch(0.48 0.050 60); background: oklch(0.2 0.03 30 / 0.25); border-radius: var(--radius-sm); }
+    .lib-about .lb-refs-h { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: oklch(0.48 0.140 145); margin-bottom: 0.6rem; }
     .lib-about .lb-refs { list-style: none; padding: 0; margin: 0; }
     .lib-about .lb-refs li { padding: 0.4rem 0; border-bottom: 1px dashed oklch(0.985 0 0 / 0.08); font-size: 0.82rem; line-height: 1.45; }
     .lib-about .lb-refs li:last-child { border-bottom: 0; }
-    .lib-about .lb-refs a { color: oklch(0.78 0.16 72); }
+    .lib-about .lb-refs a { color: oklch(0.48 0.160 72); }
     .lib-about .lb-refs .kind { display: inline-block; font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.05em; text-transform: uppercase; padding: 1px 5px; border-radius: 999px; margin-right: 0.4rem; vertical-align: 1px; }
-    .lib-about .kind-primary { background: oklch(0.3 0.1 145); color: oklch(0.9 0.1 145); }
-    .lib-about .kind-reference { background: oklch(0.3 0.08 250); color: oklch(0.88 0.09 250); }
-    .lib-about .kind-review { background: oklch(0.32 0.1 60); color: oklch(0.9 0.1 78); }
+    .lib-about .kind-primary { background: oklch(0.3 0.1 145); color: oklch(0.48 0.100 145); }
+    .lib-about .kind-reference { background: oklch(0.3 0.08 250); color: oklch(0.48 0.090 250); }
+    .lib-about .kind-review { background: oklch(0.32 0.1 60); color: oklch(0.48 0.100 78); }
     .lib-about .lb-refs-note { font-size: 0.72rem; color: var(--muted-foreground); line-height: 1.5; margin: 0.7rem 0 0; }
     @media (max-width: 720px) { .lib-about .lb-cols { grid-template-columns: 1fr; gap: 1rem; } }
     /* the journey — a scrollytelling walk through the history behind the books */
     .jr-intro { max-width: 74ch; margin: 3.2rem auto 0; text-align: center; }
-    .jr-intro .jr-eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.82 0.11 78); }
+    .jr-intro .jr-eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.48 0.110 78); }
     .jr-intro h2 { font-size: clamp(1.5rem, 3vw, 2.1rem); margin: 0.4rem 0 0.6rem; }
     .jr-intro h2 em { font-family: var(--font-italic, var(--font-display)); font-style: italic; }
     .jr-intro p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.65; }
@@ -90,18 +90,18 @@
     .jr-steps { max-width: 980px; margin: 1rem auto 0; }
     .jr-step { display: grid; grid-template-columns: 1fr 1fr; gap: 1.6rem 2.4rem; align-items: center; margin: 3.4rem 0; }
     .jr-step:nth-child(even) .jr-media { order: 2; }
-    .jr-media { position: relative; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border-strong); background: oklch(0.1 0 0); aspect-ratio: 3 / 2; }
+    .jr-media { position: relative; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border-strong); background: var(--background); aspect-ratio: 3 / 2; }
     .jr-media img { width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(0.92) contrast(1.03); transition: transform .5s ease; }
     .jr-media:hover img { transform: scale(1.03); }
-    .jr-media figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 0.5rem 0.7rem; font-family: var(--font-mono); font-size: 10.5px; color: oklch(0.92 0.02 90); background: linear-gradient(transparent, oklch(0.08 0 0 / 0.9)); }
-    .jr-body .jr-year { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; color: oklch(0.82 0.13 78); }
+    .jr-media figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 0.5rem 0.7rem; font-family: var(--font-mono); font-size: 10.5px; color: oklch(0.92 0.02 90); background: linear-gradient(transparent, var(--background)); }
+    .jr-body .jr-year { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; color: oklch(0.48 0.130 78); }
     .jr-body h3 { font-size: 1.25rem; margin: 0.2rem 0 0.5rem; line-height: 1.2; }
     .jr-body p { color: var(--muted-foreground); font-size: 0.92rem; line-height: 1.65; margin: 0 0 0.7rem; }
-    .jr-body .jr-link { font-family: var(--font-mono); font-size: 11px; color: oklch(0.78 0.16 72); cursor: pointer; border: 0; background: none; padding: 0; }
+    .jr-body .jr-link { font-family: var(--font-mono); font-size: 11px; color: oklch(0.48 0.160 72); cursor: pointer; border: 0; background: none; padding: 0; }
     .jr-body .jr-link:hover { text-decoration: underline; }
     .jr-quote { border-left: 3px solid oklch(0.7 0.16 78); padding: 0.3rem 0 0.3rem 1rem; margin: 0.2rem 0 0.8rem; font-family: var(--font-italic, var(--font-display)); font-style: italic; color: oklch(0.9 0.02 90); font-size: 0.95rem; line-height: 1.55; }
     /* a "letter" card — period document styling */
-    .jr-letter { max-width: 760px; margin: 3.2rem auto; background: oklch(0.96 0.02 85); color: oklch(0.25 0.03 60); border-radius: var(--radius); padding: 2rem 2.2rem; box-shadow: 0 10px 40px oklch(0.05 0 0 / 0.5); font-family: Georgia, 'Times New Roman', serif; line-height: 1.7; position: relative; transform: rotate(-0.4deg); }
+    .jr-letter { max-width: 760px; margin: 3.2rem auto; background: oklch(0.96 0.02 85); color: oklch(0.25 0.03 60); border-radius: var(--radius); padding: 2rem 2.2rem; box-shadow: 0 10px 40px var(--background); font-family: Georgia, 'Times New Roman', serif; line-height: 1.7; position: relative; transform: rotate(-0.4deg); }
     .jr-letter::before { content: ''; position: absolute; inset: 0; border: 1px solid oklch(0.4 0.04 60 / 0.2); border-radius: var(--radius); pointer-events: none; }
     .jr-letter .jr-l-head { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: oklch(0.45 0.05 40); margin-bottom: 1rem; }
     .jr-letter p { margin: 0 0 0.9rem; font-size: 1.02rem; }
@@ -116,29 +116,29 @@
     .pol-filter { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 1.2rem 0 0.4rem; }
     .pol-fbtn { font-family: var(--font-mono); font-size: 11px; padding: 4px 11px; border-radius: 999px; background: oklch(0.18 0.02 250); color: var(--muted-foreground); border: 1px solid var(--border-strong); cursor: pointer; transition: border-color .15s, background .15s, color .15s; }
     .pol-fbtn:hover { border-color: var(--warm); color: var(--foreground); }
-    .pol-fbtn.active { background: oklch(0.28 0.07 78); border-color: var(--warm); color: oklch(0.94 0.05 90); }
-    .pol-count { font-family: var(--font-mono); font-size: 11px; color: oklch(0.82 0.13 78); min-height: 1.1em; margin-bottom: 0.3rem; }
+    .pol-fbtn.active { background: oklch(0.28 0.07 78); border-color: var(--warm); color: oklch(0.48 0.050 90); }
+    .pol-count { font-family: var(--font-mono); font-size: 11px; color: oklch(0.48 0.130 78); min-height: 1.1em; margin-bottom: 0.3rem; }
     /* policy cards — books → policy → state → map */
     .pol-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; margin-top: 0.6rem; }
     .pol-card { border: 1px solid var(--border-strong); border-radius: var(--radius); background: oklch(0.155 0.005 250); padding: 1rem 1.05rem; display: flex; flex-direction: column; transition: border-color .15s, transform .15s; }
     .pol-card:hover { border-color: oklch(0.5 0.06 250); transform: translateY(-2px); }
     .pol-cardtop { display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.5rem; }
     .pol-icon { font-size: 1.6rem; line-height: 1; filter: saturate(1.1); flex-shrink: 0; }
-    .pol-card .pol-when { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.04em; color: oklch(0.82 0.13 78); }
+    .pol-card .pol-when { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.04em; color: oklch(0.48 0.130 78); }
     .pol-card h3 { font-size: 1.05rem; margin: 0.1rem 0 0; line-height: 1.22; }
-    .pol-states-h { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: oklch(0.72 0.06 250); margin-bottom: 0.4rem; }
+    .pol-states-h { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: oklch(0.48 0.060 250); margin-bottom: 0.4rem; }
     .pol-states-sub { text-transform: none; letter-spacing: 0; opacity: 0.7; }
     .pol-card .pol-what { font-size: 0.86rem; line-height: 1.6; color: var(--muted-foreground); margin: 0 0 0.7rem; }
     .pol-states { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-bottom: 0.6rem; }
-    .pol-states a { font-family: var(--font-mono); font-size: 10px; padding: 2px 8px; border-radius: 999px; background: oklch(0.22 0.04 250); color: oklch(0.86 0.09 230); border: 1px solid var(--border-strong); display: inline-flex; align-items: baseline; gap: 0.35rem; }
+    .pol-states a { font-family: var(--font-mono); font-size: 10px; padding: 2px 8px; border-radius: 999px; background: oklch(0.22 0.04 250); color: oklch(0.48 0.090 230); border: 1px solid var(--border-strong); display: inline-flex; align-items: baseline; gap: 0.35rem; }
     .pol-states a:hover { border-color: var(--warm); color: var(--foreground); }
-    .pol-states .pol-fig { font-size: 9px; color: oklch(0.78 0.12 78); opacity: 0.9; }
-    .pol-states a:hover .pol-fig { color: oklch(0.86 0.13 78); }
+    .pol-states .pol-fig { font-size: 9px; color: oklch(0.48 0.120 78); opacity: 0.9; }
+    .pol-states a:hover .pol-fig { color: oklch(0.48 0.130 78); }
     .pol-note { font-size: 0.78rem; color: var(--muted-foreground); line-height: 1.5; margin: 0 0 0.6rem; }
     .pol-impact { font-size: 0.82rem; line-height: 1.55; border-left: 3px solid oklch(0.7 0.16 145); padding-left: 0.7rem; margin: 0 0 0.5rem; color: oklch(0.88 0.03 145); }
-    .pol-gap { font-size: 0.76rem; line-height: 1.5; border-left: 3px solid oklch(0.62 0.16 60); padding-left: 0.7rem; margin: 0 0 0.7rem; color: oklch(0.82 0.08 70); }
+    .pol-gap { font-size: 0.76rem; line-height: 1.5; border-left: 3px solid oklch(0.62 0.16 60); padding-left: 0.7rem; margin: 0 0 0.7rem; color: oklch(0.48 0.080 70); }
     .pol-links { display: flex; flex-wrap: wrap; gap: 0.5rem 0.9rem; margin-top: auto; padding-top: 0.5rem; border-top: 1px dashed oklch(0.985 0 0 / 0.08); }
-    .pol-links a, .pol-links button { font-family: var(--font-mono); font-size: 11px; color: oklch(0.78 0.16 72); background: none; border: 0; padding: 0; cursor: pointer; }
+    .pol-links a, .pol-links button { font-family: var(--font-mono); font-size: 11px; color: oklch(0.48 0.160 72); background: none; border: 0; padding: 0; cursor: pointer; }
     .pol-links a:hover, .pol-links button:hover { text-decoration: underline; }
   </style>
 </head>
@@ -176,7 +176,7 @@
       <div class="lib-bar">
         <span>Now reading: <span class="now" id="lib-now">—</span></span>
         <label style="display:inline-flex;align-items:center;gap:0.35rem">go to page
-          <input id="lib-page" type="number" min="1" value="1" style="width:64px;background:oklch(0.18 0 0);color:var(--foreground);border:1px solid var(--border-strong);border-radius:5px;padding:2px 6px;font-family:var(--font-mono);font-size:11px">
+          <input id="lib-page" type="number" min="1" value="1" style="width:64px;background:var(--card);color:var(--foreground);border:1px solid var(--border-strong);border-radius:5px;padding:2px 6px;font-family:var(--font-mono);font-size:11px">
           <button class="lib-btn" id="lib-go" type="button">go</button>
         </label>
         <button class="lib-btn" id="lib-full" type="button">⛶ full screen</button>

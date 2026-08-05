@@ -15,38 +15,38 @@
     .eng-back { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted-foreground); display: inline-block; margin-bottom: 1.5rem; border: 1px solid var(--border-strong); padding: 5px 12px; border-radius: 999px; }
     .eng-back:hover { color: var(--foreground); border-color: var(--foreground); }
 
-    .eng-thesis { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.02em; color: var(--muted-foreground); border-left: 2px solid oklch(0.72 0.15 155); padding: 0.35rem 0 0.35rem 0.9rem; margin: 1.5rem 0 2.5rem; line-height: 1.7; max-width: 760px; }
-    .eng-thesis b { color: oklch(0.82 0.15 155); font-weight: 600; }
+    .eng-thesis { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.02em; color: var(--muted-foreground); border-left: 2px solid oklch(0.48 0.150 155); padding: 0.35rem 0 0.35rem 0.9rem; margin: 1.5rem 0 2.5rem; line-height: 1.7; max-width: 760px; }
+    .eng-thesis b { color: oklch(0.48 0.150 155); font-weight: 600; }
 
     .eng-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1rem; }
-    .eng-card { position: relative; border: 1px solid var(--border); border-radius: var(--radius-sm); background: oklch(0.145 0 0); padding: 1.3rem 1.35rem 1.2rem; overflow: hidden; display: flex; flex-direction: column; }
+    .eng-card { position: relative; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--card); padding: 1.3rem 1.35rem 1.2rem; overflow: hidden; display: flex; flex-direction: column; }
     .eng-card::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 3px; background: var(--eng-accent, oklch(0.7 0.1 200)); }
     .eng-card:hover { border-color: var(--border-strong); }
     .eng-num { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.1em; color: var(--muted-foreground); }
     .eng-icon { font-size: 22px; line-height: 1; margin-bottom: 0.5rem; display: block; }
     .eng-name { font-family: var(--font-sans); font-weight: 600; font-size: 17px; letter-spacing: -0.01em; color: var(--foreground); margin: 0.1rem 0 0.15rem; }
-    .eng-name em { color: var(--eng-accent, oklch(0.8 0.12 200)); font-style: normal; }
+    .eng-name em { color: var(--eng-accent, oklch(0.48 0.120 200)); font-style: normal; }
     .eng-tagline { font-family: var(--font-italic); font-style: italic; font-size: 13px; color: var(--muted-foreground); margin: 0 0 0.75rem; }
-    .eng-desc { font-size: 13px; line-height: 1.6; color: oklch(0.86 0 0); margin: 0 0 0.9rem; }
+    .eng-desc { font-size: 13px; line-height: 1.6; color: var(--foreground); margin: 0 0 0.9rem; }
     .eng-maps { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.02em; color: var(--muted-foreground); margin: 0 0 0.9rem; line-height: 1.6; }
     .eng-maps b { color: var(--foreground); font-weight: 500; }
     .eng-links { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: auto; }
     .eng-links a { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.02em; color: var(--foreground); border: 1px solid var(--border-strong); border-radius: 999px; padding: 4px 10px; text-decoration: none; }
     .eng-links a:hover { border-color: var(--eng-accent, var(--foreground)); color: var(--eng-accent, var(--foreground)); }
-    .eng-links a.eng-deep { color: var(--background); background: var(--eng-accent, oklch(0.8 0.12 200)); border-color: var(--eng-accent, oklch(0.8 0.12 200)); font-weight: 600; }
+    .eng-links a.eng-deep { color: var(--background); background: var(--eng-accent, oklch(0.48 0.120 200)); border-color: var(--eng-accent, oklch(0.48 0.120 200)); font-weight: 600; }
     .eng-links a.eng-deep:hover { filter: brightness(1.1); color: var(--background); }
     .eng-src { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted-foreground); margin-top: 0.9rem; padding-top: 0.7rem; border-top: 1px dashed oklch(0.985 0 0 / 0.08); }
-    .eng-src.warn { color: oklch(0.8 0.14 60); }
+    .eng-src.warn { color: oklch(0.48 0.140 60); }
 
-    .eng-origin { grid-column: 1 / -1; border-color: oklch(0.6 0.09 60 / 0.5); background: linear-gradient(180deg, oklch(0.16 0.01 60) 0%, oklch(0.145 0 0) 100%); }
-    .eng-origin .eng-name em { color: oklch(0.82 0.13 65); }
+    .eng-origin { grid-column: 1 / -1; border-color: oklch(0.6 0.09 60 / 0.5); background: linear-gradient(180deg, oklch(0.16 0.01 60) 0%, var(--card) 100%); }
+    .eng-origin .eng-name em { color: oklch(0.48 0.130 65); }
 
-    .eng-note { background: oklch(0.16 0 0); border: 1px solid var(--border); border-left: 3px solid oklch(0.7 0.18 30); border-radius: var(--radius-sm); padding: 1rem 1.2rem; margin-top: 2.5rem; }
+    .eng-note { background: var(--card); border: 1px solid var(--border); border-left: 3px solid oklch(0.7 0.18 30); border-radius: var(--radius-sm); padding: 1rem 1.2rem; margin-top: 2.5rem; }
     .eng-note h3 { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted-foreground); margin: 0 0 0.5rem; }
     .eng-note p { font-size: 13px; line-height: 1.6; color: var(--foreground); margin: 0 0 0.6rem; }
     .eng-note p:last-child { margin: 0; }
     .eng-note em { font-family: var(--font-italic); font-style: italic; }
-    .eng-note a { color: oklch(0.78 0.16 70); border-bottom-color: oklch(0.78 0.16 70 / 0.4); }
+    .eng-note a { color: oklch(0.48 0.160 70); border-bottom-color: oklch(0.48 0.160 70 / 0.4); }
   </style>
 </head>
 <body>
