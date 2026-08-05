@@ -16,7 +16,7 @@
     .cw-card { max-width: 720px; }
     .cw-eyebrow { font-family: var(--font-mono, monospace); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: oklch(0.8 0.13 70); }
     .cw-card h1 { font-family: var(--font-display, Georgia), serif; font-weight: 400; font-size: clamp(1.8rem, 4vw, 2.8rem); color: #f3ead9; margin: 0.5rem 0 0.5rem; line-height: 1.05; }
-    .cw-card h1 em { font-style: italic; color: oklch(0.85 0.13 70); }
+    .cw-card h1 em { font-style: italic; color: var(--accent); }
     .cw-card > p { color: #ccbfa8; font-size: 14.5px; line-height: 1.6; margin: 0 auto 1.4rem; max-width: 560px; }
 
     /* temple picker cards */
@@ -24,7 +24,7 @@
     .cw-pick { text-align: left; background: oklch(0.16 0.02 60 / 0.7); border: 1px solid oklch(0.4 0.03 60 / 0.6); border-radius: 12px;
       padding: 1rem 1.1rem; cursor: pointer; color: #e8dcc6; transition: border-color .15s, transform .1s; }
     .cw-pick:hover { border-color: oklch(0.78 0.15 62); transform: translateY(-2px); }
-    .cw-pick .cw-p-trad { font-family: var(--font-mono, monospace); font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase; color: oklch(0.78 0.13 70); }
+    .cw-pick .cw-p-trad { font-family: var(--font-mono, monospace); font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
     .cw-pick h3 { font-family: var(--font-display, Georgia), serif; font-weight: 400; font-size: 1.2rem; color: #f3ead9; margin: 0.15rem 0 0.3rem; }
     .cw-pick p { font-size: 12px; line-height: 1.5; color: #b3a892; margin: 0 0 0.5rem; }
     .cw-pick .cw-p-real { font-family: var(--font-mono, monospace); font-size: 10px; color: #8f8672; }
@@ -45,7 +45,7 @@
 
     #cw-hud { position: fixed; left: 12px; bottom: 12px; z-index: 10; font-family: var(--font-mono, monospace);
       font-size: 11px; color: #e8dcc6; text-shadow: 0 1px 3px #000; pointer-events: none; line-height: 1.6; }
-    #cw-hud b { color: oklch(0.86 0.13 70); }
+    #cw-hud b { color: var(--accent); }
     #cw-crosshair { position: fixed; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px 0 0 -3px; z-index: 9;
       border-radius: 50%; background: #fff6; pointer-events: none; display: none; }
     #cw-back, #cw-menu { position: fixed; top: 12px; z-index: 12; font-family: var(--font-mono, monospace); font-size: 11px;

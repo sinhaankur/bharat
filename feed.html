@@ -42,10 +42,10 @@
     .leaflet-popup-content-wrapper, .leaflet-popup-tip { background: var(--card); color: var(--foreground); border: 1px solid var(--border-strong); box-shadow: 0 8px 28px oklch(0 0 0 / 0.55); }
     .leaflet-popup-content { margin: 0.7rem 0.85rem; min-width: 220px; }
     .fd-pop-h { font-weight: 700; font-size: 1rem; color: var(--foreground); text-decoration: none; }
-    .fd-pop-h:hover { color: oklch(0.48 0.150 78); }
+    .fd-pop-h:hover { color: var(--accent); }
     .fd-pop-h .lvl { font-family: var(--font-mono); font-size: 8px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-foreground); margin-left: 0.3rem; }
     .fd-pop-sub { font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); margin: 0.15rem 0 0.5rem; }
-    .fd-pop-open { display: inline-block; margin-top: 0.55rem; font-family: var(--font-mono); font-size: 9.5px; color: oklch(0.48 0.160 75); text-decoration: none; }
+    .fd-pop-open { display: inline-block; margin-top: 0.55rem; font-family: var(--font-mono); font-size: 9.5px; color: var(--accent); text-decoration: none; }
     .fd-pop-open:hover { text-decoration: underline; }
     .fd-mapbar { display: flex; align-items: center; gap: 0.6rem; margin-top: 1.1rem; }
     .fd-mapbar.hidden { display: none; }
@@ -60,14 +60,14 @@
     .fd-card { border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1rem 0.9rem; background: var(--card); display: flex; flex-direction: column; }
     .fd-card-h { display: flex; align-items: baseline; gap: 0.5rem; margin-bottom: 0.7rem; }
     .fd-place { font-weight: 700; font-size: 1.12rem; color: var(--foreground); text-decoration: none; }
-    .fd-place:hover { color: oklch(0.48 0.150 78); }
+    .fd-place:hover { color: var(--accent); }
     .fd-place .lvl { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted-foreground); margin-left: 0.3rem; vertical-align: middle; }
     .fd-count { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); margin-left: auto; white-space: nowrap; }
     /* trend sparkline (story volume/day, ~30d) */
     .fd-trend { display: flex; align-items: center; gap: 0.4rem; margin: 0.1rem 0 0.2rem; }
     .fd-trend .lbl { font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted-foreground); white-space: nowrap; }
     svg.fd-spark { display: block; }
-    svg.fd-spark rect { fill: oklch(0.48 0.130 78); }
+    svg.fd-spark rect { fill: var(--accent); }
     .fd-trend .peak { font-family: var(--font-mono); font-size: 8.5px; color: var(--muted-foreground); white-space: nowrap; }
 
     .fd-lbl { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted-foreground); margin: 0.7rem 0 0.35rem; }
@@ -108,21 +108,21 @@
     /* top story */
     .fd-top { display: block; text-decoration: none; margin-top: 0.3rem; }
     .fd-top .t { font-size: 0.95rem; font-weight: 600; line-height: 1.32; color: var(--foreground); }
-    .fd-top:hover .t { color: oklch(0.48 0.150 78); }
+    .fd-top:hover .t { color: var(--accent); }
     .fd-top .m { font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); margin-top: 0.25rem; }
-    .fd-more { font-family: var(--font-mono); font-size: 9.5px; color: oklch(0.48 0.160 75); background: none; border: none; padding: 0.35rem 0; cursor: pointer; text-align: left; }
+    .fd-more { font-family: var(--font-mono); font-size: 9.5px; color: var(--accent); background: none; border: none; padding: 0.35rem 0; cursor: pointer; text-align: left; }
     .fd-more:hover { text-decoration: underline; }
     .fd-extra { display: none; }
     .fd-extra.open { display: block; }
     .fd-extra a { display: block; text-decoration: none; padding: 0.4rem 0 0.35rem; border-top: 1px dashed var(--border); }
     .fd-extra a .t { font-size: 0.86rem; font-weight: 500; color: var(--foreground); line-height: 1.3; }
-    .fd-extra a:hover .t { color: oklch(0.48 0.150 78); }
+    .fd-extra a:hover .t { color: var(--accent); }
     .fd-extra a .m { font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); }
 
     /* policy + reality split */
     .fd-split { margin-top: 0.85rem; border-top: 1px solid var(--border); padding-top: 0.7rem; }
     .fd-policy { font-size: 0.85rem; color: var(--foreground); line-height: 1.4; }
-    .fd-policy .amt { color: oklch(0.48 0.160 78); font-weight: 600; }
+    .fd-policy .amt { color: var(--accent); font-weight: 600; }
     .fd-tier { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted-foreground); border: 1px solid var(--border-strong); border-radius: 999px; padding: 0 5px; margin-left: 0.3rem; }
     .fd-reality { margin-top: 0.7rem; background: var(--background); border: 1px solid var(--border); border-radius: var(--radius); padding: 0.6rem 0.7rem; }
     .fd-reality .rl-h { font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.48 0.140 145); margin-bottom: 0.45rem; }
@@ -135,7 +135,7 @@
 
     .fd-empty { color: var(--muted-foreground); padding: 2rem 0; text-align: center; grid-column: 1 / -1; }
     .fd-note { font-size: 0.78rem; color: var(--muted-foreground); line-height: 1.55; margin-top: 1.8rem; }
-    .fd-note a { color: oklch(0.48 0.160 75); }
+    .fd-note a { color: var(--accent); }
   </style>
 </head>
 <body>
@@ -499,7 +499,7 @@
       }
       return `${size}
         <span class="sw"><i style="background:oklch(0.72 0.14 145)"></i> both sides cover it</span>
-        <span class="sw"><i style="background:oklch(0.80 0.14 75)"></i> leaning</span>
+        <span class="sw"><i style="background:var(--accent)"></i> leaning</span>
         <span class="sw"><i style="background:oklch(0.66 0.20 30)"></i> one-sided</span>${foot}`;
     }
 
@@ -520,7 +520,7 @@
     function skewColor(c) {
       if (c.bothSides && c.skew < 0.5) return "oklch(0.72 0.14 145)";
       if (c.oneSided || c.skew >= 0.8) return "oklch(0.66 0.20 30)";
-      return "oklch(0.80 0.14 75)";
+      return "var(--accent)";
     }
     // Funding colour: the dominant ownership bloc's colour (who owns the megaphone here).
     const FUND_COLOR = {

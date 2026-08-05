@@ -20,7 +20,7 @@
     .h3-wrap { max-width: 1180px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; }
     .h3-head h1 { margin: 0.3rem 0 0.4rem; font-size: clamp(1.7rem, 3.6vw, 2.6rem); }
     .h3-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.55; max-width: 74ch; }
-    .h3-head p a { color: oklch(0.74 0.16 75); }
+    .h3-head p a { color: var(--accent); }
 
     .h3-layout { display: grid; grid-template-columns: 300px 1fr; gap: 1.1rem; margin-top: 1.3rem; align-items: start; }
     @media (max-width: 860px) { .h3-layout { grid-template-columns: 1fr; } }
@@ -30,7 +30,7 @@
     .h3-rail-hd { position: sticky; top: 0; background: oklch(0.16 0 0); padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--border); font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted-foreground); z-index: 2; }
     .h3-filter { display: flex; gap: 0.3rem; flex-wrap: wrap; padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--border); }
     .h3-fchip { font-family: var(--font-mono); font-size: 9px; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--border-strong); color: var(--muted-foreground); background: transparent; cursor: pointer; }
-    .h3-fchip.on { color: oklch(0.16 0 0); background: oklch(0.74 0.15 75); border-color: oklch(0.74 0.15 75); font-weight: 600; }
+    .h3-fchip.on { color: oklch(0.16 0 0); background: var(--accent); border-color: var(--accent); font-weight: 600; }
     .h3-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.8rem; border-bottom: 1px solid oklch(0.2 0 0); cursor: pointer; }
     .h3-item:hover { background: oklch(0.17 0 0); }
     .h3-item.on { background: oklch(0.2 0.03 75); }
@@ -51,23 +51,23 @@
     .h3-empty .big { font-size: 2.4rem; margin-bottom: 0.6rem; }
     .h3-empty h3 { color: var(--foreground); margin: 0 0 0.4rem; font-size: 1.05rem; }
     .h3-empty p { max-width: 46ch; font-size: 0.88rem; line-height: 1.5; }
-    .h3-empty a { color: oklch(0.74 0.16 75); }
+    .h3-empty a { color: var(--accent); }
 
     .h3-info { padding: 0.9rem 1rem; border-top: 1px solid var(--border); }
     .h3-info h2 { margin: 0 0 0.15rem; font-size: 1.15rem; }
     .h3-info .sub { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted-foreground); }
     .h3-info .life { font-size: 0.88rem; line-height: 1.5; color: var(--muted-foreground); margin: 0.5rem 0; }
     .h3-info .builder { font-size: 0.86rem; }
-    .h3-info .builder b { color: oklch(0.86 0.12 75); }
+    .h3-info .builder b { color: var(--accent); }
     .h3-info .destroy { font-size: 0.84rem; color: oklch(0.85 0.10 32); background: oklch(0.2 0.06 30 / 0.35); border-radius: 6px; padding: 0.4rem 0.55rem; margin: 0.5rem 0 0; }
     .h3-info .destroy b { color: oklch(0.86 0.15 32); }
     .h3-info .links { margin-top: 0.6rem; display: flex; gap: 0.8rem; flex-wrap: wrap; font-family: var(--font-mono); font-size: 10px; }
-    .h3-info .links a { color: oklch(0.74 0.16 75); text-decoration: none; }
+    .h3-info .links a { color: var(--accent); text-decoration: none; }
     .h3-attr { font-size: 0.72rem; color: var(--muted-foreground); margin-top: 0.5rem; }
     .h3-attr a { color: oklch(0.66 0.1 250); }
     .h3-note { font-size: 0.78rem; color: var(--muted-foreground); line-height: 1.6; margin-top: 1.6rem; border-top: 1px solid var(--border); padding-top: 1rem; }
     .h3-note b { color: var(--foreground); }
-    .h3-note a { color: oklch(0.74 0.16 75); }
+    .h3-note a { color: var(--accent); }
 
     html.embed-mode body { margin: 0; }
     html.embed-mode .h3-wrap { padding: 0.7rem 0.9rem 2rem; max-width: none; }

@@ -18,7 +18,7 @@
     #hero-frame { width: 100%; height: 100%; border: 0; display: block; }
     /* slim left rail — the mode switch */
     #hero-rail { position: relative; z-index: 3; width: 60px; flex: 0 0 60px; background: oklch(0.11 0 0 / 0.82); backdrop-filter: blur(12px); border-right: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; padding: 0.6rem 0; gap: 0.3rem; }
-    #hero-rail .brand-dot { width: 26px; height: 26px; border-radius: 7px; background: linear-gradient(135deg, oklch(0.7 0.18 30), oklch(0.72 0.16 78)); margin-bottom: 0.7rem; display: grid; place-items: center; font-size: 14px; }
+    #hero-rail .brand-dot { width: 26px; height: 26px; border-radius: 7px; background: linear-gradient(135deg, oklch(0.7 0.18 30), var(--accent)); margin-bottom: 0.7rem; display: grid; place-items: center; font-size: 14px; }
     .rail-btn { width: 46px; height: 46px; border-radius: 10px; border: 1px solid transparent; background: transparent; color: var(--muted-foreground); font-size: 19px; cursor: pointer; display: grid; place-items: center; transition: background .15s, color .15s, border-color .15s; position: relative; }
     .rail-btn:hover { background: oklch(0.2 0 0); color: var(--foreground); }
     .rail-btn.active { background: oklch(0.26 0.06 78); color: oklch(0.94 0.05 90); border-color: var(--warm); }
@@ -32,7 +32,7 @@
     .hp-title { font-family: var(--font-display); font-size: 1.05rem; flex: 1; }
     .hp-close { background: oklch(0.2 0 0); border: 1px solid var(--border-strong); color: var(--foreground); border-radius: 999px; width: 28px; height: 28px; cursor: pointer; font-size: 14px; }
     .hp-close:hover { border-color: var(--warm); }
-    .hp-open-full { font-family: var(--font-mono); font-size: 10.5px; color: oklch(0.78 0.16 72); text-decoration: none; border: 1px solid var(--border-strong); border-radius: 999px; padding: 3px 9px; }
+    .hp-open-full { font-family: var(--font-mono); font-size: 10.5px; color: var(--accent); text-decoration: none; border: 1px solid var(--border-strong); border-radius: 999px; padding: 3px 9px; }
     .hp-open-full:hover { border-color: var(--warm); }
     .hp-body { flex: 1; position: relative; }
     .hp-body iframe { width: 100%; height: 100%; border: 0; display: block; background: oklch(0.1 0 0); }
@@ -57,9 +57,9 @@
     #hero-splash { position: absolute; inset: 0; z-index: 6; display: grid; place-items: center; background: radial-gradient(ellipse at 50% 45%, oklch(0.08 0.01 250 / 0.55), oklch(0.05 0 0 / 0.85)); backdrop-filter: blur(2px); animation: hs-in .4s ease; }
     @keyframes hs-in { from { opacity: 0; } to { opacity: 1; } }
     .hs-card { max-width: 640px; width: calc(100% - 80px); text-align: center; }
-    .hs-eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: oklch(0.82 0.13 78); margin-bottom: 0.8rem; }
+    .hs-eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.8rem; }
     .hs-title { font-family: var(--font-display); font-weight: 400; font-size: clamp(2rem, 5.5vw, 3.4rem); line-height: 1.05; margin: 0 0 1rem; letter-spacing: -0.01em; }
-    .hs-title em { font-family: var(--font-italic, var(--font-display)); font-style: italic; color: oklch(0.86 0.13 78); }
+    .hs-title em { font-family: var(--font-italic, var(--font-display)); font-style: italic; color: var(--accent); }
     .hs-lede { font-size: clamp(0.9rem, 1.4vw, 1.02rem); line-height: 1.6; color: var(--muted-foreground); max-width: 56ch; margin: 0 auto 1.6rem; }
     .hs-lede b { color: var(--foreground); }
     .hs-cta { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; }
@@ -67,7 +67,7 @@
     .hs-btn:hover { border-color: var(--warm); transform: translateY(-1px); }
     .hs-btn.primary { background: oklch(0.3 0.08 78); border-color: var(--warm); color: oklch(0.95 0.05 90); }
     .hs-foot { margin-top: 1.6rem; font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); }
-    .hs-foot a { color: oklch(0.78 0.16 72); }
+    .hs-foot a { color: var(--accent); }
     /* top-right: search + a link back to the classic multi-page site */
     #hero-top { position: absolute; z-index: 3; right: 14px; top: 12px; display: flex; gap: 0.5rem; align-items: center; }
     #hero-top a, #hero-top button { font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); text-decoration: none; border: 1px solid var(--border); border-radius: 999px; padding: 4px 11px; background: oklch(0.13 0 0 / 0.8); backdrop-filter: blur(8px); cursor: pointer; }

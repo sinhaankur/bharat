@@ -40,7 +40,7 @@
     .gc-era-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; }
     .gc-era-eyebrow { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted-foreground); }
     .gc-era-holder { font-family: var(--font-display); font-size: clamp(1.1rem, 2.4vw, 1.5rem); margin-top: 0.15rem; color: var(--foreground); }
-    .gc-era-year { color: oklch(0.48 0.150 78); font-weight: 600; }
+    .gc-era-year { color: var(--accent); font-weight: 600; }
     .gc-era-domwrap { min-width: 190px; flex: 0 1 240px; }
     .gc-era-domlab { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.03em; color: var(--muted-foreground); margin-bottom: 3px; }
     .gc-era-dompct::after { content: "%"; opacity: 0.6; }
@@ -50,12 +50,12 @@
     .gc-era-domcap { font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.03em; color: var(--muted-foreground); margin-top: 3px; }
     .gc-era-range { -webkit-appearance: none; appearance: none; width: 100%; height: 4px; border-radius: 999px; margin: 1rem 0 0.3rem;
       background: linear-gradient(90deg, oklch(0.5 0.05 250), oklch(0.48 0.190 25) 45%, oklch(0.48 0.150 95)); cursor: pointer; }
-    .gc-era-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--foreground); border: 2px solid oklch(0.48 0.150 78); cursor: grab; box-shadow: 0 1px 4px oklch(0 0 0 / 0.5); }
-    .gc-era-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: var(--foreground); border: 2px solid oklch(0.48 0.150 78); cursor: grab; }
+    .gc-era-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--foreground); border: 2px solid var(--accent); cursor: grab; box-shadow: 0 1px 4px oklch(0 0 0 / 0.5); }
+    .gc-era-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: var(--foreground); border: 2px solid var(--accent); cursor: grab; }
     .gc-era-ticks { display: flex; justify-content: space-between; margin-bottom: 0.7rem; }
     .gc-era-tick { background: none; border: 0; cursor: pointer; font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.02em; color: var(--muted-foreground); padding: 2px 3px; border-radius: 4px; }
     .gc-era-tick:hover { color: var(--foreground); }
-    .gc-era-tick.on { color: oklch(0.48 0.150 78); font-weight: 600; }
+    .gc-era-tick.on { color: var(--accent); font-weight: 600; }
     .gc-era-headline { font-family: var(--font-sans); font-weight: 600; font-size: 14.5px; color: var(--foreground); margin: 0 0 0.3rem; }
     .gc-era-note { font-size: 12.5px; line-height: 1.6; color: var(--foreground); margin: 0; }
     @media (max-width: 560px) { .gc-era-domwrap { flex-basis: 100%; } .gc-era-ticks { font-size: 8px; } }
@@ -99,11 +99,11 @@
     .gcb-board-note { text-align: center; font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.06em; color: var(--muted-foreground); margin: 8px 0 0 18px; }
     /* world-order banner above the board */
     .gcb-orderbar { display: flex; align-items: center; gap: 0.5rem; margin: 0 0 6px 18px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--foreground); }
-    .gcb-order-pips { color: oklch(0.48 0.150 78); letter-spacing: 0.1em; }
+    .gcb-order-pips { color: var(--accent); letter-spacing: 0.1em; }
     .gcb-order-sub { color: var(--muted-foreground); text-transform: none; letter-spacing: 0.02em; }
     /* world-order line in the era head */
     .gc-era-order { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em; color: var(--muted-foreground); margin-top: 3px; }
-    .gc-era-order .gc-order-pip { color: oklch(0.48 0.150 78); margin-right: 3px; }
+    .gc-era-order .gc-order-pip { color: var(--accent); margin-right: 3px; }
     /* allegiance flip callout under the board */
     .gcb-flip { margin: 8px 0 0 18px; font-size: 11px; line-height: 1.5; color: var(--foreground); display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
     .gcb-flip-h { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.05em; text-transform: uppercase; color: oklch(0.48 0.160 40); }
@@ -241,7 +241,7 @@
     .gc-doc > summary::after { content: "▾ how this works · sources · actions"; font-size: 9.5px; color: var(--muted-foreground); letter-spacing: 0.04em; text-transform: none; }
     .gc-doc[open] > summary::after { content: "▴ close"; }
     .gc-doc-body { padding: 0 1.1rem 1.1rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.1rem; }
-    .gc-doc-col h4 { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: oklch(0.48 0.150 78); margin: 0 0 0.5rem; }
+    .gc-doc-col h4 { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin: 0 0 0.5rem; }
     .gc-doc-col ul { margin: 0; padding-left: 1.1rem; }
     .gc-doc-col li { font-size: 12px; line-height: 1.55; color: var(--foreground); margin: 0 0 0.4rem; }
     .gc-doc-col li b { color: var(--foreground); }
@@ -412,7 +412,7 @@
       };
       const LINE_COLOR = {
         "mutual hold": "oklch(0.8 0.16 25)", "chokepoint": "oklch(0.82 0.16 20)",
-        "petrodollar": "oklch(0.8 0.15 140)", "off-board trade": "oklch(0.82 0.16 70)",
+        "petrodollar": "oklch(0.8 0.15 140)", "off-board trade": "var(--accent)",
         "creditor": "oklch(0.78 0.14 250)", "clearing": "oklch(0.8 0.12 100)",
         "dependent rival": "oklch(0.75 0.13 250)", "rivals inside a bloc": "oklch(0.72 0.16 300)",
         "patron / client": "oklch(0.7 0.1 30)", "bailout patron": "oklch(0.72 0.11 60)",

@@ -2380,7 +2380,8 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   border-radius: var(--radius-lg); overflow: hidden; background: var(--card); text-decoration: none; color: inherit; }
 @media (max-width: 760px) { .ed-feature { grid-template-columns: 1fr; } }
 .ed-feature-art { min-height: 280px; background: linear-gradient(135deg, var(--brand), var(--brand-ink));
-  display: flex; align-items: center; justify-content: center; color: #fff; font-size: 4rem; }
+  display: flex; align-items: center; justify-content: center; color: #fff; font-size: 4rem; overflow: hidden; }
+.ed-feature-art svg { width: 100%; height: 100%; display: block; }
 .ed-feature-body { padding: clamp(1.4rem, 3vw, 2.4rem); display: flex; flex-direction: column; justify-content: center; gap: 0.7rem; }
 .ed-feature-body h2 { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.5rem, 3vw, 2.3rem);
   line-height: 1.1; letter-spacing: -0.015em; margin: 0; }
