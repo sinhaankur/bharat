@@ -2429,3 +2429,14 @@ html.theme-dark #nav { background: oklch(0.145 0 0 / 0.85); }
 html.theme-dark .brand-word { color: var(--foreground); }
 html.theme-dark .snav-menu { background: oklch(0.16 0 0); box-shadow: 0 8px 24px oklch(0 0 0 / 0.5); }
 html.theme-dark .snav-menu a:hover, html.theme-dark .snav-group.is-current .snav-top { background: oklch(0.24 0 0); }
+
+/* theme-light: explicitly re-assert the light editorial tokens, so the a11y
+   toggle can force light even on a page that ships class="theme-dark", and so
+   a browser in OS-dark never darkens our editorial pages. Mirrors :root. */
+html.theme-light {
+  --background: #ffffff; --foreground: #14171a;
+  --muted: #eef2f1; --muted-foreground: #5b6b6b;
+  --border: #e2e8e6; --border-strong: #c9d4d1; --card: #ffffff;
+  --brand-tint: #e6f0ef; --accent-tint: #fbeee7;
+}
+html.theme-light, html.theme-light body { background: var(--background); color: var(--foreground); }
