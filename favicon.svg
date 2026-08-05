@@ -1,12 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <!-- Teal & Ink brand mark: teal tile, clay locator pin over a district grid -->
-  <rect width="32" height="32" rx="7" fill="#0f5c5c"/>
+  <!-- Ink & Crimson brand mark: ink tile, crimson locator pin over a district grid -->
+  <rect width="32" height="32" rx="7" fill="#16151a"/>
   <!-- faint district grid (the "atlas" idea) -->
   <g stroke="#ffffff" stroke-opacity="0.16" stroke-width="1">
     <path d="M6 11h20 M6 16h20 M6 21h20 M11 6v20 M16 6v20 M21 6v20"/>
   </g>
-  <!-- clay locator pin -->
-  <path d="M16 5.5c-3.9 0-7 2.9-7 6.6 0 4.8 6.2 12 6.5 12.3a.7.7 0 0 0 1 0C16.8 24.1 23 16.9 23 12.1c0-3.7-3.1-6.6-7-6.6z" fill="#e0663b"/>
-  <circle cx="16" cy="12" r="2.6" fill="#0f5c5c"/>
+  <!-- crimson locator pin -->
+  <path d="M16 5.5c-3.9 0-7 2.9-7 6.6 0 4.8 6.2 12 6.5 12.3a.7.7 0 0 0 1 0C16.8 24.1 23 16.9 23 12.1c0-3.7-3.1-6.6-7-6.6z" fill="#d33a2c"/>
+  <circle cx="16" cy="12" r="2.6" fill="#16151a"/>
   <circle cx="16" cy="12" r="1.2" fill="#ffffff"/>
 </svg>
