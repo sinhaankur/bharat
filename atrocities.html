@@ -109,7 +109,8 @@
     .at-bd-row .cat { display: flex; align-items: center; gap: 0.4rem; color: var(--ink); }
     .at-bd-row .cat i { width: 11px; height: 11px; border-radius: 50%; flex: 0 0 auto; border: 0.6px solid rgba(60,50,35,0.5); }
     .at-bd-row .bar { height: 10px; background: #d8d0bf; border-radius: 999px; overflow: hidden; }
-    .at-bd-row .bar i { display: block; height: 100%; border-radius: 999px; }
+    .at-bd-row .bar i { display: block; height: 100%; border-radius: 999px; width: 0; transition: width 0.8s cubic-bezier(.2,.8,.2,1); }
+    @media (prefers-reduced-motion: reduce) { .at-bd-row .bar i { transition: none; } }
     .at-bd-row .val { font-family: var(--font-mono, monospace); text-align: right; color: var(--ink); }
     .at-bd-row .val small { color: var(--ink-soft); font-size: 0.72rem; }
     .at-bd-lead { font-size: 0.85rem; color: var(--ink); margin: 0.8rem 0 0; line-height: 1.5; }
@@ -526,7 +527,7 @@
         const n = pool.filter(e => e.category === k).length;
         return `<div class="at-bd-row">
           <span class="cat"><i style="background:${CAT[k].color}"></i>${esc(CAT[k].label)}</span>
-          <span class="bar"><i style="width:${(v / maxCat) * 100}%;background:${CAT[k].color}"></i></span>
+          <span class="bar"><i data-w="${(v / maxCat) * 100}" style="width:0;background:${CAT[k].color}"></i></span>
           <span class="val">${v.toFixed(1)}M <small>${Math.round(share)}% · ${n}×</small></span>
         </div>`;
       }).join("");
@@ -543,6 +544,11 @@
         <div class="at-bd-stack">${stack}</div>
         <div class="at-bd-rows">${rows}</div>
         <p class="at-bd-lead">${lead}</p>`;
+      // animate the bars from 0 → target width (unless reduce-motion)
+      const rm = matchMedia("(prefers-reduced-motion: reduce)").matches || document.documentElement.getAttribute("data-reduce-motion") === "1";
+      requestAnimationFrame(() => host.querySelectorAll(".at-bd-row .bar i[data-w]").forEach(el => {
+        el.style.width = rm ? el.dataset.w + "%" : el.dataset.w + "%";
+      }));
     }
 
     function renderTables() {
