@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scripts & language families of Bharat — Brahmi's tree and the Bharati link-script | Bharat</title>
+  <meta name="description" content="Two family trees kept deliberately apart: how India's LANGUAGES descend (Indo-Aryan vs Dravidian — Tamil is not from Sanskrit), and how their SCRIPTS descend (nearly all from ancient Brahmi, c. 250 BCE). Dead languages (Sanskrit, Pali, Prakrit, Tocharian) and dead scripts (Brahmi, Kharoshthi) are flagged, Brahmi's contested parentage noted, and the modern constructed 'Bharati' link-script (IIT Madras) shown as a bridge across both families." />
+  <meta name="keywords" content="Brahmi script, Bharati script, Brahmic scripts family tree, Indo-Aryan Dravidian, Tamil not from Sanskrit, dead languages Sanskrit Pali Prakrit Tocharian, Kharoshthi, Devanagari origin, link script India, language family India" />
+  <link rel="canonical" href="https://sinhaankur.github.io/india-fiscal-map/scripts.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Bharat" />
+  <meta property="og:title" content="Scripts & language families of Bharat — Brahmi's tree and the Bharati link-script" />
+  <meta property="og:description" content="Unrelated language families (Tamil is Dravidian, Sanskrit Indo-European) — yet their scripts share ONE ancestor, Brahmi. Dead languages & scripts flagged; the constructed Bharati link-script explained." />
+  <meta property="og:url" content="https://sinhaankur.github.io/india-fiscal-map/scripts.html" />
+  <meta property="og:image" content="https://sinhaankur.github.io/india-fiscal-map/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://sinhaankur.github.io/india-fiscal-map/og-image.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .sc-wrap { max-width: 1040px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; }
+    .sc-head h1 { margin: 0.3rem 0 0.4rem; font-size: clamp(1.7rem, 3.6vw, 2.6rem); }
+    .sc-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.55; max-width: 76ch; }
+    .sc-head p a { color: var(--accent); }
+    .sc-thesis { border-left: 2px solid oklch(0.62 0.11 200); padding: 0.2rem 0 0.2rem 0.8rem; margin: 0.9rem 0 0; color: oklch(0.42 0.09 210); font-size: 0.92rem; line-height: 1.5; font-style: italic; max-width: 70ch; }
+
+    /* the two-truths callout */
+    .sc-truths { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin: 1.3rem 0 0; }
+    @media (max-width: 620px) { .sc-truths { grid-template-columns: 1fr; } }
+    .sc-truth { border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); padding: 0.8rem 0.95rem; font-size: 0.9rem; line-height: 1.5; }
+    .sc-truth b { color: var(--foreground); }
+    .sc-truth .k { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 0.3rem; }
+
+    /* view toggle */
+    .sc-toggle { display: inline-flex; gap: 2px; margin: 1.6rem 0 0.4rem; border: 1px solid var(--border-strong); border-radius: 999px; padding: 3px; background: var(--card); }
+    .sc-toggle button { border: 0; background: transparent; color: var(--muted-foreground); font: inherit; font-size: 0.85rem; padding: 0.35rem 0.95rem; border-radius: 999px; cursor: pointer; }
+    .sc-toggle button[aria-pressed="true"] { background: var(--foreground); color: var(--background); }
+    .sc-viewnote { font-size: 0.85rem; color: var(--muted-foreground); line-height: 1.5; margin: 0.4rem 0 0; max-width: 76ch; }
+    .sc-viewnote b { color: var(--foreground); }
+
+    /* family legend */
+    .sc-legend { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; margin: 1rem 0 0; font-size: 0.78rem; color: var(--muted-foreground); align-items: center; }
+    .sc-legend .lbl { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .sc-legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 5px; vertical-align: -2px; }
+
+    /* the tree */
+    .sc-tree { margin: 1.3rem 0 0; }
+    .sc-branch { margin: 0 0 1.6rem; }
+    .sc-branch-h { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted-foreground); margin: 0 0 0.7rem; padding-bottom: 0.35rem; border-bottom: 1px solid var(--border); }
+    .sc-row { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+
+    .sc-node { border: 1px solid var(--border); border-left-width: 4px; border-radius: var(--radius-sm); background: var(--card); padding: 0.6rem 0.8rem; width: 240px; box-sizing: border-box; cursor: pointer; transition: box-shadow .12s, transform .12s; }
+    .sc-node:hover { box-shadow: 0 4px 14px rgba(0,0,0,.07); transform: translateY(-1px); }
+    .sc-node.root { width: 100%; border-left-width: 6px; background: linear-gradient(90deg, var(--accent-tint), var(--card) 60%); }
+    .sc-node.highlight { box-shadow: 0 0 0 2px var(--accent-tint); }
+    .sc-node.link { border-style: dashed; }
+    .sc-name { font-weight: 700; font-size: 1rem; display: flex; align-items: baseline; gap: 0.4rem; flex-wrap: wrap; }
+    .sc-native { font-family: var(--font-mono); color: var(--muted-foreground); font-weight: 400; font-size: 0.85rem; }
+    .sc-meta { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted-foreground); margin: 0.25rem 0 0; }
+    .sc-from { font-size: 0.78rem; color: var(--muted-foreground); margin: 0.3rem 0 0; line-height: 1.4; }
+    .sc-from b { color: oklch(0.42 0.09 210); }
+
+    /* status pills */
+    .sc-tags { display: flex; gap: 0.3rem; flex-wrap: wrap; margin: 0.4rem 0 0; }
+    .sc-tag { font-family: var(--font-mono); font-size: 8px; text-transform: uppercase; letter-spacing: 0.03em; padding: 2px 7px; border-radius: 999px; border: 1px solid var(--border-strong); color: var(--muted-foreground); white-space: nowrap; }
+    .sc-tag.living { color: #fff; background: oklch(0.55 0.13 150); border-color: transparent; }
+    .sc-tag.dead { color: #fff; background: oklch(0.5 0.02 20); border-color: transparent; }
+    .sc-tag.dead-liturgical { color: #fff; background: oklch(0.55 0.09 300); border-color: transparent; }
+    .sc-tag.extinct { color: #fff; background: oklch(0.45 0.11 25); border-color: transparent; }
+    .sc-tag.undeciphered, .sc-tag.undeciphered-dead { color: #fff; background: oklch(0.5 0.03 60); border-color: transparent; }
+    .sc-tag.reconstructed { color: var(--muted-foreground); border-style: dashed; }
+    .sc-tag.proposed { color: #fff; background: oklch(0.55 0.12 200); border-color: transparent; }
+    .sc-tag.revived, .sc-tag.near-dead { color: oklch(0.45 0.09 90); border-color: oklch(0.6 0.1 90); }
+    .sc-tag.contested { color: oklch(0.48 0.14 40); border-color: oklch(0.6 0.13 40); }
+    .sc-tag.unicode { color: oklch(0.45 0.09 260); border-color: oklch(0.6 0.1 260); }
+    .sc-tag.no-unicode { color: var(--accent); border-color: oklch(0.65 0.14 30); }
+    .sc-tag.fam { color: #fff; border-color: transparent; }
+
+    /* detail drawer */
+    .sc-detail { margin: 1rem 0 0; border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); padding: 1rem 1.15rem; display: none; }
+    .sc-detail.open { display: block; }
+    .sc-detail h3 { margin: 0 0 0.2rem; font-size: 1.2rem; }
+    .sc-detail .sub { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted-foreground); }
+    .sc-detail p { font-size: 0.9rem; line-height: 1.6; margin: 0.6rem 0 0; }
+    .sc-detail .contest { background: oklch(0.96 0.02 40); border: 1px solid oklch(0.85 0.06 40); border-radius: 6px; padding: 0.55rem 0.7rem; margin-top: 0.6rem; font-size: 0.85rem; line-height: 1.5; color: oklch(0.4 0.1 40); }
+    html.dark-mode .sc-detail .contest { background: oklch(0.24 0.03 40); border-color: oklch(0.4 0.06 40); color: oklch(0.82 0.08 40); }
+    .sc-detail .src { font-size: 0.78rem; color: var(--muted-foreground); margin-top: 0.6rem; }
+    .sc-detail .src a { color: var(--accent); }
+
+    /* section heading */
+    .sc-sec-h { font-size: 1.25rem; margin: 2.4rem 0 0.2rem; }
+    .sc-sec-p { color: var(--muted-foreground); font-size: 0.9rem; line-height: 1.55; margin: 0.3rem 0 0; max-width: 78ch; }
+    .sc-sec-p a { color: var(--accent); }
+
+    /* Brahmi origins */
+    .sc-gap { margin: 1rem 0 0; border-left: 4px solid oklch(0.6 0.13 40); background: oklch(0.985 0.012 40); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 0.7rem 1rem; font-size: 0.9rem; line-height: 1.55; color: var(--foreground); }
+    html.dark-mode .sc-gap { background: oklch(0.22 0.02 40); }
+    .sc-gap b { color: var(--foreground); }
+    .sc-theories { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 0.7rem; margin: 1rem 0 0; }
+    .sc-theory { border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); padding: 0.85rem 0.95rem; }
+    .sc-theory .tn { font-weight: 700; font-size: 1rem; }
+    .sc-theory .st { font-family: var(--font-mono); font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--accent); margin: 0.2rem 0 0.1rem; }
+    .sc-theory .prop { font-size: 0.76rem; color: var(--muted-foreground); font-style: italic; margin-bottom: 0.4rem; }
+    .sc-theory .claim { font-size: 0.87rem; line-height: 1.5; margin: 0.3rem 0; }
+    .sc-theory .fa { font-size: 0.8rem; line-height: 1.5; margin: 0.35rem 0 0; }
+    .sc-theory .fa .for { color: oklch(0.5 0.12 150); font-weight: 600; }
+    .sc-theory .fa .ag { color: oklch(0.5 0.14 30); font-weight: 600; }
+    .sc-theory .flag { display: inline-block; font-family: var(--font-mono); font-size: 8px; text-transform: uppercase; letter-spacing: 0.03em; padding: 2px 7px; border-radius: 999px; border: 1px solid oklch(0.65 0.13 40); color: oklch(0.48 0.14 40); margin-top: 0.5rem; }
+    .sc-origin-foot { margin: 1rem 0 0; }
+    .sc-origin-foot .row { font-size: 0.86rem; line-height: 1.55; color: var(--muted-foreground); margin: 0 0 0.5rem; padding-left: 1.5rem; position: relative; }
+    .sc-origin-foot .row b { color: var(--foreground); }
+    .sc-origin-foot .row .ic { position: absolute; left: 0; top: 0; }
+    .sc-origin-foot .verdict { border: 1px solid var(--border); border-radius: var(--radius); background: oklch(0.98 0.006 200); padding: 0.7rem 0.9rem; font-size: 0.88rem; line-height: 1.55; }
+    html.dark-mode .sc-origin-foot .verdict { background: oklch(0.2 0.01 200); }
+    .sc-origin-foot .verdict b { color: var(--foreground); }
+    .sc-origin-foot a { color: var(--accent); }
+
+    /* Sanskrit specimen */
+    .sc-spec { margin: 1rem 0 0; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .sc-spec-row { display: grid; grid-template-columns: 220px 1fr; gap: 0; border-top: 1px solid var(--border); align-items: center; }
+    .sc-spec-row:first-child { border-top: 0; }
+    .sc-spec-row .lbl { padding: 0.6rem 0.9rem; font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted-foreground); background: oklch(0.98 0.004 90); border-right: 1px solid var(--border); align-self: stretch; display: flex; flex-direction: column; justify-content: center; gap: 2px; }
+    html.dark-mode .sc-spec-row .lbl { background: oklch(0.2 0.006 90); }
+    .sc-spec-row .lbl .fam { font-size: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .sc-spec-row .glyph { padding: 0.55rem 0.95rem; font-size: 1.9rem; line-height: 1.3; }
+    .sc-spec-row .glyph .cav { display: block; font-size: 0.72rem; font-family: var(--font-mono); color: var(--muted-foreground); line-height: 1.4; margin-top: 0.2rem; }
+    .sc-spec-row.iast .glyph { font-style: italic; color: var(--accent); }
+    @media (max-width: 560px) { .sc-spec-row { grid-template-columns: 1fr; } .sc-spec-row .lbl { border-right: 0; border-bottom: 1px solid var(--border); flex-direction: row; gap: 8px; } .sc-spec-row .glyph { font-size: 1.6rem; } }
+
+    /* earliest scripts (Maurya & before) */
+    .sc-ashoka { margin: 1rem 0 0; border: 1px solid oklch(0.85 0.06 40); border-left: 4px solid var(--accent); border-radius: var(--radius); background: oklch(0.985 0.012 40); padding: 0.85rem 1rem; font-size: 0.9rem; line-height: 1.55; }
+    html.dark-mode .sc-ashoka { background: oklch(0.22 0.02 40); border-color: oklch(0.4 0.05 40); }
+    .sc-ashoka b { color: var(--foreground); }
+    .sc-eras { margin: 1rem 0 0; }
+    .sc-era-h { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted-foreground); margin: 1rem 0 0.5rem; }
+    .sc-early { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+    .sc-early-card { border: 1px solid var(--border); border-left: 4px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--card); padding: 0.6rem 0.8rem; width: 300px; box-sizing: border-box; }
+    .sc-early-card.undeciphered { border-left-color: oklch(0.55 0.03 60); }
+    .sc-early-card.readable { border-left-color: oklch(0.55 0.13 150); }
+    .sc-early-card .en { font-weight: 700; font-size: 0.98rem; }
+    .sc-early-card .em { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted-foreground); margin: 0.2rem 0; }
+    .sc-early-card .facts { display: flex; flex-wrap: wrap; gap: 0.2rem 0.5rem; margin: 0.3rem 0; }
+    .sc-early-card .facts span { font-family: var(--font-mono); font-size: 8px; text-transform: uppercase; letter-spacing: 0.02em; padding: 2px 6px; border-radius: 999px; border: 1px solid var(--border-strong); color: var(--muted-foreground); }
+    .sc-early-card .facts .read { color: #fff; background: oklch(0.55 0.13 150); border-color: transparent; }
+    .sc-early-card .facts .unread { color: #fff; background: oklch(0.5 0.03 60); border-color: transparent; }
+    .sc-early-card .desc { font-size: 0.82rem; color: var(--muted-foreground); line-height: 1.5; margin-top: 0.3rem; }
+
+    /* Ashoka edict block */
+    .sc-edict { margin: 1rem 0 0; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .sc-edict-head { padding: 0.7rem 1rem; background: oklch(0.98 0.008 90); border-bottom: 1px solid var(--border); }
+    html.dark-mode .sc-edict-head { background: oklch(0.2 0.008 90); }
+    .sc-edict-head .t { font-weight: 700; font-size: 1.02rem; }
+    .sc-edict-head .m { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted-foreground); margin-top: 0.2rem; }
+    .sc-edict-body { padding: 0.9rem 1.1rem; }
+    .sc-edict-body blockquote { margin: 0 0 0.7rem; padding: 0 0 0 0.9rem; border-left: 3px solid var(--accent); font-size: 0.98rem; line-height: 1.6; color: var(--foreground); }
+    .sc-edict-brahmi { margin: 0.6rem 0 0; padding: 0.7rem 0.9rem; border: 1px dashed var(--border-strong); border-radius: var(--radius-sm); background: var(--card); }
+    .sc-edict-brahmi .big { font-size: 2.1rem; line-height: 1.4; }
+    .sc-edict-brahmi .iast { font-style: italic; color: var(--accent); font-size: 0.95rem; }
+    .sc-edict-brahmi .cav { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted-foreground); line-height: 1.4; margin-top: 0.3rem; }
+    .sc-edict-how { font-size: 0.82rem; color: var(--muted-foreground); line-height: 1.55; margin: 0.7rem 0 0; padding-top: 0.6rem; border-top: 1px dashed var(--border); }
+    .sc-edict-how a { color: var(--accent); }
+
+    /* tree controls */
+    .sc-controls { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.4rem 0 0.4rem; align-items: center; }
+
+    /* SVG connected tree */
+    .sc-diagram { width: 100%; overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); background:
+      radial-gradient(circle at 1px 1px, var(--border) 1px, transparent 0) 0 0 / 22px 22px, var(--card); }
+    .sc-diagram svg { display: block; }
+    .sc-diagram .link { fill: none; stroke: var(--border-strong); stroke-width: 1.5; }
+    .sc-diagram .link.bridge { stroke-dasharray: 4 4; stroke: oklch(0.6 0.1 200); opacity: 0.55; }
+    .sc-diagram .nodebox { cursor: pointer; transition: opacity .15s; outline: none; }
+    .sc-diagram .nodebox rect { rx: 7; transition: filter .12s; }
+    .sc-diagram .nodebox:hover rect, .sc-diagram .nodebox:focus rect { filter: brightness(0.97); }
+    html.dark-mode .sc-diagram .nodebox:hover rect, html.dark-mode .sc-diagram .nodebox:focus rect { filter: brightness(1.15); }
+    .sc-diagram .nodebox.lit rect { stroke-width: 2.4 !important; }
+    .sc-diagram .link { transition: opacity .15s, stroke-width .15s; }
+    .sc-hint { font-size: 0.78rem; color: var(--muted-foreground); margin: 0.5rem 0 0; font-style: italic; }
+    .sc-diagram .nlabel { font-size: 12.5px; font-weight: 600; fill: var(--foreground); }
+    .sc-diagram .nmeta { font-size: 9px; fill: var(--muted-foreground); font-family: var(--font-mono); }
+    .sc-diagram .gen-h { font-size: 9px; fill: var(--muted-foreground); font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.06em; }
+
+    /* deep-analysis essay */
+    .sc-essay { margin: 1rem 0 0; column-gap: 2.2rem; }
+    .sc-essay .blk { margin: 0 0 1.3rem; break-inside: avoid; }
+    .sc-essay h3 { font-size: 1.05rem; margin: 0 0 0.4rem; color: var(--foreground); }
+    .sc-essay p { font-size: 0.92rem; line-height: 1.65; color: var(--muted-foreground); margin: 0 0 0.6rem; }
+    .sc-essay p b { color: var(--foreground); }
+    .sc-essay p em { color: oklch(0.42 0.09 210); font-style: italic; }
+    @media (min-width: 860px) { .sc-essay { columns: 2; } }
+
+    /* font demo */
+    .sc-fontdemo { margin: 1rem 0 0; border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); padding: 1.1rem 1.2rem; }
+    .sc-fontwordmark { font-size: clamp(3rem, 9vw, 5.5rem); line-height: 1; color: var(--foreground); }
+    .sc-fontdemo input#fonttype { width: 100%; margin: 0.9rem 0 0; border: 0; border-bottom: 2px solid var(--border-strong); background: transparent; color: var(--foreground); font-size: clamp(1.1rem, 3.2vw, 1.7rem); padding: 0.4rem 0.1rem; outline: none; }
+    .sc-fontdemo input#fonttype:focus { border-bottom-color: var(--accent); }
+    .sc-fontsizes { display: flex; flex-wrap: wrap; gap: 0.6rem 1.6rem; align-items: baseline; margin: 1rem 0 0; color: var(--foreground); }
+    .sc-fonthow { margin: 1rem 0 0; font-size: 0.85rem; }
+    .sc-fonthow summary { cursor: pointer; color: var(--accent); font-family: var(--font-mono); font-size: 0.8rem; }
+    .sc-fonthow pre { margin: 0.6rem 0 0; padding: 0.7rem 0.9rem; background: oklch(0.97 0.005 90); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow-x: auto; font-family: var(--font-mono); font-size: 0.78rem; line-height: 1.5; color: var(--foreground); }
+    html.dark-mode .sc-fonthow pre { background: oklch(0.18 0.006 90); }
+
+    .sc-note { font-size: 0.8rem; color: var(--muted-foreground); line-height: 1.6; margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1rem; }
+    .sc-note b { color: var(--foreground); } .sc-note a { color: var(--accent); }
+
+    html.embed-mode body { margin: 0; }
+    html.embed-mode .sc-wrap { padding: 0.7rem 0.9rem 2rem; max-width: none; }
+    html.embed-mode .eyebrow, html.embed-mode .sc-head p:not(.sc-thesis) { display: none; }
+    html.embed-mode .sc-head h1 { font-size: 1.15rem; margin: 0 0 0.4rem; }
+  </style>
+</head>
+<body>
+  <div id="site-nav"></div>
+
+  <main class="sc-wrap">
+    <header class="sc-head">
+      <div class="eyebrow">Language & script · deep history · sourced</div>
+      <h1 class="display">The two trees of <em>Bharat</em></h1>
+      <p>India's languages come from families that are <b>genuinely unrelated</b> — Tamil is <b>Dravidian</b>, Sanskrit is
+      <b>Indo-European</b>; neither descends from the other. Yet almost every Indian <em>script</em> descends from one
+      ancestor: <b>Brahmi</b>, attested in the <a href="heritage-atlas.html">Edicts of Ashoka</a> around 250&nbsp;BCE.
+      So a language tree and a script tree tell <em>different</em> stories — the languages diverge, the writing systems
+      converge. That single fact is what makes a modern neutral <b>link-script</b> (<a href="https://en.wikipedia.org/wiki/Bharati_script" target="_blank" rel="noopener">Bharati</a>, IIT&nbsp;Madras) even conceivable.</p>
+      <p class="sc-thesis">This page keeps a language and the script it is written in strictly apart — because they
+      are different inheritance trees. Sanskrit was written in many scripts long before Devanagari; Tamil's script is
+      Brahmi-descended though its language is not. We flag dead languages, dead scripts, and Brahmi's own contested
+      parentage — established fact and disputed interpretation kept separate, as on the <a href="deep-history.html">DNA</a> page.</p>
+
+      <div class="sc-truths">
+        <div class="sc-truth"><span class="k">Truth 1 · languages diverge</span>
+          <b>Tamil ≠ Sanskrit.</b> Tamil belongs to the <b>Dravidian</b> family and is <b>not</b> derived from Sanskrit.
+          Sanskrit is <b>Indo-European</b> (kin to Latin, Greek, Persian). They are foreign to each other.</div>
+        <div class="sc-truth"><span class="k">Truth 2 · scripts converge</span>
+          Yet the <b>Tamil script</b> and <b>Devanagari</b> both descend from <b>Brahmi</b>. Unrelated languages,
+          one shared script-ancestor. That is why one link-script across both families is structurally possible.</div>
+      </div>
+    </header>
+
+    <!-- where Brahmi came from -->
+    <h2 class="sc-sec-h" id="origins-title"></h2>
+    <p class="sc-sec-p" id="origins-standfirst"></p>
+    <div class="sc-gap" id="origins-gap"></div>
+    <div class="sc-theories" id="origins-theories"></div>
+    <div class="sc-origin-foot" id="origins-foot"></div>
+
+    <!-- how actual Sanskrit reads across scripts -->
+    <h2 class="sc-sec-h">See it: one Sanskrit word, many scripts</h2>
+    <p class="sc-sec-p" id="spec-note"></p>
+    <div class="sc-spec" id="specimen"></div>
+
+    <!-- Maurya & before -->
+    <h2 class="sc-sec-h">Maurya &amp; before: the earliest scripts</h2>
+    <p class="sc-sec-p" id="early-note"></p>
+    <div class="sc-ashoka" id="ashoka"></div>
+    <div class="sc-eras" id="eras"></div>
+
+    <!-- Ashoka edict — a ruler's own words -->
+    <h2 class="sc-sec-h">Read a ruler's own words: Ashoka's Edict 13</h2>
+    <p class="sc-sec-p" id="edict-note"></p>
+    <div class="sc-edict" id="edict"></div>
+
+    <!-- the two family trees -->
+    <h2 class="sc-sec-h" style="margin-top:2.6rem">The two family trees</h2>
+    <div class="sc-controls">
+      <div class="sc-toggle" role="group" aria-label="Choose a tree">
+        <button id="btn-lang" aria-pressed="true">🗣 Language family</button>
+        <button id="btn-script" aria-pressed="false">✍ Script descent</button>
+      </div>
+      <div class="sc-toggle" role="group" aria-label="Choose a layout">
+        <button id="btn-diagram" aria-pressed="true">🌳 Connected tree</button>
+        <button id="btn-rows" aria-pressed="false">▦ Grouped list</button>
+      </div>
+    </div>
+    <p class="sc-viewnote" id="viewnote"></p>
+
+    <div class="sc-legend" id="legend"></div>
+
+    <div class="sc-detail" id="detail"></div>
+
+    <div class="sc-tree" id="tree"></div>
+
+    <!-- deep analysis essay -->
+    <h2 class="sc-sec-h" style="margin-top:2.8rem" id="analysis-title"></h2>
+    <p class="sc-sec-p" id="analysis-standfirst"></p>
+    <div class="sc-essay" id="essay"></div>
+
+    <!-- our own font: Bharati Inspired -->
+    <h2 class="sc-sec-h" style="margin-top:2.8rem">Our own type: the “Bharati&nbsp;Inspired” font</h2>
+    <p class="sc-sec-p">We built an <b>original, open (OFL) display font</b> from the Bharati design principles —
+      monoline strokes, open counters, and <b>no Devanagari-style headline bar</b> — with a reproducible
+      <code>build_bharati_font.py</code> (fontTools). It is <em>Bharati-inspired</em>, not the IIT&nbsp;Madras glyphs.
+      Type below to try it; source &amp; license are in <code>assets/fonts/</code>.</p>
+    <div class="sc-fontdemo">
+      <div class="sc-fontwordmark bharati">Bharat</div>
+      <input id="fonttype" class="bharati" value="type here — the map of money &amp; the meaning of scripts" aria-label="Type to preview the font" />
+      <div class="sc-fontsizes">
+        <span class="bharati" style="font-size:2.4rem">Aa Bb Gg</span>
+        <span class="bharati" style="font-size:1.4rem">0123456789</span>
+        <span class="bharati" style="font-size:1rem">The quick brown fox jumps over the lazy dog.</span>
+      </div>
+      <details class="sc-fonthow">
+        <summary>How to use it</summary>
+        <pre>/* 1. the @font-face is already in styles.css */
+/* 2. apply the class, or the family name directly */
+&lt;h1 class="bharati"&gt;Bharat&lt;/h1&gt;
+
+.my-heading { font-family: "Bharati Inspired", sans-serif; }
+
+/* rebuild the font from source: */
+python3 -m venv .venv-font
+.venv-font/bin/pip install fonttools brotli skia-pathops
+.venv-font/bin/python build_bharati_font.py</pre>
+      </details>
+    </div>
+
+    <p class="sc-note" id="note"></p>
+  </main>
+
+  <script>
+  (function () {
+    "use strict";
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+    // family colour keys reuse the DNA page's ancestry palette, so the two pages rhyme
+    const FAM_COLOR = {
+      steppe:   "oklch(0.62 0.15 285)",   // Indo-Aryan  (Steppe/Yamnaya on the DNA page)
+      aasi:     "oklch(0.58 0.15 25)",    // Dravidian   (AASI substrate)
+      ivc:      "oklch(0.62 0.12 200)",   // Austroasiatic
+      iranian:  "oklch(0.6 0.13 140)",    // Tibeto-Burman
+      bharati:  "oklch(0.55 0.12 200)",   // Constructed / link
+      unknown:  "oklch(0.55 0.03 60)"
+    };
+    const STATUS_LABEL = {
+      "living": "living", "dead": "dead", "dead-liturgical": "dead · liturgical",
+      "extinct": "extinct", "undeciphered": "undeciphered", "undeciphered-dead": "undeciphered",
+      "reconstructed": "reconstructed", "proposed": "proposed", "revived": "revived",
+      "near-dead": "near-dead", "historical": "historical"
+    };
+
+    let DATA = null, MODE = "lang", LAYOUT = "diagram";
+
+    fetch("scripts.json").then(r => r.json()).then(d => {
+      DATA = d;
+      renderOrigins();
+      renderSpecimen();
+      renderEarliest();
+      renderEdict();
+      renderEssay();
+      render();
+    }).catch(e => {
+      document.getElementById("tree").innerHTML = `<div style="color:var(--muted-foreground)">Could not load scripts.json — ${esc(e.message)}</div>`;
+    });
+
+    // live font demo: echo typing into the wordmark
+    (function () {
+      const inp = document.getElementById("fonttype");
+      const mark = document.querySelector(".sc-fontwordmark");
+      if (inp && mark) inp.addEventListener("input", () => {
+        const v = inp.value.trim();
+        mark.textContent = v ? v.split(/\s+/)[0].slice(0, 14) : "Bharat";
+      });
+    })();
+
+    document.getElementById("btn-lang").addEventListener("click", () => setMode("lang"));
+    document.getElementById("btn-script").addEventListener("click", () => setMode("script"));
+    document.getElementById("btn-diagram").addEventListener("click", () => setLayout("diagram"));
+    document.getElementById("btn-rows").addEventListener("click", () => setLayout("rows"));
+    function setMode(m) {
+      MODE = m;
+      document.getElementById("btn-lang").setAttribute("aria-pressed", m === "lang");
+      document.getElementById("btn-script").setAttribute("aria-pressed", m === "script");
+      document.getElementById("detail").classList.remove("open");
+      render();
+    }
+    function setLayout(l) {
+      LAYOUT = l;
+      document.getElementById("btn-diagram").setAttribute("aria-pressed", l === "diagram");
+      document.getElementById("btn-rows").setAttribute("aria-pressed", l === "rows");
+      document.getElementById("detail").classList.remove("open");
+      render();
+    }
+
+    function famColor(famId) {
+      const f = (DATA.families || []).find(x => x.id === famId);
+      return FAM_COLOR[f ? f.color : "unknown"] || FAM_COLOR.unknown;
+    }
+    function famLabel(famId) {
+      const f = (DATA.families || []).find(x => x.id === famId);
+      return f ? f.label : (famId || "unknown");
+    }
+    function nameOf(kind, id) {
+      const arr = kind === "lang" ? DATA.languages : DATA.scripts;
+      const o = (arr || []).find(x => x.id === id);
+      return o ? o.name : id;
+    }
+
+    // ---- Brahmi origins ----
+    function renderOrigins() {
+      const o = DATA.origins;
+      if (!o) return;
+      document.getElementById("origins-title").textContent = o.title;
+      document.getElementById("origins-standfirst").innerHTML = esc(o.standfirst);
+      document.getElementById("origins-gap").innerHTML = `<b>The ~1,500-year gap.</b> ${esc(o.the_gap)}`;
+      document.getElementById("origins-theories").innerHTML = (o.theories || []).map(t =>
+        `<div class="sc-theory">
+          <div class="tn">${esc(t.name)}</div>
+          <div class="st">${esc(t.stance)}</div>
+          <div class="prop">${esc(t.proponents)}</div>
+          <div class="claim">${esc(t.claim)}</div>
+          <div class="fa"><span class="for">For:</span> ${esc(t.for)}</div>
+          <div class="fa"><span class="ag">Against:</span> ${esc(t.against)}</div>
+          ${t.contested ? `<span class="flag">⚠ unresolved</span>` : ""}
+        </div>`).join("");
+      const src = (o.sources || []).map(s => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label.split(",")[0])}</a>`).join(" · ");
+      document.getElementById("origins-foot").innerHTML =
+        `<p class="row"><span class="ic">⚖️</span> <b>The politics.</b> ${esc(o.politics)}</p>
+         <p class="row"><span class="ic">🔑</span> <b>Decipherment.</b> ${esc(o.decipherment)}</p>
+         <div class="verdict"><b>Where the honest line is.</b> ${esc(o.verdict)}<br><span style="font-size:0.8rem;color:var(--muted-foreground)">Sources: ${src}.</span></div>`;
+    }
+
+    // ---- Sanskrit specimen ----
+    function renderSpecimen() {
+      const sp = DATA.specimen;
+      if (!sp) return;
+      document.getElementById("spec-note").innerHTML =
+        `The same word — <b>${esc(sp.iast)}</b> (${esc(sp.word_meaning)}) — in script after script. Sanskrit has no script of its own; it rides whichever local Brahmic script is at hand. Same sounds, wildly different letters: that is <b>language and script as separate trees</b>, made visible. (Rendered with your device's fonts; a line of boxes just means that script's font isn't installed.)`;
+      const rows = [
+        `<div class="sc-spec-row iast"><div class="lbl">IAST romanisation<span class="fam">the sounds</span></div><div class="glyph">${esc(sp.iast)}</div></div>`
+      ].concat((sp.renderings || []).map(r => {
+        const col = r.family && FAM_COLOR[(DATA.families.find(f=>f.id===r.family)||{}).color] ? famColor(r.family) : "var(--muted-foreground)";
+        const fam = r.family === "dead" ? "ancient / dead" : famLabel(r.family);
+        const fcls = r.font ? ` f-${esc(r.font)}` : "";
+        return `<div class="sc-spec-row"><div class="lbl">${esc(r.script)}<span class="fam" style="color:${col}">${esc(fam)}</span></div>
+          <div class="glyph${fcls}" lang="sa">${esc(r.text)}${r.caveat ? `<span class="cav">${esc(r.caveat)}</span>` : ""}</div></div>`;
+      }));
+      document.getElementById("specimen").innerHTML = rows.join("");
+    }
+
+    // ---- Maurya & before ----
+    function renderEarliest() {
+      const e = DATA.earliest_scripts;
+      if (!e) return;
+      document.getElementById("early-note").innerHTML = esc(e.purpose);
+      document.getElementById("ashoka").innerHTML =
+        `<b>📜 Ashoka's edicts — how we verify what a ruler actually said.</b> ${esc(e.ashoka_note)} <a href="heritage-atlas.html">See the sites on the atlas →</a>`;
+      const eraOrder = [
+        ["before Maurya", "Before the Maurya"],
+        ["before & into Maurya", "Straddling into the Mauryan era"],
+        ["Mauryan", "The Mauryan era (c. 322–185 BCE)"],
+        ["Mauryan / post-Mauryan", "Mauryan & just after"],
+        ["Mauryan (and around)", "Mauryan era — the frontier"]
+      ];
+      const byEra = {};
+      (e.items || []).forEach(it => { (byEra[it.era] = byEra[it.era] || []).push(it); });
+      const html = eraOrder.filter(([k]) => byEra[k]).map(([k, label]) =>
+        `<div class="sc-era-h">${esc(label)}</div><div class="sc-early">${byEra[k].map(earlyCard).join("")}</div>`
+      ).join("");
+      document.getElementById("eras").innerHTML = html;
+    }
+    // ---- Ashoka edict ----
+    function renderEdict() {
+      const e = DATA.edict;
+      if (!e) return;
+      document.getElementById("edict-note").innerHTML = esc(e.purpose);
+      const bp = e.brahmi_phrase || {};
+      document.getElementById("edict").innerHTML =
+        `<div class="sc-edict-head">
+           <div class="t">${esc(e.title)}</div>
+           <div class="m">${esc(e.when)} · language: ${esc(e.language)} · script: ${esc(e.script)}</div>
+         </div>
+         <div class="sc-edict-body">
+           ${(e.english || []).map(p => `<blockquote>${esc(p)}</blockquote>`).join("")}
+           <div class="sc-edict-brahmi">
+             <span class="big f-brahmi" lang="pra">${esc(bp.brahmi || "")}</span>
+             &nbsp; <span class="iast">${esc(bp.iast || "")}</span>
+             <div class="cav">${esc(bp.caveat || "")}</div>
+           </div>
+           <div class="sc-edict-how">${esc(e.how_we_know || "")} ${e.source ? `— <a href="${esc(e.source.url)}" target="_blank" rel="noopener">${esc(e.source.label)}</a>.` : ""} <a href="heritage-atlas.html">See edict sites on the atlas →</a></div>
+         </div>`;
+    }
+
+    // ---- deep-analysis essay ----
+    function renderEssay() {
+      const a = DATA.analysis;
+      if (!a) return;
+      document.getElementById("analysis-title").textContent = a.title;
+      document.getElementById("analysis-standfirst").innerHTML = esc(a.standfirst);
+      // essay allows a small, safe subset of inline tags from the source (b, em) — build via allow-list
+      const rich = s => esc(s).replace(/&lt;(\/?)(b|em)&gt;/g, "<$1$2>");
+      document.getElementById("essay").innerHTML = (a.sections || []).map(sec =>
+        `<div class="blk"><h3>${esc(sec.h)}</h3>${(sec.p || []).map(p => `<p>${rich(p)}</p>`).join("")}</div>`
+      ).join("");
+    }
+
+    function earlyCard(it) {
+      const readable = it.deciphered;
+      return `<div class="sc-early-card ${readable ? "readable" : "undeciphered"}">
+        <div class="en">${esc(it.name)}</div>
+        <div class="em">${esc(it.period)} · ${esc(it.region)}</div>
+        <div class="facts">
+          <span class="${readable ? "read" : "unread"}">${readable ? "readable" : "unread"}</span>
+          <span>${esc(it.direction)}</span>
+          ${it.contested ? `<span>⚠ contested</span>` : ""}
+        </div>
+        <div class="desc">${esc(it.note)}</div>
+      </div>`;
+    }
+
+    // ================= CONNECTED SVG TREE =================
+    // Generic: builds a generation-layered layout from parent pointers, draws
+    // curved bezier links, colours nodes by language family. Works for both trees.
+    const SVGNS = "http://www.w3.org/2000/svg";
+    function svg(tag, attrs, children) {
+      const el = document.createElementNS(SVGNS, tag);
+      for (const k in (attrs || {})) el.setAttribute(k, attrs[k]);
+      (children || []).forEach(c => el.appendChild(c));
+      return el;
+    }
+
+    function diagramModel() {
+      // returns { nodes:[{id,name,meta,color,kind,gen,link,bridgeTo?}], edges:[{from,to,bridge?}] }
+      if (MODE === "lang") {
+        const langs = DATA.languages.filter(l => l.family !== "unknown" || l.id === "indus-lang");
+        const nodes = langs.map(l => ({
+          id: l.id, name: l.name, kind: "lang",
+          meta: (STATUS_LABEL[l.status] || l.status),
+          color: famColor(l.family), status: l.status,
+          parent: l.descends_from
+        }));
+        const idset = new Set(nodes.map(n => n.id));
+        const edges = nodes.filter(n => n.parent && idset.has(n.parent)).map(n => ({ from: n.parent, to: n.id }));
+        return { nodes, edges };
+      } else {
+        // scripts: use the descent parent; drop cross-plane SE-Asia leaves for clarity but keep the core
+        const wanted = new Set([
+          "indus-script","brahmi","kharoshthi","gupta","nagari","devanagari","sharada","gurmukhi",
+          "bengali-assamese","odia-script","gujarati-script","meitei-script",
+          "tamil-brahmi","vatteluttu","tamil-script","grantha","telugu-script","kannada-script",
+          "malayalam-script","sinhala-script","ol-chiki","bharati"
+        ]);
+        const scr = DATA.scripts.filter(s => wanted.has(s.id));
+        const nodes = scr.map(s => {
+          const firstLang = (s.writes || [])[0];
+          const lo = firstLang ? DATA.languages.find(x => x.id === firstLang) : null;
+          const color = lo ? famColor(lo.family) : (s.link_script ? FAM_COLOR.bharati : FAM_COLOR.unknown);
+          return {
+            id: s.id, name: s.name, kind: "script",
+            meta: (STATUS_LABEL[s.status] || s.status), color, status: s.status,
+            parent: (s.parent && DATA.scripts.find(x => x.id === s.parent)) ? s.parent : null,
+            link: !!s.link_script, root: !!s.root
+          };
+        });
+        const idset = new Set(nodes.map(n => n.id));
+        const edges = nodes.filter(n => n.parent && idset.has(n.parent)).map(n => ({ from: n.parent, to: n.id }));
+        // Bharati bridges: dashed links from Bharati to a few representative living scripts across both families
+        const bridgeTargets = ["devanagari","tamil-script","telugu-script","bengali-assamese"];
+        bridgeTargets.forEach(t => { if (idset.has(t) && idset.has("bharati")) edges.push({ from: "bharati", to: t, bridge: true }); });
+        return { nodes, edges };
+      }
+    }
+
+    // assign generation (depth) by walking parents; roots at gen 0
+    function assignGenerations(nodes) {
+      const byId = Object.fromEntries(nodes.map(n => [n.id, n]));
+      const depth = {};
+      function d(id, seen) {
+        if (depth[id] != null) return depth[id];
+        const n = byId[id];
+        if (!n || !n.parent || !byId[n.parent] || seen.has(id)) return (depth[id] = 0);
+        seen.add(id);
+        return (depth[id] = d(n.parent, seen) + 1);
+      }
+      nodes.forEach(n => d(n.id, new Set()));
+      // link-scripts (Bharati) sit one generation below the deepest, on their own
+      const maxGen = Math.max(0, ...nodes.map(n => depth[n.id]));
+      nodes.forEach(n => { n.gen = n.link ? maxGen + 1 : depth[n.id]; });
+      return maxGen + (nodes.some(n => n.link) ? 1 : 0);
+    }
+
+    function renderDiagram() {
+      const host = document.getElementById("tree");
+      const model = diagramModel();
+      const maxGen = assignGenerations(model.nodes);
+
+      // group nodes by generation, order within a generation to keep siblings near parents
+      const gens = [];
+      model.nodes.forEach(n => { (gens[n.gen] = gens[n.gen] || []).push(n); });
+
+      // layout constants
+      const NW = 150, NH = 40, GAP_X = 34, GAP_Y = 74, PAD = 28, LABEL_COL = 96;
+      const colW = NW + GAP_X;
+      // width = widest generation
+      const maxRow = Math.max(...gens.map(g => (g ? g.length : 0)));
+      const width = PAD * 2 + LABEL_COL + Math.max(1, maxRow) * colW - GAP_X;
+      const height = PAD * 2 + (maxGen + 1) * (NH + GAP_Y) - GAP_Y + 14;
+
+      // position: x by index within generation (centre each row), y by generation
+      const pos = {};
+      gens.forEach((row, g) => {
+        if (!row) return;
+        const rowW = row.length * colW - GAP_X;
+        const startX = PAD + LABEL_COL + (width - PAD * 2 - LABEL_COL - rowW) / 2;
+        row.forEach((n, i) => {
+          pos[n.id] = { x: startX + i * colW, y: PAD + g * (NH + GAP_Y) + 14 };
+        });
+      });
+
+      const root = svg("svg", { viewBox: `0 0 ${width} ${height}`, width: width, height: height, role: "img", "aria-label": (MODE === "lang" ? "Language family tree" : "Script descent tree") });
+
+      // adjacency for interactive lineage highlighting (ancestors + descendants)
+      const parentOf = {}, childrenOf = {};
+      model.nodes.forEach(n => { childrenOf[n.id] = []; });
+      model.edges.forEach(e => {
+        if (e.bridge) return; // bridges are not lineage
+        parentOf[e.to] = e.from;
+        (childrenOf[e.from] = childrenOf[e.from] || []).push(e.to);
+      });
+      function lineage(id) {
+        const set = new Set([id]);
+        let p = parentOf[id]; while (p) { set.add(p); p = parentOf[p]; }      // ancestors
+        const stack = [...(childrenOf[id] || [])];                            // descendants
+        while (stack.length) { const c = stack.pop(); if (!set.has(c)) { set.add(c); (childrenOf[c] || []).forEach(x => stack.push(x)); } }
+        return set;
+      }
+      const edgeEls = {}, nodeEls = {};
+      function highlight(id) {
+        const keep = id ? lineage(id) : null;
+        model.nodes.forEach(n => {
+          const el = nodeEls[n.id]; if (!el) return;
+          el.style.opacity = keep ? (keep.has(n.id) ? "1" : "0.18") : "1";
+          el.classList.toggle("lit", keep ? keep.has(n.id) : false);
+        });
+        model.edges.forEach((e, i) => {
+          const el = edgeEls[i]; if (!el) return;
+          const on = keep && !e.bridge && keep.has(e.from) && keep.has(e.to);
+          el.style.opacity = keep ? (on ? "1" : "0.08") : (e.bridge ? "0.55" : "1");
+          el.setAttribute("stroke-width", on ? "2.6" : (e.bridge ? "1.5" : "1.5"));
+        });
+      }
+
+      // generation labels down the left
+      const genLabel = (MODE === "lang")
+        ? ["family root (unwritten)", "ancient / classical", "middle stage", "modern", "living / offshoot"]
+        : ["undeciphered / root", "Brahmi & siblings", "early branches", "medieval scripts", "modern & link"];
+      gens.forEach((row, g) => {
+        if (!row) return;
+        const y = PAD + g * (NH + GAP_Y) + 14 + NH / 2;
+        root.appendChild(svg("text", { x: PAD, y: y, class: "gen-h" }, [txt(genLabel[g] || ("gen " + g))]));
+      });
+
+      // edges first (behind nodes)
+      model.edges.forEach((e, i) => {
+        const a = pos[e.from], b = pos[e.to];
+        if (!a || !b) return;
+        const x1 = a.x + NW / 2, y1 = a.y + NH, x2 = b.x + NW / 2, y2 = b.y;
+        const my = (y1 + y2) / 2;
+        const path = `M ${x1} ${y1} C ${x1} ${my}, ${x2} ${my}, ${x2} ${y2}`;
+        const el = svg("path", { d: path, class: "link" + (e.bridge ? " bridge" : "") });
+        edgeEls[i] = el;
+        root.appendChild(el);
+      });
+
+      // nodes
+      model.nodes.forEach(n => {
+        const p = pos[n.id];
+        if (!p) return;
+        const g = svg("g", { class: "nodebox", tabindex: "0", "data-kind": n.kind, "data-id": n.id });
+        const dead = /dead|extinct|undeciphered/.test(n.status || "");
+        const fill = "var(--card)";
+        const rect = svg("rect", {
+          x: p.x, y: p.y, width: NW, height: NH, rx: 7,
+          fill: fill, stroke: n.color, "stroke-width": n.link ? 2 : 1.5,
+          "stroke-dasharray": n.link ? "5 4" : (dead ? "1 0" : "1 0"),
+          opacity: dead ? 0.92 : 1
+        });
+        // a colour tab on the left edge
+        const tab = svg("rect", { x: p.x, y: p.y, width: 5, height: NH, rx: 2, fill: n.color });
+        g.appendChild(rect); g.appendChild(tab);
+        g.appendChild(svg("text", { x: p.x + 12, y: p.y + 17, class: "nlabel" }, [txt(fit(n.name, 20))]));
+        g.appendChild(svg("text", { x: p.x + 12, y: p.y + 31, class: "nmeta" }, [txt(n.meta + (n.link ? " · bridges all" : ""))]));
+        const open = () => openDetail(n.kind, n.id);
+        g.addEventListener("click", open);
+        g.addEventListener("keydown", ev => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); open(); } });
+        g.addEventListener("mouseenter", () => highlight(n.id));
+        g.addEventListener("mouseleave", () => highlight(null));
+        g.addEventListener("focus", () => highlight(n.id));
+        g.addEventListener("blur", () => highlight(null));
+        nodeEls[n.id] = g;
+        root.appendChild(g);
+      });
+
+      host.innerHTML = "";
+      const wrap = document.createElement("div");
+      wrap.className = "sc-diagram";
+      wrap.appendChild(root);
+      host.appendChild(wrap);
+      const hint = document.createElement("p");
+      hint.className = "sc-hint";
+      hint.innerHTML = MODE === "script"
+        ? "↳ Hover or tab onto any node to light up its <b>full lineage</b> — every ancestor up to Brahmi and every descendant below. Dashed cyan links are Bharati's <b>bridges</b> across families (not descent). Click a node for detail."
+        : "↳ Hover or tab onto any language to light up its <b>whole line of descent</b>. Click for detail. Note how Dravidian and Indo-Aryan never join — they are separate trees.";
+      host.appendChild(hint);
+    }
+    function txt(s) { return document.createTextNode(s); }
+    function fit(s, n) { return s.length > n ? s.slice(0, n - 1) + "…" : s; }
+
+    function render() {
+      renderViewNote();
+      renderLegend();
+      if (LAYOUT === "diagram") {
+        renderDiagram();
+      } else {
+        MODE === "lang" ? renderLangTree() : renderScriptTree();
+      }
+    }
+
+    function renderViewNote() {
+      const el = document.getElementById("viewnote");
+      el.innerHTML = MODE === "lang"
+        ? `<b>Language family tree.</b> Who descends from whom — grouped by family. Note that families like Dravidian and Indo-Aryan have <b>no common ancestor within India</b>: they meet only much deeper, if at all. Reconstructed ancestors (Proto-Dravidian, PIE) were never written. Click any language for detail.`
+        : `<b>Script descent tree.</b> Almost everything flows from <b>Brahmi</b> (root). The <b>Northern branch</b> leads to Devanagari, Bengali–Assamese, Gujarati…; the <b>Southern branch</b> to Tamil, Telugu, Kannada, Malayalam and on into Southeast Asia. <b>Bharati</b> is not a descendant — it is a modern <em>constructed link-script</em> that only works because all these share Brahmi's abugida structure. Click any script for detail.`;
+    }
+
+    function renderLegend() {
+      const fams = MODE === "lang"
+        ? DATA.families.filter(f => f.id !== "constructed")
+        : DATA.families;
+      document.getElementById("legend").innerHTML =
+        `<span class="lbl">${MODE === "lang" ? "Language families" : "Family of the language it writes"}:</span>` +
+        fams.map(f => `<span title="${esc(f.note)}"><i style="background:${FAM_COLOR[f.color]}"></i>${esc(f.label)}${f.parent_family ? ` <span style="opacity:.6">(← ${esc(f.parent_family)})</span>` : ""}</span>`).join("") +
+        `<span class="lbl" style="margin-left:auto">status:</span>` +
+        `<span><i style="background:oklch(0.55 0.13 150)"></i>living</span>` +
+        `<span><i style="background:oklch(0.5 0.02 20)"></i>dead</span>` +
+        `<span><i style="background:oklch(0.55 0.09 300)"></i>liturgical</span>` +
+        `<span><i style="background:oklch(0.55 0.12 200)"></i>proposed</span>`;
+    }
+
+    function statusPill(status, contested) {
+      const cls = status || "";
+      let h = `<span class="sc-tag ${esc(cls)}">${esc(STATUS_LABEL[status] || status || "")}</span>`;
+      if (contested) h += `<span class="sc-tag contested">⚠ contested</span>`;
+      return h;
+    }
+
+    // ---- LANGUAGE TREE ----
+    function renderLangTree() {
+      const langs = DATA.languages || [];
+      const order = ["dravidian", "indo-aryan", "austroasiatic", "tibeto-burman", "unknown"];
+      const groups = {};
+      langs.forEach(l => { (groups[l.family] = groups[l.family] || []).push(l); });
+
+      const html = order.filter(fam => groups[fam]).map(fam => {
+        const label = fam === "unknown" ? "Unknown / undeciphered" : famLabel(fam);
+        const f = DATA.families.find(x => x.id === fam);
+        const sub = f && f.parent_family ? ` — a branch of ${f.parent_family}` : (fam === "dravidian" ? " — indigenous, no relation to Indo-European" : "");
+        // order within group: reconstructed/historical ancestors first
+        const rank = s => ({ reconstructed: 0, historical: 1, "dead-liturgical": 2, dead: 2, extinct: 2, undeciphered: 2 }[s] ?? 3);
+        const items = groups[fam].slice().sort((a, b) => rank(a.status) - rank(b.status));
+        return `<div class="sc-branch">
+          <div class="sc-branch-h">${esc(label)}${esc(sub)}</div>
+          <div class="sc-row">${items.map(l => langCard(l)).join("")}</div>
+        </div>`;
+      }).join("");
+      document.getElementById("tree").innerHTML = html;
+      wireCards("lang");
+    }
+
+    function langCard(l) {
+      const parent = l.descends_from ? nameOf("lang", l.descends_from) : null;
+      const col = famColor(l.family);
+      return `<div class="sc-node ${l.highlight ? "highlight" : ""}" style="border-left-color:${col}" data-kind="lang" data-id="${esc(l.id)}" tabindex="0">
+        <div class="sc-name">${esc(l.name)}</div>
+        <div class="sc-meta">${esc(l.period || "")}</div>
+        <div class="sc-tags">
+          <span class="sc-tag fam" style="background:${col}">${esc(famLabel(l.family))}</span>
+          ${statusPill(l.status)}
+        </div>
+        <div class="sc-from">${parent ? `← from <b>${esc(parent)}</b>` : (l.status === "reconstructed" ? "root of the family" : "independent")}</div>
+      </div>`;
+    }
+
+    // ---- SCRIPT TREE ----
+    function renderScriptTree() {
+      const scripts = DATA.scripts || [];
+      const branches = [
+        { id: "pre-brahmi", label: "Before Brahmi — the undeciphered seal" },
+        { id: "root", label: "Root — Brahmi (abugida · c. 250 BCE · Ashokan edicts)" },
+        { id: "sibling", label: "Sibling branch (not children) — dead ends" },
+        { id: "north", label: "Northern branch → Devanagari & the Indo-Aryan scripts" },
+        { id: "south", label: "Southern branch → the Dravidian scripts (+ Sinhala)" },
+        { id: "southeast-asia", label: "Beyond India — the Brahmic scripts of Southeast Asia" },
+        { id: "modern-purpose-built", label: "Purpose-built (not from Brahmi) — designed for a language that lacked a script" },
+        { id: "constructed-link", label: "The constructed link-script — one script across BOTH families" }
+      ];
+      const byBranch = {};
+      scripts.forEach(s => { (byBranch[s.branch] = byBranch[s.branch] || []).push(s); });
+
+      const html = branches.filter(b => byBranch[b.id]).map(b =>
+        `<div class="sc-branch">
+          <div class="sc-branch-h">${esc(b.label)}</div>
+          <div class="sc-row">${byBranch[b.id].map(s => scriptCard(s)).join("")}</div>
+        </div>`).join("");
+      document.getElementById("tree").innerHTML = html;
+      wireCards("script");
+    }
+
+    function scriptCard(s) {
+      const parent = s.parent && !s.parent.endsWith("?") && DATA.scripts.find(x => x.id === s.parent) ? nameOf("script", s.parent) : (s.parent || null);
+      // colour a script by the family of the (first) language it writes
+      const firstLang = (s.writes || [])[0];
+      const langObj = firstLang ? DATA.languages.find(x => x.id === firstLang) : null;
+      const col = langObj ? famColor(langObj.family) : (s.link_script ? FAM_COLOR.bharati : FAM_COLOR.unknown);
+      const uni = s.in_unicode
+        ? `<span class="sc-tag unicode" title="${esc(s.unicode || "in Unicode")}">in Unicode</span>`
+        : `<span class="sc-tag no-unicode" title="No Unicode code block yet">no Unicode</span>`;
+      return `<div class="sc-node ${s.root ? "root" : ""} ${s.highlight ? "highlight" : ""} ${s.link_script ? "link" : ""}"
+        style="border-left-color:${col}" data-kind="script" data-id="${esc(s.id)}" tabindex="0">
+        <div class="sc-name">${esc(s.name)}</div>
+        <div class="sc-meta">${esc(s.period || "")}</div>
+        <div class="sc-tags">${statusPill(s.status, s.contested)}${uni}</div>
+        <div class="sc-from">${
+          s.root ? "the root of the family" :
+          s.sibling_of ? `sibling of <b>${esc(nameOf("script", s.sibling_of))}</b>` :
+          s.link_script ? "designed — bridges all branches" :
+          parent ? `← from <b>${esc(parent)}</b>` : "independent"
+        }${(s.writes && s.writes.length) ? ` · writes ${s.writes.slice(0,3).map(id => esc(nameOf("lang", id))).join(", ")}` : ""}</div>
+      </div>`;
+    }
+
+    // ---- shared: click → detail drawer ----
+    function wireCards(kind) {
+      document.querySelectorAll(".sc-node").forEach(n => {
+        const open = () => openDetail(n.dataset.kind, n.dataset.id);
+        n.addEventListener("click", open);
+        n.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); } });
+      });
+    }
+
+    function openDetail(kind, id) {
+      const arr = kind === "lang" ? DATA.languages : DATA.scripts;
+      const o = (arr || []).find(x => x.id === id);
+      if (!o) return;
+      const d = document.getElementById("detail");
+      const src = DATA._meta.sources && DATA._meta.sources[0];
+      let sub = "";
+      if (kind === "lang") {
+        sub = `${famLabel(o.family)}${(DATA.families.find(f=>f.id===o.family)||{}).parent_family ? " (← "+(DATA.families.find(f=>f.id===o.family)).parent_family+")" : ""} · ${STATUS_LABEL[o.status]||o.status} · ${esc(o.period||"")}`;
+      } else {
+        sub = `${o.branch} branch · ${STATUS_LABEL[o.status]||o.status} · ${esc(o.period||"")}${o.in_unicode ? " · in Unicode "+(o.unicode||"") : " · not in Unicode"}`;
+      }
+      const writes = (o.writes || []).length ? `<p><b>Writes:</b> ${o.writes.map(w => esc(nameOf("lang", w))).join(", ")}.</p>` : "";
+      const writtenIn = (o.written_in || []).length ? `<p><b>Written in (scripts):</b> ${o.written_in.map(w => esc(nameOf("script", w))).join(", ")}.</p>` : "";
+      const contest = o.contested ? `<div class="contest">⚠ <b>Contested / open question.</b> ${
+        id === "brahmi" ? "Brahmi's own PARENT is disputed — the dominant Western view derives it from the Semitic/Aramaic alphabet (Weber 1856, Bühler 1895); an indigenous view ties it to the undeciphered Indus script. We flag the debate, we do not resolve it." :
+        id === "bharati" ? "Whether a single constructed link-script is desirable is genuinely contested — Tamil script-pride and anti-imposition politics in particular. And it is NOT yet in Unicode, unlike ancient dead Brahmi." :
+        id === "indus-script" ? "Undeciphered — we cannot even confirm it is full writing, nor its language. Its claimed link to Brahmi is unproven and separated by a ~1500-year gap." :
+        "Flagged as debated rather than settled."
+      }</div>` : "";
+      const decipher = o.decipherment ? `<p><b>Deciphered:</b> ${esc(o.decipherment)} <b>Attested:</b> ${esc(o.attestation||"")}</p>` : "";
+      const creator = o.creator ? `<p><b>Created by:</b> ${esc(o.creator)}.</p>` : "";
+      d.innerHTML = `<h3>${esc(o.name)}</h3>
+        <div class="sub">${sub}</div>
+        <p>${esc(o.note || "")}</p>
+        ${decipher}${creator}${writes}${writtenIn}${contest}
+        <div class="src">Sources: ${src ? `<a href="${esc(src.url)}" target="_blank" rel="noopener">${esc(src.label.split("(")[0].trim())}</a>` : ""}${
+          DATA._meta.sources[1] ? ` · <a href="${esc(DATA._meta.sources[1].url)}" target="_blank" rel="noopener">${esc(DATA._meta.sources[1].label.split("(")[0].trim())}</a>` : ""}.</div>`;
+      d.classList.add("open");
+      d.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    function renderNote() {
+      const m = DATA._meta;
+      const srcs = (m.sources || []).map(s => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label.split("(")[0].trim())}</a>`).join(" · ");
+      document.getElementById("note").innerHTML =
+        `<b>How this is framed.</b> ${esc(m.honesty || "")} ` +
+        `The Ashokan inscriptions that first carry Brahmi are mapped in the <a href="heritage-atlas.html">heritage atlas</a>; ` +
+        `the population movements behind the language families are on the <a href="deep-history.html">DNA</a> page; ` +
+        `each state's <em>official</em> language is a dimension on the <a href="explore.html">district explorer</a>. ` +
+        `<br><br><b>Primary sources:</b> ${srcs}.`;
+    }
+    // renderNote needs DATA; call it after load via render() chain
+    const _origRender = render;
+    // ensure note renders once data is present
+    const noteObserver = setInterval(() => { if (DATA) { renderNote(); clearInterval(noteObserver); } }, 50);
+  })();
+  </script>
+  <script src="page-brief.js"></script>
+  <script>
+    PageBrief.set({
+      section: "Languages",
+      explainer: "Two family trees kept apart: how India's languages descend (Indo-Aryan vs Dravidian) and how their scripts descend (nearly all from Brahmi) — with the modern Bharati link-script.",
+      research: "Compiled from paleography and historical linguistics; Brahmi's contested parentage is flagged, not resolved. Every script renders in a self-hosted OFL font so specimens never break.",
+      references: [
+        { label: "Brahmi script", href: "https://en.wikipedia.org/wiki/Brahmi_script" },
+        { label: "Bharati script", href: "https://en.wikipedia.org/wiki/Bharati_script" },
+        { label: "All sources", href: "references.html" }
+      ],
+      docs: "how-it-works.html",
+      updated: "2026-08-06"
+    });
+  </script>
+  <script src="command-palette.js"></script>
+  <script src="site-nav.js"></script>
+</body>
+</html>

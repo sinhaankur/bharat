@@ -41,19 +41,40 @@
     ['engine-corruption.html', 'Engine: Corruption (sourced facts, no accusations)'],
     ['engine-news.html', 'Engine: News (moderated, attributed feed)'],
   ];
+  // Synonyms / plain-language terms → so "temples", "money", "flood" all route.
+  // Each key maps to extra searchable words folded into a page's index text.
+  const SYNONYMS = {
+    money: 'fiscal budget spending finance cash rupees funds cost',
+    temple: 'temples mandir heritage sacred shrine worship religion',
+    flood: 'water inundation monsoon drown submerge climate',
+    quake: 'earthquake seismic tremor disaster',
+    language: 'languages tongue script alphabet linguistic mother-tongue',
+    dna: 'genetics ancestry ancestor origin migration blood',
+    history: 'historical past ancient old ago timeline',
+    ruler: 'king emperor empire reign dynasty government',
+    map: 'atlas geography where location place',
+    news: 'media press headlines journalism current',
+    source: 'sources citation evidence reference proof provenance receipts',
+    start: 'begin home intro overview guide help lost where',
+  };
+  // The site nav (window.ATLAS_NAV) is the authoritative catalog. We fold each
+  // item's text + hint + keywords (and its group label) into ONE search string.
   function sitePages() {
-    const nav = global.SiteNav && global.SiteNav.NAV;
-    if (!nav) return PAGES;
+    const nav = (global.SiteNav && global.SiteNav.NAV) || global.ATLAS_NAV;
+    if (!nav) return PAGES.map(p => [p[0], p[1], '']);
     const labels = Object.fromEntries(PAGES);
     const out = [];
     for (const g of nav) for (const i of g.items) {
       if (i.ext || /^https?:/.test(i.href)) continue;   // palette jumps stay on-site
-      out.push([i.href, labels[i.href] || i.text]);
+      const label = labels[i.href] || i.text.replace(/^[★☆]\s*/, '');
+      // searchable extra text: hint + keywords + group + expanded synonyms
+      let extra = [i.hint || '', i.keywords || '', g.label || ''].join(' ').toLowerCase();
+      for (const key in SYNONYMS) if (extra.includes(key)) extra += ' ' + SYNONYMS[key];
+      out.push([i.href, label, extra]);
     }
-    // pages the palette knows but the nav doesn't surface (e.g. story.html)
     const seen = new Set(out.map(p => p[0]));
-    for (const p of PAGES) if (!seen.has(p[0])) out.push(p);
-    return out.length ? out : PAGES;
+    for (const p of PAGES) if (!seen.has(p[0])) out.push([p[0], p[1], '']);
+    return out.length ? out : PAGES.map(p => [p[0], p[1], '']);
   }
 
   let items = [];         // the searchable index: {label, hint, kind, run()}
@@ -104,9 +125,11 @@
       out.push({ label: c.title, hint: 'story chain', kind: 'chain', key: 'chain ' + c.title,
         run: () => { location.href = 'story.html?chain=' + encodeURIComponent(c.id); } });
     }
-    // Pages (always available)
-    for (const [href, label] of sitePages())
+    // Pages (always available) — `extra` holds hint + keywords + synonyms so
+    // plain-language queries ("temples", "money", "flood") route correctly.
+    for (const [href, label, extra] of sitePages())
       out.push({ label, hint: 'page', kind: 'page', key: 'page ' + label,
+        words: (label + ' ' + (extra || '')).toLowerCase(),
         run: () => { location.href = href; } });
 
     items = out;
@@ -129,10 +152,41 @@
     return (hits / spread) + (first === 0 ? 0.6 : 0) - first * 0.002;
   }
 
+  // Common words we ignore in natural-language queries ("where does the money go").
+  const STOP = new Set(['the','a','an','of','to','in','on','is','are','and','or','for',
+    'do','does','how','what','where','which','who','me','my','i','show','find','go','goes',
+    'get','see','this','that','it','with','about','india','indian','bharat']);
+  // Whole-word match score over a bag of words (label + keywords + synonyms).
+  // Rewards exact word / prefix / substring hits so "temple" finds "Sacred ground".
+  // Ignores stopwords, and matches if MOST meaningful terms hit (not necessarily all).
+  function wordScore(q, words) {
+    if (!q || !words) return -1;
+    const all = q.toLowerCase().split(/\s+/).filter(Boolean);
+    const terms = all.filter(t => !STOP.has(t));
+    const use = terms.length ? terms : all;   // if query is all stopwords, keep them
+    let s = 0, hit = 0;
+    for (const term of use) {
+      if (words.includes(' ' + term + ' ') || words.startsWith(term + ' ') || words.endsWith(' ' + term)) { s += 2.2; hit++; }
+      else if (words.includes(' ' + term)) { s += 1.4; hit++; }
+      else if (words.includes(term)) { s += 0.7; hit++; }
+    }
+    if (!hit) return -1;
+    // require a majority of meaningful terms to match (so unrelated words don't route)
+    if (hit < Math.ceil(use.length / 2)) return -1;
+    return s / use.length;
+  }
+
   function search(q) {
     const scored = [];
     for (const it of items) {
-      const s = q ? score(q, it.key) : (it.kind === 'layer' ? 0.5 : 0.1);
+      let s;
+      if (!q) { s = (it.kind === 'layer' ? 0.5 : 0.1); }
+      else {
+        // best of: keyword/word match (smart) OR fuzzy subsequence on the key
+        const w = it.words ? wordScore(q, it.words) : -1;
+        const f = score(q, it.key);
+        s = Math.max(w >= 0 ? w + 1 : -1, f);   // +1 so a real word hit beats a loose fuzzy hit
+      }
       if (s >= 0) scored.push([s, it]);
     }
     scored.sort((a, b) => b[0] - a[0]);
@@ -177,7 +231,7 @@
     root.setAttribute('role', 'dialog'); root.setAttribute('aria-label', 'Command palette');
     root.innerHTML = `
       <div class="cp-box" role="combobox" aria-expanded="true">
-        <input class="cp-input" type="text" placeholder="Jump to a district, layer, story or page…  (Esc to close)" aria-label="Search" autocomplete="off" spellcheck="false" />
+        <input class="cp-input" type="text" placeholder="Search anything — “temples”, “flood”, “money”, a district, a page…" aria-label="Search" autocomplete="off" spellcheck="false" />
         <ul class="cp-list" role="listbox"></ul>
         <div class="cp-foot"><span><b>↑↓</b> navigate</span><span><b>↵</b> open</span><span><b>esc</b> close</span><span class="cp-brand">⌘K anywhere</span></div>
       </div>`;

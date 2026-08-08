@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The journey of a word — one language, across time and tongues | Bharat</title>
+  <meta name="description" content="A scroll-driven journey through the languages of Bharat: follow the idea of 'mother' and the word 'Bharat' from the deep past — Proto-Indo-European and the Dravidian substrate — through Brahmi and its descendant scripts to the living languages, with the ancient-DNA population shifts and Ashoka's edicts along the way. Built on self-hosted fonts so every script renders, and it honours reduce-motion." />
+  <meta name="keywords" content="language journey, history of Indian languages, Brahmi to Devanagari Tamil, Proto-Indo-European Dravidian, Sanskrit Prakrit Hindi, scrollytelling languages India" />
+  <link rel="canonical" href="https://sinhaankur.github.io/india-fiscal-map/journey.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Bharat" />
+  <meta property="og:title" content="The journey of a word — one language, across time and tongues" />
+  <meta property="og:description" content="Scroll through the deep history of India's languages: from Proto sources and the Dravidian substrate through Brahmi to the living scripts. Every script rendered; honours reduce-motion." />
+  <meta property="og:url" content="https://sinhaankur.github.io/india-fiscal-map/journey.html" />
+  <meta property="og:image" content="https://sinhaankur.github.io/india-fiscal-map/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://sinhaankur.github.io/india-fiscal-map/og-image.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .jn-intro { max-width: 760px; margin: 0 auto; padding: 2rem var(--pad-x) 0; }
+    .jn-intro h1 { font-size: clamp(2rem, 5vw, 3.2rem); margin: 0.4rem 0 0.5rem; line-height: 1.05; }
+    .jn-intro p { color: var(--muted-foreground); font-size: 1.05rem; line-height: 1.65; max-width: 66ch; }
+    .jn-intro p a { color: var(--accent); }
+    .jn-scrollhint { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-top: 2rem; display: flex; align-items: center; gap: 0.5rem; }
+    .jn-scrollhint .arrow { animation: jn-bob 1.6s ease-in-out infinite; }
+    @keyframes jn-bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(5px)} }
+
+    /* the scrolly: a sticky stage + scrolling steps */
+    .jn-scrolly { position: relative; max-width: 1080px; margin: 3rem auto 0; padding: 0 var(--pad-x); display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    @media (max-width: 820px) { .jn-scrolly { grid-template-columns: 1fr; } }
+
+    .jn-stage-wrap { position: relative; }
+    .jn-stage { position: sticky; top: 12vh; height: 76vh; display: flex; align-items: center; justify-content: center; }
+    @media (max-width: 820px) { .jn-stage { top: 8vh; height: 56vh; } }
+    .jn-card { width: 100%; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--card); box-shadow: 0 12px 40px rgba(0,0,0,.06); padding: 2rem; text-align: center; transition: opacity .4s ease, transform .4s ease; }
+    .jn-era { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); }
+    .jn-big { font-size: clamp(2.4rem, 8vw, 4.2rem); line-height: 1.3; margin: 0.8rem 0 0.4rem; color: var(--foreground); transition: opacity .35s ease; min-height: 1.3em; }
+    .jn-translit { font-family: var(--font-italic, Georgia, serif); font-style: italic; font-size: 1.2rem; color: oklch(0.45 0.07 250); }
+    html.dark-mode .jn-translit { color: oklch(0.78 0.06 250); }
+    .jn-gloss { font-size: 0.95rem; color: var(--muted-foreground); margin-top: 0.6rem; line-height: 1.5; }
+    .jn-fam { display: inline-block; margin-top: 0.9rem; font-family: var(--font-mono); font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.04em; padding: 3px 10px; border-radius: 999px; color: #fff; }
+
+    /* multi-word rows for the 'fan out' steps */
+    .jn-fan { display: flex; flex-wrap: wrap; gap: 0.5rem 1.4rem; justify-content: center; align-items: baseline; }
+    .jn-fan .w { text-align: center; }
+    .jn-fan .w .t { font-size: clamp(1.6rem, 4.5vw, 2.6rem); line-height: 1.4; color: var(--foreground); }
+    .jn-fan .w .l { font-family: var(--font-mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted-foreground); margin-top: 2px; }
+
+    /* steps column */
+    .jn-steps { }
+    .jn-step { min-height: 82vh; display: flex; flex-direction: column; justify-content: center; padding: 1rem 0; }
+    .jn-step:first-child { min-height: 40vh; }
+    .jn-step h2 { font-size: clamp(1.3rem, 3vw, 1.7rem); margin: 0 0 0.5rem; }
+    .jn-step p { color: var(--muted-foreground); font-size: 1rem; line-height: 1.7; max-width: 46ch; }
+    .jn-step p a { color: var(--accent); }
+    .jn-step .n { font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent); letter-spacing: 0.08em; }
+    .jn-step .link { display: inline-block; margin-top: 0.7rem; font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent); text-decoration: none; border-bottom: 1px solid currentColor; }
+    /* dim inactive steps unless reduce-motion */
+    .jn-step { opacity: 0.35; transition: opacity .4s ease; }
+    .jn-step.active { opacity: 1; }
+    html.a11y-reduce-motion .jn-step, html[data-reduce-motion="1"] .jn-step { opacity: 1 !important; }
+    html.a11y-reduce-motion .jn-card, html[data-reduce-motion="1"] .jn-card { transition: none !important; }
+
+    /* outro */
+    .jn-outro { max-width: 760px; margin: 2rem auto 0; padding: 3rem var(--pad-x) 5rem; text-align: center; }
+    .jn-outro h2 { font-size: 1.8rem; margin: 0 0 0.5rem; }
+    .jn-outro p { color: var(--muted-foreground); line-height: 1.65; max-width: 60ch; margin: 0 auto; }
+    .jn-cta { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; margin: 1.4rem 0 0; }
+    .jn-cta a { text-decoration: none; border: 1px solid var(--border-strong); border-radius: 999px; padding: 0.5rem 1.1rem; font-size: 0.85rem; color: var(--foreground); transition: border-color .12s, background .12s; }
+    .jn-cta a:hover { border-color: var(--accent); background: var(--accent-tint); }
+
+    /* reduce-motion: drop sticky so it reads as a normal article */
+    html.a11y-reduce-motion .jn-stage, html[data-reduce-motion="1"] .jn-stage { position: static; height: auto; margin-bottom: 1rem; }
+    html.a11y-reduce-motion .jn-step, html[data-reduce-motion="1"] .jn-step { min-height: auto; }
+  </style>
+</head>
+<body>
+  <div id="site-nav"></div>
+
+  <section class="jn-intro">
+    <div class="eyebrow">Languages of Bharat · a journey</div>
+    <h1 class="display">The journey of a <em>word</em></h1>
+    <p>Scroll, and watch a single idea travel across four thousand years and a dozen tongues — from voices that
+      were never written down, through the <a href="scripts.html">Brahmi script</a> and its children, to the living
+      languages of today. Two families that never met still ended up writing with letters from one root. Every script
+      below is rendered with our <a href="languages.html">self-hosted fonts</a>, so it shows for everyone.</p>
+    <div class="jn-scrollhint"><span class="arrow">↓</span> scroll to begin</div>
+  </section>
+
+  <div class="jn-scrolly">
+    <div class="jn-stage-wrap">
+      <div class="jn-stage">
+        <div class="jn-card" id="stage"><!-- filled by JS, driven by scroll --></div>
+      </div>
+    </div>
+    <div class="jn-steps" id="steps"><!-- step text, filled by JS --></div>
+  </div>
+
+  <section class="jn-outro">
+    <h2>One root, many voices</h2>
+    <p>The languages diverged; the writing systems converged. That is the quiet fact under all of India's noise
+      about tongue and identity — read at the level of deep time, the connections outnumber the divisions.</p>
+    <div class="jn-cta">
+      <a href="scripts.html">Explore the family trees →</a>
+      <a href="vedas.html">Read a source text →</a>
+      <a href="ashoka.html">See a ruler in his own script →</a>
+      <a href="deep-history.html">The DNA behind it →</a>
+    </div>
+  </section>
+
+  <script>
+  (function () {
+    "use strict";
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const reduced = () =>
+      document.documentElement.getAttribute("data-reduce-motion") === "1" ||
+      document.documentElement.classList.contains("a11y-reduce-motion") ||
+      (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+
+    // family colours (echo the DNA / scripts pages)
+    const FC = { ia: "oklch(0.6 0.14 285)", dr: "oklch(0.58 0.15 25)", both: "oklch(0.55 0.06 300)", dead: "oklch(0.5 0.02 20)" };
+
+    // THE JOURNEY — each step drives the sticky stage.
+    const STEPS = [
+      {
+        era: "~4500 BCE · before writing",
+        stage: { big: "*méh₂tēr", translit: "reconstructed", gloss: "The idea of ‘mother’ in Proto-Indo-European — a language no one wrote, rebuilt by comparing its descendants.", fam: "ia", famL: "Proto-Indo-European" },
+        h: "It begins in a voice we can’t hear",
+        p: "Most of language history has no script at all. Proto-Indo-European — ancestor of Sanskrit and also of Latin, Greek and English — was never written. We know its words only because its children kept them.",
+      },
+      {
+        era: "~2500 BCE · a separate root",
+        stage: { big: "*ammā", translit: "reconstructed", gloss: "And in the south, an unrelated family — Dravidian — carries its OWN ancient word for mother. Tamil is not descended from Sanskrit.", fam: "dr", famL: "Proto-Dravidian" },
+        h: "Two families, never joined",
+        p: "India spans genuinely <b>unrelated</b> language families. Indo-Aryan came in from the northwest; Dravidian was already here. They meet only far deeper, if at all. This split is the whole reason the story has two trees. <a class='link' href='deep-history.html'>See it in the DNA →</a>",
+      },
+      {
+        era: "~1500 BCE · the oral Veda",
+        stage: { big: "मातृ", translit: "mātṛ", gloss: "Vedic Sanskrit says ‘mother’ — but for a thousand years it was chanted, not written. (Shown here in Devanagari, the script it would only later adopt.)", fam: "ia", famL: "Vedic Sanskrit", f: "f-devanagari" },
+        h: "Sanskrit — spoken long before it was written",
+        p: "The Vedas were transmitted by memory for centuries. Sanskrit had no script of its own; it would later borrow whichever local one was at hand. <a class='link' href='vedas.html'>Read the Hymn of Creation →</a>",
+      },
+      {
+        era: "~250 BCE · Brahmi",
+        stage: { big: "𑀪𑀸𑀭𑀢", translit: "Bhārata", gloss: "The first script we can securely read: Brahmi, carved in Ashoka’s edicts. Here, the name ‘Bhārata’.", fam: "dead", famL: "Brahmi (the root)", f: "f-brahmi" },
+        h: "One script appears — and everything descends from it",
+        p: "Brahmi is attested in <a class='link' href='ashoka.html'>Ashoka’s edicts</a> (~250 BCE) and deciphered only in 1837. Nearly every Indian script — and ~198 across Asia — grows from this single root.",
+      },
+      {
+        era: "~250 BCE onward · the split",
+        stage: { fan: [
+          { t: "𑀪𑀸𑀭𑀢", l: "Brahmi", f: "f-brahmi" },
+          { t: "→", l: "" },
+          { t: "भारत", l: "Northern", f: "f-devanagari" },
+          { t: "பாரதம்", l: "Southern", f: "f-tamil" }
+        ], gloss: "Brahmi forks: a Northern branch (→ Devanagari) and a Southern branch (→ Tamil, Telugu…). The letters look nothing alike — but share one logic.", fam: "both", famL: "the two branches" },
+        h: "The one script forks north and south",
+        p: "Palm-leaf writing rounded the southern scripts; the north kept angular forms and the headline bar. Different faces — same abugida skeleton underneath. <a class='link' href='scripts.html'>Trace the script tree →</a>",
+      },
+      {
+        era: "today · the living languages",
+        stage: { fan: [
+          { t: "माता", l: "Hindi", f: "f-devanagari" },
+          { t: "মা", l: "Bengali", f: "f-bengali" },
+          { t: "தாய்", l: "Tamil", f: "f-tamil" },
+          { t: "అమ్మ", l: "Telugu", f: "f-telugu" },
+          { t: "ಅಮ್ಮ", l: "Kannada", f: "f-kannada" },
+          { t: "അമ്മ", l: "Malayalam", f: "f-malayalam" }
+        ], gloss: "‘Mother’, today, across living languages and their own scripts. Indo-Aryan words trace to mātṛ; Dravidian ones to ammā — two roots, both alive, both written in Brahmi’s children.", fam: "both", famL: "living languages" },
+        h: "Six scripts, two roots, one screen",
+        p: "The northern words still echo Sanskrit <em>mātṛ</em>; the southern ones still echo Dravidian <em>ammā</em>. Unrelated languages — written in scripts from one common ancestor. That is the journey in a single line.",
+      }
+    ];
+
+    const stageEl = document.getElementById("stage");
+    const stepsEl = document.getElementById("steps");
+
+    // render steps
+    stepsEl.innerHTML = STEPS.map((s, i) =>
+      `<div class="jn-step" data-i="${i}">
+        <div class="n">STAGE ${String(i + 1).padStart(2, "0")} · ${esc(s.era)}</div>
+        <h2>${esc(s.h)}</h2>
+        <p>${s.p}</p>
+      </div>`).join("");
+
+    function renderStage(i) {
+      const s = STEPS[i].stage;
+      let inner = `<div class="jn-era">${esc(STEPS[i].era)}</div>`;
+      if (s.fan) {
+        inner += `<div class="jn-fan" style="margin-top:1rem">` + s.fan.map(w =>
+          `<div class="w"><div class="t ${w.f ? esc(w.f) : ""}">${esc(w.t)}</div>${w.l ? `<div class="l">${esc(w.l)}</div>` : ""}</div>`).join("") + `</div>`;
+      } else {
+        inner += `<div class="jn-big ${s.f ? esc(s.f) : ""}">${esc(s.big)}</div>`;
+        if (s.translit) inner += `<div class="jn-translit">${esc(s.translit)}</div>`;
+      }
+      if (s.gloss) inner += `<div class="jn-gloss">${esc(s.gloss)}</div>`;
+      if (s.famL) inner += `<div class="jn-fam" style="background:${FC[s.fam] || FC.both}">${esc(s.famL)}</div>`;
+      stageEl.innerHTML = inner;
+    }
+
+    renderStage(0);
+
+    if (reduced() || !("IntersectionObserver" in window)) {
+      // static fallback: show a stage above each step, all visible
+      document.querySelectorAll(".jn-step").forEach((step, i) => {
+        step.classList.add("active");
+        const card = document.createElement("div");
+        card.className = "jn-card";
+        step.insertBefore(card, step.firstChild);
+        const tmp = stageEl.cloneNode(false);
+        renderStage(i);
+        card.innerHTML = stageEl.innerHTML;
+      });
+      renderStage(0);
+      return;
+    }
+
+    let current = -1;
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const i = +e.target.dataset.i;
+          document.querySelectorAll(".jn-step").forEach(s => s.classList.toggle("active", +s.dataset.i === i));
+          if (i !== current) { current = i; renderStage(i); }
+        }
+      });
+    }, { rootMargin: "-45% 0px -45% 0px", threshold: 0 });
+    document.querySelectorAll(".jn-step").forEach(s => io.observe(s));
+  })();
+  </script>
+  <script src="a11y.js"></script>
+  <script src="command-palette.js"></script>
+  <script src="page-brief.js"></script>
+  <script src="site-nav.js"></script>
+</body>
+</html>

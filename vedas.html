@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Hymn of Creation across languages — Nāsadīya Sūkta (Rigveda 10.129) | Bharat</title>
+  <meta name="description" content="One source text opened across languages and scripts: the Nāsadīya Sūkta (Rigveda 10.129, the 'Hymn of Creation') in Sanskrit (Devanagari + IAST + a Brahmi transcription), a word-by-word grammar gloss, and parallel attributed public-domain translations (Griffith 1896, Basham 1954) — with the famous final verse compared to show where translation becomes interpretation. Other Indian languages are held open as honest, sourced-or-gap slots." />
+  <meta name="keywords" content="Nasadiya Sukta, Rigveda 10.129, Hymn of Creation, Vedic Sanskrit, word by word gloss, Griffith translation, Basham translation, Devanagari IAST Brahmi, Indian languages, interlinear Rigveda" />
+  <link rel="canonical" href="https://sinhaankur.github.io/india-fiscal-map/vedas.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Bharat" />
+  <meta property="og:title" content="The Hymn of Creation across languages — Nāsadīya Sūkta" />
+  <meta property="og:description" content="The Rigveda's Hymn of Creation in Sanskrit, romanised, glossed word-by-word, and compared across attributed translations. Translation as interpretation, made visible." />
+  <meta property="og:url" content="https://sinhaankur.github.io/india-fiscal-map/vedas.html" />
+  <meta property="og:image" content="https://sinhaankur.github.io/india-fiscal-map/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://sinhaankur.github.io/india-fiscal-map/og-image.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .vd-wrap { max-width: 860px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; }
+    .vd-head h1 { margin: 0.3rem 0 0.3rem; font-size: clamp(1.8rem, 4vw, 2.8rem); }
+    .vd-ref { font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--accent); }
+    .vd-head p { color: var(--muted-foreground); font-size: 0.98rem; line-height: 1.6; max-width: 70ch; }
+    .vd-head p a { color: var(--accent); }
+    .vd-standfirst { font-family: var(--font-serif, Georgia, serif); font-style: italic; font-size: 1.08rem; line-height: 1.6; color: var(--foreground); border-left: 2px solid var(--accent); padding-left: 1rem; margin: 1rem 0 0; max-width: 66ch; }
+
+    /* controls */
+    .vd-controls { display: flex; flex-wrap: wrap; gap: 0.8rem 1.2rem; align-items: center; margin: 1.6rem 0 0; padding: 0.8rem 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .vd-ctl { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--muted-foreground); }
+    .vd-ctl label { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .vd-toggle { display: inline-flex; gap: 2px; border: 1px solid var(--border-strong); border-radius: 999px; padding: 3px; }
+    .vd-toggle button { border: 0; background: transparent; color: var(--muted-foreground); font: inherit; font-size: 0.82rem; padding: 0.3rem 0.8rem; border-radius: 999px; cursor: pointer; }
+    .vd-toggle button[aria-pressed="true"] { background: var(--foreground); color: var(--background); }
+
+    /* verse */
+    .vd-verse { margin: 2.2rem 0 0; padding: 0 0 1.8rem; border-bottom: 1px solid var(--border); }
+    .vd-vn { font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted-foreground); letter-spacing: 0.08em; }
+    .vd-vn b { color: var(--accent); font-size: 1.4rem; }
+    .vd-deva { font-size: clamp(1.5rem, 4.5vw, 2.15rem); line-height: 1.85; color: var(--foreground); margin: 0.5rem 0 0; white-space: pre-line; font-feature-settings: "kern" 1; }
+    .vd-brahmi { font-size: 1.5rem; color: var(--muted-foreground); margin: 0.4rem 0 0; }
+    .vd-iast { font-family: var(--font-serif, Georgia, serif); font-style: italic; font-size: 1.02rem; line-height: 1.7; color: oklch(0.42 0.06 250); margin: 0.7rem 0 0; white-space: pre-line; }
+    html.dark-mode .vd-iast { color: oklch(0.78 0.06 250); }
+
+    /* word gloss */
+    .vd-gloss { margin: 0.9rem 0 0; display: none; }
+    .vd-gloss.open { display: block; }
+    .vd-gloss-h { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted-foreground); margin: 0 0 0.5rem; }
+    .vd-words { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .vd-word { border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--card); padding: 0.4rem 0.6rem; max-width: 220px; }
+    .vd-word .sw { font-family: var(--font-serif, Georgia, serif); font-style: italic; font-weight: 600; color: var(--foreground); font-size: 0.95rem; }
+    .vd-word .lit { font-size: 0.82rem; color: oklch(0.42 0.08 210); margin-top: 1px; }
+    .vd-word .note { font-size: 0.74rem; color: var(--muted-foreground); line-height: 1.4; margin-top: 2px; }
+
+    /* translations */
+    .vd-trans { margin: 1rem 0 0; }
+    .vd-tr { border-left: 3px solid var(--border-strong); padding: 0.1rem 0 0.1rem 0.9rem; margin: 0.7rem 0 0; }
+    .vd-tr .who { font-family: var(--font-mono); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--accent); }
+    .vd-tr .body { font-size: 1.02rem; line-height: 1.65; color: var(--foreground); margin-top: 0.2rem; }
+    .vd-tr.griffith { border-left-color: oklch(0.6 0.12 250); }
+    .vd-tr.basham { border-left-color: oklch(0.6 0.12 150); }
+    .vd-gap { font-size: 0.86rem; color: var(--muted-foreground); font-style: italic; margin: 0.5rem 0 0; padding: 0.4rem 0.6rem; border: 1px dashed var(--border-strong); border-radius: var(--radius-sm); }
+
+    .vd-compare { margin: 1rem 0 0; background: oklch(0.98 0.01 40); border: 1px solid oklch(0.86 0.05 40); border-radius: var(--radius); padding: 0.8rem 1rem; font-size: 0.9rem; line-height: 1.6; color: oklch(0.38 0.09 40); }
+    html.dark-mode .vd-compare { background: oklch(0.22 0.02 40); border-color: oklch(0.4 0.05 40); color: oklch(0.84 0.07 40); }
+    .vd-compare b { color: inherit; }
+
+    /* scope: all languages */
+    .vd-scope { margin: 2.4rem 0 0; }
+    .vd-scope h2 { font-size: 1.2rem; margin: 0 0 0.3rem; }
+    .vd-scope p { color: var(--muted-foreground); font-size: 0.9rem; line-height: 1.55; max-width: 74ch; }
+    .vd-langgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0.5rem; margin: 1rem 0 0; }
+    .vd-lang { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.5rem 0.65rem; background: var(--card); }
+    .vd-lang .ln { font-weight: 600; font-size: 0.9rem; }
+    .vd-lang .lm { font-family: var(--font-mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.03em; margin-top: 2px; }
+    .vd-lang.sourced { border-left: 3px solid oklch(0.55 0.13 150); }
+    .vd-lang.partial { border-left: 3px solid oklch(0.6 0.13 90); }
+    .vd-lang.gap { border-left: 3px solid var(--border-strong); opacity: 0.85; }
+    .vd-lang.sourced .lm { color: oklch(0.5 0.12 150); }
+    .vd-lang.partial .lm { color: oklch(0.5 0.11 80); }
+    .vd-lang.gap .lm { color: var(--muted-foreground); }
+
+    .vd-note { font-size: 0.8rem; color: var(--muted-foreground); line-height: 1.6; margin-top: 2.4rem; border-top: 1px solid var(--border); padding-top: 1rem; }
+    .vd-note b { color: var(--foreground); } .vd-note a { color: var(--accent); }
+
+    html.embed-mode body { margin: 0; }
+    html.embed-mode .vd-wrap { padding: 0.7rem 0.9rem 2rem; max-width: none; }
+    html.embed-mode .eyebrow, html.embed-mode .vd-head p:not(.vd-standfirst) { display: none; }
+  </style>
+</head>
+<body>
+  <div id="site-nav"></div>
+
+  <main class="vd-wrap">
+    <header class="vd-head">
+      <div class="eyebrow">Languages of Bharat · source texts · sourced</div>
+      <div class="vd-ref" id="ref"></div>
+      <h1 class="display" id="title"></h1>
+      <p class="vd-standfirst" id="standfirst"></p>
+      <p id="intro">This is the first <b>text module</b> of the wider languages project: take a foundational text and
+        open it across scripts and languages — original, romanisation, word-by-word grammar, and
+        <b>parallel attributed translations</b>, so you can watch where interpretation diverges. Every translation
+        shown is a real, published, credited one; languages without a sourced translation are marked as honest
+        <em>gaps</em>, never invented. See also <a href="scripts.html">the script &amp; language family trees</a>.</p>
+    </header>
+
+    <div class="vd-controls">
+      <div class="vd-ctl"><label>Show</label>
+        <div class="vd-toggle" id="tg-brahmi"><button data-on="1">Brahmi line</button><button data-on="0" aria-pressed="true">off</button></div>
+      </div>
+      <div class="vd-ctl"><label>Word grammar</label>
+        <div class="vd-toggle" id="tg-gloss"><button data-on="1" aria-pressed="true">on</button><button data-on="0">off</button></div>
+      </div>
+      <div class="vd-ctl"><label>Translators</label>
+        <div class="vd-toggle" id="tg-trans"><button data-t="both" aria-pressed="true">compare</button><button data-t="en-griffith">Griffith</button><button data-t="en-basham">Basham</button></div>
+      </div>
+    </div>
+
+    <div id="verses"></div>
+
+    <section class="vd-scope">
+      <h2>Every Indian language — sourced or a gap</h2>
+      <p id="scope-note"></p>
+      <div class="vd-langgrid" id="langgrid"></div>
+    </section>
+
+    <p class="vd-note" id="note"></p>
+  </main>
+
+  <script>
+  (function () {
+    "use strict";
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const state = { brahmi: false, gloss: true, trans: "both" };
+    let DATA = null;
+
+    fetch("vedas.json").then(r => r.json()).then(d => {
+      DATA = d;
+      renderHead();
+      renderVerses();
+      renderScope();
+      renderNote();
+      wireControls();
+    }).catch(e => {
+      document.getElementById("verses").innerHTML = `<div style="color:var(--muted-foreground)">Could not load vedas.json — ${esc(e.message)}</div>`;
+    });
+
+    function renderHead() {
+      const t = DATA.text;
+      document.getElementById("ref").textContent = t.ref + " · " + t.date;
+      document.getElementById("title").innerHTML = esc(t.title);
+      document.getElementById("standfirst").textContent = t.standfirst;
+    }
+
+    function renderVerses() {
+      document.getElementById("verses").innerHTML = (DATA.verses || []).map(verseHTML).join("");
+    }
+
+    function verseHTML(v) {
+      const brahmi = v.brahmi ? `<div class="vd-brahmi f-brahmi" data-brahmi title="${esc(v.brahmi_note || "")}">${esc(v.brahmi)}</div>` : "";
+      const gloss = (v.gloss && v.gloss.length) ? `
+        <div class="vd-gloss${state.gloss ? " open" : ""}" data-gloss>
+          <div class="vd-gloss-h">Word by word — the grammar the translation hides</div>
+          <div class="vd-words">${v.gloss.map(g => `
+            <div class="vd-word"><div class="sw">${esc(g.w)}</div><div class="lit">${esc(g.lit)}</div>${g.note ? `<div class="note">${esc(g.note)}</div>` : ""}</div>`).join("")}</div>
+        </div>` : "";
+      const compare = v.compare_note ? `<div class="vd-compare"><b>Where translation becomes interpretation.</b> ${esc(v.compare_note)}</div>` : "";
+      return `<article class="vd-verse" data-n="${v.n}">
+        <div class="vd-vn">Verse <b>${v.n}</b>${v.is_famous ? " · the famous last verse" : ""}</div>
+        <div class="vd-deva f-devanagari">${esc(v.devanagari)}</div>
+        ${brahmi}
+        <div class="vd-iast">${esc(v.iast)}</div>
+        ${gloss}
+        <div class="vd-trans" data-trans>${transHTML(v)}</div>
+        ${compare}
+      </article>`;
+    }
+
+    function transHTML(v) {
+      const T = DATA.translators || {};
+      const want = state.trans;
+      const keys = Object.keys(v.translations || {});
+      const show = want === "both" ? keys : keys.filter(k => k === want);
+      let html = show.map(k => {
+        const meta = T[k] || {};
+        const cls = k.includes("griffith") ? "griffith" : k.includes("basham") ? "basham" : "";
+        return `<div class="vd-tr ${cls}"><div class="who">${esc(meta.name || k)}${meta.year ? " · " + meta.year : ""}${meta.work ? " · " + esc(meta.work) : ""}</div>
+          <div class="body">${esc(v.translations[k])}</div></div>`;
+      }).join("");
+      // if a specific translator was requested but this verse lacks it, note the gap
+      if (want !== "both" && !keys.includes(want)) {
+        const meta = T[want] || {};
+        html = `<div class="vd-gap">No ${esc(meta.name || want)} rendering of this verse in our sourced set — showing nothing rather than inventing it. Switch to “compare”.</div>`;
+      }
+      return html;
+    }
+
+    function renderScope() {
+      const langs = DATA.languages_scope || [];
+      const nGap = langs.filter(l => l.status === "gap").length;
+      document.getElementById("scope-note").innerHTML =
+        `The structure holds a slot for every language; we fill a slot only with a <b>real, attributed translation</b>. ` +
+        `Right now <b>${langs.length - nGap}</b> are sourced and <b>${nGap}</b> are open gaps — deliberately empty until a ` +
+        `credited translation is added, never machine-guessed. This is the same sourced-or-gap rule used across the atlas.`;
+      document.getElementById("langgrid").innerHTML = langs.map(l => {
+        const lbl = l.status === "sourced" ? "sourced" : l.status === "partial" ? "partial" : "gap — awaiting source";
+        return `<div class="vd-lang ${esc(l.status)}"><div class="ln">${esc(l.label)}</div><div class="lm">${esc(lbl)}</div></div>`;
+      }).join("");
+    }
+
+    function renderNote() {
+      const m = DATA._meta;
+      const srcs = (m.sources || []).map(s => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label.split(":")[0].split("(")[0].trim())}</a>`).join(" · ");
+      document.getElementById("note").innerHTML =
+        `<b>How this is framed.</b> ${esc(m.honesty)} <br><br>` +
+        `<b>Grammar.</b> ${esc(m.grammar_note)} <br><br>` +
+        `<b>Sources.</b> ${srcs}. The Sanskrit script rendering uses our self-hosted Noto fonts (see <a href="scripts.html">scripts &amp; languages</a>).`;
+    }
+
+    function wireControls() {
+      bindToggle("tg-brahmi", b => { state.brahmi = b.dataset.on === "1"; applyBrahmi(); });
+      bindToggle("tg-gloss", b => { state.gloss = b.dataset.on === "1"; applyGloss(); });
+      bindToggle("tg-trans", b => { state.trans = b.dataset.t; renderVerses(); });
+      applyBrahmi();
+    }
+    function bindToggle(id, fn) {
+      const box = document.getElementById(id);
+      box.querySelectorAll("button").forEach(btn => btn.addEventListener("click", () => {
+        box.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", "false"));
+        btn.setAttribute("aria-pressed", "true");
+        fn(btn);
+      }));
+    }
+    function applyBrahmi() { document.querySelectorAll("[data-brahmi]").forEach(el => el.style.display = state.brahmi ? "" : "none"); }
+    function applyGloss() { document.querySelectorAll("[data-gloss]").forEach(el => el.classList.toggle("open", state.gloss)); }
+  })();
+  </script>
+  <script src="page-brief.js"></script>
+  <script>
+    PageBrief.set({
+      section: "Languages",
+      explainer: "One source text opened across languages — the Rigveda's Hymn of Creation in Sanskrit, romanised, glossed word-by-word, and compared across attributed translations.",
+      research: "Sanskrit from Wikisource; translations are real, published and credited (Griffith 1896, Basham 1954). Languages without a sourced translation are shown as honest gaps — never machine-invented.",
+      references: [
+        { label: "Nāsadīya Sūkta", href: "https://en.wikipedia.org/wiki/Nasadiya_Sukta" },
+        { label: "Griffith (Wikisource)", href: "https://en.wikisource.org/wiki/The_Hymns_of_the_Rigveda/Book_10/Hymn_129" },
+        { label: "All sources", href: "references.html" }
+      ],
+      docs: "how-it-works.html",
+      updated: "2026-08-06"
+    });
+  </script>
+  <script src="command-palette.js"></script>
+  <script src="site-nav.js"></script>
+</body>
+</html>

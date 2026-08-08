@@ -1,0 +1,249 @@
+{
+  "_meta": {
+    "purpose": "The editorial brief for every content page — the editor's standard orchestration of key info: Explainer (what this is), Research (how made + honesty note), References (sources), Documentation (method). page-brief.js auto-loads the entry for the current filename. Utility/app pages (index map, hero, 3D canvases, privacy, sitemap) are intentionally omitted. Sourced-or-gap: a page with no entry simply shows no brief.",
+    "updated_at": "2026-08-06"
+  },
+  "briefs": {
+    "ancient-india.html": {
+      "section": "History",
+      "explainer": "Five thousand years of India on one spine — each era read on five facets (language, script, people, rulers, heritage), with the evidence behind every fact open to interrogation.",
+      "research": "Built from peer-reviewed ancient-DNA papers (Narasimhan & Shinde 2019), Ashoka's own edicts, and paleography. Each fact carries an evidence tier and a 'shaped by the winner' check; contested points (e.g. the Aryan-migration narrative) are flagged, not resolved.",
+      "references": [
+        { "label": "Ancient DNA (Science 2019)", "href": "https://www.science.org/doi/10.1126/science.aat7487" },
+        { "label": "Edicts of Ashoka", "href": "https://en.wikipedia.org/wiki/Edicts_of_Ashoka" },
+        { "label": "All sources", "href": "references.html" }
+      ],
+      "docs": "how-it-works.html", "updated": "2026-08-06"
+    },
+    "ashoka.html": {
+      "section": "History",
+      "explainer": "The reach and the ethics of Mauryan rule, read from Ashoka's own edicts — a ruler you can verify because the script was deciphered.",
+      "research": "Edict find-spots mapped from the archaeological record; texts summarised from standard translations (Hultzsch 1925). Edicts are treated as the ruler's own words AND propaganda — kept apart from later Buddhist legend.",
+      "references": [
+        { "label": "Edicts of Ashoka", "href": "https://en.wikipedia.org/wiki/Edicts_of_Ashoka" },
+        { "label": "Major Rock Edicts", "href": "https://en.wikipedia.org/wiki/Major_Rock_Edicts" },
+        { "label": "All sources", "href": "references.html" }
+      ],
+      "docs": "how-it-works.html", "updated": "2026-08-06"
+    },
+    "scripts.html": {
+      "section": "Languages",
+      "explainer": "Two family trees kept apart: how India's languages descend (Indo-Aryan vs Dravidian) and how their scripts descend (nearly all from Brahmi) — with the modern Bharati link-script.",
+      "research": "Compiled from paleography and historical linguistics; Brahmi's contested parentage is flagged, not resolved. Every script renders in a self-hosted OFL font so specimens never break.",
+      "references": [
+        { "label": "Brahmi script", "href": "https://en.wikipedia.org/wiki/Brahmi_script" },
+        { "label": "Bharati script", "href": "https://en.wikipedia.org/wiki/Bharati_script" },
+        { "label": "All sources", "href": "references.html" }
+      ],
+      "docs": "how-it-works.html", "updated": "2026-08-06"
+    },
+    "vedas.html": {
+      "section": "Languages",
+      "explainer": "One source text opened across languages — the Rigveda's Hymn of Creation in Sanskrit, romanised, glossed word-by-word, and compared across attributed translations.",
+      "research": "Sanskrit from Wikisource; translations are real, published and credited (Griffith 1896, Basham 1954). Languages without a sourced translation are shown as honest gaps — never machine-invented.",
+      "references": [
+        { "label": "Nāsadīya Sūkta", "href": "https://en.wikipedia.org/wiki/Nasadiya_Sukta" },
+        { "label": "Griffith (Wikisource)", "href": "https://en.wikisource.org/wiki/The_Hymns_of_the_Rigveda/Book_10/Hymn_129" },
+        { "label": "All sources", "href": "references.html" }
+      ],
+      "docs": "how-it-works.html", "updated": "2026-08-06"
+    },
+    "languages.html": {
+      "section": "Languages",
+      "explainer": "The hub for every language and script of Bharat — families, scripts, self-hosted fonts, and source texts, all in one place.",
+      "research": "Language-family assignments from standard linguistics; each language shown in its own script via bundled OFL Noto fonts. Real, attributed translations only; gaps marked, never machine-filled.",
+      "references": [
+        { "label": "Dravidian languages", "href": "https://www.britannica.com/topic/Dravidian-languages" },
+        { "label": "Brahmic scripts", "href": "https://en.wikipedia.org/wiki/Brahmic_scripts" },
+        { "label": "All sources", "href": "references.html" }
+      ],
+      "docs": "how-it-works.html", "updated": "2026-08-06"
+    },
+    "journey.html": {
+      "section": "Languages",
+      "explainer": "A scroll-through journey following one word across 4,000 years — from unwritten proto-languages, through Brahmi, to the living languages of today.",
+      "research": "A narrative built on the same sourced family-tree and script data as the languages pages; reconstructed proto-forms are labelled as reconstructions, not attested words.",
+      "references": [ { "label": "Scripts & families", "href": "scripts.html" }, { "label": "All sources", "href": "references.html" } ],
+      "docs": "how-it-works.html", "updated": "2026-08-06"
+    },
+    "deep-history.html": {
+      "section": "History",
+      "explainer": "What ancient DNA reveals about who migrated, mixed and was replaced across the subcontinent — from Neanderthals to the Steppe and the Indus genome.",
+      "research": "Held strictly to peer-reviewed ancient-DNA science (Reich lab; Narasimhan & Shinde 2019). A genetic finding (established) is kept separate from a historical interpretation (the 'Aryan migration' debate is flagged contested).",
+      "references": [
+        { "label": "Narasimhan 2019 (Science)", "href": "https://www.science.org/doi/10.1126/science.aat7487" },
+        { "label": "Shinde 2019 (Cell)", "href": "https://doi.org/10.1016/j.cell.2019.08.048" },
+        { "label": "All sources", "href": "references.html" }
+      ],
+      "docs": "how-it-works.html", "updated": "2026-08-06"
+    },
+    "heritage-atlas.html": {
+      "section": "History",
+      "explainer": "Sacred ground across Bharat — temples and sites with their builders, lifespans and record of destruction; Sanatan, Jain, Buddhist and contested.",
+      "research": "Sites compiled from public heritage records; builder and destruction claims are multi-actor and attributed, not one-sided. 'Sanatan Dharma' preferred over 'Hindu' per the project's usage.",
+      "references": [ { "label": "All sources", "href": "references.html" }, { "label": "Provenance", "href": "provenance.html" } ],
+      "docs": "how-it-works.html", "updated": "2026-08-06"
+    },
+    "atrocities.html": {
+      "section": "News",
+      "explainer": "History's 100 deadliest events, rebuilt as an interactive timeline and world map — with India's events highlighted.",
+      "research": "Figures from Matthew White's 'Great Big Book of Horrible Things' (the NYT 'Population Control, Marauder Style' chart). Tolls for ancient events are wide estimates and shown as such.",
+      "references": [ { "label": "Matthew White / NYT chart", "href": "https://www.nytimes.com/2011/11/06/opinion/sunday/why-2011-may-be-the-best-year-ever.html" }, { "label": "All sources", "href": "references.html" } ],
+      "docs": "how-it-works.html", "updated": "2026-08-06"
+    },
+    "feed.html": {
+      "section": "News",
+      "explainer": "The record behind the headlines — news clustered by place, with a media-lean bar next to the spin-proof numbers.",
+      "research": "Coverage aggregated and attributed; media-lean is contested and labelled as such. Facts (population, per-capita, crime, prisons) are sourced-or-gap, shown beside the framing.",
+      "references": [ { "label": "Outlets & funding", "href": "references.html" }, { "label": "Data & API", "href": "data.html" } ],
+      "docs": "how-it-works.html", "updated": "2026-08-06"
+    },
+    "timeline.html": {
+      "section": "News",
+      "explainer": "Events over time — the fiscal and civic record, on a scrubbable timeline.",
+      "research": "Events drawn from the district ledger and fiscal-events data; each entry links to its source or is marked a gap.",
+      "references": [ { "label": "All sources", "href": "references.html" }, { "label": "Provenance", "href": "provenance.html" } ],
+      "docs": "how-it-works.html", "updated": "2026-08-06"
+    },
+    "state-of-india.html": {
+      "section": "Money",
+      "explainer": "Who carries the country — every state ranked on the active fiscal view.",
+      "research": "State figures from the district ledger, aggregated; the ranking changes with the chosen dimension. Sourced-or-gap throughout.",
+      "references": [ { "label": "Sources", "href": "references.html" }, { "label": "Provenance ledger", "href": "provenance.html" } ],
+      "docs": "how-it-works.html", "updated": "2026-08-06"
+    },
+    "explore.html": {
+      "section": "Money",
+      "explainer": "Filter and rank all 594 districts on any dimension — a client-side query engine over the whole ledger.",
+      "research": "Runs entirely in the browser over the sourced district ledger; a district with no figure for a dimension is shown as a gap, not a zero.",
+      "references": [ { "label": "Sources", "href": "references.html" }, { "label": "Data & API", "href": "data.html" } ],
+      "docs": "how-it-works.html", "updated": "2026-08-06"
+    },
+    "command-chain.html": {
+      "section": "Money",
+      "explainer": "Who answers to whom — the federal / state / union chain of command that moves public money.",
+      "research": "The 4-layer decode is built from the constitutional/administrative structure; it maps the protocol, not individual officials' conduct.",
+      "references": [ { "label": "Sources", "href": "references.html" } ],
+      "docs": "how-it-works.html", "updated": "2026-08-06"
+    },
+    "encroachment-atlas.html": {
+      "section": "Land",
+      "explainer": "Built where water returns — illegal habitation on flood-prone and reclaimed land, case by case.",
+      "research": "Encroachment cases and flood exposure from public records and open terrain/flood-plain data; each case is attributed.",
+      "references": [ { "label": "Sources", "href": "references.html" }, { "label": "Provenance", "href": "provenance.html" } ],
+      "docs": "how-it-works.html", "updated": "2026-08-06"
+    },
+    "quake-tsunami.html": {
+      "section": "Land",
+      "explainer": "A live earthquake and tsunami tracker — real-time USGS feed alongside historical quakes and tsunamis.",
+      "research": "Live data from the USGS earthquake feed; historical events from compiled catalogues. Live values are as-reported and may revise.",
+      "references": [ { "label": "USGS feed", "href": "https://earthquake.usgs.gov/earthquakes/feed/" }, { "label": "All sources", "href": "references.html" } ],
+      "docs": "how-it-works.html", "updated": "2026-08-06"
+    },
+    "terrain-3d.html": {
+      "section": "Land",
+      "explainer": "District terrain in 2D and 3D — relief, rivers and flood plain over real elevation.",
+      "research": "Built from open elevation (DEM) and river/flood data; an honest upscale, not sharper-than-source imagery.",
+      "references": [ { "label": "Sources", "href": "references.html" } ],
+      "docs": "how-it-works.html", "updated": "2026-08-06"
+    },
+    "flood-3d.html": {
+      "section": "Land",
+      "explainer": "A flood explorer — watch water rise over real district terrain.",
+      "research": "Water levels modelled over open DEM terrain; a visualisation of exposure, not a hydrological prediction.",
+      "references": [ { "label": "Sources", "href": "references.html" } ],
+      "docs": "how-it-works.html", "updated": "2026-08-06"
+    },
+    "global.html": {
+      "section": "Data",
+      "explainer": "India against the world — GDP, income and industry compared across countries.",
+      "research": "Indicators from the World Bank open data; India is the reference, other countries the comparison.",
+      "references": [ { "label": "World Bank data", "href": "https://data.worldbank.org/" }, { "label": "All sources", "href": "references.html" } ],
+      "docs": "how-it-works.html", "updated": "2026-08-06"
+    },
+    "geopolitical-chess.html": {
+      "section": "Data",
+      "explainer": "The dollar is the board — a framing of world players, who rules each, what they bring, and how it's entangled.",
+      "research": "Sourced facts (ruling party, power nexus, pieces) are labelled; the 'chess' framing is explicitly OUR framing, not a claim of fact. Client/puppet-state calls are flagged as interpretation.",
+      "references": [ { "label": "All sources", "href": "references.html" } ],
+      "docs": "how-it-works.html", "updated": "2026-08-06"
+    },
+    "engines.html": {
+      "section": "Data",
+      "explainer": "The seven composable lenses — Survey, Country, Development, Climate, Zoning, Corruption, News — the method behind the atlas.",
+      "research": "A framework page: each engine is a way of reading the same sourced data, not a new dataset.",
+      "references": [ { "label": "Sources", "href": "references.html" } ],
+      "docs": "how-it-works.html", "updated": "2026-08-06"
+    },
+    "heritage-3d.html": {
+      "section": "History",
+      "explainer": "Temples and ruins as 3D photogrammetry models you can turn in the browser.",
+      "research": "Models are third-party photogrammetry (Sketchfab), embedded and attributed to their authors.",
+      "references": [ { "label": "Sources", "href": "references.html" } ],
+      "docs": "how-it-works.html", "updated": "2026-08-06"
+    },
+    "cave-walk.html": {
+      "section": "History",
+      "explainer": "Walk inside a reconstructed temple in the first person — Ajanta, Ellora and Nagara forms, as they once were.",
+      "research": "Reconstructions are interpretive rebuilds of temple forms, not scans of the ruins as they stand today; built to documented architectural types.",
+      "references": [ { "label": "Sources", "href": "references.html" } ],
+      "docs": "how-it-works.html", "updated": "2026-08-06"
+    },
+    "temple-forms.html": {
+      "section": "History",
+      "explainer": "Temple architecture types and orientation, modelled to real sourced dimensions.",
+      "research": "Each archetype is built by a reproducible script to sourced dimensions (temple_dims.json); a math-accurate model, not a specific building.",
+      "references": [ { "label": "Sources", "href": "references.html" } ],
+      "docs": "how-it-works.html", "updated": "2026-08-06"
+    },
+    "history.html": {
+      "section": "History",
+      "explainer": "A history race — states rising and falling on the chosen measure, over time.",
+      "research": "Animated from the same sourced state figures used across the atlas; a presentation of the data, not new data.",
+      "references": [ { "label": "Sources", "href": "references.html" } ],
+      "docs": "how-it-works.html", "updated": "2026-08-06"
+    },
+    "library.html": {
+      "section": "History",
+      "explainer": "A reading room — public-domain memoirs and primary sources of the Nehru age, with a scrollytelling journey.",
+      "research": "Texts are public-domain works served via Archive.org; presented, not edited.",
+      "references": [ { "label": "Archive.org", "href": "https://archive.org/" }, { "label": "All sources", "href": "references.html" } ],
+      "docs": "how-it-works.html", "updated": "2026-08-06"
+    },
+    "provenance.html": {
+      "section": "Data",
+      "explainer": "The provenance ledger — every figure traced to its citation, audited for zero unattributed numbers.",
+      "research": "Generated by walking the ledger and safety data against their sources; this page IS the audit trail.",
+      "references": [ { "label": "Sources", "href": "references.html" } ],
+      "docs": "how-it-works.html", "updated": "2026-08-06"
+    },
+    "knowledge.html": {
+      "section": "Data",
+      "explainer": "The knowledge base — a catalogue of every dataset the atlas holds.",
+      "research": "Auto-generated from the data catalogue so it can't drift from what's actually shipped.",
+      "references": [ { "label": "Data & API", "href": "data.html" }, { "label": "Sources", "href": "references.html" } ],
+      "docs": "how-it-works.html", "updated": "2026-08-06"
+    },
+    "mesh.html": {
+      "section": "3D",
+      "explainer": "The mesh — how the atlas's places, money and events connect, as a network.",
+      "research": "A graph view over the existing sourced relationships; a lens, not new data.",
+      "references": [ { "label": "Sources", "href": "references.html" } ],
+      "docs": "how-it-works.html", "updated": "2026-08-06"
+    },
+    "globe-map.html": {
+      "section": "3D",
+      "explainer": "Watch the globe unroll into a flat map — a live projection morph.",
+      "research": "A real projection transform over open outline data; a demonstration of how map projections distort.",
+      "references": [ { "label": "Sources", "href": "references.html" } ],
+      "docs": "how-it-works.html", "updated": "2026-08-06"
+    },
+    "geopolitics.html": {
+      "section": "Data",
+      "explainer": "World players and their entanglements.",
+      "research": "Sourced facts labelled; framing labelled as framing.",
+      "references": [ { "label": "Sources", "href": "references.html" } ],
+      "docs": "how-it-works.html", "updated": "2026-08-06"
+    }
+  }
+}
