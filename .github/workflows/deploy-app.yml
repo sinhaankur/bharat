@@ -48,8 +48,11 @@ jobs:
           NODE_ENV: production
           BASE_PATH: /india-fiscal-map/app
         run: |
-          pnpm install --no-frozen-lockfile
-          pnpm exec next build
+          # shamefully-hoist (.npmrc) flattens node_modules so Turbopack's Node
+          # resolution finds @tailwindcss/postcss; call next binary directly
+          # (pnpm's build wrapper can choke on sharp's postinstall).
+          pnpm install --no-frozen-lockfile --config.confirmModulesPurge=false
+          ./node_modules/.bin/next build
 
       - name: Assemble the Pages site (atlas at root + app under /app)
         run: |
