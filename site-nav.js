@@ -103,38 +103,32 @@
   const here = (location.pathname.split("/").pop() || "index.html").toLowerCase() || "index.html";
   const isHere = href => !/^https?:/.test(href) && href.split("?")[0].toLowerCase() === here;
 
+  // the MAGAZINE masthead sections (falls back to the full grouped nav if absent)
+  function getSections() {
+    return (typeof window !== "undefined" && window.ATLAS_SECTIONS) || getNav();
+  }
+
   function navHTML() {
-    const NAV = getNav();
-    const activeGroup = NAV.find(g => g.items.some(i => isHere(i.href)));
-    const groups = NAV.map(g => {
-      const open = g === activeGroup ? " is-current" : "";
-      const items = g.items.map(i => {
+    const SECTIONS = getSections();
+    const activeSection = SECTIONS.find(s => s.items.some(i => isHere(i.href)) || isHere(s.href));
+    const groups = SECTIONS.map(s => {
+      const open = s === activeSection ? " is-current" : "";
+      const items = s.items.map(i => {
         const here = isHere(i.href);
         const cls = [here ? "snav-cur" : "", i.hint ? "snav-has-hint" : ""].filter(Boolean).join(" ");
         const cur = (here ? ' aria-current="page"' : "") + (cls ? ` class="${cls}"` : "");
         const ext = i.ext ? ' target="_blank" rel="noopener"' : "";
-        // icon column (emoji, or a subtle bullet so text stays aligned) + text + one-line hint
-        const icon = `<span class="snav-ico">${i.icon || "›"}</span>`;
         const arrow = i.ext ? ' <span class="snav-ext">↗</span>' : "";
         const hint = i.hint ? `<span class="snav-hint">${i.hint}</span>` : "";
-        return `<a href="${i.href}"${ext}${cur}>${icon}<span class="snav-body"><span class="snav-t">${i.text}${arrow}</span>${hint}</span></a>`;
+        return `<a href="${i.href}"${ext}${cur}><span class="snav-body"><span class="snav-t">${i.text}${arrow}</span>${hint}</span></a>`;
       }).join("");
+      // a "section front" link at the top of the menu, then its stories
+      const front = s.href ? `<a class="snav-front" href="${s.href}"><span class="snav-body"><span class="snav-t">${s.label} — front page</span><span class="snav-hint">${s.tagline || ""}</span></span></a>` : "";
       return `<div class="snav-group${open}">
-        <button class="snav-top" aria-expanded="false">${g.label} <span class="snav-caret">▾</span></button>
-        <div class="snav-menu">${items}</div>
+        <button class="snav-top" aria-expanded="false">${s.label} <span class="snav-caret">▾</span></button>
+        <div class="snav-menu">${front}${items}</div>
       </div>`;
     }).join("");
-    // breadcrumb: "Group › Current page" so the reader always sees where they are
-    const curItem = activeGroup && activeGroup.items.find(i => isHere(i.href));
-    const crumb = (activeGroup && curItem)
-      ? `<div class="snav-here" aria-hidden="true"><span class="snav-here-g">${activeGroup.label}</span><span class="snav-here-sep">›</span><span class="snav-here-p">${(curItem.icon ? curItem.icon + " " : "") + curItem.text}</span></div>`
-      : "";
-    // topics strip — "making sense of it all:" quick jumps (like the Vox topics line)
-    const topics = [
-      { t: "The map", h: "index.html" }, { t: "News", h: "feed.html" },
-      { t: "States", h: "state-of-india.html" }, { t: "Heritage", h: "heritage-atlas.html" },
-      { t: "History", h: "atrocities.html" }, { t: "3D India", h: "india-3d.html" },
-    ].map(x => `<a href="${x.h}">${x.t}</a>`).join("<span class=\"snav-topic-sep\">·</span>");
 
     return `
       <nav id="nav" class="snav">
@@ -143,10 +137,10 @@
           <a class="brand" href="home.html"><img class="brand-logo" src="favicon.svg" alt="" width="24" height="24" /><span class="brand-word">Bharat</span><span class="brand-dot" title="live"></span></a>
           <div class="snav-groups">${groups}</div>
           <div class="snav-actions">
+            <button class="snav-search" aria-label="Search" title="Search (press /)" onclick="window.CommandPalette&&window.CommandPalette.open()">🔍</button>
             <a class="snav-cta" href="index.html">Open the map</a>
           </div>
         </div>
-        <div class="snav-topics"><span class="snav-topics-lbl">Making sense of it all:</span> ${topics}</div>
       </nav>
       <div class="snav-drawer" id="snav-drawer" hidden>
         <div class="snav-drawer-panel">

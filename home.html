@@ -72,16 +72,29 @@
       </a>
     </section>
 
-    <!-- ============ STORY CARDS ============ -->
-    <section class="ed-section ed-page" id="stories">
+    <!-- ============ START HERE — three curated entry points ============ -->
+    <section class="ed-section ed-page" id="stories" data-reveal>
       <div class="ed-section-head">
         <div>
-          <div class="ed-kicker">Start here</div>
-          <h2 class="ed-h2">Six ways to read India</h2>
-          <p>Each is a live, sourced tool — pick a lens and dig in.</p>
+          <div class="ed-kicker">New here?</div>
+          <h2 class="ed-h2">Start with one of these</h2>
+          <p>Three doorways into the project. Or press <kbd style="font-family:var(--font-mono);border:1px solid var(--border-strong);border-radius:5px;padding:1px 6px;font-size:0.85em">/</kbd> anywhere to search for anything.</p>
+        </div>
+        <button class="ed-btn ed-btn--ghost" onclick="window.CommandPalette&&window.CommandPalette.open()">🔎 Search the atlas</button>
+      </div>
+      <div class="ed-starthere" id="start-here"><!-- injected --></div>
+    </section>
+
+    <!-- ============ EXPLORE BY TOPIC — every section, discoverable ============ -->
+    <section class="ed-section ed-page" id="topics">
+      <div class="ed-section-head">
+        <div>
+          <div class="ed-kicker">Everything, by topic</div>
+          <h2 class="ed-h2">Explore the whole atlas</h2>
+          <p>Every tool and story, grouped. Nothing hidden — this is the full map of the site.</p>
         </div>
       </div>
-      <div class="ed-cards ed-cards--feature" id="story-cards"><!-- injected --></div>
+      <div id="topic-sections"><!-- injected: one block per nav group --></div>
     </section>
 
     <!-- ============ BY THE NUMBERS — editorial stat band ============ -->
@@ -113,58 +126,88 @@
 
   <script src="nav-data.js"></script>
   <script src="motion.js"></script>
+  <style>
+    /* topic hub (home) — reads every nav group, so nothing is hidden.
+       On the shared design tokens (type/spacing/elevation) for Vox-level consistency. */
+    .th-topic { margin: var(--sp-8) 0 0; }
+    .th-topic-head { display: flex; align-items: baseline; gap: var(--sp-3); flex-wrap: wrap;
+      border-bottom: 1px solid var(--border); padding-bottom: var(--sp-2); margin-bottom: var(--sp-5); position: relative; }
+    .th-topic-head::after { content: ""; position: absolute; left: 0; bottom: -1px; width: 40px; height: 3px; background: var(--accent); border-radius: 3px; }
+    .th-topic-head h3 { font-family: var(--font-display); font-weight: 600; font-size: var(--fs-lg); letter-spacing: -0.01em; margin: 0; }
+    .th-topic-head .tl { color: var(--muted-foreground); font-size: var(--fs-sm); }
+    .th-topic-head a { margin-left: auto; font-family: var(--font-mono); font-size: var(--fs-3xs); text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); text-decoration: none; white-space: nowrap; border: 0; }
+    .th-topic-head a:hover { color: var(--accent-ink); }
+    .th-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: var(--sp-3); }
+    .th-card { display: block; text-decoration: none; color: inherit; border: 1px solid var(--border); border-radius: var(--radius);
+      background: var(--card); padding: var(--sp-4); box-shadow: var(--shadow-xs);
+      transition: border-color .15s, box-shadow .2s, transform .18s cubic-bezier(.2,.7,.3,1); }
+    .th-card:hover { border-color: var(--border-strong); box-shadow: var(--shadow-md); transform: translateY(-3px); }
+    .th-card .ic { font-size: 1.5rem; line-height: 1; }
+    .th-card h4 { font-family: var(--font-display); font-weight: 600; margin: var(--sp-2) 0 var(--sp-1); font-size: var(--fs-base); letter-spacing: -0.005em; }
+    .th-card:hover h4 { color: var(--brand); }
+    .th-card p { margin: 0; font-size: var(--fs-xs); line-height: 1.5; color: var(--muted-foreground); }
+    .th-card.pin { border-left: 3px solid var(--accent); }
+    /* start-here big cards */
+    #start-here { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--sp-4); }
+    .th-sh { display: block; text-decoration: none; color: inherit; border: 1px solid var(--border); border-radius: var(--radius-lg);
+      background: var(--card); padding: var(--sp-5) var(--sp-5); box-shadow: var(--shadow-xs); position: relative; overflow: hidden;
+      transition: border-color .15s, box-shadow .2s, transform .18s cubic-bezier(.2,.7,.3,1); }
+    .th-sh::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 3px; background: linear-gradient(90deg, var(--accent), transparent 70%); opacity: 0; transition: opacity .2s; }
+    .th-sh:hover { border-color: var(--border-strong); box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+    .th-sh:hover::before { opacity: 1; }
+    .th-sh .n { font-family: var(--font-mono); font-size: var(--fs-3xs); color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase; }
+    .th-sh .ic { font-size: 2.1rem; line-height: 1; margin: var(--sp-3) 0 var(--sp-2); }
+    .th-sh h3 { font-family: var(--font-display); font-weight: 600; margin: 0 0 var(--sp-2); font-size: var(--fs-lg); letter-spacing: -0.01em; }
+    .th-sh:hover h3 { color: var(--brand); }
+    .th-sh p { margin: 0; color: var(--muted-foreground); font-size: var(--fs-sm); line-height: 1.55; }
+  </style>
   <script>
-  // Build story cards from the shared nav. Each card shows a VECTOR SNAPSHOT of the tool
-  // (a mini map / feed / chart / etc.) — not an emoji — in a curated masonry grid.
+  // Build the home hub straight from the shared nav catalog (window.ATLAS_NAV),
+  // so EVERY page is discoverable and nothing drifts. Two parts:
+  //   1) "Start here" — three curated doorways.
+  //   2) "By topic" — one card section per nav group (except About).
   (function () {
-    const INK = "#16151a", CRIMSON = "#d33a2c", PAPER = "#ffffff", GREY = "#e6e4e0";
-    // mini vector "snapshots" of each tool, drawn in the brand palette (0 0 100 62 viewbox)
-    const SNAP = {
-      map: `<svg viewBox="0 0 100 62" preserveAspectRatio="xMidYMid slice"><rect width="100" height="62" fill="${INK}"/>
-        <path d="M40 8 L55 6 L62 16 L58 30 L64 44 L52 54 L42 44 L46 30 L38 18 Z" fill="#2a2830"/>
-        <circle cx="50" cy="24" r="3.4" fill="${CRIMSON}"/><circle cx="56" cy="40" r="2.6" fill="${CRIMSON}"/><circle cx="44" cy="36" r="2" fill="#fff"/></svg>`,
-      feed: `<svg viewBox="0 0 100 62"><rect width="100" height="62" fill="${PAPER}"/>
-        <rect x="10" y="12" width="34" height="8" rx="2" fill="${INK}"/><rect x="10" y="24" width="80" height="3" rx="1.5" fill="${GREY}"/>
-        <rect x="10" y="31" width="72" height="3" rx="1.5" fill="${GREY}"/><rect x="10" y="42" width="26" height="10" rx="2" fill="${CRIMSON}"/>
-        <rect x="40" y="42" width="26" height="10" rx="2" fill="${INK}"/></svg>`,
-      query: `<svg viewBox="0 0 100 62"><rect width="100" height="62" fill="#f4f3f1"/>
-        <rect x="14" y="18" width="60" height="12" rx="6" fill="#fff" stroke="${GREY}" stroke-width="1.5"/>
-        <circle cx="80" cy="24" r="7" fill="none" stroke="${INK}" stroke-width="2.5"/><line x1="85" y1="29" x2="90" y2="34" stroke="${INK}" stroke-width="2.5"/>
-        <rect x="14" y="38" width="18" height="4" rx="2" fill="${CRIMSON}"/><rect x="36" y="38" width="30" height="4" rx="2" fill="${GREY}"/></svg>`,
-      states: `<svg viewBox="0 0 100 62"><rect width="100" height="62" fill="#f4f3f1"/>
-        ${[14,26,38,50,62].map((y,i)=>`<rect x="12" y="${y}" width="${[70,54,40,30,18][i]}" height="7" rx="2" fill="${i===0?CRIMSON:INK}" opacity="${1-i*0.14}"/>`).join("")}</svg>`,
-      heritage: `<svg viewBox="0 0 100 62"><rect width="100" height="62" fill="${INK}"/>
-        <path d="M50 8 L58 22 L54 22 L60 34 L56 34 L64 50 L36 50 L44 34 L40 34 L46 22 L42 22 Z" fill="#3a3730"/>
-        <path d="M50 8 L54 16 L46 16 Z" fill="${CRIMSON}"/><rect x="30" y="50" width="40" height="4" fill="#2a2830"/></svg>`,
-      history: `<svg viewBox="0 0 100 62"><rect width="100" height="62" fill="${PAPER}"/>
-        ${[[18,40,10,INK],[32,28,22,INK],[46,46,4,CRIMSON],[60,20,30,INK],[74,34,16,INK]].map(([x,y,h,c])=>`<rect x="${x}" y="${y}" width="8" height="${h}" rx="1.5" fill="${c}"/>`).join("")}
-        <line x1="10" y1="52" x2="90" y2="52" stroke="${GREY}" stroke-width="1.5"/></svg>`,
-    };
-    const ART = {
-      "index.html":          { snap: "map",      tag: "Map" },
-      "feed.html":           { snap: "feed",     tag: "News" },
-      "explore.html":        { snap: "query",    tag: "Query" },
-      "state-of-india.html": { snap: "states",   tag: "States" },
-      "heritage-atlas.html": { snap: "heritage", tag: "Heritage" },
-      "atrocities.html":     { snap: "history",  tag: "History" },
-    };
-    const order = ["index.html","atrocities.html","feed.html","heritage-atlas.html","explore.html","state-of-india.html"];
-    const flat = (window.ATLAS_NAV || []).flatMap(g => g.items);
-    const byHref = Object.fromEntries(flat.map(i => [i.href, i]));
-    const host = document.getElementById("story-cards");
-    host.className = "ba-masonry";   // Pinterest-style masonry
-    host.innerHTML = order.map((href, i) => {
-      const it = byHref[href]; if (!it) return "";
-      const a = ART[href] || { snap: "query", tag: "Tool" };
-      return `<a class="ba-tile" href="${href}" data-reveal data-reveal-delay="${i * 70}">
-        <div class="ba-tile-art">${SNAP[a.snap] || ""}</div>
-        <div class="ba-tile-body">
-          <span class="ed-tag">${a.tag}</span>
-          <h3>${it.text.replace(/^[★☆]\s*/, '')}</h3>
-          <p>${it.hint || ''}</p>
-          <span class="ed-card-meta">Open <span class="arrow">→</span></span>
-        </div></a>`;
+    const NAV = window.ATLAS_NAV || [];
+    const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const clean = t => esc(String(t).replace(/^[★☆]\s*/, ""));
+
+    // 1 · START HERE — three hand-picked entry points
+    const START = [
+      { href: "index.html",     n: "The map",       ic: "🗺", h: "See the money, by district", p: "The default front door — every one of 594 districts, coloured by what you choose. This is the heart of the atlas." },
+      { href: "languages.html", n: "The languages", ic: "🗣", h: "Every language & script of Bharat", p: "Families, scripts, fonts, sacred texts and a scroll-through journey — the deep culture layer, all in one hub." },
+      { href: "ashoka.html",    n: "The history",   ic: "🦁", h: "An empire in its own words", p: "Ashoka's rule mapped from his edicts — a ruler you can read, because the script was deciphered." },
+    ];
+    document.getElementById("start-here").innerHTML = START.map((s, i) =>
+      `<a class="th-sh" href="${s.href}" data-reveal data-reveal-delay="${i * 90}">
+        <div class="n">START ${String(i + 1).padStart(2, "0")} · ${esc(s.n)}</div>
+        <div class="ic">${s.ic}</div>
+        <h3>${esc(s.h)}</h3>
+        <p>${esc(s.p)}</p>
+      </a>`).join("");
+
+    // 2 · BY TOPIC — one section per group (skip About = utility links)
+    const SECTION_HREF = { "Map": "index.html", "Land & Climate": "encroachment-atlas.html",
+      "History & Heritage": "heritage-atlas.html", "Languages": "languages.html",
+      "3D & Globe": "india-3d.html", "Study": "engines.html", "Data": "knowledge.html" };
+    const groups = NAV.filter(g => g.label !== "About");
+    document.getElementById("topic-sections").innerHTML = groups.map(g => {
+      const cards = g.items.filter(i => !i.ext).map(i =>
+        `<a class="th-card ${i.rail ? "pin" : ""}" href="${i.href}">
+          <div class="ic">${i.icon || "›"}</div>
+          <h4>${clean(i.text)}</h4>
+          <p>${esc(i.hint || "")}</p>
+        </a>`).join("");
+      const jump = SECTION_HREF[g.label];
+      return `<div class="th-topic" data-reveal>
+        <div class="th-topic-head">
+          <h3>${esc(g.label)}</h3>
+          <span class="tl">${esc(g.tagline || "")}</span>
+          ${jump ? `<a href="${jump}">Open →</a>` : ""}
+        </div>
+        <div class="th-cards">${cards}</div>
+      </div>`;
     }).join("");
+
     if (window.Motion) window.Motion.refresh();
   })();
   </script>

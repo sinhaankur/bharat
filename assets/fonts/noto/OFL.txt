@@ -1,0 +1,10 @@
+These fonts are the Noto Sans family from the Noto Project (Google),
+subset for self-hosting by bundle_noto_fonts.py.
+
+All Noto fonts are licensed under the SIL Open Font License, Version 1.1.
+Full text: https://openfontlicense.org/open-font-license-official-text/
+Upstream:  https://github.com/notofonts/notofonts.github.io
+Copyright  The Noto Project Authors (https://github.com/notofonts).
+
+Subsetting keeps the OpenType layout tables (GSUB/GPOS/GDEF) so that Indic
+conjuncts, reordering and vowel-mark positioning render correctly.

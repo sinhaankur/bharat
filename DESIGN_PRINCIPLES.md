@@ -6,23 +6,48 @@ We reference their *conventions and UX principles* — never their assets, code,
 
 ---
 
-## 1. Brand — "Teal & Ink"
+## 1. Brand — aligned to **sinhaankur.com**
+
+The atlas is an extension of the **sinhaankur.com** design framework (Ankur Sinha ·
+Design × Engineering × AI): warm off-white paper, an **amber-gold** accent, and a
+serif-forward type system. The gold reads as turmeric/marigold — at once the
+personal brand and unmistakably Indian. Ink is the voice; gold is the accent.
+**The live reference is [`design-system.html`](design-system.html) — browse it; it renders from the real stylesheet.**
+
+**Core color tokens** (defined once in `styles.css` `:root`; the whole site re-skins here):
 
 | Token | Value | Use |
 |---|---|---|
-| `--brand` | `#0f5c5c` deep teal | headlines, links, primary brand |
-| `--brand-ink` | `#0a3f3f` | hovers, deep headlines |
-| `--accent` | `#e0663b` clay orange | calls-to-action, emphasis, live/alert |
-| `--foreground` | `#14171a` | body ink |
-| `--background` | `#ffffff` | paper |
-| `--muted` | `#eef2f1` | panels |
+| `--brand` | `#262320` warm ink | headlines, links, primary brand voice |
+| `--brand-ink` | `#0a0a0a` near-black | hovers, deep headlines |
+| `--accent` | `#cc8900` amber-gold (turmeric) | calls-to-action, emphasis, links, live/alert |
+| `--accent-ink` | `#a06b00` deep amber | accent hovers |
+| `--accent-tint` | `#f7ecd2` | pale gold wash |
+| `--background` | `#f6f5f1` warm off-white | page paper (matches sinhaankur.com) |
+| `--foreground` | `#1a1917` near-black | body ink |
+| `--card` / `--surface` | `#fbfaf7` | cards, chips, menus |
+| `--muted` | `#ece9e2` | panels |
+| `--muted-foreground` | `#6b665e` | secondary text |
+| `--border` / `--border-strong` | `#d6d0cb` / `#c3bcb2` | warm hairlines |
+| `--positive` | `#00bb7f` emerald | positive / good |
+| `--indigo` | `#1447e6` blue | secondary data hue |
 
-**Type:** display serif (`Fraunces`) for headlines, clean sans (`Geist`) for body,
-mono (`Geist Mono`) for labels/eyebrows/data. Big headlines, generous line-height,
-a comfortable reading measure (`--measure: 42rem`).
+Dark mode (`html.theme-dark`) matches sinhaankur.com: **near-black** paper
+(`#0a0a0a`), off-white ink (`#fafafa`), amber-gold glow (`#efa810`).
 
-**Discipline:** one accent, lots of whitespace, hairline rules, few borders.
-Colour carries meaning (teal = us/navigation, clay = action/alert) — never decoration.
+**Type (matches sinhaankur.com):** display serif **Fraunces** (`--font-display`)
+for headlines, **Instrument Serif** (`--font-italic`) for italic display, clean sans
+**Inter** (`--font-sans`) for body, **JetBrains Mono** (`--font-mono`) for
+labels/eyebrows/data. Use the **type scale** (`--fs-3xs … --fs-3xl`, ~1.2 ratio) —
+never ad-hoc px. Reading measure `--measure: 42rem`.
+
+**Scales (all in `:root`):** spacing `--sp-1 … --sp-12` (4px base) · radius
+`--radius-sm/‑/‑lg/‑full` · elevation `--shadow-xs … --shadow-xl` (cards rest at
+`xs`, lift to `lg` on hover) · motion `--ease-out`/`--dur-1…4`.
+
+**Discipline:** one accent, warm whitespace, hairline rules, few borders. Colour
+carries meaning (**teal = us/navigation, terracotta = action/alert**) — never decoration.
+Every control gets a `:focus-visible` ring; every animation honours reduce-motion.
 
 ---
 
@@ -87,4 +112,5 @@ Colour carries meaning (teal = us/navigation, clay = action/alert) — never dec
 
 We borrow **conventions** (grid, card patterns, bias bars, citation discipline, explainer
 structure). We do **not** copy their logos, typefaces-as-trademark, colour marks, article
-text, or code. The identity — Teal & Ink, the wordmark, the voice — is ours.
+text, or code. The identity — the sinhaankur.com framework (warm paper, amber-gold,
+Fraunces + Inter + JetBrains Mono), the wordmark, the voice — is ours.

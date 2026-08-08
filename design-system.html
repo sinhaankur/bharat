@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design system — Bharat “Terracotta · Teal · Bone” | Bharat</title>
+  <meta name="description" content="The living design system for the Bharat atlas: the India-themed brand (Terracotta · Teal · Bone), the color tokens, type scale, spacing and elevation, and every UI component rendered live with its class name. One source of truth, backed by the real stylesheet." />
+  <meta name="robots" content="noindex" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .ds-wrap { max-width: 1040px; margin: 0 auto; padding: 1.6rem var(--pad-x) 6rem; }
+    .ds-head h1 { font-family: var(--font-display); font-weight: 600; font-size: var(--fs-2xl); letter-spacing: -0.02em; margin: 0.3rem 0 0.4rem; }
+    .ds-head h1 em { font-family: var(--font-italic); font-style: italic; color: var(--accent); }
+    .ds-head p { color: var(--muted-foreground); font-size: var(--fs-md); line-height: 1.6; max-width: 60ch; }
+
+    .ds-sec { margin: var(--sp-10) 0 0; scroll-margin-top: 5rem; }
+    .ds-sec > h2 { font-family: var(--font-display); font-weight: 600; font-size: var(--fs-xl); margin: 0 0 var(--sp-2); position: relative; padding-bottom: var(--sp-2); border-bottom: 1px solid var(--border); }
+    .ds-sec > h2::after { content: ""; position: absolute; left: 0; bottom: -1px; width: 44px; height: 3px; background: var(--accent); border-radius: 3px; }
+    .ds-sec > .lead { color: var(--muted-foreground); font-size: var(--fs-sm); margin: 0 0 var(--sp-5); max-width: 66ch; }
+
+    /* section nav */
+    .ds-toc { position: sticky; top: 0; z-index: 5; display: flex; flex-wrap: wrap; gap: 0.3rem; padding: 0.6rem 0; margin: var(--sp-5) 0 0; background: color-mix(in oklch, var(--background) 90%, transparent); backdrop-filter: blur(8px); }
+    .ds-toc a { font-family: var(--font-mono); font-size: var(--fs-2xs); text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted-foreground); border: 1px solid var(--border); border-radius: var(--radius-full); padding: 3px 10px; text-decoration: none; }
+    .ds-toc a:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* swatches */
+    .ds-swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--sp-3); }
+    .ds-sw { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: var(--card); box-shadow: var(--shadow-xs); }
+    .ds-sw .chip { height: 68px; }
+    .ds-sw .meta { padding: 0.5rem 0.6rem; }
+    .ds-sw .nm { font-weight: 600; font-size: var(--fs-sm); }
+    .ds-sw .var { font-family: var(--font-mono); font-size: var(--fs-2xs); color: var(--muted-foreground); }
+    .ds-sw .hex { font-family: var(--font-mono); font-size: var(--fs-2xs); color: var(--muted-foreground); }
+
+    /* type scale */
+    .ds-type-row { display: flex; align-items: baseline; gap: var(--sp-4); padding: var(--sp-3) 0; border-bottom: 1px dashed var(--border); }
+    .ds-type-row .tag { font-family: var(--font-mono); font-size: var(--fs-2xs); color: var(--accent); width: 92px; flex: none; }
+    .ds-type-row .sample { line-height: 1.1; color: var(--foreground); }
+
+    /* scale rows (spacing / radius / elevation) */
+    .ds-scale { display: flex; flex-wrap: wrap; gap: var(--sp-4); }
+    .ds-scale .item { text-align: center; }
+    .ds-scale .box { background: var(--brand); border-radius: 4px; }
+    .ds-scale .rbox { width: 72px; height: 72px; background: var(--brand-tint); border: 1px solid var(--border-strong); }
+    .ds-scale .ebox { width: 120px; height: 72px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); display: grid; place-items: center; }
+    .ds-scale .lbl { font-family: var(--font-mono); font-size: var(--fs-2xs); color: var(--muted-foreground); margin-top: 0.4rem; }
+
+    /* component demo blocks */
+    .ds-demo { border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--card); padding: var(--sp-5); margin: var(--sp-3) 0 0; box-shadow: var(--shadow-xs); }
+    .ds-demo .row { display: flex; flex-wrap: wrap; gap: var(--sp-3); align-items: center; }
+    .ds-code { font-family: var(--font-mono); font-size: var(--fs-2xs); color: var(--muted-foreground); margin-top: var(--sp-3); background: var(--surface-2); border-radius: var(--radius-sm); padding: 0.4rem 0.6rem; overflow-x: auto; }
+
+    .ds-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .ds-note { font-size: var(--fs-xs); color: var(--muted-foreground); line-height: 1.6; margin-top: var(--sp-8); border-top: 1px solid var(--border); padding-top: var(--sp-4); }
+    .ds-note a { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div id="site-nav"></div>
+
+  <main class="ds-wrap">
+    <header class="ds-head">
+      <div class="eyebrow">Design system · living reference</div>
+      <h1>Bharat — <em>warm gold, on paper</em></h1>
+      <p>The single source of truth for how the atlas looks and feels — aligned to the
+        <a href="https://sinhaankur.com" target="_blank" rel="noopener" style="color:var(--accent)">sinhaankur.com</a> design framework:
+        warm off-white paper, an amber-gold accent (turmeric warmth — at once the personal brand and unmistakably Indian),
+        and a serif-forward pairing of <b>Fraunces</b> + <b>Inter</b> + <b>JetBrains&nbsp;Mono</b>. Every token and component
+        below is rendered <b>live</b> from the real stylesheet, so this page can never drift from the site.</p>
+    </header>
+
+    <nav class="ds-toc">
+      <a href="#brand">Brand</a><a href="#color">Color</a><a href="#type">Type</a>
+      <a href="#space">Spacing</a><a href="#radius">Radius</a><a href="#elevation">Elevation</a>
+      <a href="#buttons">Buttons</a><a href="#cards">Cards</a><a href="#tags">Tags & badges</a>
+      <a href="#principles">Principles</a>
+    </nav>
+
+    <!-- BRAND -->
+    <section class="ds-sec" id="brand">
+      <h2>Brand</h2>
+      <p class="lead">Peacock teal is the primary voice (headlines, links, brand). Terracotta clay is the single
+        accent (calls-to-action, emphasis, live). Colour always carries meaning — never decoration.</p>
+      <div class="ds-demo">
+        <div class="row" style="gap:var(--sp-5)">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="width:34px;height:34px;border-radius:8px;background:var(--brand);display:grid;place-items:center;color:#fff;font-family:var(--font-display);font-weight:700">B</span>
+            <span style="font-family:var(--font-display);font-weight:600;font-size:1.3rem">Bharat<span style="color:var(--accent)">.</span></span>
+          </div>
+          <div style="font-family:var(--font-mono);font-size:var(--fs-2xs);color:var(--muted-foreground)">the wordmark: display serif + terracotta dot</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COLOR -->
+    <section class="ds-sec" id="color">
+      <h2>Color tokens</h2>
+      <p class="lead">Reference these CSS variables — never hard-code hex. The whole site re-skins from this palette.
+        Light and dark both stay warm (bone paper / teal-charcoal night).</p>
+      <div class="ds-swatches" id="swatches"></div>
+    </section>
+
+    <!-- TYPE -->
+    <section class="ds-sec" id="type">
+      <h2>Type scale</h2>
+      <p class="lead">Display serif <b>Fraunces</b> for headlines, clean sans <b>Geist</b> for body, mono
+        <b>Geist Mono</b> for labels & data. One scale (~1.2 ratio) — use the tokens, not ad-hoc px.</p>
+      <div id="typescale"></div>
+    </section>
+
+    <!-- SPACING -->
+    <section class="ds-sec" id="space">
+      <h2>Spacing</h2>
+      <p class="lead">A 4px-based rhythm. <code>--sp-1</code> … <code>--sp-12</code>. Consistent gaps = calm layouts.</p>
+      <div class="ds-scale" id="spacescale"></div>
+    </section>
+
+    <!-- RADIUS -->
+    <section class="ds-sec" id="radius">
+      <h2>Radius</h2>
+      <p class="lead">Soft, friendly corners. <code>--radius-sm/‑/‑lg/‑full</code>.</p>
+      <div class="ds-scale" id="radiusscale"></div>
+    </section>
+
+    <!-- ELEVATION -->
+    <section class="ds-sec" id="elevation">
+      <h2>Elevation</h2>
+      <p class="lead">One shadow ladder. Cards rest at <code>--shadow-xs</code>, lift to <code>--shadow-lg</code> on hover.</p>
+      <div class="ds-scale" id="elevationscale"></div>
+    </section>
+
+    <!-- BUTTONS -->
+    <section class="ds-sec" id="buttons">
+      <h2>Buttons</h2>
+      <p class="lead">Pill buttons on the shared elevation ladder. Primary = terracotta action; dark = teal; ghost = outline.</p>
+      <div class="ds-demo">
+        <div class="row">
+          <button class="ed-btn ed-btn--primary">Primary action</button>
+          <button class="ed-btn ed-btn--dark">Dark / teal</button>
+          <button class="ed-btn ed-btn--ghost">Ghost</button>
+        </div>
+        <div class="ds-code">&lt;button class="ed-btn ed-btn--primary"&gt;…&lt;/button&gt;</div>
+      </div>
+    </section>
+
+    <!-- CARDS -->
+    <section class="ds-sec" id="cards">
+      <h2>Cards</h2>
+      <p class="lead">The discovery unit. Rest at <code>--shadow-xs</code>, lift on hover; display-serif heading.</p>
+      <div class="ds-demo">
+        <div class="ed-cards" style="grid-template-columns:repeat(auto-fill,minmax(240px,1fr))">
+          <a class="ed-card" href="#cards">
+            <div class="ed-card-art ed-card-art--teal">🗺</div>
+            <div class="ed-card-body">
+              <span class="ed-tag">Map</span>
+              <h3>Card heading</h3>
+              <p>A one-line description of the tool or story this card opens.</p>
+              <span class="ed-card-meta">Open <span class="arrow">→</span></span>
+            </div>
+          </a>
+          <a class="ed-card" href="#cards">
+            <div class="ed-card-art ed-card-art--clay">🛕</div>
+            <div class="ed-card-body">
+              <span class="ed-tag ed-tag--teal">Heritage</span>
+              <h3>Another card</h3>
+              <p>Cards carry a tag, a heading and a short hint. No walls of links.</p>
+              <span class="ed-card-meta">Open <span class="arrow">→</span></span>
+            </div>
+          </a>
+        </div>
+        <div class="ds-code">&lt;a class="ed-card"&gt;&lt;div class="ed-card-art ed-card-art--teal"&gt;…&lt;/div&gt;&lt;div class="ed-card-body"&gt;…&lt;/div&gt;&lt;/a&gt;</div>
+      </div>
+    </section>
+
+    <!-- TAGS -->
+    <section class="ds-sec" id="tags">
+      <h2>Tags, badges & eyebrows</h2>
+      <p class="lead">Mono micro-labels name a section or classify a card. Terracotta by default, teal variant available.</p>
+      <div class="ds-demo">
+        <div class="row">
+          <div class="eyebrow">Eyebrow / kicker</div>
+        </div>
+        <div class="ds-tags" style="margin-top:var(--sp-3)">
+          <span class="ed-tag">Data explainer</span>
+          <span class="ed-tag ed-tag--teal">Heritage</span>
+        </div>
+        <div class="ds-code">&lt;span class="ed-tag"&gt;Label&lt;/span&gt; · &lt;div class="eyebrow"&gt;Kicker&lt;/div&gt;</div>
+      </div>
+    </section>
+
+    <!-- PRINCIPLES -->
+    <section class="ds-sec" id="principles">
+      <h2>UX principles</h2>
+      <p class="lead">The rules behind the pixels. Full detail in <a href="how-it-works.html">how it works</a> and DESIGN_PRINCIPLES.md.</p>
+      <div class="ds-demo">
+        <ol style="margin:0;padding-left:1.2rem;line-height:1.9;color:var(--foreground)">
+          <li><b>Lead with the reader's question.</b> The headline is the thing they'd Google.</li>
+          <li><b>One idea per section.</b> Eyebrow names it, H2 states it, lede answers it.</li>
+          <li><b>Show, then tell.</b> Map/chart first, prose second.</li>
+          <li><b>Card-based discovery.</b> Doorways, not walls of links.</li>
+          <li><b>Progressive depth.</b> Skimmable top → detail on demand.</li>
+          <li><b>Sourced, or it's a gap.</b> Never fabricated; the honesty shows in the UI.</li>
+          <li><b>Colour carries meaning.</b> Teal = us/navigation, terracotta = action/alert.</li>
+          <li><b>Honour reduce-motion & focus.</b> Every animation degrades; every control has a focus ring.</li>
+        </ol>
+      </div>
+    </section>
+
+    <p class="ds-note">This page renders live from <code>styles.css</code>. Change a token there and it changes here — one
+      source of truth. See also <a href="DESIGN_PRINCIPLES.md">DESIGN_PRINCIPLES.md</a>.</p>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script>
+  (function () {
+    const cs = getComputedStyle(document.documentElement);
+    const val = v => cs.getPropertyValue(v).trim();
+    const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+    // COLOR SWATCHES
+    const COLORS = [
+      ["Brand · ink", "--brand"], ["Brand ink (hover)", "--brand-ink"], ["Brand tint", "--brand-tint"],
+      ["Accent · amber-gold", "--accent"], ["Accent ink", "--accent-ink"], ["Accent tint", "--accent-tint"],
+      ["Paper · warm off-white", "--background"], ["Card", "--card"], ["Surface", "--surface"],
+      ["Ink / foreground", "--foreground"], ["Muted", "--muted"], ["Muted text", "--muted-foreground"],
+      ["Border", "--border"], ["Border strong", "--border-strong"],
+      ["Positive · emerald", "--positive"], ["Indigo / blue", "--indigo"], ["Gold", "--gold"],
+    ];
+    document.getElementById("swatches").innerHTML = COLORS.map(([nm, v]) => {
+      const c = val(v);
+      const dark = /brand|accent|foreground|indigo|positive/.test(v) && !/tint/.test(v);
+      return `<div class="ds-sw">
+        <div class="chip" style="background:${c}"></div>
+        <div class="meta"><div class="nm">${esc(nm)}</div><div class="var">${esc(v)}</div><div class="hex">${esc(c)}</div></div>
+      </div>`;
+    }).join("");
+
+    // TYPE SCALE
+    const TYPE = [
+      ["--fs-3xl", "Hero display", "display"], ["--fs-2xl", "Page heading (h1)", "display"],
+      ["--fs-xl", "Section heading (h2)", "display"], ["--fs-lg", "Block / card heading", "display"],
+      ["--fs-md", "Lede / large body", "sans"], ["--fs-base", "Body text", "sans"],
+      ["--fs-sm", "Secondary / card text", "sans"], ["--fs-xs", "Caption", "sans"],
+      ["--fs-2xs", "Small label (mono)", "mono"], ["--fs-3xs", "Micro-label / eyebrow (mono)", "mono"],
+    ];
+    document.getElementById("typescale").innerHTML = TYPE.map(([v, label, fam]) => {
+      const ff = fam === "display" ? "var(--font-display)" : fam === "mono" ? "var(--font-mono)" : "var(--font-sans)";
+      const w = fam === "display" ? 600 : 400;
+      return `<div class="ds-type-row">
+        <span class="tag">${esc(v)}</span>
+        <span class="sample" style="font-size:var(${v});font-family:${ff};font-weight:${w}">Bharat — ${esc(label)}</span>
+      </div>`;
+    }).join("");
+
+    // SPACING
+    const SP = ["--sp-1", "--sp-2", "--sp-3", "--sp-4", "--sp-5", "--sp-6", "--sp-8", "--sp-10", "--sp-12"];
+    document.getElementById("spacescale").innerHTML = SP.map(v =>
+      `<div class="item"><div class="box" style="width:var(${v});height:var(${v})"></div><div class="lbl">${esc(v)}<br>${val(v)}</div></div>`).join("");
+
+    // RADIUS
+    const RAD = ["--radius-sm", "--radius", "--radius-lg", "--radius-full"];
+    document.getElementById("radiusscale").innerHTML = RAD.map(v =>
+      `<div class="item"><div class="rbox" style="border-radius:var(${v})"></div><div class="lbl">${esc(v)}</div></div>`).join("");
+
+    // ELEVATION
+    const EL = ["--shadow-xs", "--shadow-sm", "--shadow-md", "--shadow-lg", "--shadow-xl"];
+    document.getElementById("elevationscale").innerHTML = EL.map(v =>
+      `<div class="item"><div class="ebox" style="box-shadow:var(${v})"><span style="font-family:var(--font-mono);font-size:var(--fs-2xs);color:var(--muted-foreground)">${esc(v.replace("--shadow-", ""))}</span></div><div class="lbl">${esc(v)}</div></div>`).join("");
+
+    // smooth-scroll the toc
+    document.querySelectorAll(".ds-toc a").forEach(a => a.addEventListener("click", e => {
+      e.preventDefault(); document.querySelector(a.getAttribute("href")).scrollIntoView({ behavior: "smooth" });
+    }));
+  })();
+  </script>
+  <script src="command-palette.js"></script>
+  <script src="site-nav.js"></script>
+</body>
+</html>

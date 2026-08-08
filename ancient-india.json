@@ -1,0 +1,150 @@
+{
+  "_meta": {
+    "purpose": "One chronological spine for ancient India — the connective tissue that threads together everything the atlas holds about the deep past. Each era is read on five facets at once: the LANGUAGE spoken, the SCRIPT it was written in (if any), the PEOPLE (what ancient DNA says about who was here), the RULERS/POLITY, and the HERITAGE they left. Every era is a doorway into a deeper page (scripts, the Vedas, Ashoka, the DNA record, the heritage atlas).",
+    "honesty": "The established-vs-contested discipline used across the atlas. Dates for deep prehistory are ranges, not points, and are labelled. A GENETIC finding (well-supported) is kept separate from a HISTORICAL interpretation (often contested) — the 'Aryan migration' framing especially. Where a script is UNREAD (Indus) or a language is RECONSTRUCTED (Proto-Dravidian, PIE) we say so; we don't dress inference as fact.",
+    "facets": "language · script · people (DNA) · rulers/polity · heritage · events",
+    "interrogation": {
+      "why": "History is not a neutral download of ‘what happened’ — it is what SURVIVED, who was allowed to write it, and who benefited from the version that lasted. So every fact here also carries: how we know it (evidence tier), how solid the claim is (confidence), WHO recorded it, and whether the record was shaped by the winner/power of the time. Click any fact to interrogate it. The point is not to make you doubt everything equally — a sequenced genome and a temple you can stand in are not a court poet's flattery — but to make the DIFFERENCE visible.",
+      "tiers": {
+        "primary": { "label": "Primary / physical", "note": "Direct physical evidence read by modern method: a sequenced genome, a carved inscription, an excavated city. The hardest kind — though still interpreted.", "rank": 1 },
+        "peer-reviewed": { "label": "Peer-reviewed", "note": "A published scientific finding others have checked (e.g. the ancient-DNA papers). Strong, but a live field that can revise.", "rank": 1 },
+        "contemporary-text": { "label": "Contemporary text", "note": "Written at the time by someone who was there — powerful, but ALWAYS from someone's point of view (a king's edict is also propaganda).", "rank": 2 },
+        "later-text": { "label": "Later account", "note": "Written generations or centuries after, often by the tradition that ‘won’. Useful, but the most exposed to shaping and legend.", "rank": 3 },
+        "reference": { "label": "Reference / tertiary", "note": "An encyclopaedia or textbook summary (e.g. Wikipedia). Convenient, but a digest of other sources — verify against the primaries.", "rank": 3 },
+        "inference": { "label": "Reconstruction / inference", "note": "Not directly attested at all — rebuilt by method (comparative linguistics for Proto-languages, models for unsampled ancestry). Honest, but a hypothesis.", "rank": 3 }
+      },
+      "confidence": {
+        "established": "Not seriously disputed among specialists.",
+        "debated": "Genuinely open among specialists; competing readings.",
+        "contested": "Disputed, and often politically charged — read the ⚠ note."
+      },
+      "shaping": "‘Recorded by’ names WHO left the trace; ‘shaped by’ names the power/interest that could bend it. When these two differ from ‘what a neutral observer would record’, that gap IS the winner's-history problem."
+    },
+    "sources": [
+      { "label": "Ancient-DNA population shifts (this atlas): Narasimhan et al. 2019, Shinde et al. 2019", "url": "https://www.science.org/doi/10.1126/science.aat7487" },
+      { "label": "Edicts of Ashoka — Wikipedia; Hultzsch 1925", "url": "https://en.wikipedia.org/wiki/Edicts_of_Ashoka" },
+      { "label": "Brahmi script; Brahmic scripts — Wikipedia", "url": "https://en.wikipedia.org/wiki/Brahmi_script" },
+      { "label": "Indus Valley Civilisation — Wikipedia", "url": "https://en.wikipedia.org/wiki/Indus_Valley_Civilisation" },
+      { "label": "Vedic period; Mahajanapadas; Maurya Empire; Gupta Empire — Wikipedia", "url": "https://en.wikipedia.org/wiki/Vedic_period" }
+    ],
+    "updated_at": "2026-08-06"
+  },
+
+  "families": {
+    "aasi":    { "label": "AASI / Dravidian substrate", "color": "oklch(0.58 0.15 25)" },
+    "ia":      { "label": "Indo-Aryan (Sanskritic)",     "color": "oklch(0.6 0.14 285)" },
+    "mixed":   { "label": "mixed / multiple",            "color": "oklch(0.55 0.08 300)" },
+    "unknown": { "label": "unknown / undeciphered",      "color": "oklch(0.55 0.03 60)" }
+  },
+
+  "eras": [
+    {
+      "id": "prehistory",
+      "name": "Deep prehistory — the substrate",
+      "when": "~65,000–7000 BCE",
+      "sort": -65000,
+      "family": "aasi",
+      "language": { "text": "Ancestral languages, unknown", "detail": "No records. The deep population — the AASI (Ancient Ancestral South Indians) — is the substrate every later group mixed into.", "level": "unknown" },
+      "script": { "text": "None — pre-literate", "level": "none" },
+      "people": { "text": "AASI hunter-gatherers", "detail": "A deeply divergent lineage, distantly related to the Andamanese; the foundational layer of South Asian ancestry.", "dna": true,
+        "evidence": { "tier": "inference", "confidence": "established", "recorded_by": "modern population geneticists (inferred, not directly sampled)", "shaped_by": "none ancient — but a POLITICALLY charged topic today", "how": "No ancient AASI genome has been sequenced yet; AASI is a statistical source-population inferred in every model of South Asian ancestry (Narasimhan/Reich). So: strong consensus, but a reconstruction, not a body in a lab." } },
+      "rulers": { "text": "Band / forager societies", "detail": "No states." },
+      "heritage": { "text": "Rock art (e.g. Bhimbetka), microliths", "detail": "Some of the oldest human traces in the subcontinent.",
+        "evidence": { "tier": "primary", "confidence": "established", "recorded_by": "the people themselves (paintings, tools)", "shaped_by": "none — no one to flatter", "how": "Physical remains you can still see at Bhimbetka; dating by stratigraphy and style. About as unmediated as evidence gets — nobody's ‘winner’ curated it." } },
+      "events": ["Homo sapiens × Neanderthal admixture (~60–40 kya)", "AASI lineage established as the substrate"],
+      "links": [ { "label": "The DNA record", "href": "deep-history.html" } ],
+      "contested": false
+    },
+    {
+      "id": "indus",
+      "name": "Indus (Harappan) Civilisation",
+      "when": "~2600–1900 BCE",
+      "sort": -2600,
+      "family": "unknown",
+      "language": { "text": "Unknown (‘Harappan’)", "detail": "We cannot name the language family — the script is undeciphered. Some argue an early Dravidian; unproven.", "level": "unknown", "contested": true },
+      "script": { "text": "Indus script — UNDECIPHERED", "detail": "Short seal-inscriptions; never read, and not even confirmed to be full writing. A minority view makes it Brahmi's ancestor — separated by a ~1500-year gap.", "level": "unread", "link": "scripts.html", "contested": true,
+        "evidence": { "tier": "primary", "confidence": "contested", "recorded_by": "the Harappans (on seals)", "shaped_by": "MODERN politics — nationalist vs colonial readings", "how": "The marks are physically real and primary; but ‘what they SAY’ is unknown — undeciphered. Claims that it's early Dravidian, or the parent of Brahmi, are contested and often carry a modern political charge. Here the primary object is solid but every INTERPRETATION is a hypothesis." } },
+      "people": { "text": "Iranian-farmer-related + AASI", "detail": "The one sequenced IVC genome (Rakhigarhi) was exactly this mix — with NO Steppe and NO Anatolian-farmer ancestry.", "dna": true,
+        "evidence": { "tier": "peer-reviewed", "confidence": "established", "recorded_by": "Shinde et al. 2019 (Cell) — the Rakhigarhi genome", "shaped_by": "n=1, so read with care; the finding itself is not ‘shaped’", "how": "A single ancient genome, sequenced and peer-reviewed. Powerful and hard to spin — but it IS one individual, and the authors say so. Strong evidence, honestly bounded." } },
+      "rulers": { "text": "No evidence of kings/armies", "detail": "Remarkably uniform cities (Harappa, Mohenjo-daro, Dholavira) with no palaces or grand tombs — governance still debated.",
+        "evidence": { "tier": "primary", "confidence": "debated", "recorded_by": "the archaeological record (absence of palaces/royal tombs)", "shaped_by": "none ancient — but ‘absence of evidence’ is slippery", "how": "We infer ‘no kings’ from what's MISSING — no palaces, no royal graves, no army art. That's a reasonable read of primary excavation, but an argument from silence: a very different footing from a genome or an inscription." } },
+      "heritage": { "text": "Planned cities, the Great Bath, standardised weights, drainage", "detail": "Among the most sophisticated urban planning of the Bronze Age." },
+      "events": ["Peak urban phase ~2600–1900 BCE", "Gradual decline ~1900 BCE (climate/river shifts, not a proven invasion)"],
+      "links": [ { "label": "The undeciphered script", "href": "scripts.html" }, { "label": "Rakhigarhi genome", "href": "deep-history.html" }, { "label": "Indus sites", "href": "heritage-atlas.html" } ],
+      "contested": false
+    },
+    {
+      "id": "vedic",
+      "name": "The Vedic period",
+      "when": "~1500–500 BCE",
+      "sort": -1500,
+      "family": "ia",
+      "language": { "text": "Vedic Sanskrit (Indo-Aryan)", "detail": "An Indo-European language — kin to Persian, Greek, Latin. Composed and transmitted ORALLY for centuries.", "level": "spoken", "link": "vedas.html",
+        "evidence": { "tier": "contemporary-text", "confidence": "established", "recorded_by": "the priestly (Brahmin) composers of the hymns", "shaped_by": "a PRIESTLY elite — this is the canon of one class", "how": "The language is known from the Vedas themselves — an extraordinary oral text preserved almost verbatim. But it is the voice of a ritual elite; the speech of everyone else (labourers, the conquered, women, the ‘dasa’) survives only through that filter. What we ‘know’ of the age is largely what the priests chose to chant." } },
+      "script": { "text": "None at first — oral, then later Brahmi", "detail": "The Vedas were memorised, not written, for a very long time. Sanskrit had no script of its own.", "level": "oral", "link": "scripts.html",
+        "evidence": { "tier": "inference", "confidence": "established", "recorded_by": "the oral tradition (memory), written down much later", "shaped_by": "transmission by memory = control by the reciters", "how": "That the age was pre-literate is inferred from the absence of Vedic-era writing and the tradition's own oral method. Reliable — but note the whole record depended on WHO was permitted to memorise and recite it." } },
+      "people": { "text": "Steppe (Yamnaya) ancestry arrives", "detail": "Steppe pastoralist ancestry entered NW South Asia ~2000–1500 BCE — the same pulse that reshaped Bronze-Age Europe. The genetics are not disputed.", "dna": true, "contested": true,
+        "evidence": { "tier": "peer-reviewed", "confidence": "established", "recorded_by": "Narasimhan et al. 2019 (Science) — the Swat Valley time-transect", "shaped_by": "the GENETICS aren't shaped; the ‘Aryan’ NARRATIVE around them is fiercely contested", "how": "Here is the cleanest split in the whole timeline. That Steppe ancestry arrived ~2000–1500 BCE is peer-reviewed and NOT seriously disputed. What it MEANS — ‘Aryan invasion’, peaceful migration, or (some argue) an out-of-India origin — is a HISTORICAL interpretation, politically loaded, and genuinely contested. We hold the finding as established and flag the story as contested. ⚠" } },
+      "rulers": { "text": "Tribal chiefdoms (janas), rajas", "detail": "Pastoral, then settling agricultural societies along the Sapta-Sindhu and Ganga-Yamuna doab.",
+        "evidence": { "tier": "contemporary-text", "confidence": "debated", "recorded_by": "the Vedas (the winners' hymns)", "shaped_by": "victors' hymns — battles are told from one side", "how": "The famous ‘Battle of the Ten Kings’ and the raja lineages come from the Rigveda itself — i.e. from the side that composed the hymn. Classic winner's account: the defeated (e.g. the ‘Dasa/Dasyu’) are described only by their enemies." } },
+      "heritage": { "text": "The Vedas, the oral canon", "detail": "The Rigveda — among the oldest religious texts still in use; the Nāsadīya Sūkta (Hymn of Creation) sits here.",
+        "evidence": { "tier": "contemporary-text", "confidence": "established", "recorded_by": "the ṛṣis / priestly composers", "shaped_by": "the surviving canon = what one tradition preserved", "how": "The Vedas are a genuine, astonishingly well-preserved primary text OF THEIR KIND. But ‘heritage’ here is textual, not material — and it's the heritage the Vedic tradition kept. What rival or folk traditions of the age believed is largely lost." } },
+      "events": ["Composition of the Rigveda", "The ‘Aryan migration’ interpretation — genetics established, historical narrative CONTESTED", "Shift east into the Gangetic plain"],
+      "links": [ { "label": "Read the Hymn of Creation", "href": "vedas.html" }, { "label": "The Steppe / Aryan-migration debate", "href": "deep-history.html" } ],
+      "contested": true
+    },
+    {
+      "id": "mahajanapada",
+      "name": "The Mahajanapadas & the śramaṇa age",
+      "when": "~600–350 BCE",
+      "sort": -600,
+      "family": "ia",
+      "language": { "text": "Prakrits (spoken) beside Sanskrit (formal)", "detail": "The everyday Middle Indo-Aryan vernaculars — the real bridge to the modern languages — rise beside formal Sanskrit.", "level": "spoken", "link": "scripts.html" },
+      "script": { "text": "Writing re-emerges (Brahmi forming)", "detail": "After the long post-Indus gap, writing returns; Brahmi is taking shape, ready for the Mauryan state.", "level": "emerging", "link": "scripts.html" },
+      "people": { "text": "ANI/ASI blends forming", "detail": "The two ancestral populations (Ancestral North & South Indians) mix in two directions; almost all South Asians today are a blend of them.", "dna": true },
+      "rulers": { "text": "16 Mahajanapadas — Magadha rising", "detail": "Republics (gaṇa-saṅghas) and kingdoms; Magadha grows dominant under the Haryanka/Nanda dynasties.",
+        "evidence": { "tier": "later-text", "confidence": "debated", "recorded_by": "Buddhist & Jain canons + later Puranas", "shaped_by": "religious traditions writing their own founding era", "how": "The list of ‘16 great realms’ and their kings comes largely from Buddhist/Jain texts and later Puranic king-lists — written by the traditions that grew powerful, often centuries after. Real, but a later account, not contemporary record." } },
+      "heritage": { "text": "Buddhism & Jainism founded", "detail": "The Buddha and Mahavira teach in this age — a philosophical revolution that will shape the whole of Asia.",
+        "evidence": { "tier": "later-text", "confidence": "established", "recorded_by": "the Buddhist & Jain communities (canon written later)", "shaped_by": "the sanghas that survived preserved their own founders", "how": "That the Buddha and Mahavira lived and taught in this window is broadly accepted, but the biographies were written down generations later by devotees — reverent accounts, not neutral chronicle." } },
+      "events": ["Rise of Magadha", "Life of the Buddha & Mahavira", "Second urbanisation of the Ganga plain"],
+      "links": [ { "label": "How the scripts formed", "href": "scripts.html" }, { "label": "ANI/ASI in the DNA", "href": "deep-history.html" } ],
+      "contested": false
+    },
+    {
+      "id": "maurya",
+      "name": "The Mauryan Empire — Ashoka",
+      "when": "~322–185 BCE",
+      "sort": -322,
+      "family": "ia",
+      "language": { "text": "Prakrit (state), Sanskrit, Greek & Aramaic on the frontier", "detail": "The edicts speak in Prakrit at the core and switch to Greek/Aramaic on the Hellenistic edge — the multilingual reach of the empire.", "level": "written", "link": "ashoka.html" },
+      "script": { "text": "Brahmi (core) · Kharoshthi (NW) · Greek · Aramaic", "detail": "The first securely readable Indian script. Brahmi in the core, Kharoshthi in the northwest — deciphered only in 1837 (Prinsep).", "level": "written", "link": "scripts.html",
+        "evidence": { "tier": "primary", "confidence": "established", "recorded_by": "the Mauryan state (carved), read by Prinsep 1837", "shaped_by": "the state chose what to carve — but the OBJECT is unforgeable", "how": "The inscriptions are primary, physical and datable; the decipherment is well-established. Among the strongest evidence in the timeline — you can go touch the stone. (What it says is the state's message; that it exists and says it, is fact.)" } },
+      "people": { "text": "Settled ANI/ASI populations", "detail": "The caste system begins to reduce inter-group mixing, ‘freezing’ ancestry proportions — itself readable in later DNA.",
+        "evidence": { "tier": "peer-reviewed", "confidence": "established", "recorded_by": "modern DNA (endogamy dated by later genomes)", "shaped_by": "none — a genetic signal, not a written claim", "how": "The onset of strong endogamy is dated genetically (Reich lab). It's an inference from modern/ancient DNA, not from any text — so it sidesteps the winner's-history filter entirely." } },
+      "rulers": { "text": "Chandragupta → Bindusara → Ashoka", "detail": "One of the largest ancient empires — from Afghanistan to Karnataka. We can VERIFY Ashoka's rule from his own edicts.", "link": "ashoka.html",
+        "evidence": { "tier": "contemporary-text", "confidence": "established", "recorded_by": "Ashoka himself (the edicts) + later Buddhist chronicles", "shaped_by": "the KING himself — the edicts are self-portrait AND propaganda", "how": "Rare luxury: a ruler's OWN words survive, datable and empire-wide — so his reign is verifiable, not legend. BUT the edicts are also PR: ‘what he said’ (remorse, dhamma) is his chosen image, and must be kept apart from later hagiography (Ashokavadana) that turned him monster-to-saint. Strong evidence, read as self-portrait." } },
+      "heritage": { "text": "The Edicts, the pillars, the Lion Capital (now India's emblem)", "detail": "Rock & pillar edicts across the empire; the Sarnath lion capital.",
+        "evidence": { "tier": "primary", "confidence": "established", "recorded_by": "the Mauryan state (commissioned)", "shaped_by": "state-commissioned monuments — power made visible", "how": "Physical, standing, datable — the surest kind. Note that monumental heritage always over-represents the powerful: we have the emperor's pillars, not the villages." } },
+      "events": ["The Kalinga war and Ashoka's remorse (Rock Edict 13)", "State patronage of dhamma / Buddhism spreads", "Brahmi carved empire-wide"],
+      "links": [ { "label": "Ashoka's rule of the land", "href": "ashoka.html" }, { "label": "The scripts of the edicts", "href": "scripts.html" }, { "label": "Mauryan sites", "href": "heritage-atlas.html" } ],
+      "contested": false
+    },
+    {
+      "id": "classical",
+      "name": "Post-Mauryan to the Gupta ‘classical’ age",
+      "when": "~185 BCE – 550 CE",
+      "sort": -185,
+      "family": "ia",
+      "language": { "text": "Classical Sanskrit codified; Prakrits flourish; Old Tamil in the south", "detail": "Pāṇini's grammar fixes Classical Sanskrit; in the Dravidian south, Old Tamil produces the Sangam literature — a parallel, unrelated tradition.", "level": "written", "link": "vedas.html" },
+      "script": { "text": "Brahmi diversifies → Gupta script; Tamil-Brahmi in the south", "detail": "‘Late Brahmi’ (Gupta) is the hinge from which Devanagari and the northern scripts will grow; Tamil-Brahmi carries the Dravidian south.", "level": "written", "link": "scripts.html" },
+      "people": { "text": "The settled blend of modern South Asians", "detail": "Ancestry proportions much as today; regional communities distinct." },
+      "rulers": { "text": "Shungas, Satavahanas, Kushanas, then the Guptas", "detail": "The Gupta era is remembered as a ‘golden age’ of science, maths (the decimal/zero), art and literature.",
+        "evidence": { "tier": "primary", "confidence": "debated", "recorded_by": "coins, inscriptions + court poets (praśasti)", "shaped_by": "the very phrase ‘golden age’ is a court-and-later gloss", "how": "Gupta kings are well-attested by coins and inscriptions (primary). But ‘golden age’ is partly the Guptas' own court panegyric (e.g. the Allahabad praśasti of Samudragupta — literally a poem praising the king) and partly later nostalgia. The dynasty is fact; the glow is curated." } },
+      "heritage": { "text": "Ajanta & Ellora, Sanchi, Sangam poetry, Kalidasa, Aryabhata", "detail": "Rock-cut cave temples, classical drama, and the mathematics that gave the world the decimal place-value system.",
+        "evidence": { "tier": "primary", "confidence": "established", "recorded_by": "the works themselves (caves, texts, treatises)", "shaped_by": "elite patronage decided what got built & copied", "how": "Ajanta's paintings, Aryabhata's treatise, Kalidasa's plays survive as primary works. Rock-hard evidence they existed — though what survived is what wealthy patrons funded and later scribes chose to recopy." } },
+      "events": ["Pāṇini's Sanskrit grammar", "Sangam age of Tamil literature", "Gupta ‘golden age’; Aryabhata; the concept of zero"],
+      "links": [ { "label": "Script diversification", "href": "scripts.html" }, { "label": "Walk the cave temples", "href": "cave-walk.html" }, { "label": "Heritage atlas", "href": "heritage-atlas.html" } ],
+      "contested": false
+    }
+  ]
+}

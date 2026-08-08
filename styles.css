@@ -1,4 +1,48 @@
-@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Instrument+Serif:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Instrument+Serif:ital@0;1&display=swap');
+
+/* Bharati Inspired — our own OFL display face (build_bharati_font.py).
+   Bharati-INSPIRED original design (monoline, no shirorekha headline bar);
+   NOT the IIT Madras Bharati glyphs. Use via the .bharati utility class. */
+@font-face {
+  font-family: "Bharati Inspired";
+  src: url("assets/fonts/BharatiInspired-Regular.woff2") format("woff2"),
+       url("assets/fonts/BharatiInspired-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+.bharati { font-family: "Bharati Inspired", var(--font-sans, sans-serif); letter-spacing: 0.01em; }
+
+/* Noto self-hosted Indic fonts — bundle_noto_fonts.py · all SIL OFL 1.1.
+   So Brahmi/Grantha/Devanagari/… specimen lines always render (no tofu). */
+@font-face { font-family:"Noto Sans Brahmi"; src:url("assets/fonts/noto/NotoSansBrahmi-Regular.woff2") format("woff2"); font-display:swap; }
+@font-face { font-family:"Noto Sans Grantha"; src:url("assets/fonts/noto/NotoSansGrantha-Regular.woff2") format("woff2"); font-display:swap; }
+@font-face { font-family:"Noto Sans Devanagari"; src:url("assets/fonts/noto/NotoSansDevanagari-Regular.woff2") format("woff2"); font-display:swap; }
+@font-face { font-family:"Noto Sans Tamil"; src:url("assets/fonts/noto/NotoSansTamil-Regular.woff2") format("woff2"); font-display:swap; }
+@font-face { font-family:"Noto Sans Telugu"; src:url("assets/fonts/noto/NotoSansTelugu-Regular.woff2") format("woff2"); font-display:swap; }
+@font-face { font-family:"Noto Sans Kannada"; src:url("assets/fonts/noto/NotoSansKannada-Regular.woff2") format("woff2"); font-display:swap; }
+@font-face { font-family:"Noto Sans Malayalam"; src:url("assets/fonts/noto/NotoSansMalayalam-Regular.woff2") format("woff2"); font-display:swap; }
+@font-face { font-family:"Noto Sans Bengali"; src:url("assets/fonts/noto/NotoSansBengali-Regular.woff2") format("woff2"); font-display:swap; }
+@font-face { font-family:"Noto Sans Gujarati"; src:url("assets/fonts/noto/NotoSansGujarati-Regular.woff2") format("woff2"); font-display:swap; }
+@font-face { font-family:"Noto Sans Gurmukhi"; src:url("assets/fonts/noto/NotoSansGurmukhi-Regular.woff2") format("woff2"); font-display:swap; }
+@font-face { font-family:"Noto Sans Oriya"; src:url("assets/fonts/noto/NotoSansOriya-Regular.woff2") format("woff2"); font-display:swap; }
+@font-face { font-family:"Noto Sans Sinhala"; src:url("assets/fonts/noto/NotoSansSinhala-Regular.woff2") format("woff2"); font-display:swap; }
+@font-face { font-family:"Noto Sans Meetei Mayek"; src:url("assets/fonts/noto/NotoSansMeeteiMayek-Regular.woff2") format("woff2"); font-display:swap; }
+@font-face { font-family:"Noto Sans Ol Chiki"; src:url("assets/fonts/noto/NotoSansOlChiki-Regular.woff2") format("woff2"); font-display:swap; }
+.f-brahmi { font-family:"Noto Sans Brahmi", sans-serif; }
+.f-grantha { font-family:"Noto Sans Grantha", sans-serif; }
+.f-devanagari { font-family:"Noto Sans Devanagari", sans-serif; }
+.f-tamil { font-family:"Noto Sans Tamil", sans-serif; }
+.f-telugu { font-family:"Noto Sans Telugu", sans-serif; }
+.f-kannada { font-family:"Noto Sans Kannada", sans-serif; }
+.f-malayalam { font-family:"Noto Sans Malayalam", sans-serif; }
+.f-bengali { font-family:"Noto Sans Bengali", sans-serif; }
+.f-gujarati { font-family:"Noto Sans Gujarati", sans-serif; }
+.f-gurmukhi { font-family:"Noto Sans Gurmukhi", sans-serif; }
+.f-odia { font-family:"Noto Sans Oriya", sans-serif; }
+.f-sinhala { font-family:"Noto Sans Sinhala", sans-serif; }
+.f-meitei { font-family:"Noto Sans Meetei Mayek", sans-serif; }
+.f-olchiki { font-family:"Noto Sans Ol Chiki", sans-serif; }
 
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
@@ -13,42 +57,84 @@
      paper    white · panels warm-grey
    ============================================================ */
 :root {
-  /* brand — ink is the primary voice, crimson is the accent */
-  --brand:            #16151a;   /* near-black ink — headlines, wordmark, brand */
-  --brand-ink:        #000000;   /* pure black for hovers */
-  --brand-tint:       #f3f2f0;   /* pale ink wash (panels) */
-  --accent:           #d33a2c;   /* crimson — links, CTAs, emphasis */
-  --accent-ink:       #a82418;   /* darker crimson for hovers */
-  --accent-tint:      #fdecea;   /* pale crimson wash */
+  /* ────────────────────────────────────────────────────────────────
+     BHARAT — aligned to sinhaankur.com's design framework.
+     Warm off-white paper, amber-gold accent, serif-forward (Fraunces),
+     Inter body, JetBrains mono. Gold reads as turmeric/marigold here —
+     an Indian warmth that IS the personal brand. Ink is the voice; gold
+     is the accent. Every page re-skins from these tokens.
+     ──────────────────────────────────────────────────────────────── */
+  --brand:            #262320;   /* warm near-black ink — headlines, links, brand voice */
+  --brand-ink:        #0a0a0a;   /* near-black for hovers */
+  --brand-tint:       #ece8e0;   /* pale ink wash (panels) */
+  --accent:           #cc8900;   /* amber-gold (turmeric) — CTAs, emphasis, links, live */
+  --accent-ink:       #a06b00;   /* deep amber — hovers */
+  --accent-tint:      #f7ecd2;   /* pale gold wash */
 
-  /* editorial neutrals (light) */
-  --background:       #ffffff;   /* paper */
-  --foreground:       #16151a;   /* near-black ink */
-  --muted:            #f4f3f1;   /* warm-grey panel fill */
-  --muted-foreground: #625f5a;   /* muted warm grey text */
-  --border:           #e6e4e0;   /* hairline */
-  --border-strong:    #cfccc6;
-  --card:             #ffffff;
+  /* warm neutrals (light) — sinhaankur.com paper */
+  --background:       #f6f5f1;   /* warm off-white paper */
+  --foreground:       #1a1917;   /* near-black ink */
+  --muted:            #ece9e2;   /* warm panel fill */
+  --muted-foreground: #6b665e;   /* muted warm grey text */
+  --border:           #d6d0cb;   /* warm hairline */
+  --border-strong:    #c3bcb2;
+  --card:             #fbfaf7;   /* card paper — a touch lighter than bg */
+  --surface:          #fbfaf7;   /* warm near-white for chips/menus/overlays */
+  --surface-2:        #efece5;   /* second surface — hover rows, wells */
 
   /* semantic (kept for existing pages) */
   --warm:     var(--accent);
-  --positive: #1f8a4d;
+  --positive: #00bb7f;           /* emerald (from sinhaankur.com chart-2) */
   --pop:      var(--accent);
+  --indigo:   #1447e6;           /* blue-dye — secondary hue (sinhaankur chart-1) */
+  --gold:     var(--accent);     /* gold IS the accent now */
 
   --radius: 0.625rem;
   --radius-sm: 0.375rem;
   --radius-lg: 0.875rem;
+  --radius-full: 999px;
 
-  /* type — editorial: bold display serif + clean sans body + mono labels */
-  --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-  --font-display: 'Fraunces', 'Iowan Old Style', Georgia, serif;
+  /* type — matches sinhaankur.com: Fraunces display · Inter body · JetBrains mono */
+  --font-sans: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-display: 'Fraunces', 'Instrument Serif', Georgia, serif;
   --font-italic: 'Instrument Serif', Georgia, serif;
+  --font-serif: 'Instrument Serif', 'Fraunces', Georgia, serif;   /* alias used by newer pages */
+
+  /* ── TYPE SCALE — one rhythm for the whole site (Vox-style, ~1.2 ratio) ──
+     Use these instead of ad-hoc px. Fluid where it helps. */
+  --fs-3xs: 0.66rem;    /*  ~10.5px — mono micro-labels, eyebrows        */
+  --fs-2xs: 0.75rem;    /*  ~12px   — small mono labels, meta            */
+  --fs-xs:  0.82rem;    /*  ~13px   — captions, fine print               */
+  --fs-sm:  0.9rem;     /*  ~14px   — secondary body, card text          */
+  --fs-base:1rem;       /*  ~16px   — body                               */
+  --fs-md:  1.125rem;   /*  ~18px   — lede / large body                  */
+  --fs-lg:  1.375rem;   /*  ~22px   — card & block headings              */
+  --fs-xl:  clamp(1.5rem, 3vw, 2rem);      /* section headings (h2)      */
+  --fs-2xl: clamp(1.9rem, 4.4vw, 2.8rem);  /* page headings (h1)         */
+  --fs-3xl: clamp(2.4rem, 6vw, 4rem);      /* hero display               */
+
+  /* ── SPACING SCALE — 4px base, consistent rhythm ── */
+  --sp-1: 0.25rem; --sp-2: 0.5rem; --sp-3: 0.75rem; --sp-4: 1rem;
+  --sp-5: 1.5rem;  --sp-6: 2rem;   --sp-8: 3rem;    --sp-10: 4rem;  --sp-12: 6rem;
+
+  /* ── ELEVATION — one shadow ladder (replaces ad-hoc box-shadows) ── */
+  --shadow-xs: 0 1px 2px rgba(22,21,26,0.06);
+  --shadow-sm: 0 2px 8px rgba(22,21,26,0.06);
+  --shadow-md: 0 8px 24px -8px rgba(22,21,26,0.18);
+  --shadow-lg: 0 18px 44px -20px rgba(22,21,26,0.30);
+  --shadow-xl: 0 30px 70px -30px rgba(22,21,26,0.40);
+  --ring: 0 0 0 3px var(--accent-tint);       /* focus / active ring */
 
   --pad-x: 1.5rem;
   --measure: 42rem;              /* comfortable reading measure */
 }
 @media (min-width: 768px) { :root { --pad-x: 3rem; } }
+
+/* ── Consistent focus-visible ring site-wide (accessibility + polish) ── */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--radius-sm);
+}
 
 html, body {
   margin: 0; padding: 0;
@@ -83,7 +169,7 @@ a:hover { color: var(--brand-ink); border-color: var(--brand); }
   position: sticky; top: 0; z-index: 1000;
   display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
   padding: 0.55rem var(--pad-x);
-  background: oklch(0.985 0 0 / 0.85);
+  background: oklch(0.975 0.006 80 / 0.85);
   backdrop-filter: saturate(150%) blur(14px);
   -webkit-backdrop-filter: saturate(150%) blur(14px);
   border-bottom: 1px solid var(--border);
@@ -142,7 +228,7 @@ a:hover { color: var(--brand-ink); border-color: var(--brand); }
 .snav-caret { font-size: 8px; opacity: 0.6; }
 .snav-menu {
   position: absolute; top: 100%; left: 0; min-width: 230px;
-  background: oklch(0.985 0 0); border: 1px solid var(--border-strong);
+  background: var(--surface); border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm); padding: 0.35rem; margin-top: 0.3rem;
   display: none; flex-direction: column; gap: 1px; z-index: 1100;
   box-shadow: 0 8px 24px oklch(0 0 0 / 0.4);
@@ -180,7 +266,7 @@ a:hover { color: var(--brand-ink); border-color: var(--brand); }
   .snav-here { display: none; }   /* burger replaces the breadcrumb on mobile */
   .snav-groups { order: 4; display: none; position: absolute; top: 100%; left: 0; right: 0;
     max-height: calc(100vh - 52px); overflow-y: auto;
-    background: oklch(0.985 0 0); border-bottom: 1px solid var(--border);
+    background: var(--surface); border-bottom: 1px solid var(--border);
     flex-direction: column; align-items: stretch; gap: 0; padding: 0.25rem var(--pad-x) 1rem; }
   .snav.snav-open .snav-groups { display: flex; }
   .snav-group { width: 100%; border-bottom: 1px solid var(--border); }
@@ -217,7 +303,7 @@ a:hover { color: var(--brand-ink); border-color: var(--brand); }
 /* ───────── News-bubble map layer ───────── */
 .news-toggle-ctl { margin: 8px; }
 .news-toggle-btn {
-  background: oklch(0.985 0 0 / 0.92); color: var(--foreground);
+  background: oklch(0.975 0.006 80 / 0.92); color: var(--foreground);
   border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
   font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.03em;
   padding: 0.4rem 0.7rem; cursor: pointer; backdrop-filter: blur(8px);
@@ -228,7 +314,7 @@ a:hover { color: var(--brand-ink); border-color: var(--brand); }
 .news-bubble--flag { animation: bubblePulse 1.6s ease-in-out infinite; }
 @keyframes bubblePulse { 0%,100% { opacity: 0.85; } 50% { opacity: 0.45; } }
 .news-bubble-tip {
-  background: oklch(0.985 0 0); color: var(--foreground);
+  background: var(--surface); color: var(--foreground);
   border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
   font-family: var(--font-sans); font-size: 11px; line-height: 1.4; padding: 6px 9px;
 }
@@ -277,7 +363,7 @@ a:hover { color: var(--brand-ink); border-color: var(--brand); }
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><path d='M2 3.5l3 3 3-3' stroke='%23b3b3b3' stroke-width='1.2' fill='none' stroke-linecap='round'/></svg>");
   background-repeat: no-repeat; background-position: right 0.5rem center;
 }
-.country-pick select option { background: oklch(0.985 0 0); color: var(--foreground); }
+.country-pick select option { background: var(--surface); color: var(--foreground); }
 .country-pick:hover { border-color: var(--foreground); }
 
 /* ─────── India fiscal section — single-screen ─────── */
@@ -382,7 +468,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   flex-direction: column;
   gap: 0.55rem;
   padding: 0.75rem;
-  background: oklch(0.985 0 0);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
 }
@@ -439,7 +525,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   width: 16px; height: 16px;
   border-radius: 50%;
   background: var(--foreground);
-  border: 2px solid oklch(0.985 0 0);
+  border: 2px solid var(--surface);
   cursor: pointer;
   box-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
@@ -447,7 +533,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   width: 14px; height: 14px;
   border-radius: 50%;
   background: var(--foreground);
-  border: 2px solid oklch(0.985 0 0);
+  border: 2px solid var(--surface);
   cursor: pointer;
 }
 
@@ -497,7 +583,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   border-radius: 0;              /* full-bleed */
   overflow: hidden;
   border: none;
-  background: oklch(0.985 0 0);
+  background: var(--surface);
 }
 #india-map { height: 100%; width: 100%; background: oklch(1 0 0); }
 .leaflet-control-attribution { background: oklch(0.97 0 0 / 0.7) !important; color: var(--muted-foreground) !important; font-size: 9.5px !important; padding: 2px 6px !important; }
@@ -509,7 +595,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 }
 /* basemap layer control (dark theme) */
 .leaflet-control-layers {
-  background: oklch(0.985 0 0 / 0.95) !important;
+  background: oklch(0.975 0.006 80 / 0.95) !important;
   border: 1px solid var(--border-strong) !important;
   color: var(--foreground) !important;
   border-radius: var(--radius-sm) !important;
@@ -795,7 +881,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   position: absolute;
   top: 14px; left: 14px;
   transition: opacity .2s;
-  background: oklch(0.985 0 0 / 0.92);
+  background: oklch(0.975 0.006 80 / 0.92);
   backdrop-filter: blur(10px);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
@@ -890,7 +976,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 #india-map-legend {
   position: absolute;
   bottom: 14px; left: 14px; right: 14px;
-  background: oklch(0.985 0 0 / 0.92);
+  background: oklch(0.975 0.006 80 / 0.92);
   backdrop-filter: blur(10px);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
@@ -928,7 +1014,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 }
 
 .india-state-path {
-  stroke: oklch(0.985 0 0 / 0.22);
+  stroke: oklch(0.975 0.006 80 / 0.22);
   stroke-width: 0.5;
   transition: stroke-width 0.1s ease, stroke 0.1s ease;
   cursor: pointer;
@@ -1007,7 +1093,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   align-items: center;
   gap: 0.5rem;
   padding: 0.3rem 0.5rem;
-  background: oklch(0.985 0 0);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   font-size: 11.5px;
@@ -1037,7 +1123,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   align-items: center;
   gap: 0.4rem;
   padding: 0.32rem 0.55rem;
-  background: oklch(0.985 0 0);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   font-size: 11.5px;
@@ -1055,7 +1141,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 }
 
 .block-empty {
-  background: oklch(0.985 0 0); border: 1px solid var(--border);
+  background: var(--surface); border: 1px solid var(--border);
   border-left: 2px solid oklch(0.65 0.18 250);
   border-radius: var(--radius-sm);
   padding: 0.7rem 0.85rem;
@@ -1211,7 +1297,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   margin-bottom: 0.5rem;
 }
 .india-dept-col {
-  background: oklch(0.985 0 0);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 0.55rem 0.7rem;
@@ -1377,7 +1463,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 .ln-date { margin-left: auto; font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); }
 .ln-title { font-size: 11.5px; line-height: 1.4; color: var(--foreground); }
 .ln-more { font-size: 9.5px; color: var(--muted-foreground); margin-top: 0.35rem; font-style: italic; }
-.dev-chain { border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 0.7rem 0.8rem; margin-bottom: 0.6rem; background: oklch(0.985 0 0); }
+.dev-chain { border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 0.7rem 0.8rem; margin-bottom: 0.6rem; background: var(--surface); }
 .dev-chain-head { font-weight: 600; font-size: 12px; line-height: 1.3; }
 .dev-chain-status { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.05em; text-transform: uppercase; padding: 1px 6px; border-radius: 999px; border: 1px solid currentColor; margin-right: 0.3rem; }
 .dev-chain-status--open { color: oklch(0.48 0.140 60); } .dev-chain-status--resolved { color: oklch(0.48 0.160 150); } .dev-chain-status--dormant { color: var(--muted-foreground); }
@@ -1407,7 +1493,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 .acc-gap { font-family: var(--font-mono); font-size: 9px; color: oklch(0.48 0.160 70); font-style: italic; }
 .dev-rail { border-left: 2px solid var(--border-strong); padding-left: 0.7rem; display: flex; flex-direction: column; gap: 0.55rem; }
 .dev-ev { position: relative; }
-.dev-ev::before { content: ""; position: absolute; left: calc(-0.7rem - 5px); top: 4px; width: 7px; height: 7px; border-radius: 50%; background: currentColor; box-shadow: 0 0 0 3px oklch(0.985 0 0); }
+.dev-ev::before { content: ""; position: absolute; left: calc(-0.7rem - 5px); top: 4px; width: 7px; height: 7px; border-radius: 50%; background: currentColor; box-shadow: 0 0 0 3px var(--surface); }
 .dev-stage--sanction { color: oklch(0.48 0.130 200); } .dev-stage--release { color: oklch(0.48 0.160 162); }
 .dev-stage--delay { color: oklch(0.48 0.140 60); } .dev-stage--shortfall { color: oklch(0.48 0.150 45); }
 .dev-stage--audit_flag { color: oklch(0.48 0.160 35); } .dev-stage--cag_para { color: oklch(0.48 0.180 28); }
@@ -1450,8 +1536,8 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 .dim-tier--low { color: oklch(0.48 0.160 30); }
 /* Number-plate chip for the vehicles / RTO dimension. */
 .dim-plate { font-family: var(--font-mono); font-size: 9.5px; font-weight: 600; letter-spacing: 0.04em;
-  color: oklch(0.985 0 0); background: oklch(0.92 0.02 110); padding: 1px 5px; border-radius: 3px;
-  border: 1px solid oklch(0.985 0 0); margin: 0 2px 2px 0; display: inline-block; }
+  color: var(--surface); background: oklch(0.92 0.02 110); padding: 1px 5px; border-radius: 3px;
+  border: 1px solid var(--surface); margin: 0 2px 2px 0; display: inline-block; }
 /* Airport class chip for the aviation dimension. */
 .dim-air { font-family: var(--font-mono); font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.03em;
   padding: 1px 6px; border-radius: 999px; border: 1px solid currentColor; margin-left: 4px; }
@@ -1520,7 +1606,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 
 /* Interactive charts */
 .ledger-chart {
-  background: oklch(0.985 0 0);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 5px;
   padding: 0.5rem 0.55rem;
@@ -1574,7 +1660,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   flex-wrap: wrap;
   gap: 0.6rem;
   padding: 0.3rem 0.4rem;
-  background: oklch(0.985 0 0);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 4px;
 }
@@ -1635,7 +1721,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 /* Industrial-heritage timeline */
 .heritage-timeline {
   display: flex; flex-direction: column; gap: 0.25rem;
-  background: oklch(0.985 0 0);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 5px;
   padding: 0.5rem 0.6rem;
@@ -1645,12 +1731,12 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 .heritage-track { position: relative; flex: 1; height: 12px; }
 .heritage-track::before {
   content: ''; position: absolute; left: 0; right: 0; top: 50%;
-  height: 1px; background: oklch(0.985 0 0 / 0.12);
+  height: 1px; background: oklch(0.975 0.006 80 / 0.12);
 }
 .heritage-dot {
   position: absolute; top: 50%; width: 8px; height: 8px;
   border-radius: 50%; transform: translate(-50%, -50%);
-  border: 1px solid oklch(0.985 0 0);
+  border: 1px solid var(--surface);
 }
 .heritage-name { font-size: 10px; color: var(--muted-foreground); flex: 0 0 38%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .heritage-legend { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 0.35rem; }
@@ -1662,7 +1748,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 .plant-lineage {
   margin-top: 0.35rem;
   padding-top: 0.35rem;
-  border-top: 1px dashed oklch(0.985 0 0 / 0.08);
+  border-top: 1px dashed oklch(0.975 0.006 80 / 0.08);
   display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem;
   font-size: 10px; line-height: 1.5;
 }
@@ -1692,7 +1778,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 
 /* Baseline (skeleton) district state */
 .ledger-baseline {
-  background: oklch(0.985 0 0);
+  background: var(--surface);
   border: 1px dashed var(--border-strong);
   border-radius: 5px;
   padding: 0.6rem 0.7rem;
@@ -1781,7 +1867,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 }
 .method-box {
   position: relative;
-  background: oklch(0.985 0 0);
+  background: var(--surface);
   border: 1px solid var(--border-strong);
   border-radius: 8px;
   max-width: 560px;
@@ -1841,7 +1927,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 .dmt-facet:hover { border-color: var(--border-strong); }
 .dmt-facet.on { background: oklch(0.72 0.13 200 / 0.20); border-color: oklch(0.48 0.130 200); color: oklch(0.48 0.110 200); }
 .india-pc {
-  background: oklch(0.985 0 0);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 0.55rem 0.7rem;
@@ -1912,7 +1998,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
   align-items: center;
   gap: 0.6rem;
   padding: 0.32rem 0;
-  border-bottom: 1px dashed oklch(0.985 0 0 / 0.07);
+  border-bottom: 1px dashed oklch(0.975 0.006 80 / 0.07);
   font-size: 12.5px;
   cursor: pointer;
   transition: background 0.1s ease;
@@ -1987,7 +2073,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 .en-hero-lede { font-size: 15px; line-height: 1.7; color: oklch(0.86 0 0); max-width: 720px; margin: 0 0 1.3rem; }
 .en-factsonly { display: inline-block; font-size: 12.5px; line-height: 1.5; color: oklch(0.48 0.050 40); background: oklch(0.72 0.17 30 / 0.12); border: 1px solid oklch(0.72 0.17 30 / 0.4); border-radius: var(--radius-sm); padding: 0.6rem 0.9rem; margin-bottom: 1.3rem; }
 .en-factsonly em { font-family: var(--font-italic); font-style: italic; }
-.en-hero-stat { display: inline-flex; align-items: baseline; gap: 0.7rem; padding: 0.7rem 1.1rem; border: 1px solid var(--border-strong); border-left: 3px solid var(--en-accent); border-radius: var(--radius-sm); background: oklch(0.985 0 0); }
+.en-hero-stat { display: inline-flex; align-items: baseline; gap: 0.7rem; padding: 0.7rem 1.1rem; border: 1px solid var(--border-strong); border-left: 3px solid var(--en-accent); border-radius: var(--radius-sm); background: var(--surface); }
 .en-stat-value { font-family: var(--font-mono); font-size: 24px; font-weight: 500; color: var(--en-accent); letter-spacing: -0.01em; }
 .en-stat-label { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.03em; text-transform: uppercase; color: var(--muted-foreground); }
 
@@ -1998,20 +2084,20 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 
 /* what it maps */
 .en-maps { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.75rem; }
-.en-map { border: 1px solid var(--border); border-radius: var(--radius-sm); background: oklch(0.985 0 0); padding: 0.9rem 1rem; }
+.en-map { border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); padding: 0.9rem 1rem; }
 .en-map b { display: block; font-size: 13.5px; color: var(--foreground); margin-bottom: 0.3rem; }
 .en-map span { display: block; font-size: 12.5px; line-height: 1.55; color: var(--muted-foreground); }
 
 /* how it works */
 .en-how { display: flex; flex-direction: column; gap: 0; }
-.en-how-row { display: grid; grid-template-columns: 56px 1fr; gap: 1rem; padding: 1.1rem 0; border-bottom: 1px dashed oklch(0.985 0 0 / 0.08); }
+.en-how-row { display: grid; grid-template-columns: 56px 1fr; gap: 1rem; padding: 1.1rem 0; border-bottom: 1px dashed oklch(0.975 0.006 80 / 0.08); }
 .en-how-row:last-child { border-bottom: 0; }
 .en-how-num { font-family: var(--font-mono); font-size: 22px; font-weight: 500; color: var(--en-accent); opacity: 0.65; line-height: 1; }
 .en-how-body h3 { font-family: var(--font-sans); font-weight: 500; font-size: 15px; margin: 0 0 0.35rem; color: var(--foreground); }
 .en-how-body p { font-size: 13.5px; line-height: 1.65; color: oklch(0.82 0 0); margin: 0; }
 
 /* worked example */
-.en-example { border: 1px solid var(--border); border-left: 3px solid var(--en-accent); border-radius: var(--radius-sm); background: linear-gradient(180deg, color-mix(in oklch, var(--en-accent) 7%, oklch(0.985 0 0)) 0%, oklch(0.985 0 0) 100%); padding: 1.3rem 1.4rem; }
+.en-example { border: 1px solid var(--border); border-left: 3px solid var(--en-accent); border-radius: var(--radius-sm); background: linear-gradient(180deg, color-mix(in oklch, var(--en-accent) 7%, var(--surface)) 0%, var(--surface) 100%); padding: 1.3rem 1.4rem; }
 .en-example-k { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--en-accent); margin-bottom: 0.5rem; }
 .en-example-title { font-family: var(--font-display); font-weight: 400; font-size: 20px; letter-spacing: -0.01em; margin: 0 0 0.5rem; color: var(--foreground); }
 .en-example-body { font-size: 13.5px; line-height: 1.65; color: oklch(0.86 0 0); margin: 0; max-width: 760px; }
@@ -2025,7 +2111,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 /* two-column: sources + mixes-with */
 .en-two { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
 .en-sources { list-style: none; padding: 0; margin: 0 0 0.9rem; }
-.en-sources li { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem 0; border-bottom: 1px dashed oklch(0.985 0 0 / 0.07); font-size: 13px; color: var(--foreground); }
+.en-sources li { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem 0; border-bottom: 1px dashed oklch(0.975 0.006 80 / 0.07); font-size: 13px; color: var(--foreground); }
 .en-sources li:last-child { border-bottom: 0; }
 .en-tier { font-family: var(--font-mono); font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 3px; flex: 0 0 auto; }
 .en-tier-1 { background: oklch(0.72 0.15 155 / 0.18); color: oklch(0.48 0.150 155); }
@@ -2035,7 +2121,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 .en-tier-label { margin-left: auto; font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
 .en-prov { font-family: var(--font-mono); font-size: 11.5px; color: var(--en-accent); border-bottom-color: color-mix(in oklch, var(--en-accent) 40%, transparent); }
 .en-rels { display: flex; flex-direction: column; gap: 0.6rem; }
-.en-rel { display: flex; align-items: center; gap: 0.7rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: oklch(0.985 0 0); padding: 0.7rem 0.9rem; text-decoration: none; }
+.en-rel { display: flex; align-items: center; gap: 0.7rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); padding: 0.7rem 0.9rem; text-decoration: none; }
 .en-rel:hover { border-color: var(--en-accent); }
 .en-rel-icon { font-size: 18px; }
 .en-rel-body { display: flex; flex-direction: column; }
@@ -2045,7 +2131,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 
 /* prev / next */
 .en-seq { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
-.en-seq a { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.9rem 1.1rem; background: oklch(0.985 0 0); text-decoration: none; display: flex; flex-direction: column; gap: 0.2rem; }
+.en-seq a { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.9rem 1.1rem; background: var(--surface); text-decoration: none; display: flex; flex-direction: column; gap: 0.2rem; }
 .en-seq a:hover { border-color: var(--border-strong); }
 .en-seq-next { text-align: right; }
 .en-seq-k { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted-foreground); }
@@ -2066,7 +2152,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 .wn-label {
   display: inline-flex; align-items: center; gap: 0.4rem; flex: 0 0 auto;
   padding: 0 0.9rem; font-size: 9.5px; letter-spacing: 0.09em; font-weight: 600;
-  color: var(--warm); background: oklch(0.985 0 0); border: 0; border-right: 1px solid var(--border-strong);
+  color: var(--warm); background: var(--surface); border: 0; border-right: 1px solid var(--border-strong);
   cursor: default; white-space: nowrap;
 }
 .wn-live-dot {
@@ -2082,10 +2168,10 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 @keyframes wn-marquee { from { transform: translateX(0); } to { transform: translateX(-100%); } }
 .wn-item {
   display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1.3rem;
-  border: 0; border-right: 1px solid oklch(0.985 0 0 / 0.06); font-size: 12px;
+  border: 0; border-right: 1px solid oklch(0.975 0.006 80 / 0.06); font-size: 12px;
   color: var(--foreground); text-decoration: none;
 }
-.wn-item:hover { background: oklch(0.985 0 0); border-color: oklch(0.985 0 0 / 0.06); }
+.wn-item:hover { background: var(--surface); border-color: oklch(0.975 0.006 80 / 0.06); }
 .wn-tag {
   font-size: 8.5px; letter-spacing: 0.06em; font-weight: 700; padding: 2px 6px;
   border-radius: 3px; flex: 0 0 auto;
@@ -2104,15 +2190,15 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 .wn-more {
   flex: 0 0 auto; display: inline-flex; align-items: center; padding: 0 0.9rem;
   font-size: 9.5px; letter-spacing: 0.05em; color: var(--muted-foreground);
-  background: oklch(0.985 0 0); border: 0; border-left: 1px solid var(--border-strong);
+  background: var(--surface); border: 0; border-left: 1px solid var(--border-strong);
   text-decoration: none; white-space: nowrap;
 }
 .wn-more:hover { color: var(--foreground); }
 .wn-close {
   flex: 0 0 auto; width: 30px; border: 0; border-left: 1px solid var(--border-strong);
-  background: oklch(0.985 0 0); color: var(--muted-foreground); font-size: 15px; cursor: pointer;
+  background: var(--surface); color: var(--muted-foreground); font-size: 15px; cursor: pointer;
 }
-.wn-close:hover { color: var(--foreground); background: oklch(0.985 0 0); }
+.wn-close:hover { color: var(--foreground); background: var(--surface); }
 .wn-viewport:hover .wn-track, .wn-track:focus-within { animation-play-state: paused; }
 @media (prefers-reduced-motion: reduce) {
   .wn-track { animation: none; padding-left: 0; overflow-x: auto; }
@@ -2133,7 +2219,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 }
 .cp-box {
   width: min(620px, 92vw); max-height: 66vh; display: flex; flex-direction: column;
-  background: oklch(0.985 0 0); border: 1px solid var(--border-strong);
+  background: var(--surface); border: 1px solid var(--border-strong);
   border-radius: var(--radius-lg); box-shadow: 0 24px 70px oklch(0 0 0 / 0.6); overflow: hidden;
 }
 .cp-input {
@@ -2166,7 +2252,7 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 
 /* ============ District officials section (accountability layer) ============ */
 .doff-list { display: flex; flex-direction: column; gap: 0.5rem; }
-.doff-card { border: 1px solid var(--border); border-radius: var(--radius-sm); background: oklch(0.985 0 0); padding: 0.6rem 0.75rem; }
+.doff-card { border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); padding: 0.6rem 0.75rem; }
 .doff-head { display: flex; align-items: baseline; gap: 0.5rem; }
 .doff-name { font-weight: 600; font-size: 0.9rem; color: var(--foreground); }
 .doff-svc { font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); text-transform: uppercase; letter-spacing: 0.04em; }
@@ -2301,14 +2387,14 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 }
 .ed-kicker::before { content: ""; width: 22px; height: 2px; background: var(--accent); display: inline-block; }
 
-/* editorial headlines */
-.ed-h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(2.2rem, 5.5vw, 4rem);
-  line-height: 1.02; letter-spacing: -0.02em; color: var(--foreground); margin: 0 0 1rem; }
+/* editorial headlines — on the shared type scale */
+.ed-h1 { font-family: var(--font-display); font-weight: 600; font-size: var(--fs-3xl);
+  line-height: 1.02; letter-spacing: -0.02em; color: var(--foreground); margin: 0 0 var(--sp-4); }
 .ed-h1 em { font-family: var(--font-italic); font-style: italic; color: var(--brand); }
-.ed-h2 { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.5rem, 3.2vw, 2.2rem);
-  line-height: 1.08; letter-spacing: -0.01em; color: var(--foreground); margin: 0 0 0.7rem; }
-.ed-lede { font-size: clamp(1.05rem, 1.6vw, 1.3rem); line-height: 1.55; color: var(--muted-foreground);
-  max-width: var(--measure); margin: 0 0 1.5rem; }
+.ed-h2 { font-family: var(--font-display); font-weight: 600; font-size: var(--fs-xl);
+  line-height: 1.08; letter-spacing: -0.01em; color: var(--foreground); margin: 0 0 var(--sp-3); }
+.ed-lede { font-size: var(--fs-md); line-height: 1.6; color: var(--muted-foreground);
+  max-width: var(--measure); margin: 0 0 var(--sp-5); }
 
 /* ---- HERO ---- */
 .ed-hero { padding: clamp(3rem, 8vh, 6rem) 0 clamp(2rem, 5vh, 4rem); border-bottom: 1px solid var(--border); }
@@ -2320,15 +2406,16 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 
 /* ---- BUTTONS ---- */
 .ed-btn { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--font-sans); font-weight: 600;
-  font-size: 0.95rem; padding: 0.7rem 1.3rem; border-radius: 999px; border: 1.5px solid transparent; cursor: pointer;
-  text-decoration: none; transition: transform 0.12s, background 0.15s, box-shadow 0.15s; }
-.ed-btn:hover { transform: translateY(-1px); }
-.ed-btn--primary { background: var(--accent); color: #fff; box-shadow: 0 8px 20px -8px rgba(224,102,59,0.6); }
-.ed-btn--primary:hover { background: var(--accent-ink); color: #fff; border-color: transparent; }
+  font-size: var(--fs-sm); padding: 0.68rem 1.3rem; border-radius: var(--radius-full); border: 1.5px solid transparent; cursor: pointer;
+  text-decoration: none; line-height: 1; transition: transform 0.14s cubic-bezier(.2,.7,.3,1), background 0.15s, box-shadow 0.2s, border-color 0.15s; }
+.ed-btn:hover { transform: translateY(-2px); }
+.ed-btn:active { transform: translateY(0); }
+.ed-btn--primary { background: var(--accent); color: #fff; box-shadow: var(--shadow-md); }
+.ed-btn--primary:hover { background: var(--accent-ink); color: #fff; border-color: transparent; box-shadow: var(--shadow-lg); }
 .ed-btn--ghost { background: transparent; color: var(--brand); border-color: var(--border-strong); }
-.ed-btn--ghost:hover { border-color: var(--brand); color: var(--brand-ink); }
+.ed-btn--ghost:hover { border-color: var(--brand); color: var(--brand-ink); box-shadow: var(--shadow-sm); }
 .ed-btn--dark { background: var(--brand); color: #fff; }
-.ed-btn--dark:hover { background: var(--brand-ink); color: #fff; border-color: transparent; }
+.ed-btn--dark:hover { background: var(--brand-ink); color: #fff; border-color: transparent; box-shadow: var(--shadow-md); }
 
 /* ---- SECTION ---- */
 .ed-section { padding: clamp(2.5rem, 6vh, 4.5rem) 0; }
@@ -2340,8 +2427,9 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 .ed-cards--feature { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); }
 .ed-card { display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--border);
   border-radius: var(--radius-lg); overflow: hidden; text-decoration: none; color: inherit;
-  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s; }
-.ed-card:hover { transform: translateY(-3px); box-shadow: 0 18px 40px -22px rgba(20,23,26,0.35); border-color: var(--border-strong); }
+  box-shadow: var(--shadow-xs);
+  transition: transform 0.18s cubic-bezier(.2,.7,.3,1), box-shadow 0.2s, border-color 0.15s; }
+.ed-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--border-strong); }
 .ed-card-art { aspect-ratio: 16/9; background: var(--muted); position: relative; overflow: hidden;
   display: flex; align-items: center; justify-content: center; font-size: 2.4rem; }
 .ed-card-art--teal { background: linear-gradient(135deg, var(--brand), var(--brand-ink)); color: #fff; }
@@ -2417,20 +2505,25 @@ html[data-reduce-motion="1"] .brand-dot, html[data-reduce-motion="1"] .hero-pins
    warm off-white so headlines/wordmark stay visible; neutrals are warm charcoal.
    --brand is REMAPPED to the light ink so text/marks that used it read on dark. */
 html.theme-dark {
-  --background:       #131215;   /* warm near-black paper */
-  --foreground:       #ece9e3;   /* warm off-white ink */
-  --brand:            #ece9e3;   /* the "primary voice" is now light on dark (was near-black) */
+  /* aligned to sinhaankur.com dark — near-black paper, amber-gold glow */
+  --background:       #0a0a0a;   /* near-black paper */
+  --foreground:       #fafafa;   /* off-white ink */
+  --brand:            #fafafa;   /* the primary voice is light on dark */
   --brand-ink:        #ffffff;   /* hover */
-  --brand-tint:       #26242a;   /* dark panel wash (was pale) */
-  --accent:           #ef5442;   /* crimson, lifted a touch so it glows on dark */
-  --accent-ink:       #ff6a58;   /* hover crimson */
-  --accent-tint:      #3a1f1c;   /* deep crimson wash */
-  --muted:            #1d1c21;   /* charcoal panel */
-  --muted-foreground: #a7a39b;   /* warm grey text */
-  --border:           #2a282f;   /* hairline */
-  --border-strong:    #3b3942;
-  --card:             #1a181d;
-  --positive:         #4bbf8a;
+  --brand-tint:       #1a1a1a;   /* dark panel wash */
+  --accent:           #efa810;   /* amber-gold, lifted so it glows on dark */
+  --accent-ink:       #ffc23e;   /* hover gold */
+  --accent-tint:      #2a2110;   /* deep amber wash */
+  --muted:            #171717;   /* charcoal panel */
+  --muted-foreground: #a1a1a1;   /* grey text */
+  --border:           #262626;   /* hairline */
+  --border-strong:    #383838;
+  --card:             #0f0f0f;
+  --surface:          #0f0f0f;   /* dark surface */
+  --surface-2:        #1a1a1a;
+  --positive:         #00d29a;
+  --indigo:           #6d8bff;
+  --gold:             var(--accent);
 }
 html.theme-dark, html.theme-dark body { background: var(--background); color: var(--foreground); }
 html.theme-dark a { color: var(--accent); border-bottom-color: var(--border-strong); }
@@ -2460,10 +2553,13 @@ html.theme-dark #sfoot .brand-word, html.theme-dark #sfoot a:hover { color: #fff
    toggle can force light even on a page that ships class="theme-dark", and so
    a browser in OS-dark never darkens our editorial pages. Mirrors :root. */
 html.theme-light {
-  --background: #ffffff; --foreground: #16151a;
-  --muted: #f4f3f1; --muted-foreground: #625f5a;
-  --border: #e6e4e0; --border-strong: #cfccc6; --card: #ffffff;
-  --brand-tint: #f3f2f0; --accent-tint: #fdecea;
+  /* mirrors :root — aligned to sinhaankur.com (warm off-white + amber-gold) */
+  --brand: #262320; --brand-ink: #0a0a0a; --accent: #cc8900; --accent-ink: #a06b00;
+  --background: #f6f5f1; --foreground: #1a1917;
+  --muted: #ece9e2; --muted-foreground: #6b665e;
+  --border: #d6d0cb; --border-strong: #c3bcb2; --card: #fbfaf7;
+  --surface: #fbfaf7; --surface-2: #efece5;
+  --brand-tint: #ece8e0; --accent-tint: #f7ecd2;
 }
 html.theme-light, html.theme-light body { background: var(--background); color: var(--foreground); }
 
@@ -2484,15 +2580,34 @@ html.theme-light, html.theme-light body { background: var(--background); color: 
 .snav .snav-cta, a.snav-cta { background: var(--accent); color: #fff !important; border: none; font-family: var(--font-sans); font-weight: 600;
   font-size: 0.85rem; padding: 0.5rem 1.1rem; border-radius: 999px; text-decoration: none; white-space: nowrap; line-height: 1.2; display: inline-block; }
 .snav .snav-cta:hover, a.snav-cta:hover { background: var(--accent-ink); color: #fff !important; }
+/* header search button */
+/* ── The EDITORIAL BRIEF (page-brief.js) — orchestrates each page's key info ── */
+.page-brief { max-width: 62rem; margin: var(--sp-8) auto var(--sp-6); padding: var(--sp-5); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); background: var(--card); box-shadow: var(--shadow-xs); }
+.page-brief .pb-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: var(--sp-3); padding-bottom: var(--sp-3); border-bottom: 1px solid var(--border); margin-bottom: var(--sp-3); }
+.page-brief .pb-eyebrow { font-family: var(--font-mono); font-size: var(--fs-3xs); text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); font-weight: 600; }
+.page-brief .pb-section { font-family: var(--font-mono); font-size: var(--fs-2xs); text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted-foreground); border: 1px solid var(--border-strong); border-radius: var(--radius-full); padding: 1px 8px; }
+.page-brief .pb-updated { font-family: var(--font-mono); font-size: var(--fs-2xs); color: var(--muted-foreground); }
+.page-brief .pb-credo { margin-left: auto; font-family: var(--font-mono); font-size: var(--fs-2xs); color: var(--accent); font-style: italic; }
+.page-brief .pb-row { display: grid; grid-template-columns: 150px 1fr; gap: var(--sp-4); padding: var(--sp-2) 0; align-items: start; border-top: 1px dashed var(--border); }
+.page-brief .pb-row:first-child { border-top: 0; }
+.page-brief .pb-k { font-family: var(--font-mono); font-size: var(--fs-2xs); text-transform: uppercase; letter-spacing: 0.04em; color: var(--brand); font-weight: 600; display: flex; align-items: center; gap: 0.4rem; }
+.page-brief .pb-ic { color: var(--accent); }
+.page-brief .pb-v { font-size: var(--fs-sm); line-height: 1.55; color: var(--foreground); }
+.page-brief .pb-explain .pb-v { font-size: var(--fs-base); }
+.page-brief .pb-v a { color: var(--accent); }
+.page-brief .pb-sep { color: var(--border-strong); margin: 0 0.5rem; }
+.page-brief .pb-gap { color: var(--muted-foreground); font-style: italic; }
+@media (max-width: 620px) { .page-brief .pb-row { grid-template-columns: 1fr; gap: 0.2rem; } .page-brief .pb-credo { margin-left: 0; } }
 
-/* topics strip — "making sense of it all:" */
-.snav-topics { border-top: 1px solid var(--border); padding: 0.4rem var(--pad-x); max-width: 1320px; margin: 0 auto;
-  font-family: var(--font-mono); font-size: 11.5px; color: var(--muted-foreground); display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
-.snav-topics-lbl { font-weight: 600; color: var(--brand); text-transform: none; letter-spacing: 0; }
-.snav-topics a { color: var(--foreground); border: none; }
-.snav-topics a:hover { color: var(--accent); }
-.snav-topic-sep { color: var(--border-strong); }
-@media (max-width: 760px) { .snav-topics { display: none; } }
+.snav-search { background: transparent; border: 1px solid var(--border-strong); color: var(--foreground); border-radius: 999px;
+  width: 32px; height: 32px; cursor: pointer; font-size: 14px; line-height: 1; display: grid; place-items: center; }
+.snav-search:hover { border-color: var(--accent); color: var(--accent); }
+/* "section front" link at the top of each dropdown (magazine masthead) */
+.snav-front { border-bottom: 1px solid var(--border); margin-bottom: 0.25rem; padding-bottom: 0.4rem !important; }
+.snav-front .snav-t { color: var(--accent); font-weight: 700; }
+/* legacy topics strip — retired in the magazine nav */
+.snav-topics { display: none !important; }
 
 /* the slide-out drawer — big category menu (the interaction you liked) */
 .snav-drawer { position: fixed; inset: 0; z-index: 2000; }
