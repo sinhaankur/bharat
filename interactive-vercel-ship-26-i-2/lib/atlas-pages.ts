@@ -58,7 +58,7 @@ export const ATLAS_PAGES: AtlasPage[] = [
 
   // ── Land ────────────────────────────────────────────────────────────────
   { slug: 'encroachment-atlas', title: 'Built where the water returns', section: 'Land', featured: true, blurb: "India's encroachment cases on land the water reclaims." },
-  { slug: 'heritage-atlas', title: 'Sacred ground of the world', section: 'Land', featured: true, blurb: 'A sourced atlas of sacred sites, builders & destruction.' },
+  { slug: 'heritage-atlas', title: 'Sacred ground of the world', section: 'Land', native: '/heritage', featured: true, blurb: 'A sourced atlas of sacred sites, builders & destruction.' },
   { slug: 'atrocities', title: 'Population Control, Marauder Style', section: 'Land', blurb: 'An interactive atlas of historical atrocity.' },
   { slug: 'quake-tsunami', title: 'Earthquake & tsunami tracker', section: 'Land', blurb: 'Live USGS feed + historical quakes & tsunamis.' },
 
