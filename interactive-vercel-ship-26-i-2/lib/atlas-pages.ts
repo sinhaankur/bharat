@@ -77,7 +77,7 @@ export const ATLAS_PAGES: AtlasPage[] = [
   { slug: 'languages', title: 'Languages of Bharat', section: 'Languages', native: '/languages', featured: true, blurb: 'Families, scripts, fonts & source texts.' },
   { slug: 'scripts', title: 'Scripts & language families', section: 'Languages', blurb: "Brahmi's tree and the roots of the branches." },
   { slug: 'journey', title: 'The journey of a word', section: 'Languages', blurb: 'One meaning, across time and tongues.' },
-  { slug: 'vedas', title: 'The Hymn of Creation', section: 'Languages', blurb: 'Nāsadīya Sūkta across languages.' },
+  { slug: 'vedas', title: 'The Hymn of Creation', section: 'Languages', native: '/vedas', blurb: 'Nāsadīya Sūkta across languages.' },
   { slug: 'mauryan', title: 'Mauryan design language', section: 'Languages', native: '/mauryan', featured: true, blurb: 'The full Indian design system — carved in Blender.' },
 
   // ── 3D ──────────────────────────────────────────────────────────────────
