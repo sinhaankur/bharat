@@ -13,4 +13,12 @@ next.user-config.*
 # Common ignores
 node_modules
 .next/
+out/
 .DS_Store
+
+# public/legacy is a local-only symlink to the repo root (../..). It exists so the
+# dev server can preview the classic atlas, but Next copies public/ into out/ at
+# build time and would follow the symlink recursively (out -> public/legacy ->
+# repo root -> app -> out -> ...) until the disk fills. Never commit it, and delete
+# it before running `next build` locally.
+public/legacy
