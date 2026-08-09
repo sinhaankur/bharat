@@ -97,7 +97,7 @@ export const ATLAS_PAGES: AtlasPage[] = [
   { slug: 'articles', title: 'Analysis', section: 'Data', blurb: "Data-journalism on India's public money." },
   { slug: 'article', title: 'Analysis (single)', section: 'Data' },
   { slug: 'share', title: 'Share from the data', section: 'Data' },
-  { slug: 'sitemap', title: 'Site map', section: 'Data' },
+  { slug: 'sitemap', title: 'Site map', section: 'Data', native: '/sitemap', blurb: 'The information architecture — every page, mapped and clickable.' },
 
   // ── About ───────────────────────────────────────────────────────────────
   { slug: 'about', title: 'About & methodology', section: 'About', blurb: 'How this is built, and its limits.' },
