@@ -3,6 +3,7 @@ import PageShell from '@/components/page-shell'
 import Icon, { type IconName } from '@/components/indic/icon'
 import TempleOrnament, { type OrnamentName } from '@/components/indic/ornament'
 import MandalaButton from '@/components/indic/mandala-button'
+import BrandSpecimen, { REGISTERS } from '@/components/indic/brand-specimen'
 
 export const metadata: Metadata = {
   title: 'The Mauryan design system — Bharat',
@@ -58,6 +59,20 @@ export default function DesignSystemPage() {
                   <div className="font-mono text-[10px] text-muted-foreground">{hex}</div>
                 </div>
               </div>
+            ))}
+          </div>
+        </section>
+
+        {/* the Indic spectrum — four registers */}
+        <section className="mb-16 stone-reveal">
+          <h2 className="bharati mb-2 text-2xl font-black tracking-tight">The Indic spectrum</h2>
+          <p className="mb-6 max-w-2xl text-sm text-muted-foreground">
+            One system, four registers — each a one-sheet brand specimen. Mauryan is the skeleton;
+            Gupta the soul; Kolam the dark modern grid; Indigo the warm textile-block register.
+          </p>
+          <div className="grid gap-6 md:grid-cols-2">
+            {REGISTERS.map((r) => (
+              <BrandSpecimen key={r.id} r={r} />
             ))}
           </div>
         </section>
