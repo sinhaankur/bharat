@@ -48,14 +48,12 @@ jobs:
           NODE_ENV: production
           BASE_PATH: /india-fiscal-map/app
         run: |
-          # shamefully-hoist (.npmrc) flattens node_modules so Turbopack's Node
-          # resolution finds @tailwindcss/postcss; call next binary directly
-          # (pnpm's build wrapper can choke on sharp's postinstall).
-          pnpm install --no-frozen-lockfile
-          # guarantee the Tailwind v4 build plugin is resolvable at the top level
-          # (Turbopack + pnpm isolated layout has hidden it on CI)
-          node -e "require.resolve('@tailwindcss/postcss')" \
-            || pnpm add -D @tailwindcss/postcss@^4.2.0 tailwindcss@^4.2.0
+          # --ignore-scripts skips native postinstalls (esp. sharp), which pnpm
+          # 10+ otherwise blocks and fatally errors on (ERR_PNPM_IGNORED_BUILDS).
+          # Safe here: this is a STATIC EXPORT, sharp's native binary isn't needed
+          # at build time. .npmrc shamefully-hoist keeps @tailwindcss/postcss
+          # resolvable by Turbopack. Call the next binary directly.
+          pnpm install --no-frozen-lockfile --ignore-scripts
           ./node_modules/.bin/next build
 
       - name: Assemble the Pages site (atlas at root + app under /app)
