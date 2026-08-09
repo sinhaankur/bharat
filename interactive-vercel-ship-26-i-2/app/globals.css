@@ -29,7 +29,7 @@
   --chart-3: oklch(0.5 0.16 265);        /* indigo/blue */
   --chart-4: oklch(0.7 0.15 45);         /* terracotta */
   --chart-5: oklch(0.6 0.1 200);         /* teal */
-  --radius: 0.625rem; /* Radius 2 — curved corners everywhere (was 0.25rem, too sharp) */
+  --radius: 0.125rem; /* 2px — carved stone, not soft plastic (Mauryan handoff spec) */
   --sidebar: oklch(0.98 0.004 90);
   --sidebar-foreground: oklch(0.2 0.006 60);
   --sidebar-primary: oklch(0.24 0.006 60);
@@ -68,10 +68,13 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  /* carved-stone radius scale (Mauryan handoff: "corners stay tight") — even the
+     large steps stay crisp. --radius is 2px; the biggest box tops out at ~5px. */
+  --radius-sm: 1px;
+  --radius-md: var(--radius);        /* 2px */
+  --radius-lg: var(--radius);        /* 2px */
+  --radius-xl: calc(var(--radius) + 2px);   /* 4px */
+  --radius-2xl: calc(var(--radius) + 3px);  /* 5px */
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -182,11 +185,12 @@ button, a { -webkit-tap-highlight-color: transparent; }
   --secondary-foreground: #33251a;
   --muted: #f0e9d8;
   --muted-foreground: #8a7355;         /* warm taupe */
-  --accent: #b28234;                  /* softened antique gold — muted, not punchy */
+  --accent: #cc8900;                  /* house CTA gold (Mauryan handoff — turmeric/amber) */
+  --accent-hover: #a06b00;            /* handoff hover */
   --accent-foreground: #fefcf6;
   --border: #e7dcc4;                   /* soft warm hairline */
   --input: #e7dcc4;
-  --ring: #b28234;
+  --ring: #cc8900;
   /* muted heritage tints seen across the refs — used delicately as secondaries */
   --dusty-rose: #b07f7a; --sage: #9aa084; --clay-soft: #c08a68; --plum-soft: #7d5658;
   /* Indic named tokens (shared) */
@@ -249,7 +253,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
 }
 
 /* incised hairline rule */
-.rule-incised { height: 1px; background: var(--stone-ink, currentColor); opacity: 0.16; box-shadow: 0 1px 0 var(--polish, rgba(255,255,255,0.4)); }
+/* handoff: "rules stay 2px incised" */
+.rule-incised { height: 2px; background: var(--stone-ink, currentColor); opacity: 0.85; box-shadow: 0 1px 0 var(--polish, rgba(255,255,255,0.4)); }
 
 /* chakra spin */
 @keyframes chakra-spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
