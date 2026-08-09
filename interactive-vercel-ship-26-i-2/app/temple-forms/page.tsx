@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import PageShell from '@/components/page-shell'
 import SurveyPlate from '@/components/indic/survey-plate'
+import GopuramPlate from '@/components/indic/gopuram-plate'
 import TempleOrnament from '@/components/indic/ornament'
 
 export const metadata: Metadata = {
@@ -22,12 +23,25 @@ export default function TempleFormsPage() {
     <PageShell
       eyebrow="Heritage · measured elevation"
       title="The temple, drawn to scale"
-      intro="The Indian temple is a diagram in stone. Here it is drawn the way a surveyor would — course by course, dimension by dimension, from the plinth to the pot that crowns the tower."
+      intro="The Indian temple is a diagram in stone. Here two of its great forms — the Nagara shikhara of the north and the Dravida gopuram of the south — drawn the way a surveyor would, course by course, dimension by dimension."
     >
       <div className="mx-auto max-w-4xl px-4 py-14">
-        {/* the survey plate */}
+        {/* North: the Nagara survey plate */}
+        <div className="mb-4 flex items-center gap-3 stone-reveal">
+          <span className="rounded-[var(--radius)] bg-[var(--accent)]/12 px-2 py-0.5 text-[11px] font-bold uppercase tracking-widest text-[var(--accent)]">North · Nagara</span>
+          <span className="h-px flex-1 bg-border" />
+        </div>
         <div className="stone-reveal">
           <SurveyPlate />
+        </div>
+
+        {/* South: the Dravida gopuram plate */}
+        <div className="mb-4 mt-14 flex items-center gap-3 stone-reveal">
+          <span className="rounded-[var(--radius)] bg-[var(--gupta-stone,#c8664a)]/15 px-2 py-0.5 text-[11px] font-bold uppercase tracking-widest text-[var(--gupta-stone,#c8664a)]">South · Dravida</span>
+          <span className="h-px flex-1 bg-border" />
+        </div>
+        <div className="stone-reveal">
+          <GopuramPlate />
         </div>
 
         {/* the anatomy, bottom to top */}
