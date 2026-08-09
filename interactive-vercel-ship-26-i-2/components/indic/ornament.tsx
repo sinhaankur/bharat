@@ -16,6 +16,8 @@ export type OrnamentName =
   | 'kalasha'
   | 'shikhara'
   | 'lotus'
+  | 'mandala_ceiling'
+  | 'vine_frieze'
 
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
@@ -28,6 +30,8 @@ const RATIO: Record<OrnamentName, number> = {
   kalasha: 530 / 786,
   shikhara: 1,
   lotus: 1,
+  mandala_ceiling: 1,
+  vine_frieze: 1400 / 114,
 }
 
 const LABEL: Record<OrnamentName, string> = {
@@ -38,6 +42,8 @@ const LABEL: Record<OrnamentName, string> = {
   kalasha: 'Purna-kalasha',
   shikhara: 'Shikhara',
   lotus: 'Lotus medallion',
+  mandala_ceiling: 'Temple ceiling mandala',
+  vine_frieze: 'Carved vine frieze',
 }
 
 export default function TempleOrnament({

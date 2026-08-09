@@ -8,7 +8,6 @@
 // ─────────────────────────────────────────────────────────────────────────
 
 import { useEffect, useRef } from 'react'
-import Mandala from '@/components/indic/mandala'
 import FloralGlow from '@/components/indic/floral-glow'
 import TempleOrnament from '@/components/indic/ornament'
 import { BharatMark } from '@/components/indic/bharat-logo'
@@ -48,18 +47,19 @@ export default function BharatHero() {
       {/* glowing floral Mauryan backdrop */}
       <FloralGlow intensity={1.1} />
 
-      {/* wide mandala — the centre of focus, drifts slightly up on scroll */}
+      {/* the AUTHENTIC Blender-carved temple ceiling mandala — centre of focus,
+          slow-turns and drifts up on scroll (real relief, not a flat vector) */}
       <div
         className="pointer-events-none absolute inset-0 flex items-center justify-center"
         style={{ transform: 'translateY(calc(var(--sy) * -0.06px))' }}
         aria-hidden="true"
       >
-        <Mandala
-          size={1000}
-          opacity={0.12}
-          accent="var(--accent)"
-          ink="var(--muted-foreground)"
-          className="w-[135vw] max-w-none md:w-[1150px]"
+        <TempleOrnament
+          name="mandala_ceiling"
+          width={1100}
+          opacity={0.16}
+          spin
+          className="ken-burns w-[135vw] max-w-none md:w-[1150px]"
         />
       </div>
 
