@@ -70,7 +70,7 @@ export const ATLAS_PAGES: AtlasPage[] = [
   { slug: 'deep-history', title: 'Deep history in DNA', section: 'History', native: '/deep-history', blurb: 'The population shifts that made South Asia.' },
   { slug: 'heritage-3d', title: 'Temples in 3D', section: 'History', blurb: 'See how they looked.' },
   { slug: 'cave-walk', title: 'Walk inside the temples', section: 'History', featured: true, blurb: 'A first-person walk through temples as they were.' },
-  { slug: 'temple-forms', title: 'Temple forms in 3D', section: 'History', blurb: 'How each style is shaped and oriented.' },
+  { slug: 'temple-forms', title: 'Temple forms', section: 'History', native: '/temple-forms', featured: true, blurb: 'The temple drawn to scale — a measured survey plate.' },
   { slug: 'library', title: 'The Reading Room', section: 'History', blurb: 'Study the primary sources.' },
 
   // ── Languages ───────────────────────────────────────────────────────────
