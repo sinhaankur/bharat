@@ -8,68 +8,62 @@
 // ─────────────────────────────────────────────────────────────────────────
 
 import Link from 'next/link'
-import Chakra from '@/components/indic/chakra'
-import { Lotus } from '@/components/indic/lotus'
-import TempleOrnament from '@/components/indic/ornament'
+import Icon, { type IconName } from '@/components/indic/icon'
 
 type Dest = {
   href: string
   title: string
   blurb: string
+  icon: IconName
   status?: 'live' | 'building'
 }
-type Chamber = { key: string; label: string; note: string; items: Dest[] }
+type Chamber = { key: string; label: string; note: string; icon: IconName; items: Dest[] }
 
 const CHAMBERS: Chamber[] = [
   {
     key: 'news',
     label: 'The Newsroom',
     note: 'What is happening — read against the numbers.',
+    icon: 'edict',
     items: [
-      { href: '/news', title: 'News, bias & sentiment', blurb: 'Live India headlines with media-lean, tone and a legal-safe read.', status: 'live' },
-      { href: '/news', title: 'The Lawyer Engine', blurb: 'Every claim wrapped in careful, defamation-safe language.', status: 'live' },
+      { href: '/news', title: 'News, bias & sentiment', icon: 'edict', blurb: 'Live India headlines with media-lean, tone and a legal-safe read.', status: 'live' },
+      { href: '/news', title: 'The Lawyer Engine', icon: 'chakra', blurb: 'Every claim wrapped in careful, defamation-safe language.', status: 'live' },
     ],
   },
   {
     key: 'land',
     label: 'The Land',
     note: 'Where things are — money, rivers, risk, mapped.',
+    icon: 'pillar',
     items: [
-      { href: '/map', title: 'The interactive map', blurb: 'India by district — money flow, risk and the shape of the land.', status: 'live' },
-      { href: '/deep-history', title: 'Deep history', blurb: 'Ancient-DNA population shifts across the subcontinent.', status: 'live' },
+      { href: '/map', title: 'The interactive map', icon: 'pillar', blurb: 'India by district — money flow, risk and the shape of the land.', status: 'live' },
+      { href: '/heritage', title: 'Sacred ground', icon: 'stupa', blurb: '137 sourced sacred sites — builder, lifespan, destruction record.', status: 'live' },
+      { href: '/deep-history', title: 'Deep history', icon: 'chakra', blurb: 'Ancient-DNA population shifts across the subcontinent.', status: 'live' },
     ],
   },
   {
     key: 'roots',
     label: 'The Roots',
     note: 'Where we come from — empire, edicts, scripts.',
+    icon: 'torana',
     items: [
-      { href: '/pataliputra', title: 'The god-gifted city', blurb: 'Pataliputra — how travellers and the spade proved the Mauryan wonder.', status: 'live' },
-      { href: '/edicts', title: 'The Edicts of Ashoka', blurb: 'The empire in his own words — Kalinga’s remorse, conquest by Dhamma.', status: 'live' },
-      { href: '/ancient-india', title: 'Ancient India', blurb: 'A six-era timeline spine — language, script, rulers, heritage.', status: 'live' },
+      { href: '/pataliputra', title: 'The god-gifted city', icon: 'torana', blurb: 'Pataliputra — how travellers and the spade proved the Mauryan wonder.', status: 'live' },
+      { href: '/edicts', title: 'The Edicts of Ashoka', icon: 'edict', blurb: 'The empire in his own words — Kalinga’s remorse, conquest by Dhamma.', status: 'live' },
+      { href: '/languages', title: 'Languages of Bharat', icon: 'lotus', blurb: 'Every tongue in its own script — 19 languages, 24 scripts.', status: 'live' },
+      { href: '/ancient-india', title: 'Ancient India', icon: 'chakra', blurb: 'A six-era timeline spine — language, script, rulers, heritage.', status: 'live' },
     ],
   },
   {
     key: 'craft',
     label: 'The Craft',
     note: 'How it is made — the Indian design system itself.',
+    icon: 'lotus',
     items: [
-      { href: '/mauryan', title: 'Mauryan design language', blurb: 'The full system: palette, motifs, Blender ornaments, atomic kit.', status: 'live' },
-      { href: '/components', title: 'The component gallery', blurb: 'Every atom, molecule and organism, living and documented.', status: 'live' },
+      { href: '/mauryan', title: 'Mauryan design language', icon: 'lotus', blurb: 'The full system: palette, motifs, Blender ornaments, atomic kit.', status: 'live' },
+      { href: '/components', title: 'The component gallery', icon: 'jali', blurb: 'Every atom, molecule and organism, living and documented.', status: 'live' },
     ],
   },
 ]
-
-function motifFor(i: number) {
-  switch (i % 3) {
-    case 0:
-      return <Chakra size={30} color="var(--accent)" />
-    case 1:
-      return <Lotus size={30} color="var(--accent)" />
-    default:
-      return <TempleOrnament name="rosette" width={30} />
-  }
-}
 
 export default function AtlasMap() {
   return (
@@ -97,20 +91,23 @@ export default function AtlasMap() {
               className="stone-reveal rounded-xl border border-border bg-card/60 p-6 backdrop-blur-sm"
               style={{ transitionDelay: `${ci * 80}ms` }}
             >
-              <div className="mb-4 flex items-baseline justify-between gap-3 border-b border-border pb-3">
-                <h3 className="text-lg font-bold text-foreground">{ch.label}</h3>
-                <span className="text-xs text-muted-foreground">{ch.note}</span>
+              <div className="mb-4 flex items-center justify-between gap-3 border-b border-border pb-3">
+                <h3 className="flex items-center gap-2.5 text-lg font-bold text-foreground">
+                  <Icon name={ch.icon} size={22} className="text-[var(--accent)]" />
+                  {ch.label}
+                </h3>
+                <span className="text-right text-xs text-muted-foreground">{ch.note}</span>
               </div>
 
               <div className="grid gap-3">
-                {ch.items.map((d, i) => (
+                {ch.items.map((d) => (
                   <Link
                     key={d.title}
                     href={d.href}
                     className="lift group relative flex items-start gap-4 rounded-lg border border-transparent p-3 transition-all duration-300 hover:border-border hover:bg-background"
                   >
-                    <span className="mt-0.5 shrink-0 transition-transform duration-500 group-hover:rotate-[24deg]">
-                      {motifFor(i + ci)}
+                    <span className="mt-0.5 shrink-0 text-[var(--muted-foreground)] transition-all duration-500 group-hover:rotate-[18deg] group-hover:text-[var(--accent)]">
+                      <Icon name={d.icon} size={26} />
                     </span>
                     <span className="min-w-0 flex-1">
                       <span className="flex items-center gap-2">
