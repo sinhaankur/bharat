@@ -1,0 +1,75 @@
+{
+  "_meta": {
+    "purpose": "A seeded, sourced catalogue of tsunamis that struck or reached the Indian coast and the wider Indian Ocean / Arabian Sea. There is no reliable free REAL-TIME tsunami API to embed, so tsunamis are shown as a documented historical record; the live-hazard signal comes from the earthquake tracker's USGS `tsunami:1` flag and the official warning centre (INCOIS) linked in the page.",
+    "honesty": "Death tolls for tsunamis vary widely by source (confirmed vs incl. missing). We give a representative figure with a range note and cite it. India-specific tolls are separated from the total where known.",
+    "sources": [
+      { "label": "INCOIS — Indian Tsunami Early Warning System, tsunami history", "url": "https://tsunami.incois.gov.in/TEWS/stsunamihistory.jsp" },
+      { "label": "Rastogi & Jaiswal (2006), 'A catalog of tsunamis in the Indian Ocean', Sci. Tsunami Hazards 25(3):128-143", "url": "https://library.lanl.gov/cgi-bin/getfile?25-03-01.pdf" },
+      { "label": "Britannica — Indian Ocean tsunami of 2004", "url": "https://www.britannica.com/event/Indian-Ocean-tsunami-of-2004" }
+    ],
+    "fields": "year, name, source_quake_mw, epicentre [lat,lng], deaths_total, deaths_india, india_impact, run_up_m (max wave height), note, source",
+    "updated_at": "2026-07-30"
+  },
+  "tsunamis": [
+    {
+      "id": "ts-2004",
+      "year": 2004, "date": "2004-12-26",
+      "name": "2004 Indian Ocean (Sumatra–Andaman) tsunami",
+      "source_quake_mw": 9.2,
+      "epicentre": [3.316, 95.854],
+      "deaths_total": 228000, "deaths_india": 12405,
+      "run_up_m": 15,
+      "india_impact": "Tamil Nadu (8,009), Andaman & Nicobar (~1,310 confirmed, ~5,600 missing), Puducherry (599), Kerala (177), Andhra Pradesh (107). ~600,000 displaced in India.",
+      "note": "The deadliest tsunami in recorded history, from a Mw 9.1-9.3 megathrust rupture off Sumatra. ~230,000 dead across 15 countries. India's confirmed toll ~12,405; some sources give up to ~18,045 incl. missing. Triggered the creation of the Indian Ocean Tsunami Warning System (INCOIS, 2007).",
+      "source": { "label": "Britannica; Govt of India reports; Wikipedia — Effect on India", "url": "https://en.wikipedia.org/wiki/Effect_of_the_2004_Indian_Ocean_earthquake_on_India" }
+    },
+    {
+      "id": "ts-1945-makran",
+      "year": 1945, "date": "1945-11-28",
+      "name": "1945 Makran tsunami (Arabian Sea)",
+      "source_quake_mw": 8.1,
+      "epicentre": [24.5, 63.0],
+      "deaths_total": 4000, "deaths_india": null,
+      "run_up_m": 15,
+      "india_impact": "~2 m waves at Mumbai (Bombay); boats torn from moorings and casualties reported; noticed as far south as the Karwar coast, Karnataka; up to ~15 m in the Gulf of Cambay.",
+      "note": "The largest instrumentally-recorded tsunami of the NW Indian Ocean, from a Mw ~8.1 rupture on the Makran subduction zone. Killed up to ~4,000 (UNESCO cites ~300); Pasni and Ormara (now Pakistan) worst hit. A benchmark case for Arabian-Sea tsunami hazard to Gujarat/Maharashtra.",
+      "source": { "label": "UNESCO; Rastogi & Jaiswal 2006; NHESS (2021) Makran study", "url": "https://www.unesco.org/en/articles/search-eyewitness-accounts-and-historical-documents-1945-makran-tsunami" }
+    },
+    {
+      "id": "ts-1883-krakatoa",
+      "year": 1883, "date": "1883-08-27",
+      "name": "1883 Krakatoa tsunami",
+      "source_quake_mw": null,
+      "epicentre": [-6.102, 105.423],
+      "deaths_total": 36000, "deaths_india": null,
+      "run_up_m": 30,
+      "india_impact": "Volcanic (not tectonic); waves recorded on tide gauges as far as Aden and the Indian coast. Minimal Indian casualties but a documented Indian Ocean-wide signal.",
+      "note": "Caused by the cataclysmic eruption/collapse of Krakatoa in the Sunda Strait; ~36,000 killed, mostly in Java and Sumatra. Included as a major Indian-Ocean tsunami of non-earthquake origin.",
+      "source": { "label": "Rastogi & Jaiswal 2006; Wikipedia — 1883 eruption of Krakatoa", "url": "https://en.wikipedia.org/wiki/1883_eruption_of_Krakatoa" }
+    },
+    {
+      "id": "ts-1762-arakan",
+      "year": 1762, "date": "1762-04-02",
+      "name": "1762 Arakan (Bengal coast) tsunami",
+      "source_quake_mw": 8.5,
+      "epicentre": [22.0, 92.0],
+      "deaths_total": 500, "deaths_india": null,
+      "run_up_m": 2,
+      "india_impact": "The great Arakan earthquake off the Bengal/Myanmar coast raised the coastline and generated a tsunami felt along the eastern Bengal coast (present Bangladesh / West Bengal). Contemporary accounts describe the Hooghly disturbed at Kolkata.",
+      "note": "A large ~Mw 8.5 megathrust event on the Arakan segment; permanent coastal uplift recorded. Toll uncertain (chronicle-level).",
+      "source": { "label": "Rastogi & Jaiswal 2006, catalog of Indian Ocean tsunamis", "url": "https://tsunami.incois.gov.in/TEWS/stsunamihistory.jsp" }
+    },
+    {
+      "id": "ts-1881-carnicobar",
+      "year": 1881, "date": "1881-12-31",
+      "name": "1881 Car Nicobar tsunami",
+      "source_quake_mw": 7.9,
+      "epicentre": [8.52, 92.43],
+      "deaths_total": null, "deaths_india": null,
+      "run_up_m": 1.2,
+      "india_impact": "A Mw ~7.9 earthquake near Car Nicobar generated a tsunami recorded on tide gauges along the Indian east coast (Chennai/Madras) — an early instrumentally-observed Indian tsunami.",
+      "note": "Low casualties but historically important as one of the earliest tide-gauge-recorded tsunamis in the region.",
+      "source": { "label": "Rastogi & Jaiswal 2006", "url": "https://tsunami.incois.gov.in/TEWS/stsunamihistory.jsp" }
+    }
+  ]
+}

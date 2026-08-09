@@ -33,7 +33,7 @@ export const ATLAS_PAGES: AtlasPage[] = [
   { slug: 'engine-news', title: 'The News Engine', section: 'News', blurb: 'How the newsroom aggregates and labels sources.' },
   { slug: 'story', title: 'Source & bias comparison', section: 'News' },
   { slug: 'curate', title: 'Curate — moderation tool', section: 'News' },
-  { slug: 'geopolitical-chess', title: 'Geopolitical Chess', section: 'News', featured: true, blurb: 'The dollar is the board — long game and short game.' },
+  { slug: 'geopolitical-chess', title: 'Geopolitical Chess', section: 'News', native: '/geopolitics', featured: true, blurb: 'The dollar is the board — long game and short game.' },
 
   // ── Money ───────────────────────────────────────────────────────────────
   { slug: 'index', title: 'The India Fiscal Map', section: 'Money', native: '/map', featured: true, blurb: 'India by district — public money, flood & CRZ zoning, land.' },
@@ -60,7 +60,7 @@ export const ATLAS_PAGES: AtlasPage[] = [
   { slug: 'encroachment-atlas', title: 'Built where the water returns', section: 'Land', native: '/encroachment', featured: true, blurb: "India's encroachment cases on land the water reclaims." },
   { slug: 'heritage-atlas', title: 'Sacred ground of the world', section: 'Land', native: '/heritage', featured: true, blurb: 'A sourced atlas of sacred sites, builders & destruction.' },
   { slug: 'atrocities', title: 'Population Control, Marauder Style', section: 'Land', native: '/atrocities', blurb: 'An interactive atlas of historical atrocity.' },
-  { slug: 'quake-tsunami', title: 'Earthquake & tsunami tracker', section: 'Land', blurb: 'Live USGS feed + historical quakes & tsunamis.' },
+  { slug: 'quake-tsunami', title: 'Earthquake & tsunami', section: 'Land', native: '/quake-tsunami', blurb: 'The great tsunamis that struck the Indian coast.' },
 
   // ── History ─────────────────────────────────────────────────────────────
   { slug: 'ancient-india', title: 'Ancient India', section: 'History', native: '/ancient-india', featured: true, blurb: 'One timeline: language, script, people, rule, heritage.' },
