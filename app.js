@@ -2711,7 +2711,7 @@
         <h3>Deep vs baseline</h3>
         <p><b>${m.deep} deep districts</b> are fully researched with money flows, officials, and industrial base. The other <b>${m.baseline}</b> are honest <b>baseline skeletons</b> — real structure (admin model, the chain of command, the schemes that flow) with every unsourced figure listed as an explicit gap. <b>Nothing is fabricated.</b></p>
         <p class="method-rule">Rule: <b>PDF-cited or it's a gap.</b> A number with no public source stays blank and is recorded as missing, rather than guessed.</p>
-        <p class="method-foot">Coverage: ${m.total} districts across ${m.states} states/UTs · ${m.withMoney} with real money figures · 2,184 sub-districts/blocks. Open data on <a href="https://github.com/sinhaankur/india-fiscal-map" target="_blank" rel="noopener">GitHub</a>.</p>
+        <p class="method-foot">Coverage: ${m.total} districts across ${m.states} states/UTs · ${m.withMoney} with real money figures · 2,184 sub-districts/blocks. Open data on <a href="https://github.com/sinhaankur/bharat" target="_blank" rel="noopener">GitHub</a>.</p>
       </div>`;
     overlay.addEventListener('click', e => { if (e.target === overlay || e.target.classList.contains('method-close')) overlay.remove(); });
     document.body.appendChild(overlay);

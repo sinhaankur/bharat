@@ -33,7 +33,7 @@
     const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     const q = new URLSearchParams(location.search);
     const S = q.get("state"), D = q.get("district");
-    const base = "https://sinhaankur.github.io/india-fiscal-map";
+    const base = "https://sinhaankur.github.io/bharat";
     fetch("district-ledger.json").then(r => r.json()).then(led => {
       const dist = led.states?.[S]?.districts?.[D];
       const card = document.getElementById("card");
@@ -60,7 +60,7 @@
         </div>
         <div class="foot">
           ${srcUrl?`<a class="src" href="${esc(srcUrl)}" target="_blank" rel="noopener">↗ source</a>`:""}
-          <a href="${base}/index.html?state=${encodeURIComponent(S)}&district=${encodeURIComponent(D)}" target="_blank" rel="noopener">india-fiscal-map ↗</a>
+          <a href="${base}/index.html?state=${encodeURIComponent(S)}&district=${encodeURIComponent(D)}" target="_blank" rel="noopener">bharat ↗</a>
         </div>`;
     }).catch(()=>{ document.getElementById("card").innerHTML = `<div class="biglabel">load error</div>`; });
   </script>

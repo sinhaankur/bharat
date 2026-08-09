@@ -80,7 +80,7 @@
       { href: "privacy-policy.html", text: "Privacy & policy", icon: "🔒", keywords: "privacy policy legal cookies terms" },
       { href: "sitemap.html", text: "Site map", icon: "🗺", keywords: "sitemap all pages index list everything navigation" },
       { href: "usa.html", text: "Compare: US", icon: "🇺🇸", keywords: "usa america united states compare" },
-      { href: "https://github.com/sinhaankur/india-fiscal-map", text: "GitHub ↗", ext: true, keywords: "github code open source repo" },
+      { href: "https://github.com/sinhaankur/bharat", text: "GitHub ↗", ext: true, keywords: "github code open source repo" },
     ]},
   ];
 

@@ -102,7 +102,7 @@
       <h2>Read it as an API</h2>
       <p class="sub">No server, no key — fetch the static JSON and index into it. CORS-open via GitHub Pages.</p>
       <pre class="code"><span class="c">// base</span>
-<span class="k">const</span> BASE = <span class="s">"https://sinhaankur.github.io/india-fiscal-map"</span>;
+<span class="k">const</span> BASE = <span class="s">"https://sinhaankur.github.io/bharat"</span>;
 
 <span class="c">// whole ledger, then one district</span>
 <span class="k">const</span> led = <span class="k">await</span> fetch(`${BASE}/district-ledger.json`).then(r =&gt; r.json());
@@ -114,7 +114,7 @@
     </div>
 
     <div class="lic">
-      <p><strong>Licence &amp; attribution.</strong> Underlying figures are public government records; this project's compilation/structure/code is open on <a href="https://github.com/sinhaankur/india-fiscal-map" target="_blank" rel="noopener" style="color:var(--accent)">GitHub</a>.</p>
+      <p><strong>Licence &amp; attribution.</strong> Underlying figures are public government records; this project's compilation/structure/code is open on <a href="https://github.com/sinhaankur/bharat" target="_blank" rel="noopener" style="color:var(--accent)">GitHub</a>.</p>
       <p>When you reuse data, <strong>cite the primary government source</strong> linked in each record (CAG / Finance Commission / budget PDF / scheme portal) — this site is a convenience layer, not the authority. See <a href="about.html" style="color:var(--accent)">methodology &amp; disclaimer</a>.</p>
     </div>
   </main>
@@ -154,7 +154,7 @@
         const deep = !dist.baseline;
         open.style.display = ""; open.href = `index.html?state=${encodeURIComponent(s)}&district=${encodeURIComponent(d)}`;
         note.innerHTML = `<b>${esc(d)}</b>, ${esc(s)} — ${deep ? "deep (PDF-sourced figures)" : "baseline (structure mapped, figures are gaps)"} · ${(dist.ledger||[]).length} ledger rows · ${(dist._gaps||[]).length} gaps.`;
-        const base = "https://sinhaankur.github.io/india-fiscal-map";
+        const base = "https://sinhaankur.github.io/bharat";
         const params = `?state=${encodeURIComponent(s)}&district=${encodeURIComponent(d)}`;
         document.getElementById("emb-code").textContent =
           `<iframe src="${base}/widget.html${params}" width="340" height="168" style="border:0;border-radius:10px" title="${d} fiscal card" loading="lazy"></iframe>`;
@@ -165,7 +165,7 @@
     function downloadSlice() {
       const s = document.getElementById("d-state").value, d = document.getElementById("d-district").value;
       const dist = LED.states[s].districts[d];
-      const out = { _meta: { source: "india-fiscal-map", state: s, district: d, exported_at: new Date().toISOString(), note: "Cite the primary government source linked in each record, not this file alone." }, district: dist };
+      const out = { _meta: { source: "bharat", state: s, district: d, exported_at: new Date().toISOString(), note: "Cite the primary government source linked in each record, not this file alone." }, district: dist };
       const blob = new Blob([JSON.stringify(out, null, 2)], { type: "application/json" });
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob); a.download = `${d.replace(/\s+/g,"_")}_ledger.json`; a.click();

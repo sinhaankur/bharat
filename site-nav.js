@@ -23,8 +23,8 @@
   const SITE = {
     name: "Bharat",
     tagline: "understand India, by the evidence",
-    base: "https://sinhaankur.github.io/india-fiscal-map",   // update to custom domain when bought
-    image: "https://sinhaankur.github.io/india-fiscal-map/og-image.png",
+    base: "https://sinhaankur.github.io/bharat",   // update to custom domain when bought
+    image: "https://sinhaankur.github.io/bharat/og-image.png",
     twitter: "",   // add @handle once social accounts exist
   };
   function injectSEO() {
@@ -180,7 +180,7 @@
         <div class="sfoot-top">
           <a class="sfoot-mark" href="home.html"><img src="favicon.svg" alt="" width="30" height="30" /><span class="brand-word">Bharat</span></a>
           <div class="sfoot-social" aria-label="Social links">
-            <a href="https://github.com/sinhaankur/india-fiscal-map" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub">⌥</a>
+            <a href="https://github.com/sinhaankur/bharat" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub">⌥</a>
             <a href="feed.html" title="News feed" aria-label="News feed">✍</a>
             <a href="data.html" title="Data & API" aria-label="Data">⛁</a>
             <a href="share.html" title="Share" aria-label="Share">↗</a>
