@@ -66,7 +66,7 @@ export const ATLAS_PAGES: AtlasPage[] = [
   { slug: 'ancient-india', title: 'Ancient India', section: 'History', native: '/ancient-india', featured: true, blurb: 'One timeline: language, script, people, rule, heritage.' },
   { slug: 'pataliputra', title: 'Pataliputra — the god-gifted city', section: 'History', native: '/pataliputra', featured: true, blurb: 'How Megasthenes & Faxian described the Mauryan capital — and how archaeology proved it real.' },
   { slug: 'edicts', title: 'The Edicts of Ashoka', section: 'History', native: '/edicts', featured: true, blurb: 'The empire in his own words — Kalinga’s remorse, conquest by Dhamma, the protection of all life.' },
-  { slug: 'ashoka', title: "Ashoka's rule of the land", section: 'History', blurb: 'The empire read from his own edicts.' },
+  { slug: 'ashoka', title: "Ashoka's rule of the land", section: 'History', native: '/ashoka', blurb: 'Where the edicts stand — 25 sites, four scripts.' },
   { slug: 'deep-history', title: 'Deep history in DNA', section: 'History', native: '/deep-history', blurb: 'The population shifts that made South Asia.' },
   { slug: 'heritage-3d', title: 'Temples in 3D', section: 'History', blurb: 'See how they looked.' },
   { slug: 'cave-walk', title: 'Walk inside the temples', section: 'History', featured: true, blurb: 'A first-person walk through temples as they were.' },
@@ -76,7 +76,7 @@ export const ATLAS_PAGES: AtlasPage[] = [
   // ── Languages ───────────────────────────────────────────────────────────
   { slug: 'languages', title: 'Languages of Bharat', section: 'Languages', native: '/languages', featured: true, blurb: 'Families, scripts, fonts & source texts.' },
   { slug: 'scripts', title: 'Scripts & language families', section: 'Languages', native: '/scripts', blurb: "Brahmi's tree and the roots of the branches." },
-  { slug: 'journey', title: 'The journey of a word', section: 'Languages', blurb: 'One meaning, across time and tongues.' },
+  { slug: 'journey', title: 'The journey of a word', section: 'Languages', native: '/journey', blurb: 'One meaning, across time and tongues.' },
   { slug: 'vedas', title: 'The Hymn of Creation', section: 'Languages', native: '/vedas', blurb: 'Nāsadīya Sūkta across languages.' },
   { slug: 'mauryan', title: 'Mauryan design language', section: 'Languages', native: '/mauryan', featured: true, blurb: 'The full Indian design system — carved in Blender.' },
 
