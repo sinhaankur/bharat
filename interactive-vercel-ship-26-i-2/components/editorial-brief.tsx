@@ -1,7 +1,21 @@
 // EditorialBrief — the per-page editorial contract (React port of page-brief.js).
 // Explainer · Research · References · Documentation, on the sourced-or-gap credo.
 
+import { atlasRoot } from '@/lib/atlas-pages'
+
 type Ref = { label: string; href: string }
+
+// Brief refs are hand-authored and mostly point at the classic atlas .html pages,
+// which live at the deploy ROOT (/bharat) while this app sits at /bharat/app. A
+// bare "/references.html" would 404 in production, so prefix root-relative .html
+// links with the atlas root. External and already-prefixed links pass through.
+function resolveRef(href: string): string {
+  if (/^https?:/.test(href)) return href
+  if (href.startsWith('/') && href.includes('.html') && !href.startsWith(atlasRoot() + '/')) {
+    return `${atlasRoot()}${href}`
+  }
+  return href
+}
 
 export type Brief = {
   section?: string
@@ -30,7 +44,7 @@ function Refs({ refs }: { refs?: Ref[] }) {
           <span key={r.href}>
             {i > 0 && <span className="mx-2 text-border">·</span>}
             <a
-              href={r.href}
+              href={resolveRef(r.href)}
               {...(ext ? { target: '_blank', rel: 'noopener' } : {})}
               className="text-accent underline-offset-2 hover:underline"
             >

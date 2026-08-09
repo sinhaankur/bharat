@@ -1,4 +1,5 @@
 import { featuredVideo, videos } from '@/lib/articles'
+import { atlasRoot } from '@/lib/atlas-pages'
 import Reveal from '@/components/reveal'
 import CardArt from '@/components/card-art'
 
@@ -18,7 +19,7 @@ export default function VideoExplainers() {
             </span>
           </div>
           <a
-            href="/india-3d.html"
+            href={`${atlasRoot()}/india-3d.html`}
             className="shrink-0 text-xs font-bold uppercase tracking-widest text-background/70 transition-colors hover:text-accent"
           >
             All 3D views

@@ -5,6 +5,7 @@ import { biasSpread, LEAN_LABEL, LEAN_POS, BIAS_METHOD } from '@/lib/bias-engine
 import { SENTIMENT_METHOD } from '@/lib/sentiment-engine'
 import NewsCard from './news-card'
 import BiasBar from './bias-bar'
+import { atlasRoot } from '@/lib/atlas-pages'
 
 export const metadata: Metadata = {
   title: 'The News Engine — India headlines with bias & sentiment | Bharat',
@@ -119,7 +120,7 @@ export default async function NewsPage() {
           </p>
           <p className="mt-2">
             <b className="text-foreground">The move framing</b> ties to{' '}
-            <a href="/geopolitical-chess.html" className="text-accent hover:underline">
+            <a href={`${atlasRoot()}/geopolitical-chess.html`} className="text-accent hover:underline">
               Geopolitical Chess
             </a>{' '}
             — news as moves in a long-haul game, small headlines with compounding impact. A framing, labeled as one.

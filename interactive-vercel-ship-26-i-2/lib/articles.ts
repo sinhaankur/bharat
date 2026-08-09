@@ -3,7 +3,12 @@
 // The atlas itself is the static site; from the app we link out to those pages
 // (…or migrate them into /app routes over time).
 
-const ATLAS = '' // same-origin; set to the atlas base URL if hosted separately
+// The classic atlas .html pages live at the ROOT of the deploy (/bharat/…) while
+// this app is one level deeper (/bharat/app/…). Derive the atlas root from the
+// app's basePath by stripping a trailing "/app". In dev (basePath = '') this is
+// '' and the pages are served same-origin. These hrefs are absolute + complete,
+// so components must render them as plain <a> (see SmartLink), never next/link.
+const ATLAS = (process.env.NEXT_PUBLIC_BASE_PATH || '').replace(/\/app\/?$/, '')
 
 export type Article = {
   id: string

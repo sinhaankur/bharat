@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import { atlasRoot } from '@/lib/atlas-pages'
 import geo from './india-states.json'
 
 // A dependency-free SVG choropleth of India's states. Projects lng/lat to SVG
@@ -149,7 +150,7 @@ export default function IndiaMap() {
               })}
             </div>
             <a
-              href="/state-of-india.html"
+              href={`${atlasRoot()}/state-of-india.html`}
               className="mt-5 inline-block font-mono text-[11px] text-accent hover:underline"
             >
               full data on the atlas →
