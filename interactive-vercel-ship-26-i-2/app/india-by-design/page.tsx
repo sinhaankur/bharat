@@ -3,6 +3,7 @@ import SiteHeader from '@/components/site-header'
 import SiteFooter from '@/components/site-footer'
 import RevealObserver from '@/components/indic/reveal-observer'
 import SegmentLattice from './segment-lattice'
+import ScriptsSection from './scripts-section'
 import data from './segments.json'
 
 export const metadata: Metadata = {
@@ -59,6 +60,11 @@ export default function IndiaByDesignPage() {
         {/* the segment lattice */}
         <div id="lattice" className="pt-14">
           <SegmentLattice />
+        </div>
+
+        {/* the scripts — the material shaped the letter */}
+        <div className="border-t-2 border-[#3a2c1e]">
+          <ScriptsSection />
         </div>
       </div>
 
