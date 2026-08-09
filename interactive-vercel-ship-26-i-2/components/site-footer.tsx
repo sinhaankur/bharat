@@ -72,29 +72,10 @@ export default function SiteFooter() {
         <rect width="100%" height="100%" fill="url(#footer-jali)" />
       </svg>
 
-      {/* newsletter band */}
-      <div className="relative flex flex-col items-start gap-5 border-b border-[rgba(201,162,39,.3)] px-6 py-6 md:flex-row md:items-center md:gap-6">
-        <div className="flex-1">
-          <div className="bharati text-lg font-bold">Follow the money to your district.</div>
-          <div className="mt-1 text-xs text-[rgba(239,227,204,.6)]">
-            One email a month — what changed in the data, what got sourced, what’s still a gap. No tracking.
-          </div>
-        </div>
-        <form className="flex" onSubmit={(e) => e.preventDefault()}>
-          <input
-            type="email"
-            placeholder="your@email.in"
-            aria-label="Email"
-            className="min-w-[220px] rounded-l-[2px] border border-r-0 border-[rgba(201,162,39,.45)] bg-black/25 px-3.5 py-2.5 text-[12.5px] text-[var(--ajanta-ivory,#efe3cc)] placeholder-[rgba(239,227,204,.5)] outline-none"
-          />
-          <button className="rounded-r-[2px] bg-[var(--accent)] px-4 py-2.5 text-[12.5px] font-semibold text-white transition-colors hover:bg-[#a06b00]">
-            Subscribe
-          </button>
-        </form>
-      </div>
+      {/* newsletter/subscribe hidden for now (per request) */}
 
       {/* columns */}
-      <div className="relative grid grid-cols-2 gap-6 px-6 pb-6 pt-8 md:grid-cols-[1.4fr_1fr_1fr_1fr_1fr]">
+      <div className="relative mx-auto grid max-w-7xl grid-cols-2 gap-6 px-4 pb-6 pt-8 md:grid-cols-[1.4fr_1fr_1fr_1fr_1fr] md:px-6">
         {/* brand */}
         <div className="col-span-2 md:col-span-1">
           <div className="flex items-center gap-2.5">
@@ -143,7 +124,7 @@ export default function SiteFooter() {
       </svg>
 
       {/* baseline */}
-      <div className="relative flex flex-wrap items-center gap-x-3.5 gap-y-2 border-t border-[rgba(201,162,39,.3)] px-6 py-3 text-[11px] text-[rgba(239,227,204,.55)]">
+      <div className="relative mx-auto flex max-w-7xl flex-wrap items-center gap-x-3.5 gap-y-2 border-t border-[rgba(201,162,39,.3)] px-4 py-3 text-[11px] text-[rgba(239,227,204,.55)] md:px-6">
         <span>© {new Date().getFullYear()} Bharat · independent civic-data project · MIT</span>
         <span>·</span>
         <span>Not affiliated with any government body</span>
