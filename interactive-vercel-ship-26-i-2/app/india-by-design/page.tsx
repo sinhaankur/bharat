@@ -4,6 +4,7 @@ import SiteFooter from '@/components/site-footer'
 import RevealObserver from '@/components/indic/reveal-observer'
 import SegmentLattice from './segment-lattice'
 import ScriptsSection from './scripts-section'
+import MoreSections from './more-sections'
 import data from './segments.json'
 
 export const metadata: Metadata = {
@@ -66,6 +67,9 @@ export default function IndiaByDesignPage() {
         <div className="border-t-2 border-[#3a2c1e]">
           <ScriptsSection />
         </div>
+
+        {/* Flags · Timeline · Chassis · Poster */}
+        <MoreSections />
       </div>
 
       <SiteFooter />
