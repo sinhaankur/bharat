@@ -1,6 +1,7 @@
 import SiteHeader from '@/components/site-header'
 import TrendingTicker from '@/components/trending-ticker'
 import BharatHero from '@/components/bharat-hero'
+import StatBand from '@/components/stat-band'
 import IndiaFocal from '@/components/india-focal'
 import AtlasMap from '@/components/atlas-map'
 import RevealObserver from '@/components/indic/reveal-observer'
@@ -18,6 +19,8 @@ export default function Page() {
       <main>
         {/* the front door — glowing, mandala, living logo, parallax */}
         <BharatHero />
+        {/* the number band + dark chain-of-command thesis (from the mockups) */}
+        <StatBand />
         {/* the India map — the key focal point, drawn from data */}
         <IndiaFocal />
         {/* everything we've built, mapped into one navigable house */}
