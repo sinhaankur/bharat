@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import SiteHeader from '@/components/site-header'
 import SiteFooter from '@/components/site-footer'
 import RevealObserver from '@/components/indic/reveal-observer'
@@ -41,9 +42,9 @@ export default function IndiaByDesignPage() {
             <a href="#lattice" className="inline-block bg-[#c1440e] px-5 py-3 text-[15px] font-semibold text-[#f6f0e1] transition-colors hover:bg-[#a23409]">
               Open the canvas
             </a>
-            <a href="/mauryan" className="inline-block border-2 border-[#2a2018] px-5 py-2.5 text-[15px] font-semibold text-[#2a2018] transition-colors hover:bg-[#2a2018] hover:text-[#f6f0e1]">
+            <Link href="/mauryan" className="inline-block border-2 border-[#2a2018] px-5 py-2.5 text-[15px] font-semibold text-[#2a2018] transition-colors hover:bg-[#2a2018] hover:text-[#f6f0e1]">
               The design system
-            </a>
+            </Link>
           </div>
           {/* stats */}
           <div className="mt-12 flex flex-wrap gap-[clamp(24px,4vw,64px)]">

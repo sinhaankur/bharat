@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import Chakra from '@/components/indic/chakra'
 import LionMark from '@/components/indic/lion-mark'
 import JaliBackground from '@/components/indic/jali'
@@ -248,11 +249,11 @@ export default function MauryanPage() {
         <Section n="IX" title="Atomic Design × India · Organisms">
           <StatBand stats={[{ value: '594', label: 'Districts' }, { value: '16', label: 'News outlets' }, { value: '5', label: 'Engines' }, { value: '0', label: 'Fabricated' }]} />
           <div className="mt-4 grid gap-4 md:grid-cols-2">
-            <StoryCard kicker="History" title="Ashoka’s rule of the land" dek="An empire read from its own edicts." meta="interactive map" tags={[{ label: 'Mauryan' }]} featured href="/ashoka.html" />
-            <StoryCard kicker="Languages" title="Every language & script of Bharat" dek="Two family trees, one Brahmi root." meta="hub" tags={[{ label: 'Brahmi' }]} href="/languages.html" />
+            <StoryCard kicker="History" title="Ashoka’s rule of the land" dek="An empire read from its own edicts." meta="interactive map" tags={[{ label: 'Mauryan' }]} featured href="/ashoka" />
+            <StoryCard kicker="Languages" title="Every language & script of Bharat" dek="Two family trees, one Brahmi root." meta="hub" tags={[{ label: 'Brahmi' }]} href="/languages" />
           </div>
           <p className="mt-4 text-center font-mono text-[11px] uppercase tracking-widest text-[var(--muted-foreground)]">
-            → the full library at <a href="/components/" className="text-[var(--accent)] hover:underline">/components</a>
+            → the full library at <Link href="/components/" className="text-[var(--accent)] hover:underline">/components</Link>
           </p>
         </Section>
 

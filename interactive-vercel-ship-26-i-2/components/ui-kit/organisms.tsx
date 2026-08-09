@@ -8,6 +8,7 @@ import * as React from 'react'
 import { Button, Badge, Divider } from './atoms'
 import { CardHeader, TagRow, StatBlock, SearchField } from './molecules'
 import Chakra from '@/components/indic/chakra'
+import SmartLink from '@/components/smart-link'
 
 const cx = (...c: (string | false | undefined)[]) => c.filter(Boolean).join(' ')
 
@@ -30,7 +31,7 @@ export function StoryCard({
   featured?: boolean
 }) {
   return (
-    <a
+    <SmartLink
       href={href}
       className={cx(
         'carved group block rounded-sm bg-[var(--card)] p-5 transition-transform duration-200 hover:-translate-y-1',
@@ -43,7 +44,7 @@ export function StoryCard({
       <span className="mt-3 inline-flex items-center gap-1 font-mono text-[11px] uppercase tracking-wide text-[var(--accent)]">
         Open <span aria-hidden>→</span>
       </span>
-    </a>
+    </SmartLink>
   )
 }
 

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import PageShell from '@/components/page-shell'
+import { atlasRoot } from '@/lib/atlas-pages'
 import IndiaMap from './india-map'
 
 export const metadata: Metadata = {
@@ -33,7 +34,7 @@ export default function MapPage() {
         </h1>
         <p className="mb-8 mt-3 max-w-2xl leading-relaxed text-muted-foreground">
           Pick a dimension to recolour the map, then hover or tap a state. This is the app-native map;
-          the full <a href="/index.html" className="text-accent hover:underline">district-level atlas</a> maps
+          the full <a href={`${atlasRoot()}/index.html`} className="text-accent hover:underline">district-level atlas</a> maps
           all 594.
         </p>
         <IndiaMap />

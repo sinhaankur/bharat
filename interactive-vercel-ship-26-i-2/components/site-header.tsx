@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { Menu, Search, X } from 'lucide-react'
 import { categories } from '@/lib/articles'
 import { BharatLogo } from '@/components/indic/bharat-logo'
@@ -51,18 +52,18 @@ export default function SiteHeader() {
             {open ? <X size={22} /> : <Menu size={22} />}
           </button>
 
-          <a href="/" className="flex items-center" aria-label="Bharat home">
+          <Link href="/" className="flex items-center" aria-label="Bharat home">
             <BharatLogo size={36} />
-          </a>
+          </Link>
         </div>
 
         <div className="flex items-center gap-3">
-          <a
+          <Link
             href="/atlas"
             className="hidden text-xs font-bold uppercase tracking-widest text-muted-foreground transition-colors hover:text-foreground sm:inline"
           >
             All pages
-          </a>
+          </Link>
           <ThemeToggle className="hidden sm:flex" />
           <button
             className="hidden h-9 w-9 items-center justify-center rounded-full hover:bg-muted sm:flex"
@@ -70,12 +71,12 @@ export default function SiteHeader() {
           >
             <Search size={18} />
           </button>
-          <a
+          <Link
             href="/map"
             className="rounded-full bg-[var(--accent)] px-4 py-2 text-xs font-bold uppercase tracking-widest text-[var(--accent-foreground)] transition-opacity hover:opacity-90"
           >
             Open the map
-          </a>
+          </Link>
         </div>
       </div>
 
@@ -85,7 +86,7 @@ export default function SiteHeader() {
           <ul className="flex items-center gap-6 overflow-x-auto py-2.5">
             {categories.map((c) => (
               <li key={c}>
-                <a
+                <Link
                   href={sectionHref(c)}
                   className="group flex items-center gap-1.5 whitespace-nowrap text-xs font-bold uppercase tracking-widest text-muted-foreground transition-colors hover:text-foreground"
                 >
@@ -97,7 +98,7 @@ export default function SiteHeader() {
                     />
                   )}
                   {c}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
@@ -110,12 +111,13 @@ export default function SiteHeader() {
           <ul className="mx-auto grid max-w-7xl grid-cols-2 gap-x-4 px-4 py-4">
             {categories.map((c) => (
               <li key={c}>
-                <a
+                <Link
                   href={sectionHref(c)}
+                  onClick={() => setOpen(false)}
                   className="block py-2 text-sm font-bold uppercase tracking-wide text-foreground"
                 >
                   {c}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>

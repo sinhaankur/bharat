@@ -126,6 +126,15 @@ export function hrefFor(p: AtlasPage): string {
   return p.native ?? `/p/${p.slug}`
 }
 
+// The classic atlas lives at the ROOT of the deploy (/bharat) while this app is
+// one level deeper (/bharat/app). Strip a trailing "/app" from the basePath to
+// get the atlas root. Use for hand-written links to legacy .html pages, so they
+// resolve to /bharat/<page>.html and not /bharat/app/<page>.html. Returns '' in
+// dev. These are complete absolute hrefs — render them as plain <a>, not Link.
+export function atlasRoot(): string {
+  return (process.env.NEXT_PUBLIC_BASE_PATH || '').replace(/\/app\/?$/, '')
+}
+
 // the legacy html file url for the frame.
 // The 58 original .html pages are NOT copied under the app; they live at the
 // ATLAS ROOT (e.g. /india-fiscal-map/heritage-atlas.html). The app is deployed
