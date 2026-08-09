@@ -1,10 +1,10 @@
 /** @type {import('next').NextConfig} */
-// GitHub Pages: static export under the /india-fiscal-map subpath.
+// GitHub Pages: static export under the /bharat subpath.
 // Set BASE_PATH='' for a local/root build. Server routes (/api/*) are skipped in
 // export — the news page fetches client-side and falls back to sample data.
 const isProd = process.env.NODE_ENV === 'production'
-// The new app lives at /india-fiscal-map/app/ (the 55-page atlas stays at the root).
-const basePath = process.env.BASE_PATH ?? (isProd ? '/india-fiscal-map/app' : '')
+// The new app lives at /bharat/app/ (the 55-page atlas stays at the root /bharat/).
+const basePath = process.env.BASE_PATH ?? (isProd ? '/bharat/app' : '')
 
 const nextConfig = {
   output: 'export',

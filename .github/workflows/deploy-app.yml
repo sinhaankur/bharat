@@ -1,8 +1,8 @@
 name: Deploy to GitHub Pages (atlas + Mauryan app)
 
 # Publishes BOTH in one Pages deployment:
-#   /india-fiscal-map/      → the existing 55-page static atlas (repo root)
-#   /india-fiscal-map/app/  → the new Mauryan-designed Next app (static export)
+#   /bharat/      → the existing 55-page static atlas (repo root)
+#   /bharat/app/  → the new Mauryan-designed Next app (static export)
 # Nothing on the atlas breaks; the new app lives under /app/.
 # (Pages serves only static files — the app's /api/news becomes a build snapshot;
 #  the /news page also falls back to sample data client-side.)
@@ -46,7 +46,7 @@ jobs:
         working-directory: interactive-vercel-ship-26-i-2
         env:
           NODE_ENV: production
-          BASE_PATH: /india-fiscal-map/app
+          BASE_PATH: /bharat/app
         run: |
           # --ignore-scripts skips native postinstalls (esp. sharp), which pnpm
           # 10+ otherwise blocks and fatally errors on (ERR_PNPM_IGNORED_BUILDS).
