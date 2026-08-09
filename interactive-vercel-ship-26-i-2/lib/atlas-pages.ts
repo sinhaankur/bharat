@@ -102,6 +102,7 @@ export const ATLAS_PAGES: AtlasPage[] = [
   { slug: 'about', title: 'About & methodology', section: 'About', blurb: 'How this is built, and its limits.' },
   { slug: 'for-organisations', title: 'For organisations', section: 'About', blurb: 'Data licensing, widgets & commissions.' },
   { slug: 'how-we-report', title: 'How we report', section: 'About', file: 'about', blurb: 'Editorial standards & the Lawyer Engine.' },
+  { slug: 'design', title: 'The Mauryan design system', section: 'About', native: '/design', featured: true, blurb: 'Palette, carved-stone radius, icon sprite, ornament library — downloadable.' },
   { slug: 'design-system', title: 'Design system (legacy)', section: 'About' },
   { slug: 'privacy-policy', title: 'Privacy & policy', section: 'About' },
   { slug: 'components', title: 'Component gallery', section: 'About', native: '/components', blurb: 'Every atom, molecule & organism, living.' },
