@@ -29,7 +29,7 @@ export default function ScriptsView() {
   const [tab, setTab] = useState<'specimen' | 'tree'>('specimen')
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-14">
+    <div className="mx-auto max-w-7xl px-4 md:px-6 py-14">
       {/* tabs */}
       <div className="mb-10 flex justify-center gap-2 stone-reveal">
         {(['specimen', 'tree'] as const).map((t) => (

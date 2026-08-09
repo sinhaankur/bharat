@@ -26,7 +26,7 @@ export default function TempleFormsPage() {
       title="The temple, drawn to scale"
       intro="The Indian temple is a diagram in stone. Here two of its great forms — the Nagara shikhara of the north and the Dravida gopuram of the south — drawn the way a surveyor would, course by course, dimension by dimension."
     >
-      <div className="mx-auto max-w-4xl px-4 py-14">
+      <div className="mx-auto max-w-7xl px-4 md:px-6 py-14">
         {/* Plates of record — real measured survey drawings take precedence */}
         <div className="mb-4 flex items-center gap-3 stone-reveal">
           <span className="rounded-[var(--radius)] bg-[var(--ajanta-red,#9e3b2e)]/12 px-2 py-0.5 text-[11px] font-bold uppercase tracking-widest text-[var(--ajanta-red,#9e3b2e)]">Plates of record · real surveys</span>

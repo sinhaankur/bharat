@@ -80,7 +80,7 @@ export default function MauryanPage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-5xl px-4 py-14">
+      <main className="mx-auto max-w-7xl px-4 md:px-6 py-14">
         {/* Blender-rendered ornaments — carved stone, not vectors */}
         <Section n="0" title="Carved in Blender — the ornament library">
           <p className="mb-6 max-w-2xl text-sm leading-relaxed text-muted-foreground">

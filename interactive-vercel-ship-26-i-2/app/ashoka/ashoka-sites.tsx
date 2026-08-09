@@ -38,7 +38,7 @@ export default function AshokaSites() {
   const sites = useMemo(() => (type === 'all' ? SITES : SITES.filter((s) => s.type === type)), [type])
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-14">
+    <div className="mx-auto max-w-7xl px-4 md:px-6 py-14">
       {/* the reach line */}
       <div className="mb-8 rounded-xl border-l-4 border-[var(--accent)] bg-card/60 p-4 text-sm text-muted-foreground stone-reveal">
         From <strong className="text-foreground">Kandahar</strong> in Afghanistan to{' '}

@@ -22,7 +22,7 @@ export default function AtlasDirectory() {
       {/* masthead */}
       <header className="relative overflow-hidden border-b border-border">
         <FloralGlow petals={false} intensity={0.8} />
-        <div className="relative mx-auto max-w-6xl px-4 py-16 text-center">
+        <div className="relative mx-auto max-w-7xl px-4 md:px-6 py-16 text-center">
           <div className="mb-3 flex items-center justify-center gap-2 font-mono text-[11px] uppercase tracking-[0.24em] text-[var(--muted-foreground)]">
             <Chakra size={13} color="var(--accent)" /> {total} pages · 8 sections
           </div>
@@ -34,7 +34,7 @@ export default function AtlasDirectory() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-6xl px-4 py-14">
+      <main className="mx-auto max-w-7xl px-4 md:px-6 py-14">
         {SECTIONS.map((section) => {
           const pages = pagesBySection(section)
           if (!pages.length) return null

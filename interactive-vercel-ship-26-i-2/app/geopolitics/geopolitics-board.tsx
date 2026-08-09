@@ -43,7 +43,7 @@ export default function GeopoliticsBoard() {
   )
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-14">
+    <div className="mx-auto max-w-7xl px-4 md:px-6 py-14">
       {/* framing banner */}
       <div className="mb-8 rounded-xl border-l-4 border-[var(--accent)] bg-card/60 p-4 text-sm text-muted-foreground stone-reveal">
         <strong className="text-foreground">Framing.</strong> This is a deliberate lens — “the dollar

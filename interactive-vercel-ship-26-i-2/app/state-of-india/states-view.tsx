@@ -30,7 +30,7 @@ export default function StatesView() {
   )
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-14">
+    <div className="mx-auto max-w-7xl px-4 md:px-6 py-14">
       <div className="mb-10 flex flex-wrap justify-center gap-2 stone-reveal">
         {REGIONS.map((r) => (
           <button
