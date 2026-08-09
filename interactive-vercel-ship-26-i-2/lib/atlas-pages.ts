@@ -49,6 +49,7 @@ export const ATLAS_PAGES: AtlasPage[] = [
   { slug: 'mesh', title: 'The mesh', section: 'Money', blurb: 'How officials, districts, money & cases connect.' },
   { slug: 'how-it-works', title: 'How it works', section: 'Money' },
   { slug: 'state-of-india', title: 'State of India', section: 'Money', native: '/state-of-india', blurb: 'Who carries the country.' },
+  { slug: 'district-industry', title: 'How a district industrialised', section: 'Money', native: '/district-industry', featured: true, blurb: 'Munger — three regimes in one district, by ownership lineage.' },
   { slug: 'provenance', title: 'Provenance ledger', section: 'Money', native: '/provenance', blurb: 'Every figure → its citation.' },
   { slug: 'timeline', title: 'Fund-story timeline', section: 'Money' },
   { slug: 'history', title: 'Land-revenue history', section: 'Money' },
