@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import PageShell from '@/components/page-shell'
 import SurveyPlate from '@/components/indic/survey-plate'
 import GopuramPlate from '@/components/indic/gopuram-plate'
+import ArchivalPlates from '@/components/indic/archival-plates'
 import TempleOrnament from '@/components/indic/ornament'
 
 export const metadata: Metadata = {
@@ -26,6 +27,15 @@ export default function TempleFormsPage() {
       intro="The Indian temple is a diagram in stone. Here two of its great forms — the Nagara shikhara of the north and the Dravida gopuram of the south — drawn the way a surveyor would, course by course, dimension by dimension."
     >
       <div className="mx-auto max-w-4xl px-4 py-14">
+        {/* Plates of record — real measured survey drawings take precedence */}
+        <div className="mb-4 flex items-center gap-3 stone-reveal">
+          <span className="rounded-[var(--radius)] bg-[var(--ajanta-red,#9e3b2e)]/12 px-2 py-0.5 text-[11px] font-bold uppercase tracking-widest text-[var(--ajanta-red,#9e3b2e)]">Plates of record · real surveys</span>
+          <span className="h-px flex-1 bg-border" />
+        </div>
+        <div className="mb-14 stone-reveal">
+          <ArchivalPlates />
+        </div>
+
         {/* North: the Nagara survey plate */}
         <div className="mb-4 flex items-center gap-3 stone-reveal">
           <span className="rounded-[var(--radius)] bg-[var(--accent)]/12 px-2 py-0.5 text-[11px] font-bold uppercase tracking-widest text-[var(--accent)]">North · Nagara</span>
