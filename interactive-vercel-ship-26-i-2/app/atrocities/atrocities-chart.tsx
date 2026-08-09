@@ -39,7 +39,7 @@ export default function AtrocitiesChart() {
   )
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-14">
+    <div className="mx-auto max-w-7xl px-4 md:px-6 py-14">
       <div className="mb-8 flex flex-wrap items-center justify-between gap-3 stone-reveal">
         <p className="text-sm text-muted-foreground">
           {rows.length} events · ranked by estimated death toll (millions). India-linked in gold.

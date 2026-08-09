@@ -41,7 +41,7 @@ export default async function NewsPage() {
         updated: '2026-08-07',
       }}
     >
-      <div className="mx-auto max-w-5xl px-4 py-10 md:px-6 md:py-14">
+      <div className="mx-auto max-w-7xl px-4 md:px-6 py-10 md:px-6 md:py-14">
         <header>
           <div className="text-[11px] font-bold uppercase tracking-widest text-accent">
             The News Engine · India · {news.live ? 'live' : 'sample'}

@@ -42,7 +42,7 @@ export default function DesignSystemPage() {
       title="Carved, not clicked"
       intro="One system, rooted in the Mauryan and Gupta world — stone palette, carved-stone corners, an icon sprite, and a Blender-rendered ornament library. Everything here is downloadable and version-controlled."
     >
-      <div className="mx-auto max-w-5xl px-4 py-14">
+      <div className="mx-auto max-w-7xl px-4 md:px-6 py-14">
         {/* palette */}
         <section className="mb-16 stone-reveal">
           <h2 className="bharati mb-2 text-2xl font-black tracking-tight">The palette</h2>

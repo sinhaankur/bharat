@@ -32,7 +32,8 @@ export default function PageShell({
       {title && (
         <header className="cine-vignette relative overflow-hidden border-b border-border">
           <FloralGlow petals={false} intensity={0.8} />
-          <div className="relative mx-auto max-w-4xl px-4 py-16 text-center">
+          {/* same container as the header/footer (max-w-7xl px-4 md:px-6) so edges align */}
+          <div className="relative mx-auto max-w-7xl px-4 py-16 text-center md:px-6">
             {eyebrow && (
               <div className="mb-3 flex items-center justify-center gap-2 font-mono text-[11px] uppercase tracking-[0.24em] text-[var(--muted-foreground)]">
                 <Chakra size={13} color="var(--accent)" /> {eyebrow}
@@ -40,7 +41,7 @@ export default function PageShell({
             )}
             <CineTitle
               text={title}
-              className="bharati text-4xl font-black tracking-tight md:text-6xl"
+              className="bharati mx-auto max-w-4xl text-4xl font-black tracking-tight md:text-6xl"
             />
             {intro && (
               <p className="mx-auto mt-4 max-w-2xl text-pretty leading-relaxed text-muted-foreground">

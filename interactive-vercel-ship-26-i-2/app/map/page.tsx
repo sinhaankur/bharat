@@ -26,7 +26,7 @@ export default function MapPage() {
         updated: '2026-08-07',
       }}
     >
-      <div className="mx-auto max-w-5xl px-4 py-10 md:px-6 md:py-14">
+      <div className="mx-auto max-w-7xl px-4 md:px-6 py-10 md:px-6 md:py-14">
         <div className="text-[11px] font-bold uppercase tracking-widest text-accent">Money · the map</div>
         <h1 className="mt-2 font-serif text-3xl font-black leading-tight md:text-5xl">
           India, <em className="italic">by state</em>

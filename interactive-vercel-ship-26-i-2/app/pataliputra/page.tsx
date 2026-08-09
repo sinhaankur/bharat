@@ -97,7 +97,7 @@ export default function PataliputraPage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-4xl px-4 py-16">
+      <main className="mx-auto max-w-7xl px-4 md:px-6 py-16">
         {/* ── the witnesses ── */}
         <section className="mb-20">
           <h2 className="cine-reveal bharati mb-8 text-3xl font-black tracking-tight">

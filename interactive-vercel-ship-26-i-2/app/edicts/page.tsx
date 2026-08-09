@@ -83,7 +83,7 @@ export default function EdictsPage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-4xl px-4 py-16">
+      <main className="mx-auto max-w-7xl px-4 md:px-6 py-16">
         {/* ── Kalinga: the turn ── */}
         <section className="mb-20">
           <div className="cine-reveal rounded-2xl border border-border bg-[#1c1614] p-6 text-[#efe3cc] md:p-10">
