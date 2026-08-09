@@ -49,11 +49,11 @@ export const ATLAS_PAGES: AtlasPage[] = [
   { slug: 'mesh', title: 'The mesh', section: 'Money', blurb: 'How officials, districts, money & cases connect.' },
   { slug: 'how-it-works', title: 'How it works', section: 'Money' },
   { slug: 'state-of-india', title: 'State of India', section: 'Money', blurb: 'Who carries the country.' },
-  { slug: 'provenance', title: 'Provenance ledger', section: 'Money', blurb: 'Every figure → its citation.' },
+  { slug: 'provenance', title: 'Provenance ledger', section: 'Money', native: '/provenance', blurb: 'Every figure → its citation.' },
   { slug: 'timeline', title: 'Fund-story timeline', section: 'Money' },
   { slug: 'history', title: 'Land-revenue history', section: 'Money' },
   { slug: 'usa', title: 'USA Fiscal Map', section: 'Money', blurb: 'A comparison — state revenue, net flow & GSP.' },
-  { slug: 'global', title: 'India vs the world', section: 'Money', blurb: 'GDP, income & industry.' },
+  { slug: 'global', title: 'India vs the world', section: 'Money', native: '/global', blurb: 'GDP, income & industry.' },
   { slug: 'widget', title: 'Fiscal card widget', section: 'Money' },
 
   // ── Land ────────────────────────────────────────────────────────────────
