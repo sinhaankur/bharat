@@ -74,7 +74,7 @@ export const ATLAS_PAGES: AtlasPage[] = [
   { slug: 'library', title: 'The Reading Room', section: 'History', blurb: 'Study the primary sources.' },
 
   // ── Languages ───────────────────────────────────────────────────────────
-  { slug: 'languages', title: 'Languages of Bharat', section: 'Languages', featured: true, blurb: 'Families, scripts, fonts & source texts.' },
+  { slug: 'languages', title: 'Languages of Bharat', section: 'Languages', native: '/languages', featured: true, blurb: 'Families, scripts, fonts & source texts.' },
   { slug: 'scripts', title: 'Scripts & language families', section: 'Languages', blurb: "Brahmi's tree and the roots of the branches." },
   { slug: 'journey', title: 'The journey of a word', section: 'Languages', blurb: 'One meaning, across time and tongues.' },
   { slug: 'vedas', title: 'The Hymn of Creation', section: 'Languages', blurb: 'Nāsadīya Sūkta across languages.' },
@@ -130,12 +130,15 @@ export function hrefFor(p: AtlasPage): string {
 // we serve them through the public/legacy symlink instead.
 export function legacyUrl(p: AtlasPage): string {
   const base = process.env.NEXT_PUBLIC_BASE_PATH || ''
-  const file = `${p.file ?? p.slug}.html`
+  // ?embed=1 tells the legacy atlas to suppress its OWN site-nav/header/footer
+  // (site-nav.js embed-mode), so it renders content-only inside our themed frame
+  // — no double header. Legacy pages look like part of the Mauryan design.
+  const file = `${p.file ?? p.slug}.html?embed=1`
   if (!base) {
     // dev: served via public/legacy → /legacy/<file>
     return `/legacy/${file}`
   }
-  // production: base is like "/india-fiscal-map/app" → atlas root is "/india-fiscal-map"
+  // production: base is like "/bharat/app" → atlas root is "/bharat"
   const atlasRoot = base.replace(/\/app\/?$/, '')
   return `${atlasRoot}/${file}`
 }

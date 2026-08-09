@@ -36,7 +36,7 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`theme-ashoka bg-background ${libreFranklin.variable} ${fraunces.variable} ${GeistMono.variable}`}
     >
-      <body className="font-sans antialiased">
+      <body className="cine-grain bg-background font-sans text-foreground antialiased">
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           {children}
         </ThemeProvider>
