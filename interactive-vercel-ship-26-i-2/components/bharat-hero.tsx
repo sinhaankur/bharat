@@ -84,7 +84,7 @@ export default function BharatHero() {
         <BharatMark size={84} color="var(--accent)" ink="var(--foreground)" />
 
         <div className="mt-4 flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.24em] text-[var(--muted-foreground)]">
-          <Chakra size={13} color="var(--accent)" spin /> India, by the evidence
+          <Chakra size={13} color="var(--accent)" spin /> Origins
         </div>
 
         <CineTitle
