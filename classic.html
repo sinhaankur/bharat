@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ============ SEO: Bharat — money + land + law ============ -->
+  <title>Bharat — Money, Land &amp; Memory</title>
+  <meta name="description" content="How India's public money flows and how the land shapes it — floods, coastal (CRZ) zoning, terrain, elevation, hazards and legal 'what can be built here' zones for all 594 districts. Sourced, per-district, open data. Wealth and health of India in one map." />
+  <meta name="keywords" content="India district atlas, where India's tax money goes, CRZ zone map India, flood zone map India, coastal regulation zone, district fiscal data, India public spending map, floodplain encroachment, unsafe zone India, palaeochannel, district GDP, MGNREGA funds, per-district open data, India zoning map, land and law India" />
+  <meta name="author" content="Bharat" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <link rel="canonical" href="https://sinhaankur.github.io/bharat/index.html" />
+
+  <!-- Open Graph (Facebook / LinkedIn / WhatsApp) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Bharat" />
+  <meta property="og:title" content="Bharat — Money, Land &amp; Memory" />
+  <meta property="og:description" content="Where India's public money goes AND how floods, coastal (CRZ) zoning, terrain and hazards shape each of 594 districts — sourced, open data. Money matters; so does how the land shapes what happens." />
+  <meta property="og:url" content="https://sinhaankur.github.io/bharat/index.html" />
+  <meta property="og:image" content="https://sinhaankur.github.io/bharat/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale" content="en_IN" />
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Bharat — Money, Land &amp; Memory" />
+  <meta name="twitter:description" content="Public money + floods + coastal (CRZ) zoning + terrain + hazards for all 594 districts. Sourced, per-district, open data." />
+  <meta name="twitter:image" content="https://sinhaankur.github.io/bharat/og-image.png" />
+
+  <!-- Structured data: WebSite + Dataset (→ Google Dataset Search) + Organization -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://sinhaankur.github.io/bharat/#website",
+        "name": "Bharat",
+        "alternateName": "Bharat",
+        "url": "https://sinhaankur.github.io/bharat/",
+        "description": "How India's public money flows and how land, floods, coastal (CRZ) zoning and hazards shape each of 594 districts — sourced, per-district, open data.",
+        "inLanguage": "en-IN",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://sinhaankur.github.io/bharat/explore.html?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "Dataset",
+        "@id": "https://sinhaankur.github.io/bharat/#dataset",
+        "name": "Bharat — money, geography, zoning & hazard data (594 districts)",
+        "description": "An open, per-district dataset for India (35 states/UTs, 594 districts) combining public-money flow (revenue, central devolution, scheme funds), physical geography (terrain, elevation, rivers, rainfall band, flood-proneness), legal zoning (Coastal Regulation Zone, no-development / unsafe zones), and documented hazards (flood-chronic, palaeochannels, floodplain/water-body encroachment, monsoon inundation). Every figure is cited to a government/court/peer-reviewed source or explicitly marked a gap — never fabricated.",
+        "url": "https://sinhaankur.github.io/bharat/",
+        "keywords": ["India", "district", "fiscal", "public spending", "flood zone", "Coastal Regulation Zone", "CRZ", "zoning", "geography", "elevation", "hazard", "encroachment", "open data"],
+        "license": "https://creativecommons.org/licenses/by/4.0/",
+        "creator": { "@type": "Organization", "name": "Bharat" },
+        "spatialCoverage": { "@type": "Place", "name": "India" },
+        "isAccessibleForFree": true,
+        "distribution": [
+          { "@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://sinhaankur.github.io/bharat/district-ledger.json" }
+        ]
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://sinhaankur.github.io/bharat/#org",
+        "name": "Bharat",
+        "url": "https://sinhaankur.github.io/bharat/",
+        "logo": "https://sinhaankur.github.io/bharat/og-image.png"
+      }
+    ]
+  }
+  </script>
+
+  <!-- Leaflet self-hosted (vendor/) — same origin, no third-party CDN round-trip on
+       the map's critical path. Preload the JS so it fetches in parallel with the CSS. -->
+  <link rel="preload" href="vendor/leaflet/leaflet.js" as="script" />
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Perf: warm up tile + API hosts; prefetch the heavy ledger at low priority so it
+       arrives soon after first paint without blocking it. -->
+  <link rel="preconnect" href="https://basemaps.cartocdn.com" crossorigin />
+  <link rel="preconnect" href="https://server.arcgisonline.com" crossorigin />
+  <link rel="dns-prefetch" href="https://api.rainviewer.com" />
+  <link rel="prefetch" href="district-ledger.json" as="fetch" crossorigin />
+</head>
+<body>
+
+  <!-- site-nav.js renders the shared task-based header (Map/3D/Study/Data/About) here from nav-data.js -->
+  <div id="site-nav"></div>
+
+  <!-- What's new: sourced data-updates + moderated news, merged (whats-new.js) -->
+  <div id="whats-new"></div>
+
+  <!-- Live stats + source-transparency bar — computed from the loaded data by stats-bar.js -->
+  <div id="stats-bar" aria-live="polite"></div>
+
+  <section id="map" class="india-fullbleed">
+    <div class="india-shell">
+
+      <div class="india-map-side">
+        <div id="india-map-wrap">
+          <div id="india-map"></div>
+          <div id="map-search">
+            <input id="map-search-input" type="search" placeholder="Search a district, state or place… (e.g. Pune, Assam)" autocomplete="off" aria-label="Search a place to view its topography" />
+            <div id="map-search-results" hidden></div>
+          </div>
+          <button id="map-expand-btn" title="Expand map (India in pixels)" aria-label="Expand map">⛶</button>
+          <div id="india-map-readout">
+            <div class="readout-label mono">Hover a state</div>
+            <div class="readout-name">—</div>
+            <div class="readout-value">—</div>
+          </div>
+          <div id="india-map-legend">
+            <div class="india-legend-title mono" id="india-legend-title">Own tax revenue (₹ '000 cr)</div>
+            <div class="india-legend-bar"><span class="india-legend-grad" id="india-legend-grad"></span></div>
+            <div class="india-legend-ticks mono">
+              <span id="india-legend-min">—</span>
+              <span id="india-legend-mid">—</span>
+              <span id="india-legend-max">—</span>
+            </div>
+            <div class="india-legend-foot mono">Click a state for detail · drag the year slider for history</div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="india-side-panel">
+        <header class="india-side-header">
+          <div>
+            <div class="eyebrow">India · state-wise revenue, corruption, GDP</div>
+            <h2 class="display india-display">Who <em>earns</em>. Who <em>leaks</em>. Who <em>gets fed</em>.</h2>
+            <p class="india-side-sub">
+              Three lenses on India's 28 states + UTs over 10 fiscal years. Tap a state for its 10-year sparkline, governance footprint (IAS strength, state employees, bribe-paid %), and structural pros / cons.
+            </p>
+          </div>
+          <a class="india-ref-link" href="references.html">Sources ↗</a>
+        </header>
+
+        <div class="india-controls">
+          <div class="india-view-group" role="tablist" aria-label="View">
+            <button class="ind-btn active" data-view="ownTax">Own revenue</button>
+            <button class="ind-btn" data-view="corruption">Corruption %</button>
+            <button class="ind-btn" data-view="gsdp">GSDP</button>
+            <button class="ind-btn" data-view="perCapitaGsdp" title="GSDP per resident per year">GDP / person</button>
+            <button class="ind-btn" data-view="wealthPerCapita" title="RBI per-capita income — nominal ₹, not PPP-adjusted">₹ Wealth / person</button>
+            <button class="ind-btn" data-view="ownTaxPctGsdp">Revenue / GSDP</button>
+            <button class="ind-btn" data-view="netFlow">Net flow</button>
+            <button class="ind-btn" data-view="devolution">Devolution in</button>
+            <button class="ind-btn" data-view="contribution">Contribution out</button>
+            <button class="ind-btn" data-view="fcShare" title="Finance Commission horizontal allocation %">FC share</button>
+            <span class="ind-group-sep" aria-hidden="true"></span>
+            <button class="ind-btn ind-btn--safety" data-view="crime" title="NCRB total cognizable crime rate per lakh (2023)">🚨 Crime</button>
+            <button class="ind-btn ind-btn--safety" data-view="prisons" title="NCRB prison occupancy (% of capacity)">⛓ Jails</button>
+            <button class="ind-btn ind-btn--safety" data-view="unrest" title="News-attention: items flagged in the news feed (tier-3 signal, not a verified event count)">📰 News attention</button>
+          </div>
+          <div class="india-year-group">
+            <span class="india-year-label mono">Year</span>
+            <input type="range" id="india-year" min="0" max="9" value="9" step="1" aria-label="Year" />
+            <span class="india-year-value mono" id="india-year-value">FY24</span>
+          </div>
+          <div class="india-fc-strip" id="india-fc-strip" aria-hidden="true"></div>
+        </div>
+
+        <div class="india-main">
+          <div id="india-detail" class="india-detail">
+            <div class="india-detail-empty">
+              <div class="eyebrow">No state selected</div>
+              <p class="india-detail-empty-body">Click any state to see its 10-year history, fiscal flows, governance footprint, and structural pros / cons.</p>
+              <div id="india-summary" class="india-summary-inline"></div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </section>
+
+  <script src="vendor/leaflet/leaflet.js"></script>
+  <script src="dem.js"></script>
+  <script src="map-layers.js"></script>
+  <script src="map-ui.js"></script>
+  <script src="time-scrubber.js"></script>
+  <script src="event-heatmap.js"></script>
+  <script src="coverage.js"></script>
+  <script src="query-engine.js"></script>
+  <script src="vulnerability.js"></script>
+  <!-- Post-paint helpers — app.js only calls these AFTER the background ledger loads
+       (all guarded by typeof checks), so defer them off the map's critical path. -->
+  <script defer src="accountability-arc.js"></script>
+  <script defer src="stats-bar.js"></script>
+  <script defer src="whats-new.js"></script>
+  <script src="app.js"></script>
+  <script defer src="command-palette.js"></script>
+  <script src="site-nav.js"></script>
+  <script src="share-widget.js"></script>
+  <script src="view-switch.js"></script>
+</body>
+</html>
