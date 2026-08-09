@@ -58,15 +58,19 @@ const SCRIPTS = ['भ', 'ভ', 'ப', 'భ', 'ಭ', 'ഭ', 'ભ', 'ਭ', 'ଭ']
 export default function SiteFooter() {
   return (
     <footer className="relative overflow-hidden bg-[#301818] text-[var(--ajanta-ivory,#efe3cc)]">
-      {/* jali texture wash */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-[0.5]"
-        style={{
-          backgroundImage:
-            "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cg fill='none' stroke='%23c9a227' stroke-width='1' opacity='0.1'%3E%3Cpath d='M30 6 L38 22 L54 30 L38 38 L30 54 L22 38 L6 30 L22 22 Z'/%3E%3Crect x='14' y='14' width='32' height='32' transform='rotate(45 30 30)'/%3E%3Ccircle cx='30' cy='30' r='6'/%3E%3C/g%3E%3C/svg%3E\")",
-        }}
-      />
+      {/* jali texture wash — the mockup #jali-dark lattice */}
+      <svg className="pointer-events-none absolute inset-0 h-full w-full" aria-hidden="true">
+        <defs>
+          <pattern id="footer-jali" width="60" height="60" patternUnits="userSpaceOnUse">
+            <g fill="none" stroke="#c9a227" strokeWidth="1" opacity="0.12">
+              <path d="M30 6 L38 22 L54 30 L38 38 L30 54 L22 38 L6 30 L22 22 Z" />
+              <rect x="14" y="14" width="32" height="32" transform="rotate(45 30 30)" />
+              <circle cx="30" cy="30" r="6" />
+            </g>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#footer-jali)" />
+      </svg>
 
       {/* newsletter band */}
       <div className="relative flex flex-col items-start gap-5 border-b border-[rgba(201,162,39,.3)] px-6 py-6 md:flex-row md:items-center md:gap-6">
@@ -123,15 +127,20 @@ export default function SiteFooter() {
         ))}
       </div>
 
-      {/* floral divider */}
-      <div
-        aria-hidden="true"
-        className="relative h-[18px] opacity-50"
-        style={{
-          backgroundImage:
-            "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='18'%3E%3Cg fill='none' stroke='%23c9a227' stroke-width='1.3'%3E%3Cpath d='M0 9 C 8 2, 12 2, 20 9 S 32 16, 40 9'/%3E%3Ccircle cx='20' cy='9' r='2' fill='%23c9a227'/%3E%3C/g%3E%3C/svg%3E\")",
-        }}
-      />
+      {/* floral divider — the exact mockup #floral vine, gold, clearly visible */}
+      <svg className="relative block h-[22px] w-full" aria-hidden="true" preserveAspectRatio="none">
+        <defs>
+          <pattern id="footer-floral" width="40" height="22" patternUnits="userSpaceOnUse">
+            <g fill="none" stroke="#c9a227" strokeWidth="1.3">
+              <path d="M0 11 C 8 3, 12 3, 20 11 S 32 19, 40 11" />
+              <path d="M10 7 c -3 -4, 3 -4, 0 0" fill="#c9a227" />
+              <path d="M30 15 c -3 4, 3 4, 0 0" fill="#c9a227" />
+              <circle cx="20" cy="11" r="2" fill="#c9a227" />
+            </g>
+          </pattern>
+        </defs>
+        <rect width="100%" height="22" fill="url(#footer-floral)" opacity="0.6" />
+      </svg>
 
       {/* baseline */}
       <div className="relative flex flex-wrap items-center gap-x-3.5 gap-y-2 border-t border-[rgba(201,162,39,.3)] px-6 py-3 text-[11px] text-[rgba(239,227,204,.55)]">
