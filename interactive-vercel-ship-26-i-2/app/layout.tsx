@@ -36,6 +36,13 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`theme-ashoka bg-background ${libreFranklin.variable} ${fraunces.variable} ${GeistMono.variable}`}
     >
+      <head>
+        {/* Rozha One (display serif) + Karla (body) for the "India by design systems" page */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=Rozha+One&family=Karla:wght@400;600;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body className="cine-grain bg-background font-sans text-foreground antialiased">
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           {children}
