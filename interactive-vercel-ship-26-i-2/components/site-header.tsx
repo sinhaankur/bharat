@@ -5,7 +5,19 @@ import { Menu, Search, X } from 'lucide-react'
 import { categories } from '@/lib/articles'
 import { BharatLogo } from '@/components/indic/bharat-logo'
 import ThemeToggle from '@/components/theme-toggle'
+import Icon, { type IconName } from '@/components/indic/icon'
 import { hrefFor, sectionFront, type Section } from '@/lib/atlas-pages'
+
+// each magazine section → a Mauryan sprite icon
+const SECTION_ICON: Record<string, IconName> = {
+  News: 'edict',
+  Money: 'coin',
+  Land: 'pillar',
+  History: 'stupa',
+  Languages: 'lotus',
+  '3D': 'torana',
+  Data: 'jali',
+}
 
 // magazine section → its front page, resolved from the atlas registry so it
 // always lands on a REAL route (native page or themed frame — never a dead link)
@@ -75,8 +87,15 @@ export default function SiteHeader() {
               <li key={c}>
                 <a
                   href={sectionHref(c)}
-                  className="whitespace-nowrap text-xs font-bold uppercase tracking-widest text-muted-foreground transition-colors hover:text-foreground"
+                  className="group flex items-center gap-1.5 whitespace-nowrap text-xs font-bold uppercase tracking-widest text-muted-foreground transition-colors hover:text-foreground"
                 >
+                  {SECTION_ICON[c] && (
+                    <Icon
+                      name={SECTION_ICON[c]}
+                      size={15}
+                      className="text-[var(--muted-foreground)] transition-colors group-hover:text-[var(--accent)]"
+                    />
+                  )}
                   {c}
                 </a>
               </li>
