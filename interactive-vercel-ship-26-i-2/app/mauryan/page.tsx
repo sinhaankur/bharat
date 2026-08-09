@@ -9,6 +9,8 @@ import { BharatMark } from '@/components/indic/bharat-logo'
 import Mandala from '@/components/indic/mandala'
 import TempleOrnament from '@/components/indic/ornament'
 import RevealObserver from '@/components/indic/reveal-observer'
+import SiteHeader from '@/components/site-header'
+import SiteFooter from '@/components/site-footer'
 import { Button, Badge, Input, Eyebrow } from '@/components/ui-kit/atoms'
 import { SearchField, StatBlock, Meter } from '@/components/ui-kit/molecules'
 import { StoryCard, StatBand } from '@/components/ui-kit/organisms'
@@ -35,6 +37,7 @@ export default function MauryanPage() {
   return (
     <div className="cine-grain theme-ashoka min-h-screen bg-background text-foreground">
       <RevealObserver />
+      <SiteHeader />
       {/* masthead — Blender shikhara + jali light + PARALLAX ornament garden */}
       <header className="cine-vignette relative overflow-hidden border-b-2 border-[var(--stone-ink)]/20">
         <div
@@ -260,6 +263,7 @@ export default function MauryanPage() {
           drawings, used respectfully — never the official emblem.
         </p>
       </main>
+      <SiteFooter />
     </div>
   )
 }
