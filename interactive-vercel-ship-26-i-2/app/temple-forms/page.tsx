@@ -75,9 +75,15 @@ export default function TempleFormsPage() {
           <div>
             <h2 className="bharati mb-2 text-2xl font-black tracking-tight">And in the round</h2>
             <p className="leading-relaxed text-muted-foreground">
-              The survey plate is one elevation. The same form, rendered as carved stone in Blender,
-              shows what the drawing measures — the shikhara as it stands against the light.
+              The survey plate is one elevation. Turn the temple in three dimensions — Nagara,
+              Dravida and Kalinga, parametric, exportable to Blender.
             </p>
+            <a
+              href="/temple-3d"
+              className="mt-3 inline-flex items-center gap-2 rounded-[var(--radius)] bg-[var(--accent)] px-4 py-2 text-sm font-bold uppercase tracking-widest text-[var(--accent-foreground)] transition-opacity hover:opacity-90"
+            >
+              Open the 3D viewer →
+            </a>
           </div>
           <div className="mx-auto" aria-hidden="true">
             <TempleOrnament name="shikhara" width={160} />

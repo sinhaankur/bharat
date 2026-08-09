@@ -69,6 +69,7 @@ export const ATLAS_PAGES: AtlasPage[] = [
   { slug: 'edicts', title: 'The Edicts of Ashoka', section: 'History', native: '/edicts', featured: true, blurb: 'The empire in his own words — Kalinga’s remorse, conquest by Dhamma, the protection of all life.' },
   { slug: 'ashoka', title: "Ashoka's rule of the land", section: 'History', native: '/ashoka', blurb: 'Where the edicts stand — 25 sites, four scripts.' },
   { slug: 'deep-history', title: 'Deep history in DNA', section: 'History', native: '/deep-history', blurb: 'The population shifts that made South Asia.' },
+  { slug: 'temple-3d', title: 'Temples in 3D — parametric', section: '3D', native: '/temple-3d', featured: true, blurb: 'Nagara, Dravida & Kalinga temples in the round — orbit & export to Blender.' },
   { slug: 'heritage-3d', title: 'Temples in 3D', section: 'History', blurb: 'See how they looked.' },
   { slug: 'cave-walk', title: 'Walk inside the temples', section: 'History', featured: true, blurb: 'A first-person walk through temples as they were.' },
   { slug: 'temple-forms', title: 'Temple forms', section: 'History', native: '/temple-forms', featured: true, blurb: 'The temple drawn to scale — a measured survey plate.' },
