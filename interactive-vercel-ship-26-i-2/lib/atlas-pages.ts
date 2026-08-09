@@ -48,7 +48,7 @@ export const ATLAS_PAGES: AtlasPage[] = [
   { slug: 'command-chain', title: 'Chain of command', section: 'Money', blurb: 'How the IAS / IPS system actually works.' },
   { slug: 'mesh', title: 'The mesh', section: 'Money', blurb: 'How officials, districts, money & cases connect.' },
   { slug: 'how-it-works', title: 'How it works', section: 'Money' },
-  { slug: 'state-of-india', title: 'State of India', section: 'Money', blurb: 'Who carries the country.' },
+  { slug: 'state-of-india', title: 'State of India', section: 'Money', native: '/state-of-india', blurb: 'Who carries the country.' },
   { slug: 'provenance', title: 'Provenance ledger', section: 'Money', native: '/provenance', blurb: 'Every figure → its citation.' },
   { slug: 'timeline', title: 'Fund-story timeline', section: 'Money' },
   { slug: 'history', title: 'Land-revenue history', section: 'Money' },
