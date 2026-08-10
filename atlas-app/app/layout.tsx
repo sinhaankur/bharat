@@ -13,6 +13,10 @@ import '@fontsource/instrument-serif/400.css'
 import '@fontsource/instrument-serif/400-italic.css'
 import '@fontsource/jetbrains-mono/400.css'
 import '@fontsource/jetbrains-mono/600.css'
+import '@fontsource/rozha-one/400.css'
+import '@fontsource/karla/400.css'
+import '@fontsource/karla/600.css'
+import '@fontsource/karla/700.css'
 import SvgSprite from '@/components/svg-sprite'
 import CommandPalette from '@/components/command-palette'
 import ReaderPanel from '@/components/reader-panel'
@@ -27,7 +31,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" data-skin="gupta">
+      <head>
+        {/* apply the saved skin before paint so there's no flash of the default */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var s=localStorage.getItem('atlas-skin');if(s)document.documentElement.dataset.skin=s;}catch(e){}`,
+          }}
+        />
+      </head>
       <body>
         <SvgSprite />
         {children}

@@ -1,70 +1,107 @@
 /* ══════════════════════════════════════════════════════════════════════════
-   District Atlas — the MODERNIST design system, faithful to the handoff.
-   Source of truth: the _ds modernist token sheet in handoff/. Flat, architectural,
-   near-mono RED on a light ground; Archivo throughout; zero corner radius;
-   strong 2px rules; flush-left. Every colour/size comes from a var() below —
-   these values are copied 1:1 from the _ds token sheet.
+   INDIC DESIGNS — one Modernist structural chassis, many skins.
+   The chassis (space, radius, rules, layout) NEVER changes. A skin is a TOKEN
+   LAYER on html[data-skin=...] that swaps only the visible tokens (ground, ink,
+   accent, band/motif, display font). Default skin = GUPTA. State skins layer on
+   top when the user selects a state. Chassis constants live in :root; skin tokens
+   live in the [data-skin] blocks below.
    ══════════════════════════════════════════════════════════════════════ */
 
 :root {
-  /* — Modernist ground + ink (from _ds styles.css) — */
-  --bg:           #f3f2f2;  /* --color-bg */
-  --surface:      #eae9e9;  /* --color-surface */
-  --ink:          #201e1d;  /* --color-text + rules */
-  --muted:        color-mix(in srgb, #201e1d 55%, transparent);
-  --line:         color-mix(in srgb, #201e1d 40%, transparent);  /* --color-divider */
-  --line-strong:  color-mix(in srgb, #201e1d 40%, transparent);
-
-  /* the single accent — red (mono scheme; one role) */
-  --accent:       #ec3013;  /* --color-accent */
-  --accent-600:   #dd2b0f;
-  --accent-700:   #ae1800;  /* text-safe red on the light ground */
-
-  /* legacy token aliases kept so existing components don't break — all mapped
-     onto the Modernist palette so nothing renders off-system. */
-  --stone:        var(--bg);
-  --stone-2:      var(--surface);
-  --paper:        var(--bg);
-  --gold:         var(--accent);
-  --gold-700:     var(--accent-700);
-  --sky:          var(--accent);
-  --sky-700:      var(--accent-700);
-  --terra:        var(--accent);
-  --maroon:       var(--accent-700);
-  --good:         var(--accent-700);
-
-  /* neutral choropleth ramp (mono: light grey → accent) */
-  --ramp-0: #f8f4f4;
-  --ramp-1: #d7d3d3;
-  --ramp-2: #ff9783;
-  --ramp-3: #ff563c;
-  --ramp-4: #ec3013;
-
-  /* — type — Modernist is set entirely in Archivo. serif/italic alias to Archivo
-     so any leftover use renders on-system; mono kept for data/eyebrows. — */
-  --font-ui:      "Archivo", system-ui, sans-serif;
-  --font-display: "Archivo", system-ui, sans-serif;
-  --font-serif:   "Archivo", system-ui, sans-serif;
-  --font-italic:  "Archivo", system-ui, sans-serif;
+  /* ── CHASSIS constants (never swap) ── */
   --font-mono:    "JetBrains Mono", ui-monospace, Menlo, monospace;
+  --space-1: 4px;  --space-2: 8px;  --space-3: 12px;
+  --space-4: 16px; --space-6: 24px; --space-8: 32px;
+  --radius: 0px;               /* flat, always */
+  --edge:  clamp(20px, 5vw, 72px);
+  --wrap:  1200px;
 
-  /* — space (Modernist scale, density 1.0) — */
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-6: 24px;
-  --space-8: 32px;
+  /* the Modernist chassis palette — the neutral fallback + the "chassis" skin */
+  --chassis-bg:     #f3f2f2;
+  --chassis-ink:    #201e1d;
+  --chassis-accent: #ec3013;
 
-  --radius: 0px;               /* --radius-md is 0 on purpose */
+  /* ── SKIN tokens (default values = GUPTA; overridden per [data-skin]) ── */
+  --bg:           #f6f0e1;  /* warm stone ground */
+  --surface:      #efe3cc;
+  --ink:          #2a2018;
+  --muted:        color-mix(in srgb, #2a2018 55%, transparent);
+  --line:         color-mix(in srgb, #2a2018 40%, transparent);
+  --line-strong:  color-mix(in srgb, #2a2018 55%, transparent);
+  --accent:       #c1440e;  /* vermilion */
+  --accent-600:   #a23409;
+  --accent-700:   #8a2e08;
+  --band:         #c9862b;  /* gold band / secondary motif */
+  --font-display: "Rozha One", Georgia, serif;
+  --font-ui:      "Karla", system-ui, sans-serif;
 
-  /* elevation — the _ds tuned soft shadows (not a hard offset) */
+  /* legacy token aliases — map onto the active skin so old components inherit it */
+  --stone:  var(--bg);   --stone-2: var(--surface); --paper: var(--bg);
+  --gold:   var(--accent); --gold-700: var(--accent-700);
+  --sky:    var(--accent); --sky-700: var(--accent-700);
+  --terra:  var(--accent); --maroon: var(--accent-700); --good: var(--accent-700);
+  --font-serif: var(--font-display); --font-italic: var(--font-display);
+
+  /* choropleth ramp — light ground → accent (recomputed per skin below) */
+  --ramp-0: #f8f4ec; --ramp-1: #e8d9bf; --ramp-2: #e0a06a; --ramp-3: #cf6a2e; --ramp-4: #c1440e;
+}
+
+/* ── the shared MODERNIST CHASSIS skin (structure-forward, mono red) ── */
+html[data-skin="chassis"] {
+  --bg: #f3f2f2; --surface: #eae9e9; --ink: #201e1d;
+  --muted: color-mix(in srgb, #201e1d 55%, transparent);
+  --line: color-mix(in srgb, #201e1d 40%, transparent);
+  --line-strong: color-mix(in srgb, #201e1d 40%, transparent);
+  --accent: #ec3013; --accent-600: #dd2b0f; --accent-700: #ae1800; --band: #ec3013;
+  --font-display: "Archivo", system-ui, sans-serif;
+  --font-ui: "Archivo", system-ui, sans-serif;
+  --ramp-0: #f8f4f4; --ramp-1: #d7d3d3; --ramp-2: #ff9783; --ramp-3: #ff563c; --ramp-4: #ec3013;
+}
+
+/* ── GUPTA — the warm default (stone + vermilion + gold + Rozha One) ── */
+html[data-skin="gupta"] {
+  --bg: #f6f0e1; --surface: #efe3cc; --ink: #2a2018;
+  --accent: #c1440e; --accent-600: #a23409; --accent-700: #8a2e08; --band: #c9862b;
+  --font-display: "Rozha One", Georgia, serif; --font-ui: "Karla", system-ui, sans-serif;
+}
+
+/* ── STATE SKINS — each references the state's heritage (accent/ground/band) ── */
+html[data-skin="kashmir"] {   /* valley stone + saffron + trefoil */
+  --bg: #f4efe6; --surface: #e9e0d0; --ink: #241f1a;
+  --accent: #d98a2b; --accent-600: #bd7420; --accent-700: #8f5615; --band: #6e7f8c;
+  --ramp-0: #f4efe6; --ramp-1: #e6d6b8; --ramp-2: #e5b56a; --ramp-3: #d98a2b; --ramp-4: #8f5615;
+}
+html[data-skin="rajasthan"] { /* pink sandstone + leheriya + indigo */
+  --bg: #fbeee8; --surface: #f6dccf; --ink: #3a1f1a;
+  --accent: #c9345a; --accent-600: #a82849; --accent-700: #7f1d38; --band: #2a4a7a;
+  --ramp-0: #fbeee8; --ramp-1: #f4c9c0; --ramp-2: #e07e93; --ramp-3: #c9345a; --ramp-4: #7f1d38;
+}
+html[data-skin="tamil"] {     /* granite + kumkum + temple gold */
+  --bg: #f5efe4; --surface: #eadfc8; --ink: #231c14;
+  --accent: #a8322b; --accent-600: #8c2822; --accent-700: #6b1e19; --band: #c9862b;
+  --ramp-0: #f5efe4; --ramp-1: #e6cfb0; --ramp-2: #cc7a5a; --ramp-3: #a8322b; --ramp-4: #6b1e19;
+}
+html[data-skin="kerala"] {    /* backwater green + coir + brass */
+  --bg: #eef2e6; --surface: #dde7cf; --ink: #1c241a;
+  --accent: #2f7d4f; --accent-600: #266641; --accent-700: #1c4d31; --band: #b8863b;
+  --ramp-0: #eef2e6; --ramp-1: #cfe0c4; --ramp-2: #7fb082; --ramp-3: #2f7d4f; --ramp-4: #1c4d31;
+}
+html[data-skin="naga"] {      /* Naga shawl bands — black ground, red + white loom */
+  --bg: #f2ece2; --surface: #e5dccd; --ink: #201a16;
+  --accent: #b3271f; --accent-600: #94201a; --accent-700: #6f1813; --band: #201a16;
+  --ramp-0: #f2ece2; --ramp-1: #ddccb8; --ramp-2: #cc6f5c; --ramp-3: #b3271f; --ramp-4: #6f1813;
+}
+html[data-skin="assam"] {     /* gamosa weave — cream + red border + green */
+  --bg: #f6f1e6; --surface: #ece2cd; --ink: #232019;
+  --accent: #c0392b; --accent-600: #9f2f24; --accent-700: #78241b; --band: #3f6b45;
+  --ramp-0: #f6f1e6; --ramp-1: #e6d3b8; --ramp-2: #d67f6b; --ramp-3: #c0392b; --ramp-4: #78241b;
+}
+
+/* elevation — soft shadows tuned to a light ground (chassis constant) */
+:root {
   --shadow-offset: 0 12px 32px color-mix(in srgb, #2d2b2b 22%, transparent);
   --shadow-sm:     0 1px 2px color-mix(in srgb, #2d2b2b 14%, transparent);
   --shadow-md:     0 3px 10px color-mix(in srgb, #2d2b2b 16%, transparent);
-
-  --edge:  clamp(20px, 5vw, 72px);   /* page gutter */
-  --wrap:  1200px;                   /* _ds content width */
 }
 
 *, *::before, *::after { box-sizing: border-box; }
