@@ -35,6 +35,9 @@ export const INDEX: Hit[] = [
   { scope: 'pages', title: 'Somnath Temple', sub: 'Gujarat · Jyotirlinga · rebuilt 1951', href: '/heritage/somnath-temple', icon: 'stupa', keywords: 'heritage temple shiva gujarat' },
   { scope: 'pages', title: 'Nalanda Mahavihara', sub: 'Bihar · Buddhist university · sacked 1193', href: '/heritage/nalanda-mahavihara', icon: 'stupa', keywords: 'heritage buddhist university bihar' },
   { scope: 'pages', title: 'Vitthala Temple, Hampi', sub: 'Karnataka · Vijayanagara · sacked 1565', href: '/heritage/vitthala-temple-hampi', icon: 'stupa', keywords: 'heritage temple hampi vijayanagara' },
+  { scope: 'pages', title: 'Ranakpur Jain Temple', sub: 'Rajasthan · 1,444 carved pillars, no two alike', href: '/heritage/ranakpur-jain-temple', icon: 'jali', keywords: 'heritage jain marble ranakpur pillars' },
+  { scope: 'pages', title: 'Kailasa Temple, Ellora', sub: 'Maharashtra · largest rock-cut monolith, ~200k tonnes removed', href: '/heritage/kailasa-ellora', icon: 'stupa', keywords: 'heritage rock cut ellora rashtrakuta shiva' },
+  { scope: 'pages', title: 'Brihadishvara Temple, Thanjavur', sub: 'Tamil Nadu · ~216 ft vimana, 80-tonne capstone', href: '/heritage/brihadishvara-thanjavur', icon: 'pillar', keywords: 'heritage chola granite thanjavur vimana' },
 
   // — saved queries —
   { scope: 'queries', title: 'fund-freeze AND flood-chronic', sub: 'explore — 7 districts match', href: '/explore?q=fund-freeze+flood-chronic', icon: 'sun', keywords: 'risk stack' },
