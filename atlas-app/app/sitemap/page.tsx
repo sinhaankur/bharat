@@ -21,6 +21,7 @@ const GROUPS: { front: string; items: Entry[] }[] = [
       { t: 'The interactive map (594 districts)', href: classicMapHref(), ext: true },
       { t: 'Explore — query the districts', href: '/explore' },
       { t: 'Engines — seven lenses', href: '/engines' },
+      { t: 'The state ledger — revenue dashboard', href: '/engines/revenue' },
       ...DISTRICT_SLUGS.map((s) => ({ t: `District — ${s.replace(/-/g, ' ')}`, href: `/d/${s}` })),
     ],
   },
