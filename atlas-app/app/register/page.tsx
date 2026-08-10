@@ -29,14 +29,14 @@ const GROUPS: { label: string; rows: Row[] }[] = [
     label: 'Heritage — sites of record',
     rows: SITE_SLUGS.map((s) => {
       const h = SITES[s]
-      return { name: h.name, sub: `${h.state} · ${h.from} CE · ${h.status}${h.destroy ? ` — destroyed ${h.destroy.year}` : ''}`, href: `/heritage/${s}`, swatch: '#9e3b2e' }
+      return { name: h.name, sub: `${h.state} · ${h.from} CE · ${h.status}${h.destroy ? ` — destroyed ${h.destroy.year}` : ''}`, href: `/heritage/${s}`, swatch: '#ae1800' }
     }),
   },
   {
     label: 'Study — the long read',
     rows: STUDY_SLUGS.map((s) => {
       const st = STUDIES[s]
-      return { name: `${st.title} ${st.titleEm}`.trim(), sub: st.section.replace('Study / ', ''), href: `/study/${s}`, swatch: '#c8664a' }
+      return { name: `${st.title} ${st.titleEm}`.trim(), sub: st.section.replace('Study / ', ''), href: `/study/${s}`, swatch: '#ec3013' }
     }),
   },
   {
@@ -46,8 +46,8 @@ const GROUPS: { label: string; rows: Row[] }[] = [
       { name: 'Explore', sub: 'query the districts with AND facets', href: '/explore', swatch: 'var(--sky)' },
       { name: 'Engines', sub: 'seven lenses, one country', href: '/engines', swatch: '#2a4a7a' },
       { name: 'The state ledger', sub: 'revenue dashboard — FY15→24, 9 views', href: '/engines/revenue', swatch: '#2a4a7a' },
-      { name: 'India in 3D', sub: 'the real Earth, every layer sourced or a gap', href: '/3d', swatch: '#c9a227' },
-      { name: 'The feed', sub: 'moderated, attributed, clustered by place', href: '/feed', swatch: '#a8794a' },
+      { name: 'India in 3D', sub: 'the real Earth, every layer sourced or a gap', href: '/3d', swatch: '#ec3013' },
+      { name: 'The feed', sub: 'moderated, attributed, clustered by place', href: '/feed', swatch: '#bab6b6' },
       { name: 'Data & provenance', sub: 'audit us, figure by figure', href: '/data', swatch: 'var(--good)' },
       { name: 'Design system', sub: 'carved from artefacts', href: '/design', swatch: 'var(--ink)' },
     ],

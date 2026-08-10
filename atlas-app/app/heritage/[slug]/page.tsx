@@ -121,15 +121,15 @@ export default async function HeritagePage({ params }: { params: Promise<{ slug:
       <SiteFooter />
 
       <style>{`
-        .hs { --hs-gold: #cc8900; --hs-maroon: #9e3b2e; background: #efe3cc; color: #2a2018; max-width: 960px; margin: 0 auto; font-family: var(--font-ui); }
+        .hs { --hs-gold: #ec3013; --hs-maroon: #ae1800; background: #f3f2f2; color: #201e1d; max-width: 960px; margin: 0 auto; font-family: var(--font-ui); }
         .hs-top { display: flex; align-items: center; gap: 12px; padding: 11px var(--edge); border-bottom: 2px solid var(--line-strong); font: 500 12px var(--font-ui); flex-wrap: wrap; }
         .hs-crumb { color: var(--muted); }
-        .hs-sep { color: #c3bcb2; }
-        .hs-src { margin-left: auto; font-size: 10px; letter-spacing: .12em; color: var(--gold-700); background: #f7ecd2; padding: 3px 8px; }
+        .hs-sep { color: #bab6b6; }
+        .hs-src { margin-left: auto; font-size: 10px; letter-spacing: .12em; color: var(--gold-700); background: #ffe0d9; padding: 3px 8px; }
         .hs-read { padding: 30px var(--edge) 24px; }
         .hs-ruler { font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--hs-maroon); margin-bottom: 8px; }
         .hs-h1 { font: 600 clamp(28px,5vw,40px)/1.05 var(--font-serif); margin: 0 0 10px; }
-        .hs-lead { font: 400 14px/1.65 var(--font-ui); color: #4a3d30; margin: 0; max-width: 640px; }
+        .hs-lead { font: 400 14px/1.65 var(--font-ui); color: #444141; margin: 0; max-width: 640px; }
         .hs-facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: 20px; border-top: 2px solid var(--line-strong); }
         .hs-fact { padding: 12px 16px 0 0; border-right: 1px solid var(--line); }
         .hs-fact:last-child { border-right: 0; padding-left: 16px; }
@@ -138,14 +138,14 @@ export default async function HeritagePage({ params }: { params: Promise<{ slug:
         .hs-fact-v { font: 500 12.5px/1.4 var(--font-ui); margin-top: 4px; }
         .hs-plate { margin-top: 22px; background: #e8dcc0; border: 1.5px solid rgba(42,32,24,.5); background-image: radial-gradient(ellipse 90% 70% at 30% 20%, rgba(255,250,235,.5), transparent 60%), radial-gradient(ellipse 60% 50% at 80% 85%, rgba(160,130,80,.14), transparent 65%); }
         .hs-plate-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 12px 20px 8px; margin: 0 12px; border-bottom: 1.5px solid rgba(42,32,24,.55); }
-        .hs-plate-t { font-size: 9px; letter-spacing: .16em; color: #8a5a3a; }
-        .hs-plate-src { font-size: 9px; letter-spacing: .1em; color: #8a5a3a; }
+        .hs-plate-t { font-size: 9px; letter-spacing: .16em; color: #7d7979; }
+        .hs-plate-src { font-size: 9px; letter-spacing: .1em; color: #7d7979; }
         .hs-plate-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 0; padding: 14px 8px; }
         .hs-dim { padding: 6px 12px; border-right: 1px solid rgba(42,32,24,.2); }
         .hs-dim:last-child { border-right: 0; }
-        .hs-dim-v { font: 600 17px var(--font-mono); color: #2a2018; }
-        .hs-dim-gap { font-size: 9px; color: var(--gold-700); border: 1px solid #c3bcb2; padding: 0 4px; }
-        .hs-dim-l { font-size: 9.5px; color: #6b5c48; margin-top: 3px; }
+        .hs-dim-v { font: 600 17px var(--font-mono); color: #201e1d; }
+        .hs-dim-gap { font-size: 9px; color: var(--gold-700); border: 1px solid #bab6b6; padding: 0 4px; }
+        .hs-dim-l { font-size: 9.5px; color: #605d5d; margin-top: 3px; }
         .hs-life { margin-top: 22px; }
         .hs-life-h { font-size: 9.5px; letter-spacing: .14em; color: var(--muted); margin-bottom: 8px; }
         .hs-life-bar { position: relative; height: 12px; background: var(--stone-2); border: 1px solid var(--line); }
@@ -153,19 +153,19 @@ export default async function HeritagePage({ params }: { params: Promise<{ slug:
         .hs-life-x { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--hs-maroon); }
         .hs-life-x::after { content: '✕'; position: absolute; top: -14px; left: -4px; font-size: 10px; color: var(--hs-maroon); }
         .hs-life-labels { display: flex; justify-content: space-between; font-size: 9px; color: var(--muted); margin-top: 4px; }
-        .hs-destroy { margin: 6px var(--edge) 0; border: 1px solid rgba(158,59,46,.4); border-left: 5px solid var(--hs-maroon); background: #f5e8da; padding: 16px 20px; }
-        .hs-destroy-gap { border-left-color: #c3bcb2; }
+        .hs-destroy { margin: 6px var(--edge) 0; border: 1px solid rgba(158,59,46,.4); border-left: 5px solid var(--hs-maroon); background: #ffe0d9; padding: 16px 20px; }
+        .hs-destroy-gap { border-left-color: #bab6b6; }
         .hs-destroy-tag { font-size: 10px; letter-spacing: .14em; color: var(--muted); }
         .hs-destroy-actor { font: 600 16px var(--font-serif); color: var(--hs-maroon); margin: 6px 0 6px; }
-        .hs-destroy-account { font: italic 400 14px/1.55 var(--font-italic); color: #3a2c20; }
+        .hs-destroy-account { font: italic 400 14px/1.55 var(--font-italic); color: #201e1d; }
         .hs-cite { display: flex; gap: 12px; align-items: baseline; padding: 16px var(--edge); flex-wrap: wrap; }
         .hs-cite-l { font-size: 10px; letter-spacing: .12em; color: var(--gold-700); flex: none; }
-        .hs-cite-v { font: 400 12px/1.5 var(--font-ui); color: #4a3d30; }
+        .hs-cite-v { font: 400 12px/1.5 var(--font-ui); color: #444141; }
         .hs-more { border-top: 2px solid var(--line-strong); padding: 18px var(--edge) 28px; }
         .hs-h { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
         .hs-more-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 2px; background: var(--line); border: 2px solid var(--line-strong); }
-        .hs-more-card { background: #efe3cc; padding: 14px 16px; }
-        .hs-more-card:hover { background: #f7ecd2; }
+        .hs-more-card { background: #f3f2f2; padding: 14px 16px; }
+        .hs-more-card:hover { background: #ffe0d9; }
         .hs-more-name { font: 600 15px var(--font-serif); }
         .hs-more-sub { font-size: 10px; color: var(--muted); margin-top: 3px; }
         @media (max-width: 620px) { .hs-facts { grid-template-columns: 1fr; } .hs-fact { border-right: 0; border-bottom: 1px solid var(--line); padding: 12px 0 !important; } }

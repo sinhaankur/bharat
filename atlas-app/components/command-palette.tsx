@@ -110,21 +110,21 @@ export default function CommandPalette() {
         .cmdk { width: min(560px, 100%); background: var(--paper); border: 2px solid var(--ink); box-shadow: 10px 10px 0 rgba(42,32,24,.3); color: #1a1917; font-family: var(--font-ui); }
         .cmdk-input-row { display: flex; align-items: center; gap: 11px; padding: 13px 17px; border-bottom: 2px solid var(--ink); }
         .cmdk-input { flex: 1; border: 0; background: transparent; font: 400 15px var(--font-ui); color: #1a1917; outline: none; }
-        .cmdk-esc { font-size: 10px; border: 1px solid #c3bcb2; padding: 1px 6px; color: var(--muted); }
-        .cmdk-scopes { display: flex; gap: 0; border-bottom: 1px solid #d6d0cb; }
+        .cmdk-esc { font-size: 10px; border: 1px solid #bab6b6; padding: 1px 6px; color: var(--muted); }
+        .cmdk-scopes { display: flex; gap: 0; border-bottom: 1px solid #d7d3d3; }
         .cmdk-scope { flex: none; padding: 8px 14px; border: 0; background: transparent; cursor: pointer; font: 600 10px var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
         .cmdk-scope.on { background: var(--ink); color: var(--paper); }
         .cmdk-list { max-height: 46vh; overflow-y: auto; padding: 6px 0; }
         .cmdk-empty { padding: 22px 17px; font-size: 13px; color: var(--muted); }
         .cmdk-item { display: flex; align-items: center; gap: 11px; width: 100%; padding: 10px 17px; border: 0; background: transparent; cursor: pointer; text-align: left; border-left: 3px solid transparent; }
-        .cmdk-item.on { background: #f7ecd2; border-left-color: var(--gold); }
+        .cmdk-item.on { background: #ffe0d9; border-left-color: var(--gold); }
         .cmdk-ic { color: var(--muted); flex: none; }
         .cmdk-item.on .cmdk-ic { color: var(--gold-700); }
         .cmdk-text { display: flex; flex-direction: column; min-width: 0; }
         .cmdk-title { font: 600 13px var(--font-ui); }
         .cmdk-sub { font: 400 10.5px var(--font-ui); color: var(--muted); }
         .cmdk-open { margin-left: auto; font-size: 9.5px; color: var(--gold-700); flex: none; }
-        .cmdk-foot { display: flex; gap: 14px; padding: 9px 17px; border-top: 1px solid #d6d0cb; font-size: 10px; color: var(--muted); }
+        .cmdk-foot { display: flex; gap: 14px; padding: 9px 17px; border-top: 1px solid #d7d3d3; font-size: 10px; color: var(--muted); }
       `}</style>
     </div>
   )
