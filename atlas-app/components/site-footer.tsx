@@ -1,30 +1,41 @@
 import Link from 'next/link'
-import { Chakra } from '@/components/icon'
+import BrandSeal from '@/components/brand-seal'
 import { classicMapHref, classicHref } from '@/lib/links'
 
-// Footer — ported from Atlas Footer.dc.html: a 4-column grid under a 2px top rule,
-// brand blurb, and three link columns, then a baseline row.
+// The global footer — the 4a register: the seal-ring "Bharat." brand + the five
+// fronts (Map/3D/Study/Data/About) matching the header, a floral rule, and the
+// sourced-or-gap baseline. Used on every page.
 const COLS: { label: string; links: { t: string; href: string; ext?: boolean }[] }[] = [
   {
-    label: 'Atlas',
+    label: 'Map',
     links: [
-      { t: 'The map', href: classicMapHref(), ext: true },
+      { t: 'The interactive map', href: classicMapHref(), ext: true },
       { t: 'Explore districts', href: '/explore' },
-      { t: 'Engines', href: '/engines' },
+      { t: 'The engines', href: '/engines' },
+      { t: 'State ledger', href: '/engines/revenue' },
+    ],
+  },
+  {
+    label: 'Study',
+    links: [
+      { t: "Ashoka's edicts", href: '/study/ashoka' },
+      { t: 'Languages & scripts', href: '/study/languages' },
+      { t: 'Heritage sites', href: '/heritage/ranakpur-jain-temple' },
     ],
   },
   {
     label: 'Data',
     links: [
       { t: 'Provenance', href: '/data' },
+      { t: 'The register', href: '/register' },
       { t: 'References', href: classicHref('references'), ext: true },
-      { t: 'Downloads', href: classicHref('data'), ext: true },
+      { t: 'Design system', href: '/design' },
     ],
   },
   {
-    label: 'Project',
+    label: 'About',
     links: [
-      { t: 'About', href: '/about' },
+      { t: 'About the atlas', href: '/about' },
       { t: 'How it works', href: classicHref('how-it-works'), ext: true },
       { t: 'Sitemap', href: '/sitemap' },
     ],
@@ -42,11 +53,12 @@ export default function SiteFooter() {
         }}
       >
         <div>
-          <p style={{ display: 'flex', alignItems: 'center', gap: 10, font: '800 20px var(--font-ui)', margin: 0 }}>
-            <Chakra size={22} className="foot-chakra" /> BHARAT
+          <p style={{ display: 'flex', alignItems: 'center', gap: 10, font: '600 20px var(--font-serif)', margin: 0 }}>
+            <BrandSeal size={26} color="var(--gold)" ink="var(--ink)" />
+            <span>Bharat<span style={{ color: 'var(--gold)' }}>.</span></span>
           </p>
           <p style={{ fontSize: 13, lineHeight: '22px', color: 'var(--muted)', margin: '14px 0 0', maxWidth: '28ch' }}>
-            Money, land and law — side by side for 594 districts. Sourced to the figure, or shown as an explicit gap.
+            Understand India by the evidence — money, land and law traced to every one of 594 districts. Sourced, or we mark it a gap.
           </p>
         </div>
 
@@ -66,19 +78,22 @@ export default function SiteFooter() {
         ))}
       </div>
 
+      {/* floral rule */}
+      <svg width="100%" height="16" aria-hidden="true" style={{ display: 'block', color: '#a8794a', opacity: 0.5 }}>
+        <rect width="100%" height="16" fill="url(#floral)" />
+      </svg>
+
       <div
         style={{
           maxWidth: 'var(--wrap)', margin: '0 auto',
-          padding: '0 var(--edge) 42px',
+          padding: '14px var(--edge) 42px',
           display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 14,
           fontSize: 13, color: 'var(--muted)',
         }}
       >
-        <span>© 2026 India District Atlas</span>
-        <span className="mono" style={{ fontSize: 11 }}>Sourced — or it&apos;s an explicit gap.</span>
+        <span>© 2026 Bharat · the India District Atlas</span>
+        <span className="mono" style={{ fontSize: 11, letterSpacing: '.14em', color: 'var(--gold-700)' }}>SOURCED — OR IT&apos;S A GAP</span>
       </div>
-
-      <style>{`.foot-chakra { color: var(--sky); }`}</style>
     </footer>
   )
 }
