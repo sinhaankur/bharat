@@ -121,13 +121,13 @@ export default function AboutPage() {
         .ed-stat { padding: 20px; }
         .ed-stat-n { font: 600 clamp(26px,4vw,34px) var(--font-mono); }
         .ed-stat-l { font: 500 11px var(--font-ui); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
-        .ed-banner { position: relative; background: #301818; color: #efe3cc; padding: 44px var(--edge); overflow: hidden; }
+        .ed-banner { position: relative; background: #2d2b2b; color: #f3f2f2; padding: 44px var(--edge); overflow: hidden; }
         .ed-banner-jali { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
         .ed-banner-q { position: relative; font: 600 clamp(22px,3.5vw,30px)/1.25 var(--font-serif); max-width: 720px; }
-        .ed-banner-em { font-family: var(--font-italic); color: #c9a227; font-weight: 400; }
+        .ed-banner-em { font-family: var(--font-italic); color: #ec3013; font-weight: 400; }
         .ed-banner-cta { position: relative; display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
-        .ed-banner-ghost { border: 1.5px solid rgba(239,227,204,.5); font: 600 13px var(--font-ui); padding: 8px 16px; color: #efe3cc; }
-        .ed-banner-ghost:hover { border-color: #c9a227; color: #efe3cc; }
+        .ed-banner-ghost { border: 1.5px solid rgba(239,227,204,.5); font: 600 13px var(--font-ui); padding: 8px 16px; color: #f3f2f2; }
+        .ed-banner-ghost:hover { border-color: #ec3013; color: #f3f2f2; }
         @media (max-width: 820px) { .ed-starts { grid-template-columns: 1fr; } .ed-stats { grid-template-columns: repeat(2, 1fr); } }
       `}</style>
     </>

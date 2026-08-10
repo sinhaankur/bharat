@@ -33,12 +33,12 @@ const SWATCHES: { c: string; label: string; cta?: boolean }[] = [
   { c: 'var(--paper)', label: '--background' },
   { c: '#262320', label: '--brand' },
   { c: 'var(--gold)', label: '--accent CTA', cta: true },
-  { c: '#f7ecd2', label: '--accent-tint' },
+  { c: '#ffe0d9', label: '--accent-tint' },
   { c: 'var(--stone)', label: 'stone' },
   { c: 'var(--sky)', label: 'sky' },
-  { c: '#301818', label: 'maroon' },
-  { c: '#c9a227', label: 'gold-leaf' },
-  { c: '#c8664a', label: 'gupta-stone' },
+  { c: '#2d2b2b', label: 'maroon' },
+  { c: '#ec3013', label: 'gold-leaf' },
+  { c: '#ec3013', label: 'gupta-stone' },
   { c: 'var(--good)', label: '--positive' },
 ]
 
@@ -70,7 +70,7 @@ export default function DesignPage() {
                   </div>
                 ))}
               </div>
-              <p className="ds-note">One CTA colour everywhere: <strong style={{ color: 'var(--gold-700)' }}>amber-gold #cc8900</strong> (hover #a06b00). Sky = data/nav; maroon + gold-leaf = dark register.</p>
+              <p className="ds-note">One CTA colour everywhere: <strong style={{ color: 'var(--gold-700)' }}>amber-gold #ec3013</strong> (hover #ae1800). Sky = data/nav; maroon + gold-leaf = dark register.</p>
             </div>
 
             <div>
@@ -153,9 +153,9 @@ export default function DesignPage() {
         .ds-head-chakra { color: var(--gold); }
         .ds-title { font: 600 clamp(22px,3.5vw,28px) var(--font-serif); margin: 0; }
         .ds-head-sub { font: italic 400 15px var(--font-italic); color: var(--muted); }
-        .ds-live { margin-left: auto; font-size: 10px; letter-spacing: .14em; color: var(--gold-700); background: #f7ecd2; padding: 3px 8px; }
+        .ds-live { margin-left: auto; font-size: 10px; letter-spacing: .14em; color: var(--gold-700); background: #ffe0d9; padding: 3px 8px; }
         .ds-tier { display: grid; grid-template-columns: 120px 1fr; border-bottom: 1px solid var(--line); }
-        .ds-tier-l { padding: 20px; border-right: 2px solid var(--line-strong); background: #f7ecd2; }
+        .ds-tier-l { padding: 20px; border-right: 2px solid var(--line-strong); background: #ffe0d9; }
         .ds-tier-n { font-size: 10px; letter-spacing: .16em; color: var(--gold-700); }
         .ds-tier-name { font: 600 17px var(--font-serif); margin-top: 3px; }
         .ds-tier-body { padding: 18px 26px; display: flex; gap: 30px; flex-wrap: wrap; }
@@ -172,7 +172,7 @@ export default function DesignPage() {
         .ds-cell-l { font-size: 10.5px; letter-spacing: .08em; text-align: center; }
         .ds-coin-row { display: flex; align-items: center; gap: 12px; color: var(--gold-700); }
         .ds-mol-body { padding: 18px 26px; display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
-        .ds-gap { font-size: 10px; letter-spacing: .12em; border: 1px solid #c3bcb2; color: var(--muted); padding: 3px 9px; }
+        .ds-gap { font-size: 10px; letter-spacing: .12em; border: 1px solid #bab6b6; color: var(--muted); padding: 3px 9px; }
         .ds-freeze { display: flex; align-items: center; gap: 6px; font: 600 11px var(--font-ui); color: var(--maroon); }
         .ds-freeze-dot { width: 9px; height: 9px; border: 2px solid var(--maroon); border-radius: 50%; }
         .ds-spin { display: flex; align-items: center; gap: 8px; font: 400 11px var(--font-ui); color: var(--muted); }

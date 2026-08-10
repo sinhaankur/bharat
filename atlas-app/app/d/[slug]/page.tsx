@@ -21,10 +21,10 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
 }
 
 const TIER_TAG: Record<string, { bg: string; fg: string }> = {
-  T1: { bg: '#f7ecd2', fg: '#a06b00' },
-  T2: { bg: '#ece9e2', fg: '#6b665e' },
-  T3: { bg: '#f7ecd2', fg: '#a06b00' },
-  gap: { bg: 'transparent', fg: '#a06b00' },
+  T1: { bg: '#ffe0d9', fg: '#ae1800' },
+  T2: { bg: '#eae7e7', fg: '#605d5d' },
+  T3: { bg: '#ffe0d9', fg: '#ae1800' },
+  gap: { bg: 'transparent', fg: '#ae1800' },
 }
 
 export default async function DistrictPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -60,7 +60,7 @@ export default async function DistrictPage({ params }: { params: Promise<{ slug:
         <div className="lg-stats">
           {d.stats.map((s, i) => (
             <div key={i} className="lg-stat">
-              <div className="lg-stat-v mono" style={{ color: s.tone === 'warn' ? '#9e3b2e' : s.tone === 'muted' ? '#c3bcb2' : undefined }}>{s.value}</div>
+              <div className="lg-stat-v mono" style={{ color: s.tone === 'warn' ? '#ae1800' : s.tone === 'muted' ? '#bab6b6' : undefined }}>{s.value}</div>
               <div className="lg-stat-l">{s.label}</div>
             </div>
           ))}
@@ -76,7 +76,7 @@ export default async function DistrictPage({ params }: { params: Promise<{ slug:
                   <span className="lg-year mono">{e.year}</span>
                   <div className="lg-event-t">
                     {e.text}{' '}
-                    <span className="lg-tier mono" style={{ background: TIER_TAG[e.tier].bg, color: TIER_TAG[e.tier].fg, border: e.tier === 'gap' ? '1px solid #c3bcb2' : undefined }}>
+                    <span className="lg-tier mono" style={{ background: TIER_TAG[e.tier].bg, color: TIER_TAG[e.tier].fg, border: e.tier === 'gap' ? '1px solid #bab6b6' : undefined }}>
                       {e.tier === 'gap' ? 'GAP' : `${e.tier}${e.src ? ' · ' + e.src : ''}`}
                     </span>
                   </div>
@@ -107,7 +107,7 @@ export default async function DistrictPage({ params }: { params: Promise<{ slug:
               {d.provenance.map((p, i) => (
                 <div key={i} className="lg-prov-row">
                   <span>{p.label}</span>
-                  <strong className="mono" style={{ color: p.tone === 'good' ? '#00bb7f' : p.tone === 'gold' ? '#a06b00' : undefined }}>{p.value}</strong>
+                  <strong className="mono" style={{ color: p.tone === 'good' ? '#ae1800' : p.tone === 'gold' ? '#ae1800' : undefined }}>{p.value}</strong>
                 </div>
               ))}
             </div>
@@ -158,64 +158,64 @@ export default async function DistrictPage({ params }: { params: Promise<{ slug:
       <SiteFooter />
 
       <style>{`
-        .ledger { --lg-gold: #cc8900; --lg-gold-700: #a06b00; background: #f6f5f1; color: #1a1917; max-width: 980px; margin: 0 auto; font-family: var(--font-ui); }
-        .lg-crumb { display: flex; align-items: center; gap: 12px; padding: 12px var(--edge); border-bottom: 1px solid #d6d0cb; font: 500 12px var(--font-ui); flex-wrap: wrap; }
-        .lg-crumb-l { color: #6b665e; }
-        .lg-sep { color: #c3bcb2; }
-        .lg-badge { margin-left: auto; font-size: 10.5px; letter-spacing: .1em; color: var(--lg-gold-700); background: #f7ecd2; padding: 3px 8px; }
-        .lg-hero { position: relative; padding: 30px var(--edge) 24px; border-bottom: 1px solid #d6d0cb; }
+        .ledger { --lg-gold: #ec3013; --lg-gold-700: #ae1800; background: #f3f2f2; color: #1a1917; max-width: 980px; margin: 0 auto; font-family: var(--font-ui); }
+        .lg-crumb { display: flex; align-items: center; gap: 12px; padding: 12px var(--edge); border-bottom: 1px solid #d7d3d3; font: 500 12px var(--font-ui); flex-wrap: wrap; }
+        .lg-crumb-l { color: #605d5d; }
+        .lg-sep { color: #bab6b6; }
+        .lg-badge { margin-left: auto; font-size: 10.5px; letter-spacing: .1em; color: var(--lg-gold-700); background: #ffe0d9; padding: 3px 8px; }
+        .lg-hero { position: relative; padding: 30px var(--edge) 24px; border-bottom: 1px solid #d7d3d3; }
         .lg-jali { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: .5; }
         .lg-hero-in { position: relative; }
         .lg-kicker { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--lg-gold-700); margin-bottom: 8px; }
         .lg-title { font: 600 clamp(30px,5vw,40px)/1.05 var(--font-serif); margin: 0 0 6px; letter-spacing: -.01em; }
-        .lg-dek { font: italic 400 18px/1.4 var(--font-italic); color: #6b665e; margin: 0; }
-        .lg-stats { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid #d6d0cb; }
-        .lg-stat { padding: 18px 24px; border-right: 1px solid #d6d0cb; }
+        .lg-dek { font: italic 400 18px/1.4 var(--font-italic); color: #605d5d; margin: 0; }
+        .lg-stats { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid #d7d3d3; }
+        .lg-stat { padding: 18px 24px; border-right: 1px solid #d7d3d3; }
         .lg-stat:last-child { border-right: 0; }
         .lg-stat-v { font: 600 26px var(--font-mono); }
-        .lg-stat-l { font: 500 11px var(--font-ui); color: #6b665e; margin-top: 2px; }
+        .lg-stat-l { font: 500 11px var(--font-ui); color: #605d5d; margin-top: 2px; }
         .lg-body { display: grid; grid-template-columns: 1fr 300px; }
-        .lg-main { padding: 22px var(--edge); border-right: 1px solid #d6d0cb; }
-        .lg-h { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #6b665e; margin-bottom: 14px; }
+        .lg-main { padding: 22px var(--edge); border-right: 1px solid #d7d3d3; }
+        .lg-h { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #605d5d; margin-bottom: 14px; }
         .lg-timeline { display: flex; flex-direction: column; }
-        .lg-event { display: flex; gap: 14px; padding: 10px 0; border-bottom: 1px solid #ece9e2; }
+        .lg-event { display: flex; gap: 14px; padding: 10px 0; border-bottom: 1px solid #eae7e7; }
         .lg-event:last-child { border-bottom: 0; }
         .lg-year { font-size: 11px; color: var(--lg-gold-700); min-width: 52px; padding-top: 2px; }
         .lg-event-t { font: 400 13.5px/1.5 var(--font-ui); }
         .lg-tier { font-size: 10px; padding: 1px 6px; white-space: nowrap; }
         .lg-floral { width: 100%; margin: 18px 0 14px; color: var(--lg-gold); }
         .lg-chain { display: flex; align-items: center; gap: 10px; font: 500 12.5px var(--font-ui); flex-wrap: wrap; }
-        .lg-node { border: 1px solid #c3bcb2; padding: 6px 12px; background: #fbfaf7; }
-        .lg-node.on { border-color: var(--lg-gold); background: #f7ecd2; font-weight: 600; }
-        .lg-arrow { color: #c3bcb2; }
-        .lg-side { padding: 22px 24px; background: #fbfaf7; }
-        .lg-prov-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #ece9e2; font: 400 12.5px var(--font-ui); }
+        .lg-node { border: 1px solid #bab6b6; padding: 6px 12px; background: #eae9e9; }
+        .lg-node.on { border-color: var(--lg-gold); background: #ffe0d9; font-weight: 600; }
+        .lg-arrow { color: #bab6b6; }
+        .lg-side { padding: 22px 24px; background: #eae9e9; }
+        .lg-prov-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #eae7e7; font: 400 12.5px var(--font-ui); }
         .lg-prov-row:last-child { border-bottom: 0; }
-        .lg-quote { margin-top: 16px; border-top: 2px solid #262320; padding-top: 12px; font: italic 400 14px/1.5 var(--font-italic); color: #6b665e; }
+        .lg-quote { margin-top: 16px; border-top: 2px solid #262320; padding-top: 12px; font: italic 400 14px/1.5 var(--font-italic); color: #605d5d; }
         .lg-audit { display: block; margin-top: 16px; background: #262320; color: #fff; font: 600 13px var(--font-ui); padding: 10px 14px; }
         .lg-audit:hover { background: #0a0a0a; color: #fff; }
-        .lg-depts { border-top: 1px solid #d6d0cb; }
+        .lg-depts { border-top: 1px solid #d7d3d3; }
         .lg-depts-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; padding: 18px var(--edge) 6px; }
         .lg-depts-head .lg-h { margin-bottom: 0; }
-        .lg-depts-src { margin-left: auto; font-size: 10px; letter-spacing: .1em; color: var(--lg-gold-700); background: #f7ecd2; padding: 3px 8px; }
+        .lg-depts-src { margin-left: auto; font-size: 10px; letter-spacing: .1em; color: var(--lg-gold-700); background: #ffe0d9; padding: 3px 8px; }
         .lg-dept-table { padding: 8px var(--edge) 18px; }
         .lg-dept-thead, .lg-dept-row { display: grid; grid-template-columns: 1.4fr 2fr .6fr; gap: 12px; padding: 8px 0; align-items: baseline; }
-        .lg-dept-thead { font: 600 9.5px var(--font-mono); letter-spacing: .12em; color: #6b665e; border-bottom: 2px solid #262320; text-transform: uppercase; }
-        .lg-dept-row { border-bottom: 1px solid #ece9e2; font: 400 13px var(--font-ui); }
+        .lg-dept-thead { font: 600 9.5px var(--font-mono); letter-spacing: .12em; color: #605d5d; border-bottom: 2px solid #262320; text-transform: uppercase; }
+        .lg-dept-row { border-bottom: 1px solid #eae7e7; font: 400 13px var(--font-ui); }
         .lg-dept-name { font-weight: 600; }
-        .lg-dept-scheme { font-size: 11.5px; color: #6b665e; }
+        .lg-dept-scheme { font-size: 11.5px; color: #605d5d; }
         .lg-dept-scheme strong { color: var(--lg-gold-700); font-weight: 600; }
         .lg-dept-amt { text-align: right; font-weight: 600; }
-        .lg-gaps { border-top: 1px solid #d6d0cb; padding: 18px var(--edge); }
+        .lg-gaps { border-top: 1px solid #d7d3d3; padding: 18px var(--edge); }
         .lg-gap-list { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
-        .lg-gap-list li { display: flex; gap: 10px; font: 400 12.5px/1.5 var(--font-ui); color: #4a3d30; }
-        .lg-gap-tag { flex: none; font-size: 9.5px; border: 1px solid #c3bcb2; color: var(--lg-gold-700); padding: 1px 6px; height: fit-content; }
-        .lg-strip { display: flex; align-items: center; gap: 14px; padding: 12px var(--edge); border-top: 1px solid #d6d0cb; font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: #6b665e; }
+        .lg-gap-list li { display: flex; gap: 10px; font: 400 12.5px/1.5 var(--font-ui); color: #444141; }
+        .lg-gap-tag { flex: none; font-size: 9.5px; border: 1px solid #bab6b6; color: var(--lg-gold-700); padding: 1px 6px; height: fit-content; }
+        .lg-strip { display: flex; align-items: center; gap: 14px; padding: 12px var(--edge); border-top: 1px solid #d7d3d3; font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: #605d5d; }
         @media (max-width: 780px) {
           .lg-body { grid-template-columns: 1fr; }
-          .lg-main { border-right: 0; border-bottom: 1px solid #d6d0cb; }
+          .lg-main { border-right: 0; border-bottom: 1px solid #d7d3d3; }
           .lg-stats { grid-template-columns: 1fr; }
-          .lg-stat { border-right: 0; border-bottom: 1px solid #d6d0cb; }
+          .lg-stat { border-right: 0; border-bottom: 1px solid #d7d3d3; }
         }
       `}</style>
     </>
