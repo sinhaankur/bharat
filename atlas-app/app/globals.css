@@ -1,0 +1,214 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   Bharat · District Atlas — Modernist × Mauryan design system.
+   Built to the Amazing handoff: the Modernist grid skeleton (flat, 0-radius,
+   2px rules, flush-left, Archivo) carrying the Mauryan STONE + SKY + GOLD
+   palette from mockup 1a "Sunlit Monument". Tokens are the source of truth —
+   take every colour, size and rule from a var(), never a raw value.
+   ══════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* — Mauryan stone & sky palette (mockup 1a) — */
+  --stone:        #e9ddc7;  /* page ground */
+  --stone-2:      #dcccae;  /* raised surface / rails */
+  --paper:        #f6f5f1;  /* house register (ledger) ground */
+  --ink:          #2a2018;  /* text + 2px rules */
+  --muted:        #6b5c48;  /* secondary text */
+  --line:         rgba(42, 32, 24, 0.25);  /* 1px sub-rules */
+  --line-strong:  #2a2018;                 /* 2px section rules */
+
+  /* accents — one role each (accent law from the spec) */
+  --sky:          #3078c0;  /* DATA only */
+  --sky-700:      #245c98;
+  --gold:         #cc8900;  /* ACTION only */
+  --gold-700:     #a06b00;  /* text-safe gold (4.5:1 on stone) */
+  --terra:        #a8452a;  /* WARNINGS only */
+  --maroon:       #9e3b2e;
+  --good:         #00bb7f;
+
+  /* map choropleth ramp (₹ into district) */
+  --ramp-0: #d8f0f0;
+  --ramp-1: #9cc4e4;
+  --ramp-2: #5f9fd6;
+  --ramp-3: #3078c0;
+  --ramp-4: #245c98;
+
+  /* — type — */
+  --font-ui:      var(--font-archivo), system-ui, sans-serif;
+  --font-display: var(--font-archivo), system-ui, sans-serif;
+  --font-serif:   var(--font-fraunces), Georgia, serif;
+  --font-italic:  var(--font-instrument), Georgia, serif;
+  --font-mono:    var(--font-jetbrains), ui-monospace, Menlo, monospace;
+
+  /* — space (Modernist scale, density 1.0) — */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  --radius: 0px;               /* zero, on purpose */
+
+  /* elevation = hard offset shadow (mockup), not a soft blur */
+  --shadow-offset: 6px 6px 0 rgba(42, 32, 24, 0.2);
+  --shadow-sm:     3px 3px 0 rgba(42, 32, 24, 0.18);
+
+  --edge:  clamp(20px, 5vw, 72px);   /* page gutter */
+  --wrap:  1360px;                   /* max content width (mockup 1a) */
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--stone);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: 15px;
+  line-height: 1.55;
+  text-wrap: pretty;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  margin: 0 0 var(--space-2);
+}
+
+p { margin: 0 0 var(--space-3); }
+
+a { color: var(--ink); text-decoration: none; text-underline-offset: 3px; }
+a:hover { color: var(--gold-700); }
+
+img, svg { display: block; max-width: 100%; }
+
+.mono { font-family: var(--font-mono); }
+.muted { color: var(--muted); }
+.grayscale { filter: grayscale(1) contrast(1.08); }
+
+/* selection + focus — themed, never the default blue ring */
+::selection { background: color-mix(in srgb, var(--gold) 30%, transparent); }
+:focus { outline: none; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+/* — the eyebrow / kicker — */
+.kicker {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--terra);
+}
+
+/* — 2px section rule — */
+.rule { height: 2px; border: 0; background: var(--line-strong); }
+.rule-thin { height: 1px; border: 0; background: var(--line); }
+
+/* ── buttons ─────────────────────────────────────────────────────────────
+   Flush-left labels (Modernist): a button wider than its label starts the
+   text at the left padding edge, never centered. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1.2;
+  padding: 10px 14px;
+  border: 1.5px solid transparent;
+  border-radius: var(--radius);
+  color: var(--ink);
+  background: transparent;
+  text-align: left;
+}
+.btn-primary {           /* GOLD = action */
+  background: var(--gold);
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::before {   /* the polish edge (mockup) */
+  content: "";
+  position: absolute; top: 0; left: 0; right: 0; height: 1.5px;
+  background: rgba(255, 252, 244, 0.6);
+}
+.btn-primary:hover { background: var(--gold-700); }
+.btn-secondary { border-color: var(--line-strong); }
+.btn-secondary:hover { background: rgba(42, 32, 24, 0.06); }
+.btn-wide { padding-right: 40px; }   /* the "Open the map" nav pill */
+
+/* ── cards ── */
+.card {
+  background: var(--stone);
+  border: 2px solid var(--line-strong);
+  box-shadow: var(--shadow-offset);
+}
+
+/* ── tags ── */
+.tag {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: 600;
+  padding: 3px 8px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.08em;
+}
+.tag-sky  { color: #fff; background: var(--sky); }
+.tag-gold { color: var(--gold-700); background: #f7ecd2; }
+
+/* ── shared keyframes (used across shells) ── */
+@keyframes chakra-spin { to { transform: rotate(360deg); } }
+@keyframes bha { 0%, 26% { opacity: 1; } 33%, 93% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes drawline { from { stroke-dashoffset: 600; } to { stroke-dashoffset: 0; } }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+/* ── reader preferences (a11y panel writes data-* on <html>) ── */
+html[data-size="sm"] body { font-size: 14px; }
+html[data-size="lg"] body { font-size: 17px; }
+
+html[data-font="hyperlegible"] body { font-family: "Atkinson Hyperlegible", var(--font-ui); }
+html[data-font="dyslexic"] body { font-family: "OpenDyslexic", "Comic Sans MS", var(--font-ui); letter-spacing: 0.02em; }
+
+/* dark theme — flips the stone ground to a temple-interior ink ground */
+html[data-theme="dark"] {
+  --stone: #1c1712;
+  --stone-2: #241d16;
+  --paper: #1c1712;
+  --ink: #efe3cc;
+  --muted: #b3a488;
+  --line: rgba(239, 227, 204, 0.2);
+  --line-strong: #c9a227;
+}
+@media (prefers-color-scheme: dark) {
+  html[data-theme="auto"] {
+    --stone: #1c1712;
+    --stone-2: #241d16;
+    --paper: #1c1712;
+    --ink: #efe3cc;
+    --muted: #b3a488;
+    --line: rgba(239, 227, 204, 0.2);
+    --line-strong: #c9a227;
+  }
+}
+
+/* motion — honour reduce-motion (media query OR the reader toggle) */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+html[data-reduce="on"] { scroll-behavior: auto; }
+html[data-reduce="on"] *, html[data-reduce="on"] *::before, html[data-reduce="on"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+}

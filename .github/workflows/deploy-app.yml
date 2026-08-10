@@ -12,7 +12,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'interactive-vercel-ship-26-i-2/**'
+      - 'atlas-app/**'
       - '.github/workflows/deploy-app.yml'
       - '*.html'
       - '*.json'
@@ -32,41 +32,36 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 11
-
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: pnpm
-          cache-dependency-path: interactive-vercel-ship-26-i-2/pnpm-lock.yaml
+          cache: npm
+          cache-dependency-path: atlas-app/package-lock.json
 
       - name: Build the Next app (static export)
-        working-directory: interactive-vercel-ship-26-i-2
+        working-directory: atlas-app
         env:
           NODE_ENV: production
           BASE_PATH: /bharat/app
         run: |
-          # --ignore-scripts skips native postinstalls (esp. sharp), which pnpm
-          # 10+ otherwise blocks and fatally errors on (ERR_PNPM_IGNORED_BUILDS).
-          # Safe here: this is a STATIC EXPORT, sharp's native binary isn't needed
-          # at build time. .npmrc shamefully-hoist keeps @tailwindcss/postcss
-          # resolvable by Turbopack. Call the next binary directly.
-          pnpm install --no-frozen-lockfile --ignore-scripts
+          # atlas-app is a plain Next 16 static-export app (no Tailwind, tokens are
+          # CSS vars). npm ci --ignore-scripts skips sharp's native postinstall,
+          # which isn't needed for a static export. Call the next binary directly.
+          npm ci --ignore-scripts
           ./node_modules/.bin/next build
 
       - name: Assemble the Pages site (atlas at root + app under /app)
         run: |
           mkdir -p _site
-          # 1) the static atlas = everything in the repo root except build/dev dirs
+          # 1) the classic 594-district atlas = everything in the repo root except
+          #    build/dev dirs and BOTH app dirs (the parked old app + the new one).
           rsync -a --exclude '.git' --exclude 'node_modules' --exclude '_site' \
-                --exclude 'interactive-vercel-ship-26-i-2' --exclude '.github' \
-                --exclude '.venv-font' --exclude '__pycache__' \
+                --exclude 'atlas-app' --exclude 'interactive-vercel-ship-26-i-2' \
+                --exclude '.github' --exclude '.venv-font' --exclude '__pycache__' \
                 ./ _site/
-          # 2) the new app under /app
+          # 2) the rebuilt Modernist × Mauryan app under /app
           mkdir -p _site/app
-          cp -r interactive-vercel-ship-26-i-2/out/* _site/app/
+          cp -r atlas-app/out/* _site/app/
           # 3) Pages needs .nojekyll to serve _next/ (underscore) folders
           touch _site/.nojekyll
 
