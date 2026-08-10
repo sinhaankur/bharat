@@ -1,7 +1,0 @@
-allowBuilds:
-  sharp: set this to true or false
-# pnpm 10+ moved the build-script allowlist out of package.json to here.
-# Allow sharp's native postinstall so `pnpm install` doesn't fatally error
-# with ERR_PNPM_IGNORED_BUILDS on CI (GitHub Pages deploy).
-onlyBuiltDependencies:
-  - sharp
