@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import SiteHeader from '@/components/site-header'
 import SiteFooter from '@/components/site-footer'
 
@@ -49,10 +50,10 @@ export default function EnginesPage() {
               <div className="eng-body">{e.body}</div>
             </div>
           ))}
-          <div className="eng-cell eng-cell-cta">
+          <Link href="/engines/revenue" className="eng-cell eng-cell-cta">
             <div className="eng-quote">&ldquo;Break India into pixels of money + chain of command.&rdquo;</div>
-            <div className="eng-all">All seven deep dives →</div>
-          </div>
+            <div className="eng-all">Open the state ledger →</div>
+          </Link>
         </div>
 
         <div className="eng-strip mono">

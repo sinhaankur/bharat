@@ -5,6 +5,7 @@ import SiteHeader from '@/components/site-header'
 import SiteFooter from '@/components/site-footer'
 import { DISTRICTS, DISTRICT_SLUGS } from '@/lib/districts'
 import { classicMapHref } from '@/lib/links'
+import IndustrialisationTimeline from '@/components/industrialisation-timeline'
 
 // Deep-district ledger — mockup 1b "Edict Ledger", the house register (paper ground,
 // Fraunces / Instrument Serif / JetBrains Mono, amber-gold), edict layout.
@@ -114,6 +115,9 @@ export default async function DistrictPage({ params }: { params: Promise<{ slug:
             <a href={classicMapHref()} className="lg-audit">Audit every figure →</a>
           </aside>
         </div>
+
+        {/* era-coded industrialisation timeline (7b) — only where we have the record */}
+        <IndustrialisationTimeline slug={slug} />
 
         <div className="lg-strip mono">
           <svg width="14" height="14" style={{ color: 'var(--lg-gold)' }} aria-hidden="true"><use href="#chakra" /></svg>
