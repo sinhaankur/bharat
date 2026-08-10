@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { Archivo, Fraunces, Instrument_Serif, JetBrains_Mono } from 'next/font/google'
 import SvgSprite from '@/components/svg-sprite'
+import CommandPalette from '@/components/command-palette'
+import ReaderPanel from '@/components/reader-panel'
 import './globals.css'
 
 // Type system from the handoff: Archivo carries the whole Modernist UI; Fraunces +
@@ -22,6 +24,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <SvgSprite />
         {children}
+        <CommandPalette />
+        <ReaderPanel />
       </body>
     </html>
   )

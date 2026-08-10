@@ -162,7 +162,36 @@ img, svg { display: block; max-width: 100%; }
 .tag-sky  { color: #fff; background: var(--sky); }
 .tag-gold { color: var(--gold-700); background: #f7ecd2; }
 
-/* motion — honour reduce-motion everywhere */
+/* ── reader preferences (a11y panel writes data-* on <html>) ── */
+html[data-size="sm"] body { font-size: 14px; }
+html[data-size="lg"] body { font-size: 17px; }
+
+html[data-font="hyperlegible"] body { font-family: "Atkinson Hyperlegible", var(--font-ui); }
+html[data-font="dyslexic"] body { font-family: "OpenDyslexic", "Comic Sans MS", var(--font-ui); letter-spacing: 0.02em; }
+
+/* dark theme — flips the stone ground to a temple-interior ink ground */
+html[data-theme="dark"] {
+  --stone: #1c1712;
+  --stone-2: #241d16;
+  --paper: #1c1712;
+  --ink: #efe3cc;
+  --muted: #b3a488;
+  --line: rgba(239, 227, 204, 0.2);
+  --line-strong: #c9a227;
+}
+@media (prefers-color-scheme: dark) {
+  html[data-theme="auto"] {
+    --stone: #1c1712;
+    --stone-2: #241d16;
+    --paper: #1c1712;
+    --ink: #efe3cc;
+    --muted: #b3a488;
+    --line: rgba(239, 227, 204, 0.2);
+    --line-strong: #c9a227;
+  }
+}
+
+/* motion — honour reduce-motion (media query OR the reader toggle) */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after {
@@ -170,4 +199,10 @@ img, svg { display: block; max-width: 100%; }
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
+}
+html[data-reduce="on"] { scroll-behavior: auto; }
+html[data-reduce="on"] *, html[data-reduce="on"] *::before, html[data-reduce="on"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
 }

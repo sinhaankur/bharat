@@ -64,11 +64,23 @@ export default function SiteHeader() {
           ))}
         </nav>
 
+        {/* search — opens the command palette (also on "/" or ⌘K) */}
+        <button
+          className="hdr-search"
+          onClick={() => window.dispatchEvent(new Event('atlas:open-search'))}
+          aria-label="Search the atlas"
+        >
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" /><path d="m21 21-4.3-4.3" />
+          </svg>
+          <span className="hdr-search-label">Search</span>
+          <span className="hdr-search-key mono">/</span>
+        </button>
+
         {/* the gold action — opens the real fiscal map */}
         <a
           href={classicMapHref()}
           className="btn btn-primary btn-wide open-map"
-          style={{ marginLeft: 'auto' }}
         >
           Open the map
         </a>
@@ -109,9 +121,13 @@ export default function SiteHeader() {
 
       <style>{`
         .brand-chakra { color: var(--sky); }
+        .hdr-search { display: inline-flex; align-items: center; gap: 8px; border: 1.5px solid var(--line-strong); background: transparent; color: var(--muted); cursor: pointer; font: 500 12px var(--font-ui); padding: 8px 10px; }
+        .hdr-search:hover { color: var(--ink); background: rgba(42,32,24,.05); }
+        .hdr-search-key { font-size: 11px; border: 1px solid var(--line); padding: 0 5px; }
         @media (max-width: 860px) {
-          .nav-desktop, .open-map, .tagline { display: none !important; }
-          .nav-toggle { display: inline-flex !important; align-items: center; justify-content: center; margin-left: auto; }
+          .nav-desktop, .open-map, .tagline, .hdr-search-label, .hdr-search-key { display: none !important; }
+          .hdr-search { margin-left: auto; }
+          .nav-toggle { display: inline-flex !important; align-items: center; justify-content: center; }
         }
       `}</style>
     </header>
