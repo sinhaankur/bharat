@@ -1,0 +1,48 @@
+/* theme-mauryan.css — the Mauryan register for the Bharat atlas.
+   REVERSIBLE LAYER: link AFTER styles.css and add class="theme-mauryan" to <html>.
+   Remove the class, the site returns to the house look. CTAs keep --accent #cc8900. */
+.theme-mauryan {
+  /* Mauryan stone & sky (photo-sampled, ASHOKA_DESIGN.md §2) */
+  --stone: #e9ddc7; --stone-2: #dcccae; --stone-ink: #2a2018;
+  --sky: #3078c0; --sky-deep: #245c98; --sky-mist: #d8f0f0;
+  --ochre: #a8794a; --maroon: #301818; --terracotta: #a8452a;
+  --blush: #f0c0a8; --gold-leaf: #c9a227;
+  --polish: rgba(255, 252, 244, 0.55);
+  /* Gupta layer (long-form / heritage) */
+  --gupta-stone: #c8664a; --gupta-rose: #d98a6a;
+  --ajanta-ochre: #c68a2e; --ajanta-red: #9e3b2e; --ajanta-green: #4f6b45;
+  --ajanta-lapis: #2a4a7a; --ajanta-ivory: #efe3cc; --halo-gold: #cba233;
+  /* remap the house surfaces onto stone; ink stays warm */
+  --background: var(--stone); --card: #f0e7d4; --surface: #f0e7d4;
+  --muted: var(--stone-2); --foreground: var(--stone-ink);
+  --border: rgba(42, 32, 24, 0.22); --border-strong: rgba(42, 32, 24, 0.4);
+  --indigo: var(--sky);
+  /* --accent (#cc8900) and --accent-ink are inherited: the CTA colour is the house gold */
+}
+/* dark "temple interior" — for 3D pages and the engines hub */
+.theme-mauryan.theme-dark, .theme-mauryan .register-dark {
+  --background: #1c1210; --card: var(--maroon); --surface: var(--maroon);
+  --foreground: var(--ajanta-ivory); --muted: #3d2020;
+  --border: rgba(201, 162, 39, 0.25); --border-strong: rgba(201, 162, 39, 0.45);
+  --sky: #5f9fd6; --accent: #efa810;
+}
+/* the Mauryan polish — burnished top edge on cards and buttons */
+.theme-mauryan .ed-card, .theme-mauryan .ed-btn, .theme-mauryan .card {
+  position: relative; border-radius: 2px; /* stone, not soft plastic — 2px on CTAs and boxes */
+}
+.theme-mauryan .ed-card::before, .theme-mauryan .card::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--polish), transparent 70%); pointer-events: none;
+}
+/* incised rules: strong, never hairline-soft */
+.theme-mauryan .hr, .theme-mauryan hr { border: 0; height: 2px; background: var(--stone-ink); opacity: .85; }
+/* edict long-form: ruled margins, justified */
+.theme-mauryan .edict { border-left: 2px solid var(--stone-ink); border-right: 2px solid var(--stone-ink); padding: 0 var(--sp-6, 24px); text-align: justify; }
+/* chakra spinner + live dot */
+@keyframes chakra-spin { to { transform: rotate(360deg); } }
+.theme-mauryan .chakra-spin { animation: chakra-spin 12s linear infinite; }
+@media (prefers-reduced-motion: reduce) { .theme-mauryan .chakra-spin { animation: none; } }
+/* jali texture helper — pair with mauryan-icons.svg #jali pattern via an inline <svg> layer */
+.theme-mauryan .jali-bg { position: relative; }
+/* grayscale imagery discipline stays: photographs print in b/w */
+.theme-mauryan .grayscale img { filter: grayscale(1); }

@@ -88,7 +88,7 @@ export default function HomePage() {
 
       <style>{`
         .hero-jali { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-        .strip-chakra { color: #a8794a; }
+        .strip-chakra { color: #bab6b6; }
         @media (max-width: 620px) {
           .stat-row { grid-template-columns: repeat(2, 1fr) !important; }
         }
