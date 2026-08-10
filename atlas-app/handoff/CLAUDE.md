@@ -1,0 +1,8 @@
+# India District Atlas — project notes
+
+- Program thesis (user's words): "Giving a lot of structure to the information happens with design and language." Design + language (script, flag, band, measure) are the structuring tools for everything in Indic Designs.
+
+- Bound system: Modernist (Archivo, red #ec3013, 2px rules, flat, zero radius) is the structural chassis for all atlas screens.
+- The program is named INDIC DESIGNS: a segmented family of per-state/per-culture design systems (Kashmiri, Tamil, Odia, Rajasthani, Assamese, Manipuri, Naga, …). Each segment is a TOKEN LAYER over the shared chassis (accent color, tint, band/motif, possibly script accent), each referencing the state's heritage and past — e.g. Kashmir references its Hindu temple architecture (trefoil arcades, valley stone, saffron); Rajasthan: leheriya stripes, pink sandstone; Kerala: coir weave, backwater green. Where a state's heritage isn't a temple (the Northeast), the loom and the longhouse carry the language — Naga shawl bands, Manipuri moirang-phee border, Assamese gamosa weave. Layout and structure never change per state — only tokens swap. Derive state accents in oklch so they stay harmonious with the system.
+- Mockup turns 1–9 on the canvas use the retired Mauryan direction; kept as history, don't restyle them.
+- Flagship document: "India by Design Systems.dc.html" — the complete Indic Designs register (hero, 34 segment tiles by region, chassis rules, poster close). Per user direction it wears its own Indic skin (stone ground #e9e0cb/#f6f0e1, ink #2a2018, vermilion #c1440e, Rozha One display + Karla body) instead of Modernist.
