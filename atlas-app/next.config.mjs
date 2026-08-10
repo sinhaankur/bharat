@@ -30,11 +30,6 @@ const nextConfig = {
     config.resolve.alias = { ...(config.resolve.alias || {}), '@': __dirname }
     return config
   },
-
-  // The page-data / static-export workers crash silently (exit 1, no output) right
-  // after compile on the CI runner. Collect page data in-process instead of in a
-  // worker pool so any real error surfaces and the isolated worker crash is avoided.
-  experimental: { workerThreads: false, cpus: 1 },
 }
 
 export default nextConfig
