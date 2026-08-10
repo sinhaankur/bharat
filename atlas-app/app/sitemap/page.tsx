@@ -5,6 +5,7 @@ import SiteFooter from '@/components/site-footer'
 import { classicMapHref, classicHref } from '@/lib/links'
 import { DISTRICT_SLUGS } from '@/lib/districts'
 import { STUDY_SLUGS } from '@/lib/study'
+import { SITE_SLUGS, SITES } from '@/lib/heritage'
 
 // The IA / sitemap (mockup 5a): home fans into the fronts, then every page. Grouped
 // by the five fronts, each entry a real link (app route or classic atlas page).
@@ -27,7 +28,10 @@ const GROUPS: { front: string; items: Entry[] }[] = [
   },
   {
     front: 'Study & history',
-    items: STUDY_SLUGS.map((s) => ({ t: `Study — ${s}`, href: `/study/${s}` })),
+    items: [
+      ...STUDY_SLUGS.map((s) => ({ t: `Study — ${s}`, href: `/study/${s}` })),
+      ...SITE_SLUGS.map((s) => ({ t: `Heritage — ${SITES[s].name}`, href: `/heritage/${s}` })),
+    ],
   },
   {
     front: '3D',
@@ -47,6 +51,7 @@ const GROUPS: { front: string; items: Entry[] }[] = [
     front: 'Data & about',
     items: [
       { t: 'Data & provenance', href: '/data' },
+      { t: 'The register — every page', href: '/register' },
       { t: 'Design system', href: '/design' },
       { t: 'About the atlas', href: '/about' },
       { t: 'References (classic)', href: classicHref('references'), ext: true },
