@@ -167,6 +167,7 @@ img, svg { display: block; max-width: 100%; }
 @keyframes bha { 0%, 26% { opacity: 1; } 33%, 93% { opacity: 0; } 100% { opacity: 1; } }
 @keyframes drawline { from { stroke-dashoffset: 600; } to { stroke-dashoffset: 0; } }
 @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes shimmer { from { background-position: -200% 0; } to { background-position: 200% 0; } }
 
 /* ── reader preferences (a11y panel writes data-* on <html>) ── */
 html[data-size="sm"] body { font-size: 14px; }

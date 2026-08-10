@@ -1,6 +1,7 @@
 import SiteHeader from '@/components/site-header'
 import SiteFooter from '@/components/site-footer'
 import AtlasMap from '@/components/atlas-map'
+import Reveal from '@/components/reveal'
 import { Chakra } from '@/components/icon'
 
 // The atlas home — mockup 1a "Sunlit Monument": Modernist grid skeleton (2px rules,
@@ -30,16 +31,18 @@ export default function HomePage() {
         >
           <svg className="hero-jali" aria-hidden="true"><rect width="100%" height="100%" fill="url(#jali)" /></svg>
 
-          <div style={{ position: 'relative', maxWidth: 820 }}>
-            <div className="kicker" style={{ marginBottom: 10 }}>Sourced — or it&apos;s an explicit gap</div>
-            <h1 style={{ font: '800 clamp(30px,5vw,44px)/1.05 var(--font-ui)', margin: '0 0 14px', letterSpacing: '-.01em' }}>
-              Money, land, and law — side by side for 594 districts.
-            </h1>
-            <p style={{ font: '400 16px/1.5 var(--font-ui)', color: 'var(--muted)', margin: 0, maxWidth: 620 }}>
-              Where public money flows, what the land allows, and the health and wealth of the people on it.
-              Every figure cites a public source; a missing number is shown as a gap, never guessed.
-            </p>
-          </div>
+          <Reveal>
+            <div style={{ position: 'relative', maxWidth: 820 }}>
+              <div className="kicker" style={{ marginBottom: 10 }}>Sourced — or it&apos;s an explicit gap</div>
+              <h1 style={{ font: '800 clamp(30px,5vw,44px)/1.05 var(--font-ui)', margin: '0 0 14px', letterSpacing: '-.01em' }}>
+                Money, land, and law — side by side for 594 districts.
+              </h1>
+              <p style={{ font: '400 16px/1.5 var(--font-ui)', color: 'var(--muted)', margin: 0, maxWidth: 620 }}>
+                Where public money flows, what the land allows, and the health and wealth of the people on it.
+                Every figure cites a public source; a missing number is shown as a gap, never guessed.
+              </p>
+            </div>
+          </Reveal>
 
           {/* stat row */}
           <div
