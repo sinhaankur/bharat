@@ -55,6 +55,26 @@ export default async function HeritagePage({ params }: { params: Promise<{ slug:
             <div className="hs-fact"><div className="hs-fact-l mono">STATUS</div><div className="hs-fact-v" style={{ textTransform: 'capitalize' }}>{s.status}</div></div>
           </div>
 
+          {/* measured-survey plate — real dims, or a declared gap (never invented) */}
+          {s.dims && (
+            <div className="hs-plate">
+              <div className="hs-plate-head">
+                <span className="hs-plate-t mono">MEASURED SURVEY · {s.form ?? 'ELEVATION'}</span>
+                <span className="hs-plate-src mono">SOURCED — NOT A SURVEY FACSIMILE</span>
+              </div>
+              <div className="hs-plate-grid">
+                {s.dims.map((dim) => (
+                  <div key={dim.label} className="hs-dim">
+                    <div className="hs-dim-v mono" style={{ color: dim.gap ? 'var(--muted)' : undefined }}>
+                      {dim.value}{dim.gap && <span className="hs-dim-gap mono"> GAP</span>}
+                    </div>
+                    <div className="hs-dim-l mono">{dim.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* lifespan bar */}
           <div className="hs-life">
             <div className="hs-life-h mono">LIFESPAN — {span0} CE → today</div>
@@ -116,6 +136,16 @@ export default async function HeritagePage({ params }: { params: Promise<{ slug:
         .hs-facts .hs-fact:nth-child(2) { padding-left: 16px; }
         .hs-fact-l { font-size: 9px; letter-spacing: .14em; color: var(--muted); }
         .hs-fact-v { font: 500 12.5px/1.4 var(--font-ui); margin-top: 4px; }
+        .hs-plate { margin-top: 22px; background: #e8dcc0; border: 1.5px solid rgba(42,32,24,.5); background-image: radial-gradient(ellipse 90% 70% at 30% 20%, rgba(255,250,235,.5), transparent 60%), radial-gradient(ellipse 60% 50% at 80% 85%, rgba(160,130,80,.14), transparent 65%); }
+        .hs-plate-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 12px 20px 8px; margin: 0 12px; border-bottom: 1.5px solid rgba(42,32,24,.55); }
+        .hs-plate-t { font-size: 9px; letter-spacing: .16em; color: #8a5a3a; }
+        .hs-plate-src { font-size: 9px; letter-spacing: .1em; color: #8a5a3a; }
+        .hs-plate-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 0; padding: 14px 8px; }
+        .hs-dim { padding: 6px 12px; border-right: 1px solid rgba(42,32,24,.2); }
+        .hs-dim:last-child { border-right: 0; }
+        .hs-dim-v { font: 600 17px var(--font-mono); color: #2a2018; }
+        .hs-dim-gap { font-size: 9px; color: var(--gold-700); border: 1px solid #c3bcb2; padding: 0 4px; }
+        .hs-dim-l { font-size: 9.5px; color: #6b5c48; margin-top: 3px; }
         .hs-life { margin-top: 22px; }
         .hs-life-h { font-size: 9.5px; letter-spacing: .14em; color: var(--muted); margin-bottom: 8px; }
         .hs-life-bar { position: relative; height: 12px; background: var(--stone-2); border: 1px solid var(--line); }
