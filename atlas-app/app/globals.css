@@ -32,12 +32,12 @@
   --ramp-3: #3078c0;
   --ramp-4: #245c98;
 
-  /* — type — */
-  --font-ui:      var(--font-archivo), system-ui, sans-serif;
-  --font-display: var(--font-archivo), system-ui, sans-serif;
-  --font-serif:   var(--font-fraunces), Georgia, serif;
-  --font-italic:  var(--font-instrument), Georgia, serif;
-  --font-mono:    var(--font-jetbrains), ui-monospace, Menlo, monospace;
+  /* — type — self-hosted via @fontsource (family names, not next/font vars) — */
+  --font-ui:      "Archivo", system-ui, sans-serif;
+  --font-display: "Archivo", system-ui, sans-serif;
+  --font-serif:   "Fraunces", Georgia, serif;
+  --font-italic:  "Instrument Serif", Georgia, serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, Menlo, monospace;
 
   /* — space (Modernist scale, density 1.0) — */
   --space-1: 4px;

@@ -1,16 +1,22 @@
 import type { Metadata } from 'next'
-import { Archivo, Fraunces, Instrument_Serif, JetBrains_Mono } from 'next/font/google'
+// Self-hosted fonts via @fontsource — bundled into the app, so there is NO network
+// fetch at build time (next/font/google was aborting the CI build when the Google
+// Fonts request failed) or at runtime. Weights match the handoff.
+import '@fontsource/archivo/400.css'
+import '@fontsource/archivo/600.css'
+import '@fontsource/archivo/700.css'
+import '@fontsource/archivo/800.css'
+import '@fontsource/fraunces/400.css'
+import '@fontsource/fraunces/600.css'
+import '@fontsource/fraunces/700.css'
+import '@fontsource/instrument-serif/400.css'
+import '@fontsource/instrument-serif/400-italic.css'
+import '@fontsource/jetbrains-mono/400.css'
+import '@fontsource/jetbrains-mono/600.css'
 import SvgSprite from '@/components/svg-sprite'
 import CommandPalette from '@/components/command-palette'
 import ReaderPanel from '@/components/reader-panel'
 import './globals.css'
-
-// Type system from the handoff: Archivo carries the whole Modernist UI; Fraunces +
-// Instrument Serif + JetBrains Mono are kept for the "house register" (ledger) only.
-const archivo = Archivo({ subsets: ['latin'], weight: ['400', '600', '700', '800'], variable: '--font-archivo', display: 'swap' })
-const fraunces = Fraunces({ subsets: ['latin'], weight: ['400', '600', '700'], variable: '--font-fraunces', display: 'swap' })
-const instrument = Instrument_Serif({ subsets: ['latin'], weight: ['400'], style: ['normal', 'italic'], variable: '--font-instrument', display: 'swap' })
-const jetbrains = JetBrains_Mono({ subsets: ['latin'], weight: ['400', '600'], variable: '--font-jetbrains', display: 'swap' })
 
 export const metadata: Metadata = {
   title: 'Bharat — the India District Atlas',
@@ -20,7 +26,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${archivo.variable} ${fraunces.variable} ${instrument.variable} ${jetbrains.variable}`}>
+    <html lang="en">
       <body>
         <SvgSprite />
         {children}
