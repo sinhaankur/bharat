@@ -43,12 +43,24 @@ jobs:
         env:
           NODE_ENV: production
           BASE_PATH: /bharat/app
+          NEXT_TELEMETRY_DISABLED: '1'
+          NEXT_PRIVATE_DEBUG_CACHE: '1'
         run: |
           # atlas-app is a plain Next 16 static-export app (no Tailwind, tokens are
           # CSS vars). npm ci --ignore-scripts skips sharp's native postinstall,
           # which isn't needed for a static export. Call the next binary directly.
           npm ci --ignore-scripts
-          ./node_modules/.bin/next build
+          node --version
+          # Run without -e so we can capture next's exit code + full output even on
+          # failure (the page-data worker step was exiting 1 with no visible error).
+          set +e
+          ./node_modules/.bin/next build 2>&1 | tee build.log
+          code=${PIPESTATUS[0]}
+          echo "=== next build exit code: $code ==="
+          if [ "$code" != "0" ]; then
+            echo "=== tail of build.log ==="; tail -60 build.log
+          fi
+          exit $code
 
       - name: Assemble the Pages site (atlas at root + app under /app)
         run: |
