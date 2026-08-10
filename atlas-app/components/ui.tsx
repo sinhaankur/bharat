@@ -110,7 +110,7 @@ const UI_CSS = `
   .ui-label { font: 600 11px var(--font-ui); margin-bottom: 6px; }
   .ui-input { border: 1px solid var(--line); background: var(--stone-2); padding: 11px 13px; font: 400 13px var(--font-ui); min-height: 44px; display: flex; align-items: center; }
   .ui-input:hover { border-color: var(--line-strong); }
-  .ui-input.err { border: 1.5px solid var(--maroon); background: #f5e8da; }
+  .ui-input.err { border: 1.5px solid var(--maroon); background: #ffe0d9; }
   .ui-input.dis { background: var(--stone-2); color: var(--muted); opacity: .45; }
   .ui-ph { color: var(--muted); }
   .ui-err-msg { font: 500 10.5px var(--font-ui); color: var(--maroon); margin-top: 4px; }
@@ -126,18 +126,18 @@ const UI_CSS = `
   .ui-load-t { font: 600 12px var(--font-serif); }
   .ui-skel { height: 10px; background: linear-gradient(90deg, var(--stone-2) 25%, var(--stone) 50%, var(--stone-2) 75%); background-size: 200% 100%; animation: shimmer 1.4s linear infinite; margin-bottom: 6px; }
   .ui-empty { text-align: center; }
-  .ui-empty-ic { color: #a8794a; margin: 2px auto 6px; }
+  .ui-empty-ic { color: #bab6b6; margin: 2px auto 6px; }
   .ui-empty-t { font: 600 13px var(--font-serif); }
   .ui-empty-b { font: 400 11px/1.5 var(--font-ui); color: var(--muted); margin: 4px 0 10px; }
-  .ui-error { border: 1.5px solid var(--maroon); background: #f5e8da; }
+  .ui-error { border: 1.5px solid var(--maroon); background: #ffe0d9; }
   .ui-err-t { font: 600 13px var(--font-serif); }
   .ui-err-b { font: 400 11px/1.5 var(--font-ui); color: var(--muted); margin: 4px 0 10px; }
   .ui-retry { display: inline-flex; background: var(--gold); color: #fff; font: 600 11px var(--font-ui); padding: 8px 12px; min-height: 36px; align-items: center; cursor: pointer; }
   .ui-retry:hover { background: var(--gold-700); }
   .ui-toast { display: flex; align-items: center; gap: 11px; background: var(--ink); color: var(--stone); padding: 11px 15px; box-shadow: var(--shadow-sm); animation: rise .4s cubic-bezier(.2,.7,.2,1) both; }
-  .ui-toast-ic { color: #c9a227; }
+  .ui-toast-ic { color: #ec3013; }
   .ui-toast-t { font: 500 12px var(--font-ui); }
-  .ui-toast-undo { margin-left: auto; font: 600 11px var(--font-ui); color: #c9a227; cursor: pointer; }
+  .ui-toast-undo { margin-left: auto; font: 600 11px var(--font-ui); color: #ec3013; cursor: pointer; }
   .ui-dialog { border: 2px solid var(--ink); background: var(--paper); box-shadow: var(--shadow-offset); }
   .ui-dialog-in { padding: 16px 20px 0; }
   .ui-dialog-k { font-size: 10px; letter-spacing: .14em; color: var(--gold-700); }

@@ -1,42 +1,51 @@
 /* ══════════════════════════════════════════════════════════════════════════
-   Bharat · District Atlas — Modernist × Mauryan design system.
-   Built to the Amazing handoff: the Modernist grid skeleton (flat, 0-radius,
-   2px rules, flush-left, Archivo) carrying the Mauryan STONE + SKY + GOLD
-   palette from mockup 1a "Sunlit Monument". Tokens are the source of truth —
-   take every colour, size and rule from a var(), never a raw value.
+   District Atlas — the MODERNIST design system, faithful to the handoff.
+   Source of truth: the _ds modernist token sheet in handoff/. Flat, architectural,
+   near-mono RED on a light ground; Archivo throughout; zero corner radius;
+   strong 2px rules; flush-left. Every colour/size comes from a var() below —
+   these values are copied 1:1 from the _ds token sheet.
    ══════════════════════════════════════════════════════════════════════ */
 
 :root {
-  /* — Mauryan stone & sky palette (mockup 1a) — */
-  --stone:        #e9ddc7;  /* page ground */
-  --stone-2:      #dcccae;  /* raised surface / rails */
-  --paper:        #f6f5f1;  /* house register (ledger) ground */
-  --ink:          #2a2018;  /* text + 2px rules */
-  --muted:        #6b5c48;  /* secondary text */
-  --line:         rgba(42, 32, 24, 0.25);  /* 1px sub-rules */
-  --line-strong:  #2a2018;                 /* 2px section rules */
+  /* — Modernist ground + ink (from _ds styles.css) — */
+  --bg:           #f3f2f2;  /* --color-bg */
+  --surface:      #eae9e9;  /* --color-surface */
+  --ink:          #201e1d;  /* --color-text + rules */
+  --muted:        color-mix(in srgb, #201e1d 55%, transparent);
+  --line:         color-mix(in srgb, #201e1d 40%, transparent);  /* --color-divider */
+  --line-strong:  color-mix(in srgb, #201e1d 40%, transparent);
 
-  /* accents — one role each (accent law from the spec) */
-  --sky:          #3078c0;  /* DATA only */
-  --sky-700:      #245c98;
-  --gold:         #cc8900;  /* ACTION only */
-  --gold-700:     #a06b00;  /* text-safe gold (4.5:1 on stone) */
-  --terra:        #a8452a;  /* WARNINGS only */
-  --maroon:       #9e3b2e;
-  --good:         #00bb7f;
+  /* the single accent — red (mono scheme; one role) */
+  --accent:       #ec3013;  /* --color-accent */
+  --accent-600:   #dd2b0f;
+  --accent-700:   #ae1800;  /* text-safe red on the light ground */
 
-  /* map choropleth ramp (₹ into district) */
-  --ramp-0: #d8f0f0;
-  --ramp-1: #9cc4e4;
-  --ramp-2: #5f9fd6;
-  --ramp-3: #3078c0;
-  --ramp-4: #245c98;
+  /* legacy token aliases kept so existing components don't break — all mapped
+     onto the Modernist palette so nothing renders off-system. */
+  --stone:        var(--bg);
+  --stone-2:      var(--surface);
+  --paper:        var(--bg);
+  --gold:         var(--accent);
+  --gold-700:     var(--accent-700);
+  --sky:          var(--accent);
+  --sky-700:      var(--accent-700);
+  --terra:        var(--accent);
+  --maroon:       var(--accent-700);
+  --good:         var(--accent-700);
 
-  /* — type — self-hosted via @fontsource (family names, not next/font vars) — */
+  /* neutral choropleth ramp (mono: light grey → accent) */
+  --ramp-0: #f8f4f4;
+  --ramp-1: #d7d3d3;
+  --ramp-2: #ff9783;
+  --ramp-3: #ff563c;
+  --ramp-4: #ec3013;
+
+  /* — type — Modernist is set entirely in Archivo. serif/italic alias to Archivo
+     so any leftover use renders on-system; mono kept for data/eyebrows. — */
   --font-ui:      "Archivo", system-ui, sans-serif;
   --font-display: "Archivo", system-ui, sans-serif;
-  --font-serif:   "Fraunces", Georgia, serif;
-  --font-italic:  "Instrument Serif", Georgia, serif;
+  --font-serif:   "Archivo", system-ui, sans-serif;
+  --font-italic:  "Archivo", system-ui, sans-serif;
   --font-mono:    "JetBrains Mono", ui-monospace, Menlo, monospace;
 
   /* — space (Modernist scale, density 1.0) — */
@@ -47,14 +56,15 @@
   --space-6: 24px;
   --space-8: 32px;
 
-  --radius: 0px;               /* zero, on purpose */
+  --radius: 0px;               /* --radius-md is 0 on purpose */
 
-  /* elevation = hard offset shadow (mockup), not a soft blur */
-  --shadow-offset: 6px 6px 0 rgba(42, 32, 24, 0.2);
-  --shadow-sm:     3px 3px 0 rgba(42, 32, 24, 0.18);
+  /* elevation — the _ds tuned soft shadows (not a hard offset) */
+  --shadow-offset: 0 12px 32px color-mix(in srgb, #2d2b2b 22%, transparent);
+  --shadow-sm:     0 1px 2px color-mix(in srgb, #2d2b2b 14%, transparent);
+  --shadow-md:     0 3px 10px color-mix(in srgb, #2d2b2b 16%, transparent);
 
   --edge:  clamp(20px, 5vw, 72px);   /* page gutter */
-  --wrap:  1360px;                   /* max content width (mockup 1a) */
+  --wrap:  1200px;                   /* _ds content width */
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -63,7 +73,7 @@ html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
-  background: var(--stone);
+  background: var(--bg);
   color: var(--ink);
   font-family: var(--font-ui);
   font-size: 15px;
@@ -128,21 +138,15 @@ img, svg { display: block; max-width: 100%; }
   background: transparent;
   text-align: left;
 }
-.btn-primary {           /* GOLD = action */
-  background: var(--gold);
-  color: #fff;
-  position: relative;
-  overflow: hidden;
+.btn-primary {           /* the accent fill — the single primary action */
+  background: var(--accent);
+  color: var(--bg);
 }
-.btn-primary::before {   /* the polish edge (mockup) */
-  content: "";
-  position: absolute; top: 0; left: 0; right: 0; height: 1.5px;
-  background: rgba(255, 252, 244, 0.6);
-}
-.btn-primary:hover { background: var(--gold-700); }
-.btn-secondary { border-color: var(--line-strong); }
-.btn-secondary:hover { background: rgba(42, 32, 24, 0.06); }
-.btn-wide { padding-right: 40px; }   /* the "Open the map" nav pill */
+.btn-primary:hover { background: var(--accent-600); }
+.btn-primary:active { background: var(--accent-700); }
+.btn-secondary { border-color: var(--line); }
+.btn-secondary:hover { background: color-mix(in srgb, var(--ink) 7%, transparent); }
+.btn-wide { padding-right: 40px; }
 
 /* ── cards ── */
 .card {
@@ -176,25 +180,33 @@ html[data-size="lg"] body { font-size: 17px; }
 html[data-font="hyperlegible"] body { font-family: "Atkinson Hyperlegible", var(--font-ui); }
 html[data-font="dyslexic"] body { font-family: "OpenDyslexic", "Comic Sans MS", var(--font-ui); letter-spacing: 0.02em; }
 
-/* dark theme — flips the stone ground to a temple-interior ink ground */
+/* dark theme — Modernist dark: ink ground, light text, the same red accent */
 html[data-theme="dark"] {
-  --stone: #1c1712;
-  --stone-2: #241d16;
-  --paper: #1c1712;
-  --ink: #efe3cc;
-  --muted: #b3a488;
-  --line: rgba(239, 227, 204, 0.2);
-  --line-strong: #c9a227;
+  --bg: #201e1d;
+  --surface: #2d2b2b;
+  --stone: #201e1d;
+  --stone-2: #2d2b2b;
+  --paper: #201e1d;
+  --ink: #f8f4f4;
+  --muted: color-mix(in srgb, #f8f4f4 55%, transparent);
+  --line: color-mix(in srgb, #f8f4f4 30%, transparent);
+  --line-strong: color-mix(in srgb, #f8f4f4 30%, transparent);
+  --accent: #ff563c;   /* accent-500: the accent one step up on a dark ground */
+  --accent-700: #ff9783;
 }
 @media (prefers-color-scheme: dark) {
   html[data-theme="auto"] {
-    --stone: #1c1712;
-    --stone-2: #241d16;
-    --paper: #1c1712;
-    --ink: #efe3cc;
-    --muted: #b3a488;
-    --line: rgba(239, 227, 204, 0.2);
-    --line-strong: #c9a227;
+    --bg: #201e1d;
+    --surface: #2d2b2b;
+    --stone: #201e1d;
+    --stone-2: #2d2b2b;
+    --paper: #201e1d;
+    --ink: #f8f4f4;
+    --muted: color-mix(in srgb, #f8f4f4 55%, transparent);
+    --line: color-mix(in srgb, #f8f4f4 30%, transparent);
+    --line-strong: color-mix(in srgb, #f8f4f4 30%, transparent);
+    --accent: #ff563c;
+    --accent-700: #ff9783;
   }
 }
 

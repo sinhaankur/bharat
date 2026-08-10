@@ -3,17 +3,17 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import BrandSeal from '@/components/brand-seal'
 import { classicMapHref } from '@/lib/links'
 
-// The global header — mockup 4a: the seal-ring "Bharat." brand (animated भ/ভ/ಭ, gold),
-// the Map/3D/Study/Data/About nav with a gold active underline, a "press / to search"
-// hint, and the gold "Open the map" action. Used on every page.
+// The global header — faithful to the handoff's Atlas Header.dc.html: the Modernist
+// nav bar with the red square brand mark + "District Atlas", flush links, and the
+// red primary button. Sticky, 2px bottom rule. (nav .nav / .nav-brand / .btn come
+// straight from the _ds system.)
 const NAV: { label: string; href: string; ext?: boolean; match?: string[] }[] = [
-  { label: 'Map', href: classicMapHref(), ext: true },
+  { label: 'Atlas', href: '/', match: ['/d', '/explore', '/engines', '/heritage'] },
   { label: '3D', href: '/3d' },
   { label: 'Study', href: '/study/ashoka', match: ['/study', '/heritage'] },
-  { label: 'Data', href: '/data', match: ['/data', '/register', '/design', '/engines', '/explore'] },
+  { label: 'Data', href: '/data', match: ['/data', '/register', '/design'] },
   { label: 'About', href: '/about' },
 ]
 
@@ -21,89 +21,70 @@ export default function SiteHeader() {
   const [open, setOpen] = useState(false)
   const pathname = usePathname() || '/'
   const isActive = (n: (typeof NAV)[number]) =>
-    !n.ext && (n.match ? n.match.some((m) => pathname.startsWith(m)) : pathname === n.href)
+    !n.ext && (n.href === '/' ? pathname === '/' || (n.match?.some((m) => pathname.startsWith(m)) ?? false)
+      : n.match ? n.match.some((m) => pathname.startsWith(m)) : pathname.startsWith(n.href))
 
   return (
-    <header
-      style={{
-        position: 'sticky', top: 0, zIndex: 50,
-        background: 'var(--stone)', borderBottom: '2px solid var(--line-strong)',
-      }}
-    >
-      <div
-        style={{
-          display: 'flex', alignItems: 'center', gap: 18,
-          maxWidth: 'var(--wrap)', margin: '0 auto',
-          padding: '13px var(--edge)',
-        }}
+    <header className="nav" style={{ position: 'sticky', top: 0, zIndex: 50, background: 'var(--bg)', paddingInline: 'var(--edge)' }}>
+      {/* brand */}
+      <Link href="/" className="nav-brand" style={{ display: 'flex', alignItems: 'center', gap: 12 }} aria-label="District Atlas — home">
+        <span style={{ width: 10, height: 10, background: 'var(--accent)', flex: 'none' }} aria-hidden="true" />
+        District Atlas
+      </Link>
+
+      {/* desktop nav */}
+      <nav className="nav-links" aria-label="Primary">
+        {NAV.map((n) => {
+          const props = { 'aria-current': isActive(n) ? ('page' as const) : undefined }
+          return n.ext
+            ? <a key={n.label} href={n.href} {...props}>{n.label}</a>
+            : <Link key={n.label} href={n.href} {...props}>{n.label}</Link>
+        })}
+      </nav>
+
+      {/* search + primary */}
+      <button
+        className="nav-search"
+        onClick={() => window.dispatchEvent(new Event('atlas:open-search'))}
+        aria-label="Search the atlas"
       >
-        {/* brand — seal-ring Bharat. */}
-        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 9 }} aria-label="Bharat — home">
-          <BrandSeal size={28} color="var(--gold)" ink="var(--ink)" />
-          <span style={{ font: '600 17px var(--font-serif)' }}>Bharat<span style={{ color: 'var(--gold)' }}>.</span></span>
-        </Link>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m21 21-4.3-4.3" /></svg>
+        <span className="nav-search-key">/</span>
+      </button>
+      <a className="btn btn-primary open-map" href={classicMapHref()}>Open the map</a>
 
-        {/* nav */}
-        <nav className="nav-desktop" style={{ display: 'flex', gap: 20, font: '600 12.5px var(--font-ui)' }}>
-          {NAV.map((n) => {
-            const on = isActive(n)
-            const style: React.CSSProperties = {
-              color: on ? 'var(--ink)' : 'var(--muted)',
-              borderBottom: on ? '2px solid var(--gold)' : '2px solid transparent',
-              paddingBottom: 2,
-            }
-            return n.ext
-              ? <a key={n.label} href={n.href} style={style}>{n.label}</a>
-              : <Link key={n.label} href={n.href} style={style}>{n.label}</Link>
-          })}
-        </nav>
-
-        {/* actions */}
-        <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 12 }}>
-          <button
-            className="hdr-search"
-            onClick={() => window.dispatchEvent(new Event('atlas:open-search'))}
-            aria-label="Search the atlas"
-          >
-            <span aria-hidden>⌕</span><span className="hdr-search-label"> press <span className="mono">/</span> to search</span>
-          </button>
-          <a href={classicMapHref()} className="btn btn-primary btn-wide open-map">Open the map</a>
-          <button
-            className="nav-toggle"
-            onClick={() => setOpen((v) => !v)}
-            aria-label="Menu" aria-expanded={open}
-          >
-            {open ? '✕' : '☰'}
-          </button>
-        </div>
-      </div>
+      <button className="nav-toggle" onClick={() => setOpen((v) => !v)} aria-label="Menu" aria-expanded={open}>
+        {open ? '✕' : '☰'}
+      </button>
 
       {/* mobile drawer */}
       {open && (
-        <nav className="nav-mobile" style={{ borderTop: '2px solid var(--line-strong)', background: 'var(--stone-2)' }}>
-          <ul style={{ listStyle: 'none', margin: 0, padding: '8px var(--edge) 16px' }}>
-            {NAV.map((n) => {
-              const style: React.CSSProperties = { display: 'block', padding: '12px 0', font: '600 15px var(--font-ui)', borderBottom: '1px solid var(--line)' }
-              return (
-                <li key={n.label}>
-                  {n.ext
-                    ? <a href={n.href} style={style}>{n.label}</a>
-                    : <Link href={n.href} onClick={() => setOpen(false)} style={style}>{n.label}</Link>}
-                </li>
-              )
-            })}
-          </ul>
+        <nav className="nav-mobile" aria-label="Primary (mobile)">
+          {NAV.map((n) =>
+            n.ext
+              ? <a key={n.label} href={n.href}>{n.label}</a>
+              : <Link key={n.label} href={n.href} onClick={() => setOpen(false)}>{n.label}</Link>
+          )}
         </nav>
       )}
 
       <style>{`
-        .hdr-search { display: inline-flex; align-items: center; gap: 4px; border: 0; background: transparent; color: var(--muted); cursor: pointer; font: 400 12px var(--font-ui); padding: 6px 4px; }
-        .hdr-search:hover { color: var(--ink); }
-        .hdr-search .mono { border: 1px solid var(--line); padding: 0 5px; font-size: 11px; }
-        .nav-toggle { display: none; width: 40px; height: 40px; border: 1.5px solid var(--line-strong); background: transparent; cursor: pointer; color: var(--ink); align-items: center; justify-content: center; }
-        @media (max-width: 860px) {
-          .nav-desktop, .open-map, .hdr-search-label { display: none !important; }
-          .nav-toggle { display: inline-flex !important; }
+        .nav { display: flex; align-items: center; gap: var(--space-4); padding-block: var(--space-3); border-bottom: 2px solid var(--line); }
+        .nav-brand { font-family: var(--font-display); font-weight: 800; font-size: 18px; color: var(--ink); margin-right: auto; text-decoration: none; }
+        .nav-links { display: flex; gap: 22px; align-items: center; }
+        .nav-links a { color: var(--ink); text-decoration: none; font: 600 14px var(--font-ui); }
+        .nav-links a:hover, .nav-links a[aria-current='page'] { color: var(--accent); }
+        .nav-search { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; padding: 7px 9px; }
+        .nav-search:hover { color: var(--ink); border-color: var(--ink); }
+        .nav-search-key { font: 600 11px var(--font-mono); }
+        .open-map { white-space: nowrap; }
+        .nav-toggle { display: none; width: 40px; height: 40px; border: 1px solid var(--line); background: transparent; color: var(--ink); cursor: pointer; align-items: center; justify-content: center; }
+        .nav-mobile { display: none; }
+        @media (max-width: 820px) {
+          .nav-links, .open-map, .nav-search-key { display: none !important; }
+          .nav-toggle { display: inline-flex; }
+          .nav-mobile { display: flex; flex-direction: column; flex-basis: 100%; order: 10; border-top: 2px solid var(--line); margin-top: var(--space-3); }
+          .nav-mobile a { padding: 12px 0; border-bottom: 1px solid var(--line); color: var(--ink); text-decoration: none; font: 600 15px var(--font-ui); }
         }
       `}</style>
     </header>

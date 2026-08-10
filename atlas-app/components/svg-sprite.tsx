@@ -33,7 +33,7 @@ export default function SvgSprite() {
 
           {/* jali lattice — light texture behind heros/panels */}
           <pattern id="jali" width="60" height="60" patternUnits="userSpaceOnUse">
-            <g fill="none" stroke="#a8794a" strokeWidth="1.1" opacity="0.14">
+            <g fill="none" stroke="#bab6b6" strokeWidth="1.1" opacity="0.14">
               <path d="M30 6 L38 22 L54 30 L38 38 L30 54 L22 38 L6 30 L22 22 Z" />
               <rect x="14" y="14" width="32" height="32" transform="rotate(45 30 30)" />
               <circle cx="30" cy="30" r="6" />
@@ -43,7 +43,7 @@ export default function SvgSprite() {
 
           {/* jali lattice — for dark grounds (gold-leaf lines) */}
           <pattern id="jali-dark" width="60" height="60" patternUnits="userSpaceOnUse">
-            <g fill="none" stroke="#c9a227" strokeWidth="1" opacity="0.1">
+            <g fill="none" stroke="#ec3013" strokeWidth="1" opacity="0.1">
               <path d="M30 6 L38 22 L54 30 L38 38 L30 54 L22 38 L6 30 L22 22 Z" />
               <rect x="14" y="14" width="32" height="32" transform="rotate(45 30 30)" />
               <circle cx="30" cy="30" r="6" />
@@ -52,11 +52,11 @@ export default function SvgSprite() {
 
           {/* floral band — section divider */}
           <pattern id="floral" width="40" height="22" patternUnits="userSpaceOnUse">
-            <g fill="none" stroke="#a8794a" strokeWidth="1.3">
+            <g fill="none" stroke="#bab6b6" strokeWidth="1.3">
               <path d="M0 11 C 8 3, 12 3, 20 11 S 32 19, 40 11" />
-              <path d="M10 7 c -3 -4, 3 -4, 0 0" fill="#a8794a" />
-              <path d="M30 15 c -3 4, 3 4, 0 0" fill="#a8794a" />
-              <circle cx="20" cy="11" r="2" fill="#a8794a" />
+              <path d="M10 7 c -3 -4, 3 -4, 0 0" fill="#bab6b6" />
+              <path d="M30 15 c -3 4, 3 4, 0 0" fill="#bab6b6" />
+              <circle cx="20" cy="11" r="2" fill="#bab6b6" />
             </g>
           </pattern>
 

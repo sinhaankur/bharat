@@ -6,10 +6,10 @@ import { INDUSTRIALISATION, ERA_LABEL, ERA_COLOR, type Era } from '@/lib/industr
 // a section inside the district ledger (house register). Returns null if the district
 // has no industrial record yet.
 const TIER_TAG: Record<string, { bg?: string; fg: string; border?: string }> = {
-  T1: { bg: '#f7ecd2', fg: '#a06b00' },
-  T2: { bg: '#ece9e2', fg: '#3a3630' },
-  T3: { bg: '#f7ecd2', fg: '#a06b00' },
-  gap: { fg: '#6b665e', border: '1px solid #c3bcb2' },
+  T1: { bg: '#ffe0d9', fg: '#ae1800' },
+  T2: { bg: '#eae7e7', fg: '#3a3630' },
+  T3: { bg: '#ffe0d9', fg: '#ae1800' },
+  gap: { fg: '#605d5d', border: '1px solid #bab6b6' },
 }
 
 export default function IndustrialisationTimeline({ slug }: { slug: string }) {
@@ -65,8 +65,8 @@ export default function IndustrialisationTimeline({ slug }: { slug: string }) {
       <div className="it-note"><Icon name="coin" size={13} className="it-note-ic" />{data.note}</div>
 
       <style>{`
-        .it { border-top: 1px solid #d6d0cb; margin-top: 8px; }
-        .it-head { padding: 18px var(--edge) 14px; border-bottom: 1px solid #d6d0cb; }
+        .it { border-top: 1px solid #d7d3d3; margin-top: 8px; }
+        .it-head { padding: 18px var(--edge) 14px; border-bottom: 1px solid #d7d3d3; }
         .it-kicker { font-size: 10px; letter-spacing: .16em; color: var(--gold-700); }
         .it-title { font: 600 20px var(--font-serif); margin-top: 3px; }
         .it-legend { display: flex; gap: 14px; flex-wrap: wrap; padding: 16px var(--edge) 4px; }
@@ -76,12 +76,12 @@ export default function IndustrialisationTimeline({ slug }: { slug: string }) {
         .it-spine { position: absolute; left: calc(var(--edge) + 8px); top: 12px; bottom: 12px; width: 3px; }
         .it-event { position: relative; padding-bottom: 16px; }
         .it-event:last-child { padding-bottom: 4px; }
-        .it-node { position: absolute; left: -24px; top: 3px; width: 13px; height: 13px; border-radius: 50%; border: 2.5px solid #f6f5f1; }
+        .it-node { position: absolute; left: -24px; top: 3px; width: 13px; height: 13px; border-radius: 50%; border: 2.5px solid #f3f2f2; }
         .it-date { font: 600 11px var(--font-mono); }
         .it-event-t { font: 600 14.5px var(--font-serif); }
-        .it-event-b { font: 400 12px/1.5 var(--font-ui); color: #6b665e; }
+        .it-event-b { font: 400 12px/1.5 var(--font-ui); color: #605d5d; }
         .it-tier { font-size: 9.5px; padding: 1px 6px; white-space: nowrap; }
-        .it-note { display: flex; align-items: center; gap: 12px; padding: 12px var(--edge); border-top: 1px solid #d6d0cb; font: 400 11px var(--font-ui); color: #6b665e; }
+        .it-note { display: flex; align-items: center; gap: 12px; padding: 12px var(--edge); border-top: 1px solid #d7d3d3; font: 400 11px var(--font-ui); color: #605d5d; }
         .it-note-ic { color: var(--gold); flex: none; }
       `}</style>
     </section>

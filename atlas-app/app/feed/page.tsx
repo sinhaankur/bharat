@@ -61,8 +61,8 @@ export default function FeedPage() {
                 <span className="mono fd-lean-l">LEAN</span>
                 <div className="fd-lean">
                   <span style={{ flex: s.lean[0], background: '#2a4a7a' }} />
-                  <span style={{ flex: s.lean[1], background: '#c3bcb2' }} />
-                  <span style={{ flex: s.lean[2], background: '#9e3b2e' }} />
+                  <span style={{ flex: s.lean[1], background: '#bab6b6' }} />
+                  <span style={{ flex: s.lean[2], background: '#ae1800' }} />
                 </div>
                 <span className={`mono fd-tag${s.tag.blindspot ? ' blindspot' : ''}`}>{s.tag.text}</span>
               </div>
@@ -76,22 +76,22 @@ export default function FeedPage() {
       <SiteFooter />
 
       <style>{`
-        .fd { background: #f6f5f1; color: #1a1917; max-width: 680px; margin: 0 auto; font-family: var(--font-ui); }
+        .fd { background: #f3f2f2; color: #1a1917; max-width: 680px; margin: 0 auto; font-family: var(--font-ui); }
         .fd-top { display: flex; align-items: center; gap: 11px; padding: 12px var(--edge); border-bottom: 2px solid #262320; }
         .fd-brand { font: 600 13px var(--font-serif); }
-        .fd-sub { font: 400 11px var(--font-ui); color: #6b665e; }
+        .fd-sub { font: 400 11px var(--font-ui); color: #605d5d; }
         .fd-live { margin-left: auto; display: flex; align-items: center; gap: 6px; font-size: 10px; letter-spacing: .1em; color: var(--gold-700); }
-        .fd-story { padding: 16px var(--edge); border-bottom: 1px solid #d6d0cb; }
+        .fd-story { padding: 16px var(--edge); border-bottom: 1px solid #d7d3d3; }
         .fd-place { font-size: 9.5px; letter-spacing: .14em; color: var(--gold-700); margin-bottom: 6px; }
         .fd-headline { font: 600 17px/1.3 var(--font-serif); margin: 0 0 6px; }
-        .fd-body { font: 400 12px/1.5 var(--font-ui); color: #6b665e; margin: 0 0 10px; }
+        .fd-body { font: 400 12px/1.5 var(--font-ui); color: #605d5d; margin: 0 0 10px; }
         .fd-lean-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-        .fd-lean-l { font-size: 9.5px; color: #6b665e; }
+        .fd-lean-l { font-size: 9.5px; color: #605d5d; }
         .fd-lean { display: flex; height: 8px; flex: 1; max-width: 220px; }
-        .fd-tag { font-size: 9.5px; border: 1px solid #c3bcb2; color: #6b665e; padding: 1px 7px; }
-        .fd-tag.blindspot { background: #f7ecd2; color: var(--gold-700); border-color: transparent; }
+        .fd-tag { font-size: 9.5px; border: 1px solid #bab6b6; color: #605d5d; padding: 1px 7px; }
+        .fd-tag.blindspot { background: #ffe0d9; color: var(--gold-700); border-color: transparent; }
         .fd-all { display: block; padding: 13px var(--edge); font: 600 12px var(--font-ui); color: var(--gold-700); }
-        .fd-all:hover { background: #f7ecd2; color: var(--gold-700); }
+        .fd-all:hover { background: #ffe0d9; color: var(--gold-700); }
       `}</style>
     </>
   )
