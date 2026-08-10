@@ -16,6 +16,7 @@ import '@fontsource/jetbrains-mono/600.css'
 import SvgSprite from '@/components/svg-sprite'
 import CommandPalette from '@/components/command-palette'
 import ReaderPanel from '@/components/reader-panel'
+import BottomNav from '@/components/bottom-nav'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {children}
         <CommandPalette />
         <ReaderPanel />
+        <BottomNav />
       </body>
     </html>
   )

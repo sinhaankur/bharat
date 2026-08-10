@@ -46,6 +46,7 @@ const GROUPS: { front: string; items: Entry[] }[] = [
     front: 'Data & about',
     items: [
       { t: 'Data & provenance', href: '/data' },
+      { t: 'Design system', href: '/design' },
       { t: 'About the atlas', href: '/about' },
       { t: 'References (classic)', href: classicHref('references'), ext: true },
       { t: 'How it works (classic)', href: classicHref('how-it-works'), ext: true },
