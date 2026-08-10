@@ -3,6 +3,7 @@
 export type IconName =
   | 'lotus' | 'pillar' | 'stupa' | 'edict' | 'jali' | 'coin'
   | 'torana' | 'lion' | 'tree' | 'sun'
+  | 'bell' | 'elephant' | 'bull' | 'horse' | 'sixarm' | 'chaitya'
 
 export default function Icon({
   name,
