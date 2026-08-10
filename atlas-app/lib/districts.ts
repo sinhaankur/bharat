@@ -5,6 +5,7 @@
 export type Tier = 'T1' | 'T2' | 'T3' | 'gap'
 export type Event = { year: string; text: string; tier: Tier; src?: string }
 export type Stat = { value: string; label: string; tone?: 'warn' | 'muted' }
+export type Dept = { name: string; allocCr: number; scheme?: string; ministry?: string }
 
 export type District = {
   slug: string
@@ -16,9 +17,61 @@ export type District = {
   events: Event[]
   chain: string[]        // chain of command, active node marked with a leading '*'
   provenance: { label: string; value: string; tone?: 'good' | 'gold' }[]
+  departments?: { source: string; sourceTier: Tier; fy: string; rows: Dept[] }  // real KMC-style budget lines
+  gaps?: string[]        // declared gaps (sourced-or-gap made explicit)
 }
 
 export const DISTRICTS: Record<string, District> = {
+  // Kolkata — the deepest real ledger. Figures from the KMC Budget 2025-26 PDF (T1)
+  // and MPLADS delivery review (T4). A split-admin metro with no conventional DM.
+  kolkata: {
+    slug: 'kolkata',
+    name: 'Kolkata',
+    state: 'West Bengal',
+    model: 'split-admin metro',
+    dek: 'More than half the city’s civic money is grant-in-aid transferred down — and the budget still runs a deficit. No single DM answers for it.',
+    stats: [
+      { value: '₹5,525 cr', label: 'KMC receipts · BE 2025-26 · T1' },
+      { value: '52%', label: 'is Central + State grant-in-aid (₹2,897 cr)', tone: 'warn' },
+      { value: '₹5,639.56 cr', label: 'expenditure — a deficit budget', tone: 'muted' },
+    ],
+    events: [
+      { year: 'Structure', text: 'No conventional District Magistrate/Collector: magisterial powers vest in the Commissioner of Police (Ajay Kumar Nand, IPS); a limited Collector handles only stamp/registration; service delivery runs through KMC. “Who is the DM responsible for this money?” has no single answer here.', tier: 'T3', src: 'wiki' },
+      { year: 'Money', text: '~52% of KMC’s ₹5,525 cr receipts is Government Grant-in-Aid from Centre + State (₹2,897 cr) vs ₹2,628 cr raised from own sources — more than half the civic money is transferred down, not locally generated.', tier: 'T1', src: 'KMC PDF' },
+      { year: 'Delivery', text: 'MPLADS delivery is recommendation-heavy but completion-poor: Kolkata Uttar completed 3 of 36 works, Kolkata Dakshin 0 of 73 (as on 2026-01-06). Money flows in on paper, converts to far less on the ground.', tier: 'T3', src: 'review' },
+    ],
+    chain: ['Union Ministries (MoHUA / Jal Shakti / MoRD)', 'State (UD&MA Dept)', '*Commissioner of Police (magisterial) + Municipal Commissioner', 'KMC — 16 boroughs, 144 wards'],
+    provenance: [
+      { label: 'Source coverage', value: '81%', tone: 'good' },
+      { label: 'Tier-1 figures', value: '18' },
+      { label: 'Declared gaps', value: '9', tone: 'gold' },
+      { label: 'Awaiting upgrade ⚠', value: '5' },
+    ],
+    departments: {
+      source: 'kmcgov.in — Budget 2025-26 PDF',
+      sourceTier: 'T1',
+      fy: 'BE 2025-26',
+      rows: [
+        { name: 'Solid Waste Management', allocCr: 720.85, scheme: 'SWM Rules 2016', ministry: 'MoEF&CC (Union) — rules; ULB implements' },
+        { name: 'Water Supply', allocCr: 444.97, scheme: 'AMRUT 2.0', ministry: 'MoHUA (Union)' },
+        { name: 'Sewerage & Drainage', allocCr: 335.69, scheme: 'NMCG', ministry: 'Jal Shakti (Union)' },
+        { name: 'Roads', allocCr: 318.22 },
+        { name: 'Slum Development', allocCr: 232.69, scheme: 'DAY-NULM · PMAY-U', ministry: 'MoHUA (Union)' },
+        { name: 'Health', allocCr: 186.55, scheme: '15th FC Health Grants', ministry: 'Finance Commission (Union)' },
+        { name: 'Lighting', allocCr: 164.45 },
+        { name: 'Education', allocCr: 52.12 },
+        { name: 'Parks & Squares', allocCr: 46.35 },
+        { name: 'Social Welfare & Poverty Alleviation', allocCr: 29.52, scheme: 'NSAP', ministry: 'MoRD (Union)' },
+      ],
+    },
+    gaps: [
+      'Scheme-wise split of the ₹2,897 cr grant (AMRUT 2.0 / PMAY-U / 15th FC Health / NMCG named in the budget; individual ₹ pending Volume-II)',
+      'MPLADS exact released & unspent per constituency (have spent + completed from the review; need the official portal release figure)',
+      'Utilisation % and CAG audit data for the civic budget',
+      'Municipal Commissioner & District Judge names (posts, not persons, are sourced)',
+      'District-level Census C-16 mother-tongue split',
+    ],
+  },
   birbhum: {
     slug: 'birbhum',
     name: 'Birbhum',
