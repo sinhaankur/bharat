@@ -52,7 +52,16 @@ jobs:
           # workers on the Pages runner (exits 1 with no output right after compile);
           # the stable webpack builder exports cleanly. Call the next binary directly.
           npm ci --ignore-scripts
-          ./node_modules/.bin/next build --webpack
+          # Capture the full crash: run detached from bash -e, force Node to print
+          # unhandled errors, and dump everything (the page-data step dies silently).
+          set +e
+          NODE_OPTIONS="--stack-trace-limit=100 --unhandled-rejections=strict" \
+            node ./node_modules/next/dist/bin/next build --webpack > build.log 2>&1
+          code=$?
+          echo "===== BUILD EXIT $code — FULL LOG ====="
+          cat build.log
+          echo "===== END LOG ====="
+          exit $code
 
       - name: Assemble the Pages site (atlas at root + app under /app)
         run: |
