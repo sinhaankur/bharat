@@ -24,6 +24,7 @@ export const INDEX: Hit[] = [
   // — pages / fronts —
   { scope: 'pages', title: 'The map — 594 districts', sub: 'the classic interactive fiscal map', href: classicMapHref(), icon: 'jali', external: true, keywords: 'choropleth leaflet money crz flood' },
   { scope: 'pages', title: 'Engines — seven lenses', sub: 'survey · country · development · climate · zoning · corruption · news', href: '/engines', icon: 'stupa', keywords: 'hub' },
+  { scope: 'pages', title: 'The state ledger — revenue dashboard', sub: 'FY15→24 · 9 views · governance footprint', href: '/engines/revenue', icon: 'coin', keywords: 'revenue gsdp corruption finance commission dashboard' },
   { scope: 'pages', title: 'Explore — query 594 districts', sub: 'AND facets · shareable via URL', href: '/explore', icon: 'sun', keywords: 'query filter facets' },
   { scope: 'pages', title: 'Data & provenance', sub: 'every figure, its citation, or a declared gap', href: '/data', icon: 'edict', keywords: 'references sources audit' },
   { scope: 'pages', title: 'West Bengal — every source', sub: 'references · 14 T1 citations', href: classicHref('references'), icon: 'edict', external: true, keywords: 'sources provenance' },
