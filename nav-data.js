@@ -143,6 +143,7 @@
       { href: "references.html", text: "Sources", hint: "every citation" },
       { href: "engines.html", text: "The 7 engines", hint: "the composable lenses" },
       { href: "global.html", text: "India vs world", hint: "global comparison" },
+      { href: "geopolitical-chess.html", text: "Geopolitical chess", hint: "the dollar is the board — who rules each player" },
     ]},
   ];
 })(typeof window !== "undefined" ? window : this);
