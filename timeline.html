@@ -10,6 +10,14 @@
   <style>
     .tl-wrap { max-width: 1040px; margin: 0 auto; padding: 2rem var(--pad-x) 5rem; }
     .tl-head { max-width: 760px; margin-bottom: 1.4rem; }
+    /* the visual timeline spine */
+    .tl-spine-wrap { border: 2px solid var(--foreground); border-radius: var(--radius-sm); background: var(--card); padding: 0.9rem 1rem 0.6rem; margin: 0 0 2rem; }
+    .tl-spine-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.4rem; }
+    .tl-spine-title { font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+    .tl-spine-legend { font-size: 10px; color: var(--muted-foreground); }
+    #tl-spine { display: block; overflow: visible; }
+    .tl-dot { cursor: pointer; transition: r 0.12s, fill-opacity 0.12s; }
+    .tl-dot:hover { fill-opacity: 1; }
     .tl-head h1 { margin: 0.4rem 0 0.6rem; font-size: clamp(1.8rem, 4vw, 2.8rem); line-height: 1.05; }
     .tl-head p { color: var(--muted-foreground); font-size: 0.96rem; line-height: 1.6; max-width: 70ch; }
 
@@ -120,6 +128,16 @@
       </div>
       <div class="tl-legend" id="legend"></div>
     </header>
+
+    <!-- the visual timeline spine: every event plotted on a dated axis, coloured by
+         severity, grouped by chain. Click a dot to jump to its story below. -->
+    <div id="tl-spine-wrap" class="tl-spine-wrap" hidden>
+      <div class="tl-spine-head">
+        <span class="tl-spine-title mono">The spine — every dated event</span>
+        <span class="tl-spine-legend mono" id="tl-spine-legend"></span>
+      </div>
+      <svg id="tl-spine" role="img" aria-label="Timeline of fiscal events by date"></svg>
+    </div>
 
     <div id="chains"><p class="tl-empty">Loading…</p></div>
 
@@ -312,6 +330,64 @@
         const target = (DOC.story_chains || []).find(c => c.id === b.dataset.chain);
         if (target) { document.getElementById("f-scheme").value = ""; document.getElementById("f-state").value = ""; render();
           setTimeout(() => { const el = [...document.querySelectorAll("article.chain h2")].find(h => h.textContent === target.title); el?.scrollIntoView({behavior:"smooth", block:"center"}); }, 50); }
+      }));
+
+      renderSpine(chains);
+    }
+
+    // ── the visual timeline spine — plot every event of the visible chains on a dated
+    //    axis, coloured by severity, click a dot to jump to its story. ──
+    const SEV_COLOR = e => {
+      const s = (e.severity && e.severity.score) || 0;
+      return s >= 10 ? "#ae1800" : s >= 7 ? "#cc8900" : s >= 4 ? "#3078c0" : "#6b5c48";
+    };
+    function renderSpine(chains) {
+      const wrap = document.getElementById("tl-spine-wrap");
+      const svg = document.getElementById("tl-spine");
+      const rows = chains.map(c => ({ c, evs: eventsFor(c).filter(e => e.date && !isNaN(Date.parse(e.date))) }))
+                         .filter(r => r.evs.length);
+      const all = rows.flatMap(r => r.evs);
+      if (all.length < 2) { wrap.hidden = true; return; }
+      wrap.hidden = false;
+      const NS = "http://www.w3.org/2000/svg";
+      const times = all.map(e => Date.parse(e.date));
+      let min = Math.min(...times), max = Math.max(...times);
+      const padMs = (max - min) * 0.04 || 86400000 * 30;
+      min -= padMs; max += padMs;
+      const W = Math.max(680, wrap.clientWidth || 900), rowH = 34, padL = 8, padR = 8, padT = 30;
+      const H = padT + rows.length * rowH + 26;
+      const x = t => padL + ((t - min) / (max - min)) * (W - padL - padR);
+      svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+      svg.style.width = "100%"; svg.style.height = H + "px";
+      let out = "";
+      // year gridlines
+      const y0 = new Date(min).getFullYear(), y1 = new Date(max).getFullYear();
+      for (let y = y0; y <= y1; y++) {
+        const px = x(Date.parse(y + "-01-01")); if (px < padL || px > W - padR) continue;
+        out += `<line x1="${px}" y1="${padT - 8}" x2="${px}" y2="${H - 18}" stroke="var(--border)" stroke-width="1"/>`;
+        out += `<text x="${px + 3}" y="${H - 6}" font-family="var(--font-mono)" font-size="10" fill="var(--muted-foreground)">${y}</text>`;
+      }
+      rows.forEach((r, i) => {
+        const cy = padT + i * rowH + rowH / 2;
+        const xs = r.evs.map(e => x(Date.parse(e.date))).sort((a, b) => a - b);
+        // spine line for the chain
+        out += `<line x1="${xs[0]}" y1="${cy}" x2="${xs[xs.length - 1]}" y2="${cy}" stroke="var(--border-strong)" stroke-width="2"/>`;
+        // label
+        out += `<text x="${padL}" y="${cy - 12}" font-family="var(--font-mono)" font-size="9.5" fill="var(--muted-foreground)">${esc((r.c.scheme_ref || r.c.geo?.district || "").slice(0, 22))}</text>`;
+        r.evs.forEach(e => {
+          const cx = x(Date.parse(e.date)), col = SEV_COLOR(e), rad = e.amount_cr ? Math.min(11, 4 + Math.sqrt(e.amount_cr) / 8) : 4.5;
+          out += `<circle class="tl-dot" cx="${cx}" cy="${cy}" r="${rad}" fill="${col}" fill-opacity="0.85" stroke="var(--card)" stroke-width="1.2" data-title="${esc(e.title)}" data-date="${esc(e.date)}"><title>${esc(e.date)} · ${esc(e.title)}${e.amount_cr ? " · ₹" + e.amount_cr + " cr" : ""}</title></circle>`;
+        });
+      });
+      svg.innerHTML = out;
+      // legend
+      document.getElementById("tl-spine-legend").innerHTML =
+        `<span style="color:#ae1800">● severe</span>  <span style="color:#cc8900">● high</span>  <span style="color:#3078c0">● moderate</span>  <span style="color:#6b5c48">● low</span> · circle ∝ ₹`;
+      // click a dot → scroll to its story
+      svg.querySelectorAll(".tl-dot").forEach(dot => dot.addEventListener("click", () => {
+        const title = dot.getAttribute("data-title");
+        const railEv = [...document.querySelectorAll(".rail .ev-title, article.chain h2")].find(el => el.textContent.includes(title.slice(0, 20)));
+        railEv?.scrollIntoView({ behavior: "smooth", block: "center" });
       }));
     }
 
