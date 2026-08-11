@@ -74,21 +74,27 @@ export default function DsShell() {
 
   return (
     <div className="dss">
-      {/* intro */}
+      {/* GRAND CINEMATIC INTRO — the flagship arrival: every design system, its story */}
       <header className="dss-intro">
-        <div className="kicker">Indic Designs™ · India&apos;s own design systems</div>
-        <h1 className="dss-h1">One chassis. Many Indias.</h1>
-        <p className="dss-lede">
-          An original body of work: a design language <em>for India</em>, one per state and culture —
-          each accent, ground, band and motif drawn from that place&apos;s own heritage (Kashmir&apos;s
-          Martand trefoil, Rajasthan&apos;s leheriya, Kerala&apos;s coir green, Assam&apos;s gamosa, the
-          Naga loom), all standing on one shared chassis. Not a theme pack — a cultural design
-          register. Pick one below to wear it across the whole atlas, then scroll the specimens.
-        </p>
-        <p className="dss-ip">
-          Indic Designs™ — the design systems, their names and this register are original work,
-          © 2026 Bharat. All rights reserved.
-        </p>
+        <svg className="dss-intro-bg" aria-hidden="true"><rect width="100%" height="100%" fill="url(#jali)" /></svg>
+        <div className="dss-intro-wash" aria-hidden="true" />
+        <div className="dss-intro-in">
+          <div className="dss-intro-seal" aria-hidden="true"><svg width="56" height="56" viewBox="0 0 100 100"><use href="#seal-ring" /></svg></div>
+          <div className="kicker">Indic Designs™ · India&apos;s own design systems · carved from artefacts</div>
+          <h1 className="dss-h1">One chassis. Many Indias.</h1>
+          <p className="dss-lede">
+            Giving structure to a civilisation is the work of design <em>and</em> language. This is an
+            original body of work: a design language <em>for India</em>, one per state and culture —
+            each colour, band and motif read straight out of that place&apos;s own heritage, most of it
+            older than any nation. Every system below carries the <b>idea it was built from</b> — the
+            temple, the loom, the script, the measure. The layout never moves; only the tokens swap.
+            Wear one to reskin the whole atlas.
+          </p>
+          <p className="dss-ip">
+            Indic Designs™ — the design systems, their names and this register are original work,
+            © 2026 Bharat. All rights reserved.
+          </p>
+        </div>
       </header>
 
       {/* live skin switcher — the ready skins, as apply buttons + downloads */}
@@ -101,6 +107,7 @@ export default function DsShell() {
               <button className="dss-skin-apply" onClick={() => applySkin(s.id)} aria-pressed={skin === s.id}>
                 <span className="dss-skin-name">{s.label}</span>
                 <span className="dss-skin-note">{s.note}</span>
+                {TOKEN_SETS[s.id]?.from && <span className="dss-skin-from">{TOKEN_SETS[s.id].from}</span>}
                 <span className="dss-skin-cta">{skin === s.id ? '● worn' : 'Wear this skin →'}</span>
               </button>
               {hasFiles && (
@@ -139,12 +146,25 @@ export default function DsShell() {
 
       <style>{`
         .dss { background: var(--bg); }
-        .dss-intro { max-width: var(--wrap); margin: 0 auto; padding: 34px var(--edge) 8px; }
-        .dss-h1 { font: 400 clamp(30px,5vw,52px) 'Rozha One', var(--font-display); margin: 8px 0 10px; color: var(--ink); line-height: 1.02; }
-        .dss-lede { font: 400 15px/1.65 var(--font-ui); color: var(--muted); max-width: 68ch; margin: 0; }
+        /* grand cinematic intro — heritage texture + gold vignette, ancient feel */
+        @keyframes dssDrift { from { transform: scale(1.06) translate(0,0); } to { transform: scale(1.14) translate(-1.5%,-1%); } }
+        .dss-intro { position: relative; overflow: hidden; border-bottom: 2px solid var(--ink);
+          background: radial-gradient(120% 100% at 50% 0%, #f6efdf 0%, var(--bg) 55%, #ece0c6 100%); }
+        .dss-intro-bg { position: absolute; inset: -8%; width: 116%; height: 116%; color: var(--band); opacity: .13; animation: dssDrift 30s ease-in-out infinite alternate; }
+        .dss-intro-wash { position: absolute; inset: 0; pointer-events: none;
+          background: radial-gradient(90% 120% at 12% 8%, transparent 42%, color-mix(in srgb, var(--accent) 9%, transparent) 100%); }
+        .dss-intro-in { position: relative; max-width: var(--wrap); margin: 0 auto; padding: clamp(44px,7vh,80px) var(--edge) clamp(32px,5vh,52px); }
+        .dss-intro-seal { color: var(--accent); margin-bottom: 16px; }
+        .dss-intro-seal svg { filter: drop-shadow(0 3px 8px color-mix(in srgb, var(--accent) 28%, transparent)); }
+        .dss-h1 { font: 400 clamp(34px,6vw,72px) 'Rozha One', var(--font-display); margin: 8px 0 14px; color: var(--ink); line-height: 1.0; }
+        .dss-lede { font: 400 clamp(15px,1.5vw,18px)/1.7 var(--font-ui); color: color-mix(in srgb, var(--ink) 82%, transparent); max-width: 70ch; margin: 0; }
         .dss-lede em { font-style: italic; color: var(--ink); }
-        .dss-ip { font: 500 11.5px/1.5 var(--font-mono); color: var(--muted); max-width: 68ch; margin: 12px 0 0;
+        .dss-lede b { color: var(--accent-700); }
+        .dss-ip { font: 500 11.5px/1.5 var(--font-mono); color: var(--muted); max-width: 70ch; margin: 16px 0 0;
           padding-top: 10px; border-top: 1px solid var(--line); letter-spacing: .01em; }
+        @media (prefers-reduced-motion: reduce) { .dss-intro-bg { animation: none; } }
+        /* the origin story on each skin card */
+        .dss-skin-from { font: 400 11.5px/1.5 var(--font-ui); color: var(--muted); font-style: italic; margin-top: 3px; }
 
         .dss-skins { max-width: var(--wrap); margin: 0 auto; padding: 18px var(--edge) 8px;
           display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; }
