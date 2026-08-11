@@ -2668,19 +2668,11 @@ html.theme-light, html.theme-light body { background: var(--background); color: 
    MASTHEAD HEADER + TOPICS + SLIDE-OUT DRAWER (editorial).
    Vox-structured information architecture, Teal & Ink brand.
    ============================================================ */
-.snav { position: sticky; top: 0; z-index: 1000; background: var(--background);
-  border-bottom: 2px solid var(--foreground); }
-.snav-bar { display: flex; align-items: center; gap: 1rem; padding: 0.6rem var(--pad-x); max-width: 1320px; margin: 0 auto; }
-.snav-burger { order: -1; background: none; border: 1.5px solid var(--border-strong); border-radius: 6px;
-  width: 38px; height: 34px; font-size: 15px; cursor: pointer; color: var(--foreground); flex: none; }
-.snav-burger:hover { border-color: var(--brand); color: var(--brand); }
-.snav .brand { flex: none; }
-.snav .brand-word { font-family: var(--font-display); font-size: 21px; font-weight: 600; letter-spacing: -0.015em; }
-.snav-groups { display: flex; gap: 0.2rem; margin-left: 0.6rem; }
-.snav-actions { margin-left: auto; display: flex; align-items: center; gap: 0.6rem; }
-.snav .snav-cta, a.snav-cta { background: var(--accent); color: #fff !important; border: none; font-family: var(--font-sans); font-weight: 600;
-  font-size: 0.85rem; padding: 0.5rem 1.1rem; border-radius: 999px; text-decoration: none; white-space: nowrap; line-height: 1.2; display: inline-block; }
-.snav .snav-cta:hover, a.snav-cta:hover { background: var(--accent-ink); color: #fff !important; }
+/* (The header chrome is styled once, in the Indic chrome block near the top of this
+   file. The old "masthead" duplicates for .snav / .snav-bar / .snav-burger /
+   .snav-groups / .snav-cta were removed — being later in the file, they overrode the
+   Indic rules on equal specificity and, critically, forced .snav-groups to display:flex
+   which broke the mobile burger menu (groups showed expanded by default). */
 /* header search button */
 /* ── The EDITORIAL BRIEF (page-brief.js) — orchestrates each page's key info ── */
 .page-brief { max-width: 62rem; margin: var(--sp-8) auto var(--sp-6); padding: var(--sp-5); border: 1px solid var(--border);
