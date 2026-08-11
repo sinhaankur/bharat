@@ -73,9 +73,9 @@
       // the launcher button + panel
       // ── Indic design system: stone/vermilion/gold, Karla, 0 radius, hard shadows ──
       // Local fallbacks so it looks right even on pages that don't define the --chrome-* set.
-      + ".a11y-overlay{--a-ground:var(--chrome-ground,#ece3cd);--a-surface:var(--chrome-surface,#f6f0e1);--a-ink:var(--chrome-ink,#2a2018);--a-muted:var(--chrome-muted,#6b5c48);--a-line:var(--chrome-line,#3a2c1e);--a-accent:var(--chrome-accent,#c1440e);--a-band:var(--chrome-band,#c9862b);--a-ui:var(--chrome-ui,'Karla',system-ui,sans-serif);--a-display:var(--chrome-display,'Rozha One',Georgia,serif)}"
+      + ".a11y-overlay{--a-ground:var(--chrome-ground,#ece3cd);--a-surface:var(--chrome-surface,#f6f0e1);--a-ink:var(--chrome-ink,#2a2018);--a-muted:var(--chrome-muted,#6b5c48);--a-line:var(--chrome-line,#3a2c1e);--a-accent:var(--chrome-accent,#cc8900);--a-band:var(--chrome-band,#cc8900);--a-ui:var(--chrome-ui,'Karla',system-ui,sans-serif);--a-display:var(--chrome-display,'Rozha One',Georgia,serif)}"
       + ".a11y-btn{width:44px;height:44px;border-radius:999px;border:1.5px solid var(--chrome-line,#3a2c1e);background:var(--chrome-ground,#ece3cd);color:var(--chrome-ink,#2a2018);font-family:var(--chrome-display,'Rozha One',serif);font-size:17px;cursor:pointer;line-height:1}"
-      + ".a11y-btn:hover{border-color:var(--chrome-accent,#c1440e);color:var(--chrome-accent,#c1440e)}"
+      + ".a11y-btn:hover{border-color:var(--chrome-accent,#cc8900);color:var(--chrome-accent,#cc8900)}"
       + ".a11y-overlay{position:fixed;inset:0;z-index:9500;display:grid;place-items:center;background:rgba(42,32,24,0.5);backdrop-filter:blur(5px)}"
       + ".a11y-card{width:min(440px,92vw);max-height:88vh;overflow:auto;background:var(--a-surface);color:var(--a-ink);border:2px solid var(--a-line);border-radius:0;box-shadow:8px 8px 0 rgba(42,32,24,0.22);padding:1.15rem 1.25rem 1.35rem;font-family:var(--a-ui)}"
       + ".a11y-head{display:flex;align-items:center;gap:0.6rem;margin-bottom:1rem;padding-bottom:0.7rem;border-bottom:2px solid var(--a-line)}"

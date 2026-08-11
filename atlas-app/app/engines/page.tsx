@@ -66,7 +66,7 @@ export default function EnginesPage() {
 
       <style>{`
         /* engines runs its own dark register regardless of the reader theme */
-        .engines { --engine-gold: #ec3013; background: #201e1d; color: #f3f2f2; max-width: var(--wrap); margin: 0 auto; }
+        .engines { --engine-gold: #cc8900; background: #201e1d; color: #f3f2f2; max-width: var(--wrap); margin: 0 auto; }
         .eng-hero { position: relative; padding: 40px var(--edge) 30px; border-bottom: 1px solid rgba(201,162,39,.3); }
         .eng-jali { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: .5; }
         .eng-hero-in { position: relative; display: flex; align-items: flex-start; gap: 26px; }
