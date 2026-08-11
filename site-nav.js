@@ -323,11 +323,26 @@
     document.head.appendChild(s);
   }
 
+  // load a companion script (analytics, ads) once, self-pathed like the others. Each is
+  // INERT until its ID is configured (placeholders in analytics.js / ads.js), so this is
+  // safe to load everywhere now and flip on later.
+  function ensureScript(id, file) {
+    if (document.getElementById(id)) return;
+    let base = "";
+    const me = document.currentScript || [...document.scripts].find(s => /site-nav\.js/.test(s.src));
+    if (me && me.src) base = me.src.replace(/site-nav\.js.*$/, "");
+    const s = document.createElement("script");
+    s.id = id; s.src = base + file; s.defer = true;
+    document.head.appendChild(s);
+  }
+
   function mount() {
     injectSEO();
     ensureA11y();
     ensureMotion();
     ensureSprite();   // Mauryan icons for the section nav
+    ensureScript("analytics-script", "analytics.js");   // privacy analytics + visit count (inert until configured)
+    ensureScript("ads-script", "ads.js");               // AdSense (inert until approved + enabled)
     // EMBED MODE: when a page is loaded inside the hero app (?embed=1), suppress the site
     // header + footer so the hero's own chrome is the only navigation. The page's own
     // content fills the panel. A body class lets pages trim their own margins if they like.
