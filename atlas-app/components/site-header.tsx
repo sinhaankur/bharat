@@ -52,11 +52,11 @@ const SECTIONS: Section[] = [
     { t: 'Scripts & families', href: c('scripts') },
     { t: 'Texts across languages', href: c('vedas') },
   ]},
-  { label: '3D', href: '/3d', app: true, icon: 'i-stupa', items: [
-    { t: 'Temple in 3D', href: '/3d', app: true },
-    { t: 'The globe', href: c('india-3d') },
+  { label: '3D', href: c('india-3d'), icon: 'i-stupa', items: [
+    { t: 'India in 3D — the globe', href: c('india-3d') },
     { t: 'Globe → map', href: c('globe-map') },
-    { t: 'Temple forms in 3D', href: c('temple-forms') },
+    { t: 'Temples in 3D (photogrammetry)', href: c('heritage-3d') },
+    { t: 'Temple forms in 3D (parametric)', href: '/3d', app: true },
     { t: 'The mesh', href: c('mesh') },
   ]},
   { label: 'Design', href: '/design-systems', app: true, icon: 'i-lotus', items: [
