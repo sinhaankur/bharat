@@ -66,6 +66,37 @@ export default async function DistrictPage({ params }: { params: Promise<{ slug:
           ))}
         </div>
 
+        {/* PLAIN-LANGUAGE citizen summary — 'what this means for you', built from the real
+            fields (the money in, the catch, who's accountable, what's honestly unknown),
+            so an ordinary reader gets the answer before the researcher's ledger below. */}
+        {(() => {
+          const moneyIn = d.stats[0]
+          const theCatch = d.stats.find((s) => s.tone === 'warn') || d.stats[1]
+          const accountable = (d.chain.find((n) => n.startsWith('*')) || d.chain[d.chain.length - 1] || '').replace(/^\*/, '')
+          const gapCount = d.gaps?.length || 0
+          const cards = [
+            { k: 'What came in', v: moneyIn?.value, s: (moneyIn?.label || '').replace(/·\s*T\d.*/, '').trim() },
+            { k: 'The catch', v: theCatch?.value, s: (theCatch?.label || '').replace(/·\s*T\d.*/, '').trim(), warn: true },
+            { k: 'Who answers for it', v: accountable.split('(')[0].trim(), s: accountable.includes('(') ? '(' + accountable.split('(').slice(1).join('(') : d.state },
+            { k: 'What we don’t know', v: gapCount ? `${gapCount} open gaps` : 'Marked, not guessed', s: 'A blank cell is honesty, not absence.' },
+          ]
+          return (
+            <section className="lg-citizen" aria-label="What this means for you">
+              <div className="lg-citizen-h mono">In plain terms</div>
+              <p className="lg-citizen-lede">{d.dek}</p>
+              <div className="lg-citizen-grid">
+                {cards.map((c, i) => (
+                  <div key={i} className={`lg-cc${c.warn ? ' warn' : ''}`}>
+                    <div className="lg-cc-k mono">{c.k}</div>
+                    <div className="lg-cc-v">{c.v}</div>
+                    <div className="lg-cc-s">{c.s}</div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )
+        })()}
+
         {/* body: timeline + provenance */}
         <div className="lg-body">
           <div className="lg-main">
@@ -174,6 +205,21 @@ export default async function DistrictPage({ params }: { params: Promise<{ slug:
         .lg-stat:last-child { border-right: 0; }
         .lg-stat-v { font: 600 26px var(--font-mono); }
         .lg-stat-l { font: 500 11px var(--font-ui); color: #605d5d; margin-top: 2px; }
+
+        /* plain-language citizen band — the human answer, above the researcher's ledger */
+        .lg-citizen { padding: 26px var(--edge) 28px; border-bottom: 2px solid #1a1917; background: #f8f4f4; }
+        .lg-citizen-h { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--lg-gold-700); margin-bottom: 10px; }
+        .lg-citizen-lede { font: 400 clamp(17px,2.4vw,22px)/1.5 var(--font-ui); color: #1a1917; margin: 0 0 20px; max-width: 62ch; }
+        .lg-citizen-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0; border: 1px solid #d7d3d3; }
+        .lg-cc { padding: 14px 16px; border-right: 1px solid #d7d3d3; }
+        .lg-cc:last-child { border-right: 0; }
+        .lg-cc-k { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: #605d5d; }
+        .lg-cc-v { font: 600 18px/1.2 var(--font-ui); color: #1a1917; margin: 6px 0 4px; }
+        .lg-cc-s { font: 400 12px/1.45 var(--font-ui); color: #605d5d; }
+        .lg-cc.warn { background: #fff3f0; }
+        .lg-cc.warn .lg-cc-v { color: var(--lg-gold-700); }
+        @media (max-width: 640px) { .lg-cc { border-right: 0; border-bottom: 1px solid #d7d3d3; } .lg-cc:last-child { border-bottom: 0; } }
+
         .lg-body { display: grid; grid-template-columns: 1fr 300px; }
         .lg-main { padding: 22px var(--edge); border-right: 1px solid #d7d3d3; }
         .lg-h { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #605d5d; margin-bottom: 14px; }
