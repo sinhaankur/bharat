@@ -124,11 +124,11 @@
       { href: "vedas.html", text: "Texts across languages", hint: "the Rigveda, translated & compared" },
     ]},
     { label: "3D", href: "india-3d.html", tagline: "India as it really is — a real globe.", items: [
-      { href: "india-3d.html", text: "The globe", hint: "real Earth · 594 districts · layers" },
+      { href: "india-3d.html", text: "India in 3D — the globe", hint: "real Earth · 594 districts · layers" },
       { href: "globe-map.html", text: "Globe → map", hint: "watch the globe unroll" },
-      { href: "heritage-3d.html", text: "Temples in 3D", hint: "photogrammetry of temples & ruins" },
-      { href: "temple-forms.html", text: "Temple forms in 3D", hint: "Nagara · Dravida · Kalinga, modelled to real dims" },
-      { href: "mesh.html", text: "The mesh", hint: "how it all connects" },
+      { href: "heritage-3d.html", text: "Temples in 3D (photogrammetry)", hint: "scanned temples & ruins, as they survive" },
+      { href: "temple-forms.html", text: "Temple forms in 3D (parametric)", hint: "Nagara · Dravida · Kalinga, modelled to real dims" },
+      { href: "mesh.html", text: "The mesh", hint: "how officials, districts, money & cases connect" },
     ]},
     { label: "Design", href: "app/design-systems/", tagline: "One chassis, many Indias — the Indic design system.", items: [
       { href: "app/design-systems/", text: "India by Design Systems", hint: "the flagship — a skin per state, over one chassis", ext: true },
