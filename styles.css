@@ -221,6 +221,8 @@ a:hover { color: var(--brand-ink); border-color: var(--brand); }
 }
 .snav-top:hover { color: var(--chrome-accent); }
 .snav-group.is-current .snav-top { color: var(--chrome-accent); border-bottom-color: var(--chrome-band); }
+.snav-ico-sec { color: var(--chrome-band); flex: none; margin-right: 2px; vertical-align: -2px; }
+.snav-top:hover .snav-ico-sec, .snav-group.is-current .snav-ico-sec { color: var(--chrome-accent); }
 .snav-caret { font-size: 8px; opacity: 0.55; }
 .snav-menu {
   position: absolute; top: 100%; left: 0; min-width: 244px;
