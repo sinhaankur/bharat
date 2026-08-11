@@ -1,9 +1,319 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Bharat — Money, Land & Memory</title>
-<link rel="canonical" href="https://sinhaankur.github.io/bharat/app/ancient-india/"/>
-<meta http-equiv="refresh" content="0; url=/bharat/app/ancient-india/"/>
-<script>location.replace("/bharat/app/ancient-india/"+location.search+location.hash)</script>
-<style>html,body{margin:0;height:100%;background:#f8f4ea;color:#33251a;font-family:-apple-system,sans-serif}
-.w{display:flex;height:100%;align-items:center;justify-content:center;text-align:center}a{color:#cc8900;font-weight:700}</style>
-</head><body><div class="w"><p>Moved to the new atlas… <a href="/bharat/app/ancient-india/">continue</a></p></div></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ancient India — one timeline: language, script, people, rulers & heritage | Bharat</title>
+  <meta name="description" content="A single chronological spine for ancient India, from the deep prehistoric substrate through the Indus Valley, the Vedic age, the Mahajanapadas, the Mauryan empire of Ashoka, and the Gupta classical age. Each era is read on five facets at once — the language spoken, the script it was written in, the people (from ancient DNA), the rulers, and the heritage — with every era a doorway into a deeper page. Sourced, with the contested points flagged." />
+  <meta name="keywords" content="ancient India timeline, Indus Valley, Vedic period, Mahajanapadas, Mauryan empire, Ashoka, Gupta age, Sanskrit Prakrit Brahmi, ancient DNA India, history of Indian languages and scripts" />
+  <link rel="canonical" href="https://sinhaankur.github.io/bharat/ancient-india.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Bharat" />
+  <meta property="og:title" content="Ancient India — one timeline: language, script, people, rulers & heritage" />
+  <meta property="og:description" content="From the Indus Valley to the Gupta age — each era's language, script, people (DNA), rulers and heritage, on one chronological spine. Every era a doorway into a deeper page." />
+  <meta property="og:url" content="https://sinhaankur.github.io/bharat/ancient-india.html" />
+  <meta property="og:image" content="https://sinhaankur.github.io/bharat/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://sinhaankur.github.io/bharat/og-image.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .ai-wrap { max-width: 1000px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; }
+    .ai-head h1 { margin: 0.3rem 0 0.4rem; font-size: clamp(1.9rem, 4.4vw, 3rem); }
+    .ai-head p { color: var(--muted-foreground); font-size: 1rem; line-height: 1.65; max-width: 74ch; }
+    .ai-head p a { color: var(--accent); }
+    .ai-thesis { border-left: 2px solid var(--accent); padding-left: 0.9rem; margin: 1rem 0 0; font-style: italic; color: var(--foreground); font-size: 0.98rem; line-height: 1.6; max-width: 68ch; }
+
+    /* facet legend / filter */
+    .ai-facets { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 1.4rem 0 0; }
+    .ai-facet-btn { border: 1px solid var(--border-strong); background: var(--card); color: var(--muted-foreground); font: inherit; font-size: 0.8rem; padding: 0.35rem 0.85rem; border-radius: 999px; cursor: pointer; display: inline-flex; align-items: center; gap: 0.35rem; }
+    .ai-facet-btn[aria-pressed="true"] { background: var(--foreground); color: var(--background); border-color: var(--foreground); }
+    .ai-hint { font-size: 0.82rem; color: var(--muted-foreground); margin: 0.5rem 0 0; }
+
+    /* the timeline spine */
+    .ai-timeline { position: relative; margin: 2rem 0 0; padding-left: 2.2rem; }
+    .ai-timeline::before { content: ""; position: absolute; left: 9px; top: 8px; bottom: 8px; width: 3px;
+      background: linear-gradient(180deg, oklch(0.58 0.14 25), oklch(0.55 0.08 300), oklch(0.6 0.14 285)); border-radius: 3px; }
+    .ai-era { position: relative; margin: 0 0 2rem; }
+    .ai-era::before { content: ""; position: absolute; left: -2.2rem; top: 6px; width: 21px; height: 21px; border-radius: 50%;
+      background: var(--fc, var(--accent)); border: 3px solid var(--background); box-shadow: 0 0 0 1px var(--border-strong); }
+
+    .ai-card { border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); overflow: hidden; transition: box-shadow .15s; }
+    .ai-card:hover { box-shadow: 0 8px 26px rgba(0,0,0,.07); }
+    .ai-card-head { padding: 0.9rem 1.1rem; border-left: 5px solid var(--fc, var(--accent)); }
+    .ai-when { font-family: var(--font-mono); font-size: 0.74rem; letter-spacing: 0.05em; color: var(--accent); text-transform: uppercase; }
+    .ai-name { font-size: 1.3rem; font-weight: 700; margin: 0.15rem 0 0; }
+    .ai-name .flag { font-family: var(--font-mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.03em; color: oklch(0.5 0.14 40); border: 1px solid oklch(0.65 0.13 40); border-radius: 999px; padding: 1px 7px; vertical-align: 2px; margin-left: 0.4rem; }
+    .ai-famtag { display: inline-block; font-family: var(--font-mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.03em; color: #fff; background: var(--fc); border-radius: 999px; padding: 2px 9px; margin-top: 0.4rem; }
+
+    /* facet grid inside a card */
+    .ai-facet-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1px; background: var(--border); border-top: 1px solid var(--border); }
+    .ai-cell { background: var(--card); padding: 0.75rem 1.1rem; }
+    .ai-cell.hide { display: none; }
+    .ai-cell .fl { font-family: var(--font-mono); font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted-foreground); display: flex; align-items: center; gap: 0.35rem; }
+    .ai-cell .ft { font-size: 0.95rem; font-weight: 600; color: var(--foreground); margin: 0.25rem 0 0; line-height: 1.35; }
+    .ai-cell .fd { font-size: 0.82rem; color: var(--muted-foreground); line-height: 1.5; margin: 0.25rem 0 0; }
+    .ai-cell .lvl { font-family: var(--font-mono); font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.03em; padding: 1px 6px; border-radius: 999px; border: 1px solid var(--border-strong); color: var(--muted-foreground); margin-left: auto; }
+    .ai-cell a.deep { display: inline-block; margin-top: 0.35rem; font-family: var(--font-mono); font-size: 0.68rem; color: var(--accent); text-decoration: none; border-bottom: 1px solid currentColor; }
+    .ai-cell.contested .fl { color: oklch(0.5 0.14 40); }
+
+    /* events + links footer */
+    .ai-foot { padding: 0.8rem 1.1rem; border-top: 1px solid var(--border); background: oklch(0.985 0.004 90); }
+    html.dark-mode .ai-foot { background: oklch(0.18 0.006 90); }
+    .ai-events { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .ai-ev { font-size: 0.78rem; color: var(--muted-foreground); background: var(--card); border: 1px solid var(--border); border-radius: 999px; padding: 2px 10px; }
+    .ai-links { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; margin-top: 0.6rem; }
+    .ai-links a { font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent); text-decoration: none; }
+    .ai-links a:hover { text-decoration: underline; }
+
+    /* interrogation: evidence tier chips + "how do we know?" drawer */
+    .ai-cell.has-ev { cursor: pointer; position: relative; }
+    .ai-cell.has-ev:hover { background: oklch(0.985 0.006 90); }
+    html.dark-mode .ai-cell.has-ev:hover { background: oklch(0.2 0.008 90); }
+    .ai-tier { font-family: var(--font-mono); font-size: 0.56rem; text-transform: uppercase; letter-spacing: 0.03em; padding: 1px 6px; border-radius: 999px; color: #fff; }
+    .tier-1 { background: oklch(0.5 0.13 150); }   /* primary / peer-reviewed — strongest */
+    .tier-2 { background: oklch(0.52 0.12 80); }   /* contemporary text */
+    .tier-3 { background: oklch(0.54 0.13 40); }   /* later / reference / inference — weakest */
+    .ai-ask { font-family: var(--font-mono); font-size: 0.6rem; color: var(--accent); border: 1px solid var(--border-strong); border-radius: 999px; padding: 1px 7px; margin-top: 0.35rem; display: inline-block; }
+    .ai-cell.has-ev:hover .ai-ask { border-color: var(--accent); }
+
+    .ai-drawer { grid-column: 1 / -1; background: oklch(0.98 0.006 250); border-top: 2px solid var(--accent); padding: 0; max-height: 0; overflow: hidden; transition: max-height .3s ease; }
+    html.dark-mode .ai-drawer { background: oklch(0.19 0.01 250); }
+    .ai-drawer.open { max-height: 640px; }
+    html.a11y-reduce-motion .ai-drawer, html[data-reduce-motion="1"] .ai-drawer { transition: none; }
+    .ai-drawer-in { padding: 1rem 1.2rem; }
+    .ai-drawer h4 { margin: 0 0 0.2rem; font-size: 0.95rem; }
+    .ai-drawer .qrow { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.5rem 0; }
+    .ai-drawer .qchip { font-family: var(--font-mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.02em; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--border-strong); color: var(--muted-foreground); }
+    .ai-drawer .qchip b { color: var(--foreground); }
+    .ai-drawer .qline { font-size: 0.85rem; line-height: 1.55; margin: 0.5rem 0 0; }
+    .ai-drawer .qline .k { font-family: var(--font-mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--accent); display: block; }
+    .ai-drawer .qline.shaped .k { color: oklch(0.55 0.14 40); }
+    .ai-drawer .how { font-size: 0.88rem; line-height: 1.6; color: var(--foreground); margin: 0.6rem 0 0; padding: 0.6rem 0.8rem; background: var(--card); border-radius: var(--radius-sm); border: 1px solid var(--border); }
+    .ai-drawer .close { float: right; background: none; border: 0; color: var(--muted-foreground); cursor: pointer; font-size: 1.1rem; line-height: 1; }
+
+    /* evidence legend */
+    .ai-evlegend { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; margin: 1rem 0 0; padding: 0.7rem 0.9rem; border: 1px dashed var(--border-strong); border-radius: var(--radius); font-size: 0.8rem; color: var(--muted-foreground); }
+    .ai-evlegend .lh { font-family: var(--font-mono); font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.06em; width: 100%; color: var(--foreground); }
+    .ai-evlegend span.t i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+
+    .ai-note { font-size: 0.8rem; color: var(--muted-foreground); line-height: 1.6; margin-top: 2.4rem; border-top: 1px solid var(--border); padding-top: 1rem; }
+    .ai-note b { color: var(--foreground); } .ai-note a { color: var(--accent); }
+
+    html.embed-mode body { margin: 0; }
+    html.embed-mode .ai-wrap { padding: 0.7rem 0.9rem 2rem; max-width: none; }
+    html.embed-mode .eyebrow, html.embed-mode .ai-head p:not(.ai-thesis) { display: none; }
+  </style>
+</head>
+<body>
+  <div id="site-nav"></div>
+
+  <main class="ai-wrap">
+    <header class="ai-head">
+      <div class="eyebrow">Ancient India · one timeline · sourced</div>
+      <h1 class="display">Ancient India, on <em>one spine</em></h1>
+      <p>Five thousand years, read five ways at once. For each era — from the deep <a href="deep-history.html">prehistoric
+        substrate</a> through the Indus cities, the <a href="vedas.html">Vedic age</a>, the Mahajanapadas,
+        <a href="ashoka.html">Ashoka's empire</a> and the Gupta classical age — see the <b>language</b> spoken, the
+        <b>script</b> it was written in, the <b>people</b> (from ancient DNA), the <b>rulers</b>, and the <b>heritage</b>
+        they left. Every era is a doorway into a deeper page.</p>
+      <p class="ai-thesis">This is the connective tissue: language, script, blood, power and stone, threaded into one
+        story. Established facts and contested interpretations are kept apart — the ‘Aryan migration’ point especially.</p>
+      <div class="ai-facets" id="facets"></div>
+      <div class="ai-hint" id="hint"></div>
+      <div class="ai-evlegend" id="evlegend"></div>
+    </header>
+
+    <div class="ai-timeline" id="timeline"></div>
+
+    <p class="ai-note" id="note"></p>
+  </main>
+
+  <script>
+  (function () {
+    "use strict";
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    let DATA = null;
+    const FACETS = [
+      { key: "language", icon: "🗣", label: "Language" },
+      { key: "script",   icon: "🔤", label: "Script" },
+      { key: "people",   icon: "🧬", label: "People (DNA)" },
+      { key: "rulers",   icon: "👑", label: "Rulers" },
+      { key: "heritage", icon: "🏛", label: "Heritage" },
+    ];
+    const shown = new Set(FACETS.map(f => f.key));   // all on by default
+
+    fetch("ancient-india.json").then(r => r.json()).then(d => {
+      DATA = d;
+      renderFacets();
+      renderEvLegend();
+      renderTimeline();
+      renderNote();
+    }).catch(e => {
+      document.getElementById("timeline").innerHTML = `<div style="color:var(--muted-foreground)">Could not load ancient-india.json — ${esc(e.message)}</div>`;
+    });
+
+    const famColor = id => (DATA.families[id] || {}).color || "var(--accent)";
+    const famLabel = id => (DATA.families[id] || {}).label || id;
+
+    function renderFacets() {
+      document.getElementById("facets").innerHTML =
+        `<span style="font-family:var(--font-mono);font-size:0.66rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted-foreground);align-self:center;margin-right:0.3rem">Read by facet:</span>` +
+        FACETS.map(f => `<button class="ai-facet-btn" data-facet="${f.key}" aria-pressed="true">${f.icon} ${esc(f.label)}</button>`).join("");
+      document.getElementById("hint").textContent = "Toggle a facet to focus the timeline on just language, or just the people, or just who ruled.";
+      document.querySelectorAll(".ai-facet-btn").forEach(btn => btn.addEventListener("click", () => {
+        const k = btn.dataset.facet;
+        if (shown.has(k)) shown.delete(k); else shown.add(k);
+        if (shown.size === 0) shown.add(k);   // never empty
+        btn.setAttribute("aria-pressed", shown.has(k));
+        applyFacets();
+      }));
+    }
+    function applyFacets() {
+      document.querySelectorAll(".ai-cell[data-facet]").forEach(c =>
+        c.classList.toggle("hide", !shown.has(c.dataset.facet)));
+    }
+
+    // evidence tier → visual rank (1 strongest … 3 weakest)
+    function tierInfo(tierKey) {
+      const t = ((DATA._meta.interrogation || {}).tiers || {})[tierKey] || {};
+      const rank = t.rank || 3;
+      return { label: t.label || tierKey, note: t.note || "", rank };
+    }
+
+    function cell(facetKey, obj) {
+      if (!obj) return "";
+      const f = FACETS.find(x => x.key === facetKey);
+      const lvl = obj.level ? `<span class="lvl">${esc(obj.level)}</span>` : "";
+      const deep = obj.link ? `<a class="deep" href="${esc(obj.link)}">explore →</a>` : "";
+      const cont = obj.contested ? " contested" : "";
+      const cflag = obj.contested ? ` <span title="contested" style="color:oklch(0.55 0.14 40)">⚠</span>` : "";
+      // interrogation affordance
+      let ev = "", evAttr = "", hasEv = "";
+      if (obj.evidence) {
+        const ti = tierInfo(obj.evidence.tier);
+        ev = `<span class="ai-tier tier-${ti.rank}" title="${esc(ti.note)}">${esc(ti.label)}</span>
+              <span class="ai-ask">how do we know? →</span>`;
+        evAttr = ` data-ev='${esc(JSON.stringify(obj.evidence))}' data-evtitle="${esc(obj.text)}"`;
+        hasEv = " has-ev";
+      }
+      return `<div class="ai-cell${cont}${hasEv}" data-facet="${facetKey}"${evAttr}>
+        <div class="fl">${f.icon} ${esc(f.label)}${cflag}${lvl}</div>
+        <div class="ft">${esc(obj.text)}</div>
+        ${obj.detail ? `<div class="fd">${esc(obj.detail)}</div>` : ""}
+        <div style="margin-top:0.35rem">${deep} ${ev}</div>
+      </div>`;
+    }
+
+    // the "how do we know?" drawer (one, reused; opens under the clicked cell's row)
+    function evidenceDrawerHTML(ev, title) {
+      const ti = tierInfo(ev.tier);
+      const confNote = ((DATA._meta.interrogation || {}).confidence || {})[ev.confidence] || "";
+      return `<div class="ai-drawer-in">
+        <button class="close" aria-label="close">✕</button>
+        <h4>How do we know: “${esc(title)}”?</h4>
+        <div class="qrow">
+          <span class="qchip"><b>Evidence:</b> ${esc(ti.label)}</span>
+          <span class="qchip"><b>Confidence:</b> ${esc(ev.confidence)}</span>
+        </div>
+        <div class="qline"><span class="k">Recorded by</span>${esc(ev.recorded_by)}</div>
+        <div class="qline shaped"><span class="k">Shaped by (the winner's-history check)</span>${esc(ev.shaped_by)}</div>
+        <div class="how">${esc(ev.how)}</div>
+        <div class="qline" style="color:var(--muted-foreground);font-size:0.78rem">${esc(ti.note)}${confNote ? " · " + esc(confNote) : ""}</div>
+      </div>`;
+    }
+
+    // click a cell → toggle a drawer appended to that cell's grid
+    function wireDrawers() {
+      document.querySelectorAll(".ai-cell.has-ev").forEach(cellEl => {
+        cellEl.addEventListener("click", (e) => {
+          if (e.target.closest("a")) return;   // let deep-links work
+          const grid = cellEl.closest(".ai-facet-grid");
+          let drawer = grid.querySelector(".ai-drawer");
+          const ev = JSON.parse(cellEl.dataset.ev);
+          const title = cellEl.dataset.evtitle;
+          // if a drawer is open for THIS cell, close it
+          if (drawer && drawer.dataset.for === cellEl.dataset.evtitle && drawer.classList.contains("open")) {
+            drawer.classList.remove("open"); setTimeout(() => drawer.remove(), 260); return;
+          }
+          if (drawer) drawer.remove();
+          drawer = document.createElement("div");
+          drawer.className = "ai-drawer"; drawer.dataset.for = title;
+          drawer.innerHTML = evidenceDrawerHTML(ev, title);
+          // insert right after the clicked cell so it appears beneath its row
+          cellEl.after(drawer);
+          requestAnimationFrame(() => drawer.classList.add("open"));
+          drawer.querySelector(".close").addEventListener("click", () => {
+            drawer.classList.remove("open"); setTimeout(() => drawer.remove(), 260);
+          });
+        });
+      });
+    }
+
+    function renderTimeline() {
+      const eras = (DATA.eras || []).slice().sort((a, b) => a.sort - b.sort);
+      document.getElementById("timeline").innerHTML = eras.map(e => {
+        const fc = famColor(e.family);
+        const cells = FACETS.map(f => cell(f.key, e[f.key])).join("");
+        const events = (e.events || []).map(ev => `<span class="ai-ev">${esc(ev)}</span>`).join("");
+        const links = (e.links || []).map(l => `<a href="${esc(l.href)}">${esc(l.label)} →</a>`).join("");
+        return `<div class="ai-era" style="--fc:${fc}">
+          <div class="ai-card">
+            <div class="ai-card-head" style="--fc:${fc}">
+              <div class="ai-when">${esc(e.when)}</div>
+              <div class="ai-name">${esc(e.name)}${e.contested ? `<span class="flag">contested points</span>` : ""}</div>
+              <span class="ai-famtag" style="--fc:${fc}">${esc(famLabel(e.family))}</span>
+            </div>
+            <div class="ai-facet-grid">${cells}</div>
+            <div class="ai-foot">
+              <div class="ai-events">${events}</div>
+              ${links ? `<div class="ai-links">${links}</div>` : ""}
+            </div>
+          </div>
+        </div>`;
+      }).join("");
+      applyFacets();
+      wireDrawers();
+    }
+
+    function renderEvLegend() {
+      const intr = DATA._meta.interrogation || {};
+      const tiers = intr.tiers || {};
+      const chips = Object.keys(tiers).map(k => {
+        const rank = tiers[k].rank || 3;
+        return `<span class="t" title="${esc(tiers[k].note)}"><i class="tier-${rank}" style="background:${rank===1?'oklch(0.5 0.13 150)':rank===2?'oklch(0.52 0.12 80)':'oklch(0.54 0.13 40)'}"></i>${esc(tiers[k].label)}</span>`;
+      }).join("");
+      const el = document.getElementById("evlegend");
+      if (el) el.innerHTML = `<span class="lh">Question the evidence — click any fact's “how do we know?” to interrogate it. Evidence tiers (strong → weak):</span>${chips}`;
+    }
+
+    function renderNote() {
+      const m = DATA._meta;
+      const srcs = (m.sources || []).map(s => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label.split(":")[0].split("—")[0].split("(")[0].trim())}</a>`).join(" · ");
+      document.getElementById("note").innerHTML =
+        `<b>How this is framed.</b> ${esc(m.honesty)} <br><br>` +
+        `<b>Go deeper.</b> Each era links out to the full page — the <a href="scripts.html">scripts &amp; families</a>, the ` +
+        `<a href="vedas.html">source texts</a>, <a href="ashoka.html">Ashoka's edicts</a>, the ` +
+        `<a href="deep-history.html">ancient-DNA record</a>, and the <a href="heritage-atlas.html">heritage atlas</a>. ` +
+        `<br><br><b>Sources:</b> ${srcs}.`;
+    }
+  })();
+  </script>
+  <script src="page-brief.js"></script>
+  <script>
+    PageBrief.set({
+      section: "History",
+      explainer: "Five thousand years of India on one spine — each era read on five facets (language, script, people, rulers, heritage), with the evidence behind every fact open to interrogation.",
+      research: "Built from peer-reviewed ancient-DNA papers (Narasimhan & Shinde 2019), Ashoka's own edicts, and paleography. Each fact carries an evidence tier and a 'shaped by the winner' check; contested points (e.g. the Aryan-migration narrative) are flagged, not resolved.",
+      references: [
+        { label: "Ancient DNA (Science 2019)", href: "https://www.science.org/doi/10.1126/science.aat7487" },
+        { label: "Edicts of Ashoka", href: "https://en.wikipedia.org/wiki/Edicts_of_Ashoka" },
+        { label: "All sources", href: "references.html" }
+      ],
+      docs: "how-it-works.html",
+      updated: "2026-08-06"
+    });
+  </script>
+  <script src="command-palette.js"></script>
+  <script src="site-nav.js"></script>
+</body>
+</html>

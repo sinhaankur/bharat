@@ -1,9 +1,136 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Bharat — Money, Land & Memory</title>
-<link rel="canonical" href="https://sinhaankur.github.io/bharat/app/global/"/>
-<meta http-equiv="refresh" content="0; url=/bharat/app/global/"/>
-<script>location.replace("/bharat/app/global/"+location.search+location.hash)</script>
-<style>html,body{margin:0;height:100%;background:#f8f4ea;color:#33251a;font-family:-apple-system,sans-serif}
-.w{display:flex;height:100%;align-items:center;justify-content:center;text-align:center}a{color:#cc8900;font-weight:700}</style>
-</head><body><div class="w"><p>Moved to the new atlas… <a href="/bharat/app/global/">continue</a></p></div></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>India vs the world — GDP, income &amp; industry</title>
+  <meta name="description" content="Where India sits among 220+ countries on GDP, income per head, and the industry/services/agriculture split — World Bank open data." />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .gl-wrap { max-width: 1040px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; }
+    .gl-head h1 { margin: 0.3rem 0 0.5rem; font-size: clamp(1.6rem, 3.5vw, 2.4rem); }
+    .gl-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.55; max-width: 72ch; }
+    .gl-india { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 0.7rem; margin: 1.4rem 0; }
+    .gl-stat { border: 1px solid var(--border-strong); border-radius: var(--radius); background: oklch(0.18 0.04 75 / 0.25); padding: 0.9rem 1rem; }
+    .gl-stat .v { font-family: var(--font-mono); font-size: 1.25rem; color: var(--accent); }
+    .gl-stat .l { font-size: 9.5px; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-foreground); margin-top: 2px; }
+    .gl-stat .rank { font-size: 10px; color: oklch(0.48 0.160 150); font-family: var(--font-mono); margin-top: 3px; }
+    .gl-controls { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin: 1rem 0; }
+    .gl-controls select, .gl-controls input { background: var(--card); color: var(--foreground); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 0.45rem 0.7rem; font-family: var(--font-mono); font-size: 11px; }
+    table.gl-tbl { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+    .gl-tbl th { text-align: right; font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted-foreground); padding: 0.6rem 0.7rem; border-bottom: 1px solid var(--border-strong); cursor: pointer; }
+    .gl-tbl th:nth-child(1), .gl-tbl th:nth-child(2) { text-align: left; }
+    .gl-tbl td { padding: 0.5rem 0.7rem; border-bottom: 1px solid var(--border); text-align: right; color: var(--foreground); }
+    .gl-tbl td:nth-child(1), .gl-tbl td:nth-child(2) { text-align: left; }
+    .gl-tbl td:nth-child(1) { font-family: var(--font-mono); color: var(--muted-foreground); }
+    .gl-tbl tr.is-india td { background: oklch(0.22 0.05 78 / 0.5); color: var(--foreground); font-weight: 600; }
+    .gl-tbl tr:hover td { background: var(--card); }
+    .gl-bar { display: inline-block; height: 7px; border-radius: 999px; background: var(--accent); vertical-align: middle; margin-left: 6px; }
+    .gl-note { font-size: 0.8rem; color: var(--muted-foreground); line-height: 1.55; margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1rem; }
+    .gl-note a { color: var(--accent); }
+    .gl-empty { color: var(--muted-foreground); padding: 2rem 0; }
+  </style>
+</head>
+<body>
+  <div id="site-nav"></div>
+
+  <main class="gl-wrap">
+    <header class="gl-head">
+      <div class="eyebrow">India vs the world · World Bank open data</div>
+      <h1 class="display">Where India <em>sits</em></h1>
+      <p>India's economy against 220+ countries — total output, income per head, and how the economy
+      splits across industry, services and agriculture. Every figure is World Bank open data; a blank
+      is a gap, never an estimate.</p>
+      <div class="gl-india" id="india-cards"></div>
+    </header>
+
+    <div class="gl-controls">
+      <label class="mono" style="font-size:11px;color:var(--muted-foreground)">Rank by</label>
+      <select id="metric">
+        <option value="gdp_usd">GDP (US$)</option>
+        <option value="gni_per_capita">Income per head (GNI/capita)</option>
+        <option value="population">Population</option>
+        <option value="industry_pct">Industry % of GDP</option>
+        <option value="services_pct">Services % of GDP</option>
+        <option value="agri_pct">Agriculture % of GDP</option>
+      </select>
+      <input type="search" id="q" placeholder="find a country…" />
+    </div>
+
+    <table class="gl-tbl" id="tbl"><tbody><tr><td class="gl-empty">Loading…</td></tr></tbody></table>
+
+    <p class="gl-note">
+      Source: <a href="https://data.worldbank.org" target="_blank" rel="noopener">World Bank Open Data</a>
+      (CC-BY-4.0), latest available year per country. Generated by <code>gen_global_indicators.py</code>.
+      This is the comparison layer; the standalone global atlas builds on the same data. India figures
+      sit alongside the <a href="index.html">district fiscal map</a>.
+    </p>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script>
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    let DATA = null;
+    const fmt = (m, v) => {
+      if (v == null) return "—";
+      if (m === "gdp_usd") return v >= 1e12 ? `$${(v/1e12).toFixed(2)}T` : `$${(v/1e9).toFixed(1)}B`;
+      if (m === "gni_per_capita") return `$${Number(v).toLocaleString("en-US")}`;
+      if (m === "population") return v >= 1e9 ? `${(v/1e9).toFixed(2)}B` : `${(v/1e6).toFixed(1)}M`;
+      return `${v}%`;
+    };
+    const LABEL = { gdp_usd:"GDP", gni_per_capita:"Income/head", population:"Population", industry_pct:"Industry %", services_pct:"Services %", agri_pct:"Agri %" };
+
+    fetch("global-indicators.json").then(r => r.json()).then(d => { DATA = d; initIndia(); render();
+      document.getElementById("metric").addEventListener("change", render);
+      document.getElementById("q").addEventListener("input", render);
+    }).catch(e => document.getElementById("tbl").innerHTML = `<tbody><tr><td class="gl-empty">Load error: ${esc(e.message)}</td></tr></tbody>`);
+
+    function rankOf(metric) {
+      const ranked = DATA.countries.filter(c => c[metric] != null).sort((a,b) => b[metric]-a[metric]);
+      const i = ranked.findIndex(c => c.iso3 === "IND");
+      return { rank: i+1, total: ranked.length };
+    }
+    function initIndia() {
+      const ind = DATA.countries.find(c => c.iso3 === "IND");
+      if (!ind) return;
+      const metrics = ["gdp_usd","gni_per_capita","population","industry_pct","services_pct"];
+      document.getElementById("india-cards").innerHTML = metrics.map(m => {
+        const r = rankOf(m);
+        return `<div class="gl-stat"><div class="v">${fmt(m, ind[m])}</div><div class="l">${esc(LABEL[m])}</div>
+          <div class="rank">#${r.rank} of ${r.total}</div></div>`;
+      }).join("");
+    }
+
+    function render() {
+      const m = document.getElementById("metric").value;
+      const q = document.getElementById("q").value.toLowerCase();
+      let rows = DATA.countries.filter(c => c[m] != null);
+      rows.sort((a,b) => b[m]-a[m]);
+      const max = rows.length ? rows[0][m] : 1;
+      const ranked = rows.map((c,i) => ({...c, _rank:i+1}));
+      const shown = q ? ranked.filter(c => c.name.toLowerCase().includes(q)) : ranked.slice(0, 60);
+      const body = shown.map(c => `
+        <tr class="${c.iso3==="IND"?"is-india":""}">
+          <td>${c._rank}</td>
+          <td>${esc(c.name)}${c.iso3==="IND"?" 🇮🇳":""}</td>
+          <td>${fmt(m, c[m])}<span class="gl-bar" style="width:${Math.max(2,(c[m]/max*70)).toFixed(0)}px"></span></td>
+          <td>${fmt("gdp_usd", c.gdp_usd)}</td>
+          <td>${fmt("gni_per_capita", c.gni_per_capita)}</td>
+        </tr>`).join("");
+      document.getElementById("tbl").innerHTML = `
+        <thead><tr><th>#</th><th>Country</th><th>${esc(LABEL[m])}</th><th>GDP</th><th>Income/head</th></tr></thead>
+        <tbody>${body || `<tr><td class="gl-empty" colspan="5">No match.</td></tr>`}</tbody>`;
+      // ensure India visible even when showing top-60 + no search
+      if (!q && !shown.some(c=>c.iso3==="IND")) {
+        const ind = ranked.find(c=>c.iso3==="IND");
+        if (ind) document.querySelector("#tbl tbody").insertAdjacentHTML("beforeend",
+          `<tr class="is-india"><td>${ind._rank}</td><td>${esc(ind.name)} 🇮🇳</td><td>${fmt(m,ind[m])}</td><td>${fmt("gdp_usd",ind.gdp_usd)}</td><td>${fmt("gni_per_capita",ind.gni_per_capita)}</td></tr>`);
+      }
+    }
+  </script>
+  <script src="command-palette.js"></script>
+  <script src="page-brief.js"></script>
+  <script src="site-nav.js"></script>
+</body>
+</html>
