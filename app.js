@@ -248,7 +248,7 @@
   // should go translucent (with crisper borders) to let the terrain read through.
   function terrainActive() {
     if (!map || !mapLayers) return false;
-    const baseTerrain = mapLayers.current && mapLayers.current !== 'Dark map';
+    const baseTerrain = mapLayers.current && mapLayers.current !== 'Light map';
     const overlayOn = (mapLayers.hillshade && map.hasLayer(mapLayers.hillshade)) ||
                       (mapLayers.elevTint && map.hasLayer(mapLayers.elevTint));
     return baseTerrain || overlayOn;
@@ -2911,13 +2911,13 @@
     // a Mapbox token. Ships no key; licensed, so opt-in only. Added last in the list.
     const hd = MapLayers.satelliteHD(L);
     if (hd) basemaps['Satellite HD (your Mapbox key)'] = hd;
-    basemaps['Dark map'].addTo(map);      // default
+    basemaps['Light map'].addTo(map);      // default (Indic light Modernist)
     const labels = MapLayers.labels(L);
     const hillshade = MapLayers.hillshade(L);
     const elevTint = buildElevationTintLayer();   // custom GridLayer (uses DEM decode)
     const { rain, clouds } = MapLayers.weather(L);
     // Stash for the unified layers panel (replaces the default Leaflet controls).
-    mapLayers = { basemaps, labels, hillshade, elevTint, rain, clouds, current: 'Dark map' };
+    mapLayers = { basemaps, labels, hillshade, elevTint, rain, clouds, current: 'Light map' };
     // Deep-zoom note + zoom/scale readout (map-ui.js) — reads the active basemap's
     // real resolution so it can flag upscaling.
     mapUI = MapUI.setup(map, { getActiveBasemap: () => mapLayers.basemaps[mapLayers.current] });
@@ -3164,17 +3164,17 @@
   // overlays and colour facet TOGETHER so the layers tell one story instead of the
   // user hand-assembling them. Same honesty rules as the individual layers.
   const MAP_PRESETS = {
-    flood: { label: '🌊 Flood', base: 'Dark map', overlays: { hillshade: false, elevTint: false, rain: true, clouds: false }, mode: 'geography', facet: 'lowlying',
+    flood: { label: '🌊 Flood', base: 'Light map', overlays: { hillshade: false, elevTint: false, rain: true, clouds: false }, mode: 'geography', facet: 'lowlying',
       title: 'Low-lying share (open DEM raster) + LIVE rain radar — where water would sit, and where it is raining right now' },
     zoning: { label: '⚖ Zoning', base: 'Satellite', overlays: { hillshade: false, elevTint: false, labels: true, rain: false, clouds: false }, mode: 'geography', facet: 'zoning',
       title: 'Legal zone over real satellite imagery — what may be built vs what is actually built' },
-    risk: { label: '⚠ Risk stack', base: 'Dark map', overlays: { hillshade: false, elevTint: false, rain: false, clouds: false }, mode: 'geography', facet: 'vulnerability', hazards: true,
+    risk: { label: '⚠ Risk stack', base: 'Light map', overlays: { hillshade: false, elevTint: false, rain: false, clouds: false }, mode: 'geography', facet: 'vulnerability', hazards: true,
       title: 'Overlapping sourced risk signals (count, not a score) + hazard & zoning pins when drilled' },
     relief: { label: '🏔 Relief', base: 'Terrain HD', overlays: { hillshade: true, elevTint: true, rain: false, clouds: false }, mode: 'geography', facet: 'elevation',
       title: 'Sharp topographic base + hillshade + per-pixel elevation tint (metres above sea) — the physical terrain in one view. For a true 3D height model, open the 3D topography page.' },
-    money: { label: '₹ Money', base: 'Dark map', overlays: { hillshade: false, elevTint: false, rain: false, clouds: false }, mode: 'money',
+    money: { label: '₹ Money', base: 'Light map', overlays: { hillshade: false, elevTint: false, rain: false, clouds: false }, mode: 'money',
       title: 'Per-district money flow (drill into a state first)' },
-    safety: { label: '🚨 Safety', base: 'Dark map', overlays: { hillshade: false, elevTint: false, rain: false, clouds: false }, stateView: 'crime', unrest: true,
+    safety: { label: '🚨 Safety', base: 'Light map', overlays: { hillshade: false, elevTint: false, rain: false, clouds: false }, stateView: 'crime', unrest: true,
       title: 'NCRB crime rate colouring every state + live protest/unrest hotspot pins (Ground-News-style lean spread on each)' },
   };
   function applyMapPreset(key) {
@@ -3225,7 +3225,7 @@
       panel.querySelector('#mlp-open').onclick = () => { ui.state.layersCollapsed = false; renderLayersPanel(); };
       return;
     }
-    const cur = mapLayers?.current || 'Dark map';
+    const cur = mapLayers?.current || 'Light map';
     const shortBase = n => n.replace(' map', '')
       .replace('Recent satellite (Sentinel-2)', 'Recent (S2)')
       .replace('Satellite HD (your Mapbox key)', 'Satellite HD');

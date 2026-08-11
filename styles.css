@@ -2564,6 +2564,86 @@ html.theme-dark .ed-btn--dark { background: var(--muted); color: var(--foregroun
 html.theme-dark .ed-btn--dark:hover { background: var(--card); color: #fff; }
 /* the meridian-B favicon strokes are white-on-ink → already fine on dark */
 
+/* ============================================================
+   THEME: INDIC LIGHT — the classic map app on the light Modernist
+   ground (the handoff design system). classic.html ships
+   class="theme-indic-light" instead of theme-dark. The many map-UI
+   glass panels were authored dark (oklch 0.1x, "floating over a dark
+   map"); here we remap them to a LIGHT stone glass so the whole app
+   reads light + Modernist. Scoped so the dark 3D/globe pages are
+   untouched. Light basemap ('Light map') is the default (app.js).
+   ============================================================ */
+html.theme-indic-light {
+  /* stone Modernist tokens for the body (mirrors the Indic chrome) */
+  --stone-glass:      #f6f0e1;                 /* opaque light glass */
+  --stone-glass-t:    rgba(246, 240, 225, .9); /* translucent light glass */
+  --stone-glass-2:    rgba(236, 227, 205, .94);
+  --ink-2018:         #2a2018;
+  --muted-48:         #6b5c48;
+  --line-2c:          rgba(58, 44, 30, .22);
+  --line-strong-2c:   rgba(58, 44, 30, .40);
+  --vermilion:        #c1440e;
+}
+/* the floating side panel + its controls */
+html.theme-indic-light .india-side-panel { background: var(--stone-glass-t); border-left: 1px solid var(--line-2c); color: var(--ink-2018); }
+html.theme-indic-light .india-side-header, html.theme-indic-light .india-side-sub,
+html.theme-indic-light .india-detail, html.theme-indic-light .india-main { color: var(--ink-2018); }
+/* the readout, query panel, drawer, popovers, chips — all the dark glass surfaces */
+html.theme-indic-light #india-map-readout,
+html.theme-indic-light .map-query .mq-toggle,
+html.theme-indic-light .map-query:not(.collapsed),
+html.theme-indic-light #map-search,
+html.theme-indic-light #map-search-input,
+html.theme-indic-light #map-search-results,
+html.theme-indic-light .ln-item,
+html.theme-indic-light .sd-popup .leaflet-popup-content-wrapper,
+html.theme-indic-light .sd-popup .leaflet-popup-tip {
+  background: var(--stone-glass) !important;
+  color: var(--ink-2018) !important;
+  border-color: var(--line-strong-2c) !important;
+}
+/* view-toggle + base-map buttons: light chips, vermilion when active */
+html.theme-indic-light .ind-btn,
+html.theme-indic-light .base-map-btn,
+html.theme-indic-light .layers-panel button {
+  background: var(--stone-glass-2); color: var(--ink-2018); border-color: var(--line-2c);
+}
+html.theme-indic-light .ind-btn.active,
+html.theme-indic-light .base-map-btn.active {
+  background: var(--vermilion); color: #fff; border-color: var(--vermilion);
+}
+/* the LAYERS panel (.mlp) on the left — the big dark glass box → light stone */
+html.theme-indic-light .mlp { background: var(--stone-glass-t); border-color: var(--line-strong-2c); color: var(--ink-2018); }
+html.theme-indic-light .mlp-toggle,
+html.theme-indic-light .mlp-preset,
+html.theme-indic-light .mlp-base,
+html.theme-indic-light .mlp-facet,
+html.theme-indic-light .mlp-data-btn {
+  background: var(--stone-glass-2); color: var(--ink-2018); border-color: var(--line-2c);
+}
+html.theme-indic-light .mlp-title { color: var(--vermilion); }
+html.theme-indic-light .mlp-preset.on,
+html.theme-indic-light .mlp-base.on,
+html.theme-indic-light .mlp-facet.on,
+html.theme-indic-light .mlp-data-btn.on {
+  background: color-mix(in srgb, var(--vermilion) 14%, transparent);
+  border-color: var(--vermilion); color: var(--vermilion);
+}
+html.theme-indic-light .readout-label, html.theme-indic-light .india-legend-foot { color: var(--muted-48); }
+html.theme-indic-light .readout-name, html.theme-indic-light .readout-value { color: var(--ink-2018); }
+/* the "layer story" ranking board inside the detail panel → light stone */
+html.theme-indic-light .layer-story { background: var(--stone-glass-2); border-color: var(--line-2c); }
+html.theme-indic-light .layer-story .ls-head b, html.theme-indic-light .layer-story .ls-go:hover { color: var(--vermilion); }
+html.theme-indic-light .layer-story .ls-val { color: var(--vermilion); }
+html.theme-indic-light .layer-story .ls-go, html.theme-indic-light .layer-story .vs-go { color: var(--ink-2018); }
+/* the map readout pill (make sure the container itself is light, not just descendants) */
+html.theme-indic-light #india-map-readout { background: var(--stone-glass-t) !important; border: 1px solid var(--line-2c) !important; }
+/* the layers panel + legend read on light */
+html.theme-indic-light #india-map-legend { background: var(--stone-glass-t); border-color: var(--line-2c); color: var(--ink-2018); }
+html.theme-indic-light .india-legend-title, html.theme-indic-light .india-legend-foot { color: var(--muted-48); }
+/* labels/eyebrows/links keep the Indic accent, not amber */
+html.theme-indic-light .eyebrow, html.theme-indic-light .india-ref-link { color: var(--vermilion); }
+
 /* theme-light: explicitly re-assert the light editorial tokens, so the a11y
    toggle can force light even on a page that ships class="theme-dark", and so
    a browser in OS-dark never darkens our editorial pages. Mirrors :root. */

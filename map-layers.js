@@ -23,6 +23,9 @@
   // OpenTopo 17, Sentinel-2 16. Deep-zoom note fires when zoom > native.
   function basemaps(L) {
     return {
+      'Light map': L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+        subdomains: 'abcd', attribution: '&copy; OSM, &copy; CARTO', maxZoom: MAX_ZOOM, maxNativeZoom: 20,
+      }),
       'Dark map': L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
         subdomains: 'abcd', attribution: '&copy; OSM, &copy; CARTO', maxZoom: MAX_ZOOM, maxNativeZoom: 20,
       }),
