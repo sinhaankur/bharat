@@ -127,7 +127,13 @@
       { href: "india-3d.html", text: "The globe", hint: "real Earth · 594 districts · layers" },
       { href: "globe-map.html", text: "Globe → map", hint: "watch the globe unroll" },
       { href: "heritage-3d.html", text: "Temples in 3D", hint: "photogrammetry of temples & ruins" },
+      { href: "temple-forms.html", text: "Temple forms in 3D", hint: "Nagara · Dravida · Kalinga, modelled to real dims" },
       { href: "mesh.html", text: "The mesh", hint: "how it all connects" },
+    ]},
+    { label: "Design", href: "app/design-systems/", tagline: "One chassis, many Indias — the Indic design system.", items: [
+      { href: "app/design-systems/", text: "India by Design Systems", hint: "the flagship — a skin per state, over one chassis", ext: true },
+      { href: "app/canvas/", text: "The canvas", hint: "every screen of the atlas, one deck", ext: true },
+      { href: "design-system.html", text: "Design system", hint: "the brand, tokens & components — the style guide" },
     ]},
     { label: "Data", href: "knowledge.html", tagline: "The receipts — every figure, every source.", items: [
       { href: "knowledge.html", text: "Knowledge base", hint: "the data catalog" },
