@@ -89,7 +89,10 @@
       + ".a11y-size .v{font-family:var(--font-mono);font-size:12px;min-width:44px;text-align:right}"
       + ".a11y-info{font-size:0.85rem;line-height:1.6;color:var(--muted-foreground);border-top:1px solid var(--border);padding-top:0.8rem;margin-top:0.4rem}"
       + ".a11y-info a{color:var(--brand)}"
-      + ".a11y-reset{font-family:var(--font-mono);font-size:11px;color:var(--muted-foreground);background:none;border:0;cursor:pointer;text-decoration:underline;padding:0}";
+      + ".a11y-reset{font-family:var(--font-mono);font-size:11px;color:var(--muted-foreground);background:none;border:0;cursor:pointer;text-decoration:underline;padding:0}"
+      + ".a11y-refresh{border-color:var(--brand);color:var(--brand);font-weight:600}"
+      + ".a11y-refresh:hover{background:var(--brand);color:#fff}"
+      + ".a11y-refresh[disabled]{opacity:0.6;cursor:progress}";
     var s = document.createElement("style"); s.id = "a11y-css"; s.textContent = css;
     document.head.appendChild(s);
   }
@@ -117,6 +120,7 @@
         + '<button class="a11y-opt' + (state.contrast ? " on" : "") + '" id="a11y-contrast">◑ High contrast</button>'
         + '<button class="a11y-opt' + (!state.motion ? " on" : "") + '" id="a11y-motion">⏸ Reduce motion</button>'
       + "</div></div>"
+      + '<div class="a11y-row"><div class="a11y-lbl">Trouble?</div><div class="a11y-opts"><button class="a11y-opt a11y-refresh" id="a11y-refresh" title="Clear this device\'s cached copy of the site and reload the newest version. Keeps your reading settings.">↻ <span id="a11y-refresh-t">Clear cache &amp; get latest</span></button></div></div>'
       + '<div class="a11y-info" id="a11y-info"><b>What is this?</b> The India District Atlas traces public money to every district — sourced, or marked a gap — so you can make <em>informed decisions</em> from the record. These controls make it easier to read: pick a font (incl. a dyslexia-friendly one), size the text, boost contrast, or calm the motion. Your choices are saved on this device and apply everywhere. <a href="how-it-works.html">How it works →</a> · <a href="about.html">About &amp; methodology →</a> · <button class="a11y-reset" id="a11y-reset">reset to defaults</button></div>'
       + "</div>";
     document.body.appendChild(ov);
@@ -145,6 +149,34 @@
     var mb = document.getElementById("a11y-motion");
     mb.addEventListener("click", function () { state.motion = !state.motion; mb.classList.toggle("on", !state.motion); save(); apply(); });
     document.getElementById("a11y-reset").addEventListener("click", function () { state = Object.assign({}, DEFAULTS); save(); apply(); close(); openPanel(); });
+
+    // "Clear cache & get latest" — clears this device's cached copy of the site (any
+    // service worker + Cache Storage) and hard-reloads the newest deployed version with a
+    // cache-busting query param. Keeps reading settings (localStorage is untouched).
+    document.getElementById("a11y-refresh").addEventListener("click", function () {
+      var btn = this, label = document.getElementById("a11y-refresh-t");
+      btn.disabled = true; if (label) label.textContent = "Clearing…";
+      var jobs = [];
+      try {
+        if (window.caches && caches.keys) {
+          jobs.push(caches.keys().then(function (keys) { return Promise.all(keys.map(function (k) { return caches.delete(k); })); }));
+        }
+      } catch (e) {}
+      try {
+        if (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) {
+          jobs.push(navigator.serviceWorker.getRegistrations().then(function (regs) { return Promise.all(regs.map(function (r) { return r.unregister(); })); }));
+        }
+      } catch (e) {}
+      var done = function () {
+        // strip any old cache-bust param, add a fresh one, then reload from the network
+        var u = new URL(location.href);
+        u.searchParams.set("fresh", Date.now().toString(36));
+        location.replace(u.toString());
+      };
+      // don't hang forever if a job stalls
+      var t = setTimeout(done, 1500);
+      Promise.all(jobs).then(function () { clearTimeout(t); done(); }).catch(function () { clearTimeout(t); done(); });
+    });
   }
   function escClose(e) { if (e.key === "Escape") close(); }
   function close() { var o = document.getElementById("a11y-overlay"); if (o) o.remove(); document.removeEventListener("keydown", escClose); }
