@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import SiteHeader from '@/components/site-header'
 import SiteFooter from '@/components/site-footer'
-import FlagshipFrame from './flagship-frame'
+import DsShell from './ds-shell'
 
 export const metadata: Metadata = {
   title: 'India by Design Systems — one chassis, many Indias · Bharat',
@@ -13,8 +13,8 @@ export default function DesignSystemsPage() {
   return (
     <>
       <SiteHeader />
-      {/* the full handoff flagship document IS the page (full-bleed) */}
-      <FlagshipFrame />
+      {/* intro + live skin switcher + jump-nav wrapped around the handoff document */}
+      <DsShell />
       <SiteFooter />
     </>
   )
