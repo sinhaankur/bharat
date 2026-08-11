@@ -36,6 +36,29 @@
     .lh-card .badge.done { background: oklch(0.55 0.13 150); color: #fff; }
     .lh-card .badge.soon { border: 1px dashed var(--border-strong); color: var(--muted-foreground); }
 
+    /* ── specimen grid: one word, every script ── */
+    .lh-spec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0; border: 2px solid var(--foreground); margin-top: 1.4rem; }
+    .lh-spec { padding: 1.4rem 1.1rem 1rem; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; text-align: center; background: var(--card); transition: background .14s; }
+    .lh-spec:hover { background: var(--muted); }
+    .lh-spec.is-root { background: color-mix(in srgb, var(--accent) 8%, var(--card)); }
+    .lh-spec-word { font-size: clamp(1.9rem, 3.6vw, 2.7rem); line-height: 1.25; color: var(--foreground); margin-bottom: 0.7rem; word-break: break-word; }
+    .lh-spec-name { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: .04em; color: var(--foreground); }
+    .lh-spec-fam { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted-foreground); margin-top: 2px; }
+    .lh-spec.fam-dr .lh-spec-name { color: oklch(0.5 0.15 25); }
+    .lh-spec.fam-ia .lh-spec-name { color: oklch(0.5 0.14 285); }
+
+    /* ── language tiles: each language BIG in its own hand ── */
+    .lh-tile-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 0.9rem; margin-top: 1.4rem; }
+    .lh-tile { display: flex; flex-direction: column; align-items: flex-start; gap: 0.3rem; padding: 1.2rem 1.2rem 1rem; border: 1px solid var(--border); border-top: 3px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--card); text-decoration: none; color: inherit; transition: transform .14s, box-shadow .14s, border-color .14s; }
+    .lh-tile:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,.10); }
+    .lh-tile.fam-ia { border-top-color: oklch(0.6 0.14 285); }
+    .lh-tile.fam-dr { border-top-color: oklch(0.58 0.15 25); }
+    .lh-tile.fam-other { border-top-color: oklch(0.58 0.12 150); }
+    .lh-tile-native { font-size: clamp(2rem, 4vw, 2.8rem); line-height: 1.2; color: var(--foreground); margin-bottom: 0.35rem; }
+    .lh-tile-name { font-family: var(--font-display); font-size: 1.15rem; font-weight: 600; color: var(--foreground); }
+    .lh-tile-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-top: 0.15rem; }
+    .lh-tile-script { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
+
     /* section */
     .lh-sec { margin: 2.6rem 0 0; }
     .lh-sec h2 { font-size: 1.35rem; margin: 0 0 0.3rem; }
@@ -99,15 +122,20 @@
       <div class="lh-fams" id="fams"></div>
     </section>
 
-    <!-- all languages -->
+    <!-- ONE WORD, EVERY SCRIPT — the specimen hero (from scripts.json) -->
     <section class="lh-sec">
-      <h2>India's languages — written in their own letters</h2>
-      <p>A first pass over the major scheduled languages, each shown in its <b>own script</b> using our self-hosted
-        fonts (so every line renders for everyone). This grows toward all 22 as sourced material is added.</p>
-      <table class="lh-langtable" id="langtable">
-        <thead><tr><th>Language</th><th>In its script</th><th>Family</th><th>Script</th></tr></thead>
-        <tbody></tbody>
-      </table>
+      <h2 id="specimen-h">One word, written every way</h2>
+      <p id="specimen-sub">The same word — <b>saṃskṛtam</b>, "refined, put-together" — set in each of India's living
+        scripts and its ancient root. One sound, a dozen letters. This is how the written script <em>was</em>, and is.</p>
+      <div class="lh-spec-grid" id="specgrid"></div>
+    </section>
+
+    <!-- all languages, as tiles in their own letters -->
+    <section class="lh-sec">
+      <h2>India's languages — each in its own hand</h2>
+      <p>The major scheduled languages, each shown big in its <b>own script</b> with our self-hosted fonts
+        (so every tile renders for everyone), tagged by family. This grows toward all 22 as sourced material is added.</p>
+      <div class="lh-tile-grid" id="langtiles"></div>
     </section>
 
     <p class="lh-note" id="note"></p>
@@ -178,13 +206,33 @@
         <div class="fl">${esc(f.fl)}</div>
       </div>`).join("");
 
-    document.querySelector("#langtable tbody").innerHTML = LANGS.map(l => `
-      <tr>
-        <td class="name">${esc(l.name)}</td>
-        <td class="native ${esc(l.f)}">${esc(l.native)}</td>
-        <td><span class="fam ${l.fam}">${esc(l.famL)}</span></td>
-        <td>${esc(l.script)}</td>
-      </tr>`).join("");
+    // language tiles — each language BIG in its own script
+    document.getElementById("langtiles").innerHTML = LANGS.map(l => `
+      <a class="lh-tile fam-${l.fam}" href="scripts.html" title="${esc(l.name)} · ${esc(l.script)} script">
+        <div class="lh-tile-native ${esc(l.f)}">${esc(l.native)}</div>
+        <div class="lh-tile-name">${esc(l.name)}</div>
+        <div class="lh-tile-meta"><span class="fam ${l.fam}">${esc(l.famL)}</span><span class="lh-tile-script">${esc(l.script)}</span></div>
+      </a>`).join("");
+
+    // specimen — one word across every script (scripts.json). Maps the font key to our
+    // self-hosted font classes so every rendering displays, never a tofu box.
+    const FONT_CLASS = { devanagari:"f-devanagari", bengali:"f-bengali", gujarati:"f-gujarati", gurmukhi:"f-gurmukhi",
+      odia:"f-odia", tamil:"f-tamil", grantha:"f-grantha", telugu:"f-telugu", kannada:"f-kannada",
+      malayalam:"f-malayalam", sinhala:"f-sinhala", brahmi:"f-brahmi" };
+    fetch("scripts.json").then(r => r.ok ? r.json() : null).then(sc => {
+      const grid = document.getElementById("specgrid");
+      const spec = sc && sc.specimen;
+      if (!spec || !spec.renderings) { grid.innerHTML = ""; return; }
+      grid.innerHTML = spec.renderings.map(r => {
+        const famCls = /dravidian/.test(r.family) ? "dr" : /dead/.test(r.family) ? "dead" : "ia";
+        const dead = /dead|ancient|root/i.test(r.script);
+        return `<div class="lh-spec fam-${famCls}${dead ? " is-root" : ""}">
+          <div class="lh-spec-word ${FONT_CLASS[r.font] || ""}">${esc(r.text)}</div>
+          <div class="lh-spec-name">${esc(r.script.replace(/\s*\([^)]*\)/, ""))}</div>
+          <div class="lh-spec-fam">${esc(r.family.replace("-", " "))}${dead ? " · ancient root" : ""}</div>
+        </div>`;
+      }).join("");
+    }).catch(() => { document.getElementById("specgrid").innerHTML = ""; });
 
     document.getElementById("note").innerHTML =
       `<b>The discipline.</b> This hub only ever shows a translation that is real and attributed; where we don’t have one, ` +
