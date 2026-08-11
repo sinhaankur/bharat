@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import SiteHeader from '@/components/site-header'
 import SiteFooter from '@/components/site-footer'
-import DesignSystemsClient from './design-systems-client'
 import FlagshipFrame from './flagship-frame'
 
 export const metadata: Metadata = {
@@ -14,9 +13,7 @@ export default function DesignSystemsPage() {
   return (
     <>
       <SiteHeader />
-      {/* the live, interactive skin lattice (the switcher control) */}
-      <DesignSystemsClient />
-      {/* the full designed flagship document, served as-is beneath it */}
+      {/* the full handoff flagship document IS the page (full-bleed) */}
       <FlagshipFrame />
       <SiteFooter />
     </>
