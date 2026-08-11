@@ -189,9 +189,10 @@
     btn.id = "a11y-launch"; btn.className = "a11y-btn"; btn.type = "button";
     btn.textContent = "Aa"; btn.title = "Reading & accessibility"; btn.setAttribute("aria-label", "Reading and accessibility options");
     btn.addEventListener("click", openPanel);
-    var nav = document.querySelector(".snav");
-    if (nav) { btn.style.marginLeft = "0.5rem"; nav.appendChild(btn); }
-    else { btn.style.cssText += ";position:fixed;top:12px;right:12px;z-index:8000"; document.body.appendChild(btn); }
+    // Always a fixed bottom-right FAB (where it was built) — a persistent, reachable
+    // reading-options button, not tucked into the nav bar. Sits above the footer.
+    btn.style.cssText += ";position:fixed;bottom:16px;right:16px;z-index:8000;width:44px;height:44px;font-size:17px;box-shadow:0 4px 14px rgba(0,0,0,.22)";
+    document.body.appendChild(btn);
   }
 
   function init() { apply(); mountButton(); }
