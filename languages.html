@@ -18,10 +18,24 @@
   <link rel="stylesheet" href="styles.css" />
   <style>
     .lh-wrap { max-width: 1000px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; }
+    /* grand cinematic hero */
+    @keyframes lhDrift { from { transform: scale(1.06) translate(0,0); } to { transform: scale(1.14) translate(-1.5%,-1%); } }
+    .lh-cinema { position: relative; overflow: hidden; border-bottom: 2px solid var(--foreground);
+      background: radial-gradient(120% 100% at 50% 0%, #f6efdf 0%, var(--background) 55%, #ece0c6 100%); }
+    .lh-cinema-bg { position: absolute; inset: -8%; width: 116%; height: 116%; color: var(--accent); opacity: .12; animation: lhDrift 30s ease-in-out infinite alternate; }
+    .lh-cinema-wash { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(90% 120% at 12% 8%, transparent 42%, color-mix(in srgb, var(--accent) 9%, transparent) 100%); }
+    .lh-cinema-in { position: relative; max-width: 1000px; margin: 0 auto; padding: clamp(44px,7vh,84px) var(--pad-x) clamp(30px,5vh,52px); }
+    .lh-cinema-seal { color: var(--accent); margin-bottom: 14px; }
+    .lh-cinema-seal svg { filter: drop-shadow(0 3px 8px color-mix(in srgb, var(--accent) 28%, transparent)); }
+    .lh-cinema .eyebrow { color: var(--accent-ink); }
+    .lh-cinema-h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(34px,6vw,72px); line-height: 1.0; margin: 6px 0 12px; color: var(--foreground); }
+    .lh-cinema-lede { font-size: clamp(15px,1.5vw,18px); line-height: 1.7; max-width: 72ch; color: color-mix(in srgb, var(--foreground) 82%, transparent); margin: 0; }
+    .lh-cinema-lede b { color: var(--accent-ink); }
+    @media (prefers-reduced-motion: reduce) { .lh-cinema-bg { animation: none; } }
     .lh-head h1 { margin: 0.3rem 0 0.4rem; font-size: clamp(1.9rem, 4.2vw, 3rem); }
     .lh-head p { color: var(--muted-foreground); font-size: 1rem; line-height: 1.6; max-width: 74ch; }
     .lh-head p a { color: var(--accent); }
-    .lh-hero-script { font-size: clamp(2.2rem, 7vw, 4rem); line-height: 1.5; margin: 1.2rem 0 0; letter-spacing: 0.02em; }
+    .lh-hero-script { font-size: clamp(2.2rem, 7vw, 4rem); line-height: 1.5; margin: 1.4rem 0 0; letter-spacing: 0.02em; }
     .lh-hero-script span { margin-right: 0.6rem; display: inline-block; }
 
     /* pillars */
@@ -108,15 +122,18 @@
 <body>
   <div id="site-nav"></div>
 
-  <main class="lh-wrap">
-    <header class="lh-head">
-      <div class="eyebrow">Languages of Bharat · the hub</div>
-      <h1 class="display">Every language, every script — <em>one place</em></h1>
-      <p>India speaks languages from <b>unrelated families</b> written in scripts that mostly share <b>one ancestor</b>.
-        This hub pulls the whole thread together: the <b>family trees</b>, the <b>Brahmi-descended scripts</b> and the
-        <b>Bharati link-script</b>, self-hosted <b>fonts for every script</b>, and <b>source texts</b> opened across
-        languages with attributed translations. Everything holds to one rule — <b>real, sourced translations only;
-        honest gaps everywhere else</b>.</p>
+  <!-- GRAND CINEMATIC HERO — the languages, since antiquity -->
+  <header class="lh-cinema">
+    <svg class="lh-cinema-bg" aria-hidden="true"><rect width="100%" height="100%" fill="url(#jali-tile)" /></svg>
+    <div class="lh-cinema-wash" aria-hidden="true"></div>
+    <div class="lh-cinema-in">
+      <div class="lh-cinema-seal" aria-hidden="true"><svg width="56" height="56" viewBox="0 0 100 100"><use href="#i-chakra" /></svg></div>
+      <div class="eyebrow">Since Brahmi · भारत · every tongue, every hand</div>
+      <h1 class="lh-cinema-h1">Every language,<br>every script.</h1>
+      <p class="lh-cinema-lede">India speaks languages from <b>unrelated families</b>, written in scripts that mostly
+        share <b>one ancient ancestor</b> — Brahmi, carved on Ashoka&apos;s pillars. This hub pulls the whole thread
+        together: the family trees, the Brahmi-descended scripts, self-hosted fonts for every hand, source texts across
+        languages, and how the places got their names. <b>Sourced, or it&apos;s a gap.</b></p>
       <div class="lh-hero-script" aria-hidden="true">
         <span class="f-devanagari">भारत</span>
         <span class="f-tamil">பாரதம்</span>
@@ -125,7 +142,10 @@
         <span class="f-kannada">ಭಾರತ</span>
         <span class="f-brahmi">𑀪𑀸𑀭𑀢</span>
       </div>
-    </header>
+    </div>
+  </header>
+
+  <main class="lh-wrap">
 
     <!-- the pillars -->
     <div class="lh-grid" id="pillars"></div>
