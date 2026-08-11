@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { SKINS } from '@/components/skin-switcher'
+import { downloadCss, downloadJson, downloadSpec, downloadZip } from '@/lib/download-skin'
+import { TOKEN_SETS } from '@/lib/design-tokens'
 
 // The intuitive shell around the handoff design document. It gives /design-systems what a
 // 12,000px iframe scroll lacks: an intro that says what this is, a LIVE skin switcher (pick
@@ -87,22 +89,34 @@ export default function DsShell() {
         </p>
       </header>
 
-      {/* live skin switcher — the ready skins, as apply buttons */}
+      {/* live skin switcher — the ready skins, as apply buttons + downloads */}
       <section className="dss-skins" aria-label="Choose a design system">
-        {SKINS.map((s) => (
-          <button
-            key={s.id}
-            className={`dss-skin${skin === s.id ? ' on' : ''}`}
-            onClick={() => applySkin(s.id)}
-            aria-pressed={skin === s.id}
-          >
-            <span className="dss-skin-band" style={{ background: `linear-gradient(90deg, ${s.swatch}, ${s.band})` }} />
-            <span className="dss-skin-name">{s.label}</span>
-            <span className="dss-skin-note">{s.note}</span>
-            <span className="dss-skin-cta">{skin === s.id ? '● worn' : 'Wear this skin →'}</span>
-          </button>
-        ))}
+        {SKINS.map((s) => {
+          const hasFiles = !!TOKEN_SETS[s.id]
+          return (
+            <div key={s.id} className={`dss-skin${skin === s.id ? ' on' : ''}`}>
+              <span className="dss-skin-band" style={{ background: `linear-gradient(90deg, ${s.swatch}, ${s.band})` }} />
+              <button className="dss-skin-apply" onClick={() => applySkin(s.id)} aria-pressed={skin === s.id}>
+                <span className="dss-skin-name">{s.label}</span>
+                <span className="dss-skin-note">{s.note}</span>
+                <span className="dss-skin-cta">{skin === s.id ? '● worn' : 'Wear this skin →'}</span>
+              </button>
+              {hasFiles && (
+                <div className="dss-dl" aria-label={`Download the ${s.label} design system`}>
+                  <span className="dss-dl-h">Download</span>
+                  <button onClick={() => downloadCss(s.id)} title="CSS custom properties">CSS</button>
+                  <button onClick={() => downloadJson(s.id)} title="JSON design tokens">JSON</button>
+                  <button onClick={() => downloadSpec(s.id)} title="One-page specimen (HTML)">Spec</button>
+                  <button className="dss-dl-zip" onClick={() => downloadZip(s.id)} title="All files + license (.zip)">.zip ↓</button>
+                </div>
+              )}
+            </div>
+          )
+        })}
       </section>
+      <p className="dss-dl-note mono">
+        Downloads are for reference. Indic Designs™ — original work, © 2026 Bharat; all rights reserved. No redistribution or reuse without a licence.
+      </p>
 
       {/* sticky jump-nav */}
       <nav className="dss-tabs" aria-label="Jump to a section">
@@ -132,17 +146,25 @@ export default function DsShell() {
 
         .dss-skins { max-width: var(--wrap); margin: 0 auto; padding: 18px var(--edge) 8px;
           display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; }
-        .dss-skin { display: flex; flex-direction: column; align-items: flex-start; gap: 4px;
-          text-align: left; cursor: pointer; background: var(--surface); color: var(--ink);
-          border: 2px solid var(--line); border-radius: 0; padding: 0 0 12px;
-          overflow: hidden; transition: transform .12s cubic-bezier(.2,.7,.2,1), box-shadow .16s ease, border-color .16s ease; }
+        .dss-skin { display: flex; flex-direction: column; background: var(--surface); color: var(--ink);
+          border: 2px solid var(--line); border-radius: 0; overflow: hidden;
+          transition: transform .12s cubic-bezier(.2,.7,.2,1), box-shadow .16s ease, border-color .16s ease; }
         .dss-skin:hover { transform: translateY(-3px); box-shadow: 6px 8px 0 rgba(42,32,24,.16); border-color: var(--ink); }
         .dss-skin.on { border-color: var(--accent); box-shadow: 4px 5px 0 color-mix(in srgb, var(--accent) 35%, transparent); }
         .dss-skin-band { height: 12px; width: 100%; display: block; }
-        .dss-skin-name { font: 700 16px var(--font-ui); padding: 10px 12px 0; }
-        .dss-skin-note { font: 400 12px var(--font-ui); color: var(--muted); padding: 0 12px; }
-        .dss-skin-cta { font: 600 11px var(--font-mono); letter-spacing: .04em; color: var(--accent); padding: 6px 12px 0; margin-top: auto; }
-        .dss-skin.on .dss-skin-cta { color: var(--accent); }
+        .dss-skin-apply { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; text-align: left;
+          cursor: pointer; background: transparent; border: 0; width: 100%; padding: 10px 12px 12px; color: inherit; }
+        .dss-skin-name { font: 700 16px var(--font-ui); }
+        .dss-skin-note { font: 400 12px var(--font-ui); color: var(--muted); }
+        .dss-skin-cta { font: 600 11px var(--font-mono); letter-spacing: .04em; color: var(--accent); margin-top: 4px; }
+        .dss-dl { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; padding: 8px 10px; border-top: 1px solid var(--line); background: color-mix(in srgb, var(--ink) 4%, transparent); }
+        .dss-dl-h { font: 600 9.5px var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-right: 2px; }
+        .dss-dl button { font: 600 11px var(--font-mono); cursor: pointer; background: transparent; color: var(--ink);
+          border: 1px solid var(--line); padding: 3px 7px; border-radius: 0; transition: background .12s ease, color .12s ease, border-color .12s ease; }
+        .dss-dl button:hover { background: var(--accent); color: var(--surface); border-color: var(--accent); }
+        .dss-dl .dss-dl-zip { border-color: var(--accent); color: var(--accent); }
+        .dss-dl .dss-dl-zip:hover { background: var(--accent); color: var(--surface); }
+        .dss-dl-note { max-width: var(--wrap); margin: 6px auto 0; padding: 0 var(--edge); font-size: 10.5px; color: var(--muted); }
 
         .dss-tabs { position: sticky; top: 58px; z-index: 20; display: flex; gap: 0; flex-wrap: wrap;
           background: var(--surface); border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink);
