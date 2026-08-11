@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Instrument+Serif:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Instrument+Serif:ital@0;1&family=Rozha+One&family=Karla:wght@400;600;700&family=Noto+Sans+Gurmukhi&family=Noto+Sans+Gujarati&family=Noto+Sans+Oriya&display=swap');
 
 /* Bharati Inspired — our own OFL display face (build_bharati_font.py).
    Bharati-INSPIRED original design (monoline, no shirorekha headline bar);
@@ -165,140 +165,154 @@ a:hover { color: var(--brand-ink); border-color: var(--brand); }
   color: var(--muted-foreground);
 }
 
+/* ═══════════ INDIC CHROME (site-nav.js header + footer) ═══════════
+   The global header + footer wear the Indic skin faithful to atlas-app's
+   SiteHeader/SiteFooter (handoff Atlas Header/Footer.dc.html): stone header,
+   vermilion accent, gold seal-ring, dark-brown footer with an 8-script band.
+   These --chrome-* tokens are LOCAL to the chrome so the map/page body keeps its
+   own amber-gold theme; only the header + footer read them. */
+:root {
+  --chrome-ground:  #ece3cd;   /* stone header ground */
+  --chrome-surface: #f6f0e1;   /* menus / hover wells */
+  --chrome-ink:     #2a2018;   /* ink text */
+  --chrome-muted:   #6b5c48;   /* muted */
+  --chrome-line:    #3a2c1e;   /* 2px rule */
+  --chrome-hair:    rgba(58,44,30,.28);
+  --chrome-accent:  #c1440e;   /* vermilion — CTA, active, hover */
+  --chrome-accent-600: #a23409;
+  --chrome-band:    #c9862b;   /* gold seal-ring + footer accent */
+  --chrome-foot:    #38221a;   /* dark-brown footer ground */
+  --chrome-foot-tx: #f0e6d0;   /* footer cream text */
+  --chrome-ui:      'Karla', system-ui, -apple-system, sans-serif;
+  --chrome-display: 'Rozha One', 'Fraunces', Georgia, serif;
+  --chrome-mono:    var(--font-mono);
+}
+
 #nav {
   position: sticky; top: 0; z-index: 1000;
-  display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
-  padding: 0.55rem var(--pad-x);
-  background: oklch(0.975 0.006 80 / 0.85);
-  backdrop-filter: saturate(150%) blur(14px);
-  -webkit-backdrop-filter: saturate(150%) blur(14px);
-  border-bottom: 1px solid var(--border);
+  background: var(--chrome-ground);
+  border-bottom: 2px solid var(--chrome-line);
+  font-family: var(--chrome-ui);
 }
-.brand {
-  display: flex; align-items: center; gap: 9px;
-  border: none; text-decoration: none;
+.snav-bar {
+  display: flex; align-items: center; gap: 26px;
+  padding: 9px var(--pad-x);
 }
-.brand-logo { display: block; border-radius: 5px; flex: none; }
+/* ── brand: seal-ring + Bharat. lockup ── */
+.brand { display: flex; align-items: center; gap: 11px; text-decoration: none; color: var(--chrome-ink); }
+.bha-seal { flex: none; color: var(--chrome-ink); }
+.brand-lockup { display: flex; flex-direction: column; line-height: 1; }
 .brand-word {
-  font-family: var(--font-display);
-  font-size: 18px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: var(--foreground);
-  line-height: 1;
+  font-family: var(--chrome-display); font-size: 22px; font-weight: 400;
+  letter-spacing: 0; color: var(--chrome-ink); line-height: 1;
 }
-.brand:hover .brand-word { color: var(--brand); }
-.brand-dot {
-  display: inline-block;
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 0 4px var(--accent-tint);
-  animation: pulse 2.4s ease-in-out infinite;
-}
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.6; transform: scale(1.25); }
-}
-.nav-links { display: flex; gap: 1.5rem; }
-.nav-links a {
-  font-family: var(--font-mono);
-  font-size: 11.5px;
-  letter-spacing: 0.04em;
-  color: var(--muted-foreground);
-  border: none;
-}
-.nav-links a:hover { color: var(--foreground); }
+.brand-stop { color: var(--chrome-band); }
+.brand-tag { font-family: var(--chrome-ui); font-size: 8.5px; letter-spacing: 0.22em; color: var(--chrome-band); margin-top: 4px; }
+.brand:hover .brand-word { color: var(--chrome-accent); }
 
-/* ───────── Shared grouped nav (site-nav.js) ───────── */
-.snav .brand { text-decoration: none; color: var(--foreground); }
-.snav-groups { display: flex; gap: 0.4rem; align-items: center; }
+/* ───────── grouped nav (site-nav.js) ───────── */
+.snav-groups { display: flex; gap: 20px; align-items: center; }
 .snav-group { position: relative; }
 .snav-top {
   background: transparent; border: none; cursor: pointer;
-  font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.04em;
-  color: var(--muted-foreground); padding: 0.4rem 0.7rem; border-radius: var(--radius-sm);
+  font-family: var(--chrome-ui); font-size: 14.5px; font-weight: 600; letter-spacing: 0;
+  color: var(--chrome-ink); padding: 6px 0; border-bottom: 3px solid transparent;
+  display: inline-flex; align-items: center; gap: 6px;
 }
-.snav-top:hover { color: var(--foreground); }
-/* current group: highlighted pill so you can see which section you're in */
-.snav-group.is-current .snav-top {
-  color: var(--foreground); background: oklch(0.94 0 0);
-  box-shadow: inset 0 -2px 0 var(--brand);
-}
-.snav-caret { font-size: 8px; opacity: 0.6; }
+.snav-top:hover { color: var(--chrome-accent); }
+.snav-group.is-current .snav-top { color: var(--chrome-accent); border-bottom-color: var(--chrome-band); }
+.snav-caret { font-size: 8px; opacity: 0.55; }
 .snav-menu {
-  position: absolute; top: 100%; left: 0; min-width: 230px;
-  background: var(--surface); border: 1px solid var(--border-strong);
-  border-radius: var(--radius-sm); padding: 0.35rem; margin-top: 0.3rem;
+  position: absolute; top: 100%; left: 0; min-width: 244px;
+  background: var(--chrome-surface); border: 1.5px solid var(--chrome-line);
+  border-radius: 0; padding: 0.35rem; margin-top: 9px;
   display: none; flex-direction: column; gap: 1px; z-index: 1100;
-  box-shadow: 0 8px 24px oklch(0 0 0 / 0.4);
+  box-shadow: 6px 6px 0 rgba(42,32,24,.18);
 }
 .snav-group:hover .snav-menu, .snav-group.open .snav-menu { display: flex; }
 .snav-menu a {
-  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.02em;
-  color: var(--muted-foreground); text-decoration: none; padding: 0.45rem 0.6rem;
-  border-radius: 4px; border: none; display: flex; align-items: flex-start; gap: 0.5rem;
+  font-family: var(--chrome-ui); font-size: 13.5px; letter-spacing: 0;
+  color: var(--chrome-ink); text-decoration: none; padding: 0.5rem 0.65rem;
+  border-radius: 0; border: none; display: flex; align-items: flex-start; gap: 0.5rem;
 }
-.snav-menu a:hover { color: var(--foreground); background: oklch(0.94 0 0); }
+.snav-menu a:hover { color: var(--chrome-accent); background: color-mix(in srgb, var(--chrome-band) 16%, transparent); }
 .snav-ico { flex: none; width: 1.15em; text-align: center; font-size: 12.5px; line-height: 1.25; opacity: 0.9; }
-.snav-menu a:not(.snav-has-hint) .snav-ico { opacity: 0.4; }   /* bare bullet items */
+.snav-menu a:not(.snav-has-hint) .snav-ico { opacity: 0.4; }
 .snav-body { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
-/* current PAGE: filled highlight + left accent bar so it's unmistakable */
-.snav-menu a.snav-cur { background: var(--brand-tint); box-shadow: inset 2px 0 0 var(--brand); }
-.snav-menu a.snav-cur .snav-t { color: var(--brand-ink); font-weight: 600; }
+.snav-menu a.snav-cur { background: color-mix(in srgb, var(--chrome-accent) 12%, transparent); box-shadow: inset 3px 0 0 var(--chrome-accent); }
+.snav-menu a.snav-cur .snav-t { color: var(--chrome-accent); font-weight: 600; }
 .snav-menu a .snav-t { display: block; }
 .snav-ext { font-size: 0.85em; opacity: 0.6; }
-.snav-menu a .snav-hint { font-size: 9.5px; color: oklch(0.6 0.02 250); letter-spacing: 0.01em; line-height: 1.3; }
-.snav-menu a:hover .snav-hint { color: oklch(0.72 0.03 250); }
+.snav-menu a .snav-hint { font-size: 10px; color: var(--chrome-muted); letter-spacing: 0.01em; line-height: 1.3; }
+.snav-menu a:hover .snav-hint { color: var(--chrome-ink); }
+.snav-front .snav-t { color: var(--chrome-accent); font-weight: 700; }
 
-/* breadcrumb "you are here" — pushed to the right of the group bar on desktop */
-.snav-here { margin-left: auto; display: flex; align-items: center; gap: 0.4rem;
-  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.03em; color: var(--muted-foreground); white-space: nowrap; }
-.snav-here-g { text-transform: uppercase; opacity: 0.75; }
-.snav-here-sep { opacity: 0.5; }
-.snav-here-p { color: var(--brand-ink); }
+/* ── actions: search field + CTA ── */
+.snav-actions { display: flex; align-items: center; gap: 14px; margin-left: auto; }
+.snav-search {
+  display: flex; align-items: center; gap: 10px; cursor: pointer;
+  border: 1.5px solid var(--chrome-hair); background: transparent; color: var(--chrome-muted);
+  padding: 8px 12px; font: 400 12.5px var(--chrome-ui); border-radius: 0; min-width: 170px;
+}
+.snav-search:hover { border-color: var(--chrome-ink); color: var(--chrome-ink); }
+.snav-search-label { white-space: nowrap; }
+.snav-search-key { margin-left: auto; border: 1px solid var(--chrome-hair); padding: 0 5px; font: 400 10.5px var(--chrome-mono); }
+.snav-cta {
+  display: inline-block; background: var(--chrome-accent); color: var(--chrome-surface);
+  padding: 10px 18px; font: 600 14px var(--chrome-ui); text-decoration: none; border-radius: 0;
+}
+.snav-cta:hover { background: var(--chrome-accent-600); color: var(--chrome-surface); }
 
-.snav-burger { display: none; background: transparent; border: none; color: var(--foreground); font-size: 18px; cursor: pointer; }
+.snav-burger { display: none; background: transparent; border: 1.5px solid var(--chrome-ink); color: var(--chrome-ink); width: 40px; height: 40px; font-size: 18px; cursor: pointer; border-radius: 0; }
 
-@media (max-width: 760px) {
+@media (max-width: 900px) {
   .snav-burger { display: block; order: 3; }
-  .snav .brand { order: 1; margin-right: auto; }   /* brand first, pinned left */
-  .snav-here { display: none; }   /* burger replaces the breadcrumb on mobile */
+  .brand { order: 1; margin-right: auto; }
+  .snav-search-label, .snav-search-key { display: none; }
+  .snav-search { min-width: 40px; padding: 8px 10px; }
   .snav-groups { order: 4; display: none; position: absolute; top: 100%; left: 0; right: 0;
-    max-height: calc(100vh - 52px); overflow-y: auto;
-    background: var(--surface); border-bottom: 1px solid var(--border);
+    max-height: calc(100vh - 56px); overflow-y: auto;
+    background: var(--chrome-surface); border-bottom: 2px solid var(--chrome-line);
     flex-direction: column; align-items: stretch; gap: 0; padding: 0.25rem var(--pad-x) 1rem; }
   .snav.snav-open .snav-groups { display: flex; }
-  .snav-group { width: 100%; border-bottom: 1px solid var(--border); }
+  .snav-group { width: 100%; border-bottom: 1px solid var(--chrome-hair); }
   .snav-group:last-child { border-bottom: 0; }
-  /* group header is a full-width tap target; the caret shows open/closed */
   .snav-top { width: 100%; text-align: left; display: flex; justify-content: space-between; align-items: center;
-    padding: 0.85rem 0.4rem; font-size: 13px; }
+    padding: 0.85rem 0.4rem; font-size: 15px; border-bottom: 0; }
   .snav-top .snav-caret { transition: transform 0.15s ease; }
   .snav-group.open .snav-top .snav-caret { transform: rotate(180deg); }
-  .snav-group.is-current .snav-top { box-shadow: inset 3px 0 0 oklch(0.84 0.15 78); }
-  /* ACCORDION: items hidden until the group is tapped open (no 1800px dump) */
+  .snav-group.is-current .snav-top { box-shadow: inset 3px 0 0 var(--chrome-band); }
   .snav-menu { position: static; display: none; border: none; box-shadow: none; padding: 0 0 0.5rem 0.6rem; margin: 0; background: transparent; }
   .snav-group.open .snav-menu { display: flex; }
-  .snav-group:hover .snav-menu { display: none; }   /* no hover-open on touch */
-  .snav-group.open .snav-menu { display: flex; }
+  .snav-group:hover .snav-menu { display: none; }
   .snav-menu a { padding: 0.6rem 0.5rem; }
 }
 
-/* ───────── Shared footer (site-nav.js) ───────── */
-#sfoot { border-top: 1px solid var(--border); margin-top: 4rem; padding: 2.5rem var(--pad-x) 1.5rem; background: oklch(1 0 0); }
-.sfoot-grid { display: grid; grid-template-columns: 1.6fr repeat(4, 1fr); gap: 1.5rem; max-width: 1180px; margin: 0 auto; }
-@media (max-width: 760px) { .sfoot-grid { grid-template-columns: 1fr 1fr; } }
-.sfoot-col { display: flex; flex-direction: column; gap: 0.4rem; }
-.sfoot-h { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted-foreground); margin-bottom: 0.2rem; }
-.sfoot-col a { font-size: 12.5px; color: var(--muted-foreground); text-decoration: none; }
-.sfoot-col a:hover { color: var(--foreground); }
-.sfoot-brand .sfoot-name { font-family: var(--font-mono); font-size: 13px; color: var(--foreground); margin-bottom: 0.5rem; }
-.sfoot-brand p { font-size: 11.5px; line-height: 1.55; color: var(--muted-foreground); max-width: 34ch; }
-.sfoot-base { max-width: 1180px; margin: 1.8rem auto 0; padding-top: 1rem; border-top: 1px solid var(--border);
-  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem;
-  font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
-.sfoot-base a { color: oklch(0.48 0.160 75); text-decoration: none; }
+/* ───────── Indic footer (site-nav.js) ───────── */
+#sfoot { margin-top: 4rem; background: var(--chrome-foot); color: var(--chrome-foot-tx); font-family: var(--chrome-ui); }
+#sfoot a { color: var(--chrome-foot-tx); text-decoration: none; }
+#sfoot a:hover { color: var(--chrome-band); }
+.sfoot-news { max-width: 1240px; margin: 0 auto; padding: 34px var(--pad-x); display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; border-bottom: 1px solid color-mix(in srgb, var(--chrome-band) 35%, transparent); }
+.sfoot-news-t { font-family: var(--chrome-display); font-size: 24px; margin: 0; color: var(--chrome-foot-tx); }
+.sfoot-news-s { font-size: 13px; color: rgba(240,230,208,.65); margin: 6px 0 0; max-width: 52ch; }
+.sfoot-news-form { display: flex; }
+.sfoot-input { background: transparent; border: 1.5px solid rgba(240,230,208,.4); color: var(--chrome-foot-tx); padding: 11px 14px; font: 400 14px var(--chrome-ui); min-width: 210px; outline: none; border-radius: 0; }
+.sfoot-sub { background: var(--chrome-band); color: #2a1610; border: 0; padding: 11px 20px; font: 700 14px var(--chrome-ui); cursor: pointer; border-radius: 0; }
+.sfoot-cols { max-width: 1240px; margin: 0 auto; padding: 40px var(--pad-x) 46px; display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 38px 30px; }
+@media (max-width: 760px) { .sfoot-cols { grid-template-columns: 1fr 1fr; } }
+.sfoot-mark { display: inline-flex; align-items: center; gap: 11px; }
+.sfoot-brand .bha-seal { color: var(--chrome-foot-tx); }
+.sfoot-brand .brand-word { color: var(--chrome-foot-tx); }
+.sfoot-credo-p { font-style: italic; font-size: 13.5px; color: rgba(240,230,208,.75); margin: 16px 0 0; }
+.sfoot-social { display: flex; gap: 16px; margin-top: 14px; font-size: 12.5px; }
+.sfoot-col { display: flex; flex-direction: column; gap: 9px; }
+.sfoot-h { display: inline-block; font-family: var(--chrome-ui); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--chrome-band); border-bottom: 1px solid color-mix(in srgb, var(--chrome-band) 40%, transparent); padding-bottom: 8px; margin-bottom: 4px; }
+.sfoot-col a { font-size: 14px; line-height: 22px; }
+.sfoot-saw { height: 10px; background-image: conic-gradient(from 135deg at 50% 0%, color-mix(in srgb, var(--chrome-band) 55%, transparent) 0deg 90deg, transparent 90deg 360deg); background-size: 14px 10px; background-repeat: repeat-x; }
+.sfoot-base { max-width: 1240px; margin: 0 auto; padding: 16px var(--pad-x) 22px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 12.5px; color: rgba(240,230,208,.6); border-top: 1px solid color-mix(in srgb, var(--chrome-band) 30%, transparent); }
+.sfoot-scripts { font-size: 15px; letter-spacing: 0.4em; color: rgba(240,230,208,.8);
+  font-family: 'Noto Sans Devanagari','Noto Sans Bengali','Noto Sans Gurmukhi','Noto Sans Gujarati','Noto Sans Oriya','Noto Sans Telugu','Noto Sans Kannada','Noto Sans Malayalam', var(--chrome-ui), sans-serif; }
+.sfoot-credo { font-size: 10.5px; letter-spacing: 0.12em; color: var(--chrome-band); }
 
 /* ───────── News-bubble map layer ───────── */
 .news-toggle-ctl { margin: 8px; }
@@ -2528,14 +2542,10 @@ html.theme-dark {
 html.theme-dark, html.theme-dark body { background: var(--background); color: var(--foreground); }
 html.theme-dark a { color: var(--accent); border-bottom-color: var(--border-strong); }
 html.theme-dark a:hover { color: var(--accent-ink); border-color: var(--accent); }
-/* nav on dark: warm-black bar, light wordmark, crimson current-state */
-html.theme-dark .snav { background: var(--background); border-bottom-color: var(--foreground); }
-html.theme-dark #nav { background: color-mix(in oklch, var(--background) 88%, transparent); }
-html.theme-dark .brand-word { color: var(--foreground); }
-html.theme-dark .snav-menu { background: var(--card); box-shadow: 0 8px 24px rgba(0,0,0,0.55); }
-html.theme-dark .snav-menu a:hover, html.theme-dark .snav-group.is-current .snav-top { background: var(--muted); }
-html.theme-dark .snav-topics a { color: var(--foreground); }
-html.theme-dark .snav-topics a:hover { color: var(--accent); }
+/* The Indic chrome (header + footer) is skin-fixed via its own --chrome-* tokens
+   (stone header / dark-brown footer) and does NOT follow light/dark — matching
+   atlas-app's SiteHeader/SiteFooter. So there are no theme-dark overrides for
+   .snav / #nav / #sfoot here; they'd fight the fixed Indic palette. */
 /* "brand-colored" feature blocks (hero, feature art, stat band) use --brand as a BACKGROUND
    expecting it to be dark. In dark mode --brand flips to light, so pin these to a dark surface. */
 html.theme-dark .ba-hero, html.theme-dark .ed-band { background: #0d0c0f; }
@@ -2544,9 +2554,6 @@ html.theme-dark .ed-card-art--teal { background: linear-gradient(135deg, #23222a
 html.theme-dark .ed-hero-art { background: linear-gradient(140deg, #23222a, #14131a); }
 html.theme-dark .ed-btn--dark { background: var(--muted); color: var(--foreground); border: 1px solid var(--border-strong); }
 html.theme-dark .ed-btn--dark:hover { background: var(--card); color: #fff; }
-/* footer already renders on --brand; on dark that's now light, so flip its text back to ink */
-html.theme-dark #sfoot { background: #0d0c0f; color: #d9d6d0; }
-html.theme-dark #sfoot .brand-word, html.theme-dark #sfoot a:hover { color: #fff; }
 /* the meridian-B favicon strokes are white-on-ink → already fine on dark */
 
 /* theme-light: explicitly re-assert the light editorial tokens, so the a11y
@@ -2600,12 +2607,9 @@ html.theme-light, html.theme-light body { background: var(--background); color: 
 .page-brief .pb-gap { color: var(--muted-foreground); font-style: italic; }
 @media (max-width: 620px) { .page-brief .pb-row { grid-template-columns: 1fr; gap: 0.2rem; } .page-brief .pb-credo { margin-left: 0; } }
 
-.snav-search { background: transparent; border: 1px solid var(--border-strong); color: var(--foreground); border-radius: 999px;
-  width: 32px; height: 32px; cursor: pointer; font-size: 14px; line-height: 1; display: grid; place-items: center; }
-.snav-search:hover { border-color: var(--accent); color: var(--accent); }
+/* (.snav-search now styled once, in the Indic chrome block above) */
 /* "section front" link at the top of each dropdown (magazine masthead) */
-.snav-front { border-bottom: 1px solid var(--border); margin-bottom: 0.25rem; padding-bottom: 0.4rem !important; }
-.snav-front .snav-t { color: var(--accent); font-weight: 700; }
+.snav-front { border-bottom: 1px solid var(--chrome-hair); margin-bottom: 0.25rem; padding-bottom: 0.4rem !important; }
 /* legacy topics strip — retired in the magazine nav */
 .snav-topics { display: none !important; }
 
@@ -2630,36 +2634,11 @@ html.theme-light, html.theme-light body { background: var(--background); color: 
   letter-spacing: -0.01em; color: var(--foreground); padding: 0.28rem 0; border: none; line-height: 1.2; }
 .snav-dl-group a:hover { color: var(--accent); padding-left: 0.4rem; transition: padding 0.12s, color 0.12s; }
 
-/* the desktop dropdown menus keep working (styles above), just re-home the caret spacing */
-.snav-groups .snav-top { font-family: var(--font-sans); font-weight: 600; font-size: 0.9rem; }
-@media (max-width: 900px) { .snav-groups { display: none; } .snav-actions .snav-cta { display: none; } }
+/* (desktop dropdown + mobile behaviour handled in the Indic chrome block above) */
 
-/* ============================================================
-   EDITORIAL FOOTER — wordmark + social + dotted rule + columns.
-   ============================================================ */
-#sfoot { background: var(--brand); color: #e8e6e2; margin-top: 4rem; padding: 2.5rem var(--pad-x) 2rem; }
-#sfoot a { color: #e8e6e2; border: none; }
-#sfoot a:hover { color: var(--accent); }
-.sfoot-top { max-width: 1320px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
-.sfoot-mark { display: flex; align-items: center; gap: 10px; }
-.sfoot-mark .brand-word { font-family: var(--font-display); font-size: 26px; font-weight: 600; color: #fff; letter-spacing: -0.015em; }
-.sfoot-mark img { border-radius: 6px; background: #fff; }
-.sfoot-social { display: flex; gap: 0.5rem; }
-.sfoot-social a { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.35); font-size: 15px; }
-.sfoot-social a:hover { background: var(--accent); border-color: var(--accent); }
-.sfoot-rule { max-width: 1320px; margin: 1.1rem auto; border-top: 1px dotted rgba(255,255,255,0.4); }
-#sfoot .sfoot-grid { max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1.4rem; }
-#sfoot .sfoot-col { display: flex; flex-direction: column; gap: 0.35rem; }
-#sfoot .sfoot-h { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #a8a5a0; margin-bottom: 0.3rem; }
-#sfoot .sfoot-col a { font-size: 0.86rem; }
-.sfoot-legal { max-width: 1320px; margin: 1.6rem auto 0; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;
-  font-family: var(--font-mono); font-size: 11.5px; color: #cbc8c3; }
-.sfoot-legal span { opacity: 0.5; }
-.sfoot-base { max-width: 1320px; margin: 0.7rem auto 0; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem;
-  font-family: var(--font-mono); font-size: 10.5px; color: #a8a5a0; }
-/* footer stays branded ink even in dark theme (it's a deliberate block) */
-/* (dark-mode footer handled above in the theme-dark block) */
+/* (The Indic footer is styled once, in the chrome block near the top of this file.
+   The old "editorial footer" rules were removed — they set #sfoot to var(--brand)
+   and fought the fixed dark-brown Indic palette.) */
 
 /* ============================================================
    MAGAZINE FRONT — 3-column front block + horizontal story rows.

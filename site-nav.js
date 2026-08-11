@@ -100,6 +100,31 @@
   // resolved at mount time (after nav-data.js loads), never at IIFE-eval time
   function getNav() { return (typeof window !== "undefined" && window.ATLAS_NAV) || FALLBACK_NAV; }
 
+  // ---- Bharat seal logo (Indic chrome) -------------------------------------
+  // The gold seal-ring + a script glyph that cycles भ→ভ→ਭ… every 1.4s (started in
+  // wire(), reduce-motion safe), faithful to the handoff's Bharat Logo.dc.html.
+  const BHA_GLYPHS = ["ಭ", "भ", "ভ", "ਭ", "ભ", "ଭ", "భ", "ഭ"];
+  const BHA_FONTS = "'Noto Sans Kannada','Noto Sans Devanagari','Noto Sans Bengali','Noto Sans Gurmukhi','Noto Sans Gujarati','Noto Sans Oriya','Noto Sans Telugu','Noto Sans Malayalam',serif";
+  function sealLogo(size) {
+    const s = size || 32;
+    return `<svg class="bha-seal" width="${s}" height="${s}" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="45" fill="none" stroke="var(--chrome-band)" stroke-width="4"/>
+        <circle cx="50" cy="50" r="39" fill="none" stroke="var(--chrome-band)" stroke-width="6" stroke-dasharray="2.5 7.7"/>
+        <text x="50" y="62" font-size="34" text-anchor="middle" fill="currentColor" data-bha="1" font-family="${BHA_FONTS}">ಭ</text>
+        <circle cx="50" cy="22" r="3.2" fill="currentColor"/>
+        <path d="M34 72 Q50 64 66 72 M38 79 Q50 72 62 79" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      </svg>`;
+  }
+  function startGlyphCycle() {
+    if (window.__bhaTimer) return;
+    try { if (matchMedia("(prefers-reduced-motion: reduce)").matches) return; } catch (e) {}
+    let i = 1;
+    window.__bhaTimer = setInterval(() => {
+      document.querySelectorAll("[data-bha]").forEach(el => { el.textContent = BHA_GLYPHS[i % BHA_GLYPHS.length]; });
+      i++;
+    }, 1400);
+  }
+
   const here = (location.pathname.split("/").pop() || "index.html").toLowerCase() || "index.html";
   const isHere = href => !/^https?:/.test(href) && href.split("?")[0].toLowerCase() === here;
 
@@ -134,18 +159,21 @@
       <nav id="nav" class="snav">
         <div class="snav-bar">
           <button class="snav-burger" aria-label="Open menu" aria-expanded="false">☰</button>
-          <a class="brand" href="home.html"><img class="brand-logo" src="favicon.svg" alt="" width="24" height="24" /><span class="brand-word">Bharat</span><span class="brand-dot" title="live"></span></a>
+          <a class="brand" href="home.html" aria-label="Bharat — home">${sealLogo(30)}<span class="brand-lockup"><span class="brand-word">Bharat<span class="brand-stop">.</span></span><span class="brand-tag">INDIC DESIGNS</span></span></a>
           <div class="snav-groups">${groups}</div>
           <div class="snav-actions">
-            <button class="snav-search" aria-label="Search" title="Search (press /)" onclick="window.CommandPalette&&window.CommandPalette.open()">🔍</button>
-            <a class="snav-cta" href="index.html">Open the map</a>
+            <button class="snav-search" aria-label="Search" title="Search the atlas (press /)" onclick="window.CommandPalette&&window.CommandPalette.open()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4.5 4.5"/></svg>
+              <span class="snav-search-label">Search the atlas</span><span class="snav-search-key">/</span>
+            </button>
+            <a class="snav-cta" href="index.html">Open the atlas</a>
           </div>
         </div>
       </nav>
       <div class="snav-drawer" id="snav-drawer" hidden>
         <div class="snav-drawer-panel">
           <div class="snav-drawer-head">
-            <span class="brand-word">Bharat</span>
+            <span class="brand-word">Bharat<span class="brand-stop">.</span></span>
             <button class="snav-drawer-close" aria-label="Close menu">✕</button>
           </div>
           <div class="snav-drawer-links">${drawerLinks()}</div>
@@ -166,39 +194,64 @@
       </div>`).join("");
   }
 
+  // The footer — faithful to the handoff's Atlas Footer.dc.html (Indic): a dark register
+  // with a newsletter, the Bharat seal, three CURATED columns (Atlas / Heritage / Trust)
+  // instead of the whole-IA dump, a gold sawtooth band and the 8-script baseline. The full
+  // site map still lives at sitemap.html — the footer is a wayfinding shortlist, not a mirror.
+  const FOOT_COLS = [
+    { label: "Atlas", links: [
+      { t: "Home", href: "home.html" },
+      { t: "The map", href: "index.html" },
+      { t: "Explore & query", href: "explore.html" },
+      { t: "The engines", href: "engines.html" },
+    ] },
+    { label: "Heritage", links: [
+      { t: "India by design", href: "design-system.html" },
+      { t: "Temples in 3D", href: "temple-forms.html" },
+      { t: "Sacred ground", href: "heritage-atlas.html" },
+      { t: "Ancient India", href: "ancient-india.html" },
+    ] },
+    { label: "Trust", links: [
+      { t: "Every source", href: "references.html" },
+      { t: "Provenance ledger", href: "provenance.html" },
+      { t: "How it works", href: "how-it-works.html" },
+      { t: "Methodology", href: "about.html" },
+    ] },
+  ];
   function footerHTML() {
-    const cols = getNav().map(g => `
-      <div class="sfoot-col">
-        <div class="sfoot-h">${g.label}</div>
-        ${g.items.map(i => {
-          const ext = i.ext ? ' target="_blank" rel="noopener"' : "";
-          return `<a href="${i.href}"${ext}>${i.text}</a>`;
-        }).join("")}
-      </div>`).join("");
+    const cols = FOOT_COLS.map(c => `
+      <nav class="sfoot-col" aria-label="${c.label}">
+        <div class="sfoot-h">${c.label}</div>
+        ${c.links.map(l => `<a href="${l.href}">${l.t}</a>`).join("")}
+      </nav>`).join("");
     return `
       <footer id="sfoot">
-        <div class="sfoot-top">
-          <a class="sfoot-mark" href="home.html"><img src="favicon.svg" alt="" width="30" height="30" /><span class="brand-word">Bharat</span></a>
-          <div class="sfoot-social" aria-label="Social links">
-            <a href="https://github.com/sinhaankur/bharat" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub">⌥</a>
-            <a href="feed.html" title="News feed" aria-label="News feed">✍</a>
-            <a href="data.html" title="Data & API" aria-label="Data">⛁</a>
-            <a href="share.html" title="Share" aria-label="Share">↗</a>
+        <div class="sfoot-news">
+          <div>
+            <p class="sfoot-news-t">Follow the money to your district.</p>
+            <p class="sfoot-news-s">One email a month — what changed in the data, what got sourced, what's still a gap. No tracking.</p>
           </div>
+          <form class="sfoot-news-form" onsubmit="return false">
+            <input type="email" class="sfoot-input" placeholder="your@email.in" aria-label="Email" />
+            <button type="button" class="sfoot-sub">Subscribe</button>
+          </form>
         </div>
-        <div class="sfoot-rule"></div>
-        <div class="sfoot-grid">${cols}</div>
-        <div class="sfoot-legal">
-          <a href="about.html">About &amp; methodology</a><span>·</span>
-          <a href="how-it-works.html">How it works</a><span>·</span>
-          <a href="references.html">Sources</a><span>·</span>
-          <a href="provenance.html">Provenance</a><span>·</span>
-          <a href="privacy-policy.html">Privacy</a><span>·</span>
-          <a href="sitemap.html">Site map</a>
+        <div class="sfoot-cols">
+          <div class="sfoot-brand">
+            <a class="sfoot-mark" href="home.html" aria-label="Bharat — home">${sealLogo(40)}<span class="brand-lockup"><span class="brand-word">Bharat<span class="brand-stop">.</span></span><span class="brand-tag">INDIC DESIGNS</span></span></a>
+            <p class="sfoot-credo-p">Sourced, or it's a gap — never fabricated.</p>
+            <div class="sfoot-social" aria-label="Social links">
+              <a href="https://github.com/sinhaankur/bharat" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub">GitHub</a>
+              <a href="data.html" title="Data & API" aria-label="Data & API">Data & API</a>
+            </div>
+          </div>
+          ${cols}
         </div>
+        <div class="sfoot-saw" aria-hidden="true"></div>
         <div class="sfoot-base">
-          <span>© ${new Date().getFullYear()} Bharat · independent civic-data project · sourced, or it's a gap.</span>
-          <span>Not affiliated with any government body.</span>
+          <span>© ${new Date().getFullYear()} Ankur Sinha · Bharat · Indic Designs</span>
+          <span class="sfoot-scripts" aria-hidden="true">भ ভ ਭ ભ ଭ భ ಭ ഭ</span>
+          <span class="sfoot-credo">● SOURCED — OR IT'S A GAP</span>
         </div>
       </footer>`;
   }
@@ -259,6 +312,7 @@
   }
 
   function wire() {
+    startGlyphCycle();   // begin the seal-ring script-glyph cycle (reduce-motion safe)
     // dropdowns: click to open on touch, hover handled by CSS on desktop
     document.querySelectorAll(".snav-group .snav-top").forEach(btn => {
       btn.addEventListener("click", e => {
