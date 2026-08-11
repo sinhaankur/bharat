@@ -1,0 +1,106 @@
+{
+  "_meta": {
+    "purpose": "Sourced etymologies of Indian place names — how each got its name, and when the name is first attested. Sourced-or-gap: a claim is cited or marked a gap; contested origins are flagged, not resolved. Most names are ancient (BCE/early CE).",
+    "as_of": "2026-08-11",
+    "honesty": "Etymology is often contested; where scholars differ we say so and cite the reading rather than pick a winner. 'First attested' = the earliest surviving text/inscription that records the name, not necessarily when it was coined.",
+    "tiers": { "1": "primary text / inscription", "2": "standard reference (encyclopaedia / academic)", "3": "general reference" }
+  },
+  "places": [
+    {
+      "name": "Kashmir", "kind": "region", "native": "कश्मीर",
+      "meaning": "Land desiccated from water",
+      "origin": "From Sanskrit Kaśmīra. The Nilamata Purana derives it from the sage Kashyapa (Kaśyapa) draining the vast lake Satisar — 'Kaśyapa-mira/mera', the land the sage reclaimed from water. Kalhana's Rajatarangini (12th c.) records the same tradition. A folk gloss reads 'ka' (water) + 'shimir' (to desiccate) = land dried out of water.",
+      "attested": "1st millennium BCE onward", "attested_note": "Recorded as Kaspeiria (Ptolemy, 2nd c. CE) and in the Ashokan-era Buddhist accounts; the drained-lake tradition is Puranic.",
+      "contested": true,
+      "source": "https://en.wikipedia.org/wiki/Kashmir#Etymology", "tier": 2
+    },
+    {
+      "name": "Bharat", "kind": "country", "native": "भारत",
+      "meaning": "Land of the Bharatas / of Bharata",
+      "origin": "From the Bharata clan/king of the Rigveda — the Bharatas are a Rigvedic people, and 'Bhāratavarṣa' is the land of Bharata. Later tradition names it for Emperor Bharata (Rishabha's son in Jain accounts; Dushyanta & Shakuntala's son in the Mahabharata).",
+      "attested": "Rigveda, c. 1500–1200 BCE", "attested_note": "The Bharatas appear in the Rigveda's 'Battle of the Ten Kings'; 'Bhāratavarṣa' is Puranic.",
+      "contested": false,
+      "source": "https://en.wikipedia.org/wiki/Bharat_(term)", "tier": 2
+    },
+    {
+      "name": "India", "kind": "country", "native": "India",
+      "meaning": "Land of the Sindhu (Indus) river",
+      "origin": "From the river Sindhu → Old Persian Hindu → Greek Indos → Latin India. The Greeks named the land beyond the Indus after the river.",
+      "attested": "5th c. BCE", "attested_note": "Herodotus (c. 440 BCE) uses 'Indos' for the river and its people; Darius I's inscriptions record 'Hi(n)du' as a satrapy.",
+      "contested": false,
+      "source": "https://en.wikipedia.org/wiki/Name_of_India", "tier": 2
+    },
+    {
+      "name": "Hindustan", "kind": "region", "native": "हिन्दुस्तान",
+      "meaning": "Land of the Hindu (Indus) / of the Indus people",
+      "origin": "Persian: Hindū (from Sindhu) + -stān ('land'). Coined in the Persianate world for the land of the Indus and, later, the northern plains.",
+      "attested": "Sasanian era, c. 3rd c. CE", "attested_note": "'Hindustan' appears in Sasanian Persian; widened under the Delhi Sultanate & Mughals.",
+      "contested": false,
+      "source": "https://en.wikipedia.org/wiki/Hindustan", "tier": 2
+    },
+    {
+      "name": "Delhi", "kind": "city", "native": "दिल्ली",
+      "meaning": "Contested — 'Dhilli/Dhillika', or after King Dhilu",
+      "origin": "Traditionally from Raja Dhilu (c. 1st c. BCE); an Apabhramsha reading is 'dhili' (loose) for a loose iron pillar. The early name 'Dhillika' is recorded on a 12th-c. inscription. The site is old — Indraprastha of the Mahabharata is placed here.",
+      "attested": "1170 CE (Dhillika inscription)", "attested_note": "Earliest firm epigraphic form is 12th c.; the Dhilu tradition is legendary.",
+      "contested": true,
+      "source": "https://en.wikipedia.org/wiki/Etymology_of_Delhi", "tier": 2
+    },
+    {
+      "name": "Maharashtra", "kind": "state", "native": "महाराष्ट्र",
+      "meaning": "The great realm / great nation",
+      "origin": "Sanskrit mahā ('great') + rāṣṭra ('nation, realm'). An alternate reading ties it to 'Maharashtri' Prakrit or to the Rathi/Ratta people (mahā-rathi, 'great charioteers').",
+      "attested": "c. 7th c. CE", "attested_note": "Hiuen Tsang (Xuanzang) records 'Mo-ho-la-ch'a' (Maharashtra) in the 7th c.; the term appears earlier in Prakrit.",
+      "contested": true,
+      "source": "https://en.wikipedia.org/wiki/Maharashtra#Etymology", "tier": 2
+    },
+    {
+      "name": "Karnataka", "kind": "state", "native": "ಕರ್ನಾಟಕ",
+      "meaning": "Lofty / black land ('karu' + 'nadu')",
+      "origin": "From Kannada karu ('lofty/black') + nāḍu ('land') — 'the lofty land' or 'land of black soil'. Recorded historically as 'Karnata desha'.",
+      "attested": "Mahabharata & later inscriptions", "attested_note": "'Karnata' appears in the Mahabharata; the modern state was named Karnataka in 1973.",
+      "contested": false,
+      "source": "https://en.wikipedia.org/wiki/Karnataka#Etymology", "tier": 2
+    },
+    {
+      "name": "Tamil Nadu", "kind": "state", "native": "தமிழ்நாடு",
+      "meaning": "Land of the Tamils / Tamil-speaking land",
+      "origin": "Tamil ('the Tamil language/people') + nāḍu ('land, country'). 'Tamilakam' — the ancient Tamil country — is named in Sangam literature.",
+      "attested": "Sangam era, c. 300 BCE – 300 CE", "attested_note": "'Tamilakam' is a Sangam-age term; 'Tamil Nadu' as a modern state name dates to 1969.",
+      "contested": false,
+      "source": "https://en.wikipedia.org/wiki/Tamil_Nadu#Etymology", "tier": 2
+    },
+    {
+      "name": "Kerala", "kind": "state", "native": "കേരളം",
+      "meaning": "Contested — 'land of coconuts' or 'Chera-alam'",
+      "origin": "Popular gloss: keram ('coconut') + alam ('land'). Scholarly reading: from the Chera dynasty — 'Cheralam' → Kerala. The Ashokan Edicts (3rd c. BCE) name 'Keralaputra' (son of the Cheras).",
+      "attested": "Ashokan Edicts, c. 250 BCE", "attested_note": "'Keralaputo' appears in Ashoka's Rock Edicts II & XIII — one of the oldest surviving records of the name.",
+      "contested": true,
+      "source": "https://en.wikipedia.org/wiki/Kerala#Etymology", "tier": 1
+    },
+    {
+      "name": "Punjab", "kind": "region", "native": "ਪੰਜਾਬ",
+      "meaning": "Five waters (land of the five rivers)",
+      "origin": "Persian panj ('five') + āb ('water') — the land of the five rivers (Jhelum, Chenab, Ravi, Beas, Sutlej). The ancient Sanskrit name was 'Sapta Sindhu' (seven rivers).",
+      "attested": "Persianate name from c. 16th c.; region ancient", "attested_note": "'Panjāb' is a Persianate coinage; the Rigveda's 'Sapta Sindhu' is the older name for the wider region.",
+      "contested": false,
+      "source": "https://en.wikipedia.org/wiki/Punjab#Etymology", "tier": 2
+    },
+    {
+      "name": "Bengal", "kind": "region", "native": "বঙ্গ",
+      "meaning": "From 'Vanga' — an ancient janapada",
+      "origin": "From Vaṅga, an ancient kingdom/janapada of the eastern Ganges delta; 'Vangala' → Bengal. Possibly from a Dravidian/Austroasiatic root or the Bang tribe.",
+      "attested": "c. 1000 BCE (Vanga in texts)", "attested_note": "Vanga appears in the Aitareya Aranyaka and the Mahabharata; 'Vangaladesa' on the 11th-c. Nesari plates.",
+      "contested": true,
+      "source": "https://en.wikipedia.org/wiki/Bengal#Etymology", "tier": 2
+    },
+    {
+      "name": "Gujarat", "kind": "state", "native": "ગુજરાત",
+      "meaning": "Land of the Gurjaras",
+      "origin": "From 'Gurjara-rāṣṭra' — the land of the Gurjara people, who established power here in the early medieval period.",
+      "attested": "c. 6th–8th c. CE", "attested_note": "'Gurjara' appears in the early medieval period (Gurjara-Pratihara era).",
+      "contested": false,
+      "source": "https://en.wikipedia.org/wiki/Gujarat#Etymology", "tier": 2
+    }
+  ]
+}

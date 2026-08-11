@@ -59,6 +59,22 @@
     .lh-tile-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-top: 0.15rem; }
     .lh-tile-script { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
 
+    /* ── place-name etymologies (dated, sourced) ── */
+    .lh-etym-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.9rem; margin-top: 1.4rem; }
+    .lh-etym { border: 1px solid var(--border); border-top: 3px solid var(--accent); border-radius: var(--radius-sm); background: var(--card); padding: 1.1rem 1.2rem; display: flex; flex-direction: column; gap: 0.4rem; }
+    .lh-etym.kind-country { border-top-color: var(--accent); } .lh-etym.kind-region { border-top-color: oklch(0.55 0.13 200); } .lh-etym.kind-state { border-top-color: oklch(0.55 0.14 150); } .lh-etym.kind-city { border-top-color: oklch(0.55 0.15 25); }
+    .lh-etym-top { display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem; }
+    .lh-etym-name { font-family: var(--font-display); font-weight: 700; font-size: 1.3rem; color: var(--foreground); }
+    .lh-etym-native { font-size: 1.1rem; color: var(--muted-foreground); }
+    .lh-etym-mean { font-weight: 600; font-size: 0.95rem; color: var(--foreground); }
+    .lh-etym-flag { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: .06em; color: var(--accent-ink); border: 1px dashed var(--accent); border-radius: 999px; padding: 1px 6px; }
+    .lh-etym-origin { font-size: 0.85rem; line-height: 1.55; color: var(--muted-foreground); margin: 0.2rem 0; }
+    .lh-etym-when { font-size: 10px; letter-spacing: .03em; color: var(--accent-ink); font-weight: 600; }
+    .lh-etym-note { font-size: 0.76rem; line-height: 1.45; color: var(--muted-foreground); font-style: italic; }
+    .lh-etym-src { margin-top: auto; padding-top: 0.4rem; }
+    .lh-etym-src a { font-family: var(--font-mono); font-size: 10px; color: var(--accent); text-decoration: none; }
+    .lh-etym-src a:hover { text-decoration: underline; }
+
     /* section */
     .lh-sec { margin: 2.6rem 0 0; }
     .lh-sec h2 { font-size: 1.35rem; margin: 0 0 0.3rem; }
@@ -136,6 +152,15 @@
       <p>The major scheduled languages, each shown big in its <b>own script</b> with our self-hosted fonts
         (so every tile renders for everyone), tagged by family. This grows toward all 22 as sourced material is added.</p>
       <div class="lh-tile-grid" id="langtiles"></div>
+    </section>
+
+    <!-- HOW PLACES GOT THEIR NAMES — dated etymologies, mostly BCE/early CE -->
+    <section class="lh-sec">
+      <h2>How the places got their names</h2>
+      <p>Most of India's names are ancient — first written down in the centuries <b>BCE or the early CE</b>.
+        Each card: what the name means, where it came from, and the earliest text that records it. Where scholars
+        differ we say so and cite the reading rather than pick a winner — <b>sourced, or it's a gap</b>.</p>
+      <div class="lh-etym-grid" id="etymgrid"></div>
     </section>
 
     <p class="lh-note" id="note"></p>
@@ -233,6 +258,25 @@
         </div>`;
       }).join("");
     }).catch(() => { document.getElementById("specgrid").innerHTML = ""; });
+
+    // place-name etymologies — how each got its name + the earliest text that records it
+    fetch("etymologies.json").then(r => r.ok ? r.json() : null).then(ety => {
+      const grid = document.getElementById("etymgrid");
+      const places = ety && ety.places;
+      if (!places || !places.length) { grid.innerHTML = ""; return; }
+      grid.innerHTML = places.map(p => `
+        <article class="lh-etym kind-${esc(p.kind)}">
+          <div class="lh-etym-top">
+            <span class="lh-etym-name">${esc(p.name)}</span>
+            ${p.native ? `<span class="lh-etym-native">${esc(p.native)}</span>` : ""}
+          </div>
+          <div class="lh-etym-mean">${esc(p.meaning)}${p.contested ? ` <span class="lh-etym-flag">contested</span>` : ""}</div>
+          <p class="lh-etym-origin">${esc(p.origin)}</p>
+          <div class="lh-etym-when mono">◷ first attested: ${esc(p.attested)}</div>
+          ${p.attested_note ? `<div class="lh-etym-note">${esc(p.attested_note)}</div>` : ""}
+          <div class="lh-etym-src">${p.source ? `<a href="${esc(p.source)}" target="_blank" rel="noopener">source (tier ${esc(p.tier)}) ↗</a>` : ""}</div>
+        </article>`).join("");
+    }).catch(() => { document.getElementById("etymgrid").innerHTML = ""; });
 
     document.getElementById("note").innerHTML =
       `<b>The discipline.</b> This hub only ever shows a translation that is real and attributed; where we don’t have one, ` +
