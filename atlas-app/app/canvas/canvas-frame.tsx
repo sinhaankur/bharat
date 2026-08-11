@@ -10,7 +10,7 @@ const base = process.env.NEXT_PUBLIC_BASE_PATH || ''
 export default function CanvasFrame() {
   return (
     <div style={{ background: '#e9e0cb' }}>
-      <div style={{ maxWidth: 'var(--wrap)', margin: '0 auto', padding: '18px var(--edge) 0' }}>
+      <div data-reveal style={{ maxWidth: 'var(--wrap)', margin: '0 auto', padding: '18px var(--edge) 0' }}>
         <div className="kicker" style={{ color: 'var(--accent)', fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase' }}>
           The canvas · every screen, one deck
         </div>

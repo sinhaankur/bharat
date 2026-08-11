@@ -21,6 +21,7 @@ import SvgSprite from '@/components/svg-sprite'
 import CommandPalette from '@/components/command-palette'
 import ReaderPanel from '@/components/reader-panel'
 import BottomNav from '@/components/bottom-nav'
+import RevealScan from '@/components/reveal-scan'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -46,6 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <CommandPalette />
         <ReaderPanel />
         <BottomNav />
+        <RevealScan />
       </body>
     </html>
   )
