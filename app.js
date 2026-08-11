@@ -4038,12 +4038,35 @@
     const box = document.getElementById('map-search-results');
     if (!input || !box || !LEDGER?.states) return;
 
+    // Common CITY / OLD names → the official district they sit in, so a citizen who types
+    // "Noida" or "Bangalore" (not the district name) still finds the place. Match is on the
+    // district name — the alias just points at it. Key = what people type, value = a
+    // fragment of the district name to find.
+    const CITY_ALIAS = {
+      "noida": "Gautam Buddha Nagar", "greater noida": "Gautam Buddha Nagar",
+      "bangalore": "Bengaluru", "bengaluru": "Bengaluru Urban",
+      "bombay": "Mumbai", "calcutta": "Kolkata", "madras": "Chennai",
+      "gurgaon": "Gurugram", "poona": "Pune", "cawnpore": "Kanpur",
+      "trivandrum": "Thiruvananthapuram", "cochin": "Ernakulam", "kochi": "Ernakulam",
+      "banaras": "Varanasi", "benares": "Varanasi", "pondicherry": "Puducherry",
+      "mysore": "Mysuru", "mangalore": "Dakshina Kannada", "belgaum": "Belagavi",
+      "gauhati": "Kamrup", "guwahati": "Kamrup", "vizag": "Visakhapatnam",
+      "waltair": "Visakhapatnam", "baroda": "Vadodara", "simla": "Shimla",
+      "allahabad": "Prayagraj", "gaya": "Gaya", "jamshedpur": "East Singhbhum",
+      "tata nagar": "East Singhbhum", "secunderabad": "Hyderabad", "salt lake": "North 24 Parganas",
+      "navi mumbai": "Thane", "faridabad": "Faridabad", "ghaziabad": "Ghaziabad",
+      "dharavi": "Mumbai", "connaught place": "New Delhi", "old delhi": "Central Delhi"
+    };
+
     // lightweight index: every state + district, with its state for jump-to.
     const IDX = [];
     for (const [sn, sd] of Object.entries(LEDGER.states)) {
       IDX.push({ kind: 'state', name: sn, ctx: `${Object.keys(sd.districts || {}).length} districts`, state: sn });
-      for (const dn of Object.keys(sd.districts || {}))
-        IDX.push({ kind: 'district', name: dn, ctx: sn, state: sn, district: dn });
+      for (const dn of Object.keys(sd.districts || {})) {
+        // collect any city aliases that resolve to this district (so they're searchable)
+        const aliases = Object.keys(CITY_ALIAS).filter(a => dn.toLowerCase().includes(CITY_ALIAS[a].toLowerCase()));
+        IDX.push({ kind: 'district', name: dn, ctx: sn, state: sn, district: dn, aliases });
+      }
     }
     let hits = [], sel = -1;
 
@@ -4060,7 +4083,7 @@
         <div class="msr-item ${i === sel ? 'sel' : ''}" data-i="${i}">
           <span class="msr-kind k-${h.kind}">${h.kind}</span>
           <span class="msr-name">${esc(h.name)}</span>${h.kind === 'district' ? vulnChip(h) : ''}
-          <span class="msr-ctx">${esc(h.ctx)}</span>
+          <span class="msr-ctx">${esc(h.ctx)}${h.aliases && h.aliases.length ? ' · aka ' + esc(h.aliases.join(', ')) : ''}</span>
         </div>`).join('');
       box.querySelectorAll('.msr-item').forEach(el => el.onclick = () => pick(hits[+el.dataset.i]));
     }
@@ -4077,8 +4100,10 @@
     function search(t) {
       t = t.trim().toLowerCase();
       if (!t) { box.hidden = true; hits = []; return; }
-      // districts first (more specific), then states; prefix matches rank higher
-      hits = IDX.filter(x => x.name.toLowerCase().includes(t) || x.ctx.toLowerCase().includes(t))
+      // districts first (more specific), then states; prefix matches rank higher.
+      // also match a district by a city ALIAS ("noida" → Gautam Buddha Nagar).
+      hits = IDX.filter(x => x.name.toLowerCase().includes(t) || x.ctx.toLowerCase().includes(t)
+                 || (x.aliases && x.aliases.some(a => a.includes(t) || t.includes(a))))
         .sort((a, b) => {
           const ap = a.name.toLowerCase().startsWith(t) ? 0 : 1, bp = b.name.toLowerCase().startsWith(t) ? 0 : 1;
           if (ap !== bp) return ap - bp;
