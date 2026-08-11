@@ -133,6 +133,31 @@
     return (typeof window !== "undefined" && window.ATLAS_SECTIONS) || getNav();
   }
 
+  // ---- Mauryan section icons (mauryan-icons.svg sprite) --------------------
+  // Each top-nav section wears an artefact icon, matching the app header.
+  const SECTION_ICON = {
+    News: "i-edict", Money: "i-coin", Land: "i-tree", History: "i-lion",
+    Languages: "i-pillar", "3D": "i-stupa", Design: "i-lotus", Data: "i-jali",
+  };
+  function sectionIcon(label) {
+    const id = SECTION_ICON[label];
+    return id ? `<svg class="snav-ico-sec" width="15" height="15" viewBox="0 0 32 32" aria-hidden="true"><use href="#${id}"></use></svg>` : "";
+  }
+  // inject the Mauryan sprite once (hidden), so <use href="#i-…"> resolves on classic pages
+  function ensureSprite() {
+    if (document.getElementById("mauryan-sprite")) return;
+    let base = "";
+    const me = document.currentScript || [...document.scripts].find(s => /site-nav\.js/.test(s.src));
+    if (me && me.src) base = me.src.replace(/site-nav\.js.*$/, "");
+    fetch(base + "mauryan-icons.svg").then(r => r.ok ? r.text() : "").then(svg => {
+      if (!svg) return;
+      const div = document.createElement("div");
+      div.id = "mauryan-sprite"; div.style.cssText = "position:absolute;width:0;height:0;overflow:hidden";
+      div.setAttribute("aria-hidden", "true"); div.innerHTML = svg;
+      document.body.insertAdjacentElement("afterbegin", div);
+    }).catch(() => {});
+  }
+
   // href → icon lookup, built from ATLAS_NAV (which carries per-item icons). The
   // editorial ATLAS_SECTIONS don't define icons, so we borrow them by href so the
   // dropdown items get the same glyph as the full nav/drawer.
@@ -164,7 +189,7 @@
       // a "section front" link at the top of the menu, then its stories
       const front = s.href ? `<a class="snav-front" href="${s.href}"><span class="snav-body"><span class="snav-t">${s.label} — front page</span><span class="snav-hint">${s.tagline || ""}</span></span></a>` : "";
       return `<div class="snav-group${open}">
-        <button class="snav-top" aria-expanded="false">${s.label} <span class="snav-caret">▾</span></button>
+        <button class="snav-top" aria-expanded="false">${sectionIcon(s.label)}${s.label} <span class="snav-caret">▾</span></button>
         <div class="snav-menu">${front}${items}</div>
       </div>`;
     }).join("");
@@ -299,6 +324,7 @@
     injectSEO();
     ensureA11y();
     ensureMotion();
+    ensureSprite();   // Mauryan icons for the section nav
     // EMBED MODE: when a page is loaded inside the hero app (?embed=1), suppress the site
     // header + footer so the hero's own chrome is the only navigation. The page's own
     // content fills the panel. A body class lets pages trim their own margins if they like.

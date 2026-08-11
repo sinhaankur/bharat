@@ -14,55 +14,57 @@ import { classicMapHref, classicHref } from '@/lib/links'
 // Colours come from skin tokens so it reskins with the whole site.
 
 type Item = { t: string; href: string; app?: boolean }
-type Section = { label: string; href: string; app?: boolean; items: Item[] }
+type Section = { label: string; href: string; app?: boolean; icon: string; items: Item[] }
 
+// Each section wears a Mauryan artefact icon (public sprite): News=edict, Money=coin,
+// Land=tree, History=lion, Languages=pillar, 3D=stupa, Design=lotus, Data=jali.
 // c() = a classic page link; app routes are marked app:true (rendered via next/link).
 const c = (file: string) => classicHref(file)
 const SECTIONS: Section[] = [
-  { label: 'News', href: c('feed'), items: [
+  { label: 'News', href: c('feed'), icon: 'i-edict', items: [
     { t: 'The feed', href: c('feed') },
     { t: 'Timeline', href: c('timeline') },
     { t: "History's deadliest", href: c('atrocities') },
   ]},
-  { label: 'Money', href: classicMapHref(), items: [
+  { label: 'Money', href: classicMapHref(), icon: 'i-coin', items: [
     { t: 'The map', href: classicMapHref() },
     { t: 'State of India', href: c('state-of-india') },
     { t: 'Explore / query', href: '/explore', app: true },
     { t: 'Chain of command', href: c('command-chain') },
     { t: 'Provenance ledger', href: c('provenance') },
   ]},
-  { label: 'Land', href: c('encroachment-atlas'), items: [
+  { label: 'Land', href: c('encroachment-atlas'), icon: 'i-tree', items: [
     { t: 'Built where water returns', href: c('encroachment-atlas') },
     { t: 'District terrain 3D', href: c('terrain-3d') },
     { t: 'Flood explorer', href: c('flood-3d') },
     { t: 'Quake & tsunami', href: c('quake-tsunami') },
   ]},
-  { label: 'History', href: c('ancient-india'), items: [
+  { label: 'History', href: c('ancient-india'), icon: 'i-lion', items: [
     { t: 'Ancient India timeline', href: c('ancient-india') },
     { t: "Ashoka's rule of the land", href: c('ashoka') },
     { t: 'Sacred ground', href: c('heritage-atlas') },
     { t: 'Walk inside a temple', href: c('cave-walk') },
     { t: 'Deep history in DNA', href: c('deep-history') },
   ]},
-  { label: 'Languages', href: c('languages'), items: [
+  { label: 'Languages', href: c('languages'), icon: 'i-pillar', items: [
     { t: 'Languages of Bharat', href: c('languages') },
     { t: 'The journey of a word', href: c('journey') },
     { t: 'Scripts & families', href: c('scripts') },
     { t: 'Texts across languages', href: c('vedas') },
   ]},
-  { label: '3D', href: '/3d', app: true, items: [
+  { label: '3D', href: '/3d', app: true, icon: 'i-stupa', items: [
     { t: 'Temple in 3D', href: '/3d', app: true },
     { t: 'The globe', href: c('india-3d') },
     { t: 'Globe → map', href: c('globe-map') },
     { t: 'Temple forms in 3D', href: c('temple-forms') },
     { t: 'The mesh', href: c('mesh') },
   ]},
-  { label: 'Design', href: '/design-systems', app: true, items: [
+  { label: 'Design', href: '/design-systems', app: true, icon: 'i-lotus', items: [
     { t: 'India by Design Systems', href: '/design-systems', app: true },
     { t: 'The canvas', href: '/canvas', app: true },
     { t: 'Design system', href: c('design-system') },
   ]},
-  { label: 'Data', href: '/data', app: true, items: [
+  { label: 'Data', href: '/data', app: true, icon: 'i-jali', items: [
     { t: 'Data & provenance', href: '/data', app: true },
     { t: 'The register', href: '/register', app: true },
     { t: 'Knowledge base', href: c('knowledge') },
@@ -91,7 +93,7 @@ export default function SiteHeader() {
       <div className="ah-nav">
         {SECTIONS.map((s) => (
           <div key={s.label} className={`ah-group${activeSec(s) ? ' on' : ''}`}>
-            <button className="ah-top" aria-haspopup="true">{s.label}<span className="ah-caret" aria-hidden>▾</span></button>
+            <button className="ah-top" aria-haspopup="true"><svg className="ah-sec-ico" width="15" height="15" viewBox="0 0 32 32" aria-hidden="true"><use href={`#${s.icon}`} /></svg>{s.label}<span className="ah-caret" aria-hidden>▾</span></button>
             <div className="ah-menu">
               {s.items.map((i) => renderLink(i, 'ah-mitem'))}
             </div>
@@ -115,7 +117,7 @@ export default function SiteHeader() {
           {SECTIONS.map((s) => (
             <div key={s.label} className="ah-msec">
               <button className="ah-msec-top" onClick={() => setOpenSec(openSec === s.label ? null : s.label)} aria-expanded={openSec === s.label}>
-                {s.label}<span aria-hidden>{openSec === s.label ? '−' : '+'}</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 9 }}><svg width="16" height="16" viewBox="0 0 32 32" aria-hidden="true"><use href={`#${s.icon}`} /></svg>{s.label}</span><span aria-hidden>{openSec === s.label ? '−' : '+'}</span>
               </button>
               {openSec === s.label && (
                 <div className="ah-msec-body">
@@ -135,9 +137,11 @@ export default function SiteHeader() {
         .ah-brand { display: flex; text-decoration: none; color: var(--ink); flex: none; }
         .ah-nav { display: flex; align-items: center; gap: 2px; }
         .ah-group { position: relative; }
-        .ah-top { display: inline-flex; align-items: center; gap: 4px; background: transparent; border: 0; cursor: pointer;
-                  color: var(--ink); font: 600 14px var(--font-ui); padding: 8px 9px; border-bottom: 3px solid transparent; }
+        .ah-top { display: inline-flex; align-items: center; gap: 6px; background: transparent; border: 0; cursor: pointer;
+                  color: var(--ink); font: 600 13.5px var(--font-ui); padding: 8px 8px; border-bottom: 3px solid transparent; }
         .ah-top:hover { color: var(--accent); }
+        .ah-sec-ico { color: var(--band); flex: none; }
+        .ah-top:hover .ah-sec-ico, .ah-group.on .ah-sec-ico { color: var(--accent); }
         .ah-caret { font-size: 8px; opacity: .55; }
         .ah-group.on .ah-top { color: var(--accent); border-bottom-color: var(--band); }
         .ah-menu { position: absolute; top: 100%; left: 0; min-width: 230px; display: none; flex-direction: column;
