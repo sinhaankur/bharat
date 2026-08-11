@@ -1,11 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <!-- Bharat mark: the "meridian B" — a line of longitude that bends into a B,
-       with a crimson node marking a located point on the meridian (a district). -->
-  <rect width="32" height="32" rx="7" fill="#16151a"/>
-  <g fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round">
-    <path d="M11 7 v18"/>
-    <path d="M11 8 h4.5 a4.5 4.5 0 0 1 0 9 h-4.5"/>
-    <path d="M11 16 h6 a4.5 4.5 0 0 1 0 9 h-6"/>
-  </g>
-  <circle cx="11" cy="16" r="2.4" fill="#d33a2c"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Bharat seal — the gold seal-ring identity (matches the header/footer logo):
+       a stone ground, a gold seal-ring, the "भ" script glyph, and a located node. -->
+  <rect width="100" height="100" rx="18" fill="#ece3cd"/>
+  <circle cx="50" cy="50" r="45" fill="none" stroke="#cc8900" stroke-width="4"/>
+  <circle cx="50" cy="50" r="39" fill="none" stroke="#cc8900" stroke-width="6" stroke-dasharray="2.5 7.7"/>
+  <text x="50" y="63" font-size="38" text-anchor="middle" fill="#2a2018"
+        font-family="'Noto Sans Devanagari','Segoe UI',serif">भ</text>
+  <circle cx="50" cy="22" r="3.4" fill="#2a2018"/>
+  <path d="M34 74 Q50 66 66 74 M38 81 Q50 74 62 81" stroke="#2a2018" stroke-width="2.6" fill="none" stroke-linecap="round"/>
 </svg>
