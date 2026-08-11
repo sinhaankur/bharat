@@ -87,6 +87,14 @@
     .sent-mix { background: oklch(0.93 0.05 80); color: oklch(0.45 0.13 80); }
     .fd-sig .fd-sig-life { color: var(--foreground); border-color: var(--border-strong); }
     .fd-sig .fd-sig-off { color: oklch(0.48 0.13 300); border-color: oklch(0.6 0.10 300); }
+    .fd-sig .fd-sig-corrupt { color: #ae1800; border-color: #ae1800; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+    .fd-sig .fd-sig-name { color: var(--foreground); border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); }
+    .fd-sig .fd-sig-name em { font-style: normal; opacity: .6; font-size: 0.9em; }
+    .fd-links { display: flex; gap: 0.8rem; margin-top: 0.5rem; }
+    .fd-links a { font-family: var(--font-mono); font-size: 10px; letter-spacing: .02em; text-decoration: none; }
+    .fd-src-link { color: var(--accent); }
+    .fd-arc-link { color: var(--muted-foreground); }
+    .fd-arc-link:hover, .fd-src-link:hover { text-decoration: underline; }
     .lean-right{background:oklch(0.66 0.20 30)} .lean-state{background:oklch(0.60 0.10 300)} .lean-unknown{background:oklch(0.35 0 0)}
     .fd-lean-key { display: flex; flex-wrap: wrap; gap: 0.5rem 0.7rem; margin-top: 0.35rem; }
     .fd-lean-key span { font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); display: inline-flex; align-items: center; gap: 0.3rem; }
@@ -676,7 +684,7 @@
       const marks = `<span class="lean-tag ${lean.cls}" style="color:oklch(0.15 0 0)">${esc(lean.short)}</span>`
         + (fund ? ` <i class="${fund.cls}" style="width:8px;height:8px;border-radius:2px;display:inline-block" title="${esc(fund.short)}-funded${reg.owner ? " · " + reg.owner : ""}"></i>` : "");
       // the engines on top: sentiment · life impacted · govt officials named
-      var sig = "";
+      var sig = "", links = "";
       if (window.FeedEnrich) {
         var e = window.FeedEnrich.enrich(it);
         var parts = [];
@@ -686,13 +694,27 @@
           var o = e.officials[0];
           parts.push(`<span class="fd-sig-off" title="Government figure named in the story — attributed, not an accusation">⚖ ${esc(o.name || o.post)}${o.name && o.post ? " · " + esc(o.post) : ""}</span>`);
         }
+        // corruption flag + IMPLICATED NAMES — attributed to the outlet, never our accusation
+        if (e.corruption && e.corruption.isCorrupt) {
+          parts.push(`<span class="fd-sig-corrupt" title="This story mentions corruption / a probe">⚑ accountability</span>`);
+          (e.corruption.names || []).forEach(function (n) {
+            parts.push(`<span class="fd-sig-name" title="Named in the ${esc(e.outlet)} report — as reported, not our accusation">👤 ${esc(n.name)} <em>as reported</em></span>`);
+          });
+        }
         sig = `<div class="fd-sig">${parts.join("")}</div>`;
+        // source + Wayback archive links (news gets deleted) — separate anchors
+        links = `<div class="fd-links">
+          <a class="fd-src-link" href="${esc(it.url || "#")}" target="_blank" rel="noopener">source ↗</a>
+          ${e.archive ? `<a class="fd-arc-link" href="${esc(e.archive)}" target="_blank" rel="noopener" title="Archived copy — survives if the outlet deletes it">archived (Wayback) ↗</a>` : ""}
+        </div>`;
       }
-      return `<a class="${small ? "" : "fd-top"}" href="${esc(it.url || "#")}" target="_blank" rel="noopener">
-        <div class="t">${esc(it.headline || "(untitled)")} ↗</div>
-        <div class="m">${marks} ${esc(it.outlet || "unknown outlet")}${fund && reg.owner ? ` <span style="opacity:.7">(${esc(reg.owner)})</span>` : ""} · ${esc(fmtDate(it.published_at))}</div>
-        ${sig}
-      </a>`;
+      return `<div class="fd-story">
+        <a class="${small ? "" : "fd-top"}" href="${esc(it.url || "#")}" target="_blank" rel="noopener">
+          <div class="t">${esc(it.headline || "(untitled)")} ↗</div>
+          <div class="m">${marks} ${esc(it.outlet || "unknown outlet")}${fund && reg.owner ? ` <span style="opacity:.7">(${esc(reg.owner)})</span>` : ""} · ${esc(fmtDate(it.published_at))}</div>
+        </a>
+        ${sig}${links}
+      </div>`;
     }
 
     function realityPanel(c) {
