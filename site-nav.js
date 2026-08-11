@@ -205,7 +205,7 @@
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4.5 4.5"/></svg>
               <span class="snav-search-label">Search the atlas</span><span class="snav-search-key">/</span>
             </button>
-            <a class="snav-cta" href="index.html">Open the atlas</a>
+            <a class="snav-cta" href="index.html">View the India map</a>
           </div>
         </div>
       </nav>
@@ -237,31 +237,34 @@
   // with a newsletter, the Bharat seal, three CURATED columns (Atlas / Heritage / Trust)
   // instead of the whole-IA dump, a gold sawtooth band and the 8-script baseline. The full
   // site map still lives at sitemap.html — the footer is a wayfinding shortlist, not a mirror.
+  // columns wear Mauryan sprite icons (coin/stupa/edict headers + a line icon per link),
+  // matching the app footer so the two footers are the same design system.
   const FOOT_COLS = [
-    { label: "Atlas", links: [
-      { t: "Home", href: "home.html" },
-      { t: "The map", href: "index.html" },
-      { t: "Explore & query", href: "explore.html" },
-      { t: "The engines", href: "engines.html" },
+    { label: "Atlas", icon: "i-coin", links: [
+      { t: "Home", href: "home.html", icon: "i-torana" },
+      { t: "The map", href: "index.html", icon: "i-coin" },
+      { t: "Explore & query", href: "explore.html", icon: "i-jali" },
+      { t: "The engines", href: "engines.html", icon: "i-sixarm" },
     ] },
-    { label: "Heritage", links: [
-      { t: "India by design", href: "design-system.html" },
-      { t: "Temples in 3D", href: "temple-forms.html" },
-      { t: "Sacred ground", href: "heritage-atlas.html" },
-      { t: "Ancient India", href: "ancient-india.html" },
+    { label: "Heritage", icon: "i-stupa", links: [
+      { t: "India by design", href: "design-system.html", icon: "i-lotus" },
+      { t: "Temples in 3D", href: "temple-forms.html", icon: "i-chaitya" },
+      { t: "Sacred ground", href: "heritage-atlas.html", icon: "i-pillar" },
+      { t: "Ancient India", href: "ancient-india.html", icon: "i-sun" },
     ] },
-    { label: "Trust", links: [
-      { t: "Every source", href: "references.html" },
-      { t: "Provenance ledger", href: "provenance.html" },
-      { t: "How it works", href: "how-it-works.html" },
-      { t: "Methodology", href: "about.html" },
+    { label: "Trust", icon: "i-edict", links: [
+      { t: "Every source", href: "references.html", icon: "i-edict" },
+      { t: "Provenance ledger", href: "provenance.html", icon: "i-bell" },
+      { t: "How it works", href: "how-it-works.html", icon: "i-tree" },
+      { t: "Methodology", href: "about.html", icon: "i-elephant" },
     ] },
   ];
+  const footIcon = (id, cls) => id ? `<svg class="${cls}" width="15" height="15" viewBox="0 0 32 32" aria-hidden="true"><use href="#${id}"></use></svg>` : "";
   function footerHTML() {
     const cols = FOOT_COLS.map(c => `
       <nav class="sfoot-col" aria-label="${c.label}">
-        <div class="sfoot-h">${c.label}</div>
-        ${c.links.map(l => `<a href="${l.href}">${l.t}</a>`).join("")}
+        <div class="sfoot-h">${footIcon(c.icon, "sfoot-h-ico")}${c.label}</div>
+        ${c.links.map(l => `<a class="sfoot-link" href="${l.href}">${footIcon(l.icon, "sfoot-lico")}<span>${l.t}</span></a>`).join("")}
       </nav>`).join("");
     return `
       <footer id="sfoot">
@@ -288,7 +291,7 @@
         </div>
         <div class="sfoot-saw" aria-hidden="true"></div>
         <div class="sfoot-base">
-          <span>© ${new Date().getFullYear()} Ankur Sinha · Bharat · Indic Designs</span>
+          <span>© ${new Date().getFullYear()} Bharat · Indic Designs™ · original work, all rights reserved</span>
           <span class="sfoot-scripts" aria-hidden="true">भ ভ ਭ ભ ଭ భ ಭ ഭ</span>
           <span class="sfoot-credo">● SOURCED — OR IT'S A GAP</span>
         </div>
