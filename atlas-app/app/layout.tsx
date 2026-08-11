@@ -22,6 +22,7 @@ import CommandPalette from '@/components/command-palette'
 import ReaderPanel from '@/components/reader-panel'
 import BottomNav from '@/components/bottom-nav'
 import RevealScan from '@/components/reveal-scan'
+import Analytics from '@/components/analytics'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -48,6 +49,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ReaderPanel />
         <BottomNav />
         <RevealScan />
+        <Analytics />
       </body>
     </html>
   )
