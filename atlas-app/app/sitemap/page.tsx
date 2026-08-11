@@ -52,10 +52,17 @@ const GROUPS: { front: string; items: Entry[] }[] = [
     items: [
       { t: 'Data & provenance', href: '/data' },
       { t: 'The register — every page', href: '/register' },
-      { t: 'Design system', href: '/design' },
       { t: 'About the atlas', href: '/about' },
       { t: 'References (classic)', href: classicHref('references'), ext: true },
       { t: 'How it works (classic)', href: classicHref('how-it-works'), ext: true },
+    ],
+  },
+  {
+    front: 'Design',
+    items: [
+      { t: 'India by Design Systems — the flagship', href: '/design-systems' },
+      { t: 'The canvas — every screen, one deck', href: '/canvas' },
+      { t: 'Design system — foundations', href: '/design' },
     ],
   },
 ]

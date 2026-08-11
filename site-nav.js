@@ -367,7 +367,23 @@
 
   // Expose the IA so sitemap.html (and anything else) can render the SAME structure
   // without duplicating it — single source of truth for the site's information map.
-  window.SiteNav = { get NAV() { return getNav(); }, SITE };
+  // `ready(cb)` runs cb once nav-data.js has actually loaded (ATLAS_NAV present),
+  // fixing the race where consumers read SiteNav.NAV before it resolved and got the
+  // 3-item fallback. Fires immediately if already ready.
+  let _navReady = false;
+  const _readyCbs = [];
+  window.SiteNav = {
+    get NAV() { return getNav(); },
+    SITE,
+    get isReady() { return _navReady; },
+    ready(cb) { if (_navReady) cb(getNav()); else _readyCbs.push(cb); },
+  };
+  function markNavReady() {
+    _navReady = true;
+    _iconMap = null;   // rebuild icon lookup now that the real nav is present
+    _readyCbs.splice(0).forEach(cb => { try { cb(getNav()); } catch (e) {} });
+    try { window.dispatchEvent(new CustomEvent("SiteNavReady", { detail: { nav: getNav() } })); } catch (e) {}
+  }
 
   // ensure the shared view catalog (nav-data.js) is loaded, THEN mount. If a page already
   // included nav-data.js, this is instant; otherwise we inject it so no page has to remember to.
@@ -382,7 +398,7 @@
     s.onload = cb; s.onerror = cb;   // fall back to FALLBACK_NAV if it can't load
     document.head.appendChild(s);
   }
-  function start() { ensureNavData(mount); }
+  function start() { ensureNavData(function () { markNavReady(); mount(); }); }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
   else start();
 })();

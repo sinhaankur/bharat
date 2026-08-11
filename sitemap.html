@@ -151,8 +151,14 @@
           ${links}${extra}${planned}</section>`;
       }).join("");
     }
-    // site-nav.js runs on DOMContentLoaded and defines window.SiteNav; render after.
-    if (window.SiteNav) render(); else window.addEventListener("DOMContentLoaded", render);
+    // Render once nav-data.js has actually loaded (SiteNav.ready fixes the race where
+    // we'd otherwise read the 3-item fallback before ATLAS_NAV resolved).
+    function boot() {
+      if (window.SiteNav && window.SiteNav.ready) window.SiteNav.ready(render);
+      else window.addEventListener("SiteNavReady", render, { once: true });
+    }
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+    else boot();
   </script>
 </body>
 </html>

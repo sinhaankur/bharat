@@ -74,6 +74,8 @@
     { label: "About", tagline: "What this is, how it's built, and how to use or share it.", items: [
       { href: "how-it-works.html", text: "How it works", hint: "the project, explained", icon: "ℹ️", keywords: "how it works about explain intro what is this help start guide" },
       { href: "design-system.html", text: "Design system", hint: "the brand, tokens & components — the living style guide", icon: "🎨", keywords: "design system brand style guide tokens colors components ui ux theme terracotta teal" },
+      { href: "app/design-systems/", text: "India by Design Systems", hint: "the flagship — one chassis, many Indias (Indic skins)", icon: "🪷", ext: true, keywords: "indic design systems flagship skins states chassis modernist segment lattice" },
+      { href: "app/canvas/", text: "The canvas", hint: "every screen of the atlas, one deck", icon: "🗂", ext: true, keywords: "canvas mockups deck every screen design pages map" },
       { href: "about.html", text: "Methodology & disclaimer", icon: "📋", keywords: "about methodology disclaimer legal how method" },
       { href: "for-organisations.html", text: "For organisations", icon: "🏢", keywords: "organisations business enterprise partner ngo licence" },
       { href: "share.html", text: "Share", icon: "🔗", keywords: "share social embed widget" },
