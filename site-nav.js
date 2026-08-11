@@ -133,6 +133,18 @@
     return (typeof window !== "undefined" && window.ATLAS_SECTIONS) || getNav();
   }
 
+  // href → icon lookup, built from ATLAS_NAV (which carries per-item icons). The
+  // editorial ATLAS_SECTIONS don't define icons, so we borrow them by href so the
+  // dropdown items get the same glyph as the full nav/drawer.
+  let _iconMap = null;
+  function iconFor(href) {
+    if (!_iconMap) {
+      _iconMap = {};
+      getNav().forEach(g => (g.items || []).forEach(i => { if (i.icon) _iconMap[(i.href || "").toLowerCase()] = i.icon; }));
+    }
+    return _iconMap[(href || "").toLowerCase()] || "";
+  }
+
   function navHTML() {
     const SECTIONS = getSections();
     const activeSection = SECTIONS.find(s => s.items.some(i => isHere(i.href)) || isHere(s.href));
@@ -145,7 +157,9 @@
         const ext = i.ext ? ' target="_blank" rel="noopener"' : "";
         const arrow = i.ext ? ' <span class="snav-ext">↗</span>' : "";
         const hint = i.hint ? `<span class="snav-hint">${i.hint}</span>` : "";
-        return `<a href="${i.href}"${ext}${cur}><span class="snav-body"><span class="snav-t">${i.text}${arrow}</span>${hint}</span></a>`;
+        const glyph = i.icon || iconFor(i.href);
+        const ico = `<span class="snav-ico" aria-hidden="true">${glyph || "·"}</span>`;
+        return `<a href="${i.href}"${ext}${cur}>${ico}<span class="snav-body"><span class="snav-t">${i.text}${arrow}</span>${hint}</span></a>`;
       }).join("");
       // a "section front" link at the top of the menu, then its stories
       const front = s.href ? `<a class="snav-front" href="${s.href}"><span class="snav-body"><span class="snav-t">${s.label} — front page</span><span class="snav-hint">${s.tagline || ""}</span></span></a>` : "";
