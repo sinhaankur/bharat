@@ -2638,6 +2638,12 @@ html.theme-indic-light .layer-story .ls-val { color: var(--vermilion); }
 html.theme-indic-light .layer-story .ls-go, html.theme-indic-light .layer-story .vs-go { color: var(--ink-2018); }
 /* the map readout pill (make sure the container itself is light, not just descendants) */
 html.theme-indic-light #india-map-readout { background: var(--stone-glass-t) !important; border: 1px solid var(--line-2c) !important; }
+/* map tooltips + hover popups that were authored dark → light stone */
+html.theme-indic-light .leaflet-tooltip.unrest-tip {
+  background: var(--stone-glass) !important; color: var(--ink-2018) !important;
+  border: 1px solid var(--line-strong-2c) !important; box-shadow: 4px 4px 0 rgba(42,32,24,.16) !important;
+}
+html.theme-indic-light .leaflet-tooltip.unrest-tip::before { border-top-color: var(--stone-glass) !important; border-bottom-color: var(--stone-glass) !important; }
 /* the layers panel + legend read on light */
 html.theme-indic-light #india-map-legend { background: var(--stone-glass-t); border-color: var(--line-2c); color: var(--ink-2018); }
 html.theme-indic-light .india-legend-title, html.theme-indic-light .india-legend-foot { color: var(--muted-48); }
