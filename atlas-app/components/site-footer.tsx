@@ -89,7 +89,7 @@ export default function SiteFooter() {
 
       {/* baseline */}
       <div className="af-base">
-        <span>© 2026 Bharat · Indic Designs · independent project</span>
+        <span>© 2026 Bharat · Indic Designs™ · original work, all rights reserved</span>
         <span className="af-scripts">भ ভ ਭ ભ ଭ భ ಭ ഭ</span>
         <span className="af-credo">● SOURCED — OR IT&apos;S A GAP</span>
       </div>
