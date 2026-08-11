@@ -67,8 +67,8 @@ export default function RegisterPage() {
           <span className="rg-count mono">{TOTAL} entries · sourced or a gap</span>
         </div>
 
-        {GROUPS.map((g) => (
-          <section key={g.label} className="rg-group">
+        {GROUPS.map((g, gi) => (
+          <section key={g.label} className="rg-group" data-reveal data-reveal-delay={gi * 60}>
             <div className="rg-group-h mono">{g.label}</div>
             {g.rows.map((r) => {
               const inner = (

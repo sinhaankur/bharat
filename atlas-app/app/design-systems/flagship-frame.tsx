@@ -11,7 +11,7 @@ const base = process.env.NEXT_PUBLIC_BASE_PATH || ''
 export default function FlagshipFrame() {
   return (
     <section style={{ borderTop: '2px solid var(--ink)', background: '#f6f0e1' }}>
-      <div style={{ maxWidth: 'var(--wrap)', margin: '0 auto', padding: '26px var(--edge) 0' }}>
+      <div data-reveal style={{ maxWidth: 'var(--wrap)', margin: '0 auto', padding: '26px var(--edge) 0' }}>
         <div className="kicker" style={{ color: 'var(--accent)', fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase' }}>
           The complete document · all segments
         </div>
