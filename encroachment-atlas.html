@@ -1,9 +1,403 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Bharat — Money, Land & Memory</title>
-<link rel="canonical" href="https://sinhaankur.github.io/bharat/app/encroachment/"/>
-<meta http-equiv="refresh" content="0; url=/bharat/app/encroachment/"/>
-<script>location.replace("/bharat/app/encroachment/"+location.search+location.hash)</script>
-<style>html,body{margin:0;height:100%;background:#f8f4ea;color:#33251a;font-family:-apple-system,sans-serif}
-.w{display:flex;height:100%;align-items:center;justify-content:center;text-align:center}a{color:#cc8900;font-weight:700}</style>
-</head><body><div class="w"><p>Moved to the new atlas… <a href="/bharat/app/encroachment/">continue</a></p></div></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Built where the water returns — India's encroachment cases | Bharat</title>
+  <meta name="description" content="Documented cases where construction sits on land the water reclaims — floodplains, lakebeds and wetlands — each ruled on by the NGT, a court or CAG. Bengaluru's Bellandur, Delhi's Yamuna O-zone, Chennai's Pallikaranai, Mumbai's Mithi and more, sourced or marked a gap." />
+  <meta name="keywords" content="encroachment India, floodplain construction, lakebed encroachment, NGT demolition, wetland fill, why cities flood, Bellandur, Yamuna floodplain, Pallikaranai" />
+  <link rel="canonical" href="https://sinhaankur.github.io/bharat/encroachment-atlas.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Bharat" />
+  <meta property="og:title" content="Built where the water returns — India's encroachment cases" />
+  <meta property="og:description" content="Where construction sits on land the water reclaims — floodplains, lakebeds, wetlands — each ruled on by the NGT, a court or CAG. Sourced or marked a gap." />
+  <meta property="og:url" content="https://sinhaankur.github.io/bharat/encroachment-atlas.html" />
+  <meta property="og:image" content="https://sinhaankur.github.io/bharat/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://sinhaankur.github.io/bharat/og-image.png" />
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .ea-wrap { max-width: 1080px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; }
+    .ea-head h1 { margin: 0.3rem 0 0.4rem; font-size: clamp(1.7rem, 3.6vw, 2.6rem); }
+    .ea-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.55; max-width: 70ch; }
+    .ea-thesis { border-left: 2px solid oklch(0.62 0.19 32); padding: 0.2rem 0 0.2rem 0.8rem; margin: 0.9rem 0 0; color: oklch(0.48 0.100 40); font-size: 0.92rem; line-height: 1.5; font-style: italic; max-width: 62ch; }
+    .ea-stats { display: flex; flex-wrap: wrap; gap: 1.4rem; margin: 1.3rem 0 0.2rem; }
+    .ea-stat b { font-family: var(--font-mono); font-size: 1.5rem; color: oklch(0.48 0.150 45); display: block; line-height: 1; }
+    .ea-stat span { font-size: 0.78rem; color: var(--muted-foreground); }
+
+    /* layered national roll-up — each row adds a dimension on top of the last */
+    .ea-rollup { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin: 1.3rem 0 0.4rem; }
+    .ea-layer { display: flex; align-items: center; gap: 0.8rem; padding: 0.7rem 0.95rem; border-bottom: 1px solid var(--border); position: relative; }
+    .ea-layer:last-child { border-bottom: none; }
+    .ea-layer::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--lc, oklch(0.6 0.15 40)); }
+    .ea-layer .n { font-family: var(--font-mono); font-size: 1.6rem; font-weight: 700; color: var(--foreground); line-height: 1; min-width: 4.6rem; }
+    .ea-layer .n small { font-size: 0.9rem; color: var(--muted-foreground); }
+    .ea-layer .lb { font-size: 0.86rem; line-height: 1.4; }
+    .ea-layer .lb b { color: var(--foreground); }
+    .ea-layer .lb span { color: var(--muted-foreground); }
+    .ea-layer .lk { margin-left: auto; font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted-foreground); white-space: nowrap; }
+    .ea-rollup-head { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted-foreground); padding: 0.5rem 0.95rem 0; }
+
+    #ea-map { height: 440px; border: 1px solid var(--border); border-radius: var(--radius); margin: 1.3rem 0 0.5rem; background: var(--background); }
+    @media (max-width: 640px) { #ea-map { height: 340px; } }
+    .leaflet-container { background: var(--background); font-family: inherit; }
+    .leaflet-popup-content-wrapper, .leaflet-popup-tip { background: var(--card); color: var(--foreground); border: 1px solid var(--border-strong); }
+    .leaflet-popup-content { margin: 0.65rem 0.8rem; min-width: 200px; }
+    .ea-pop-t { font-weight: 700; color: oklch(0.48 0.130 45); }
+    .ea-pop-wb { font-size: 0.82rem; color: oklch(0.48 0.100 220); margin: 2px 0; }
+    .ea-pop-open { display: inline-block; margin-top: 5px; font-family: var(--font-mono); font-size: 9.5px; color: var(--accent); text-decoration: none; }
+
+    /* time scrubber */
+    .ea-scrub { border: 1px solid var(--border); border-radius: var(--radius); padding: 0.7rem 0.9rem; margin: 0.7rem 0 0.2rem; background: oklch(0.15 0.01 220); }
+    .ea-scrub-hd { display: flex; align-items: baseline; justify-content: space-between; font-size: 0.86rem; color: var(--muted-foreground); }
+    .ea-scrub-hd b { font-family: var(--font-mono); font-size: 1.5rem; color: oklch(0.48 0.120 210); }
+    .ea-scrub input[type=range] { width: 100%; margin: 0.5rem 0 0.35rem; accent-color: oklch(0.66 0.16 210); cursor: pointer; }
+    .ea-scrub-foot { font-size: 0.74rem; color: var(--muted-foreground); line-height: 1.45; }
+    .ea-scrub-reset { background: none; border: none; color: var(--accent); font-size: 0.74rem; cursor: pointer; text-decoration: underline; padding: 0; }
+    /* the "as of year" state on a card's loss bar */
+    .ea-loss-now { font-family: var(--font-mono); font-size: 0.8rem; color: oklch(0.48 0.120 210); }
+    .ea-loss-bar .now { position: relative; }
+    .ea-controls { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin: 1rem 0 0.2rem; }
+    .ea-chip { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.03em; padding: 4px 11px; border-radius: 999px; border: 1px solid var(--border-strong); color: var(--muted-foreground); background: transparent; cursor: pointer; }
+    .ea-chip.on { border-color: oklch(0.66 0.19 32); color: var(--card); background: oklch(0.7 0.17 40); font-weight: 600; }
+    .ea-count { margin-left: auto; font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
+
+    .ea-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 1rem; margin-top: 1rem; }
+    .ea-card { border: 1px solid var(--border); border-left: 3px solid oklch(0.62 0.19 32); border-radius: 0 var(--radius) var(--radius) 0; padding: 0.9rem 1rem; background: var(--card); }
+    .ea-card-h { display: flex; align-items: baseline; gap: 0.5rem; }
+    .ea-place { font-weight: 700; font-size: 1.05rem; color: var(--foreground); text-decoration: none; }
+    .ea-place:hover { color: oklch(0.48 0.150 45); }
+    .ea-place .st { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; color: var(--muted-foreground); margin-left: 0.3rem; }
+    .ea-yr { margin-left: auto; font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
+    .ea-type { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.03em; color: oklch(0.48 0.140 40); margin: 0.35rem 0 0.1rem; }
+    .ea-wb { font-size: 0.9rem; font-weight: 600; color: oklch(0.48 0.100 220); }
+    .ea-detail { font-size: 0.85rem; line-height: 1.5; color: var(--foreground); margin: 0.4rem 0; }
+    .ea-flood { font-size: 0.82rem; line-height: 1.45; color: oklch(0.48 0.100 220); background: oklch(0.20 0.05 220 / 0.3); border-radius: 6px; padding: 0.35rem 0.55rem; margin: 0.4rem 0; }
+    .ea-flood b { color: oklch(0.48 0.130 210); }
+    .ea-loss { margin: 0.5rem 0 0.3rem; }
+    .ea-loss-hd { font-size: 0.82rem; line-height: 1.4; color: var(--foreground); }
+    .ea-loss-hd b { font-family: var(--font-mono); font-size: 0.95rem; color: oklch(0.48 0.160 40); }
+    .ea-loss-yr { font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); }
+    .ea-loss-bar { height: 6px; background: var(--muted); border-radius: 999px; overflow: hidden; margin-top: 0.3rem; }
+    .ea-loss-bar i { display: block; height: 100%; border-radius: 999px; }
+    .ea-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.6rem; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px dashed var(--border); }
+    .ea-order { font-size: 0.76rem; color: var(--muted-foreground); }
+    .ea-order a { color: oklch(0.48 0.130 250); }
+    .ea-status { font-family: var(--font-mono); font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.03em; padding: 1px 7px; border-radius: 999px; border: 1px solid oklch(0.55 0.12 150); color: oklch(0.48 0.130 150); }
+    .ea-share { margin-left: auto; background: none; border: 1px solid var(--border-strong); color: var(--muted-foreground); font-family: var(--font-mono); font-size: 10px; padding: 6px 12px; border-radius: 999px; cursor: pointer; }
+    .ea-share:hover { border-color: oklch(0.7 0.17 40); color: oklch(0.48 0.150 45); }
+    .ea-card--hl { border-color: oklch(0.7 0.17 40); box-shadow: 0 0 0 2px oklch(0.66 0.19 32 / 0.4); }
+    .ea-empty { grid-column: 1/-1; color: var(--muted-foreground); text-align: center; padding: 2rem 0; }
+    .ea-note { font-size: 0.78rem; color: var(--muted-foreground); line-height: 1.55; margin-top: 1.8rem; }
+    .ea-note a { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div id="site-nav"></div>
+
+  <main class="ea-wrap">
+    <header class="ea-head">
+      <div class="eyebrow">Geography · accountability · sourced</div>
+      <h1 class="display">Built where the <em>water returns</em></h1>
+      <p>Where construction sits on land the water reclaims — floodplains, lakebeds and wetlands.
+      Every case here has been ruled on by the National Green Tribunal, a court, or flagged by CAG.
+      This is why the ground floods: it was always water.</p>
+      <p class="ea-thesis">The floodplain doesn't forget. A lakebed filled for real estate, a
+      riverfront reclaimed, a marsh built over — the water comes back to where it always was.</p>
+      <div class="ea-stats" id="stats"></div>
+    </header>
+
+    <div class="ea-rollup-head">The national picture — one layer at a time</div>
+    <div class="ea-rollup" id="rollup"></div>
+
+    <div id="ea-map"></div>
+
+    <div class="ea-scrub" id="scrub" hidden>
+      <div class="ea-scrub-hd">
+        <span>⏳ Watch the water disappear</span>
+        <b id="scrub-year">2024</b>
+      </div>
+      <input id="scrub-range" type="range" min="1960" max="2024" value="2024" step="1" aria-label="Year" />
+      <div class="ea-scrub-foot">Drag to a year — each case fills to its water-body extent then. Dots on a card's bar are the real sourced data-points; values between are interpolated. <button id="scrub-reset" class="ea-scrub-reset">reset to today</button></div>
+    </div>
+
+    <div class="ea-controls">
+      <div id="filters" style="display:flex;flex-wrap:wrap;gap:0.5rem">
+        <button class="ea-chip on" data-f="all">All cases</button>
+        <button class="ea-chip" data-f="wetland">Wetland / Ramsar</button>
+        <button class="ea-chip" data-f="lake">Lake / lakebed</button>
+        <button class="ea-chip" data-f="floodplain">River floodplain</button>
+      </div>
+      <span class="ea-count" id="count"></span>
+    </div>
+
+    <div class="ea-list" id="list"><p class="ea-empty">Loading cases…</p></div>
+
+    <p class="ea-note">
+      Cases are generated from the district ledger's geography dimension (documented NGT / court /
+      CAG matters only — sourced or a gap, never invented). Map markers sit on the
+      <b>centre of the named water body</b> (lake / marsh / river reach) — an approximate placement,
+      not a survey point. Open any place on the <a href="index.html">atlas map</a> for its full
+      geography panel, or audit every figure on the <a href="provenance.html">provenance ledger</a>.
+      <br><b>What it cost to clean up</b> — the public money spent on drainage, relief and desilting
+      after these floods — is a <b>declared gap</b>: no per-district flood-spend figure is published
+      in a form we can source, so we don't invent one. Where a court fine or revival budget IS on
+      record (e.g. Bengaluru's ₹139 cr fines, Gurgaon's ₹100 cr bundh revival) it appears in the
+      case detail.
+    </p>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="vendor/leaflet/leaflet.js"></script>
+  <script src="map-layers.js"></script>
+  <script>
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    let CASES = [], FILTER = "all", MAP = null, MARKERS = null, SCRUB_YEAR = null;
+
+    fetch("encroachment-cases.json").then(r => r.ok ? r.json() : { cases: [] }).catch(() => ({ cases: [] }))
+      .then(d => {
+        CASES = d.cases || [];
+        renderStats(d._meta || {});
+        renderRollup(d._meta || {});
+        document.querySelectorAll(".ea-chip").forEach(b => b.addEventListener("click", () => {
+          FILTER = b.dataset.f;
+          document.querySelectorAll(".ea-chip").forEach(x => x.classList.toggle("on", x === b));
+          render();
+        }));
+        initScrubber();
+        initMap();
+        render();
+      }).catch(e => document.getElementById("list").innerHTML = `<p class="ea-empty">Load error: ${esc(e.message)}</p>`);
+
+    // Value of a case's metric AT a given year — clamped to its sourced range, linearly
+    // interpolated between the real data-points (the dots). null if the case has no series.
+    function valueAt(c, year) {
+      const pts = c.loss && c.loss.points;
+      if (!pts || pts.length < 2) return null;
+      if (year <= pts[0][0]) return pts[0][1];
+      if (year >= pts[pts.length - 1][0]) return pts[pts.length - 1][1];
+      for (let i = 0; i < pts.length - 1; i++) {
+        const [y0, v0] = pts[i], [y1, v1] = pts[i + 1];
+        if (year >= y0 && year <= y1) return v0 + (v1 - v0) * ((year - y0) / (y1 - y0));
+      }
+      return pts[pts.length - 1][1];
+    }
+
+    function initScrubber() {
+      const scrubbable = CASES.some(c => c.loss && c.loss.points && c.loss.points.length >= 2);
+      const wrap = document.getElementById("scrub");
+      if (!scrubbable) { wrap.hidden = true; return; }
+      wrap.hidden = false;
+      const range = document.getElementById("scrub-range");
+      const yr = document.getElementById("scrub-year");
+      const apply = () => {
+        SCRUB_YEAR = +range.value;
+        yr.textContent = SCRUB_YEAR;
+        render();
+      };
+      range.addEventListener("input", apply);
+      document.getElementById("scrub-reset").addEventListener("click", () => {
+        range.value = range.max; SCRUB_YEAR = null; yr.textContent = range.max; render();
+      });
+    }
+
+    // classify a case for filtering, from its type + water-body text
+    function bucket(c) {
+      const t = ((c.type || "") + " " + (c.water_body || "")).toLowerCase();
+      if (/wetland|ramsar|marsh|beel/.test(t)) return "wetland";
+      if (/lake|jheel|sagar|lakebed|tank/.test(t)) return "lake";
+      return "floodplain";
+    }
+
+    function renderStats(meta) {
+      document.getElementById("stats").innerHTML = `
+        <div class="ea-stat"><b>${meta.count ?? CASES.length}</b><span>documented cases</span></div>
+        <div class="ea-stat"><b>${meta.districts ?? new Set(CASES.map(c => c.state + c.district)).size}</b><span>districts</span></div>
+        <div class="ea-stat"><b>${CASES.filter(c => bucket(c) === "wetland").length}</b><span>wetland / Ramsar</span></div>
+        <div class="ea-stat"><b>NGT / court</b><span>every case ruled on</span></div>`;
+    }
+
+    // The layered national roll-up — each layer stacks a new dimension on the picture:
+    // the cases → where → what's protected → how much was lost → is anyone enforcing it.
+    // Every number is computed from the 16 sourced cases; nothing invented.
+    function renderRollup(meta) {
+      const districts = new Set(CASES.map(c => c.state + "|" + c.district)).size;
+      const states = new Set(CASES.map(c => c.state)).size;
+      const ramsar = new Set(CASES.filter(c => /ramsar/i.test(c.water_body || "")).map(c => c.state + c.district)).size;
+      // one loss figure PER DISTRICT (Kolkata/Chennai have 2 cases each — don't double-count)
+      const lossByDistrict = new Map();
+      for (const c of CASES) {
+        if (c.loss && typeof c.loss.pct === "number" && c.loss.pct < 0) {
+          const k = c.state + "|" + c.district;
+          if (!lossByDistrict.has(k)) lossByDistrict.set(k, c);
+        }
+      }
+      const withLoss = [...lossByDistrict.values()];
+      const shrinks = withLoss.map(c => Math.abs(c.loss.pct)).sort((a, b) => a - b);
+      const medianLoss = shrinks.length ? shrinks[Math.floor(shrinks.length / 2)] : null;
+      const worst = withLoss.reduce((w, c) => (!w || c.loss.pct < w.loss.pct) ? c : w, null);
+      const years = withLoss.flatMap(c => [c.loss.from_year, c.loss.to_year]);
+      const span = years.length ? `${Math.min(...years)}–${Math.max(...years)}` : "";
+      // "still unactioned" = status/detail carries an unresolved signal (unique districts)
+      const stuck = new Set(CASES.filter(c => /unactioned|pending|contested|data gap|before ngt|before sc/i.test((c.status || "") + " " + (c.detail || ""))).map(c => c.state + c.district)).size;
+
+      const layers = [
+        { n: meta.count ?? CASES.length, lb: `<b>documented cases</b> of building where the water returns <span>— floodplains, lakebeds, wetlands, each ruled on by the NGT, a court, or CAG</span>`, lc: "oklch(0.66 0.19 32)", lk: "the cases" },
+        { n: districts, unit: `across ${states} states`, lb: `<b>districts</b> in ${states} states/UTs <span>— from Srinagar's Dal Lake to Chennai's Pallikaranai marsh</span>`, lc: "oklch(0.7 0.15 55)", lk: "where" },
+        { n: ramsar, lb: `sit on <b>internationally-protected Ramsar wetlands</b> <span>— the strongest legal protection a wetland can carry, built on anyway</span>`, lc: "oklch(0.62 0.13 200)", lk: "what's protected" },
+        { n: medianLoss != null ? medianLoss + "%" : "—", lb: `<b>median water-body loss</b> where measured <span>— worst: ${worst ? esc(worst.district) + " " + Math.abs(worst.loss.pct) + "% (" + worst.loss.label + ")" : "—"}, over ${span}</span>`, lc: "oklch(0.6 0.16 25)", lk: "how much lost" },
+        { n: stuck, lb: `still <b>unactioned or contested</b> <span>— an order exists, but the encroachment or the flooding continues</span>`, lc: "var(--accent)", lk: "is anyone enforcing" },
+      ];
+      document.getElementById("rollup").innerHTML = layers.map(L => `
+        <div class="ea-layer" style="--lc:${L.lc}">
+          <span class="n">${L.n}${L.unit ? ` <small>${esc(L.unit)}</small>` : ""}</span>
+          <span class="lb">${L.lb}</span>
+          <span class="lk">${esc(L.lk)}</span>
+        </div>`).join("");
+    }
+
+    function filtered() {
+      return FILTER === "all" ? CASES : CASES.filter(c => bucket(c) === FILTER);
+    }
+
+    function render() {
+      const list = document.getElementById("list");
+      const cs = filtered();
+      document.getElementById("count").textContent = `${cs.length} of ${CASES.length} shown`;
+      list.innerHTML = cs.length ? cs.map(card).join("") : `<p class="ea-empty">No cases in this category.</p>`;
+      // wire share buttons
+      list.querySelectorAll(".ea-share").forEach(btn => btn.addEventListener("click", () => {
+        const c = CASES.find(x => caseId(x) === btn.dataset.id);
+        if (c) shareCase(c, btn);
+      }));
+      drawMarkers(cs);
+      // deep-link ?case=… → scroll to + highlight that card
+      const want = new URLSearchParams(location.search).get("case");
+      if (want) {
+        const btn = list.querySelector(`.ea-share[data-id="${CSS.escape(want)}"]`);
+        const cardEl = btn && btn.closest(".ea-card");
+        if (cardEl) { cardEl.scrollIntoView({ behavior: "smooth", block: "center" }); cardEl.classList.add("ea-card--hl"); }
+      }
+    }
+
+    async function shareCase(c, btn) {
+      const url = location.origin + location.pathname + "?case=" + encodeURIComponent(caseId(c));
+      const text = shareText(c);
+      try {
+        if (navigator.share) { await navigator.share({ title: "Built where the water returns", text, url }); return; }
+        await navigator.clipboard.writeText(text + " " + url);
+        const old = btn.textContent; btn.textContent = "✓ copied"; setTimeout(() => btn.textContent = old, 1600);
+      } catch (e) { /* user dismissed share — no-op */ }
+    }
+
+    // "…and this is why it floods" — the consequence half. Low-lying % only where it's
+    // meaningful (>0 — inland plateau cases read 0 because <10 m SEA level is the wrong metric
+    // there); otherwise the CWC/NDMA flood flag + the river whose plain it sits on.
+    const FLOOD_LABEL = { "district-chronic": "flood-chronic (CWC/NDMA)", "state-flood-prone": "in a flood-prone state (CWC/NDMA)" };
+    function floodLine(c) {
+      const bits = [];
+      if (typeof c.low_lying_pct === "number" && c.low_lying_pct >= 1)
+        bits.push(`<b>${c.low_lying_pct.toFixed(0)}%</b> of the district lies below 10 m`);
+      if (FLOOD_LABEL[c.flood_level]) bits.push(FLOOD_LABEL[c.flood_level]);
+      if (c.rivers && c.rivers.length) bits.push(`on the ${esc(c.rivers[0])} plain`);
+      if (!bits.length) return "";
+      return `<div class="ea-flood">🌊 …and the water returns: ${bits.join(" · ")}</div>`;
+    }
+
+    // What was lost, over time — a sourced before→after with a "then vs now" bar.
+    function lossLine(c) {
+      const L = c.loss;
+      if (!L || typeof L.pct !== "number") return "";
+      const shrunk = L.pct < 0;
+      const round1 = v => Math.round(v * 10) / 10;
+      const fmt = v => `${round1(v)}${esc(L.unit || "")}`;
+      // When the scrubber is active, show this case's value AT that year (interpolated),
+      // and fill the bar to its share of the original — you watch the water shrink.
+      const now = SCRUB_YEAR != null ? valueAt(c, SCRUB_YEAR) : null;
+      let barPct, headExtra = "";
+      if (now != null) {
+        barPct = Math.max(2, Math.min(100, now / L.from * 100));
+        const pctNow = Math.round((now - L.from) / L.from * 100);
+        headExtra = ` <span class="ea-loss-now">· ${fmt(now)} in ${SCRUB_YEAR} (${pctNow >= 0 ? "+" : ""}${pctNow}%)</span>`;
+      } else {
+        barPct = shrunk ? Math.max(4, 100 + L.pct) : Math.min(100, Math.abs(L.pct));
+      }
+      return `<div class="ea-loss">
+        <div class="ea-loss-hd"><b>${shrunk ? "▼" : "▲"} ${Math.abs(L.pct)}%</b> ${esc(L.label)} — ${fmt(L.from)} <span class="ea-loss-yr">${L.from_year}</span> → ${fmt(L.to)} <span class="ea-loss-yr">${L.to_year}</span>${headExtra}</div>
+        <div class="ea-loss-bar"><i style="width:${barPct}%;background:${shrunk ? "oklch(0.6 0.13 200)" : "oklch(0.66 0.19 32)"};transition:width .25s"></i></div>
+      </div>`;
+    }
+
+    function card(c) {
+      const href = `index.html?state=${encodeURIComponent(c.state)}&district=${encodeURIComponent(c.district)}`;
+      return `<article class="ea-card">
+        <div class="ea-card-h">
+          <a class="ea-place" href="${href}">${esc(c.district)}<span class="st">${esc(c.state)}</span></a>
+          ${c.year ? `<span class="ea-yr">${esc(String(c.year))}</span>` : ""}
+        </div>
+        <div class="ea-type">🏗️ ${esc(c.type || "encroachment")}</div>
+        ${c.water_body ? `<div class="ea-wb">on ${esc(c.water_body)}</div>` : ""}
+        ${lossLine(c)}
+        ${c.detail ? `<div class="ea-detail">${esc(c.detail)}</div>` : ""}
+        ${floodLine(c)}
+        <div class="ea-foot">
+          ${c.order_ref ? `<span class="ea-order">⚖️ ${esc(c.order_ref)}${c.source ? ` <a href="${esc(c.source)}" target="_blank" rel="noopener">↗ source</a>` : ""}</span>` : ""}
+          ${c.status ? `<span class="ea-status">${esc(c.status)}</span>` : ""}
+          <button class="ea-share" data-id="${esc(caseId(c))}" title="Share this case">↗ share</button>
+        </div>
+      </article>`;
+    }
+
+    // A stable per-case id for deep-linking + sharing.
+    function caseId(c) {
+      return (c.district + "-" + (c.water_body || c.type || "")).toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60);
+    }
+
+    // Build a one-line, copy-pasteable summary of a case for sharing.
+    function shareText(c) {
+      const L = c.loss;
+      const lost = (L && typeof L.pct === "number") ? ` — ${L.label} ${L.pct < 0 ? "down " + Math.abs(L.pct) + "%" : "up " + L.pct + "%"} (${L.from_year}→${L.to_year})` : "";
+      return `Built where the water returns: ${c.type} on ${c.water_body}, ${c.district}${lost}. Ruled on by ${c.order_ref || "NGT/court"}. — Bharat`;
+    }
+
+    function initMap() {
+      if (typeof L === "undefined") return;
+      MAP = L.map("ea-map", { scrollWheelZoom: true }).setView([22.6, 80], 5);
+      const base = (window.MapLayers && MapLayers.basemaps)
+        ? MapLayers.basemaps(L)["Dark map"]
+        : L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png", { subdomains: "abcd", attribution: "&copy; OSM, &copy; CARTO" });
+      base.addTo(MAP);
+      MARKERS = L.layerGroup().addTo(MAP);
+    }
+
+    function drawMarkers(cs) {
+      if (!MAP || !MARKERS) return;
+      MARKERS.clearLayers();
+      const bounds = [];
+      // group by district so multiple cases in one place don't stack invisibly
+      const byPlace = {};
+      for (const c of cs) {
+        if (!c.latlng) continue;
+        const k = c.state + "|" + c.district;
+        (byPlace[k] = byPlace[k] || { latlng: c.latlng, state: c.state, district: c.district, cases: [] }).cases.push(c);
+      }
+      for (const g of Object.values(byPlace)) {
+        const m = L.circleMarker(g.latlng, { radius: 6 + Math.min(8, g.cases.length * 3), color: "oklch(0.66 0.20 32)", weight: 1.5, fillColor: "oklch(0.7 0.19 38)", fillOpacity: 0.5 });
+        const href = `index.html?state=${encodeURIComponent(g.state)}&district=${encodeURIComponent(g.district)}`;
+        m.bindPopup(`<div class="ea-pop-t">${esc(g.district)}</div>`
+          + g.cases.map(c => `<div class="ea-pop-wb">🏗️ ${esc(c.water_body || c.type || "")}</div>`).join("")
+          + `<a class="ea-pop-open" href="${href}">open on the atlas →</a>`);
+        m.addTo(MARKERS);
+        bounds.push(g.latlng);
+      }
+      if (bounds.length) try { MAP.fitBounds(bounds, { padding: [40, 40], maxZoom: 8 }); } catch (e) {}
+    }
+  </script>
+  <script src="command-palette.js"></script>
+  <script src="page-brief.js"></script>
+  <script src="site-nav.js"></script>
+</body>
+</html>
