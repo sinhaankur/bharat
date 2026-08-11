@@ -1,9 +1,10 @@
 name: Ingest news feeds
 
 # The "server" for news ingestion — a free scheduled runner, no server to manage.
-# Runs ingest_news.py and uploads the result as an ARTIFACT for you to curate
-# locally. It deliberately does NOT auto-commit news to the live site, because
-# nothing unmoderated should go public (the human curation gate stays intact).
+# Runs ingest_news.py (stdlib RSS/Atom scraper, link + snippet only — never republishes
+# article text) and AUTO-COMMITS news-feed.json every 6h, so feed.html always shows
+# present India headlines. The Bias + Sentiment + accountability engines run on top of it
+# in the browser. Source = open RSS feeds listed in feeds.json (ToS-friendly aggregation).
 
 on:
   schedule:
@@ -11,7 +12,11 @@ on:
   workflow_dispatch: {}       # also runnable on-demand from the Actions tab
 
 permissions:
-  contents: read
+  contents: write             # allow committing the refreshed feed
+
+concurrency:
+  group: ingest-news
+  cancel-in-progress: false
 
 jobs:
   ingest:
@@ -23,21 +28,23 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Run the aggregator
+      - name: Run the aggregator (RSS → news-feed.json)
         run: python3 ingest_news.py || true   # don't fail the run if some feeds are down
 
-      - name: Upload ingested feed (for local curation)
-        if: ${{ hashFiles('news-feed.json') != '' }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: news-feed-${{ github.run_number }}
-          path: news-feed.json
-          retention-days: 14
-
-      - name: Summary
+      - name: Commit the refreshed feed
         run: |
-          echo "### News ingest complete" >> $GITHUB_STEP_SUMMARY
-          echo "Download the \`news-feed\` artifact above, curate it in curate.html," >> $GITHUB_STEP_SUMMARY
-          echo "run apply_curation.py, and commit approved-news.json." >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Nothing is auto-published — the moderation gate stays intact." >> $GITHUB_STEP_SUMMARY
+          if [ ! -s news-feed.json ]; then
+            echo "no news-feed.json produced — skipping commit"; exit 0
+          fi
+          git config user.name  "bharat-news-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add news-feed.json
+          if git diff --cached --quiet; then
+            echo "no change in news-feed.json"; exit 0
+          fi
+          count=$(python3 -c "import json;print(len(json.load(open('news-feed.json')).get('news_items',[])))" 2>/dev/null || echo "?")
+          # NO [skip ci] — this commit SHOULD trigger deploy-app.yml (it matches *.json)
+          # so the refreshed feed actually reaches the live site.
+          git commit -m "News feed: refresh RSS aggregate (${count} items)"
+          git push
+          echo "### News feed refreshed — ${count} items committed" >> $GITHUB_STEP_SUMMARY
