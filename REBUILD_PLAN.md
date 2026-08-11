@@ -1,72 +1,81 @@
-# Rebuild plan — Atlas, from the Amazing (Modernist × Mauryan) handoff
+# Rebuild plan — Atlas, from the "amazing 2" (Modernist × INDIC DESIGNS) handoff
 
-**Source of truth:** `~/Downloads/amazing/project/` (Atlas Mockups.dc.html + Atlas
-Home/Header/Footer + `_ds/modernist-*/`). Screen map in `github.md`.
+> **2026-08-11 — reconciled with reality.** Today's shipped work follows the NEWER
+> `amazing 2` handoff (INDIC DESIGNS), not the earlier Mauryan-gold plan. The old
+> Mauryan-palette version of this file is retired; the notes below describe what is
+> actually built and what remains. See `MAURYAN_HANDOFF.md` for the retired direction.
 
-**Decisions locked with user:**
-- Park current app → done: branch `archive/mauryan-app` (pushed). `main` stays live until cutover.
-- New Next.js app, **replaces** current `interactive-vercel-ship-26-i-2` as `/bharat/app`.
-- Identity = **build 1a exactly**: Modernist grid skeleton (2px rules, flush-left,
-  0 radius, Archivo) + Mauryan **stone/sky/gold** palette (stone `#e9ddc7`, ink
-  `#2a2018`, sky `#3078c0`, gold `#cc8900`, terracotta `#a8452a`) + chakra + jali.
-- Keep the classic 2D fiscal map (`classic.html`, all 594 districts) as the real
-  map the home links open — do NOT replace it with a placeholder.
+**Source of truth:** `~/Downloads/amazing 2/project/` — `CLAUDE.md` (authoritative
+brief) + `India by Design Systems.dc.html` (flagship, 133KB) + Atlas
+Home/Header/Footer + `Bharat Logo.dc.html` + `Bharat Temple 3D.html` +
+`three-d-stage.js` + `Atlas Mockups.dc.html` (293KB). This SUPERSEDES the older
+`~/Downloads/amazing/` bundle. A copy lives in `atlas-app/handoff/`; screen map in
+`atlas-app/handoff/github.md`.
 
-## Design tokens (from _ds + turn 1a)
-- Type: **Archivo** (400/600/800) UI; Fraunces + Instrument Serif + JetBrains Mono
-  kept for the "house register" ledger (1b) only.
-- Color roles: bg stone `#e9ddc7` / surface `#dcccae` / ink `#2a2018` / muted
-  `#6b5c48`; accents sky `#3078c0` (data), gold `#cc8900` (action), terracotta
-  `#a8452a` (warnings). Radius 0. Rules: 2px section, 1px sub. Elevation = offset
-  hard shadow `6px 6px 0 rgba(42,32,24,.2)` (mockup) not soft blur.
-- SVG defs to port: chakra, seal-ring, jali/jali-dark/floral patterns, the 12
-  Mauryan stroke icons (lotus/pillar/stupa/lion/elephant/bull/horse/edict/jali/
-  coin/torana/bell + sun/sixarm/chaitya/tree). All exist in the mockup + repo.
+## The system (from amazing 2 CLAUDE.md)
+- **Bound chassis = Modernist**: Archivo, red `#ec3013`, 2px section rules / 1px sub,
+  flat, 0 radius, offset hard shadows. This is the structural skeleton for atlas
+  **content** screens.
+- **Program = INDIC DESIGNS**: per-state/culture design systems as **token layers over
+  the shared chassis**. Layout never changes per skin — only tokens swap (accent, tint,
+  band/motif, script accent), derived in oklch. NE states use loom/longhouse motifs.
+- **Global chrome is Indic-skinned** (NOT Modernist-red, NOT Mauryan-gold):
+  - Header: stone ground `#ece3cd`, ink `#2a2018`, vermilion `#c1440e`, **Karla**,
+    2px bottom rule. Brand = `Bharat Logo`. Nav = Home · Design systems · Temple 3D ·
+    Canvas. Search box + vermilion "Open the atlas" CTA.
+  - Footer: dark brown `#38221a` ground, cream `#f0e6d0`, gold `#c9862b`. Rozha One
+    newsletter, GitHub + Data&API, 8-script band `भ ভ ਭ ભ ଭ భ ಭ ഭ`, "● SOURCED — OR
+    IT'S A GAP". ⚠️ Baseline names Ankur Sinha — reconcile with anonymity req before
+    shipping that line.
+- **Mauryan mockup turns 1–9 = retired.** Kept as history; do NOT restyle to them.
+- **Flagship** `India by Design Systems.dc.html` wears its OWN Indic skin (stone
+  `#e9e0cb`/`#f6f0e1`, ink `#2a2018`, vermilion `#c1440e`, Rozha One + Karla).
 
-## Build phases (plan-first, then bulk)
+## The app — `atlas-app/` (built, deploying)
+Next 16, static export (`output: 'export'`), basePath `/bharat/app`. No Tailwind —
+tokens are hand-authored CSS. Fonts (Rozha One + Karla) self-hosted via @fontsource.
+Build: `./node_modules/.bin/next build --webpack` (sharp/pnpm gotchas already solved).
+**Deploy is already wired**: `deploy-app.yml` builds `atlas-app/out/` into
+`_site/app/` on any `atlas-app/**` change — no separate cutover step needed.
 
-**Phase 0 — Scaffold (foundation)**
-1. New Next.js app dir `atlas-app/` (Next 16, static export, basePath `/bharat/app`,
-   the sharp/symlink build fixes already learned). Reuse deploy-app.yml pointed at it.
-2. `app/globals.css` = port `_ds/modernist styles.css` tokens + the turn-1a palette
-   overlay + SVG-symbol sprite. Archivo/Fraunces/etc. via next/font.
-3. Shared chrome: `SiteHeader` (chakra + BHARAT + Engines/Explore/3D/Data/About +
-   gold "Open the map" → classic map) and `SiteFooter` (4-col, 2px top rule).
-   Both use next/link + basePath-aware SmartLink (carry over that fix).
+### Skin token engine (the interactive core)
+- `app/globals.css`: chassis constants in `:root`; skins on `html[data-skin=…]`
+  override ground/ink/accent/band/display-font. Default = **gupta**. Skins present:
+  chassis (Modernist red), kashmir, rajasthan, tamil, kerala, assam, naga. Legacy vars
+  (stone/gold/sky/…) alias onto the active skin so old pages reskin for free.
+- `components/skin-switcher.tsx`: sets `html[data-skin]` + localStorage; whole site
+  reskins live. Full-page version = the flagship's segment lattice.
 
-**Phase 1 — The home (1a "Sunlit Monument")** ← first reviewable screen
-- Full atlas home: header, jali hero ("Money, land, and law — side by side for 594
-  districts" + sourced-or-gap kicker + 35/594/6800/7 stat row), then the 280px
-  "colour the map by" rail (8 dimensions) + the map panel with the floating
-  district card, footer register strip. Real interactive state map (port existing
-  india-map, restyled) with "Open the map" → the classic 594-district fiscal map.
+## ✅ Shipped (2026-08-10, live on main)
+- **Chrome**: `SiteHeader` / `SiteFooter` rebuilt faithful to amazing 2 (Indic skin,
+  stone header / dark-brown footer, 8-script band). `BharatLogo` = gold seal-ring +
+  cycling 8-script glyph.
+- **Home** (`app/page.tsx`): amazing2 Atlas Home — intro splash Bharat/Indic, "Bharat,
+  district by district", animated counters (`home-motion.tsx`), entry grid. Enter
+  Bharat → classic 594-district map.
+- **`/design-systems`**: the flagship "India by Design Systems" — "One chassis / Many
+  Indias", ready-skins, region-grouped segment lattice, poster close.
+- **`/3d`**: the handoff's `Bharat Temple 3D.html` served as-is from `public/temple3d/`
+  (Three.js `<three-d-stage>`, parametric Nagara/Dravida/Kalinga, OBJ/GLB export).
+- Route stubs exist for: about, d/[slug], data, design, engines, engines/revenue,
+  explore, feed, heritage/[slug], register, sitemap, study/[slug].
 
-**Phase 2 — The four registers / key screens (turn 1 + 7)**
-- 1b Edict Ledger (district detail, house Fraunces register) — Birbhum template,
-  wired to district-ledger.json.
-- 1c Engines hub (dark maroon register, gilded chakra) — engines-data.
-- 1d Explore/query (strict red Modernist grid) — query-engine.
-- 7a revenue dashboard, 7b industrialisation timeline, 7c command palette (/) +
-  a11y panel (this is the REAL search — fixes "search is broken").
+## Remaining roadmap (user's stated order)
+1. **Finish the handoff-faithful MAIN SITE** — wire the interior pages cleanly onto the
+   Indic chassis: engines · explore · data · ledgers (register) · heritage. Optionally
+   the full `Atlas Mockups.dc.html` canvas.
+2. **Port back the earlier work WITH a storyline** onto this chassis: engines hub, deep
+   district ledgers (Kolkata-depth), state-revenue dashboard (7a), industrialisation
+   timeline (7b), heritage atlas. See `MAURYAN_HANDOFF.md` / the amazing-handoff-rebuild
+   notes for the full list of what exists to migrate.
+3. **Polish**: mobile 390px (drawer, map sheet, bottom nav, ≥44px targets), motion layer
+   honouring reduce-motion, a11y/command-palette parity with the classic app.
 
-**Phase 3 — The five page shells (turn 4) covering all 58 pages**
-- 4a editorial (home/hero/about/how-it-works/for-organisations)
-- 4b study/edict Gupta (ashoka/vedas/scripts/languages/heritage/temple-forms/…)
-- 4c 3D dark canvas (india-3d/terrain/flood/… — reuse existing R3F)
-- 4d feed (feed/articles/story/timeline/atrocities)
-- 4e data/provenance table shell (data/references/provenance/knowledge/sitemap)
-- Migrate content page-by-page into the right shell (screen map in github.md).
-
-**Phase 4 — System + polish (turns 2,3,5,6)**
-- Icon set (2), atomic design-system page (3a) + page map (3b), IA/sitemap (5a),
-  motion layer (5c, honour reduce-motion), forms + states + **mobile 390px**
-  (6a/6b/6c: drawer, map sheet, bottom nav, ≥44px targets).
-
-**Phase 5 — Cutover**
-- Point deploy-app.yml at `atlas-app/`, verify all routes 200 + link scan clean
-  (reuse the broken-link scan), then merge to main. `archive/mauryan-app` remains
-  the rollback.
+## Keep
+- The classic 2D fiscal map (all 594 districts) stays the real map the home links open
+  — do NOT replace it with a placeholder. `archive/mauryan-app` remains the rollback.
 
 ## Review cadence
-Build a screen → show you → iterate → next. Home (Phase 1) is the first gate:
-if the look is right there, the rest follows the same system fast.
+Build a screen → show → iterate → next. The flagship `/design-systems` + the skin
+switcher are the identity gate: if the reskin reads right there, interior pages follow
+the same token system fast.
