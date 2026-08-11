@@ -137,6 +137,8 @@
     ]},
     { label: "Data", href: "knowledge.html", tagline: "The receipts — every figure, every source.", items: [
       { href: "knowledge.html", text: "Knowledge base", hint: "the data catalog" },
+      { href: "officials.html", text: "Officials to track", hint: "sourced accountability register — cited to the naming authority" },
+      { href: "provenance.html", text: "Provenance ledger", hint: "every figure → its citation, 0 unattributed" },
       { href: "data.html", text: "Data & API", hint: "get the data" },
       { href: "references.html", text: "Sources", hint: "every citation" },
       { href: "engines.html", text: "The 7 engines", hint: "the composable lenses" },

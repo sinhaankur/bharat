@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-mauryan theme-indic-light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Officials to track — a sourced accountability register | Bharat</title>
+  <meta name="description" content="A factual, sourced register of public office-holders and their postings. Issues are quoted from and cited to the naming authority (CAG / court / PIB / government order) and attached to the OFFICE — never asserted as personal wrongdoing. Sourced, or it's a gap." />
+  <meta name="robots" content="index, follow" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="theme-mauryan.css" />
+  <style>
+    .of-wrap { max-width: 1040px; margin: 0 auto; padding: 2rem var(--pad-x) 5rem; }
+    .of-head { max-width: 780px; margin-bottom: 1.4rem; }
+    .of-head h1 { margin: 0.4rem 0 0.6rem; font-size: clamp(1.8rem, 4vw, 2.8rem); line-height: 1.05; }
+    .of-head p { color: var(--muted-foreground); font-size: 0.98rem; line-height: 1.6; }
+    /* the legal spine — prominent, not buried */
+    .of-disclaimer { border: 2px solid var(--accent); background: var(--accent-tint); padding: 1rem 1.2rem; margin: 1.2rem 0; font-size: 0.86rem; line-height: 1.55; color: var(--foreground); }
+    .of-disclaimer b { color: var(--accent-ink); }
+    .of-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); border: 2px solid var(--foreground); margin: 1.2rem 0 2rem; }
+    .of-stat { padding: 0.9rem 1rem; border-right: 1px solid var(--border); }
+    .of-stat:last-child { border-right: 0; }
+    .of-stat b { display: block; font-family: var(--font-mono); font-size: 1.6rem; color: var(--foreground); line-height: 1; }
+    .of-stat span { display: block; font-size: 0.72rem; color: var(--muted-foreground); margin-top: 0.35rem; }
+    .of-search { margin: 0 0 1.4rem; }
+    .of-search input { width: 100%; background: var(--card); color: var(--foreground); border: 1.5px solid var(--border-strong); border-radius: 0; padding: 0.75rem 1rem; font-size: 1rem; outline: none; }
+    .of-search input:focus { border-color: var(--accent); }
+    .of-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1rem; }
+    .of-card { border: 1px solid var(--border); border-top: 3px solid var(--accent); border-radius: var(--radius-sm); background: var(--card); padding: 1.1rem 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    .of-card.has-issue { border-top-color: var(--warm, #ae1800); box-shadow: 0 6px 20px rgba(0,0,0,.06); }
+    .of-name { font-family: var(--font-display); font-weight: 700; font-size: 1.2rem; color: var(--foreground); }
+    .of-post { font-size: 0.9rem; color: var(--foreground); }
+    .of-place { font-family: var(--font-mono); font-size: 10.5px; color: var(--muted-foreground); text-transform: uppercase; letter-spacing: .04em; }
+    .of-svc { display: inline-block; font-family: var(--font-mono); font-size: 9.5px; letter-spacing: .08em; padding: 2px 7px; border: 1px solid var(--border-strong); border-radius: 999px; color: var(--muted-foreground); }
+    .of-issue { border-left: 3px solid var(--warm, #ae1800); background: color-mix(in srgb, var(--warm, #ae1800) 6%, transparent); padding: 0.6rem 0.8rem; margin-top: 0.3rem; }
+    .of-issue-h { display: flex; align-items: center; gap: 0.5rem; font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: var(--warm, #ae1800); margin-bottom: 0.3rem; }
+    .of-conf { font-size: 9px; padding: 1px 6px; border-radius: 999px; border: 1px solid currentColor; }
+    .of-issue-st { font-size: 0.85rem; line-height: 1.5; color: var(--foreground); }
+    .of-issue-auth { font-size: 0.76rem; color: var(--muted-foreground); margin-top: 0.35rem; }
+    .of-links { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 0.4rem; }
+    .of-links a { font-family: var(--font-mono); font-size: 10px; color: var(--accent); text-decoration: none; }
+    .of-links a:hover { text-decoration: underline; }
+    .of-gaps { font-size: 0.78rem; color: var(--muted-foreground); font-style: italic; border-top: 1px dotted var(--border); padding-top: 0.5rem; margin-top: 0.3rem; }
+    .of-empty { color: var(--muted-foreground); padding: 2rem 0; }
+  </style>
+</head>
+<body>
+  <div id="site-nav"></div>
+
+  <main class="of-wrap">
+    <header class="of-head">
+      <div class="eyebrow">Accountability · sourced-or-gap</div>
+      <h1 class="display">Officials to track</h1>
+      <p>A factual, sourced register of public office-holders — their posting history, and where a
+        naming authority (CAG, a court, PIB, a government order) has cited an <b>issue</b> against the
+        <em>office</em> they held. You can follow each claim to its source, and archive it before it moves.</p>
+    </header>
+
+    <div class="of-disclaimer" id="disclaimer">Loading the register…</div>
+
+    <div class="of-stats" id="stats"></div>
+
+    <div class="of-search"><input id="q" type="search" placeholder="Search a name, post, place, or issue…" aria-label="Search officials" /></div>
+
+    <div class="of-grid" id="grid"><p class="of-empty">Loading…</p></div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="site-nav.js"></script>
+  <script>
+  (function () {
+    "use strict";
+    var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]; }); };
+    var TIER = { 1: "gov PDF", 2: "gov portal", 3: "Wikipedia", 4: "news" };
+    var CONF = { documented: "#2e7d32", reported: "#b26a00", alleged: "#ae1800" };
+    var PEOPLE = [], META = {};
+
+    fetch("officials.json").then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
+      if (!d) { document.getElementById("grid").innerHTML = '<p class="of-empty">Register unavailable.</p>'; return; }
+      PEOPLE = d.officials || d; META = d._meta || {};
+      // the legal spine, straight from the data
+      document.getElementById("disclaimer").innerHTML =
+        "<b>How to read this — the discipline.</b> " + esc(META.disclaimer || "");
+      // stats
+      var withIssue = PEOPLE.filter(function (p) { return (p.issues || []).length; }).length;
+      var srcTotal = PEOPLE.reduce(function (n, p) { return n + ((p.current_post && p.current_post.source ? 1 : 0) + (p.postings || []).filter(function (x) { return x.source; }).length + (p.issues || []).filter(function (x) { return x.source; }).length); }, 0);
+      document.getElementById("stats").innerHTML =
+        stat(PEOPLE.length, "officials tracked") +
+        stat(withIssue, "with a cited issue") +
+        stat(srcTotal, "sourced records") +
+        stat("0", "unsourced claims");
+      render();
+      document.getElementById("q").addEventListener("input", render);
+    });
+
+    function stat(v, l) { return '<div class="of-stat"><b>' + esc(v) + "</b><span>" + esc(l) + "</span></div>"; }
+    function archive(u) { return u ? "https://web.archive.org/web/" + u : null; }
+
+    function issueBlock(iss) {
+      var conf = iss.confidence || "reported", col = CONF[conf] || "#b26a00";
+      var arc = archive(iss.source);
+      var kind = esc(String(iss.kind || "issue").replace(/_/g, " "));
+      var tier = esc(TIER[iss.source_tier] || "tier ?");
+      var srcLink = iss.source ? `<a href="${esc(iss.source)}" target="_blank" rel="noopener">source (${tier}) &#8599;</a>` : "";
+      var arcLink = arc ? `<a href="${esc(arc)}" target="_blank" rel="noopener" title="Archived copy">archived &#8599;</a>` : "";
+      return `<div class="of-issue">
+        <div class="of-issue-h">&#9873; ${kind} <span class="of-conf" style="color:${col}">${esc(conf)}</span>${iss.period ? ` <span style="color:var(--muted-foreground)">${esc(iss.period)}</span>` : ""}</div>
+        <div class="of-issue-st">${esc(iss.statement || "")}</div>
+        ${iss.amount_note ? `<div class="of-issue-auth">&#8377; note: ${esc(iss.amount_note)}</div>` : ""}
+        <div class="of-issue-auth">Naming authority: ${esc(iss.naming_authority || "—")}${iss.figure_gap ? ` &middot; <span style="color:var(--accent-ink)">figure is a gap</span>` : ""}</div>
+        <div class="of-links">${srcLink}${arcLink}</div>
+      </div>`;
+    }
+
+    function card(p) {
+      var cp = p.current_post || {}, hasIssue = (p.issues || []).length;
+      var arc = archive(cp.source);
+      var place = esc([cp.place, cp.state].filter(Boolean).join(", "));
+      var postLinks = cp.source
+        ? `<div class="of-links"><a href="${esc(cp.source)}" target="_blank" rel="noopener">posting source &#8599;</a>${arc ? `<a href="${esc(arc)}" target="_blank" rel="noopener">archived &#8599;</a>` : ""}</div>`
+        : "";
+      return `<article class="of-card${hasIssue ? " has-issue" : ""}">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:.5rem">
+          <span class="of-name">${esc(p.name)}</span>${p.service ? `<span class="of-svc">${esc(p.service)}</span>` : ""}
+        </div>
+        <div class="of-post">${esc(cp.post || "—")}</div>
+        <div class="of-place">${place}${cp.as_of ? ` &middot; as of ${esc(cp.as_of)}` : ""}</div>
+        ${postLinks}
+        ${(p.issues || []).map(issueBlock).join("")}
+        ${(p._gaps || []).length ? `<div class="of-gaps">Gaps: ${esc(p._gaps.join(" &middot; "))}</div>` : ""}
+      </article>`;
+    }
+
+    function render() {
+      var q = (document.getElementById("q").value || "").toLowerCase().trim();
+      var list = PEOPLE.filter(function (p) {
+        if (!q) return true;
+        return JSON.stringify(p).toLowerCase().indexOf(q) >= 0;
+      });
+      // issues first, then alphabetical
+      list.sort(function (a, b) { return ((b.issues || []).length - (a.issues || []).length) || a.name.localeCompare(b.name); });
+      var host = document.getElementById("grid");
+      host.innerHTML = list.length ? list.map(card).join("") : '<p class="of-empty">No officials match “' + esc(q) + '”.</p>';
+    }
+  })();
+  </script>
+</body>
+</html>
