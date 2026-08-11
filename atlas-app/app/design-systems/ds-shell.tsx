@@ -11,21 +11,23 @@ import { TOKEN_SETS } from '@/lib/design-tokens'
 // (same-origin) iframe to each section. The iframe itself is the exact handoff document.
 const base = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
-// the visible turns in the deck, in document order, with human labels for the jump-nav
+// the standalone flagship's sections (data-screen-label → slug id, added to the served
+// India by Design Systems.dc.html), in document order, for the jump-nav.
 const SECTIONS: { id: string; label: string }[] = [
-  { id: 't14', label: 'The register' },
-  { id: 't13', label: 'Segment plates' },
-  { id: 't12', label: 'Segment detail' },
-  { id: 't11', label: 'Federated theming' },
-  { id: 't8', label: 'Ready skins' },
-  { id: 't4', label: 'Every page' },
-  { id: 't3', label: 'Atomic system' },
-  { id: 't2', label: 'Icon set' },
+  { id: 'ds-hero', label: 'Hero' },
+  { id: 'ds-segment-lattice', label: 'Segment lattice' },
+  { id: 'ds-scripts', label: 'The script layer' },
+  { id: 'ds-flags', label: 'The flag layer' },
+  { id: 'ds-timeline', label: 'The time layer' },
+  { id: 'ds-version-register', label: 'Version register' },
+  { id: 'ds-explorations', label: 'Explorations' },
+  { id: 'ds-chassis', label: 'The chassis' },
+  { id: 'ds-poster-close', label: 'Poster' },
 ]
 
 export default function DsShell() {
   const iframeRef = useRef<HTMLIFrameElement>(null)
-  const [active, setActive] = useState('t14')
+  const [active, setActive] = useState('ds-hero')
   const [skin, setSkin] = useState('gupta')
 
   useEffect(() => {
