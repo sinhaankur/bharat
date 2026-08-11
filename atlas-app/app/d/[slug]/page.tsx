@@ -75,10 +75,10 @@ export default async function DistrictPage({ params }: { params: Promise<{ slug:
           const accountable = (d.chain.find((n) => n.startsWith('*')) || d.chain[d.chain.length - 1] || '').replace(/^\*/, '')
           const gapCount = d.gaps?.length || 0
           const cards = [
-            { k: 'What came in', v: moneyIn?.value, s: (moneyIn?.label || '').replace(/·\s*T\d.*/, '').trim() },
-            { k: 'The catch', v: theCatch?.value, s: (theCatch?.label || '').replace(/·\s*T\d.*/, '').trim(), warn: true },
-            { k: 'Who answers for it', v: accountable.split('(')[0].trim(), s: accountable.includes('(') ? '(' + accountable.split('(').slice(1).join('(') : d.state },
-            { k: 'What we don’t know', v: gapCount ? `${gapCount} open gaps` : 'Marked, not guessed', s: 'A blank cell is honesty, not absence.' },
+            { k: 'What came in', v: moneyIn?.value, s: (moneyIn?.label || '').replace(/·\s*T\d.*/, '').trim(), icon: 'i-coin' },
+            { k: 'The catch', v: theCatch?.value, s: (theCatch?.label || '').replace(/·\s*T\d.*/, '').trim(), warn: true, icon: 'i-edict' },
+            { k: 'Who answers for it', v: accountable.split('(')[0].trim(), s: accountable.includes('(') ? '(' + accountable.split('(').slice(1).join('(') : d.state, icon: 'i-lion' },
+            { k: 'What we don’t know', v: gapCount ? `${gapCount} open gaps` : 'Marked, not guessed', s: 'A blank cell is honesty, not absence.', icon: 'i-jali' },
           ]
           return (
             <section className="lg-citizen" aria-label="What this means for you">
@@ -87,7 +87,7 @@ export default async function DistrictPage({ params }: { params: Promise<{ slug:
               <div className="lg-citizen-grid">
                 {cards.map((c, i) => (
                   <div key={i} className={`lg-cc${c.warn ? ' warn' : ''}`}>
-                    <div className="lg-cc-k mono">{c.k}</div>
+                    <div className="lg-cc-k mono"><svg className="lg-cc-ico" width="14" height="14" viewBox="0 0 32 32" aria-hidden="true"><use href={`#${c.icon}`} /></svg>{c.k}</div>
                     <div className="lg-cc-v">{c.v}</div>
                     <div className="lg-cc-s">{c.s}</div>
                   </div>
@@ -189,7 +189,7 @@ export default async function DistrictPage({ params }: { params: Promise<{ slug:
       <SiteFooter />
 
       <style>{`
-        .ledger { --lg-gold: #ec3013; --lg-gold-700: #ae1800; background: #f3f2f2; color: #1a1917; max-width: 980px; margin: 0 auto; font-family: var(--font-ui); }
+        .ledger { --lg-gold: #cc8900; --lg-gold-700: #a06b00; background: #f3f2f2; color: #1a1917; max-width: 980px; margin: 0 auto; font-family: var(--font-ui); }
         .lg-crumb { display: flex; align-items: center; gap: 12px; padding: 12px var(--edge); border-bottom: 1px solid #d7d3d3; font: 500 12px var(--font-ui); flex-wrap: wrap; }
         .lg-crumb-l { color: #605d5d; }
         .lg-sep { color: #bab6b6; }
@@ -213,7 +213,8 @@ export default async function DistrictPage({ params }: { params: Promise<{ slug:
         .lg-citizen-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0; border: 1px solid #d7d3d3; }
         .lg-cc { padding: 14px 16px; border-right: 1px solid #d7d3d3; }
         .lg-cc:last-child { border-right: 0; }
-        .lg-cc-k { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: #605d5d; }
+        .lg-cc-k { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: #605d5d; }
+        .lg-cc-ico { color: var(--lg-gold, #cc8900); flex: none; }
         .lg-cc-v { font: 600 18px/1.2 var(--font-ui); color: #1a1917; margin: 6px 0 4px; }
         .lg-cc-s { font: 400 12px/1.45 var(--font-ui); color: #605d5d; }
         .lg-cc.warn { background: #fff3f0; }

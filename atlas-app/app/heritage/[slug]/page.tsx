@@ -121,7 +121,7 @@ export default async function HeritagePage({ params }: { params: Promise<{ slug:
       <SiteFooter />
 
       <style>{`
-        .hs { --hs-gold: #ec3013; --hs-maroon: #ae1800; background: #f3f2f2; color: #201e1d; max-width: 960px; margin: 0 auto; font-family: var(--font-ui); }
+        .hs { --hs-gold: #cc8900; --hs-maroon: #a06b00; background: #f3f2f2; color: #201e1d; max-width: 960px; margin: 0 auto; font-family: var(--font-ui); }
         .hs-top { display: flex; align-items: center; gap: 12px; padding: 11px var(--edge); border-bottom: 2px solid var(--line-strong); font: 500 12px var(--font-ui); flex-wrap: wrap; }
         .hs-crumb { color: var(--muted); }
         .hs-sep { color: #bab6b6; }

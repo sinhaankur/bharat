@@ -81,7 +81,7 @@ export default async function StudyPage({ params }: { params: Promise<{ slug: st
       <SiteFooter />
 
       <style>{`
-        .st { --st-gold: #ec3013; --st-maroon: #ae1800; background: #f3f2f2; color: #201e1d; max-width: 960px; margin: 0 auto; font-family: var(--font-ui); }
+        .st { --st-gold: #cc8900; --st-maroon: #a06b00; background: #f3f2f2; color: #201e1d; max-width: 960px; margin: 0 auto; font-family: var(--font-ui); }
         .st-top { display: flex; align-items: center; gap: 12px; padding: 11px var(--edge); border-bottom: 2px solid var(--line-strong); font: 500 12px var(--font-ui); flex-wrap: wrap; }
         .st-brand { font: 600 13px var(--font-serif); }
         .st-sec { color: var(--muted); }
