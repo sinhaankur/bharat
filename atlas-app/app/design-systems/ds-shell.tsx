@@ -72,12 +72,18 @@ export default function DsShell() {
     <div className="dss">
       {/* intro */}
       <header className="dss-intro">
-        <div className="kicker">Indic Designs · the register</div>
+        <div className="kicker">Indic Designs™ · India&apos;s own design systems</div>
         <h1 className="dss-h1">One chassis. Many Indias.</h1>
         <p className="dss-lede">
-          Every atlas screen stands on one Modernist chassis. A <em>design system</em> is a token
-          layer over it — a state&apos;s accent, ground, band and motif, drawn from its own heritage.
-          Pick one below to wear it across the whole atlas, then scroll the specimens.
+          An original body of work: a design language <em>for India</em>, one per state and culture —
+          each accent, ground, band and motif drawn from that place&apos;s own heritage (Kashmir&apos;s
+          Martand trefoil, Rajasthan&apos;s leheriya, Kerala&apos;s coir green, Assam&apos;s gamosa, the
+          Naga loom), all standing on one shared chassis. Not a theme pack — a cultural design
+          register. Pick one below to wear it across the whole atlas, then scroll the specimens.
+        </p>
+        <p className="dss-ip">
+          Indic Designs™ — the design systems, their names and this register are original work,
+          © 2026 Bharat. All rights reserved.
         </p>
       </header>
 
@@ -121,6 +127,8 @@ export default function DsShell() {
         .dss-h1 { font: 400 clamp(30px,5vw,52px) 'Rozha One', var(--font-display); margin: 8px 0 10px; color: var(--ink); line-height: 1.02; }
         .dss-lede { font: 400 15px/1.65 var(--font-ui); color: var(--muted); max-width: 68ch; margin: 0; }
         .dss-lede em { font-style: italic; color: var(--ink); }
+        .dss-ip { font: 500 11.5px/1.5 var(--font-mono); color: var(--muted); max-width: 68ch; margin: 12px 0 0;
+          padding-top: 10px; border-top: 1px solid var(--line); letter-spacing: .01em; }
 
         .dss-skins { max-width: var(--wrap); margin: 0 auto; padding: 18px var(--edge) 8px;
           display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; }
