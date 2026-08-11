@@ -107,7 +107,7 @@ export default function SiteHeader() {
           <span className="ah-search-key">/</span>
         </button>
         <SkinSwitcher />
-        <a className="ah-cta" href={classicMapHref()}>Open the atlas</a>
+        <a className="ah-cta" href={classicMapHref()}>View the India map</a>
         <button className="ah-toggle" onClick={() => setOpen((v) => !v)} aria-label="Menu" aria-expanded={open}>{open ? '✕' : '☰'}</button>
       </div>
 
@@ -126,7 +126,7 @@ export default function SiteHeader() {
               )}
             </div>
           ))}
-          <a className="ah-cta" href={classicMapHref()} style={{ marginTop: 10, width: 'fit-content' }}>Open the atlas</a>
+          <a className="ah-cta" href={classicMapHref()} style={{ marginTop: 10, width: 'fit-content' }}>View the India map</a>
         </div>
       )}
 
