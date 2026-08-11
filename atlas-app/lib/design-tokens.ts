@@ -17,9 +17,9 @@ const FONT_MODERN = { '--font-display': '"Archivo", system-ui, sans-serif', '--f
 
 export const TOKEN_SETS: Record<string, TokenSet> = {
   gupta: {
-    id: 'gupta', label: 'Gupta', note: 'the warm default — stone & vermilion',
-    from: 'Gupta-classical stone & vermilion — the house default.',
-    tokens: { '--bg': '#f6f0e1', '--surface': '#efe3cc', '--ink': '#2a2018', '--accent': '#c1440e', '--accent-600': '#a23409', '--accent-700': '#8a2e08', '--band': '#c9862b', ...FONT_GUPTA },
+    id: 'gupta', label: 'Gupta', note: 'the warm default — stone & house gold',
+    from: 'Gupta-classical stone & house gold (#cc8900) — the default; CTAs wear the gold.',
+    tokens: { '--bg': '#f6f0e1', '--surface': '#efe3cc', '--ink': '#2a2018', '--accent': '#cc8900', '--accent-600': '#a06b00', '--accent-700': '#7d5400', '--band': '#cc8900', ...FONT_GUPTA },
   },
   chassis: {
     id: 'chassis', label: 'Modernist', note: 'the bare structural chassis — red on grey',

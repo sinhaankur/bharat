@@ -61,7 +61,7 @@ html[data-skin="chassis"] {
 /* ── GUPTA — the warm default (stone + vermilion + gold + Rozha One) ── */
 html[data-skin="gupta"] {
   --bg: #f6f0e1; --surface: #efe3cc; --ink: #2a2018;
-  --accent: #c1440e; --accent-600: #a23409; --accent-700: #8a2e08; --band: #c9862b;
+  --accent: #cc8900; --accent-600: #a06b00; --accent-700: #7d5400; --band: #cc8900;
   --font-display: "Rozha One", Georgia, serif; --font-ui: "Karla", system-ui, sans-serif;
 }
 

@@ -178,9 +178,9 @@ a:hover { color: var(--brand-ink); border-color: var(--brand); }
   --chrome-muted:   #6b5c48;   /* muted */
   --chrome-line:    #3a2c1e;   /* 2px rule */
   --chrome-hair:    rgba(58,44,30,.28);
-  --chrome-accent:  #c1440e;   /* vermilion — CTA, active, hover */
-  --chrome-accent-600: #a23409;
-  --chrome-band:    #c9862b;   /* gold seal-ring + footer accent */
+  --chrome-accent:  #cc8900;   /* HOUSE GOLD (Atomic Design System) — CTA, active, hover */
+  --chrome-accent-600: #a06b00;
+  --chrome-band:    #cc8900;   /* house gold — seal-ring + footer accent */
   --chrome-foot:    #38221a;   /* dark-brown footer ground */
   --chrome-foot-tx: #f0e6d0;   /* footer cream text */
   --chrome-ui:      'Karla', system-ui, -apple-system, sans-serif;

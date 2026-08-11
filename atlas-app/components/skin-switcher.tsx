@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react'
 export type Skin = { id: string; label: string; note: string; swatch: string; band: string }
 
 export const SKINS: Skin[] = [
-  { id: 'gupta', label: 'Gupta', note: 'the warm default — stone & vermilion', swatch: '#c1440e', band: '#c9862b' },
+  { id: 'gupta', label: 'Gupta', note: 'the warm default — stone & house gold', swatch: '#cc8900', band: '#cc8900' },
   { id: 'chassis', label: 'Modernist', note: 'the bare structural chassis — red on grey', swatch: '#ec3013', band: '#ec3013' },
   { id: 'kashmir', label: 'Kashmir', note: 'valley stone · saffron · trefoil', swatch: '#d98a2b', band: '#6e7f8c' },
   { id: 'rajasthan', label: 'Rajasthan', note: 'pink sandstone · leheriya · indigo', swatch: '#c9345a', band: '#2a4a7a' },
