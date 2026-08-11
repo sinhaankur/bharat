@@ -68,8 +68,33 @@
     .at-ic-row .ic-yr { font-family: var(--font-mono, monospace); font-size: 10px; color: var(--ink-soft); margin-left: 0.5rem; }
     .at-ic-row .ic-note { font-size: 0.82rem; color: var(--ink-soft); line-height: 1.45; grid-column: 1 / -1; margin-top: 0.15rem; }
     .at-ic-row .ic-d { font-family: Georgia, serif; font-weight: 700; font-size: 1.1rem; color: var(--accent); white-space: nowrap; }
-    .at-ic-foot { margin-top: 0.9rem; font-size: 0.82rem; }
+    .at-ic-foot { margin-top: 1.2rem; font-size: 0.82rem; }
     .at-ic-foot a { color: var(--accent); }
+
+    /* ── Mauryan Atomic register: hero stats + tiered specimen plates ── */
+    .at-ic-head { margin-bottom: 1.6rem; }
+    .at-ic-kicker { display: block; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #cc8900; margin-bottom: 0.5rem; }
+    .at-ic-title { font-family: Georgia, serif; font-weight: 700; font-size: clamp(1.5rem, 3vw, 2.1rem); margin: 0 0 1rem; color: var(--ink); }
+    .at-ic-hero { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); border: 2px solid var(--ink); margin: 0 0 1rem; }
+    .at-ic-stat { padding: 1rem 1.1rem; border-right: 1px solid var(--rule); }
+    .at-ic-stat:last-child { border-right: 0; }
+    .at-ic-stat b { display: block; font-family: Georgia, serif; font-weight: 700; font-size: 1.8rem; color: var(--ink); line-height: 1; }
+    .at-ic-stat--big b { font-size: 2.6rem; color: var(--accent); }
+    .at-ic-stat span { display: block; font-size: 0.74rem; color: var(--ink-soft); margin-top: 0.35rem; line-height: 1.35; }
+    .at-tier { margin: 1.4rem 0 0; }
+    .at-tier-h { display: flex; align-items: center; gap: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--ink); margin-bottom: 0.9rem; }
+    .at-tier-ico { color: #cc8900; flex: none; }
+    .at-tier-lbl { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ink); }
+    .at-tier-sub { font-size: 10px; color: var(--ink-soft); }
+    .at-plate-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 0; border: 1px solid var(--rule); }
+    .at-plate { padding: 0.9rem 1rem 1rem; border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); background: var(--paper); }
+    .at-plate-top { display: flex; align-items: baseline; justify-content: space-between; }
+    .at-plate-rank { font-size: 10px; color: var(--ink-soft); }
+    .at-plate-d { font-family: Georgia, serif; font-weight: 700; font-size: 1.5rem; color: var(--accent); }
+    .at-plate-d span { font-size: 0.7rem; margin-left: 1px; }
+    .at-plate-nm { font-family: Georgia, serif; font-weight: 700; font-size: 1.05rem; margin: 0.25rem 0 0.15rem; color: var(--ink); }
+    .at-plate-meta { font-size: 10px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .04em; }
+    .at-plate-note { font-size: 0.8rem; line-height: 1.5; color: var(--ink-soft); margin: 0.5rem 0 0; }
 
     /* HUMAN CLOSER — the personal beat at the end */
     .at-closer { background: #16151a; color: #ece9e3; padding: clamp(3rem, 8vh, 5rem) var(--pad-x); margin-top: 2rem; text-align: center; }
@@ -670,22 +695,45 @@
       const ind = EVENTS.filter(e => e.india_region).sort((a, b) => b.deaths_millions - a.deaths_millions);
       if (!ind.length) { host.style.display = "none"; return; }
       const total = ind.reduce((s, e) => s + (e.deaths_millions || 0), 0);
-      const rows = ind.map(e => {
+      const worstRank = Math.min(...ind.map(e => e.rank || 999));
+      // Mauryan Atomic Design System — carved from artefacts, ORGANISED IN TIERS.
+      // The subcontinent's events, tiered by scale of loss (a specimen plate each).
+      const TIERS = [
+        { key: "cat",  icon: "i-lion",     label: "Catastrophe", sub: "ten million and above", test: e => e.deaths_millions >= 10 },
+        { key: "great",icon: "i-elephant", label: "Great killing", sub: "one to ten million", test: e => e.deaths_millions >= 1 && e.deaths_millions < 10 },
+        { key: "wound",icon: "i-edict",    label: "The wound", sub: "under a million, but it cut deep", test: e => e.deaths_millions < 1 },
+      ];
+      const plate = e => {
         const span = e.year_end && e.year_end !== e.year_start ? `${yr(e.year_start)}–${yr(e.year_end)}` : yr(e.year_start);
-        return `<div class="at-ic-row">
-          <span><span class="ic-nm">${esc(e.name)}</span><span class="ic-yr">${span} · ${esc(e.india_region)}</span>
-          ${e.note ? `<div class="ic-note">${esc(e.note)}</div>` : ""}</span>
-          <span class="ic-d">${e.deaths_millions}M</span>
+        return `<article class="at-plate">
+          <div class="at-plate-top"><span class="at-plate-rank mono">#${e.rank}</span><span class="at-plate-d">${e.deaths_millions}<span>M</span></span></div>
+          <h4 class="at-plate-nm">${esc(e.name)}</h4>
+          <div class="at-plate-meta mono">${span} · ${esc(e.india_region)}</div>
+          ${e.note ? `<p class="at-plate-note">${esc(e.note)}</p>` : ""}
+        </article>`;
+      };
+      const tiersHtml = TIERS.map(t => {
+        const items = ind.filter(t.test);
+        if (!items.length) return "";
+        return `<div class="at-tier">
+          <div class="at-tier-h"><svg class="at-tier-ico" width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><use href="#${t.icon}"></use></svg>
+            <span class="at-tier-lbl mono">${t.label}</span><span class="at-tier-sub mono">${t.sub}</span></div>
+          <div class="at-plate-grid">${items.map(plate).join("")}</div>
         </div>`;
       }).join("");
       host.innerHTML =
-        `<h3>The subcontinent's share</h3>
-         <p class="ic-sub">Of the hundred, ${ind.length} struck the Indian subcontinent — roughly
-         <b>${Math.round(total)} million</b> dead across two-and-a-half millennia: conquest, famine under
-         colonial rule, and the wound of Partition. Deadliest first.</p>
-         ${rows}
-         <p class="at-ic-foot">These link to the <a href="heritage-atlas.html">heritage atlas</a> —
-         where a temple's destruction can be read against the era that took it.</p>`;
+        `<div class="at-ic-head">
+           <span class="at-ic-kicker mono">Mauryan register · carved from artefacts, organised in tiers</span>
+           <h3 class="at-ic-title">The subcontinent's share of the hundred</h3>
+           <div class="at-ic-hero">
+             <div class="at-ic-stat"><b>${ind.length}</b><span>of the hundred struck here</span></div>
+             <div class="at-ic-stat at-ic-stat--big"><b>~${Math.round(total)}M</b><span>dead across two-and-a-half millennia</span></div>
+             <div class="at-ic-stat"><b>#${worstRank}</b><span>the worst — famine under colonial rule</span></div>
+           </div>
+           <p class="ic-sub">Conquest, famine under colonial rule, and the wound of Partition — the events that fell on this soil, set as specimen plates and stacked by the scale of loss.</p>
+         </div>
+         ${tiersHtml}
+         <p class="at-ic-foot">Each links to the era in the <a href="heritage-atlas.html">heritage atlas</a> — where a temple's destruction can be read against the age that took it.</p>`;
     }
 
     function renderNote() {
