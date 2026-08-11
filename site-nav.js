@@ -343,6 +343,7 @@
     ensureSprite();   // Mauryan icons for the section nav
     ensureScript("analytics-script", "analytics.js");   // privacy analytics + visit count (inert until configured)
     ensureScript("ads-script", "ads.js");               // AdSense (inert until approved + enabled)
+    ensureScript("related-script", "related.js");       // "Related — read next" cross-links
     // EMBED MODE: when a page is loaded inside the hero app (?embed=1), suppress the site
     // header + footer so the hero's own chrome is the only navigation. The page's own
     // content fills the panel. A body class lets pages trim their own margins if they like.
