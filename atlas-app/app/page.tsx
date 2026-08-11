@@ -41,27 +41,33 @@ export default function HomePage() {
 
       <SiteHeader />
 
-      <main style={{ maxWidth: 'var(--wrap)', margin: '0 auto', padding: '0 var(--edge)' }}>
-        {/* hero — modular grid rules behind the headline */}
-        <section className="hm-hero">
-          <div className="hm-rule" style={{ left: '25%' }} data-anim />
-          <div className="hm-rule" style={{ left: '50%' }} data-anim />
-          <div className="hm-rule" style={{ left: '75%' }} data-anim />
+      {/* GRAND CINEMATIC HERO — a heritage-textured, gilded arrival, full-bleed */}
+      <section className="hm-cinema" aria-label="Welcome">
+        {/* layered ancient texture backdrop, slow ken-burns drift */}
+        <svg className="hm-cinema-bg" aria-hidden="true"><rect width="100%" height="100%" fill="url(#jali)" /></svg>
+        <div className="hm-cinema-wash" aria-hidden="true" />
+        <div className="hm-cinema-in">
+          <div className="hm-seal" data-seq aria-hidden="true">
+            <svg width="64" height="64" viewBox="0 0 100 100"><use href="#seal-ring" /></svg>
+          </div>
+          <div className="hm-kicker" data-seq>Since antiquity · भारत · a civilisation, mapped</div>
           <h1 className="hm-h1">
             <span data-seq>Bharat,</span>
             <span data-seq>district by district.</span>
           </h1>
           <p className="hm-lede" data-seq>
-            594 districts — their boundaries, censuses, and measured survey plates — in one archive that
-            opens like a book of maps.
+            Five thousand years of a civilisation — its money and land, its temples, scripts and names —
+            laid over 594 districts in one archive that opens like a book of maps. Sourced, or it&apos;s a gap.
           </p>
           <div className="hm-cta" data-seq>
-            <a className="btn btn-primary" href={classicMapHref()}>Enter Bharat</a>
+            <a className="btn btn-primary btn-lg" href={classicMapHref()}>Enter Bharat →</a>
             <a className="btn btn-ghost" href="#atlas">What it holds</a>
           </div>
-        </section>
+        </div>
+        <div className="hm-ornament" aria-hidden="true"><svg height="20" width="100%"><rect width="100%" height="20" fill="url(#floral)" /></svg></div>
+      </section>
 
-        <div className="hm-hr" data-anim />
+      <main style={{ maxWidth: 'var(--wrap)', margin: '0 auto', padding: '0 var(--edge)' }}>
 
         {/* stats — animated red counters */}
         <section id="data" aria-label="The atlas, by the numbers" style={{ padding: '70px 0' }}>
@@ -108,6 +114,29 @@ export default function HomePage() {
         .hm-intro-t span { display: block; opacity: 0; animation: hmRise .7s cubic-bezier(.2,.6,.2,1) .3s forwards; }
         .hm-intro-t span:last-child { animation-delay: .45s; }
         @media (prefers-reduced-motion: reduce) { .hm-intro { display: none !important; } }
+
+        /* ── GRAND CINEMATIC HERO — heritage texture + gilded wash + slow drift ── */
+        @keyframes hmDrift { from { transform: scale(1.08) translate(0,0); } to { transform: scale(1.16) translate(-1.5%, -1%); } }
+        .hm-cinema { position: relative; overflow: hidden; border-bottom: 2px solid var(--ink);
+          background: radial-gradient(120% 100% at 50% 0%, #f6efdf 0%, var(--bg) 55%, #ece0c6 100%); }
+        .hm-cinema-bg { position: absolute; inset: -8%; width: 116%; height: 116%; color: var(--band);
+          opacity: .14; animation: hmDrift 26s ease-in-out infinite alternate; }
+        .hm-cinema-wash { position: absolute; inset: 0;
+          background: radial-gradient(90% 120% at 15% 10%, transparent 40%, color-mix(in srgb, var(--accent) 10%, transparent) 100%),
+                      linear-gradient(180deg, transparent 60%, color-mix(in srgb, var(--ink) 8%, transparent) 100%); pointer-events: none; }
+        .hm-cinema-in { position: relative; max-width: var(--wrap); margin: 0 auto; padding: clamp(64px, 12vh, 128px) var(--edge) clamp(56px, 9vh, 104px); }
+        .hm-seal { color: var(--accent); margin-bottom: 22px; }
+        .hm-seal svg { filter: drop-shadow(0 3px 8px color-mix(in srgb, var(--accent) 30%, transparent)); }
+        .hm-kicker { font-family: var(--font-mono); font-size: 12px; letter-spacing: .22em; text-transform: uppercase;
+          color: var(--accent-700); margin-bottom: 18px; }
+        .hm-cinema .hm-h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(46px, 8vw, 108px);
+          line-height: 1.0; letter-spacing: -0.015em; margin: 0; color: var(--ink);
+          text-shadow: 0 1px 0 color-mix(in srgb, #fff 50%, transparent); }
+        .hm-cinema .hm-lede { font-size: clamp(16px, 1.6vw, 20px); line-height: 1.7; max-width: 60ch; margin: 30px 0 0; color: color-mix(in srgb, var(--ink) 82%, transparent); }
+        .hm-cinema .hm-cta { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 34px; }
+        .hm-ornament { position: relative; height: 20px; color: var(--band); opacity: .55; overflow: hidden; }
+        @media (prefers-reduced-motion: reduce) { .hm-cinema-bg { animation: none; } }
+
         .hm-hero { position: relative; padding: 112px 0 84px; }
         .hm-rule { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--line); opacity: .35; }
         .hm-h1 { position: relative; font-family: var(--font-display); font-weight: 800; font-size: clamp(42px, 6.2vw, 84px); line-height: 1.06; letter-spacing: -0.02em; margin: 0 0 0 -0.058em; }
