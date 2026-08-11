@@ -23,6 +23,21 @@
     .kb-card { border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--card); padding: 0.7rem 0.85rem; }
     .kb-card h3 { margin: 0 0 0.35rem; font-size: 0.95rem; }
     .kb-card p { margin: 0; font-size: 0.82rem; color: var(--muted-foreground); line-height: 1.5; }
+    /* intuitive dimension cards: what it holds + coverage bar + sourced% + tier */
+    .kb-dimgrid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+    .kb-dimcard { display: flex; flex-direction: column; gap: 0.5rem; transition: transform .12s cubic-bezier(.2,.7,.2,1), box-shadow .16s ease, border-color .16s ease; }
+    .kb-dimcard:hover { transform: translateY(-2px); border-color: var(--warm); box-shadow: 3px 4px 0 rgba(0,0,0,.12); }
+    .kb-dim-top { display: flex; align-items: center; gap: 0.5rem; }
+    .kb-dim-emoji { font-size: 1.15rem; }
+    .kb-dimcard h3 { margin: 0; font-size: 0.98rem; }
+    .kb-dim-bar { height: 6px; background: var(--muted); border-radius: 999px; overflow: hidden; }
+    .kb-dim-bar span { display: block; height: 100%; background: linear-gradient(90deg, var(--warm), var(--accent)); border-radius: 999px; }
+    .kb-dim-meta { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 10.5px; color: var(--muted-foreground); }
+    .kb-dim-meta b { color: var(--foreground); }
+    .kb-dim-meta .ok { color: oklch(0.55 0.14 150); font-weight: 600; }
+    .kb-dim-meta .mid { color: oklch(0.6 0.14 80); font-weight: 600; }
+    .kb-dim-meta .gap { color: oklch(0.55 0.18 30); font-weight: 600; }
+    .kb-dim-note { font-size: 9.5px; color: var(--muted-foreground); font-style: italic; line-height: 1.4; border-top: 1px dashed var(--border); padding-top: 5px; }
     .kb-tier { font-family: var(--font-mono); font-size: 9px; padding: 1px 6px; border-radius: 999px; border: 1px solid currentColor; }
     .kb-t1 { color: oklch(0.48 0.160 150); } .kb-t2 { color: oklch(0.48 0.130 200); } .kb-t3 { color: oklch(0.48 0.130 90); } .kb-t4 { color: oklch(0.48 0.160 40); }
     .kb-state { border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 0.5rem; background: var(--card); }
@@ -175,13 +190,56 @@
 
     // 1. Dimensions reference (what each layer is)
     function dimensionsSection(led) {
+      // Compute REAL coverage per dimension from the ledger, so each card says what the
+      // dimension holds, how many district-blocks carry it, how well it's sourced, and its
+      // best source tier — an intuitive read, not just an emoji + a label.
+      const stat = {};   // k -> { blocks, sourced, figureGaps, bestTier }
+      const bump = (k, dim) => {
+        const st = stat[k] || (stat[k] = { blocks: 0, sourced: 0, figureGaps: 0, bestTier: 9 });
+        st.blocks++;
+        // "sourced" = the dimension carries a citation (URL or tier) or a real level.
+        // A district-level FIGURE may still be a gap (figure_gap) even when the dimension
+        // is sourced at a coarser resolution (state / proxy) — we count that separately,
+        // it's honesty about resolution, not an unsourced blank.
+        const isSourced = dim && (dim.source || dim.source_tier || (dim.level && dim.level !== "gap"));
+        if (isSourced) st.sourced++;
+        if (dim && dim.figure_gap) st.figureGaps++;
+        // best tier: an explicit source_tier, else infer tier 2 (gov HTML) from a source URL
+        const tier = (dim && dim.source_tier) || (dim && dim.source ? 2 : 0);
+        if (tier && tier < st.bestTier) st.bestTier = tier;
+      };
+      for (const s of Object.values(led.states || {})) {
+        for (const d of Object.values(s.districts || {})) {
+          const dims = d.dimensions || {};
+          if (d.ledger || d.departments) bump("money", { source: true, source_tier: d.departments_source_tier || 1 });
+          for (const [k, dim] of Object.entries(dims)) bump(k, dim);
+        }
+      }
+      const tierName = { 1: "gov PDF", 2: "gov HTML", 3: "Wikipedia", 4: "news" };
       const cards = Object.entries(DIM_LABELS).map(([k, label]) => {
         const [emoji, ...rest] = label.split(" ");
-        return `<div class="kb-card kb-row" data-k="${esc(k + ' ' + label)}">
-          <h3>${esc(emoji)} ${esc(k)}</h3><p>${esc(rest.join(" ").replace(/^[—-]\s*/, ""))}</p></div>`;
+        const title = rest.join(" ").replace(/^[—-]\s*/, "");
+        const [name, desc] = title.split("—").map(x => x.trim());
+        const st = stat[k] || { blocks: 0, sourced: 0, figureGaps: 0, bestTier: 9 };
+        const pct = st.blocks ? Math.round((st.sourced / st.blocks) * 100) : 0;
+        const tier = st.bestTier <= 4 ? `tier ${st.bestTier} · ${tierName[st.bestTier]}` : "no source yet";
+        // figure-gap note: dimension sourced, but district-level figure coarser (state/proxy)
+        const coarse = st.figureGaps >= st.blocks && st.blocks > 0;
+        return `<div class="kb-card kb-dimcard kb-row" data-k="${esc(k + ' ' + label)}">
+          <div class="kb-dim-top"><span class="kb-dim-emoji" aria-hidden="true">${esc(emoji)}</span>
+            <h3>${esc(name || k)}</h3></div>
+          <p>${esc(desc || title)}</p>
+          <div class="kb-dim-bar" title="${pct}% of ${st.blocks} district-blocks are sourced"><span style="width:${pct}%"></span></div>
+          <div class="kb-dim-meta mono">
+            <span><b>${st.blocks.toLocaleString("en-IN")}</b> districts</span>
+            <span class="${pct >= 60 ? 'ok' : pct > 0 ? 'mid' : 'gap'}">${pct}% sourced</span>
+            <span class="kb-tier kb-t${st.bestTier <= 4 ? st.bestTier : ''}">${esc(tier)}</span>
+          </div>
+          ${coarse ? `<div class="kb-dim-note mono">Sourced at state / proxy level — exact district figure is an honest gap.</div>` : ""}</div>`;
       }).join("");
       return `<section class="kb-sec" id="dimensions"><h2>Data dimensions <span class="kb-count-lbl"></span></h2>
-        <div class="kb-grid">${cards}</div></section>`;
+        <p class="kb-empty" style="padding:0 0 0.7rem">The nine lenses we read every district through. Each card: what it holds, how many districts carry it, how much is sourced (vs an honest gap), and the best source tier behind it.</p>
+        <div class="kb-grid kb-dimgrid">${cards}</div></section>`;
     }
 
     // 2. Sources index — every distinct source URL + its tier, across the data
