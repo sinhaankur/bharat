@@ -25,7 +25,7 @@ const NAV: { label: string; href: string; ext?: boolean; match?: string[]; icon:
     icon: <><path d="M12 3 4 9h16z" /><path d="M5 9v10M12 9v10M19 9v10" /><path d="M3 19h18" /></>,
   },
   {
-    label: 'Canvas', href: '/explore', match: ['/explore', '/engines', '/d', '/data', '/register'],
+    label: 'Canvas', href: '/canvas', match: ['/canvas', '/explore', '/engines', '/d', '/data', '/register'],
     icon: <><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /></>,
   },
 ]
