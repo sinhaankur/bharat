@@ -62,6 +62,7 @@ const SECTIONS: Section[] = [
   { label: 'Design', href: '/design-systems', app: true, icon: 'i-lotus', items: [
     { t: 'India by Design Systems', href: '/design-systems', app: true },
     { t: 'The canvas', href: '/canvas', app: true },
+    { t: 'Components — the library', href: '/components', app: true },
     { t: 'Design system', href: c('design-system') },
   ]},
   { label: 'Data', href: '/data', app: true, icon: 'i-jali', items: [
