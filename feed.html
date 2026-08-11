@@ -77,6 +77,16 @@
     .fd-lean i { display: block; height: 100%; }
     .lean-left{background:oklch(0.62 0.17 250)} .lean-cleft{background:oklch(0.68 0.12 220)}
     .lean-centre{background:oklch(0.72 0.03 250)} .lean-cright{background:oklch(0.48 0.130 55)}
+    /* the engines-on-top signal row: sentiment · life impacted · officials */
+    .fd-sig { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.5rem; }
+    .fd-sig > span { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.02em; padding: 2px 7px; border-radius: 999px; border: 1px solid var(--border); color: var(--muted-foreground); line-height: 1.5; }
+    .fd-sig .fd-sig-sent { text-transform: uppercase; font-weight: 600; border: none; }
+    .sent-pos { background: oklch(0.92 0.06 150); color: oklch(0.40 0.14 150); }
+    .sent-neg { background: oklch(0.93 0.06 30); color: oklch(0.45 0.17 30); }
+    .sent-neu { background: var(--muted); color: var(--muted-foreground); }
+    .sent-mix { background: oklch(0.93 0.05 80); color: oklch(0.45 0.13 80); }
+    .fd-sig .fd-sig-life { color: var(--foreground); border-color: var(--border-strong); }
+    .fd-sig .fd-sig-off { color: oklch(0.48 0.13 300); border-color: oklch(0.6 0.10 300); }
     .lean-right{background:oklch(0.66 0.20 30)} .lean-state{background:oklch(0.60 0.10 300)} .lean-unknown{background:oklch(0.35 0 0)}
     .fd-lean-key { display: flex; flex-wrap: wrap; gap: 0.5rem 0.7rem; margin-top: 0.35rem; }
     .fd-lean-key span { font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); display: inline-flex; align-items: center; gap: 0.3rem; }
@@ -202,6 +212,7 @@
 
   <script src="vendor/leaflet/leaflet.js"></script>
   <script src="map-layers.js"></script>
+  <script src="feed-enrich.js"></script>
   <script>
     const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     const fmtDate = d => { if (!d) return ""; const x = new Date(d); return isNaN(x) ? d : x.toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"}); };
@@ -243,10 +254,13 @@
       fetch("india-states.geojson").then(r => r.ok ? r.json() : null).catch(() => null),
       fetch("district-centroids.json").then(r => r.ok ? r.json() : null).catch(() => null),
       fetch("outlets.json").then(r => r.ok ? r.json() : null).catch(() => null),
-    ]).then(([feed, led, safety, pop, geo, dcent, outlets]) => {
+      fetch("officials.json").then(r => r.ok ? r.json() : null).catch(() => null),
+    ]).then(([feed, led, safety, pop, geo, dcent, outlets, officials]) => {
       LED = led; SAFETY = safety; POP = pop;
       OUTLETS = (outlets && outlets.outlets) || {};
       FUNDING_META = (outlets && outlets._meta && outlets._meta.funding_types) || {};
+      // the enrichment engines (sentiment · officials · life-impact) run on top of the feed
+      if (window.FeedEnrich) window.FeedEnrich.init(officials);
       CENTROIDS = geo ? stateCentroids(geo) : {};
       // district centroids keyed lower-case "state|district" for case-insensitive lookup
       if (dcent && dcent.centroids) for (const [k, v] of Object.entries(dcent.centroids)) DCENT[k.toLowerCase()] = v;
@@ -661,9 +675,23 @@
       // mark each source's bias level inline: a lean chip + a funding swatch
       const marks = `<span class="lean-tag ${lean.cls}" style="color:oklch(0.15 0 0)">${esc(lean.short)}</span>`
         + (fund ? ` <i class="${fund.cls}" style="width:8px;height:8px;border-radius:2px;display:inline-block" title="${esc(fund.short)}-funded${reg.owner ? " · " + reg.owner : ""}"></i>` : "");
+      // the engines on top: sentiment · life impacted · govt officials named
+      var sig = "";
+      if (window.FeedEnrich) {
+        var e = window.FeedEnrich.enrich(it);
+        var parts = [];
+        parts.push(`<span class="fd-sig-sent ${e.sentiment.cls}" title="Story tone, read from the text (lexicon)">${e.sentiment.tone}</span>`);
+        if (e.life) parts.push(`<span class="fd-sig-life" title="Who this touches">◉ ${esc(e.life)}</span>`);
+        if (e.officials && e.officials.length) {
+          var o = e.officials[0];
+          parts.push(`<span class="fd-sig-off" title="Government figure named in the story — attributed, not an accusation">⚖ ${esc(o.name || o.post)}${o.name && o.post ? " · " + esc(o.post) : ""}</span>`);
+        }
+        sig = `<div class="fd-sig">${parts.join("")}</div>`;
+      }
       return `<a class="${small ? "" : "fd-top"}" href="${esc(it.url || "#")}" target="_blank" rel="noopener">
         <div class="t">${esc(it.headline || "(untitled)")} ↗</div>
         <div class="m">${marks} ${esc(it.outlet || "unknown outlet")}${fund && reg.owner ? ` <span style="opacity:.7">(${esc(reg.owner)})</span>` : ""} · ${esc(fmtDate(it.published_at))}</div>
+        ${sig}
       </a>`;
     }
 
