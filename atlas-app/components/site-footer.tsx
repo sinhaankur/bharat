@@ -6,33 +6,37 @@ import { classicMapHref, classicHref } from '@/lib/links'
 // register (ink ground, cream text, gold band), a "Follow the money" newsletter, the
 // Bharat Logo, Atlas / Heritage / Trust columns, a sawtooth band, and the 8-script
 // baseline. The dark ground stays constant; the gold band follows the active skin.
-const COLS: { label: string; icon: React.ReactNode; links: { t: string; href: string; ext?: boolean }[] }[] = [
+// Columns wear the Mauryan sprite icons (public sprite, viewBox 0 0 32 32) — a coin for
+// the money atlas, a stupa for heritage, an edict for the trust/sources column — and each
+// link carries its own line icon so the footer is visual and scannable, not a text list.
+type FLink = { t: string; href: string; ext?: boolean; icon: string }
+const COLS: { label: string; icon: string; links: FLink[] }[] = [
   {
     label: 'Atlas',
-    icon: <><path d="M9 3 3.6 5v16L9 19l6 2 5.4-2V3L15 5 9 3z" /><path d="M9 3v16M15 5v16" /></>,
+    icon: 'i-coin',
     links: [
-      { t: 'Home', href: '/' },
-      { t: 'Explore & query', href: '/explore' },
-      { t: 'The engines', href: '/engines' },
-      { t: 'The map', href: classicMapHref(), ext: true },
+      { t: 'Home', href: '/', icon: 'i-torana' },
+      { t: 'Explore & query', href: '/explore', icon: 'i-jali' },
+      { t: 'The engines', href: '/engines', icon: 'i-sixarm' },
+      { t: 'The map', href: classicMapHref(), ext: true, icon: 'i-coin' },
     ],
   },
   {
     label: 'Heritage',
-    icon: <><path d="M12 3 4 9h16z" /><path d="M5 9v10M12 9v10M19 9v10" /><path d="M3 19h18" /></>,
+    icon: 'i-stupa',
     links: [
-      { t: 'India by Design Systems', href: '/design-systems' },
-      { t: 'Temple in 3D', href: '/3d' },
-      { t: 'Heritage sites', href: '/heritage/ranakpur-jain-temple' },
+      { t: 'India by Design Systems', href: '/design-systems', icon: 'i-lotus' },
+      { t: 'Temple in 3D', href: '/3d', icon: 'i-chaitya' },
+      { t: 'Heritage sites', href: '/heritage/ranakpur-jain-temple', icon: 'i-pillar' },
     ],
   },
   {
     label: 'Trust',
-    icon: <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />,
+    icon: 'i-edict',
     links: [
-      { t: 'Every source', href: '/data' },
-      { t: 'The register', href: '/register' },
-      { t: 'References', href: classicHref('references'), ext: true },
+      { t: 'Every source', href: '/data', icon: 'i-edict' },
+      { t: 'The register', href: '/register', icon: 'i-bell' },
+      { t: 'References', href: classicHref('references'), ext: true, icon: 'i-tree' },
     ],
   },
 ]
@@ -61,14 +65,21 @@ export default function SiteFooter() {
         {COLS.map((col) => (
           <nav key={col.label} aria-label={col.label} className="af-col">
             <span className="af-col-h">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{col.icon}</svg>
+              <svg width="16" height="16" viewBox="0 0 32 32" aria-hidden="true"><use href={`#${col.icon}`} /></svg>
               {col.label}
             </span>
-            {col.links.map((l) =>
-              l.ext
-                ? <a key={l.t} href={l.href}>{l.t}</a>
-                : <Link key={l.t} href={l.href}>{l.t}</Link>
-            )}
+            {col.links.map((l) => {
+              const inner = (
+                <>
+                  <svg className="af-lico" width="15" height="15" viewBox="0 0 32 32" aria-hidden="true"><use href={`#${l.icon}`} /></svg>
+                  <span>{l.t}</span>
+                  {l.ext && <span className="af-lext" aria-hidden="true">↗</span>}
+                </>
+              )
+              return l.ext
+                ? <a key={l.t} href={l.href} className="af-link">{inner}</a>
+                : <Link key={l.t} href={l.href} className="af-link">{inner}</Link>
+            })}
           </nav>
         ))}
       </div>
@@ -95,9 +106,14 @@ export default function SiteFooter() {
         .af-sub { background: var(--band); color: #2a1610; border: 0; padding: 11px 20px; font: 700 14px var(--font-ui); cursor: pointer; }
         .af-cols { max-width: 1240px; margin: 0 auto; padding: 40px var(--edge) 46px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 38px 30px; }
         .af-tag { font-style: italic; font-size: 13.5px; color: rgba(240,230,208,.75); margin: 16px 0 0; }
-        .af-col { display: flex; flex-direction: column; gap: 9px; }
-        .af-col-h { display: inline-flex; align-items: center; gap: 7px; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--band); border-bottom: 1px solid color-mix(in srgb, var(--band) 40%, transparent); padding-bottom: 8px; margin-bottom: 4px; }
-        .af-col a { font-size: 14px; line-height: 22px; }
+        .af-col { display: flex; flex-direction: column; gap: 2px; }
+        .af-col-h { display: inline-flex; align-items: center; gap: 8px; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--band); border-bottom: 1px solid color-mix(in srgb, var(--band) 40%, transparent); padding-bottom: 9px; margin-bottom: 8px; }
+        .af-col-h svg { color: var(--band); }
+        .af-link { display: inline-flex; align-items: center; gap: 9px; font-size: 14px; line-height: 1; padding: 6px 8px 6px 0; margin-left: -2px; border-radius: 0; transition: color .14s ease, transform .12s cubic-bezier(.2,.7,.2,1); }
+        .af-link:hover { transform: translateX(3px); }
+        .af-lico { flex: none; color: color-mix(in srgb, var(--chrome-foot-tx, #f0e6d0) 55%, var(--band)); opacity: .8; transition: color .14s ease, opacity .14s ease; }
+        .af-link:hover .af-lico { color: var(--band); opacity: 1; }
+        .af-lext { font-size: 11px; opacity: .5; }
         .af-saw { height: 10px; background-image: conic-gradient(from 135deg at 50% 0%, color-mix(in srgb, var(--band) 55%, transparent) 0deg 90deg, transparent 90deg 360deg); background-size: 14px 10px; background-repeat: repeat-x; }
         .af-base { max-width: 1240px; margin: 0 auto; padding: 16px var(--edge) 22px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 12.5px; color: rgba(240,230,208,.6); border-top: 1px solid color-mix(in srgb, var(--band) 30%, transparent); }
         .af-scripts { font-size: 15px; letter-spacing: .4em; color: rgba(240,230,208,.8); }
