@@ -87,7 +87,7 @@ export default function SiteHeader() {
 
   return (
     <nav className="ah" aria-label="Global header">
-      <Link href="/" className="ah-brand" aria-label="Bharat — home"><BharatLogo size={38} /></Link>
+      <Link href="/" className="ah-brand" aria-label="Bharat — home"><BharatLogo size={38} tagline="INDIC DESIGNS" /></Link>
 
       {/* desktop grouped nav */}
       <div className="ah-nav">
@@ -104,6 +104,7 @@ export default function SiteHeader() {
       <div className="ah-actions">
         <button className="ah-search" onClick={() => window.dispatchEvent(new Event('atlas:open-search'))} aria-label="Search the atlas">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m16.5 16.5 4.5 4.5" /></svg>
+          <span className="ah-search-label">Search the atlas</span>
           <span className="ah-search-key">/</span>
         </button>
         <SkinSwitcher />
@@ -152,10 +153,11 @@ export default function SiteHeader() {
         .ah-mitem:hover { color: var(--accent); background: color-mix(in srgb, var(--band) 15%, transparent); }
         .ah-ext { font-size: .85em; opacity: .5; }
         .ah-actions { display: flex; align-items: center; gap: 12px; margin-left: auto; }
-        .ah-search { display: flex; align-items: center; gap: 8px; border: 1.5px solid var(--line); background: transparent;
-                     color: var(--muted); padding: 8px 10px; cursor: pointer; }
+        .ah-search { display: flex; align-items: center; gap: 10px; border: 1.5px solid var(--line); background: transparent;
+                     color: var(--muted); padding: 8px 12px; cursor: pointer; min-width: 170px; font: 400 12.5px var(--font-ui); }
         .ah-search:hover { border-color: var(--ink); color: var(--ink); }
-        .ah-search-key { border: 1px solid var(--line); padding: 0 5px; font: 400 10.5px var(--font-mono); }
+        .ah-search-label { white-space: nowrap; }
+        .ah-search-key { margin-left: auto; border: 1px solid var(--line); padding: 0 5px; font: 400 10.5px var(--font-mono); }
         .ah-cta { display: inline-block; background: var(--accent); color: var(--surface); padding: 9px 16px;
                   font: 600 13.5px var(--font-ui); text-decoration: none; transition: background .16s ease, transform .12s cubic-bezier(.2,.7,.2,1), box-shadow .16s ease; }
         .ah-cta:hover { background: var(--accent-600); color: var(--surface); transform: translateY(-1px); box-shadow: 3px 4px 0 rgba(42,32,24,.25); }
