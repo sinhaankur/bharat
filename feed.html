@@ -17,6 +17,7 @@
   <meta name="twitter:image" content="https://sinhaankur.github.io/bharat/og-image.png" />
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="cinematic-hero.css" />
   <link rel="stylesheet" href="theme-mauryan.css" />
   <style>
     .fd-wrap { max-width: 1080px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; }
@@ -161,16 +162,22 @@
   <div id="site-nav"></div>
 
   <main class="fd-wrap">
-    <header class="fd-head">
+    <header class="fd-head ch-hero">
+      <svg class="ch-hero-bg" aria-hidden="true"><rect width="100%" height="100%" fill="url(#jali-tile)" /></svg>
+      <div class="ch-hero-in">
+      <svg class="ch-hero-seal" width="52" height="52" viewBox="0 0 100 100" aria-hidden="true"><use href="#i-chakra" /></svg>
       <div class="eyebrow">The feed · place by place · bias vs reality</div>
-      <h1 class="display">News, <em>place by place</em></h1>
-      <p>Every place gathers the news covering it — split by <b>who's telling it</b> (media lean,
+      <h1 class="display ch-hero-h1">News, <em>place by place</em></h1>
+      <p class="ch-hero-lede">Every place gathers the news covering it — split by <b>who's telling it</b> (media lean,
       left→right) and <b>who funds them</b> (owner / funding type). Beside the coverage sits the
       <b>reality</b>: population, per-capita money, crime and prison figures — sourced or marked a
       gap, never invented.</p>
       <p class="fd-thesis">History is written by the winner, and a "fact" can be disputable depending
       on who won. So we separate the two: the coverage is contested; the numbers underneath are not.</p>
-      <div class="fd-controls">
+      </div>
+    </header>
+
+    <div class="fd-controls">
         <div class="fd-view" id="view">
           <button data-v="cards" class="on">▦ Cards</button>
           <button data-v="map">🗺 Map</button>
