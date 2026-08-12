@@ -59,6 +59,9 @@
     .ev-date { font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); letter-spacing: 0.03em; }
     .ev-title { font-weight: 600; font-size: 0.92rem; margin: 0.1rem 0 0; color: var(--foreground); display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; }
     .ev-summary { font-size: 0.82rem; color: var(--muted-foreground); line-height: 1.55; margin: 0.3rem 0 0; }
+    .ev-context { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0.5rem 0 0; }
+    .ev-context .ctx-chip { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.01em; color: var(--muted-foreground); background: var(--muted); border: 1px solid var(--border); border-radius: 999px; padding: 2px 8px; line-height: 1.5; }
+    .ev-context .ctx-gap { color: var(--accent-ink); border-color: var(--accent); border-style: dashed; background: transparent; }
     .ev-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin-top: 0.4rem; }
     .ev-amt { font-family: var(--font-mono); font-size: 9.5px; color: var(--accent); }
     .ev-gap { font-family: var(--font-mono); font-size: 9px; color: var(--accent); font-style: italic; }
@@ -264,6 +267,23 @@
       const weak = (ps.source_tier || 9) >= 3;
       return `<a class="src-link" href="${esc(ps.url)}" target="_blank" rel="noopener" title="${esc(ps.title||"source")} (tier ${ps.source_tier})">↗</a>${weak ? `<span class="tier-warn" title="Tier ${ps.source_tier} — pending upgrade to a government PDF">⚠</span>` : ""}`;
     }
+    // more CONTEXT per event: the scheme, who it touches (severity scope), the office
+    // that answers for it, and honest flags — so each step reads as a story, not a row.
+    const OFFICE_LABEL = { collector: "the District Magistrate / Collector", dm: "the District Magistrate",
+      police_commissioner: "the Police Commissioner", municipal: "the Municipal Commissioner",
+      state: "the State government", union: "the Union ministry", chief_secretary: "the Chief Secretary" };
+    const SCOPE_WHO = { district: "this district", state: "the whole state", national: "the country",
+      block: "these blocks", city: "the city" };
+    function contextRow(e) {
+      const bits = [];
+      if (e.scheme_ref) { const sch = String(e.scheme_ref).replace(/^_/, "").replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+        bits.push(`<span class="ctx-chip" title="The scheme this money runs on">◈ ${esc(sch)}</span>`); }
+      const scope = e.severity && e.severity.people_scope;
+      if (scope) bits.push(`<span class="ctx-chip" title="Who this step touches">◉ affects ${esc(SCOPE_WHO[scope] || scope)}</span>`);
+      if (e.official_ref) bits.push(`<span class="ctx-chip" title="Who answers for this office (attributed, not an accusation)">⚖ ${esc(OFFICE_LABEL[e.official_ref] || e.official_ref)}</span>`);
+      if (e.needs_pdf_upgrade) bits.push(`<span class="ctx-chip ctx-gap" title="Currently news-sourced; a government PDF is the pending upgrade">◐ awaiting a primary source</span>`);
+      return bits.length ? `<div class="ev-context">${bits.join("")}</div>` : "";
+    }
 
     function render() {
       const fState = document.getElementById("f-state").value;
@@ -302,6 +322,7 @@
             <div class="ev-date">${fmtDate(e.date, e.date_precision)} · <span class="st-${e.stage}">${esc(STAGE_LABEL[e.stage]||e.stage)}</span></div>
             <div class="ev-title">${esc(e.title)}</div>
             ${e.summary ? `<div class="ev-summary">${esc(e.summary)}</div>` : ""}
+            ${contextRow(e)}
             <div class="ev-foot">
               ${severityBadge(e.severity)}
               ${e.amount_cr != null ? `<span class="ev-amt">₹${Number(e.amount_cr).toLocaleString("en-IN")} cr</span>` : (e.figure_gap ? `<span class="ev-gap">figure gap</span>` : "")}
