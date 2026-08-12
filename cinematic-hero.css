@@ -1,0 +1,59 @@
+/* cinematic-hero.css — the RESTRAINED grand hero, one place.
+   Grandeur = clean stone ground + serif display + space + one gold voice + a faint
+   corner watermark. NO muddy gradients, no vignette, no full-bleed texture. (See the
+   "cinematic-restraint" note.) Wrap a page's intro in .ch-hero and it inherits this. */
+
+.ch-hero {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+  background: var(--background);
+}
+/* a whisper of jali, top-right corner only — never full-bleed */
+.ch-hero-bg {
+  position: absolute;
+  top: -10%;
+  right: -5%;
+  width: 42%;
+  height: 120%;
+  color: var(--accent);
+  opacity: .05;
+  pointer-events: none;
+}
+.ch-hero-in {
+  position: relative;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: clamp(48px, 8vh, 92px) var(--pad-x) clamp(30px, 5vh, 52px);
+}
+.ch-hero-seal { color: var(--accent); margin-bottom: 16px; display: block; }
+.ch-hero .eyebrow, .ch-hero-kicker {
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--accent-ink, var(--accent));
+  margin: 0 0 14px;
+  display: block;
+}
+.ch-hero-h1 {
+  font-family: var(--font-display, Georgia, serif);
+  font-weight: 400;
+  font-size: clamp(32px, 5.5vw, 64px);
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  color: var(--foreground);
+  margin: 0 0 14px;
+}
+.ch-hero-h1 em { font-style: italic; color: var(--accent); }
+.ch-hero-lede {
+  font-size: clamp(15px, 1.4vw, 18px);
+  line-height: 1.7;
+  color: var(--muted-foreground);
+  max-width: 72ch;
+  margin: 0;
+}
+.ch-hero-lede a { color: var(--accent); }
+.ch-hero-lede b { color: var(--accent-ink, var(--accent)); }
+/* stats / meta rows sit under the lede with room to breathe */
+.ch-hero-in > .qt-stats, .ch-hero-in > [id="stats"] { margin-top: 22px; }
