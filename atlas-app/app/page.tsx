@@ -115,27 +115,21 @@ export default function HomePage() {
         .hm-intro-t span:last-child { animation-delay: .45s; }
         @media (prefers-reduced-motion: reduce) { .hm-intro { display: none !important; } }
 
-        /* ── GRAND CINEMATIC HERO — heritage texture + gilded wash + slow drift ── */
-        @keyframes hmDrift { from { transform: scale(1.08) translate(0,0); } to { transform: scale(1.16) translate(-1.5%, -1%); } }
-        .hm-cinema { position: relative; overflow: hidden; border-bottom: 2px solid var(--ink);
-          background: radial-gradient(120% 100% at 50% 0%, #f6efdf 0%, var(--bg) 55%, #ece0c6 100%); }
-        .hm-cinema-bg { position: absolute; inset: -8%; width: 116%; height: 116%; color: var(--band);
-          opacity: .14; animation: hmDrift 26s ease-in-out infinite alternate; }
-        .hm-cinema-wash { position: absolute; inset: 0;
-          background: radial-gradient(90% 120% at 15% 10%, transparent 40%, color-mix(in srgb, var(--accent) 10%, transparent) 100%),
-                      linear-gradient(180deg, transparent 60%, color-mix(in srgb, var(--ink) 8%, transparent) 100%); pointer-events: none; }
-        .hm-cinema-in { position: relative; max-width: var(--wrap); margin: 0 auto; padding: clamp(64px, 12vh, 128px) var(--edge) clamp(56px, 9vh, 104px); }
-        .hm-seal { color: var(--accent); margin-bottom: 22px; }
-        .hm-seal svg { filter: drop-shadow(0 3px 8px color-mix(in srgb, var(--accent) 30%, transparent)); }
-        .hm-kicker { font-family: var(--font-mono); font-size: 12px; letter-spacing: .22em; text-transform: uppercase;
-          color: var(--accent-700); margin-bottom: 18px; }
-        .hm-cinema .hm-h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(46px, 8vw, 108px);
-          line-height: 1.0; letter-spacing: -0.015em; margin: 0; color: var(--ink);
-          text-shadow: 0 1px 0 color-mix(in srgb, #fff 50%, transparent); }
-        .hm-cinema .hm-lede { font-size: clamp(16px, 1.6vw, 20px); line-height: 1.7; max-width: 60ch; margin: 30px 0 0; color: color-mix(in srgb, var(--ink) 82%, transparent); }
-        .hm-cinema .hm-cta { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 34px; }
-        .hm-ornament { position: relative; height: 20px; color: var(--band); opacity: .55; overflow: hidden; }
-        @media (prefers-reduced-motion: reduce) { .hm-cinema-bg { animation: none; } }
+        /* ── HERO — clean, quiet, confident. A faint jali watermark on the stone
+              ground, ample space, one gold accent. No murky gradients. ── */
+        .hm-cinema { position: relative; overflow: hidden; border-bottom: 1px solid var(--line); background: var(--bg); }
+        .hm-cinema-bg { position: absolute; top: -10%; right: -6%; width: 46%; height: 120%; color: var(--band);
+          opacity: .05; }                                       /* a whisper of pattern, corner only */
+        .hm-cinema-wash { display: none; }                      /* no wash — it muddied the ground */
+        .hm-cinema-in { position: relative; max-width: var(--wrap); margin: 0 auto; padding: clamp(72px, 13vh, 148px) var(--edge) clamp(56px, 9vh, 100px); }
+        .hm-seal { color: var(--accent); margin-bottom: 26px; }
+        .hm-kicker { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .24em; text-transform: uppercase;
+          color: var(--accent-700); margin-bottom: 20px; }
+        .hm-cinema .hm-h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(46px, 7.5vw, 96px);
+          line-height: 1.02; letter-spacing: -0.01em; margin: 0; color: var(--ink); }
+        .hm-cinema .hm-lede { font-size: clamp(16px, 1.4vw, 19px); line-height: 1.75; max-width: 58ch; margin: 30px 0 0; color: var(--muted); }
+        .hm-cinema .hm-cta { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 36px; }
+        .hm-ornament { display: none; }                          /* dropped — cleaner without it */
 
         .hm-hero { position: relative; padding: 112px 0 84px; }
         .hm-rule { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--line); opacity: .35; }

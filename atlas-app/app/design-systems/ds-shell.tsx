@@ -146,23 +146,18 @@ export default function DsShell() {
 
       <style>{`
         .dss { background: var(--bg); }
-        /* grand cinematic intro — heritage texture + gold vignette, ancient feel */
-        @keyframes dssDrift { from { transform: scale(1.06) translate(0,0); } to { transform: scale(1.14) translate(-1.5%,-1%); } }
-        .dss-intro { position: relative; overflow: hidden; border-bottom: 2px solid var(--ink);
-          background: radial-gradient(120% 100% at 50% 0%, #f6efdf 0%, var(--bg) 55%, #ece0c6 100%); }
-        .dss-intro-bg { position: absolute; inset: -8%; width: 116%; height: 116%; color: var(--band); opacity: .13; animation: dssDrift 30s ease-in-out infinite alternate; }
-        .dss-intro-wash { position: absolute; inset: 0; pointer-events: none;
-          background: radial-gradient(90% 120% at 12% 8%, transparent 42%, color-mix(in srgb, var(--accent) 9%, transparent) 100%); }
-        .dss-intro-in { position: relative; max-width: var(--wrap); margin: 0 auto; padding: clamp(44px,7vh,80px) var(--edge) clamp(32px,5vh,52px); }
-        .dss-intro-seal { color: var(--accent); margin-bottom: 16px; }
-        .dss-intro-seal svg { filter: drop-shadow(0 3px 8px color-mix(in srgb, var(--accent) 28%, transparent)); }
+        /* intro — clean stone ground, a faint corner watermark, one gold voice */
+        .dss-intro { position: relative; overflow: hidden; border-bottom: 1px solid var(--line); background: var(--bg); }
+        .dss-intro-bg { position: absolute; top: -10%; right: -6%; width: 44%; height: 120%; color: var(--band); opacity: .05; }
+        .dss-intro-wash { display: none; }
+        .dss-intro-in { position: relative; max-width: var(--wrap); margin: 0 auto; padding: clamp(52px,8vh,92px) var(--edge) clamp(34px,5vh,56px); }
+        .dss-intro-seal { color: var(--accent); margin-bottom: 18px; }
         .dss-h1 { font: 400 clamp(34px,6vw,72px) 'Rozha One', var(--font-display); margin: 8px 0 14px; color: var(--ink); line-height: 1.0; }
-        .dss-lede { font: 400 clamp(15px,1.5vw,18px)/1.7 var(--font-ui); color: color-mix(in srgb, var(--ink) 82%, transparent); max-width: 70ch; margin: 0; }
+        .dss-lede { font: 400 clamp(15px,1.4vw,18px)/1.75 var(--font-ui); color: var(--muted); max-width: 70ch; margin: 0; }
         .dss-lede em { font-style: italic; color: var(--ink); }
         .dss-lede b { color: var(--accent-700); }
         .dss-ip { font: 500 11.5px/1.5 var(--font-mono); color: var(--muted); max-width: 70ch; margin: 16px 0 0;
           padding-top: 10px; border-top: 1px solid var(--line); letter-spacing: .01em; }
-        @media (prefers-reduced-motion: reduce) { .dss-intro-bg { animation: none; } }
         /* the origin story on each skin card */
         .dss-skin-from { font: 400 11.5px/1.5 var(--font-ui); color: var(--muted); font-style: italic; margin-top: 3px; }
 
