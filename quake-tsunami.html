@@ -17,6 +17,7 @@
   <meta name="twitter:image" content="https://sinhaankur.github.io/bharat/og-image.png" />
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="cinematic-hero.css" />
   <style>
     .qt-wrap { max-width: 1120px; margin: 0 auto; padding: 1.6rem var(--pad-x) 5rem; }
     .qt-head h1 { margin: 0.3rem 0 0.4rem; font-size: clamp(1.7rem, 3.6vw, 2.6rem); }
@@ -76,14 +77,18 @@
   <div id="site-nav"></div>
 
   <main class="qt-wrap">
-    <header class="qt-head">
-      <div class="eyebrow">Hazard · live + historical · sourced</div>
-      <h1 class="display">Earthquake &amp; tsunami <em>tracker</em></h1>
-      <p>Live earthquakes from the <a href="https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php" target="_blank" rel="noopener">USGS public feed</a>,
-      the atlas's historical India-region catalogue (2000 quakes, 2000–2025), and a sourced record of the Indian Ocean
-      tsunamis that reached India. Circle size = magnitude; a ring marks a quake that carried a tsunami flag.
-      Official warnings come from <a href="https://tsunami.incois.gov.in" target="_blank" rel="noopener">INCOIS</a> — this page is for study, not warning.</p>
-      <div class="qt-stats" id="stats"></div>
+    <header class="qt-head ch-hero">
+      <svg class="ch-hero-bg" aria-hidden="true"><rect width="100%" height="100%" fill="url(#jali-tile)" /></svg>
+      <div class="ch-hero-in">
+        <svg class="ch-hero-seal" width="52" height="52" viewBox="0 0 100 100" aria-hidden="true"><use href="#i-chakra" /></svg>
+        <div class="eyebrow">Hazard · live + historical · sourced</div>
+        <h1 class="display ch-hero-h1">Earthquake &amp; tsunami <em>tracker</em></h1>
+        <p class="ch-hero-lede">Live earthquakes from the <a href="https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php" target="_blank" rel="noopener">USGS public feed</a>,
+        the atlas's historical India-region catalogue (2000 quakes, 2000–2025), and a sourced record of the Indian Ocean
+        tsunamis that reached India. Circle size = magnitude; a ring marks a quake that carried a tsunami flag.
+        Official warnings come from <a href="https://tsunami.incois.gov.in" target="_blank" rel="noopener">INCOIS</a> — this page is for study, not warning.</p>
+        <div class="qt-stats" id="stats"></div>
+      </div>
     </header>
 
     <div class="qt-controls">

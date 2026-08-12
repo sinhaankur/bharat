@@ -6,6 +6,7 @@
   <title>Timeline — fund stories, dated &amp; sourced</title>
   <meta name="description" content="Public-money story chains on a timeline: each fund's lifecycle (sanction → release → delay → audit → action) dated, anchored to a district, and shown with Ground News-style source coverage." />
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="cinematic-hero.css" />
   <link rel="stylesheet" href="theme-mauryan.css" />
   <style>
     .tl-wrap { max-width: 1040px; margin: 0 auto; padding: 2rem var(--pad-x) 5rem; }
@@ -101,15 +102,19 @@
 
   <div id="site-nav"></div>
 <main class="tl-wrap">
-    <header class="tl-head">
-      <div class="eyebrow">Money over time · fund story-chains</div>
-      <h1 class="display">When the money <em>moved</em> — and when it didn't</h1>
-      <p>
-        Each card is one fund's <strong>story chain</strong>: the lifecycle of public money over
-        time — sanctioned, released, delayed, flagged, acted on — every step dated and anchored to a
-        district. Where multiple outlets report a step, a <strong>coverage bar</strong> shows the
-        spread of sources (and the blindspots), Ground News–style.
-      </p>
+    <header class="tl-head ch-hero">
+      <svg class="ch-hero-bg" aria-hidden="true"><rect width="100%" height="100%" fill="url(#jali-tile)" /></svg>
+      <div class="ch-hero-in">
+        <svg class="ch-hero-seal" width="52" height="52" viewBox="0 0 100 100" aria-hidden="true"><use href="#i-chakra" /></svg>
+        <div class="eyebrow">Money over time · fund story-chains</div>
+        <h1 class="display ch-hero-h1">When the money <em>moved</em> — and when it didn't</h1>
+        <p class="ch-hero-lede">
+          Each card is one fund's <strong>story chain</strong>: the lifecycle of public money over
+          time — sanctioned, released, delayed, flagged, acted on — every step dated and anchored to a
+          district. Where multiple outlets report a step, a <strong>coverage bar</strong> shows the
+          spread of sources (and the blindspots), Ground News–style.
+        </p>
+      </div>
       <div class="tl-controls">
         <select id="f-state"><option value="">All states</option></select>
         <select id="f-scheme"><option value="">All schemes</option></select>
