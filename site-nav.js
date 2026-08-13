@@ -105,13 +105,29 @@
   // wire(), reduce-motion safe), faithful to the handoff's Bharat Logo.dc.html.
   const BHA_GLYPHS = ["ಭ", "भ", "ভ", "ਭ", "ભ", "ଭ", "భ", "ഭ"];
   const BHA_FONTS = "'Noto Sans Kannada','Noto Sans Devanagari','Noto Sans Bengali','Noto Sans Gurmukhi','Noto Sans Gujarati','Noto Sans Oriya','Noto Sans Telugu','Noto Sans Malayalam',serif";
+  // 24 fine engraved rays behind the ring — an imperial/temple sun-emblem. Built
+  // once as a path string so both the classic + React seals draw identical geometry.
+  function sealRays() {
+    let d = "";
+    for (let k = 0; k < 24; k++) {
+      const a = (k / 24) * Math.PI * 2;
+      const long = k % 2 === 0;            // alternate long/short rays
+      const r0 = 46, r1 = long ? 49.5 : 48;
+      const c = Math.cos(a), s = Math.sin(a);
+      d += `M${(50 + r0 * c).toFixed(2)} ${(50 + r0 * s).toFixed(2)}L${(50 + r1 * c).toFixed(2)} ${(50 + r1 * s).toFixed(2)}`;
+    }
+    return d;
+  }
   function sealLogo(size) {
     const s = size || 32;
     return `<svg class="bha-seal" width="${s}" height="${s}" viewBox="0 0 100 100" aria-hidden="true">
-        <circle cx="50" cy="50" r="45" fill="none" stroke="var(--chrome-band)" stroke-width="4"/>
-        <circle cx="50" cy="50" r="39" fill="none" stroke="var(--chrome-band)" stroke-width="6" stroke-dasharray="2.5 7.7"/>
+        <g class="bha-rays"><path d="${sealRays()}" stroke="var(--chrome-band)" stroke-width="1.4" stroke-linecap="round" fill="none" opacity="0.62"/></g>
+        <g class="bha-ring">
+          <circle cx="50" cy="50" r="45" fill="none" stroke="var(--chrome-band)" stroke-width="4"/>
+          <circle cx="50" cy="50" r="39" fill="none" stroke="var(--chrome-band)" stroke-width="6" stroke-dasharray="2.5 7.7"/>
+          <circle cx="50" cy="22" r="3.2" fill="currentColor"/>
+        </g>
         <text x="50" y="62" font-size="34" text-anchor="middle" fill="currentColor" data-bha="1" font-family="${BHA_FONTS}">ಭ</text>
-        <circle cx="50" cy="22" r="3.2" fill="currentColor"/>
         <path d="M34 72 Q50 64 66 72 M38 79 Q50 72 62 79" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round"/>
       </svg>`;
   }

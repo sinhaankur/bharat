@@ -200,7 +200,12 @@ a:hover { color: var(--brand-ink); border-color: var(--brand); }
 }
 /* ── brand: seal-ring + Bharat. lockup ── */
 .brand { display: flex; align-items: center; gap: 11px; text-decoration: none; color: var(--chrome-ink); }
-.bha-seal { flex: none; color: var(--chrome-ink); }
+.bha-seal { flex: none; color: var(--chrome-ink); overflow: visible; }
+/* grand seal: engraved sunburst rays + a ring that wakes on hover */
+.bha-seal .bha-rays { transform-origin: 50px 50px; transition: opacity .5s ease; opacity: .9; }
+.bha-seal .bha-ring { transform-origin: 50px 50px; transition: transform 1.1s cubic-bezier(.22,.61,.36,1); }
+.brand:hover .bha-seal .bha-ring, .sfoot-brand:hover .bha-seal .bha-ring { transform: rotate(30deg); }
+.brand:hover .bha-seal .bha-rays, .sfoot-brand:hover .bha-seal .bha-rays { opacity: 1; }
 .brand-lockup { display: flex; flex-direction: column; line-height: 1; }
 .brand-word {
   font-family: var(--chrome-display); font-size: 22px; font-weight: 400;
@@ -2518,9 +2523,13 @@ html.embed-mode .india-shell { height: 100vh; min-height: 0; }
 @media (prefers-reduced-motion: reduce) {
   .will-reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
   .brand-dot, .hero-pins circle { animation: none !important; }
+  .bha-seal .bha-ring, .bha-seal .bha-rays { transition: none !important; }
+  .brand:hover .bha-seal .bha-ring, .sfoot-brand:hover .bha-seal .bha-ring { transform: none !important; }
 }
 html[data-reduce-motion="1"] .will-reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
 html[data-reduce-motion="1"] .brand-dot, html[data-reduce-motion="1"] .hero-pins circle { animation: none !important; }
+html[data-reduce-motion="1"] .bha-seal .bha-ring, html[data-reduce-motion="1"] .bha-seal .bha-rays { transition: none !important; }
+html[data-reduce-motion="1"] .brand:hover .bha-seal .bha-ring, html[data-reduce-motion="1"] .sfoot-brand:hover .bha-seal .bha-ring { transform: none !important; }
 
 /* ============================================================
    THEME: DARK CANVAS pages (map / 3D globe / walkthroughs).
