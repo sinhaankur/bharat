@@ -74,6 +74,37 @@
     .prov-samp-val.gap { color: var(--muted-foreground); }
     .prov-scopes-inline { font-family: var(--font-mono); font-size: 10.5px; color: var(--muted-foreground); margin-top: 0.6rem; }
 
+    /* built vs proven (district coverage) */
+    .prov-built { margin: 0 0 2rem; }
+    .prov-built h2 { font-family: var(--font-sans); font-weight: 500; font-size: 16px; margin: 0 0 0.5rem; color: var(--foreground); }
+    .prov-built h2 em { font-family: var(--font-italic); font-style: italic; color: var(--muted-foreground); }
+    .prov-built-lede { font-size: 13px; color: var(--muted-foreground); line-height: 1.6; margin: 0 0 1.1rem; max-width: 760px; }
+    .prov-built-lede em { font-family: var(--font-italic); font-style: italic; }
+    .prov-built-lede a { color: var(--accent); border-bottom-color: oklch(0.55 0.20 27 / 0.4); }
+    /* the three bands */
+    .prov-bands { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; margin-bottom: 1.1rem; }
+    .prov-band { background: var(--card); padding: 0.9rem 1rem; }
+    .prov-band .num { font-family: var(--font-mono); font-size: 22px; font-weight: 500; letter-spacing: -0.01em; line-height: 1; }
+    .prov-band.deep .num { color: oklch(0.72 0.15 155); }
+    .prov-band.partial .num { color: oklch(0.70 0.12 200); }
+    .prov-band.baseline .num { color: oklch(0.62 0.03 250); }
+    .prov-band .lbl { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted-foreground); margin-top: 6px; line-height: 1.4; }
+    /* component pinned bars */
+    .prov-comp { margin-bottom: 1.1rem; }
+    .prov-comp-row { display: grid; grid-template-columns: 180px 1fr 74px; gap: 0.75rem; align-items: center; padding: 0.4rem 0; border-bottom: 1px dashed oklch(0.985 0 0 / 0.07); }
+    .prov-comp-row:last-child { border-bottom: 0; }
+    .prov-comp-name { font-family: var(--font-mono); font-size: 12px; color: var(--foreground); }
+    .prov-comp-bar { height: 8px; border-radius: 999px; background: var(--card); overflow: hidden; }
+    .prov-comp-bar .p { height: 100%; background: oklch(0.72 0.15 155); }
+    .prov-comp-num { font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); text-align: right; }
+    /* top-proven chips */
+    .prov-top { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .prov-top .cap { flex: 1 0 100%; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted-foreground); margin-bottom: 0.1rem; }
+    .prov-top-chip { font-family: var(--font-mono); font-size: 11px; border: 1px solid var(--border-strong); border-radius: 999px; padding: 4px 11px; color: var(--foreground); white-space: nowrap; }
+    .prov-top-chip b { color: oklch(0.72 0.15 155); }
+    .prov-top-chip.partial b { color: oklch(0.70 0.12 200); }
+    @media (max-width: 560px) { .prov-bands { grid-template-columns: 1fr; } .prov-comp-row { grid-template-columns: 130px 1fr 60px; } }
+
     .prov-note { background: var(--card); border: 1px solid var(--border); border-left: 3px solid oklch(0.48 0.150 155); border-radius: var(--radius-sm); padding: 1rem 1.2rem; margin: 2rem 0 0; }
     .prov-note h3 { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted-foreground); margin: 0 0 0.5rem; }
     .prov-note p { font-size: 13px; line-height: 1.6; color: var(--foreground); margin: 0 0 0.6rem; }
@@ -104,6 +135,21 @@
   <div class="prov-ratio" id="ratio"></div>
   <div class="prov-ratio-cap" id="ratioCap"></div>
 
+  <div class="prov-built" id="built">
+    <h2>Built <em>vs</em> proven — the 594&#8209;district frame</h2>
+    <p class="prov-built-lede">
+      Every district ships. But <em>built</em> and <em>proven</em> are not the same
+      thing: the frame is everywhere, the <strong>depth</strong> — a real money&#8209;flow
+      ledger, pinned geography sub&#8209;layers, a named officials roster, located news —
+      is not. This is where the atlas is genuinely proven vs. where it is still an honest,
+      gap&#8209;marked skeleton. Scored the same way the <a href="knowledge.html">map's
+      coverage facet</a> scores it, so the two never disagree.
+    </p>
+    <div class="prov-bands" id="bands"></div>
+    <div class="prov-comp" id="comp"></div>
+    <div class="prov-top" id="topProven"></div>
+  </div>
+
   <div class="prov-scopes">
     <h2>What each layer is pinned on</h2>
     <div id="scopes"></div>
@@ -129,8 +175,16 @@
     or <strong>state&#8209;official</strong> figure while the per&#8209;district number is
     a declared gap — because no official per&#8209;district series exists yet. That is
     honestly a gap, not a fabrication, and it's counted as one here.</p>
-    <p>Regenerate any time with <code>python3 gen_provenance.py</code>. It re-walks the
-    ledger and the safety layer, so the counts below always reflect the shipped data.</p>
+    <p><em>Built is not proven.</em> The <strong>Built vs proven</strong> panel above
+    counts a different thing: not "is each figure cited?" but "how deep is each of the
+    594 districts actually taken?" — a real ledger, pinned geography, elevation, a named
+    roster, located news. Most districts ship as an honest <strong>baseline</strong>
+    frame with the depth still a declared gap; that is the map to work down, district by
+    district.</p>
+    <p>Regenerate any time with <code>python3 gen_provenance.py</code> (figure-level) and
+    <code>python3 gen_coverage.py</code> (district-level → also writes
+    <code>coverage-gaps.csv</code>, one row per district with exactly which components are
+    still missing). Both re-walk the shipped data, so nothing here can drift.</p>
   </div>
 </div>
 
@@ -167,6 +221,34 @@ let DATA = null, FILTER = "all", QUERY = "";
 fetch("provenance.json").then(r => r.json()).then(d => { DATA = d; render(); })
   .catch(() => { document.getElementById("sources").innerHTML =
     '<div class="prov-empty">Could not load provenance.json — run <code>python3 gen_provenance.py</code>.</div>'; });
+
+// Built-vs-proven panel — district-level rollup (coverage.json), fetched
+// independently so it degrades on its own if the file is missing.
+fetch("coverage.json").then(r => r.json()).then(renderBuilt).catch(() => {
+  document.getElementById("built").style.display = "none";
+});
+
+function renderBuilt(cov) {
+  const t = cov.totals, b = t.bands;
+  document.getElementById("bands").innerHTML = [
+    ["deep", b.deep, "deep — real ledger + layers (≥60%)"],
+    ["partial", b.partial, "partial — some depth (30–59%)"],
+    ["baseline", b.baseline, "baseline — frame built, depth a gap (<30%)"],
+  ].map(([cls, n, l]) =>
+    `<div class="prov-band ${cls}"><div class="num">${n}</div><div class="lbl">${l}</div></div>`).join("");
+
+  document.getElementById("comp").innerHTML = (cov.components || []).map(c =>
+    `<div class="prov-comp-row">
+      <div class="prov-comp-name">${esc(c.label)}</div>
+      <div class="prov-comp-bar"><div class="p" style="width:${c.pct}%"></div></div>
+      <div class="prov-comp-num">${c.got.toLocaleString()}/${c.possible.toLocaleString()}</div>
+    </div>`).join("");
+
+  const chips = (cov.top || []).map(d =>
+    `<span class="prov-top-chip ${d.band === "deep" ? "" : "partial"}"><b>${d.pct}%</b> ${esc(d.place)}</span>`).join("");
+  document.getElementById("topProven").innerHTML =
+    `<div class="cap">Deepest-proven districts · avg across all ${t.districts} = ${t.avg_pct}%</div>${chips}`;
+}
 
 function render() {
   const cov = DATA._meta.coverage;
