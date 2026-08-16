@@ -6,14 +6,83 @@
 
 .ds-wrap { max-width: 1080px; margin: 0 auto; padding: 1.6rem var(--pad-x, 1.4rem) 6rem; }
 
-/* masthead */
-.ds-head { border-bottom: 2px solid var(--foreground); padding-bottom: var(--sp-6); margin-bottom: var(--sp-6); }
-.ds-head .eyebrow, .ds-head .ds-kicker { font-family: var(--font-mono); font-size: var(--fs-3xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); }
-.ds-head h1 { font-family: var(--font-display); font-weight: 600; font-size: var(--fs-3xl); letter-spacing: -0.02em; margin: 0.4rem 0 0.5rem; line-height: 1.02; }
-.ds-head h1 em { font-family: var(--font-italic); font-style: italic; color: var(--accent); }
-.ds-head .sub { color: var(--muted-foreground); font-size: var(--fs-md); line-height: 1.65; max-width: 66ch; }
-.ds-head .by { font-family: var(--font-mono); font-size: var(--fs-2xs); color: var(--muted-foreground); margin-top: var(--sp-4); }
+/* ============================================================
+   THE GALLERY HERO — each design system presented as a work of art
+   on a title wall. Museum-scale type, a heritage colour-band backdrop,
+   a curatorial "plate", generous air. Reduce-motion safe.
+   ============================================================ */
+.ds-head {
+  position: relative;
+  min-height: min(92vh, 860px);
+  display: flex; flex-direction: column; justify-content: center;
+  padding: clamp(3rem, 10vh, 7rem) 0 clamp(2.5rem, 7vh, 5rem);
+  margin: 0 0 var(--sp-10);
+  overflow: hidden;
+}
+/* the full-bleed heritage band behind the title wall — painted from the
+   system's OWN tokens, so it reskins with the switcher. */
+.ds-head::before {
+  content: ""; position: absolute; inset: 0 calc(50% - 50vw);
+  background:
+    radial-gradient(120% 90% at 82% 0%, color-mix(in srgb, var(--accent) 20%, transparent), transparent 60%),
+    radial-gradient(90% 80% at 0% 100%, color-mix(in srgb, var(--indigo) 16%, transparent), transparent 55%),
+    linear-gradient(180deg, color-mix(in srgb, var(--foreground) 5%, var(--background)), var(--background));
+  z-index: -2;
+}
+/* a faint incised baseline grid — the "wall" texture */
+.ds-head::after {
+  content: ""; position: absolute; inset: 0 calc(50% - 50vw); z-index: -1; pointer-events: none;
+  background-image: linear-gradient(color-mix(in srgb, var(--foreground) 4%, transparent) 1px, transparent 1px);
+  background-size: 100% 2.4rem;
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent);
+          mask-image: linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent);
+}
+
+/* curatorial eyebrow — "gallery" label */
+.ds-head .eyebrow, .ds-head .ds-kicker {
+  font-family: var(--font-mono); font-size: var(--fs-2xs); text-transform: uppercase;
+  letter-spacing: 0.28em; color: var(--accent); display: inline-flex; align-items: center; gap: 0.7rem; }
+.ds-head .ds-kicker::before { content: ""; width: clamp(28px, 6vw, 64px); height: 2px; background: var(--accent); display: inline-block; }
+
+/* the title — monumental display serif */
+.ds-head h1 {
+  font-family: var(--font-display); font-weight: 500;
+  font-size: clamp(3rem, 9.5vw, 8.5rem); letter-spacing: -0.035em; line-height: 0.94;
+  margin: clamp(1rem, 3.5vh, 2.4rem) 0 clamp(1rem, 2.5vh, 1.6rem); max-width: 16ch;
+  text-wrap: balance; }
+.ds-head h1 em { font-family: var(--font-italic); font-style: italic; font-weight: 400; color: var(--accent); }
+
+/* the lede */
+.ds-head .sub { color: var(--muted-foreground); font-size: clamp(1.05rem, 1.7vw, 1.4rem);
+  line-height: 1.6; max-width: 62ch; }
+.ds-head .sub b { color: var(--foreground); font-weight: 600; }
+
+/* the curatorial plate — era · medium · provenance, like a museum caption */
+.ds-plate { display: flex; flex-wrap: wrap; gap: 0 var(--sp-6); margin-top: clamp(1.4rem, 3.5vh, 2.6rem);
+  padding-top: var(--sp-4); border-top: 1px solid var(--border); max-width: 62ch; }
+.ds-plate div { min-width: 0; }
+.ds-plate dt { font-family: var(--font-mono); font-size: var(--fs-3xs); text-transform: uppercase;
+  letter-spacing: 0.14em; color: var(--muted-foreground); margin-bottom: 0.2rem; }
+.ds-plate dd { margin: 0 0 0.6rem; font-size: var(--fs-sm); color: var(--foreground); font-weight: 500; }
+
+.ds-head .by { font-family: var(--font-mono); font-size: var(--fs-2xs); color: var(--muted-foreground); margin-top: var(--sp-5); }
 .ds-head .by b { color: var(--foreground); }
+
+/* scroll cue at the foot of the wall */
+.ds-scrollcue { position: absolute; left: 0; bottom: clamp(1rem, 3vh, 2rem); display: inline-flex; align-items: center; gap: 0.6rem;
+  font-family: var(--font-mono); font-size: var(--fs-3xs); text-transform: uppercase; letter-spacing: 0.18em; color: var(--muted-foreground); }
+.ds-scrollcue .dot { width: 22px; height: 34px; border: 1.5px solid var(--border-strong); border-radius: 12px; position: relative; }
+.theme-mauryan .ds-scrollcue .dot, .theme-chola .ds-scrollcue .dot { border-radius: 3px; }
+.ds-scrollcue .dot::after { content: ""; position: absolute; left: 50%; top: 6px; width: 3px; height: 6px; margin-left: -1.5px;
+  background: var(--accent); border-radius: 2px; animation: dsScroll 1.8s ease-in-out infinite; }
+@keyframes dsScroll { 0%,100% { transform: translateY(0); opacity: 1; } 50% { transform: translateY(9px); opacity: 0.3; } }
+@media (prefers-reduced-motion: reduce) { .ds-scrollcue .dot::after { animation: none; } }
+html[data-reduce-motion="1"] .ds-scrollcue .dot::after { animation: none; }
+
+/* reading-progress bar (museum "you are here") */
+.ds-progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; z-index: 60;
+  background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 40%, var(--indigo)));
+  transition: width 0.1s linear; }
 
 /* skin switcher */
 .ds-skins { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; margin-top: var(--sp-5); }
@@ -27,12 +96,14 @@
 .ds-toc a:hover, .ds-toc a.active { border-color: var(--accent); color: var(--accent); }
 .theme-mauryan .ds-toc a { border-radius: 3px; }
 
-/* atomic tier band */
-.ds-tier { margin: var(--sp-12) 0 0; scroll-margin-top: 4rem; }
-.ds-tier-head { display: flex; align-items: baseline; gap: 0.8rem; flex-wrap: wrap; border-bottom: 2px solid var(--foreground); padding-bottom: var(--sp-2); }
-.ds-tier-head .num { font-family: var(--font-mono); font-size: var(--fs-sm); color: var(--accent); font-weight: 700; }
-.ds-tier-head h2 { font-family: var(--font-display); font-weight: 600; font-size: var(--fs-2xl); margin: 0; letter-spacing: -0.01em; }
-.ds-tier-head .glossword { font-family: var(--font-italic); font-style: italic; color: var(--muted-foreground); font-size: var(--fs-md); }
+/* atomic tier band — museum rhythm: each tier is a room */
+.ds-tier { margin: clamp(4rem, 12vh, 8rem) 0 0; scroll-margin-top: 4rem; }
+.ds-tier-head { display: flex; align-items: baseline; gap: 1rem; flex-wrap: wrap;
+  border-bottom: 1px solid var(--border); padding-bottom: var(--sp-4); position: relative; }
+.ds-tier-head::after { content: ""; position: absolute; left: 0; bottom: -1px; width: 72px; height: 3px; background: var(--accent); }
+.ds-tier-head .num { font-family: var(--font-mono); font-size: var(--fs-md); color: var(--accent); font-weight: 700; letter-spacing: 0.05em; }
+.ds-tier-head h2 { font-family: var(--font-display); font-weight: 500; font-size: clamp(1.9rem, 4.5vw, 3.2rem); margin: 0; letter-spacing: -0.02em; line-height: 1.02; }
+.ds-tier-head .glossword { font-family: var(--font-italic); font-style: italic; color: var(--muted-foreground); font-size: clamp(1rem, 1.6vw, 1.35rem); margin-left: auto; }
 
 /* the STORY section — how the system was designed (per system) */
 .ds-story { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-6); margin: var(--sp-5) 0 0; }
@@ -131,3 +202,45 @@
 .ds-syscard .era { font-family: var(--font-mono); font-size: var(--fs-3xs); text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-foreground); }
 .ds-syscard h3 { font-family: var(--font-display); font-weight: 600; font-size: var(--fs-lg); margin: 0.2rem 0 0.3rem; }
 .ds-syscard p { font-size: var(--fs-xs); color: var(--muted-foreground); line-height: 1.55; margin: 0 0 0.6rem; }
+
+/* ============================================================
+   GRAND CRAFT — micro-interactions & gallery framing.
+   Spring easing + reduce-motion safe. Token-driven → all skins inherit.
+   ============================================================ */
+.ds-wrap { --ds-ease: var(--ease-spring, cubic-bezier(.2,.9,.3,1.2)); }
+
+/* system cards lift like plates coming off a wall */
+.ds-syscard { transition: transform .28s var(--ds-ease), box-shadow .28s ease, border-color .2s ease; }
+.ds-syscard:hover { transform: translateY(-6px) scale(1.012); box-shadow: 0 26px 60px -24px color-mix(in srgb, var(--foreground) 55%, transparent); }
+.ds-syscard .band { position: relative; overflow: hidden; }
+.ds-syscard .band::after { content: ""; position: absolute; inset: 0;
+  background: linear-gradient(115deg, transparent 40%, color-mix(in srgb, #fff 30%, transparent) 50%, transparent 60%);
+  transform: translateX(-120%); transition: transform .6s ease; }
+.ds-syscard:hover .band::after { transform: translateX(120%); }
+
+/* demo stages gain a quiet inner frame — like a mounted work */
+.ds-demo { box-shadow: 0 1px 0 color-mix(in srgb, var(--foreground) 6%, transparent), var(--shadow-xs); transition: box-shadow .25s ease, border-color .2s ease; }
+.ds-demo:hover { border-color: color-mix(in srgb, var(--accent) 55%, var(--border-strong)); box-shadow: var(--shadow-md); }
+
+/* swatches: gentle spring on hover, and the opened story eases in */
+.ds-sw { transition: transform .2s var(--ds-ease), box-shadow .2s ease, border-color .15s ease; }
+.ds-sw.has-story:hover { transform: translateY(-3px); }
+.ds-sw-story { animation: dsStoryIn .32s var(--ds-ease) both; }
+@keyframes dsStoryIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+/* the TOC chips get a subtle fill on the active room */
+.ds-toc a.active { background: color-mix(in srgb, var(--accent) 12%, transparent); font-weight: 600; }
+
+/* section-number watermark: a huge faint numeral behind each tier head */
+.ds-tier-head { isolation: isolate; }
+
+/* honour reduce-motion everywhere in the gallery chrome */
+@media (prefers-reduced-motion: reduce) {
+  .ds-syscard, .ds-demo, .ds-sw { transition: none; }
+  .ds-syscard:hover { transform: none; }
+  .ds-syscard .band::after { display: none; }
+  .ds-sw-story { animation: none; }
+}
+html[data-reduce-motion="1"] .ds-syscard:hover { transform: none; }
+html[data-reduce-motion="1"] .ds-syscard .band::after { display: none; }
+html[data-reduce-motion="1"] .ds-sw-story { animation: none; }

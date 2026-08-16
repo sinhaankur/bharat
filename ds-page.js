@@ -218,4 +218,62 @@
     }, { rootMargin: "-10% 0px -80% 0px" });
     document.querySelectorAll(".ds-tier[id]").forEach(function (s) { io.observe(s); });
   }
+
+  /* ---------- GRAND: reveal-on-scroll + reading progress ----------
+     Reuses the site's .will-reveal / [data-reveal] system, which already
+     degrades under prefers-reduced-motion AND the a11y data-reduce-motion flag.
+     We just auto-tag the gallery's sections + specimens and reveal on scroll. */
+  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function markReveal() {
+    var targets = document.querySelectorAll(".ds-tier-head, .ds-why, .ds-spec, .ds-story-col, .ds-plate");
+    targets.forEach(function (el, i) {
+      if (el.classList.contains("will-reveal")) return;
+      el.classList.add("will-reveal");
+      el.style.transitionDelay = (Math.min(i % 4, 3) * 60) + "ms";  // gentle stagger within a group
+    });
+    return targets;
+  }
+  var revealEls = markReveal();
+  // .is-revealed is the site's shown-state class (see styles.css / motion.js)
+  function reveal(el) { if (el && !el.classList.contains("is-revealed")) el.classList.add("is-revealed"); }
+  if (reduceMotion || !("IntersectionObserver" in window)) {
+    revealEls.forEach(function (el) { el.classList.add("is-revealed"); el.style.transitionDelay = ""; });
+  } else {
+    var rio = new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { reveal(en.target); obs.unobserve(en.target); }
+      });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
+    revealEls.forEach(function (el) { rio.observe(el); });
+    // safety net: anything at/above the viewport bottom is revealed on load and
+    // on scroll, so fast jumps (or elements already on-screen) never stay hidden.
+    var sweep = function () {
+      var vh = window.innerHeight || document.documentElement.clientHeight;
+      revealEls.forEach(function (el) {
+        if (el.classList.contains("is-revealed")) return;
+        var top = el.getBoundingClientRect().top;
+        if (top < vh * 0.92) { reveal(el); rio.unobserve(el); }
+      });
+    };
+    sweep();
+    window.addEventListener("scroll", sweep, { passive: true });
+    window.addEventListener("resize", sweep, { passive: true });
+  }
+
+  // reading-progress bar
+  var bar = document.createElement("div");
+  bar.className = "ds-progress"; bar.setAttribute("aria-hidden", "true");
+  document.body.appendChild(bar);
+  var ticking = false;
+  function updateProgress() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop || document.body.scrollTop) / max : 0;
+    bar.style.width = (pct * 100).toFixed(2) + "%";
+    ticking = false;
+  }
+  window.addEventListener("scroll", function () {
+    if (!ticking) { ticking = true; window.requestAnimationFrame(updateProgress); }
+  }, { passive: true });
+  updateProgress();
 })();
