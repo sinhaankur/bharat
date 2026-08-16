@@ -97,6 +97,30 @@ SYSTEMS = {
                 "<b>A warm top-edge.</b> Cards carry a foliate gold-to-rose hairline instead of Mauryan's cool polish.",
             ],
         },
+        "legacy": {
+            "lede": ("Long before the phrase existed, the Guptas ran a <b>design system</b> — a canon written down "
+                     "and taught, so an image made in one workshop matched one made in another. A legacy is not an "
+                     "accident; it is a <i>standard, maintained</i>. Here is how the classical age held the line."),
+            "cards": [
+                {"title": "A measured canon",
+                 "body": "Gupta sculpture followed <b>iconometry</b> — the <i>śilpaśāstra</i> rules of proportion "
+                         "(<b>tālamāna</b>): the body measured in face-lengths, on a scale from one to ten <i>tala</i>, "
+                         "each divided into <i>angulas</i>. A written spec for making a figure.",
+                 "mapto": "our <b>spacing scale &amp; type ramp</b>: fixed proportional steps, not ad-hoc pixels."},
+                {"title": "Serenity as a rule",
+                 "body": "The downcast eyes, the <b>halo</b>, the diaphanous drapery, the tribhanga stance — a "
+                         "repeatable set of forms that made a Gupta image recognisable anywhere as <i>Gupta</i>.",
+                 "mapto": "our <b>component contracts</b>: the same parts, composed the same way, every page."},
+                {"title": "Written down &amp; taught",
+                 "body": "Because the canon lived in <b>texts</b> and workshops, the style outlasted the dynasty and "
+                         "set the template for classical Indian art for centuries.",
+                 "mapto": "our <b>documented tokens &amp; this page</b>: a system survives because it is written down."},
+            ],
+            "note": ("Sourced: the <i>śilpaśāstra</i> / <i>tālamāna</i> iconometric tradition (T. A. Gopinatha Rao, "
+                     "<i>Talamana, or Iconometry</i>, ASI Memoir no. 3, 1920). Honestly: study of surviving sculpture "
+                     "suggests the canon was often a guiding ideal rather than a strict rule — "),
+            "cite": '<a href="https://en.wikipedia.org/wiki/Talamana" target="_blank" rel="noopener">Talamana ↗</a> · <a href="heritage-atlas.html">Ajanta &amp; Gupta sites</a>',
+        },
     },
     "chola": {
         "theme_css": "theme-chola.css",
@@ -166,6 +190,30 @@ SYSTEMS = {
                 "<b>Monumental corner.</b> Radius stays a squared 3px — granite blocks, not soft plastic.",
                 "<b>Kaveri teal as the quiet second voice.</b> A river-water blue-green carries secondary data.",
             ],
+        },
+        "legacy": {
+            "lede": ("The Cholas ran an empire on <b>records</b> — and their canon is literally carved into the walls. "
+                     "A legacy is not an accident; it is a <i>standard, maintained</i>, and audited. Here is how the "
+                     "Tamil imperium held the line."),
+            "cards": [
+                {"title": "The temple as a module",
+                 "body": "The great temples were built to <b>proportion</b> — the <i>vimana</i> rising in measured, "
+                         "self-similar tiers. Brihadisvara at Thanjavur is a single coherent module scaled to "
+                         "monumental size — order you can measure.",
+                 "mapto": "our <b>layout scale &amp; elevation ladder</b>: one modular system, scaled up cleanly."},
+                {"title": "Inscribed &amp; audited",
+                 "body": "Chola temple walls carry thousands of <b>inscriptions</b> — endowments, land grants, wages, "
+                         "audits — a public ledger in stone that held officials to a recorded standard.",
+                 "mapto": "our <b>sourced-or-gap ledger</b>: every figure traceable, nothing unattributed."},
+                {"title": "A canon in bronze",
+                 "body": "The <b>lost-wax bronzes</b> repeated an iconographic canon so consistently that a Chola "
+                         "Nataraja is unmistakable — a house style enforced across generations of workshops.",
+                 "mapto": "our <b>atoms &amp; finish tokens</b>: one recognisable house form, cast the same each time."},
+            ],
+            "note": ("Sourced: the Great Living Chola Temples (UNESCO) and the vast corpus of Chola temple "
+                     "inscriptions studied since the ASI's early epigraphy; Chola bronze iconography. Read from "
+                     "surviving stone and metal — "),
+            "cite": '<a href="https://en.wikipedia.org/wiki/Chola_art_and_architecture" target="_blank" rel="noopener">Chola art ↗</a> · <a href="heritage-atlas.html">the temples</a>',
         },
     },
     "rajput": {
@@ -239,6 +287,29 @@ SYSTEMS = {
                 "<b>Sheesh-mahal at night.</b> The dark register is deep indigo with gold and mirror glints — the mirror hall by lamplight.",
             ],
         },
+        "legacy": {
+            "lede": ("The Rajput courts kept their standard through the <b>atelier</b> — the royal <i>karkhana</i> where "
+                     "master painters trained pupils to a house hand. A legacy is not an accident; it is a "
+                     "<i>standard, maintained</i>, workshop to workshop. Here is how the courts held the line."),
+            "cards": [
+                {"title": "The gharana / atelier",
+                 "body": "A court's paintings share a recognisable hand because they came from one <b>atelier</b> — a "
+                         "lineage (<i>gharānā</i>) of masters and pupils. Mewar, Kishangarh, Bundi each held a "
+                         "distinct, teachable style.",
+                 "mapto": "our <b>one shared stylesheet</b>: a single source every page is trained on."},
+                {"title": "A fixed making-order",
+                 "body": "Miniatures followed a set <b>process</b> — wasli paper, under-drawing, burnished ground, "
+                         "mineral pigment in order, gold last — so results were consistent across many hands.",
+                 "mapto": "our <b>atomic tiers</b>: tokens → atoms → molecules, a fixed order of composition."},
+                {"title": "A canon of forms",
+                 "body": "Ragamala and epic sets repeated an agreed <b>iconographic vocabulary</b> — postures, colour "
+                         "codes, framing (the <i>jharokha</i>) — a visual grammar every painter knew.",
+                 "mapto": "our <b>component library</b>: an agreed vocabulary of reusable parts."},
+            ],
+            "note": ("Sourced: the Rajput / Rajasthani painting tradition and its court ateliers (Mewar, Kishangarh, "
+                     "Bundi–Kota); miniature technique on wasli. Read from surviving folios and workshop practice — "),
+            "cite": '<a href="https://en.wikipedia.org/wiki/Rajput_painting" target="_blank" rel="noopener">Rajput painting ↗</a> · <a href="heritage-atlas.html">forts &amp; courts</a>',
+        },
     },
 }
 
@@ -281,6 +352,29 @@ def story_html(st):
         '        </div>\n'
         '      </div>'
     ).format(inspired=st["inspired"], origins=st["origins"], decisions=decisions)
+
+
+def legacy_html(lg):
+    """Build the Standards & Legacy chapter: a lede, three 'how they held the
+    line -> our canon' cards, and a sourced note."""
+    cards = "".join(
+        '\n          <article class="ds-legacy-card">\n'
+        '            <h3>{title}</h3>\n'
+        '            <p>{body}</p>\n'
+        '            <p class="ds-legacy-map"><span class="ds-arrow">→</span> {mapto}</p>\n'
+        '          </article>'.format(title=c["title"], body=c["body"], mapto=c["mapto"])
+        for c in lg["cards"])
+    return (
+        '<div class="ds-legacy">\n'
+        '        <p class="ds-legacy-lede">{lede}</p>\n'
+        '        <div class="ds-legacy-grid">{cards}</div>\n'
+        '        <p class="ds-legacy-note">{note}<span class="ds-legacy-cite">{cite}</span></p>\n'
+        '      </div>'
+    ).format(lede=lg["lede"], cards=cards, note=lg["note"], cite=lg["cite"])
+
+
+# tiers that get a faint room-number watermark
+ROOMS = {"tokens": "0", "atoms": "1", "molecules": "2", "organisms": "3", "templates": "4"}
 
 
 def build(name, cfg):
@@ -350,6 +444,12 @@ def build(name, cfg):
     if cfg.get("story"):
         html = re.sub(r'<div class="ds-story">.*?</div>\s*</section>',
                       lambda m: story_html(cfg["story"]) + "\n    </section>",
+                      html, count=1, flags=re.S)
+
+    # 6c) the STANDARDS & LEGACY chapter — per system (how the empire held its canon)
+    if cfg.get("legacy"):
+        html = re.sub(r'<div class="ds-legacy">.*?</div>\s*</section>',
+                      lambda m: legacy_html(cfg["legacy"]) + "\n    </section>",
                       html, count=1, flags=re.S)
 
     # 7) sprite specimen + its script are Mauryan-only
