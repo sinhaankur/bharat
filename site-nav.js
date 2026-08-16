@@ -191,17 +191,24 @@
     const activeSection = SECTIONS.find(s => s.items.some(i => isHere(i.href)) || isHere(s.href));
     const groups = SECTIONS.map(s => {
       const open = s === activeSection ? " is-current" : "";
-      const items = s.items.map(i => {
+      // render one L2 item (and, if it has children[], an L3 nested list).
+      const renderItem = (i, depth) => {
         const here = isHere(i.href);
-        const cls = [here ? "snav-cur" : "", i.hint ? "snav-has-hint" : ""].filter(Boolean).join(" ");
+        const kids = Array.isArray(i.children) && i.children.length ? i.children : null;
+        const cls = [here ? "snav-cur" : "", i.hint ? "snav-has-hint" : "", depth >= 3 ? "snav-l3" : "", kids ? "snav-has-kids" : ""].filter(Boolean).join(" ");
         const cur = (here ? ' aria-current="page"' : "") + (cls ? ` class="${cls}"` : "");
         const ext = i.ext ? ' target="_blank" rel="noopener"' : "";
         const arrow = i.ext ? ' <span class="snav-ext">↗</span>' : "";
         const hint = i.hint ? `<span class="snav-hint">${i.hint}</span>` : "";
         const glyph = i.icon || iconFor(i.href);
         const ico = `<span class="snav-ico" aria-hidden="true">${glyph || "·"}</span>`;
-        return `<a href="${i.href}"${ext}${cur}>${ico}<span class="snav-body"><span class="snav-t">${i.text}${arrow}</span>${hint}</span></a>`;
-      }).join("");
+        const link = `<a href="${i.href}"${ext}${cur}>${ico}<span class="snav-body"><span class="snav-t">${i.text}${arrow}</span>${hint}</span></a>`;
+        if (!kids) return link;
+        // L3: nest the children under this item as an indented sublist
+        const sub = kids.map(c => renderItem(c, depth + 1)).join("");
+        return `<div class="snav-sub">${link}<div class="snav-sublist">${sub}</div></div>`;
+      };
+      const items = s.items.map(i => renderItem(i, 2)).join("");
       // a "section front" link at the top of the menu, then its stories
       const front = s.href ? `<a class="snav-front" href="${s.href}"><span class="snav-body"><span class="snav-t">${s.label} — front page</span><span class="snav-hint">${s.tagline || ""}</span></span></a>` : "";
       return `<div class="snav-group${open}">
@@ -237,15 +244,20 @@
       </div>`;
   }
 
-  // big category links for the slide-out drawer (Vox-style full-list menu)
+  // big category links for the slide-out drawer (Vox-style full-list menu).
+  // supports L3: an item's children[] render as an indented sublist.
   function drawerLinks() {
+    const dItem = (i, depth) => {
+      const ext = i.ext ? ' target="_blank" rel="noopener"' : "";
+      const kids = Array.isArray(i.children) && i.children.length ? i.children : null;
+      const link = `<a href="${i.href}"${ext} class="snav-dl-l${depth}">${i.icon ? i.icon + " " : ""}${i.text}</a>`;
+      if (!kids) return link;
+      return link + `<div class="snav-dl-sub">${kids.map(c => dItem(c, depth + 1)).join("")}</div>`;
+    };
     return getNav().map(g => `
       <div class="snav-dl-group">
         <div class="snav-dl-h">${g.label}</div>
-        ${g.items.map(i => {
-          const ext = i.ext ? ' target="_blank" rel="noopener"' : "";
-          return `<a href="${i.href}"${ext}>${i.icon ? i.icon + " " : ""}${i.text}</a>`;
-        }).join("")}
+        ${g.items.map(i => dItem(i, 2)).join("")}
       </div>`).join("");
   }
 

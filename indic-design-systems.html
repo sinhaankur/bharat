@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-mauryan theme-light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Indic design systems — India's own, one per heritage | Bharat</title>
+  <meta name="description" content="A family of original design systems drawn from India's own heritage — one per era and state — each documented on Atomic Design tiers with live components, tokens, and reasoning. Author: Sinhaankur. Mauryan is the flagship." />
+  <meta name="robots" content="noindex" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="theme-mauryan.css" />
+  <link rel="stylesheet" href="theme-gupta.css" />
+  <link rel="stylesheet" href="theme-chola.css" />
+  <link rel="stylesheet" href="theme-rajput.css" />
+  <link rel="stylesheet" href="ds-page.css" />
+</head>
+<body>
+  <div id="site-nav"></div>
+
+  <main class="ds-wrap">
+    <header class="ds-head">
+      <div class="ds-kicker">Indic design systems · the family</div>
+      <h1>India, <em>by design</em></h1>
+      <p class="sub">A family of <b>original</b> design systems — one per era and, in time, one per state — each drawn
+        from India's <b>own</b> heritage: the polished Mauryan pillar, the Gupta temple, the Ajanta fresco, and the
+        living craft of every region. Not a theme bought off a shelf; India's visual grammar, rebuilt as reusable
+        systems. Every system is documented the same way — on the five tiers of <b>Atomic Design</b>, with live
+        components, tokens, and the reasoning behind each decision.</p>
+      <div class="ds-skins" data-ds-skins></div>
+      <p class="by">Systems &amp; authorship · <b>Sinhaankur</b>. These are India's own work — the brand and the
+        systems are being trademarked. ™ / © Sinhaankur.</p>
+    </header>
+
+    <nav class="ds-toc" aria-label="Sections">
+      <a href="#systems">The systems</a>
+      <a href="#method">The method</a>
+      <a href="#registers">Registers</a>
+    </nav>
+
+    <!-- THE SYSTEMS -->
+    <section class="ds-tier" id="systems">
+      <div class="ds-tier-head"><span class="num">◆</span><h2>The systems</h2><span class="glossword">built · specced · planned</span></div>
+      <div class="ds-systems" id="ds-systems"></div>
+    </section>
+
+    <!-- THE METHOD -->
+    <section class="ds-tier" id="method">
+      <div class="ds-tier-head"><span class="num">§</span><h2>The method — every system, the same spine</h2></div>
+      <div class="ds-why">
+        <h3>One scaffold, many skins</h3>
+        <p>Each system is documented on <b>Atomic Design</b>: <b>Tokens</b> (the raw colour/type/space/elevation) →
+          <b>Atoms</b> (buttons, inputs, badges) → <b>Molecules</b> (fields, alerts, tabs) → <b>Organisms</b>
+          (tables, dialogs, card grids) → <b>Templates</b> (the page layouts). The components live once in
+          <code>styles.css</code> and are painted entirely by tokens — so a new system is a new <b>token set</b> on the
+          same atoms, not a new codebase. That is why we can grow to a design system per state without the work
+          exploding.</p>
+        <p>We benchmarked coverage against <b>Oracle JET</b> and <b>Google Material</b> — took their thoroughness in
+          states, density, and elevation — and then added the thing both of them lack: the <b>design reasoning</b>,
+          and a home in India's own heritage. Each system page carries the "why this is an atom, not a molecule" that
+          a component dump never explains.</p>
+      </div>
+    </section>
+
+    <!-- REGISTERS -->
+    <section class="ds-tier" id="registers">
+      <div class="ds-tier-head"><span class="num">♦</span><h2>Registers — mood within a system</h2></div>
+      <div class="ds-why">
+        <h3>Pick the register per context</h3>
+        <p>A single system can carry more than one mood. Within <b>Mauryan</b>: the <b>stone-and-sky</b> register is the
+          skeleton (nav, map, data); the <b>Gupta</b> register — red sandstone &amp; Ajanta — is the soul (long-form,
+          heritage); the <b>dark temple-interior</b> register (maroon + gold-leaf) is for 3D pages and the engines hub.
+          Same atoms, different tokens. Try the <b>skin switcher</b> above.</p>
+      </div>
+    </section>
+
+    <p class="ds-foot">The flagship is the <a href="design-system.html">Mauryan atomic reference</a> — the full,
+      component-by-component build. Method: Atomic Design (Brad Frost); coverage benchmarked against Oracle JET &amp;
+      Material, then made India's own. Heritage sources in <a href="ASHOKA_DESIGN.md">ASHOKA_DESIGN.md</a>. Systems
+      &amp; authorship <b>Sinhaankur</b> ™ / ©.</p>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script>
+  (function () {
+    // The registry of Indic design systems. Each system's page is the SAME atomic
+    // scaffold with a different token skin — that's the whole design of the family.
+    var SYSTEMS = [
+      { name: "Mauryan", era: "3rd c. BCE · imperial", status: "flagship",
+        blurb: "Polished Chunar stone, chakra-blue sky, the incised line. The skeleton register — nav, map, data.",
+        band: ["#e9ddc7","#dcccae","#3078c0","#2a2018"], href: "design-system.html" },
+      { name: "Gupta", era: "c. 320–550 CE · classical", status: "built",
+        blurb: "Mathura red-pink sandstone and Ajanta fresco jewel-tones. The soul register — long-form & heritage.",
+        band: ["#f3e7cf","#c8664a","#c68a2e","#9e3b2e"], href: "ds-gupta.html" },
+      { name: "Chola", era: "9th–13th c. · Tamil bronze", status: "built",
+        blurb: "Chola bronze patina, Thanjavur granite, kumkum vermilion. A southern, monumental system.",
+        band: ["#f4efe4","#7d5a2e","#6f7d5a","#b3341f"], href: "ds-chola.html" },
+      { name: "Rajput", era: "medieval · desert court", status: "built",
+        blurb: "Jaisalmer sandstone, sheesh-mahal mirror-work, miniature-painting indigo & vermilion.",
+        band: ["#f6ecd6","#e7c98a","#274a8c","#c8331f"], href: "ds-rajput.html" },
+      { name: "…one per state", era: "roadmap", status: "planned",
+        blurb: "The goal: a design system per state, each from its own heritage, all on this one atomic spine.",
+        band: ["#8a8a8a","#b0b0b0","#cc8900","#2a2018"], href: "" }
+    ];
+    var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
+    var statusBadge = function (s) {
+      var map = { flagship: "success", built: "success", specced: "warning", planned: "neutral" };
+      return '<span class="ds-badge ds-badge--' + (map[s] || "neutral") + '">' + esc(s) + '</span>';
+    };
+    document.getElementById("ds-systems").innerHTML = SYSTEMS.map(function (sys) {
+      var band = sys.band.map(function (c) { return '<span style="background:' + esc(c) + '"></span>'; }).join("");
+      var live = sys.href ? "" : ' style="pointer-events:none;opacity:.7"';
+      var tag = sys.href ? "a" : "div";
+      var hrefAttr = sys.href ? ' href="' + esc(sys.href) + '"' : "";
+      return "<" + tag + ' class="ds-syscard"' + hrefAttr + live + ">" +
+        '<div class="band">' + band + '</div>' +
+        '<div class="body"><div class="era">' + esc(sys.era) + '</div>' +
+        '<h3>' + esc(sys.name) + '</h3>' +
+        '<p>' + esc(sys.blurb) + '</p>' +
+        statusBadge(sys.status) +
+        (sys.href ? ' <span class="ed-card-meta" style="margin-left:.4rem">Open <span class="arrow">→</span></span>' : "") +
+        "</div></" + tag + ">";
+    }).join("");
+  })();
+  </script>
+  <script src="ds-page.js"></script>
+  <script src="command-palette.js"></script>
+  <script src="site-nav.js"></script>
+</body>
+</html>

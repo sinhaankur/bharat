@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-rajput theme-light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rajput design system · Atomic reference | Bharat</title>
+  <meta name="description" content="The Mauryan Indic design system, documented on Atomic Design tiers — Tokens, Atoms, Molecules, Organisms, Templates. Every component rendered live from the real stylesheet, with copyable code, the tokens it uses, an accessibility note, and — unlike Oracle JET or Material — the reasoning for WHY it lives at its tier. Author: Sinhaankur." />
+  <meta name="robots" content="noindex" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="theme-rajput.css" />
+  <link rel="stylesheet" href="ds-page.css" />
+</head>
+<body>
+  <div id="site-nav"></div>
+
+  <main class="ds-wrap">
+    <header class="ds-head">
+      <div class="ds-kicker">Indic design systems · atomic reference</div>
+      <h1>Rajput — <em>sandstone, mirror-work &amp; miniature colour</em></h1>
+      <p class="sub">The <b>Rajput</b> register — the medieval desert courts of Rajasthan. <b>Golden fort sandstone</b>, the mirror-inlay of the sheesh mahal, and the vivid <b>indigo / vermilion / gold-leaf</b> palette of Rajput miniature painting. A courtly system on the same atomic spine.</p>
+      <div class="ds-skins" data-ds-skins></div>
+      <p class="by">System &amp; authorship · <b>Sinhaankur</b> — the Rajput court register, drawn from desert forts &amp; miniature painting. ™ / © Sinhaankur. See <a href="indic-design-systems.html">all systems →</a></p>
+    </header>
+
+    <nav class="ds-toc" aria-label="Sections">
+      <a href="#story">The story</a>
+      <a href="#method">Method</a>
+      <a href="#tokens">0 · Tokens</a>
+      <a href="#atoms">1 · Atoms</a>
+      <a href="#molecules">2 · Molecules</a>
+      <a href="#organisms">3 · Organisms</a>
+      <a href="#templates">4 · Templates</a>
+    </nav>
+
+    <!-- THE STORY (per-system narrative) -->
+    <section class="ds-tier" id="story">
+      <div class="ds-tier-head"><span class="num">✦</span><h2>The story — how we designed it</h2><span class="glossword">inspired-by · origins · decisions</span></div>
+      <div class="ds-story">
+        <div class="ds-story-col">
+          <h3>What it's inspired from</h3>
+          <p>The Rajput register is drawn from the <b>desert courts of Rajasthan (c. 8th–18th c.)</b> — the golden-sandstone forts of Jaisalmer and Jodhpur, the mirror-inlaid <b>sheesh mahal</b>, and above all <b>Rajput and Mewar miniature painting</b>: vivid indigo, vermilion, malachite green and gold leaf on cream wasli paper, framed by the arched <b>jharokha</b> window.</p>
+          <h3>What we know of its origins</h3>
+          <p>Rajput kingdoms held the arid northwest through fort-cities and a courtly painting tradition that recorded epics, ragas and royal life in jewel-like pages. The blue of those pages is <b>indigo — nīla</b>, India's 'blue gold', cultivated here from antiquity and later the cause of the Champaran revolt; the gold is often the very <b>Indian Yellow</b> made downriver in Munger. The palette is read from surviving folios and haveli walls.</p>
+        </div>
+        <div class="ds-story-col">
+          <h3>The design decisions that followed</h3>
+          <p>From that heritage we made concrete choices, each traceable to a source:</p>
+          <ul class="ds-story-list">
+            <li><b>Wasli as paper.</b> The ground is cream miniature paper (<code>--background</code>) — the page you paint on.</li>
+            <li><b>Vermilion as action; indigo as the second voice.</b> The two dominant miniature pigments become the two loudest UI roles.</li>
+            <li><b>Gold-leaf hairline.</b> Cards carry a gold-leaf-to-indigo edge — the illuminated border of a folio.</li>
+            <li><b>Arched, crisp corner.</b> Radius is a 5px jharokha softness — ornamented but sharp, never plush.</li>
+            <li><b>Sheesh-mahal at night.</b> The dark register is deep indigo with gold and mirror glints — the mirror hall by lamplight.</li></ul>
+          <p class="ds-story-colour">Every colour below carries its own origin story — <b>click any swatch marked “story”</b> to see where the pigment came from and the reference behind it. A colour here is a place with a history, not a decoration.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- METHOD -->
+    <section class="ds-tier" id="method">
+      <div class="ds-tier-head"><span class="num">§</span><h2>The method</h2><span class="glossword">how to read this page</span></div>
+      <div class="ds-why">
+        <h3>Why atomic, and how we decide the tier</h3>
+        <p>Atomic Design (Brad Frost) borrows a chemistry metaphor: interfaces are built from <b>atoms</b> that
+          combine into <b>molecules</b>, which assemble into <b>organisms</b>, laid into <b>templates</b>. We add a
+          tier <b>0 · Tokens</b> underneath — the raw values (colour, type, space, elevation) that everything else
+          is made of. The point isn't taxonomy for its own sake; it's <b>reuse</b>: fix a token once and the whole
+          system reskins — which is exactly how one scaffold serves Mauryan, Gupta, and a design system per state.</p>
+        <p class="rule">The decision rule we use on every specimen:</p>
+        <p><b>Atom</b> — cannot be broken down and still do its job. A <code>&lt;button&gt;</code>, an input, a badge, a
+          rule, the spinner. It has no meaning of its own beyond its form.
+          <b>Molecule</b> — a small, <i>reusable group of atoms that together do one job</i>: a label + input + error is
+          a <code>field</code>; a set of atoms bonded to a single purpose. If removing one atom breaks the purpose,
+          it's a molecule, not a coincidental grouping.
+          <b>Organism</b> — a distinct, self-contained section: a table, a dialog, a nav bar. It can stand alone on a
+          page. <b>Template</b> — the page-level skeleton where organisms are placed; content-agnostic layout.</p>
+        <p>Each specimen below is tagged with its tier and — where the call is interesting — a line on <i>why</i>.</p>
+      </div>
+    </section>
+
+    <!-- 0 · TOKENS -->
+    <section class="ds-tier" id="tokens">
+      <div class="ds-tier-head"><span class="num">0</span><h2>Tokens</h2><span class="glossword">the raw material</span></div>
+      <div class="ds-why">
+        <h3>Why tokens sit below the atoms</h3>
+        <p>An atom is a <i>thing</i> (a button); a token is a <i>value</i> (the gold it's painted with). Tokens are
+          the only place a hex, a font, or a pixel is allowed to be literal. Everything upward references them, so a
+          skin is nothing more than a different set of token values on the same atoms. <b>Never hard-code — reference
+          the variable.</b> Rajput values are drawn from miniature painting and fort architecture: cream wasli paper, Jaisalmer sandstone, court indigo, and vermilion. The action colour is <b>miniature vermilion</b>; corners take a 5px jharokha-arch softness — ornamented but crisp.</p>
+      </div>
+
+      <div class="ds-spec">
+        <div class="ds-spec-head"><h4>Colour</h4><span class="tier-tag">token</span></div>
+        <p class="desc">Wasli &amp; miniature pigment. <span class="heritage">Cream paper, sepia ink, vermilion action, indigo as the secondary hue, gold-leaf highlights.</span></p>
+        <div class="ds-swatches" id="ds-swatches" data-colors='[
+          ["Paper · wasli","--background"],
+          ["Card","--card"],
+          ["Surface","--surface"],
+          ["Ink · court sepia","--foreground"],
+          ["Muted","--muted"],
+          ["Muted text","--muted-foreground"],
+          ["Border","--border"],
+          ["Border strong","--border-strong"],
+          ["Accent · vermilion","--accent"],
+          ["Accent ink","--accent-ink"],
+          ["Accent tint","--accent-tint"],
+          ["Haveli sandstone","--haveli"],
+          ["Miniature indigo","--indigo-mss"],
+          ["Gold leaf","--gold-leaf-r"],
+          ["Success · malachite","--success"],
+          ["Warning · gold","--warning"],
+          ["Danger · vermilion","--danger"],
+          ["Info · indigo","--info"]
+        ]'></div>
+      </div>
+
+      <div class="ds-spec">
+        <div class="ds-spec-head"><h4>Type scale</h4><span class="tier-tag">token</span></div>
+        <p class="desc">One modular scale. Display serif for headlines, sans for body, mono for labels &amp; data.
+          Use the step, never an ad-hoc pixel.</p>
+        <div id="ds-typescale" data-type='[
+          ["--fs-3xl","Bharat — hero display","display"],["--fs-2xl","Page heading (h1)","display"],
+          ["--fs-xl","Section heading (h2)","display"],["--fs-lg","Block / card heading","display"],
+          ["--fs-md","Lede / large body","sans"],["--fs-base","Body text","sans"],
+          ["--fs-sm","Secondary / card text","sans"],["--fs-xs","Caption","sans"],
+          ["--fs-2xs","Small label (mono)","mono"],["--fs-3xs","Micro-label / eyebrow (mono)","mono"]
+        ]'></div>
+      </div>
+
+      <div class="ds-spec">
+        <div class="ds-spec-head"><h4>Spacing · radius · elevation</h4><span class="tier-tag">token</span></div>
+        <p class="desc">A 4px rhythm; a tight radius (the Mauryan register drops corners to an incised <b>2px</b>);
+          one shadow ladder. Consistency here is what makes layouts feel calm.</p>
+        <div class="ds-scale" id="ds-spacescale" data-vars='["--sp-1","--sp-2","--sp-3","--sp-4","--sp-5","--sp-6","--sp-8","--sp-10","--sp-12"]' style="margin-bottom:var(--sp-5)"></div>
+        <div class="ds-scale" id="ds-radiusscale" data-vars='["--radius-sm","--radius","--radius-lg","--radius-full"]' style="margin-bottom:var(--sp-5)"></div>
+        <div class="ds-scale" id="ds-elevationscale" data-vars='["--shadow-xs","--shadow-sm","--shadow-md","--shadow-lg","--shadow-xl"]'></div>
+      </div>
+    </section>
+
+    <!-- 1 · ATOMS -->
+    <section class="ds-tier" id="atoms">
+      <div class="ds-tier-head"><span class="num">1</span><h2>Atoms</h2><span class="glossword">indivisible primitives</span></div>
+      <div class="ds-why">
+        <h3>Why these are atoms</h3>
+        <p>Each thing here does <i>one</i> job and can't be split without losing it. A button is still a button with
+          nothing inside but a word; a badge is a coloured word; a rule is a line. They carry no content logic — you
+          drop them anywhere. If you find yourself giving an "atom" a heading <i>and</i> a body <i>and</i> a control,
+          it stopped being an atom two additions ago.</p>
+      </div>
+
+      <div class="ds-spec">
+        <div class="ds-spec-head"><h4>Buttons</h4><span class="tier-tag">atom</span></div>
+        <p class="desc">The primary action wears the house gold; dark = stone-ink; ghost = incised outline.
+          <span class="heritage">Under Mauryan the corner tightens to 2px and a burnished top edge appears — the
+          "Mauryan polish."</span></p>
+        <div class="ds-demo">
+          <div class="ds-demo-stage">
+            <button class="ed-btn ed-btn--primary">Primary action</button>
+            <button class="ed-btn ed-btn--dark">Dark</button>
+            <button class="ed-btn ed-btn--ghost">Ghost</button>
+            <button class="ed-btn ed-btn--primary" disabled style="opacity:.5;pointer-events:none">Disabled</button>
+          </div>
+          <div class="ds-demo-code" data-ds-copy><pre>&lt;button class="ed-btn ed-btn--primary"&gt;Primary action&lt;/button&gt;
+&lt;button class="ed-btn ed-btn--dark"&gt;Dark&lt;/button&gt;
+&lt;button class="ed-btn ed-btn--ghost"&gt;Ghost&lt;/button&gt;</pre></div>
+        </div>
+        <div class="ds-meta"><span><b>Tokens:</b> <code>--accent</code> <code>--brand</code> <code>--radius-full</code> <code>--shadow-md</code></span><span><b>a11y:</b> real <code>&lt;button&gt;</code>; visible focus ring; hover-lift honours reduce-motion.</span></div>
+      </div>
+
+      <div class="ds-spec">
+        <div class="ds-spec-head"><h4>Text input · textarea · select</h4><span class="tier-tag">atom</span></div>
+        <p class="desc">Native form elements, house-skinned, with full state coverage: rest, hover, focus, disabled,
+          invalid.</p>
+        <div class="ds-demo">
+          <div class="ds-demo-stage col">
+            <input class="ds-input" placeholder="District name…" />
+            <input class="ds-input" value="Kolkata" aria-invalid="true" />
+            <select class="ds-select"><option>Choose a state…</option><option>West Bengal</option><option>Bihar</option></select>
+            <textarea class="ds-textarea" placeholder="Notes…"></textarea>
+            <input class="ds-input" value="Locked field" disabled />
+          </div>
+          <div class="ds-demo-code" data-ds-copy><pre>&lt;input class="ds-input" placeholder="District name…"&gt;
+&lt;input class="ds-input" aria-invalid="true" value="Kolkata"&gt;
+&lt;select class="ds-select"&gt;…&lt;/select&gt;
+&lt;textarea class="ds-textarea"&gt;&lt;/textarea&gt;</pre></div>
+        </div>
+        <div class="ds-meta"><span><b>Tokens:</b> <code>--card</code> <code>--border-strong</code> <code>--accent</code> <code>--danger</code></span><span><b>a11y:</b> pair with a <code>&lt;label&gt;</code> (see Field molecule); <code>aria-invalid</code> drives the error colour.</span></div>
+      </div>
+
+      <div class="ds-spec">
+        <div class="ds-spec-head"><h4>Checkbox · radio · switch</h4><span class="tier-tag">atom</span></div>
+        <p class="desc">Custom visuals over a real native input, so keyboard and screen-reader semantics stay free.</p>
+        <div class="ds-demo">
+          <div class="ds-demo-stage">
+            <label class="ds-check"><input type="checkbox" checked><span class="ds-check-box"></span> Flood layer</label>
+            <label class="ds-check ds-check--radio"><input type="radio" name="r" checked><span class="ds-check-box"></span> Per-capita</label>
+            <label class="ds-check ds-check--radio"><input type="radio" name="r"><span class="ds-check-box"></span> Absolute</label>
+            <label class="ds-switch"><input type="checkbox" checked><span class="ds-switch-track"></span> Live data</label>
+          </div>
+          <div class="ds-demo-code" data-ds-copy><pre>&lt;label class="ds-check"&gt;&lt;input type="checkbox"&gt;&lt;span class="ds-check-box"&gt;&lt;/span&gt; Label&lt;/label&gt;
+&lt;label class="ds-check ds-check--radio"&gt;&lt;input type="radio" name="r"&gt;&lt;span class="ds-check-box"&gt;&lt;/span&gt; Label&lt;/label&gt;
+&lt;label class="ds-switch"&gt;&lt;input type="checkbox"&gt;&lt;span class="ds-switch-track"&gt;&lt;/span&gt; Label&lt;/label&gt;</pre></div>
+        </div>
+        <div class="ds-meta"><span><b>Tokens:</b> <code>--accent</code> <code>--muted</code> <code>--border-strong</code></span><span><b>a11y:</b> the hidden native input is the source of truth; focus ring on the custom box.</span></div>
+      </div>
+
+      <div class="ds-spec">
+        <div class="ds-spec-head"><h4>Tags · badges · dots</h4><span class="tier-tag">atom</span></div>
+        <p class="desc">Mono micro-labels classify a card or name a status. Status badges use the semantic tokens.</p>
+        <div class="ds-demo">
+          <div class="ds-demo-stage">
+            <span class="ed-tag">Data explainer</span>
+            <span class="ed-tag ed-tag--teal">Heritage</span>
+            <span class="ds-badge ds-badge--success">Sourced</span>
+            <span class="ds-badge ds-badge--warning">Partial</span>
+            <span class="ds-badge ds-badge--danger">Gap</span>
+            <span class="ds-badge ds-badge--info">Contested</span>
+            <span class="ds-badge ds-badge--neutral">Draft</span>
+            <span style="display:inline-flex;align-items:center;gap:.4rem"><span class="ds-dot ds-dot--live"></span> Live</span>
+          </div>
+          <div class="ds-demo-code" data-ds-copy><pre>&lt;span class="ed-tag"&gt;Data explainer&lt;/span&gt;
+&lt;span class="ds-badge ds-badge--success"&gt;Sourced&lt;/span&gt;
+&lt;span class="ds-dot ds-dot--live"&gt;&lt;/span&gt; Live</pre></div>
+        </div>
+        <div class="ds-meta"><span><b>Tokens:</b> <code>--success</code> <code>--warning</code> <code>--danger</code> <code>--info</code> + tints</span><span><b>a11y:</b> colour is backed by the word — never colour alone.</span></div>
+      </div>
+
+      <div class="ds-spec">
+        <div class="ds-spec-head"><h4>Chip · icon-button · kbd · spinner · rule</h4><span class="tier-tag">atom</span></div>
+        <p class="desc">The small hardware: a selectable filter chip, an icon button, a keyboard key, the chakra
+          spinner, and the incised divider.</p>
+        <div class="ds-demo">
+          <div class="ds-demo-stage">
+            <button class="ds-chip" aria-pressed="true">Rivers</button>
+            <button class="ds-chip">Roads</button>
+            <button class="ds-iconbtn" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></button>
+            <span><span class="ds-kbd">⌘</span> <span class="ds-kbd">K</span></span>
+            <span class="ds-spinner"></span>
+          </div>
+          <hr class="ds-rule" />
+          <div class="ds-demo-code" data-ds-copy><pre>&lt;button class="ds-chip" aria-pressed="true"&gt;Rivers&lt;/button&gt;
+&lt;button class="ds-iconbtn" aria-label="Search"&gt;&lt;svg…&gt;&lt;/button&gt;
+&lt;span class="ds-kbd"&gt;⌘&lt;/span&gt; &lt;span class="ds-spinner"&gt;&lt;/span&gt;
+&lt;hr class="ds-rule"&gt;</pre></div>
+        </div>
+        <div class="ds-meta"><span><b>Tokens:</b> <code>--accent</code> <code>--border-strong</code> <code>--stone-ink</code></span><span><b>a11y:</b> <code>aria-pressed</code> on chips; <code>aria-label</code> on icon-only buttons; spinner slows under reduce-motion.</span></div>
+      </div>
+
+    </section>
+
+    <!-- 2 · MOLECULES -->
+    <section class="ds-tier" id="molecules">
+      <div class="ds-tier-head"><span class="num">2</span><h2>Molecules</h2><span class="glossword">atoms bonded to one job</span></div>
+      <div class="ds-why">
+        <h3>Why these are molecules, not atoms</h3>
+        <p>Each is <i>several atoms bonded so tightly that the group is the reusable unit</i>. A <b>field</b> is a
+          label + input + help/error — pull the label off and the input loses its accessible name; the bond is the
+          point. A <b>segmented control</b> is buttons that only mean something as a mutually-exclusive set. The test:
+          <span class="ds-why"><b>if the atoms are only meaningful together, and you'd reuse them together, it's a
+          molecule.</b></span> A molecule still isn't a whole page section — that's the next tier up.</p>
+      </div>
+
+      <div class="ds-spec">
+        <div class="ds-spec-head"><h4>Field (label + control + help/error)</h4><span class="tier-tag">molecule</span></div>
+        <p class="desc">The smallest genuinely useful form unit — and the clearest atom-vs-molecule example on the page.</p>
+        <div class="ds-demo">
+          <div class="ds-demo-stage col" style="max-width:380px">
+            <div class="ds-field">
+              <label for="f1">District</label>
+              <input id="f1" class="ds-input" placeholder="e.g. Munger" />
+              <span class="ds-help">Type a district to load its ledger.</span>
+            </div>
+            <div class="ds-field">
+              <label for="f2">Year</label>
+              <input id="f2" class="ds-input" value="18XX" aria-invalid="true" />
+              <span class="ds-error">Enter a four-digit year.</span>
+            </div>
+          </div>
+          <div class="ds-demo-code" data-ds-copy><pre>&lt;div class="ds-field"&gt;
+  &lt;label for="f1"&gt;District&lt;/label&gt;
+  &lt;input id="f1" class="ds-input"&gt;
+  &lt;span class="ds-help"&gt;Helper text.&lt;/span&gt;
+&lt;/div&gt;</pre></div>
+        </div>
+        <div class="ds-meta"><span><b>Atoms:</b> label + <code>.ds-input</code> + help/error</span><span><b>a11y:</b> <code>for</code>/<code>id</code> ties label to control; error text pairs with <code>aria-invalid</code>.</span></div>
+      </div>
+
+      <div class="ds-spec">
+        <div class="ds-spec-head"><h4>Segmented control · tabs · pagination</h4><span class="tier-tag">molecule</span></div>
+        <p class="desc">Sets of atoms that only mean anything as a group — one choice out of several.</p>
+        <div class="ds-demo">
+          <div class="ds-demo-stage col">
+            <div class="ds-segmented"><button class="is-on" aria-pressed="true">Map</button><button aria-pressed="false">Chart</button><button aria-pressed="false">Table</button></div>
+            <div class="ds-tabs" role="tablist"><button class="ds-tab" role="tab" aria-selected="true">Overview</button><button class="ds-tab" role="tab" aria-selected="false">Sources</button><button class="ds-tab" role="tab" aria-selected="false">Method</button></div>
+            <div class="ds-pagination"><span aria-current="page">1</span><a href="#molecules">2</a><a href="#molecules">3</a><a href="#molecules">→</a></div>
+          </div>
+          <div class="ds-demo-code" data-ds-copy><pre>&lt;div class="ds-segmented"&gt;&lt;button class="is-on"&gt;Map&lt;/button&gt;…&lt;/div&gt;
+&lt;div class="ds-tabs" role="tablist"&gt;&lt;button class="ds-tab" role="tab" aria-selected="true"&gt;…&lt;/button&gt;&lt;/div&gt;
+&lt;div class="ds-pagination"&gt;&lt;span aria-current="page"&gt;1&lt;/span&gt;…&lt;/div&gt;</pre></div>
+        </div>
+        <div class="ds-meta"><span><b>Atoms:</b> buttons/links bonded by a shared choice</span><span><b>a11y:</b> tabs use <code>role=tablist/tab</code> + <code>aria-selected</code>; current page uses <code>aria-current</code>.</span></div>
+      </div>
+
+      <div class="ds-spec">
+        <div class="ds-spec-head"><h4>Alert · stat · breadcrumb</h4><span class="tier-tag">molecule</span></div>
+        <p class="desc">An icon + heading + body is an alert; a number + label + delta is a stat; a trail of links is a
+          breadcrumb. Small, composed, reusable.</p>
+        <div class="ds-demo">
+          <div class="ds-demo-stage col">
+            <div class="ds-alert ds-alert--info"><span>ⓘ</span><div><strong>Sourced, or it's a gap.</strong>Figures without a government PDF are shown as gaps, never invented.</div></div>
+            <div class="ds-alert ds-alert--danger"><span>⚠</span><div><strong>Flood exposure high.</strong>This ward sits below the 1-in-100-year line.</div></div>
+            <div style="display:flex;gap:var(--sp-8)">
+              <div class="ds-stat"><span class="num">594</span><span class="lbl">Districts</span></div>
+              <div class="ds-stat"><span class="num">11.7%</span><span class="lbl">Avg coverage · <span class="delta--up">▲</span></span></div>
+            </div>
+            <nav class="ds-breadcrumb"><a href="#">Bharat</a><span class="sep">/</span><a href="#">West Bengal</a><span class="sep">/</span><span aria-current="page">Kolkata</span></nav>
+          </div>
+          <div class="ds-demo-code" data-ds-copy><pre>&lt;div class="ds-alert ds-alert--info"&gt;&lt;span&gt;ⓘ&lt;/span&gt;&lt;div&gt;&lt;strong&gt;Title&lt;/strong&gt;Body.&lt;/div&gt;&lt;/div&gt;
+&lt;div class="ds-stat"&gt;&lt;span class="num"&gt;594&lt;/span&gt;&lt;span class="lbl"&gt;Districts&lt;/span&gt;&lt;/div&gt;
+&lt;nav class="ds-breadcrumb"&gt;&lt;a&gt;Bharat&lt;/a&gt;&lt;span class="sep"&gt;/&lt;/span&gt;…&lt;/nav&gt;</pre></div>
+        </div>
+        <div class="ds-meta"><span><b>Tokens:</b> semantic status + tints</span><span><b>a11y:</b> alerts can take <code>role="alert"</code>; stat label names the number.</span></div>
+      </div>
+    </section>
+
+    <!-- 3 · ORGANISMS -->
+    <section class="ds-tier" id="organisms">
+      <div class="ds-tier-head"><span class="num">3</span><h2>Organisms</h2><span class="glossword">standalone sections</span></div>
+      <div class="ds-why">
+        <h3>Why these are organisms</h3>
+        <p>An organism is a <i>distinct, self-sufficient part of an interface</i> — you could point at it on a page
+          and name it: "the data table," "the dialog," "the card grid," "the toolbar." It composes molecules and
+          atoms, owns a chunk of layout, and often owns behaviour. The line from molecule to organism: <b>a molecule
+          is a control; an organism is a place.</b></p>
+      </div>
+
+      <div class="ds-spec">
+        <div class="ds-spec-head"><h4>Card &amp; card grid</h4><span class="tier-tag">organism</span></div>
+        <p class="desc">The discovery unit — a doorway, not a wall of links. Tag + heading + hint + affordance.</p>
+        <div class="ds-demo">
+          <div class="ds-demo-stage col">
+            <div class="ed-cards" style="grid-template-columns:repeat(auto-fill,minmax(230px,1fr));width:100%">
+              <a class="ed-card" href="#organisms"><div class="ed-card-art ed-card-art--teal">🗺</div><div class="ed-card-body"><span class="ed-tag">Map</span><h3>District ledger</h3><p>Follow the money, ward by ward.</p><span class="ed-card-meta">Open <span class="arrow">→</span></span></div></a>
+              <a class="ed-card" href="#organisms"><div class="ed-card-art ed-card-art--clay">🛕</div><div class="ed-card-body"><span class="ed-tag ed-tag--teal">Heritage</span><h3>Temple forms</h3><p>Nagara verticality, to real dims.</p><span class="ed-card-meta">Open <span class="arrow">→</span></span></div></a>
+            </div>
+          </div>
+          <div class="ds-demo-code" data-ds-copy><pre>&lt;a class="ed-card"&gt;&lt;div class="ed-card-art ed-card-art--teal"&gt;…&lt;/div&gt;
+  &lt;div class="ed-card-body"&gt;&lt;span class="ed-tag"&gt;Map&lt;/span&gt;&lt;h3&gt;…&lt;/h3&gt;&lt;p&gt;…&lt;/p&gt;&lt;/div&gt;&lt;/a&gt;</pre></div>
+        </div>
+        <div class="ds-meta"><span><b>Molecules/atoms:</b> tag + heading + meta, on <code>--shadow-xs</code></span><span><b>a11y:</b> whole card is one link; heading is a real <code>&lt;h3&gt;</code>.</span></div>
+      </div>
+
+      <div class="ds-spec">
+        <div class="ds-spec-head"><h4>Data table</h4><span class="tier-tag">organism</span></div>
+        <p class="desc">Rules from the divider token, mono numeric columns, status cells reuse the badges.</p>
+        <div class="ds-demo">
+          <div class="ds-demo-stage col">
+            <table class="ds-table">
+              <thead><tr><th>District</th><th class="num">Allocated</th><th class="num">Spent</th><th>Coverage</th></tr></thead>
+              <tbody>
+                <tr><td>Kolkata</td><td class="num">₹1,240 Cr</td><td class="num">₹1,090 Cr</td><td><span class="ds-badge ds-badge--success">Deep</span></td></tr>
+                <tr><td>Munger</td><td class="num">₹210 Cr</td><td class="num">₹96 Cr</td><td><span class="ds-badge ds-badge--warning">Partial</span></td></tr>
+                <tr><td>Begusarai</td><td class="num">₹305 Cr</td><td class="num">—</td><td><span class="ds-badge ds-badge--danger">Gap</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="ds-demo-code" data-ds-copy><pre>&lt;table class="ds-table"&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;District&lt;/th&gt;&lt;th class="num"&gt;Spent&lt;/th&gt;…&lt;/tr&gt;&lt;/thead&gt;
+  &lt;tbody&gt;&lt;tr&gt;&lt;td&gt;Kolkata&lt;/td&gt;&lt;td class="num"&gt;₹1,090 Cr&lt;/td&gt;…&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;</pre></div>
+        </div>
+        <div class="ds-meta"><span><b>Reuses:</b> badge atoms, divider token</span><span><b>a11y:</b> real <code>&lt;th&gt;</code> headers; numeric columns tabular-aligned.</span></div>
+      </div>
+
+      <div class="ds-spec">
+        <div class="ds-spec-head"><h4>Toolbar</h4><span class="tier-tag">organism</span></div>
+        <p class="desc">Where the controls live above a view — chips, segmented, a search, an action.</p>
+        <div class="ds-demo">
+          <div class="ds-demo-stage col">
+            <div class="ds-toolbar">
+              <div class="ds-segmented"><button class="is-on">Map</button><button>Table</button></div>
+              <button class="ds-chip" aria-pressed="true">Rivers</button><button class="ds-chip">Roads</button>
+              <span class="spacer"></span>
+              <input class="ds-input" placeholder="Search…" style="max-width:180px">
+              <button class="ed-btn ed-btn--primary">Export</button>
+            </div>
+          </div>
+          <div class="ds-demo-code" data-ds-copy><pre>&lt;div class="ds-toolbar"&gt;&lt;div class="ds-segmented"&gt;…&lt;/div&gt;&lt;button class="ds-chip"&gt;…&lt;/button&gt;
+  &lt;span class="spacer"&gt;&lt;/span&gt;&lt;input class="ds-input"&gt;&lt;button class="ed-btn ed-btn--primary"&gt;Export&lt;/button&gt;&lt;/div&gt;</pre></div>
+        </div>
+        <div class="ds-meta"><span><b>Composes:</b> segmented + chips + input + button</span><span><b>a11y:</b> group with <code>role="toolbar"</code> + a label.</span></div>
+      </div>
+
+      <div class="ds-spec">
+        <div class="ds-spec-head"><h4>Dialog</h4><span class="tier-tag">organism</span></div>
+        <p class="desc">A modal surface at the top of the elevation ladder, shown here inside a static frame.</p>
+        <div class="ds-demo">
+          <div class="ds-demo-stage" style="background:var(--muted)">
+            <div class="ds-dialog">
+              <div class="ds-dialog-head"><h3>Remove this layer?</h3><button class="ds-iconbtn" aria-label="Close">✕</button></div>
+              <div class="ds-dialog-body">The flood overlay will be hidden. You can bring it back from the toolbar at any time.</div>
+              <div class="ds-dialog-foot"><button class="ed-btn ed-btn--ghost">Cancel</button><button class="ed-btn ed-btn--primary">Remove</button></div>
+            </div>
+          </div>
+          <div class="ds-demo-code" data-ds-copy><pre>&lt;div class="ds-dialog"&gt;&lt;div class="ds-dialog-head"&gt;&lt;h3&gt;…&lt;/h3&gt;&lt;button class="ds-iconbtn"&gt;✕&lt;/button&gt;&lt;/div&gt;
+  &lt;div class="ds-dialog-body"&gt;…&lt;/div&gt;&lt;div class="ds-dialog-foot"&gt;…&lt;/div&gt;&lt;/div&gt;</pre></div>
+        </div>
+        <div class="ds-meta"><span><b>Elevation:</b> <code>--shadow-lg</code></span><span><b>a11y:</b> live use needs <code>role="dialog"</code>, <code>aria-modal</code>, focus trap, <kbd>Esc</kbd> to close.</span></div>
+      </div>
+    </section>
+
+    <!-- 4 · TEMPLATES -->
+    <section class="ds-tier" id="templates">
+      <div class="ds-tier-head"><span class="num">4</span><h2>Templates &amp; patterns</h2><span class="glossword">where organisms live</span></div>
+      <div class="ds-why">
+        <h3>Why templates are the top tier</h3>
+        <p>A template is the <i>page-level skeleton</i>: it arranges organisms into a layout without caring what
+          content fills them. It's the difference between "a card grid" (organism) and "the front-door layout: hero,
+          then a start-here row, then topic sections" (template). Our real templates already ship as pages —
+          <code>home.html</code>, the article layout, the atlas shell. This tier is the bridge from the system to the
+          product.</p>
+      </div>
+
+      <div class="ds-spec">
+        <div class="ds-spec-head"><h4>Registers — one system, three moods</h4><span class="tier-tag">pattern</span></div>
+        <p class="desc"><span class="heritage">The light <b>wasli</b> register is the miniature page in daylight; the dark <b>sheesh-mahal</b> register is the mirror hall at night — deep indigo with gold &amp; mirror glints.</span> Same atoms, different tokens — try the <b>skin switcher</b> above.</p>
+        <div class="ds-demo">
+          <div class="ds-demo-stage" style="gap:var(--sp-3)">
+            <span class="ds-badge ds-badge--neutral">Mauryan → structure</span>
+            <span class="ds-badge ds-badge--neutral">Gupta → long-form</span>
+            <span class="ds-badge ds-badge--neutral">Dark → 3D / engines</span>
+          </div>
+        </div>
+        <div class="ds-meta"><span><b>Registers per context</b> — see <code>ASHOKA_DESIGN.md §0</code></span><span><b>Reuse:</b> the whole point of tiers 0–3.</span></div>
+      </div>
+
+      <div class="ds-spec">
+        <div class="ds-spec-head"><h4>Template starters</h4><span class="tier-tag">template</span></div>
+        <p class="desc">The real pages that compose these organisms into layouts.</p>
+        <div class="ds-demo">
+          <div class="ds-demo-stage">
+            <a class="ed-btn ed-btn--ghost" href="home.html">Front door →</a>
+            <a class="ed-btn ed-btn--ghost" href="index.html">Atlas shell →</a>
+            <a class="ed-btn ed-btn--ghost" href="article.html">Article layout →</a>
+            <a class="ed-btn ed-btn--ghost" href="indic-design-systems.html">All Indic systems →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <p class="ds-foot">This page renders live from <code>styles.css</code> + <code>theme-mauryan.css</code>: change a
+      token there and every specimen here changes — one source of truth, no drift. The atomic component library
+      (<code>.ds-*</code> classes) lives in <code>styles.css</code>; the docs chrome is <code>ds-page.css</code> /
+      <code>ds-page.js</code>. Reference: <a href="DESIGN_PRINCIPLES.md">DESIGN_PRINCIPLES.md</a> ·
+      <a href="ASHOKA_DESIGN.md">ASHOKA_DESIGN.md</a>. Method: Atomic Design (Brad Frost); coverage benchmarked
+      against Oracle JET &amp; Material and then made our own. System &amp; authorship <b>Sinhaankur</b> ™ / ©.</p>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="ds-page.js"></script>
+  <script src="command-palette.js"></script>
+  <script src="site-nav.js"></script>
+</body>
+</html>
