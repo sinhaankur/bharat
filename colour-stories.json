@@ -1,0 +1,146 @@
+{
+  "_meta": {
+    "title": "Colour origin stories — the pigments behind the Indic design systems",
+    "author": "Sinhaankur",
+    "note": "Every colour in these systems is drawn from a real material, place and history. This is the 'sourced, or it's a gap' rule applied to the palette itself: each entry carries where the colour came from, what it inspired, and a book/article reference. Claims flagged 'contested' where the historical record disagrees.",
+    "ethos": "A colour is not decoration; it is a place with a history."
+  },
+  "colours": [
+    {
+      "id": "indian-yellow",
+      "name": "Indian Yellow",
+      "systems": ["gupta", "mauryan", "rajput"],
+      "tokens": ["--accent", "--gold-leaf", "--halo-gold", "--gopuram-gold", "--gold-leaf-r"],
+      "hex": "#c9a227",
+      "origin": "A luminous golden lake pigment (piuri / peori / gogili) reportedly made at Monghyr — modern Munger, Bihar — from the concentrated urine of cows fed only mango leaves and water. Documented by the Indian civil servant T. N. Mukharji in 1883 at the request of Kew's Sir Joseph Hooker; long doubted, then largely confirmed by 21st-century chemistry identifying euxanthate salts.",
+      "place": "Munger (Monghyr), Bihar",
+      "place_href": "district.html?d=Munger",
+      "inspired": "Used across Rajput and Pahari miniature painting for its glowing gold, and prized in Europe — Vermeer, Turner, and famously Van Gogh, who used it for the moon in The Starry Night (1889). It vanished from the market in the early 20th c. amid animal-cruelty concern and synthetic competition.",
+      "status": "confirmed",
+      "reference": {
+        "type": "encyclopaedia",
+        "cite": "\"Indian yellow\", Wikipedia; T. N. Mukharji (1883) report to J. D. Hooker; euxanthate confirmation, C&EN 2018.",
+        "url": "https://en.wikipedia.org/wiki/Indian_yellow"
+      }
+    },
+    {
+      "id": "indigo-nila",
+      "name": "Indigo · Nīla",
+      "systems": ["rajput", "gupta", "mauryan"],
+      "tokens": ["--indigo", "--indigo-mss", "--ajanta-lapis", "--sky"],
+      "hex": "#274a8c",
+      "origin": "The blue dye of Indigofera tinctoria — called nīla (\"dark blue\") in India, where its use is attested from the Indus Valley (Mohenjo-daro / Lothal, c. 2500–2000 BCE). The English word 'indigo' comes from Greek indikón, 'from India'. India dominated the world indigo trade for two millennia; it was called 'blue gold'.",
+      "place": "Indus Valley; later Bengal & Bihar plantations",
+      "place_href": "",
+      "inspired": "Traded along the Silk Road, it became the 'bleu de Gênes' of Genoa — the ancestor of blue jeans. Under colonial plantations it drove the 1859 Bengal indigo revolt and Gandhi's 1917 Champaran satyagraha — one of India's first acts of mass non-violent resistance.",
+      "status": "confirmed",
+      "reference": {
+        "type": "encyclopaedia",
+        "cite": "\"Indigo dye\", Wikipedia; archaeology of Indus Valley textiles; Champaran satyagraha (1917).",
+        "url": "https://en.wikipedia.org/wiki/Indigo_dye"
+      }
+    },
+    {
+      "id": "ajanta-lapis",
+      "name": "Ultramarine · Lapis lazuli",
+      "systems": ["gupta"],
+      "tokens": ["--ajanta-lapis"],
+      "hex": "#2a4a7a",
+      "origin": "The deepest blue of the Ajanta murals, ground from lapis lazuli. Raman-spectroscopy provenance work on Ajanta pigment samples points to the stone being imported from the Sar-e-Sang mines of Badakhshan, Afghanistan — mined for over 6,000 years — reaching the Deccan by trade.",
+      "place": "Ajanta Caves, Maharashtra (stone from Badakhshan)",
+      "place_href": "heritage-atlas.html",
+      "inspired": "By weight it was once costlier than gold; Renaissance handbooks (Cennini) called it the most perfect of colours. Its journey Afghanistan → Ajanta is a Silk-Route story written in a single blue.",
+      "status": "confirmed",
+      "reference": {
+        "type": "journal",
+        "cite": "Kumar et al. (2025), 'Multianalytical Characterization of Lapis Lazuli Pigments of Ajanta Murals', J. Raman Spectroscopy.",
+        "url": "https://analyticalsciencejournals.onlinelibrary.wiley.com/doi/10.1002/jrs.70012"
+      }
+    },
+    {
+      "id": "kumkum-vermilion",
+      "name": "Vermilion · Kumkum / Sindūra",
+      "systems": ["chola", "rajput", "mauryan"],
+      "tokens": ["--accent", "--kumkum", "--vermilion", "--terracotta", "--ajanta-red"],
+      "hex": "#b3341f",
+      "origin": "The sacred red of the temple and the miniature — historically vermilion, the brilliant scarlet of ground cinnabar (mercury sulphide) and its synthetic twin. In ritual use as kumkum / sindūra it marks the deity, the threshold and the married woman; the same red fills the Ajanta palette as iron-oxide.",
+      "place": "Temple towns of the Tamil country; pan-Indian ritual use",
+      "place_href": "heritage-atlas.html",
+      "inspired": "The single 'action colour' of the Chola and Rajput systems — because in the culture it already means 'here, now, sacred'. Colour that carries meaning, never decoration.",
+      "status": "confirmed",
+      "reference": {
+        "type": "encyclopaedia",
+        "cite": "\"Vermilion\" and \"Sindoor\", Wikipedia; Ajanta pigment analyses (iron-oxide reds).",
+        "url": "https://en.wikipedia.org/wiki/Vermilion"
+      }
+    },
+    {
+      "id": "chunar-stone",
+      "name": "Chunar buff · Mauryan sandstone",
+      "systems": ["mauryan"],
+      "tokens": ["--stone", "--stone-2", "--background"],
+      "hex": "#e9ddc7",
+      "origin": "The buff / tan sandstone of Chunar, quarried on the Ganga near Varanasi, from which the Ashokan pillars were cut and given the famous mirror-like 'Mauryan polish'. The paper of the Mauryan system is this stone in sunlight.",
+      "place": "Chunar, Uttar Pradesh",
+      "place_href": "ashoka.html",
+      "inspired": "The pillars stood 12–15 m, single shafts of this stone; their tapering, burnished form is the whole geometry of the Mauryan register — tall, singular, polished.",
+      "status": "confirmed",
+      "reference": {
+        "type": "encyclopaedia",
+        "cite": "\"Pillars of Ashoka\", Wikipedia; ASHOKA_DESIGN.md §1.",
+        "url": "https://en.wikipedia.org/wiki/Pillars_of_Ashoka"
+      }
+    },
+    {
+      "id": "mathura-sandstone",
+      "name": "Mathura red sandstone",
+      "systems": ["gupta"],
+      "tokens": ["--gupta-stone", "--gupta-rose", "--background"],
+      "hex": "#c8664a",
+      "origin": "The mottled red-and-cream sandstone of the Mathura region, the signature medium of Kushan and Gupta sculpture — the great Gupta Buddha and Vishnu figures were carved from it. Its warm red is the ground of the Gupta 'soul' register.",
+      "place": "Mathura, Uttar Pradesh",
+      "place_href": "heritage-atlas.html",
+      "inspired": "Where Mauryan is cool polished buff, Gupta is this warm red — the shift from imperial austerity to classical warmth, read straight off the stone.",
+      "status": "confirmed",
+      "reference": {
+        "type": "encyclopaedia",
+        "cite": "\"Mathura art\" and \"Gupta art\", Wikipedia; ASHOKA_DESIGN.md §2b.",
+        "url": "https://en.wikipedia.org/wiki/Gupta_art"
+      }
+    },
+    {
+      "id": "chola-bronze",
+      "name": "Chola bronze · patina",
+      "systems": ["chola"],
+      "tokens": ["--bronze", "--bronze-deep", "--patina", "--foreground", "--background"],
+      "hex": "#7d5a2e",
+      "origin": "The lost-wax cast bronze of the Chola masters — the Nataraja and the processional icons — an alloy that ages from warm metal to a green-brown verdigris patina. The system's ink and success-green are that metal and its ageing.",
+      "place": "Thanjavur / Kaveri delta, Tamil Nadu",
+      "place_href": "heritage-atlas.html",
+      "inspired": "Chola bronzes are held among the finest metal sculpture ever made; the register's monumental, squared feel comes from bronze and Thanjavur granite together.",
+      "status": "confirmed",
+      "reference": {
+        "type": "encyclopaedia",
+        "cite": "\"Chola art and architecture\" and \"Chola bronzes\", Wikipedia.",
+        "url": "https://en.wikipedia.org/wiki/Chola_art_and_architecture"
+      }
+    },
+    {
+      "id": "jaisalmer-sandstone",
+      "name": "Jaisalmer golden sandstone",
+      "systems": ["rajput"],
+      "tokens": ["--haveli", "--haveli-2", "--background"],
+      "hex": "#e7c98a",
+      "origin": "The honey-gold yellow sandstone of Jaisalmer, so pervasive that the fort and town are called the 'Golden City'. The carved havelis and the living fort are cut from it; it is the sunlit ground of the Rajput register.",
+      "place": "Jaisalmer, Rajasthan",
+      "place_href": "heritage-atlas.html",
+      "inspired": "Paired with sheesh-mahal mirror-work and miniature pigment, the sandstone gives the Rajput system its desert-court warmth.",
+      "status": "confirmed",
+      "reference": {
+        "type": "encyclopaedia",
+        "cite": "\"Jaisalmer Fort\", Wikipedia; Rajput architecture.",
+        "url": "https://en.wikipedia.org/wiki/Jaisalmer_Fort"
+      }
+    }
+  ]
+}

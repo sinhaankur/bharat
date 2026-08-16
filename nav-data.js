@@ -73,8 +73,9 @@
 
     { label: "About", tagline: "What this is, how it's built, and how to use or share it.", items: [
       { href: "how-it-works.html", text: "How it works", hint: "the project, explained", icon: "ℹ️", keywords: "how it works about explain intro what is this help start guide" },
-      { href: "design-system.html", text: "Design system", hint: "the brand, tokens & components — the living style guide", icon: "🎨", keywords: "design system brand style guide tokens colors components ui ux theme terracotta teal" },
-      { href: "app/design-systems/", text: "India by Design Systems", hint: "the flagship — one chassis, many Indias (Indic skins)", icon: "🪷", ext: true, keywords: "indic design systems flagship skins states chassis modernist segment lattice" },
+      { href: "indic-design-systems.html", text: "Indic design systems", hint: "the family — Mauryan, Gupta, Chola, Rajput… one atomic spine, many heritages", icon: "🪷", keywords: "indic design systems family atomic mauryan gupta chola rajput heritage tokens skins per state sinhaankur" },
+      { href: "design-system.html", text: "Design system — Mauryan", hint: "the flagship atomic reference: tokens, atoms, molecules, organisms, templates", icon: "🎨", keywords: "design system brand style guide tokens colors components ui ux theme atomic mauryan reference cookbook" },
+      { href: "app/design-systems/", text: "India by Design Systems", hint: "the flagship deck — one chassis, many Indias (Indic skins)", icon: "🪷", ext: true, keywords: "indic design systems flagship skins states chassis modernist segment lattice" },
       { href: "app/canvas/", text: "The canvas", hint: "every screen of the atlas, one deck", icon: "🗂", ext: true, keywords: "canvas mockups deck every screen design pages map" },
       { href: "about.html", text: "Methodology & disclaimer", icon: "📋", keywords: "about methodology disclaimer legal how method" },
       { href: "for-organisations.html", text: "For organisations", icon: "🏢", keywords: "organisations business enterprise partner ngo licence" },
@@ -130,10 +131,22 @@
       { href: "temple-forms.html", text: "Temple forms in 3D (parametric)", hint: "Nagara · Dravida · Kalinga, modelled to real dims" },
       { href: "mesh.html", text: "The mesh", hint: "how officials, districts, money & cases connect" },
     ]},
-    { label: "Design", href: "app/design-systems/", tagline: "One chassis, many Indias — the Indic design system.", items: [
-      { href: "app/design-systems/", text: "India by Design Systems", hint: "the flagship — a skin per state, over one chassis", ext: true },
+    { label: "Design", href: "indic-design-systems.html", tagline: "One atomic spine, many heritages — the Indic design systems.", items: [
+      { href: "indic-design-systems.html", text: "Indic design systems", hint: "the family hub — every system, one atomic spine", icon: "🪷", children: [
+        { href: "design-system.html", text: "Mauryan", hint: "stone, sky & the incised line" },
+        { href: "ds-gupta.html", text: "Gupta", hint: "plaster, fresco & the ornate halo" },
+        { href: "ds-chola.html", text: "Chola", hint: "bronze, granite & the sacred red" },
+        { href: "ds-rajput.html", text: "Rajput", hint: "sandstone, mirror-work & miniature colour" },
+      ] },
+      { href: "design-system.html", text: "Atomic reference", hint: "tokens · atoms · molecules · organisms · templates", icon: "🎨", children: [
+        { href: "design-system.html#tokens", text: "Tokens" },
+        { href: "design-system.html#atoms", text: "Atoms" },
+        { href: "design-system.html#molecules", text: "Molecules" },
+        { href: "design-system.html#organisms", text: "Organisms" },
+        { href: "design-system.html#templates", text: "Templates" },
+      ] },
+      { href: "app/design-systems/", text: "India by Design Systems", hint: "the flagship deck — a skin per state, over one chassis", ext: true },
       { href: "app/canvas/", text: "The canvas", hint: "every screen of the atlas, one deck", ext: true },
-      { href: "design-system.html", text: "Design system", hint: "the brand, tokens & components — the style guide" },
     ]},
     { label: "Data", href: "knowledge.html", tagline: "The receipts — every figure, every source.", items: [
       { href: "knowledge.html", text: "Knowledge base", hint: "the data catalog" },

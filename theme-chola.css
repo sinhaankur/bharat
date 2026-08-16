@@ -1,0 +1,59 @@
+/* theme-chola.css — the Chola register of the Indic design systems.
+   Author: Sinhaankur.  Heritage (Tamil, 9th–13th c. CE):
+   - The Chola bronzes (Nataraja) — lost-wax cast bronze, aged to a green-brown patina.
+   - Brihadisvara temple, Thanjavur (UNESCO "Great Living Chola Temples") — golden
+     granite, the towering vimana, deep-shadowed sanctum.
+   - Tamil monumental inscription; sacred ash (vibhuti) white; kumkum vermilion.
+   Sources: Wikipedia — Chola art & architecture; Brihadisvara Temple; Chola bronzes.
+
+   REVERSIBLE LAYER: link AFTER styles.css, add class="theme-chola" to <html>.
+   Add theme-dark for the lamp-lit sanctum register. Same token contract. */
+html.theme-chola {
+  /* `html.` prefix raises specificity to (0,1,1) to override html.theme-light */
+  /* Chola palette (heritage-sourced) */
+  --bronze:      #7d5a2e;   /* fresh cast bronze */
+  --bronze-deep: #5a3f1f;   /* aged bronze / carved shadow */
+  --patina:      #6f7d5a;   /* verdigris green on old bronze */
+  --patina-2:    #8a9670;
+  --granite:     #b7ad9a;   /* Thanjavur golden granite, sunlit */
+  --granite-2:   #cfc6b4;
+  --sanctum:     #211712;   /* deep temple interior */
+  --kumkum:      #b3341f;   /* vermilion — the action / sacred red */
+  --vibhuti:     #f4efe4;   /* sacred-ash off-white — the paper */
+  --gopuram-gold:#c99a34;   /* gilded finial */
+
+  /* remap house surfaces onto granite/ash; ink is bronze-brown */
+  --background: var(--vibhuti); --card: #fbf7ee; --surface: #fbf7ee;
+  --muted: var(--granite-2); --foreground: #2c2013;
+  --muted-foreground: #766549;
+  --border: rgba(90, 63, 31, 0.20); --border-strong: rgba(90, 63, 31, 0.42);
+  --surface-2: #efe8d8;
+
+  /* Chola action colour = kumkum vermilion (the temple's sacred red) */
+  --accent: var(--kumkum); --accent-ink: #8f2616; --accent-tint: #f2ddd6;
+  --indigo: #2f5f6e;        /* Kaveri-water teal as the secondary data hue */
+  --success: var(--patina); --warning: var(--gopuram-gold);
+  --danger: var(--kumkum);  --info: #2f5f6e;
+
+  /* monumental, squared — granite blocks, not soft plastic */
+  --ds-radius: 3px;
+}
+
+/* dark "sanctum" — the lamp-lit inner shrine: black granite, bronze glow */
+html.theme-chola.theme-dark, html.theme-chola .register-dark {
+  --background: #171009; --card: var(--sanctum); --surface: var(--sanctum);
+  --foreground: #f0e6d2; --muted: #2e2115; --muted-foreground: #c2a982;
+  --border: rgba(201, 154, 52, 0.24); --border-strong: rgba(201, 154, 52, 0.46);
+  --surface-2: #241a10;
+  --accent: #d9603f; --accent-ink: #eb8163;
+}
+
+/* the Chola finish — a thin bronze-patina top edge (the cast metal catching light) */
+.theme-chola .ed-card::before, .theme-chola .card::before {
+  content: ""; position: absolute; inset: 0 0 auto 0; height: 2px;
+  background: linear-gradient(90deg, var(--gopuram-gold), var(--patina) 70%, transparent);
+  opacity: .85; pointer-events: none; }
+.theme-chola .ed-card, .theme-chola .card, .theme-chola .ds-demo { position: relative; }
+
+/* rules read as incised granite lines */
+.theme-chola .ds-rule, .theme-chola hr { border: 0; height: 2px; background: var(--bronze-deep); opacity: .8; }

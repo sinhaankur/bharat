@@ -1,8 +1,10 @@
 /* theme-mauryan.css — the Mauryan register for the Bharat atlas.
    REVERSIBLE LAYER: link AFTER styles.css and add class="theme-mauryan" to <html>.
    Remove the class, the site returns to the house look. CTAs keep --accent #cc8900. */
-.theme-mauryan {
+html.theme-mauryan {
   /* Mauryan stone & sky (photo-sampled, ASHOKA_DESIGN.md §2) */
+  /* NOTE: `html.` prefix is required — it raises specificity to (0,1,1) so this
+     skin overrides styles.css `html.theme-light`, which pages also carry. */
   --stone: #e9ddc7; --stone-2: #dcccae; --stone-ink: #2a2018;
   --sky: #3078c0; --sky-deep: #245c98; --sky-mist: #d8f0f0;
   --ochre: #a8794a; --maroon: #301818; --terracotta: #a8452a;
@@ -20,7 +22,7 @@
   /* --accent (#cc8900) and --accent-ink are inherited: the CTA colour is the house gold */
 }
 /* dark "temple interior" — for 3D pages and the engines hub */
-.theme-mauryan.theme-dark, .theme-mauryan .register-dark {
+html.theme-mauryan.theme-dark, html.theme-mauryan .register-dark {
   --background: #1c1210; --card: var(--maroon); --surface: var(--maroon);
   --foreground: var(--ajanta-ivory); --muted: #3d2020;
   --border: rgba(201, 162, 39, 0.25); --border-strong: rgba(201, 162, 39, 0.45);
