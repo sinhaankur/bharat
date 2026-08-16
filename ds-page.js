@@ -14,6 +14,105 @@
   var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) {
     return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
 
+  // which Indic system is this page? (also used by the colour-stories below)
+  function sysOf() {
+    var m = (root.className || "").match(/theme-(mauryan|gupta|chola|rajput)/);
+    return m ? m[1] : "mauryan";
+  }
+
+  /* ---------- HERO ORNAMENT: imperial seal + heritage-motif watermark ----------
+     Each system's title wall carries (a) a drawn imperial seal medallion and
+     (b) a full-bleed heritage-motif watermark, both original line-drawings on
+     currentColor so they reskin with the accent. NEVER the official State Emblem.
+     Very low opacity; no motion → reduce-motion safe by construction. */
+  var SEAL = {
+    // a radial "coin/seal" medallion — concentric rules, a ring of ticks, a mark
+    mauryan: '<circle cx="60" cy="60" r="54" fill="none" stroke="currentColor" stroke-width="1.5"/>' +
+      '<circle cx="60" cy="60" r="44" fill="none" stroke="currentColor" stroke-width="1"/>' +
+      '<g stroke="currentColor" stroke-width="1.4">' + ticks(60, 60, 48, 24) + '</g>' +
+      '<circle cx="60" cy="60" r="8" fill="none" stroke="currentColor" stroke-width="1.4"/>' +
+      '<path d="M60 30 L60 90 M30 60 L90 60" stroke="currentColor" stroke-width="1"/>',
+    gupta: '<circle cx="60" cy="60" r="54" fill="none" stroke="currentColor" stroke-width="1.5"/>' +
+      '<g stroke="currentColor" stroke-width="1.2" fill="none">' + petals(60, 60, 30, 52, 16) + '</g>' +
+      '<circle cx="60" cy="60" r="10" fill="none" stroke="currentColor" stroke-width="1.4"/>',
+    chola: '<circle cx="60" cy="60" r="54" fill="none" stroke="currentColor" stroke-width="1.5"/>' +
+      '<circle cx="60" cy="60" r="40" fill="none" stroke="currentColor" stroke-width="1"/>' +
+      '<g stroke="currentColor" stroke-width="1.3">' + ticks(60, 60, 47, 32) + '</g>' +
+      '<path d="M60 40 L72 78 L48 78 Z" fill="none" stroke="currentColor" stroke-width="1.4"/>',
+    rajput: '<circle cx="60" cy="60" r="54" fill="none" stroke="currentColor" stroke-width="1.5"/>' +
+      '<path d="M60 12 A48 48 0 0 1 108 60 L60 60 Z" fill="none" stroke="currentColor" stroke-width="1"/>' +
+      '<g stroke="currentColor" stroke-width="1.2" fill="none">' + petals(60, 60, 22, 46, 12) + '</g>' +
+      '<circle cx="60" cy="60" r="7" fill="none" stroke="currentColor" stroke-width="1.4"/>'
+  };
+  // full-bleed motif watermarks (drawn large, tiled or radial)
+  function motifSVG(sys) {
+    if (sys === "mauryan") {   // jali lattice
+      return '<defs><pattern id="dsJali" width="46" height="46" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">' +
+        '<path d="M23 0 V46 M0 23 H46" stroke="currentColor" stroke-width="1" fill="none"/>' +
+        '<circle cx="23" cy="23" r="10" fill="none" stroke="currentColor" stroke-width="1"/>' +
+        '</pattern></defs><rect width="100%" height="100%" fill="url(#dsJali)"/>';
+    }
+    if (sys === "gupta") {     // radiating halo / prabhāvali
+      return '<g stroke="currentColor" stroke-width="1.1" fill="none" transform="translate(760,150)">' +
+        [0.5, 0.7, 0.85, 1].map(function (r) { return '<circle cx="0" cy="0" r="' + (120 * r) + '"/>'; }).join("") +
+        petals(0, 0, 90, 150, 32) + '</g>';
+    }
+    if (sys === "chola") {     // tiered gopuram silhouette
+      var tiers = "";
+      for (var i = 0; i < 7; i++) {
+        var w = 150 - i * 16, y = 40 + i * 30;
+        tiers += '<rect x="' + (-w / 2) + '" y="' + y + '" width="' + w + '" height="22" rx="2" fill="none" stroke="currentColor" stroke-width="1.2"/>';
+      }
+      return '<g transform="translate(770,60)">' + tiers + '<path d="M-14 40 Q0 8 14 40 Z" fill="none" stroke="currentColor" stroke-width="1.2"/></g>';
+    }
+    // rajput — jharokha arches
+    var arches = "";
+    for (var c = 0; c < 4; c++) {
+      var x = 560 + c * 70;
+      arches += '<path d="M' + x + ' 300 V150 Q' + x + ' 90 ' + (x + 35) + ' 90 Q' + (x + 70) + ' 90 ' + (x + 70) + ' 150 V300" fill="none" stroke="currentColor" stroke-width="1.2"/>';
+    }
+    return '<g>' + arches + '</g>';
+  }
+  // helper: N radial ticks around a circle
+  function ticks(cx, cy, r, n) {
+    var out = "";
+    for (var i = 0; i < n; i++) {
+      var a = (i / n) * Math.PI * 2, x1 = cx + Math.cos(a) * r, y1 = cy + Math.sin(a) * r,
+        x2 = cx + Math.cos(a) * (r - 5), y2 = cy + Math.sin(a) * (r - 5);
+      out += '<line x1="' + x1.toFixed(1) + '" y1="' + y1.toFixed(1) + '" x2="' + x2.toFixed(1) + '" y2="' + y2.toFixed(1) + '"/>';
+    }
+    return out;
+  }
+  // helper: N teardrop petals radiating from a centre (a halo/lotus ring)
+  function petals(cx, cy, r0, r1, n) {
+    var out = "";
+    for (var i = 0; i < n; i++) {
+      var a = (i / n) * Math.PI * 2, ca = Math.cos(a), sa = Math.sin(a);
+      var x0 = cx + ca * r0, y0 = cy + sa * r0, x1 = cx + ca * r1, y1 = cy + sa * r1;
+      var pa = a + 0.11, ma = a - 0.11;
+      var xa = cx + Math.cos(pa) * (r0 + (r1 - r0) * 0.5), ya = cy + Math.sin(pa) * (r0 + (r1 - r0) * 0.5);
+      var xb = cx + Math.cos(ma) * (r0 + (r1 - r0) * 0.5), yb = cy + Math.sin(ma) * (r0 + (r1 - r0) * 0.5);
+      out += '<path d="M' + x0.toFixed(1) + ' ' + y0.toFixed(1) + ' Q' + xa.toFixed(1) + ' ' + ya.toFixed(1) + ' ' + x1.toFixed(1) + ' ' + y1.toFixed(1) +
+        ' Q' + xb.toFixed(1) + ' ' + yb.toFixed(1) + ' ' + x0.toFixed(1) + ' ' + y0.toFixed(1) + 'Z"/>';
+    }
+    return out;
+  }
+  (function ornamentHero() {
+    var head = document.querySelector(".ds-head");
+    if (!head) return;
+    var sys = sysOf();
+    // motif watermark (full-bleed, behind everything)
+    var motif = document.createElement("div");
+    motif.className = "ds-motif"; motif.setAttribute("aria-hidden", "true");
+    motif.innerHTML = '<svg viewBox="0 0 960 360" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">' + motifSVG(sys) + '</svg>';
+    head.insertBefore(motif, head.firstChild);
+    // seal medallion (top-right)
+    var seal = document.createElement("div");
+    seal.className = "ds-seal"; seal.setAttribute("aria-hidden", "true");
+    seal.innerHTML = '<svg viewBox="0 0 120 120" width="100%" height="100%">' + (SEAL[sys] || SEAL.mauryan) + '</svg>';
+    head.appendChild(seal);
+  })();
+
   /* ---------- SKIN SWITCHER ---------- */
   // The full family of Indic skins. `id` must be unique; `cls` is the <html>
   // class list to apply; `needs` is the theme-*.css file that must be linked for
