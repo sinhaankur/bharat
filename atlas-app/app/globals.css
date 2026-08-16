@@ -44,6 +44,9 @@
 
   /* choropleth ramp — light ground → accent (recomputed per skin below) */
   --ramp-0: #f8f4ec; --ramp-1: #e8d9bf; --ramp-2: #e0a06a; --ramp-3: #cf6a2e; --ramp-4: #c1440e;
+
+  /* ROYAL — a gold-leaf token for gilt detailing (falls back to the band/gold) */
+  --gold-leaf: var(--band, #c9862b);
 }
 
 /* ── the shared MODERNIST CHASSIS skin (structure-forward, mono red) ── */
@@ -349,3 +352,39 @@ html[data-reduce="on"] *, html[data-reduce="on"] *::before, html[data-reduce="on
 html[data-reduce="on"] [data-reveal] { opacity: 1 !important; transform: none !important; }
 html[data-reduce="on"] .btn:hover, html[data-reduce="on"] .ah-cta:hover, html[data-reduce="on"] .af-sub:hover,
 html[data-reduce="on"] a.card:hover, html[data-reduce="on"] button.card:hover, html[data-reduce="on"] .card--interactive:hover { transform: none !important; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   ROYAL BHARAT — a light gilt layer ON TOP of the Modernist chassis.
+   Never touches space/radius/layout; only adds gilt detailing & refined type.
+   Utilities are opt-in (class-based) so nothing changes unless a page asks.
+   Author: Sinhaankur.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* a fine gold-leaf hairline — under headers, over footers, framing bands */
+.gilt-rule { height: 1px; border: 0; background:
+  linear-gradient(90deg, transparent, var(--gold-leaf) 12%, var(--gold-leaf) 88%, transparent); opacity: .8; }
+.gilt-rule--center { background:
+  linear-gradient(90deg, transparent, var(--gold-leaf), transparent); }
+
+/* an imperial gold double-rule (a thin line shadowed by a fainter one) */
+.gilt-double { position: relative; border-top: 1px solid var(--gold-leaf); }
+.gilt-double::after { content: ""; position: absolute; left: 0; right: 0; top: 2px; height: 1px;
+  background: color-mix(in srgb, var(--gold-leaf) 45%, transparent); }
+
+/* small-caps tracked label — the curatorial/royal voice */
+.royal-caps { font-variant: small-caps; letter-spacing: 0.14em; }
+
+/* a gilt kicker with a lead rule (— SINCE ANTIQUITY) */
+.royal-kicker { display: inline-flex; align-items: center; gap: 0.7rem;
+  font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.26em; text-transform: uppercase;
+  color: var(--accent-700); }
+.royal-kicker::before { content: ""; width: clamp(24px, 5vw, 56px); height: 1.5px; background: var(--gold-leaf); }
+
+/* gilt text — a warm gold-leaf gradient fill for a hero word */
+.gilt-text { background: linear-gradient(180deg,
+  color-mix(in srgb, var(--gold-leaf) 88%, #fff) 0%, var(--gold-leaf) 55%,
+  color-mix(in srgb, var(--gold-leaf) 70%, var(--accent-700)) 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+/* a hairline gilt frame for cards/plates (chassis stays flat; this is a 1px inlay) */
+.gilt-frame { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gold-leaf) 40%, transparent); }

@@ -50,11 +50,12 @@ export default function HomePage() {
           <div className="hm-seal" data-seq aria-hidden="true">
             <svg width="64" height="64" viewBox="0 0 100 100"><use href="#seal-ring" /></svg>
           </div>
-          <div className="hm-kicker" data-seq>Since antiquity · भारत · a civilisation, mapped</div>
+          <div className="royal-kicker hm-kicker" data-seq>Since antiquity · भारत · a civilisation, mapped</div>
           <h1 className="hm-h1">
-            <span data-seq>Bharat,</span>
+            <span data-seq><span className="gilt-text">Bharat</span>,</span>
             <span data-seq>district by district.</span>
           </h1>
+          <div className="hm-gilt-rule gilt-rule" data-seq aria-hidden="true" />
           <p className="hm-lede" data-seq>
             Five thousand years of a civilisation — its money and land, its temples, scripts and names —
             laid over 594 districts in one archive that opens like a book of maps. Sourced, or it&apos;s a gap.
@@ -85,7 +86,7 @@ export default function HomePage() {
 
         {/* entry grid */}
         <section id="atlas" style={{ padding: '0 0 98px' }}>
-          <span className="hm-eyebrow">What Bharat holds</span>
+          <span className="hm-eyebrow royal-caps">What Bharat holds</span>
           <div className="hm-grid" data-seq>
             {ENTRIES.map((e) => (
               <Link key={e.n} href={e.href} className="hm-cell">
@@ -127,9 +128,25 @@ export default function HomePage() {
           color: var(--accent-700); margin-bottom: 20px; }
         .hm-cinema .hm-h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(46px, 7.5vw, 96px);
           line-height: 1.02; letter-spacing: -0.01em; margin: 0; color: var(--ink); }
+        /* keep the gilt word on the same baseline as its comma; no extra line-box */
+        .hm-cinema .hm-h1 .gilt-text { display: inline; line-height: inherit; padding-right: .02em; }
+        .hm-cinema .hm-h1 span[data-seq]:first-child { margin-bottom: -0.06em; }
         .hm-cinema .hm-lede { font-size: clamp(16px, 1.4vw, 19px); line-height: 1.75; max-width: 58ch; margin: 30px 0 0; color: var(--muted); }
         .hm-cinema .hm-cta { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 36px; }
         .hm-ornament { display: none; }                          /* dropped — cleaner without it */
+
+        /* ROYAL BHARAT gilt detailing on the hero */
+        .hm-gilt-rule { width: min(420px, 62%); margin: 30px 0 0; height: 2px; opacity: .9; }
+        .hm-cinema .hm-kicker::before { background: var(--gold-leaf); }
+        .hm-cinema .hm-seal { color: var(--gold-leaf); filter: drop-shadow(0 1px 0 color-mix(in srgb, var(--gold-leaf) 40%, transparent)); }
+        /* stat counters get a gilt underline; entry cells a gilt top-hairline on hover */
+        .hm-stats > div { position: relative; padding-top: 14px; }
+        .hm-stats > div::before { content: ""; position: absolute; top: 0; left: 0; width: 34px; height: 2px; background: var(--gold-leaf); }
+        .hm-cell { position: relative; transition: background .15s ease; }
+        .hm-cell::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; transform: scaleX(0); transform-origin: left;
+          background: linear-gradient(90deg, var(--gold-leaf), transparent); transition: transform .28s cubic-bezier(.2,.7,.3,1); }
+        .hm-cell:hover::before { transform: scaleX(1); }
+        html[data-reduce="on"] .hm-cell::before { transition: none; }
 
         .hm-hero { position: relative; padding: 112px 0 84px; }
         .hm-rule { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--line); opacity: .35; }
