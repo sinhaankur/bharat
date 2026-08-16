@@ -105,6 +105,28 @@ html[data-reduce-motion="1"] .ds-scrollcue .dot::after { animation: none; }
 .ds-tier-head h2 { font-family: var(--font-display); font-weight: 500; font-size: clamp(1.9rem, 4.5vw, 3.2rem); margin: 0; letter-spacing: -0.02em; line-height: 1.02; }
 .ds-tier-head .glossword { font-family: var(--font-italic); font-style: italic; color: var(--muted-foreground); font-size: clamp(1rem, 1.6vw, 1.35rem); margin-left: auto; }
 
+/* the STANDARDS & LEGACY chapter — how the empire kept its canon */
+.ds-legacy { margin-top: var(--sp-5); }
+.ds-legacy-lede { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.15rem, 2vw, 1.6rem);
+  line-height: 1.5; color: var(--foreground); max-width: 60ch; margin: 0 0 var(--sp-6); }
+.ds-legacy-lede b { font-weight: 600; }
+.ds-legacy-lede i { font-family: var(--font-italic); font-style: italic; color: var(--accent); }
+.ds-legacy-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-5); }
+@media (max-width: 820px) { .ds-legacy-grid { grid-template-columns: 1fr; } }
+.ds-legacy-card { position: relative; padding: var(--sp-5) var(--sp-4) var(--sp-4); background: var(--card);
+  border: 1px solid var(--border); border-radius: var(--ds-radius, 4px); }
+/* gold-leaf hairline across the top of each legacy card */
+.ds-legacy-card::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold-leaf, var(--accent)) 20%, var(--gold-leaf, var(--accent)) 80%, transparent); opacity: .8; }
+.ds-legacy-card h3 { font-family: var(--font-display); font-weight: 600; font-size: var(--fs-lg); margin: 0 0 0.5rem; letter-spacing: -0.01em; }
+.ds-legacy-card p { font-size: var(--fs-sm); line-height: 1.65; color: var(--foreground); margin: 0 0 0.7rem; }
+.ds-legacy-map { border-top: 1px dashed var(--border); padding-top: 0.6rem; color: var(--muted-foreground) !important; font-size: var(--fs-xs) !important; }
+.ds-legacy-map b { color: var(--foreground); }
+.ds-legacy-map .ds-arrow { color: var(--accent); font-weight: 700; }
+.ds-legacy-note { margin: var(--sp-5) 0 0; font-size: var(--fs-xs); color: var(--muted-foreground); line-height: 1.7; max-width: 76ch; }
+.ds-legacy-note a { color: var(--accent); }
+.ds-legacy-cite { display: block; margin-top: 0.3rem; font-family: var(--font-mono); font-size: var(--fs-3xs); letter-spacing: 0.04em; }
+
 /* the STORY section — how the system was designed (per system) */
 .ds-story { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-6); margin: var(--sp-5) 0 0; }
 @media (max-width: 760px) { .ds-story { grid-template-columns: 1fr; } }
@@ -244,3 +266,42 @@ html[data-reduce-motion="1"] .ds-scrollcue .dot::after { animation: none; }
 html[data-reduce-motion="1"] .ds-syscard:hover { transform: none; }
 html[data-reduce-motion="1"] .ds-syscard .band::after { display: none; }
 html[data-reduce-motion="1"] .ds-sw-story { animation: none; }
+
+/* ============================================================
+   ROYAL · gold-leaf & fine detail. Elevation, not clutter.
+   Small-caps tracked labels, hairline gold rules, a subtle
+   seal watermark, a faint room-number behind each tier.
+   Token-driven → every skin inherits; reduce-motion safe.
+   ============================================================ */
+
+/* gilt small-caps for curatorial labels */
+.ds-head .ds-kicker, .ds-tier-head .glossword, .ds-toc a, .ds-plate dt, .ds-skins .lbl {
+  font-variant: small-caps; }
+.ds-head .ds-kicker { letter-spacing: 0.3em; }
+
+/* an imperial gold double-rule under the hero plate */
+.ds-plate { border-top: 1px solid var(--gold-leaf, var(--accent)); box-shadow: 0 3px 0 -2px color-mix(in srgb, var(--gold-leaf, var(--accent)) 55%, transparent); }
+
+/* a faint ROOM NUMBER watermark behind each tier head (the big numeral) */
+.ds-tier { position: relative; }
+.ds-tier-head { isolation: isolate; }
+.ds-tier[data-room]::before {
+  content: attr(data-room); position: absolute; top: -0.35em; right: 0; z-index: 0; pointer-events: none;
+  font-family: var(--font-display); font-weight: 600; font-size: clamp(6rem, 20vw, 15rem); line-height: 0.8;
+  color: color-mix(in srgb, var(--accent) 8%, transparent); letter-spacing: -0.04em; }
+
+/* subtle imperial seal watermark behind the hero (drawn, not an emblem) */
+.ds-head { }
+.ds-head .ds-seal { position: absolute; right: clamp(-2rem, 2vw, 3rem); top: 12%; width: clamp(180px, 26vw, 420px); height: auto;
+  opacity: 0.06; z-index: -1; color: var(--accent); pointer-events: none; }
+
+/* gold-leaf hairline framing on demo stages (mounted-work feel) */
+.ds-demo { border-image: linear-gradient(180deg, color-mix(in srgb, var(--gold-leaf, var(--accent)) 35%, var(--border-strong)), var(--border-strong)) 1; }
+
+/* refined focus/hover accents stay gold */
+.ds-toc a.active { border-color: var(--gold-leaf, var(--accent)); }
+
+/* the reading-progress bar reads as gilt */
+.ds-progress { background: linear-gradient(90deg, var(--gold-leaf, var(--accent)), var(--accent)); box-shadow: 0 0 8px -1px color-mix(in srgb, var(--gold-leaf, var(--accent)) 60%, transparent); }
+
+@media (max-width: 720px) { .ds-head .ds-seal { display: none; } .ds-tier[data-room]::before { font-size: 6rem; opacity: .5; } }
