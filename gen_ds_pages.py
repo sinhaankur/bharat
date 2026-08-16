@@ -28,7 +28,13 @@ SYSTEMS = {
         "theme_css": "theme-gupta.css",
         "html_class": "theme-gupta theme-light",
         "title": "Gupta design system · Atomic reference | Bharat",
-        "kicker": "Indic design systems · atomic reference",
+        "kicker": "Indic design systems · gallery no. II",
+        "plate": [
+            ("Era", "c. 320–550 CE · Gupta classical"),
+            ("Medium", "Mathura red sandstone · Ajanta fresco"),
+            ("Provenance", "Ajanta murals &amp; Gupta sculpture"),
+            ("Curated by", "Sinhaankur ™ / ©"),
+        ],
         "h1": 'Gupta — <em>plaster, fresco &amp; the ornate halo</em>',
         "lead": (
             "The <b>Gupta</b> register of Bharat — the classical, devotional "
@@ -96,7 +102,13 @@ SYSTEMS = {
         "theme_css": "theme-chola.css",
         "html_class": "theme-chola theme-light",
         "title": "Chola design system · Atomic reference | Bharat",
-        "kicker": "Indic design systems · atomic reference",
+        "kicker": "Indic design systems · gallery no. III",
+        "plate": [
+            ("Era", "9th–13th century CE · Chola imperial"),
+            ("Medium", "Cast bronze · Thanjavur granite · kumkum"),
+            ("Provenance", "Chola bronzes &amp; the Great Living Temples"),
+            ("Curated by", "Sinhaankur ™ / ©"),
+        ],
         "h1": 'Chola — <em>bronze, granite &amp; the sacred red</em>',
         "lead": (
             "The <b>Chola</b> register — Tamil, monumental, devotional (9th–13th "
@@ -160,7 +172,13 @@ SYSTEMS = {
         "theme_css": "theme-rajput.css",
         "html_class": "theme-rajput theme-light",
         "title": "Rajput design system · Atomic reference | Bharat",
-        "kicker": "Indic design systems · atomic reference",
+        "kicker": "Indic design systems · gallery no. IV",
+        "plate": [
+            ("Era", "8th–18th century · Rajput courts"),
+            ("Medium", "Jaisalmer sandstone · miniature pigment · mirror"),
+            ("Provenance", "Mewar miniatures &amp; desert forts"),
+            ("Curated by", "Sinhaankur ™ / ©"),
+        ],
         "h1": 'Rajput — <em>sandstone, mirror-work &amp; miniature colour</em>',
         "lead": (
             "The <b>Rajput</b> register — the medieval desert courts of "
@@ -280,17 +298,29 @@ def build(name, cfg):
     html = re.sub(r"<title>.*?</title>",
                   "<title>{}</title>".format(cfg["title"]), html, count=1, flags=re.S)
 
-    # 3) masthead: kicker, h1, lead, heritage note (tier0), by-line
+    # 3) masthead: kicker, h1, lead, curatorial plate, by-line
     html = html.replace(
         '<h1>Mauryan — <em>stone, sky &amp; the incised line</em></h1>',
         "<h1>{}</h1>".format(cfg["h1"]), 1)
 
+    # kicker ("gallery no. …")
+    html = re.sub(r'<div class="ds-kicker">.*?</div>',
+                  lambda m: '<div class="ds-kicker">{}</div>'.format(cfg["kicker"]),
+                  html, count=1, flags=re.S)
+
     # replace the <p class="sub">…</p> lead (first occurrence)
     html = re.sub(r'<p class="sub">.*?</p>',
-                  '<p class="sub">{}</p>'.format(cfg["lead"]), html, count=1, flags=re.S)
+                  lambda m: '<p class="sub">{}</p>'.format(cfg["lead"]), html, count=1, flags=re.S)
 
-    # by-line
-    _by = '<p class="by">{} See <a href="indic-design-systems.html">all systems →</a></p>'.format(cfg["by_line"])
+    # curatorial plate (era · medium · provenance · curated-by)
+    if cfg.get("plate"):
+        rows = "\n".join(
+            '        <div><dt>{}</dt><dd>{}</dd></div>'.format(dt, dd) for dt, dd in cfg["plate"])
+        plate = '<dl class="ds-plate">\n' + rows + '\n      </dl>'
+        html = re.sub(r'<dl class="ds-plate">.*?</dl>', lambda m: plate, html, count=1, flags=re.S)
+
+    # by-line (template: "One of the Indic… See the whole gallery →")
+    _by = '<p class="by">{} See <a href="indic-design-systems.html">the whole gallery →</a></p>'.format(cfg["by_line"])
     html = re.sub(r'<p class="by">.*?</p>', lambda m: _by, html, count=1, flags=re.S)
 
     # 4) tier-0 WHY paragraph (the sourcing note) + colour desc.
