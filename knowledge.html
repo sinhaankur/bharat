@@ -48,7 +48,7 @@
     .kb-state .kb-count { margin-left: auto; font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
     .kb-dists { padding: 0.2rem 0.9rem 0.8rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.35rem; }
     .kb-dist { display: flex; align-items: baseline; gap: 0.4rem; font-size: 0.83rem; padding: 0.25rem 0.4rem; border-radius: 4px; text-decoration: none; color: var(--foreground); }
-    .kb-dist:hover { background: oklch(0.22 0.02 260); }
+    .kb-dist:hover { background: color-mix(in srgb, var(--foreground) 7%, transparent); }
     .kb-dist .kb-dim { font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); margin-left: auto; }
     .kb-dist .kb-deep { color: var(--warm); font-family: var(--font-mono); font-size: 9px; }
     .kb-chain { border-left: 2px solid var(--border-strong); padding: 0.3rem 0 0.3rem 0.8rem; margin-bottom: 0.7rem; }
@@ -80,6 +80,12 @@
   <div id="stats-bar" aria-live="polite"></div>
 
   <main class="kb-wrap">
+    <!-- DS molecule: breadcrumb — shared wayfinding -->
+    <nav class="ds-breadcrumb" aria-label="Breadcrumb">
+      <a href="home.html">Bharat</a><span class="sep">/</span>
+      <a href="knowledge.html">Data</a><span class="sep">/</span>
+      <span aria-current="page">Knowledge base</span>
+    </nav>
     <header class="kb-head">
       <div class="eyebrow">Reference · auto-generated from the data</div>
       <h1 class="display">Knowledge base</h1>
