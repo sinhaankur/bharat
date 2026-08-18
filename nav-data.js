@@ -93,43 +93,43 @@
      from real pages. `lead` = the one story/tool to surface first in the menu.
      Utility (About) deliberately lives only in the footer. */
   g.ATLAS_SECTIONS = [
-    { label: "News", href: "feed.html", tagline: "The record behind the headlines, by place.", items: [
-      { href: "feed.html", text: "The feed", hint: "bias vs the record, clustered by place" },
-      { href: "timeline.html", text: "Timeline", hint: "events over time" },
+    { label: "News", href: "feed.html", tagline: "Start with today — then see who spun it, and when it happened before.", items: [
+      { href: "feed.html", text: "The feed", hint: "today's headlines, clustered by place" },
+      { href: "feed.html#bias", text: "Bias vs the record", hint: "the spin, next to the sourced number" },
+      { href: "timeline.html", text: "Timeline", hint: "how the story built up, event by event" },
     ]},
-    { label: "Money", href: "index.html", tagline: "Where India's public money goes — every district.", items: [
-      { href: "index.html", text: "The map", hint: "2D fiscal atlas — every district" },
-      { href: "state-of-india.html", text: "State of India", hint: "states ranked — who carries the country" },
-      { href: "explore.html", text: "Explore / query", hint: "filter & rank all 594 districts" },
-      { href: "command-chain.html", text: "Chain of command", hint: "who answers to whom" },
-      { href: "provenance.html", text: "Provenance ledger", hint: "figure → source, audited" },
+    { label: "Money", href: "index.html", tagline: "Follow one rupee: onto the map, up the rankings, down the chain of command.", items: [
+      { href: "index.html", text: "The map", hint: "start here — every district, coloured by money" },
+      { href: "state-of-india.html", text: "State of India", hint: "then zoom out — who carries the country" },
+      { href: "explore.html", text: "Explore / query", hint: "ask your own question of all 594 districts" },
+      { href: "command-chain.html", text: "Chain of command", hint: "and see who answers for it, tier by tier" },
     ]},
-    { label: "Land", href: "encroachment-atlas.html", tagline: "The physical India — terrain, water, flood, risk.", items: [
-      { href: "encroachment-atlas.html", text: "Built where water returns", hint: "illegal habitation on flood land" },
-      { href: "terrain-3d.html", text: "District terrain 3D", hint: "relief · river · flood plain" },
-      { href: "flood-3d.html", text: "Flood explorer", hint: "water over real terrain" },
-      { href: "quake-tsunami.html", text: "Quake & tsunami", hint: "live USGS + historical" },
+    { label: "Land", href: "encroachment-atlas.html", tagline: "Read the ground itself: where water returns, and where it's unsafe to build.", items: [
+      { href: "encroachment-atlas.html", text: "Built where water returns", hint: "start here — habitation on flood land" },
+      { href: "terrain-3d.html", text: "District terrain 3D", hint: "the relief beneath it — river & plain" },
+      { href: "flood-3d.html", text: "Flood explorer", hint: "raise the water over real terrain" },
+      { href: "quake-tsunami.html", text: "Quake & tsunami", hint: "the live hazard — USGS + historical" },
     ]},
-    { label: "History", href: "ancient-india.html", tagline: "The deep past — temples, rulers, DNA, the record.", items: [
-      { href: "ancient-india.html", text: "Ancient India timeline", hint: "5,000 years on one spine" },
-      { href: "ashoka.html", text: "Ashoka's rule of the land", hint: "an empire in its own edicts" },
-      { href: "heritage-atlas.html", text: "Sacred ground", hint: "temples, builders & destruction" },
-      { href: "cave-walk.html", text: "Walk inside a temple", hint: "first-person reconstruction" },
-      { href: "deep-history.html", text: "Deep history in DNA", hint: "ancient-DNA population shifts" },
-      { href: "atrocities.html", text: "History's deadliest", hint: "the 100 deadliest events, mapped" },
+    { label: "History", href: "ancient-india.html", tagline: "Walk 5,000 years: the timeline first, then rulers, temples, blood and the toll.", items: [
+      { href: "ancient-india.html", text: "Ancient India timeline", hint: "start here — 5,000 years on one spine" },
+      { href: "ashoka.html", text: "Ashoka's rule of the land", hint: "one empire, read in its own edicts" },
+      { href: "heritage-atlas.html", text: "Sacred ground", hint: "the temples — builders & destruction" },
+      { href: "cave-walk.html", text: "Walk inside a temple", hint: "step in — a first-person reconstruction" },
+      { href: "deep-history.html", text: "Deep history in DNA", hint: "who we are — ancient-DNA population shifts" },
+      { href: "atrocities.html", text: "History's deadliest", hint: "the cost — the 100 deadliest events, mapped" },
     ]},
-    { label: "Languages", href: "languages.html", tagline: "Every language & script of Bharat.", items: [
-      { href: "languages.html", text: "Languages of Bharat", hint: "the hub — families, scripts, fonts, texts" },
-      { href: "journey.html", text: "The journey of a word", hint: "scroll through 4,000 years" },
-      { href: "scripts.html", text: "Scripts & families", hint: "Indo-Aryan vs Dravidian + Brahmi" },
-      { href: "vedas.html", text: "Texts across languages", hint: "the Rigveda, translated & compared" },
+    { label: "Languages", href: "languages.html", tagline: "One hub, then the journey of a word, the script trees, and a text across tongues.", items: [
+      { href: "languages.html", text: "Languages of Bharat", hint: "start here — the hub for every tongue & script" },
+      { href: "journey.html", text: "The journey of a word", hint: "scroll one word through 4,000 years" },
+      { href: "scripts.html", text: "Scripts & families", hint: "the family trees — Indo-Aryan vs Dravidian + Brahmi" },
+      { href: "vedas.html", text: "Texts across languages", hint: "one text, many translations, compared" },
     ]},
-    { label: "3D", href: "india-3d.html", tagline: "India as it really is — a real globe.", items: [
-      { href: "india-3d.html", text: "India in 3D — the globe", hint: "real Earth · 594 districts · layers" },
-      { href: "globe-map.html", text: "Globe → map", hint: "watch the globe unroll" },
+    { label: "3D", href: "india-3d.html", tagline: "See it for real: the globe, unrolled to a map, down to the temples themselves.", items: [
+      { href: "india-3d.html", text: "India in 3D — the globe", hint: "start here — real Earth, 594 districts, layers" },
+      { href: "globe-map.html", text: "Globe → map", hint: "watch the globe unroll into a flat map" },
       { href: "heritage-3d.html", text: "Temples in 3D (photogrammetry)", hint: "scanned temples & ruins, as they survive" },
       { href: "temple-forms.html", text: "Temple forms in 3D (parametric)", hint: "Nagara · Dravida · Kalinga, modelled to real dims" },
-      { href: "mesh.html", text: "The mesh", hint: "how officials, districts, money & cases connect" },
+      { href: "mesh.html", text: "The mesh", hint: "the whole thing connected — money, cases, people" },
     ]},
     { label: "Design", href: "indic-design-systems.html", tagline: "One atomic spine, many heritages — the Indic design systems.", items: [
       { href: "indic-design-systems.html", text: "The systems", hint: "the family hub — every system, one atomic spine", icon: "🪷", children: [
@@ -150,15 +150,15 @@
         { href: "app/canvas/", text: "The canvas", hint: "every screen of the atlas, one deck", ext: true },
       ] },
     ]},
-    { label: "Study", href: "engines.html", tagline: "The lenses and the arguments — how to read the whole atlas.", items: [
-      { href: "engines.html", text: "The 7 engines", hint: "the composable lenses — Survey · Country · Development · Climate · Zoning · Corruption · News" },
+    { label: "Study", href: "engines.html", tagline: "The lenses that read the whole atlas — the engines, the board, the world, the sources.", items: [
+      { href: "engines.html", text: "The 7 engines", hint: "start here — the composable lenses (Survey → News)" },
       { href: "geopolitical-chess.html", text: "Geopolitical chess", hint: "the dollar is the board — who rules each player" },
-      { href: "global.html", text: "India vs world", hint: "global comparison — GDP, income, industry" },
-      { href: "library.html", text: "Reading room", hint: "read the primary sources" },
+      { href: "global.html", text: "India vs world", hint: "zoom out — GDP, income, industry vs the world" },
+      { href: "library.html", text: "Reading room", hint: "go to the source — the primary texts" },
     ]},
-    { label: "Data", href: "knowledge.html", tagline: "The receipts — every figure, every source.", items: [
-      { href: "knowledge.html", text: "Knowledge base", hint: "the data catalog" },
-      { href: "officials.html", text: "Officials to track", hint: "sourced accountability register — cited to the naming authority" },
+    { label: "Data", href: "knowledge.html", tagline: "The receipts: the catalog, the named officials, then every figure back to its citation.", items: [
+      { href: "knowledge.html", text: "Knowledge base", hint: "start here — the whole data catalog" },
+      { href: "officials.html", text: "Officials to track", hint: "the accountability register — cited to the naming authority" },
       { href: "provenance.html", text: "Provenance ledger", hint: "every figure → its citation, 0 unattributed" },
       { href: "data.html", text: "Data & API", hint: "get the data" },
       { href: "references.html", text: "Sources", hint: "every citation" },
