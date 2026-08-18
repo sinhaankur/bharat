@@ -74,14 +74,15 @@ export default function DsShell() {
 
   return (
     <div className="dss">
-      {/* GRAND CINEMATIC INTRO — the flagship arrival: every design system, its story */}
+      {/* GRAND CINEMATIC INTRO — the throne-room arrival: deep-royal ground, gold-leaf */}
       <header className="dss-intro">
         <svg className="dss-intro-bg" aria-hidden="true"><rect width="100%" height="100%" fill="url(#jali)" /></svg>
         <div className="dss-intro-wash" aria-hidden="true" />
         <div className="dss-intro-in">
-          <div className="dss-intro-seal" aria-hidden="true"><svg width="56" height="56" viewBox="0 0 100 100"><use href="#seal-ring" /></svg></div>
+          <div className="dss-intro-seal" aria-hidden="true"><svg width="64" height="64" viewBox="0 0 100 100"><use href="#seal-ring" /></svg></div>
+          <div className="dss-rule" aria-hidden="true"><span /><b>✦</b><span /></div>
           <div className="kicker">Indic Designs™ · India&apos;s own design systems · carved from artefacts</div>
-          <h1 className="dss-h1">One chassis. Many Indias.</h1>
+          <h1 className="dss-h1">One chassis.<br /><em>Many Indias.</em></h1>
           <p className="dss-lede">
             Giving structure to a civilisation is the work of design <em>and</em> language. This is an
             original body of work: a design language <em>for India</em>, one per state and culture —
@@ -146,18 +147,36 @@ export default function DsShell() {
 
       <style>{`
         .dss { background: var(--bg); }
-        /* intro — clean stone ground, a faint corner watermark, one gold voice */
-        .dss-intro { position: relative; overflow: hidden; border-bottom: 1px solid var(--line); background: var(--bg); }
-        .dss-intro-bg { position: absolute; top: -10%; right: -6%; width: 44%; height: 120%; color: var(--band); opacity: .05; }
-        .dss-intro-wash { display: none; }
-        .dss-intro-in { position: relative; max-width: var(--wrap); margin: 0 auto; padding: clamp(52px,8vh,92px) var(--edge) clamp(34px,5vh,56px); }
-        .dss-intro-seal { color: var(--accent); margin-bottom: 18px; }
-        .dss-h1 { font: 400 clamp(34px,6vw,72px) 'Rozha One', var(--font-display); margin: 8px 0 14px; color: var(--ink); line-height: 1.0; }
-        .dss-lede { font: 400 clamp(15px,1.4vw,18px)/1.75 var(--font-ui); color: var(--muted); max-width: 70ch; margin: 0; }
-        .dss-lede em { font-style: italic; color: var(--ink); }
-        .dss-lede b { color: var(--accent-700); }
-        .dss-ip { font: 500 11.5px/1.5 var(--font-mono); color: var(--muted); max-width: 70ch; margin: 16px 0 0;
-          padding-top: 10px; border-top: 1px solid var(--line); letter-spacing: .01em; }
+        /* intro — DEEP-ROYAL throne-room ground: maroon-ink, gold-leaf hairlines, gilt seal */
+        .dss-intro { position: relative; overflow: hidden;
+          --royal: #2a1410; --royal-2: #3a1c14; --leaf: #d9a441; --leaf-2: #f0cd7a; --cream: #f4e6c8;
+          background:
+            radial-gradient(130% 100% at 50% -8%, #3a1c14 0%, #2a1410 46%, #1c0d0a 100%);
+          border-bottom: 3px solid var(--leaf);
+          box-shadow: inset 0 -1px 0 rgba(240,205,122,.5); }
+        .dss-intro-bg { position: absolute; top: -12%; right: -8%; width: 52%; height: 130%; color: var(--leaf); opacity: .10; }
+        .dss-intro-wash { display: block; position: absolute; inset: 0; pointer-events: none;
+          background: radial-gradient(80% 120% at 14% 0%, rgba(240,205,122,.10), transparent 55%); }
+        .dss-intro-in { position: relative; max-width: var(--wrap); margin: 0 auto; padding: clamp(64px,10vh,120px) var(--edge) clamp(44px,6vh,72px); }
+        .dss-intro-seal { color: var(--leaf-2); margin-bottom: 14px;
+          filter: drop-shadow(0 3px 10px rgba(240,205,122,.35)); }
+        /* a centred gold-leaf hairline flourish under the seal */
+        .dss-rule { display: flex; align-items: center; gap: 14px; max-width: 340px; margin: 0 0 20px; }
+        .dss-rule span { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--leaf) 60%, var(--leaf-2)); }
+        .dss-rule span:last-of-type { background: linear-gradient(90deg, var(--leaf-2), var(--leaf) 40%, transparent); }
+        .dss-rule b { color: var(--leaf-2); font-size: 13px; letter-spacing: .2em; }
+        .dss-intro .kicker { color: var(--leaf-2); letter-spacing: .22em; }
+        .dss-h1 { font: 400 clamp(44px,8vw,92px)/1.0 'Rozha One', var(--font-display); margin: 8px 0 18px;
+          color: var(--cream); letter-spacing: .01em;
+          text-shadow: 0 2px 26px rgba(0,0,0,.45); }
+        .dss-h1 em { font-style: italic;
+          background: linear-gradient(180deg, var(--leaf-2), var(--leaf) 70%, #b8842f);
+          -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .dss-lede { font: 400 clamp(15px,1.4vw,18.5px)/1.8 var(--font-ui); color: rgba(244,230,200,.82); max-width: 70ch; margin: 0; }
+        .dss-lede em { font-style: italic; color: var(--cream); }
+        .dss-lede b { color: var(--leaf-2); font-weight: 600; }
+        .dss-ip { font: 500 11.5px/1.5 var(--font-mono); color: rgba(244,230,200,.55); max-width: 70ch; margin: 18px 0 0;
+          padding-top: 12px; border-top: 1px solid rgba(217,164,65,.35); letter-spacing: .01em; }
         /* the origin story on each skin card */
         .dss-skin-from { font: 400 11.5px/1.5 var(--font-ui); color: var(--muted); font-style: italic; margin-top: 3px; }
 
