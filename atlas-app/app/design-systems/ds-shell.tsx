@@ -27,11 +27,37 @@ const SECTIONS: { id: string; label: string }[] = [
 
 export default function DsShell() {
   const iframeRef = useRef<HTMLIFrameElement>(null)
+  const introRef = useRef<HTMLElement>(null)
   const [active, setActive] = useState('ds-hero')
   const [skin, setSkin] = useState('gupta')
 
   useEffect(() => {
     setSkin(document.documentElement.dataset.skin || 'gupta')
+  }, [])
+
+  // PARALLAX — the gilt jali watermark, wash and seal drift as the royal intro
+  // scrolls past. Honours reduce-motion (OS + the site a11y flag); rAF-throttled.
+  useEffect(() => {
+    const reduced =
+      document.documentElement.getAttribute('data-reduce-motion') === '1' ||
+      (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+    if (reduced) return
+    const el = introRef.current
+    if (!el) return
+    let ticking = false
+    const onScroll = () => {
+      if (ticking) return
+      ticking = true
+      requestAnimationFrame(() => {
+        const y = window.scrollY || window.pageYOffset
+        // only pay the cost while the intro is roughly in view
+        if (y < el.offsetHeight + 200) el.style.setProperty('--px', String(y))
+        ticking = false
+      })
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   // apply a skin to the WHOLE site (same as the header switcher)
@@ -75,7 +101,7 @@ export default function DsShell() {
   return (
     <div className="dss">
       {/* GRAND CINEMATIC INTRO — the throne-room arrival: deep-royal ground, gold-leaf */}
-      <header className="dss-intro">
+      <header className="dss-intro" ref={introRef}>
         <svg className="dss-intro-bg" aria-hidden="true"><rect width="100%" height="100%" fill="url(#jali)" /></svg>
         <div className="dss-intro-wash" aria-hidden="true" />
         <div className="dss-intro-in">
@@ -154,12 +180,20 @@ export default function DsShell() {
             radial-gradient(130% 100% at 50% -8%, #3a1c14 0%, #2a1410 46%, #1c0d0a 100%);
           border-bottom: 3px solid var(--leaf);
           box-shadow: inset 0 -1px 0 rgba(240,205,122,.5); }
-        .dss-intro-bg { position: absolute; top: -12%; right: -8%; width: 52%; height: 130%; color: var(--leaf); opacity: .10; }
+        .dss-intro { --px: 0; }
+        .dss-intro-bg { position: absolute; top: -12%; right: -8%; width: 52%; height: 130%; color: var(--leaf); opacity: .10;
+          transform: translate3d(0, calc(var(--px) * 0.22px), 0) rotate(calc(var(--px) * 0.006deg)); will-change: transform; }
         .dss-intro-wash { display: block; position: absolute; inset: 0; pointer-events: none;
-          background: radial-gradient(80% 120% at 14% 0%, rgba(240,205,122,.10), transparent 55%); }
-        .dss-intro-in { position: relative; max-width: var(--wrap); margin: 0 auto; padding: clamp(64px,10vh,120px) var(--edge) clamp(44px,6vh,72px); }
+          background: radial-gradient(80% 120% at 14% 0%, rgba(240,205,122,.10), transparent 55%);
+          transform: translate3d(0, calc(var(--px) * -0.08px), 0); }
+        .dss-intro-in { position: relative; max-width: var(--wrap); margin: 0 auto; padding: clamp(64px,10vh,120px) var(--edge) clamp(44px,6vh,72px);
+          transform: translate3d(0, calc(var(--px) * 0.12px), 0); }
         .dss-intro-seal { color: var(--leaf-2); margin-bottom: 14px;
-          filter: drop-shadow(0 3px 10px rgba(240,205,122,.35)); }
+          filter: drop-shadow(0 3px 10px rgba(240,205,122,.35));
+          transform: translate3d(0, calc(var(--px) * -0.16px), 0); }
+        @media (prefers-reduced-motion: reduce) {
+          .dss-intro-bg, .dss-intro-wash, .dss-intro-in, .dss-intro-seal { transform: none !important; }
+        }
         /* a centred gold-leaf hairline flourish under the seal */
         .dss-rule { display: flex; align-items: center; gap: 14px; max-width: 340px; margin: 0 0 20px; }
         .dss-rule span { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--leaf) 60%, var(--leaf-2)); }

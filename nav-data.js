@@ -96,7 +96,6 @@
     { label: "News", href: "feed.html", tagline: "The record behind the headlines, by place.", items: [
       { href: "feed.html", text: "The feed", hint: "bias vs the record, clustered by place" },
       { href: "timeline.html", text: "Timeline", hint: "events over time" },
-      { href: "atrocities.html", text: "History's deadliest", hint: "the 100 deadliest events, mapped" },
     ]},
     { label: "Money", href: "index.html", tagline: "Where India's public money goes — every district.", items: [
       { href: "index.html", text: "The map", hint: "2D fiscal atlas — every district" },
@@ -117,6 +116,7 @@
       { href: "heritage-atlas.html", text: "Sacred ground", hint: "temples, builders & destruction" },
       { href: "cave-walk.html", text: "Walk inside a temple", hint: "first-person reconstruction" },
       { href: "deep-history.html", text: "Deep history in DNA", hint: "ancient-DNA population shifts" },
+      { href: "atrocities.html", text: "History's deadliest", hint: "the 100 deadliest events, mapped" },
     ]},
     { label: "Languages", href: "languages.html", tagline: "Every language & script of Bharat.", items: [
       { href: "languages.html", text: "Languages of Bharat", hint: "the hub — families, scripts, fonts, texts" },
@@ -132,21 +132,29 @@
       { href: "mesh.html", text: "The mesh", hint: "how officials, districts, money & cases connect" },
     ]},
     { label: "Design", href: "indic-design-systems.html", tagline: "One atomic spine, many heritages — the Indic design systems.", items: [
-      { href: "indic-design-systems.html", text: "Indic design systems", hint: "the family hub — every system, one atomic spine", icon: "🪷", children: [
+      { href: "indic-design-systems.html", text: "The systems", hint: "the family hub — every system, one atomic spine", icon: "🪷", children: [
         { href: "design-system.html", text: "Mauryan", hint: "stone, sky & the incised line" },
         { href: "ds-gupta.html", text: "Gupta", hint: "plaster, fresco & the ornate halo" },
         { href: "ds-chola.html", text: "Chola", hint: "bronze, granite & the sacred red" },
         { href: "ds-rajput.html", text: "Rajput", hint: "sandstone, mirror-work & miniature colour" },
       ] },
-      { href: "design-system.html", text: "Atomic reference", hint: "tokens · atoms · molecules · organisms · templates", icon: "🎨", children: [
-        { href: "design-system.html#tokens", text: "Tokens" },
-        { href: "design-system.html#atoms", text: "Atoms" },
-        { href: "design-system.html#molecules", text: "Molecules" },
-        { href: "design-system.html#organisms", text: "Organisms" },
-        { href: "design-system.html#templates", text: "Templates" },
+      { href: "design-system.html", text: "Atomic reference", hint: "the spine — tokens to templates", icon: "🎨", children: [
+        { href: "design-system.html#tokens", text: "Tokens", hint: "the raw design decisions" },
+        { href: "design-system.html#atoms", text: "Atoms", hint: "the smallest parts" },
+        { href: "design-system.html#molecules", text: "Molecules", hint: "atoms combined" },
+        { href: "design-system.html#organisms", text: "Organisms", hint: "sections & patterns" },
+        { href: "design-system.html#templates", text: "Templates", hint: "whole-page registers" },
       ] },
-      { href: "app/design-systems/", text: "India by Design Systems", hint: "the flagship deck — a skin per state, over one chassis", ext: true },
-      { href: "app/canvas/", text: "The canvas", hint: "every screen of the atlas, one deck", ext: true },
+      { href: "app/design-systems/", text: "India by Design Systems", hint: "the flagship deck — a skin per state, over one chassis", ext: true, children: [
+        { href: "app/design-systems/", text: "The flag layer", hint: "22 dhvaja as banner grammar", ext: true },
+        { href: "app/canvas/", text: "The canvas", hint: "every screen of the atlas, one deck", ext: true },
+      ] },
+    ]},
+    { label: "Study", href: "engines.html", tagline: "The lenses and the arguments — how to read the whole atlas.", items: [
+      { href: "engines.html", text: "The 7 engines", hint: "the composable lenses — Survey · Country · Development · Climate · Zoning · Corruption · News" },
+      { href: "geopolitical-chess.html", text: "Geopolitical chess", hint: "the dollar is the board — who rules each player" },
+      { href: "global.html", text: "India vs world", hint: "global comparison — GDP, income, industry" },
+      { href: "library.html", text: "Reading room", hint: "read the primary sources" },
     ]},
     { label: "Data", href: "knowledge.html", tagline: "The receipts — every figure, every source.", items: [
       { href: "knowledge.html", text: "Knowledge base", hint: "the data catalog" },
@@ -154,9 +162,6 @@
       { href: "provenance.html", text: "Provenance ledger", hint: "every figure → its citation, 0 unattributed" },
       { href: "data.html", text: "Data & API", hint: "get the data" },
       { href: "references.html", text: "Sources", hint: "every citation" },
-      { href: "engines.html", text: "The 7 engines", hint: "the composable lenses" },
-      { href: "global.html", text: "India vs world", hint: "global comparison" },
-      { href: "geopolitical-chess.html", text: "Geopolitical chess", hint: "the dollar is the board — who rules each player" },
     ]},
   ];
 })(typeof window !== "undefined" ? window : this);
