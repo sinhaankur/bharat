@@ -97,6 +97,17 @@
 
     /* families quick map */
     .lh-fams { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.7rem; margin: 1rem 0 0; }
+    /* where the families came from — origin callout under the families grid */
+    .lh-origin { display: flex; align-items: center; gap: 0.9rem; margin: 1rem 0 0; padding: 0.9rem 1rem;
+      border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: var(--radius-sm);
+      background: color-mix(in srgb, var(--accent) 6%, var(--card)); text-decoration: none; color: inherit; transition: background 0.15s ease, transform 0.15s ease; }
+    .lh-origin:hover { background: color-mix(in srgb, var(--accent) 11%, var(--card)); transform: translateX(2px); }
+    .lh-origin-ic { font-size: 1.5rem; flex: none; }
+    .lh-origin-body { display: flex; flex-direction: column; gap: 0.2rem; }
+    .lh-origin-h { font-weight: 700; font-size: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .lh-origin-p { font-size: 0.85rem; line-height: 1.5; color: var(--muted-foreground); }
+    .lh-origin-p b { color: var(--foreground); }
+    .lh-origin-go { margin-left: auto; color: var(--accent); font-size: 1.2rem; flex: none; }
     .lh-fam { border: 1px solid var(--border); border-left: 4px solid var(--fc, var(--border-strong)); border-radius: var(--radius-sm); background: var(--card); padding: 0.7rem 0.9rem; }
     .lh-fam .fn { font-weight: 700; font-size: 1rem; }
     .lh-fam .fsub { font-family: var(--font-mono); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted-foreground); margin: 0.15rem 0 0.35rem; }
@@ -156,6 +167,17 @@
       <p>Two big families dominate, and they are <b>not related to each other</b>. Explore the full descent in the
         <a href="scripts.html">interactive family trees</a>.</p>
       <div class="lh-fams" id="fams"></div>
+
+      <!-- where the families came from — the origin story of the families just listed -->
+      <a class="lh-origin" href="deep-history.html">
+        <span class="lh-origin-ic" aria-hidden="true">🧬</span>
+        <span class="lh-origin-body">
+          <span class="lh-origin-h">Where these families came from <span class="badge done">live</span></span>
+          <span class="lh-origin-p">The population movements behind them — Steppe / Indo-Aryan vs the Dravidian substrate —
+            read in ancient DNA, with the Aryan-migration debate flagged. See it in <b>Deep history in DNA</b>.</span>
+        </span>
+        <span class="lh-origin-go" aria-hidden="true">→</span>
+      </a>
     </section>
 
     <!-- ONE WORD, EVERY SCRIPT — the specimen hero (from scripts.json) -->
@@ -200,8 +222,6 @@
         p: "One text opened in Sanskrit + romanisation + word-by-word grammar + compared attributed translations. First text: the Rigveda’s Hymn of Creation." },
       { ic: "🗺", h: "Which language is official where", href: "explore.html", badge: "done",
         p: "Each state’s statutory official language(s), attached to all 594 districts as a data dimension (Eighth Schedule) — district mother-tongue %s held as honest gaps." },
-      { ic: "🧬", h: "Where the families came from", href: "deep-history.html", badge: "done",
-        p: "The population movements behind the language families — Steppe/Indo-Aryan vs the Dravidian substrate — read in ancient DNA, with the Aryan-migration debate flagged." },
       { ic: "➕", h: "More text modules", href: "vedas.html", badge: "soon",
         p: "Epics, inscriptions, and living-language corpora slot into the same reader — each new text sourced-or-gap. The Vedas are just the first." }
     ];
