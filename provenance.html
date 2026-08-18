@@ -118,7 +118,12 @@
 <body>
 
 <div class="prov-wrap">
-  <a class="prov-back" href="references.html">← Sources narrative</a>
+  <!-- DS molecule: breadcrumb — the atlas's shared wayfinding component -->
+  <nav class="ds-breadcrumb" aria-label="Breadcrumb">
+    <a href="home.html">Bharat</a><span class="sep">/</span>
+    <a href="knowledge.html">Data</a><span class="sep">/</span>
+    <span aria-current="page">Provenance ledger</span>
+  </nav>
 
   <h1>Provenance <em>ledger</em></h1>
   <p class="lede">
@@ -159,10 +164,10 @@
     <h2>Every source &amp; what it backs</h2>
     <div class="prov-controls">
       <input class="prov-search" id="search" type="search" placeholder="Search sources, places, fields (e.g. NCRB, Kolkata, IMR)…" />
-      <button class="prov-chip active" data-filter="all">All</button>
-      <button class="prov-chip" data-filter="tier1">Gov (tier 1)</button>
-      <button class="prov-chip" data-filter="gaps">Has gaps</button>
-      <button class="prov-chip" data-filter="unattr">Unattributed</button>
+      <button class="ds-chip prov-chip active" data-filter="all">All</button>
+      <button class="ds-chip prov-chip" data-filter="tier1">Gov (tier 1)</button>
+      <button class="ds-chip prov-chip" data-filter="gaps">Has gaps</button>
+      <button class="ds-chip prov-chip" data-filter="unattr">Unattributed</button>
     </div>
     <div id="sources"></div>
     <div class="prov-empty" id="empty" style="display:none">No sources match that filter.</div>
@@ -190,6 +195,9 @@
 
 <script>
 const TIER_CLASS = t => t ? `tier-${t}` : "tier-4";
+// map a source tier to the shared DS badge variant (tier 1 gov = trusted/success,
+// tier 2 = info, tier 3 = neutral, unattributed/tier 4 = danger)
+const TIER_BADGE = t => t == 1 ? "ds-badge--success" : t == 2 ? "ds-badge--info" : t == 3 ? "ds-badge--neutral" : "ds-badge--danger";
 const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const isUrl = s => typeof s === "string" && /^https?:\/\//.test(s);
 function srcLabel(s) {
@@ -261,7 +269,7 @@ function render() {
     ["num", cov.distinct_sources, "distinct sources"],
     [cov.unattributed ? "num warn" : "num good", cov.unattributed, "unattributed"],
     ["num", cov.pinned_pct + "%", "sourced density"],
-  ].map(([cls, n, l]) => `<div class="prov-stat"><div class="${cls}">${n}</div><div class="lbl">${l}</div></div>`).join("");
+  ].map(([cls, n, l]) => `<div class="ds-stat prov-stat"><div class="num ${cls.replace('num','').trim()}">${n}</div><div class="lbl">${l}</div></div>`).join("");
 
   // pinned vs gap ratio
   const pin = cov.figures_pinned, gap = cov.declared_gaps, tot = pin + gap || 1;
@@ -306,7 +314,7 @@ function renderSources() {
         <span class="prov-samp-val${x.gap ? " gap" : ""}">${x.gap ? "gap" : esc(x.value)}</span></li>`).join("");
     return `<div class="prov-source${s.unattributed ? " unattr" : ""}" data-i="${i}">
       <div class="prov-src-head">
-        <span class="prov-tier ${TIER_CLASS(s.tier)}">TIER ${s.tier || "?"}</span>
+        <span class="ds-badge ${TIER_BADGE(s.tier)} prov-tier ${TIER_CLASS(s.tier)}">TIER ${s.tier || "?"}</span>
         <span class="prov-src-name">${s.unattributed ? "⚠ " + esc(s.source) : srcLabel(s)}</span>
         <span class="prov-src-count"><b class="pin">${s.figures}</b> figures · <b class="gap">${s.gaps}</b> gaps</span>
       </div>
