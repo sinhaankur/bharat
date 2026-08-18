@@ -161,6 +161,7 @@ export default function Gallery() {
 
   return (
     <section
+      id="gallery"
       className="gal"
       aria-roledescription="carousel"
       aria-label="Indic design systems gallery"

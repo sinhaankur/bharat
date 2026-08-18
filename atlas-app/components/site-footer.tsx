@@ -26,6 +26,7 @@ const COLS: { label: string; icon: string; links: FLink[] }[] = [
     icon: 'i-stupa',
     links: [
       { t: 'India by Design Systems', href: '/design-systems', icon: 'i-lotus' },
+      { t: 'The gallery', href: '/design-systems#gallery', icon: 'i-torana' },
       { t: 'Temple in 3D', href: '/3d', icon: 'i-chaitya' },
       { t: 'Heritage sites', href: '/heritage/ranakpur-jain-temple', icon: 'i-pillar' },
     ],
