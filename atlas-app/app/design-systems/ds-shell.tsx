@@ -214,35 +214,44 @@ export default function DsShell() {
         /* the origin story on each skin card */
         .dss-skin-from { font: 400 11.5px/1.5 var(--font-ui); color: var(--muted); font-style: italic; margin-top: 3px; }
 
-        .dss-skins { max-width: var(--wrap); margin: 0 auto; padding: 18px var(--edge) 8px;
-          display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; }
-        .dss-skin { display: flex; flex-direction: column; background: var(--surface); color: var(--ink);
-          border: 2px solid var(--line); border-radius: 0; overflow: hidden;
+        /* the skin band continues the royal register — dark ground, gilt-edged cards
+           on maroon — so the arrival reads as ONE throne-room, not a light interruption */
+        .dss-skins { --leaf: #d9a441; --leaf-2: #f0cd7a; --cream: #f4e6c8; --royal-2: #2f1712; --leaf-ln: rgba(217,164,65,.32);
+          background: linear-gradient(180deg, #1c0d0a 0%, #23110d 100%);
+          margin: 0; padding: 26px var(--edge) 22px;
+          display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px;
+          max-width: none; }
+        .dss-skin { display: flex; flex-direction: column; background: var(--royal-2); color: var(--cream);
+          border: 1px solid var(--leaf-ln); border-radius: 0; overflow: hidden;
           transition: transform .12s cubic-bezier(.2,.7,.2,1), box-shadow .16s ease, border-color .16s ease; }
-        .dss-skin:hover { transform: translateY(-3px); box-shadow: 6px 8px 0 rgba(42,32,24,.16); border-color: var(--ink); }
-        .dss-skin.on { border-color: var(--accent); box-shadow: 4px 5px 0 color-mix(in srgb, var(--accent) 35%, transparent); }
+        .dss-skin:hover { transform: translateY(-3px); box-shadow: 0 8px 22px rgba(0,0,0,.4); border-color: var(--leaf); }
+        .dss-skin.on { border-color: var(--leaf-2); box-shadow: 0 0 0 1px var(--leaf-2), 0 8px 22px rgba(0,0,0,.45); }
         .dss-skin-band { height: 12px; width: 100%; display: block; }
         .dss-skin-apply { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; text-align: left;
           cursor: pointer; background: transparent; border: 0; width: 100%; padding: 10px 12px 12px; color: inherit; }
-        .dss-skin-name { font: 700 16px var(--font-ui); }
-        .dss-skin-note { font: 400 12px var(--font-ui); color: var(--muted); }
-        .dss-skin-cta { font: 600 11px var(--font-mono); letter-spacing: .04em; color: var(--accent); margin-top: 4px; }
-        .dss-dl { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; padding: 8px 10px; border-top: 1px solid var(--line); background: color-mix(in srgb, var(--ink) 4%, transparent); }
-        .dss-dl-h { font: 600 9.5px var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-right: 2px; }
-        .dss-dl button { font: 600 11px var(--font-mono); cursor: pointer; background: transparent; color: var(--ink);
-          border: 1px solid var(--line); padding: 3px 7px; border-radius: 0; transition: background .12s ease, color .12s ease, border-color .12s ease; }
-        .dss-dl button:hover { background: var(--accent); color: var(--surface); border-color: var(--accent); }
-        .dss-dl .dss-dl-zip { border-color: var(--accent); color: var(--accent); }
-        .dss-dl .dss-dl-zip:hover { background: var(--accent); color: var(--surface); }
-        .dss-dl-note { max-width: var(--wrap); margin: 6px auto 0; padding: 0 var(--edge); font-size: 10.5px; color: var(--muted); }
+        .dss-skin-name { font: 700 16px var(--font-ui); color: var(--cream); }
+        .dss-skin-note { font: 400 12px var(--font-ui); color: rgba(244,230,200,.6); }
+        .dss-skin-cta { font: 600 11px var(--font-mono); letter-spacing: .04em; color: var(--leaf-2); margin-top: 4px; }
+        .dss-skin.on .dss-skin-cta { color: var(--leaf-2); }
+        .dss-dl { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; padding: 8px 10px; border-top: 1px solid var(--leaf-ln); background: rgba(0,0,0,.18); }
+        .dss-dl-h { font: 600 9.5px var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: rgba(244,230,200,.5); margin-right: 2px; }
+        .dss-dl button { font: 600 11px var(--font-mono); cursor: pointer; background: transparent; color: var(--cream);
+          border: 1px solid var(--leaf-ln); padding: 3px 7px; border-radius: 0; transition: background .12s ease, color .12s ease, border-color .12s ease; }
+        .dss-dl button:hover { background: var(--leaf); color: #23110d; border-color: var(--leaf); }
+        .dss-dl .dss-dl-zip { border-color: var(--leaf); color: var(--leaf-2); }
+        .dss-dl .dss-dl-zip:hover { background: var(--leaf); color: #23110d; }
+        /* the note closes the royal skin band */
+        .dss-dl-note { background: #23110d; color: rgba(244,230,200,.5); margin: 0; padding: 0 var(--edge) 22px;
+          font-size: 10.5px; border-bottom: 3px solid #d9a441; }
 
+        /* jump-nav — a gilt rail on deep ground, the sticky throne-room ribbon */
         .dss-tabs { position: sticky; top: 58px; z-index: 20; display: flex; gap: 0; flex-wrap: wrap;
-          background: var(--surface); border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink);
-          padding: 0 var(--edge); margin-top: 16px; }
-        .dss-tab { background: transparent; border: 0; cursor: pointer; color: var(--muted);
+          background: #2f1712; border-top: 1px solid rgba(217,164,65,.3); border-bottom: 2px solid #d9a441;
+          padding: 0 var(--edge); margin-top: 0; }
+        .dss-tab { background: transparent; border: 0; cursor: pointer; color: rgba(244,230,200,.62);
           font: 600 13px var(--font-ui); padding: 12px 14px; border-bottom: 3px solid transparent; }
-        .dss-tab:hover { color: var(--ink); }
-        .dss-tab.on { color: var(--accent); border-bottom-color: var(--accent); }
+        .dss-tab:hover { color: #f4e6c8; }
+        .dss-tab.on { color: #f0cd7a; border-bottom-color: #f0cd7a; }
 
         .dss-frame { width: 100%; height: calc(100vh - 60px); border: 0; display: block; background: #f6f0e1; }
 
