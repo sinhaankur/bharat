@@ -124,9 +124,10 @@
       { href: "scripts.html", text: "Scripts & families", hint: "the family trees — Indo-Aryan vs Dravidian + Brahmi" },
       { href: "vedas.html", text: "Texts across languages", hint: "one text, many translations, compared" },
     ]},
-    { label: "3D", href: "india-3d.html", tagline: "See it for real: the globe, unrolled to a map, down to the temples themselves.", items: [
+    { label: "3D", href: "india-3d.html", tagline: "See it for real: the globe, unrolled to a map, down into the terrain and the temples.", items: [
       { href: "india-3d.html", text: "India in 3D — the globe", hint: "start here — real Earth, 594 districts, layers" },
       { href: "globe-map.html", text: "Globe → map", hint: "watch the globe unroll into a flat map" },
+      { href: "terrain-3d.html", text: "Real topography", hint: "the land in relief — open DEM elevation" },
       { href: "heritage-3d.html", text: "Temples in 3D (photogrammetry)", hint: "scanned temples & ruins, as they survive" },
       { href: "temple-forms.html", text: "Temple forms in 3D (parametric)", hint: "Nagara · Dravida · Kalinga, modelled to real dims" },
       { href: "mesh.html", text: "The mesh", hint: "the whole thing connected — money, cases, people" },
