@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { SKINS } from '@/components/skin-switcher'
 import { downloadCss, downloadJson, downloadSpec, downloadZip } from '@/lib/download-skin'
 import { TOKEN_SETS } from '@/lib/design-tokens'
+import Gallery from './gallery'
 
 // The intuitive shell around the handoff design document. It gives /design-systems what a
 // 12,000px iframe scroll lacks: an intro that says what this is, a LIVE skin switcher (pick
@@ -124,31 +125,29 @@ export default function DsShell() {
         </div>
       </header>
 
-      {/* live skin switcher — the ready skins, as apply buttons + downloads */}
-      <section className="dss-skins" aria-label="Choose a design system">
-        {SKINS.map((s) => {
-          const hasFiles = !!TOKEN_SETS[s.id]
-          return (
-            <div key={s.id} className={`dss-skin${skin === s.id ? ' on' : ''}`}>
-              <span className="dss-skin-band" style={{ background: `linear-gradient(90deg, ${s.swatch}, ${s.band})` }} />
-              <button className="dss-skin-apply" onClick={() => applySkin(s.id)} aria-pressed={skin === s.id}>
-                <span className="dss-skin-name">{s.label}</span>
-                <span className="dss-skin-note">{s.note}</span>
-                {TOKEN_SETS[s.id]?.from && <span className="dss-skin-from">{TOKEN_SETS[s.id].from}</span>}
-                <span className="dss-skin-cta">{skin === s.id ? '● worn' : 'Wear this skin →'}</span>
-              </button>
-              {hasFiles && (
-                <div className="dss-dl" aria-label={`Download the ${s.label} design system`}>
-                  <span className="dss-dl-h">Download</span>
-                  <button onClick={() => downloadCss(s.id)} title="CSS custom properties">CSS</button>
-                  <button onClick={() => downloadJson(s.id)} title="JSON design tokens">JSON</button>
-                  <button onClick={() => downloadSpec(s.id)} title="One-page specimen (HTML)">Spec</button>
-                  <button className="dss-dl-zip" onClick={() => downloadZip(s.id)} title="All files + license (.zip)">.zip ↓</button>
-                </div>
-              )}
+      {/* GALLERY MODE — walk the design systems one at a time, framed & spotlit */}
+      <Gallery />
+
+      {/* TAKE ONE HOME — the downloads shelf. Not a second skin-picker (the gallery
+          above wears skins); this is only the files, for the systems that ship them. */}
+      <div className="dss-shelf-h mono">Take one home — download the tokens</div>
+      <section className="dss-skins" aria-label="Download a design system">
+        {SKINS.filter((s) => TOKEN_SETS[s.id]).map((s) => (
+          <div key={s.id} className={`dss-skin${skin === s.id ? ' on' : ''}`}>
+            <span className="dss-skin-band" style={{ background: `linear-gradient(90deg, ${s.swatch}, ${s.band})` }} />
+            <div className="dss-skin-apply">
+              <span className="dss-skin-name">{s.label}</span>
+              {TOKEN_SETS[s.id]?.from && <span className="dss-skin-from">{TOKEN_SETS[s.id].from}</span>}
             </div>
-          )
-        })}
+            <div className="dss-dl" aria-label={`Download the ${s.label} design system`}>
+              <span className="dss-dl-h">Files</span>
+              <button onClick={() => downloadCss(s.id)} title="CSS custom properties">CSS</button>
+              <button onClick={() => downloadJson(s.id)} title="JSON design tokens">JSON</button>
+              <button onClick={() => downloadSpec(s.id)} title="One-page specimen (HTML)">Spec</button>
+              <button className="dss-dl-zip" onClick={() => downloadZip(s.id)} title="All files + license (.zip)">.zip ↓</button>
+            </div>
+          </div>
+        ))}
       </section>
       <p className="dss-dl-note mono">
         Downloads are for reference. Indic Designs™ — original work, © 2026 Bharat; all rights reserved. No redistribution or reuse without a licence.
@@ -214,11 +213,12 @@ export default function DsShell() {
         /* the origin story on each skin card */
         .dss-skin-from { font: 400 11.5px/1.5 var(--font-ui); color: var(--muted); font-style: italic; margin-top: 3px; }
 
-        /* the skin band continues the royal register — dark ground, gilt-edged cards
-           on maroon — so the arrival reads as ONE throne-room, not a light interruption */
+        /* the downloads shelf continues the royal register — dark ground, gilt cards */
+        .dss-shelf-h { background: #1c0d0a; color: #f0cd7a; margin: 0; padding: 26px var(--edge) 0;
+          font: 700 11px var(--font-mono); letter-spacing: .2em; text-transform: uppercase; }
         .dss-skins { --leaf: #d9a441; --leaf-2: #f0cd7a; --cream: #f4e6c8; --royal-2: #2f1712; --leaf-ln: rgba(217,164,65,.32);
           background: linear-gradient(180deg, #1c0d0a 0%, #23110d 100%);
-          margin: 0; padding: 26px var(--edge) 22px;
+          margin: 0; padding: 16px var(--edge) 22px;
           display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px;
           max-width: none; }
         .dss-skin { display: flex; flex-direction: column; background: var(--royal-2); color: var(--cream);
