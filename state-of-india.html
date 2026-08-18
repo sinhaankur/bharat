@@ -18,22 +18,26 @@
     .soi-head p { color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.6; max-width: 76ch; }
     /* the totals strip — India as one number */
     .soi-totals { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.2rem 0; }
-    .soi-tot { flex: 1 1 150px; background: oklch(0.155 0.005 250); border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 0.7rem 0.9rem; }
-    .soi-tot .v { font-family: var(--font-mono); font-size: 1.3rem; color: var(--foreground); }
-    .soi-tot .l { font-size: 0.75rem; color: var(--muted-foreground); margin-top: 2px; }
+    /* card surface now uses theme tokens so it reads on the light Indic theme
+       (was hardcoded dark from the old dark-theme era) */
+    .soi-tot { flex: 1 1 150px; background: var(--card); border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 0.7rem 0.9rem; }
+    .soi-tot .v, .soi-tot .num { font-family: var(--font-mono); font-size: 1.3rem; color: var(--foreground); }
+    .soi-tot .l, .soi-tot .lbl { font-size: 0.75rem; color: var(--muted-foreground); margin-top: 2px; }
     /* metric switch */
     .soi-metrics { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 1rem 0 0.4rem; }
-    .soi-mbtn { font-family: var(--font-mono); font-size: 12px; padding: 5px 13px; border-radius: 999px; background: oklch(0.18 0.02 250); color: var(--muted-foreground); border: 1px solid var(--border-strong); cursor: pointer; }
-    .soi-mbtn:hover { color: var(--foreground); border-color: var(--warm); }
-    .soi-mbtn.active { background: oklch(0.28 0.07 78); border-color: var(--warm); color: oklch(0.48 0.050 90); }
+    /* standalone soi-mbtn (the share pill) uses theme tokens; segment buttons are
+       restyled by .ds-segmented */
+    .soi-mbtn { font-family: var(--font-mono); font-size: 12px; padding: 5px 13px; border-radius: 999px; background: var(--card); color: var(--muted-foreground); border: 1px solid var(--border-strong); cursor: pointer; }
+    .soi-mbtn:hover { color: var(--foreground); border-color: var(--accent); }
+    .soi-mbtn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
     .soi-metric-note { font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); min-height: 1.1em; margin-bottom: 0.6rem; }
     /* the ranked bars */
     .soi-list { display: flex; flex-direction: column; gap: 2px; }
     .soi-row { display: grid; grid-template-columns: 22px 150px 1fr auto 26px; align-items: center; gap: 0.6rem; padding: 0.32rem 0.5rem; border-radius: 6px; cursor: pointer; transition: background .12s; }
     .soi-share { background: none; border: 0; color: var(--muted-foreground); font-size: 14px; cursor: pointer; opacity: 0; padding: 2px 4px; border-radius: 5px; transition: opacity .12s, color .12s, background .12s; }
     .soi-row:hover .soi-share { opacity: 1; }
-    .soi-share:hover { color: var(--accent); background: oklch(0.24 0.04 250); }
-    .soi-row:hover { background: oklch(0.2 0.02 250); }
+    .soi-share:hover { color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
+    .soi-row:hover { background: color-mix(in srgb, var(--foreground) 6%, transparent); }
     .soi-rank { font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); text-align: right; }
     .soi-name { font-size: 0.9rem; }
     .soi-name .rg { font-family: var(--font-mono); font-size: 9.5px; color: var(--muted-foreground); }
@@ -45,13 +49,19 @@
     .soi-val.negc { color: oklch(0.48 0.160 35); }
     .soi-note { font-size: 0.83rem; color: var(--muted-foreground); line-height: 1.6; margin-top: 1.6rem; border-top: 1px solid var(--border); padding-top: 1rem; }
     .soi-note a { color: var(--accent); }
-    .soi-gap { border-left: 3px solid oklch(0.6 0.16 60); padding: 0.55rem 0.9rem; background: oklch(0.2 0.03 60 / 0.3); border-radius: var(--radius-sm); margin: 1.2rem 0; font-size: 0.85rem; line-height: 1.55; }
+    .soi-gap { border-left: 3px solid var(--warning, oklch(0.6 0.16 60)); padding: 0.55rem 0.9rem; background: color-mix(in srgb, var(--warning, oklch(0.6 0.16 60)) 10%, transparent); border-radius: var(--radius-sm); margin: 1.2rem 0; font-size: 0.85rem; line-height: 1.55; }
     @media (max-width: 640px) { .soi-row { grid-template-columns: 20px 96px 1fr auto; } .soi-name { font-size: 0.8rem; } }
   </style>
 </head>
 <body>
   <div id="site-nav"></div>
   <main class="soi-wrap">
+    <!-- DS molecule: breadcrumb — shared wayfinding -->
+    <nav class="ds-breadcrumb" aria-label="Breadcrumb">
+      <a href="home.html">Bharat</a><span class="sep">/</span>
+      <a href="index.html">Money</a><span class="sep">/</span>
+      <span aria-current="page">State of India</span>
+    </nav>
     <header class="soi-head">
       <div class="eyebrow">Understand · State of India</div>
       <h1 class="display">State of <em>India</em> — who carries the country</h1>
@@ -130,16 +140,20 @@
       const totContrib = arr.reduce((a, s) => a + (last(s.contribution) || 0), 0);
       const givers = arr.filter(s => METRICS.net.val(s) > 0).length;
       document.getElementById('soi-totals').innerHTML =
-        `<div class="soi-tot"><div class="v">${Object.keys(STATES).length}</div><div class="l">states &amp; UTs mapped</div></div>` +
-        `<div class="soi-tot"><div class="v">${Math.round(totPop)} cr</div><div class="l">people</div></div>` +
-        `<div class="soi-tot"><div class="v">${fmt(totGsdp)}</div><div class="l">combined economy (GSDP)</div></div>` +
-        `<div class="soi-tot"><div class="v">${givers} of ${arr.length}</div><div class="l">are net givers to the union</div></div>`;
+        `<div class="ds-stat soi-tot"><div class="num v">${Object.keys(STATES).length}</div><div class="lbl l">states &amp; UTs mapped</div></div>` +
+        `<div class="ds-stat soi-tot"><div class="num v">${Math.round(totPop)} cr</div><div class="lbl l">people</div></div>` +
+        `<div class="ds-stat soi-tot"><div class="num v">${fmt(totGsdp)}</div><div class="lbl l">combined economy (GSDP)</div></div>` +
+        `<div class="ds-stat soi-tot"><div class="num v">${givers} of ${arr.length}</div><div class="lbl l">are net givers to the union</div></div>`;
       // metric buttons
-      document.getElementById('soi-metrics').innerHTML = Object.entries(METRICS)
-        .map(([k, m]) => `<button class="soi-mbtn${k === metric ? ' active' : ''}" data-m="${k}">${m.label}</button>`).join('');
-      document.querySelectorAll('.soi-mbtn').forEach(b => b.addEventListener('click', () => {
+      // DS molecule: segmented control — the metric switcher
+      document.getElementById('soi-metrics').innerHTML = '<div class="ds-segmented" role="tablist">' + Object.entries(METRICS)
+        .map(([k, m]) => `<button class="soi-mbtn${k === metric ? ' active is-on' : ''}" data-m="${k}" aria-pressed="${k === metric}">${m.label}</button>`).join('') + '</div>';
+      document.querySelectorAll('.soi-mbtn[data-m]').forEach(b => b.addEventListener('click', () => {
         metric = b.dataset.m;
-        document.querySelectorAll('.soi-mbtn').forEach(x => x.classList.toggle('active', x === b));
+        document.querySelectorAll('.soi-mbtn[data-m]').forEach(x => {
+          const on = x === b;
+          x.classList.toggle('active', on); x.classList.toggle('is-on', on); x.setAttribute('aria-pressed', on);
+        });
         render();
       }));
       render();
