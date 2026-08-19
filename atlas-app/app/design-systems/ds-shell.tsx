@@ -13,10 +13,10 @@ import Gallery from './gallery'
 const base = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
 // the standalone flagship's sections (data-screen-label → slug id, added to the served
-// India by Design Systems.dc.html), in document order, for the jump-nav.
+// India by Design Systems.dc.html), in document order, for the jump-nav. The hero +
+// segment lattice are TRIMMED from the embed (the gallery above already covers them),
+// so the embedded document only adds what's NEW: scripts, flags, timeline, chassis…
 const SECTIONS: { id: string; label: string }[] = [
-  { id: 'ds-hero', label: 'Hero' },
-  { id: 'ds-segment-lattice', label: 'Segment lattice' },
   { id: 'ds-scripts', label: 'The script layer' },
   { id: 'ds-flags', label: 'The flag layer' },
   { id: 'ds-timeline', label: 'The time layer' },
@@ -25,12 +25,15 @@ const SECTIONS: { id: string; label: string }[] = [
   { id: 'ds-chassis', label: 'The chassis' },
   { id: 'ds-poster-close', label: 'Poster' },
 ]
+// sections hidden inside the embed because the gallery/shell already presents them
+const EMBED_HIDE = ['ds-hero', 'ds-segment-lattice']
 
 export default function DsShell() {
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const introRef = useRef<HTMLElement>(null)
-  const [active, setActive] = useState('ds-hero')
+  const [active, setActive] = useState('ds-scripts')
   const [skin, setSkin] = useState('gupta')
+  const [frameH, setFrameH] = useState<number | null>(null)
 
   useEffect(() => {
     setSkin(document.documentElement.dataset.skin || 'gupta')
@@ -85,6 +88,29 @@ export default function DsShell() {
       const doc = frame.contentDocument
       const win = frame.contentWindow as (Window & typeof globalThis) | null
       if (!doc || !win || !win.IntersectionObserver) return
+
+      // TRIM the embed: hide the duplicate hero + segment lattice (the gallery covers
+      // them) by injecting a style into the iframe document, once.
+      if (!doc.getElementById('dss-embed-trim')) {
+        const st = doc.createElement('style')
+        st.id = 'dss-embed-trim'
+        st.textContent =
+          EMBED_HIDE.map((id) => `#${id}`).join(',') + '{display:none!important}' +
+          // the embed opens straight on the script layer — tighten its top padding
+          '#ds-scripts{padding-top:8px!important}'
+        doc.head?.appendChild(st)
+      }
+
+      // FIT the iframe to its (now shorter) content so there's no dark void below.
+      const fit = () => {
+        const h = doc.body?.scrollHeight
+        if (h && h > 200) setFrameH(h)
+      }
+      fit()
+      // re-fit after fonts/reveals settle
+      win.setTimeout(fit, 400)
+      win.setTimeout(fit, 1200)
+
       // build the observer INSIDE the iframe's context so it observes its own scroll
       io = new win.IntersectionObserver(
         (entries) => {
@@ -106,7 +132,33 @@ export default function DsShell() {
         <svg className="dss-intro-bg" aria-hidden="true"><rect width="100%" height="100%" fill="url(#jali)" /></svg>
         <div className="dss-intro-wash" aria-hidden="true" />
         <div className="dss-intro-in">
-          <div className="dss-intro-seal" aria-hidden="true"><svg width="64" height="64" viewBox="0 0 100 100"><use href="#seal-ring" /></svg></div>
+          <div className="dss-intro-seal" aria-hidden="true">
+            <svg width="76" height="76" viewBox="0 0 100 100" role="img">
+              <defs>
+                <radialGradient id="dss-seal-g" cx="50%" cy="38%" r="65%">
+                  <stop offset="0%" stopColor="#3a1c14" />
+                  <stop offset="100%" stopColor="#1c0d0a" />
+                </radialGradient>
+              </defs>
+              {/* filled medallion disc */}
+              <circle cx="50" cy="50" r="47" fill="url(#dss-seal-g)" stroke="#f0cd7a" strokeWidth="2.5" />
+              <circle cx="50" cy="50" r="40" fill="none" stroke="#d9a441" strokeWidth="1" opacity="0.7" />
+              {/* radiating ticks around the ring */}
+              <g stroke="#f0cd7a" strokeWidth="1.4">
+                {Array.from({ length: 24 }, (_, i) => (
+                  <line key={i} x1="50" y1="11" x2="50" y2="6" transform={`rotate(${i * 15} 50 50)`} />
+                ))}
+              </g>
+              {/* center chakra glyph */}
+              <g stroke="#f0cd7a" strokeWidth="1.4" fill="none">
+                <circle cx="50" cy="50" r="15" />
+                {Array.from({ length: 12 }, (_, i) => (
+                  <line key={i} x1="50" y1="36" x2="50" y2="50" transform={`rotate(${i * 30} 50 50)`} />
+                ))}
+              </g>
+              <circle cx="50" cy="50" r="4" fill="#f0cd7a" />
+            </svg>
+          </div>
           <div className="dss-rule" aria-hidden="true"><span /><b>✦</b><span /></div>
           <div className="kicker">Indic Designs™ · India&apos;s own design systems · carved from artefacts</div>
           <h1 className="dss-h1">One chassis.<br /><em>Many Indias.</em></h1>
@@ -162,12 +214,14 @@ export default function DsShell() {
         ))}
       </nav>
 
-      {/* the handoff document */}
+      {/* the handoff document — the layers the gallery doesn't cover (scripts, flags,
+          timeline, chassis). Height is fit to content so there's no dark void. */}
       <iframe
         ref={iframeRef}
         src={`${base}/design-systems-full/`}
-        title="India by Design Systems — the complete document"
+        title="India by Design Systems — scripts, flags, timeline & the chassis"
         className="dss-frame"
+        style={frameH ? { height: frameH } : undefined}
       />
 
       <style>{`
@@ -253,7 +307,8 @@ export default function DsShell() {
         .dss-tab:hover { color: #f4e6c8; }
         .dss-tab.on { color: #f0cd7a; border-bottom-color: #f0cd7a; }
 
-        .dss-frame { width: 100%; height: calc(100vh - 60px); border: 0; display: block; background: #f6f0e1; }
+        /* default is a sensible min until JS fits it to content (avoids the dark void) */
+        .dss-frame { width: 100%; height: 1400px; border: 0; display: block; background: #23110d; }
 
         @media (max-width: 720px) {
           .dss-tabs { top: 54px; overflow-x: auto; flex-wrap: nowrap; }
