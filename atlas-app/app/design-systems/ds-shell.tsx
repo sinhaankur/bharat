@@ -5,6 +5,7 @@ import { SKINS } from '@/components/skin-switcher'
 import { downloadCss, downloadJson, downloadSpec, downloadZip } from '@/lib/download-skin'
 import { TOKEN_SETS } from '@/lib/design-tokens'
 import Gallery from './gallery'
+import { Stagger, Item } from '@/components/motion'
 
 // The intuitive shell around the handoff design document. It gives /design-systems what a
 // 12,000px iframe scroll lacks: an intro that says what this is, a LIVE skin switcher (pick
@@ -181,11 +182,12 @@ export default function DsShell() {
       <Gallery />
 
       {/* TAKE ONE HOME — the downloads shelf. Not a second skin-picker (the gallery
-          above wears skins); this is only the files, for the systems that ship them. */}
+          above wears skins); this is only the files, for the systems that ship them.
+          Cards cascade in on view via the design-system Stagger primitive. */}
       <div className="dss-shelf-h mono">Take one home — download the tokens</div>
-      <section className="dss-skins" aria-label="Download a design system">
+      <Stagger className="dss-skins" as="section" aria-label="Download a design system">
         {SKINS.filter((s) => TOKEN_SETS[s.id]).map((s) => (
-          <div key={s.id} className={`dss-skin${skin === s.id ? ' on' : ''}`}>
+          <Item key={s.id} className={`dss-skin${skin === s.id ? ' on' : ''}`} as="article">
             <span className="dss-skin-band" style={{ background: `linear-gradient(90deg, ${s.swatch}, ${s.band})` }} />
             <div className="dss-skin-apply">
               <span className="dss-skin-name">{s.label}</span>
@@ -198,9 +200,9 @@ export default function DsShell() {
               <button onClick={() => downloadSpec(s.id)} title="One-page specimen (HTML)">Spec</button>
               <button className="dss-dl-zip" onClick={() => downloadZip(s.id)} title="All files + license (.zip)">.zip ↓</button>
             </div>
-          </div>
+          </Item>
         ))}
-      </section>
+      </Stagger>
       <p className="dss-dl-note mono">
         Downloads are for reference. Indic Designs™ — original work, © 2026 Bharat; all rights reserved. No redistribution or reuse without a licence.
       </p>

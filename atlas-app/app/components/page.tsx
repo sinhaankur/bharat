@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import SiteHeader from '@/components/site-header'
 import SiteFooter from '@/components/site-footer'
+import MotionSpecimens from './motion-specimens'
 
 // The living component reference — every design-system primitive rendered in the house
 // style (gold accent, 0 radius, Karla/Rozha), so pages are built from these, not ad-hoc.
@@ -90,6 +91,18 @@ export default function ComponentsPage() {
           <div className="card card-pad elev-md" style={{ width: 150 }}><div className="card-meta">elev-md</div></div>
           <div className="card card-pad elev-lg" style={{ width: 150 }}><div className="card-meta">elev-lg</div></div>
         </Row>
+
+        <section style={{ padding: '26px 0', borderBottom: '1px solid var(--line)' }}>
+          <div className="card-kicker" style={{ marginBottom: 4 }}>Motion · powered by Motion (framer-motion)</div>
+          <h2 style={{ font: '700 20px var(--font-ui)', margin: '0 0 6px', color: 'var(--ink)' }}>Motion</h2>
+          <p className="text-muted" style={{ font: '400 13px/1.6 var(--font-ui)', maxWidth: '64ch', margin: '0 0 16px' }}>
+            The animation layer — spring physics, gestures and scroll reveals as reusable primitives
+            (<code>&lt;Reveal&gt;</code>, <code>&lt;Stagger&gt;</code>, <code>&lt;Press&gt;</code>) and tokens
+            (<code>SPRING</code>, <code>DUR</code>, <code>EASE</code>). Every one honours reduce-motion —
+            the reader&apos;s toggle or the OS setting renders it static.
+          </p>
+          <MotionSpecimens />
+        </section>
       </main>
       <SiteFooter />
     </>
