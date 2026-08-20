@@ -7,70 +7,62 @@ import BharatLogo from '@/components/bharat-logo'
 import SkinSwitcher from '@/components/skin-switcher'
 import { classicMapHref, classicHref } from '@/lib/links'
 
-// The global header — the SAME 8-section magazine nav the classic pages use
-// (News · Money · Land · History · Languages · 3D · Design · Data), so a visitor sees
-// one consistent header across the classic atlas and this app. Most section items are
-// classic .html pages (one level up at /bharat); a few are app routes (Design, some 3D).
+// The global header — the SAME public 6-section nav the classic pages use
+// (News · Money · Land · History · Languages · About), so a visitor sees one
+// consistent map across the classic atlas and this app. '3D' folds into its topic
+// (globe→Money, temples→History, terrain→Land); Design/Study/Data live under About.
+// Most items are classic .html pages (one level up at /bharat); some are app routes.
 // Colours come from skin tokens so it reskins with the whole site.
 
 type Item = { t: string; href: string; app?: boolean }
 type Section = { label: string; href: string; app?: boolean; icon: string; items: Item[] }
 
 // Each section wears a Mauryan artefact icon (public sprite): News=edict, Money=coin,
-// Land=tree, History=lion, Languages=pillar, 3D=stupa, Design=lotus, Data=jali.
+// Land=tree, History=lion, Languages=pillar, About=jali.
 // c() = a classic page link; app routes are marked app:true (rendered via next/link).
 const c = (file: string) => classicHref(file)
 const SECTIONS: Section[] = [
   { label: 'News', href: c('feed'), icon: 'i-edict', items: [
-    { t: 'The feed', href: c('feed') },
-    { t: 'Timeline', href: c('timeline') },
-    { t: "History's deadliest", href: c('atrocities') },
+    { t: "Today's news", href: c('feed') },
+    { t: 'How it built up', href: c('timeline') },
   ]},
   { label: 'Money', href: classicMapHref(), icon: 'i-coin', items: [
-    { t: 'The map', href: classicMapHref() },
-    { t: 'State of India', href: c('state-of-india') },
-    { t: 'Explore / query', href: '/explore', app: true },
-    { t: 'Chain of command', href: c('command-chain') },
-    { t: 'Provenance ledger', href: c('provenance') },
+    { t: 'The money map', href: classicMapHref() },
+    { t: 'See it on the globe', href: c('india-3d') },
+    { t: 'Which states carry the country', href: c('state-of-india') },
+    { t: 'Ask your own question', href: '/explore', app: true },
+    { t: "Who's in charge", href: c('command-chain') },
   ]},
   { label: 'Land', href: c('encroachment-atlas'), icon: 'i-tree', items: [
     { t: 'Built where water returns', href: c('encroachment-atlas') },
-    { t: 'District terrain 3D', href: c('terrain-3d') },
-    { t: 'Flood explorer', href: c('flood-3d') },
-    { t: 'Quake & tsunami', href: c('quake-tsunami') },
+    { t: 'The land in 3D', href: c('terrain-3d') },
+    { t: 'Raise the water', href: c('flood-3d') },
+    { t: 'Earthquakes & tsunamis', href: c('quake-tsunami') },
   ]},
   { label: 'History', href: c('ancient-india'), icon: 'i-lion', items: [
-    { t: 'Ancient India timeline', href: c('ancient-india') },
-    { t: "Ashoka's rule of the land", href: c('ashoka') },
-    { t: 'Sacred ground', href: c('heritage-atlas') },
+    { t: '5,000 years, one timeline', href: c('ancient-india') },
+    { t: "Ashoka's empire", href: c('ashoka') },
+    { t: 'Temples & sacred ground', href: c('heritage-atlas') },
     { t: 'Walk inside a temple', href: c('cave-walk') },
-    { t: 'Deep history in DNA', href: c('deep-history') },
+    { t: 'Temples in 3D', href: '/3d', app: true },
+    { t: 'Who we are, in DNA', href: c('deep-history') },
+    { t: "History's deadliest events", href: c('atrocities') },
   ]},
   { label: 'Languages', href: c('languages'), icon: 'i-pillar', items: [
-    { t: 'Languages of Bharat', href: c('languages') },
+    { t: 'Every language & script', href: c('languages') },
     { t: 'The journey of a word', href: c('journey') },
-    { t: 'Scripts & families', href: c('scripts') },
-    { t: 'Texts across languages', href: c('vedas') },
+    { t: 'The script family tree', href: c('scripts') },
+    { t: 'One text, many tongues', href: c('vedas') },
   ]},
-  { label: '3D', href: c('india-3d'), icon: 'i-stupa', items: [
-    { t: 'India in 3D — the globe', href: c('india-3d') },
-    { t: 'Globe → map', href: c('globe-map') },
-    { t: 'Temples in 3D (photogrammetry)', href: c('heritage-3d') },
-    { t: 'Temple forms in 3D (parametric)', href: '/3d', app: true },
-    { t: 'The mesh', href: c('mesh') },
-  ]},
-  { label: 'Design', href: '/design-systems', app: true, icon: 'i-lotus', items: [
+  { label: 'About', href: c('how-it-works'), icon: 'i-jali', items: [
+    { t: 'How it works', href: c('how-it-works') },
+    { t: 'The 7 engines', href: '/engines', app: true },
+    { t: 'India vs the world', href: c('global') },
+    { t: 'The data & sources', href: '/data', app: true },
+    { t: 'Every figure → its source', href: c('provenance') },
     { t: 'India by Design Systems', href: '/design-systems', app: true },
-    { t: 'The canvas', href: '/canvas', app: true },
-    { t: 'Components — the library', href: '/components', app: true },
-    { t: 'Design system', href: c('design-system') },
-  ]},
-  { label: 'Data', href: '/data', app: true, icon: 'i-jali', items: [
-    { t: 'Data & provenance', href: '/data', app: true },
-    { t: 'The register', href: '/register', app: true },
-    { t: 'Knowledge base', href: c('knowledge') },
-    { t: 'The engines', href: '/engines', app: true },
-    { t: 'India vs world', href: c('global') },
+    { t: 'The gallery', href: '/design-systems#gallery', app: true },
+    { t: 'Methodology & honesty', href: c('about') },
   ]},
 ]
 
