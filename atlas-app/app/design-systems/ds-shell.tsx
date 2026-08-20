@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { SKINS } from '@/components/skin-switcher'
-import { downloadCss, downloadJson, downloadSpec, downloadZip } from '@/lib/download-skin'
+import { downloadCss, downloadJson, downloadFigma, downloadSpec, downloadZip } from '@/lib/download-skin'
 import { TOKEN_SETS } from '@/lib/design-tokens'
 import Gallery from './gallery'
 import { Stagger, Item } from '@/components/motion'
@@ -197,8 +197,9 @@ export default function DsShell() {
               <span className="dss-dl-h">Files</span>
               <button onClick={() => downloadCss(s.id)} title="CSS custom properties">CSS</button>
               <button onClick={() => downloadJson(s.id)} title="JSON design tokens">JSON</button>
+              <button className="dss-dl-figma" onClick={() => downloadFigma(s.id)} title="W3C Design Tokens — import into Figma via Tokens Studio">Figma ↗</button>
               <button onClick={() => downloadSpec(s.id)} title="One-page specimen (HTML)">Spec</button>
-              <button className="dss-dl-zip" onClick={() => downloadZip(s.id)} title="All files + license (.zip)">.zip ↓</button>
+              <button className="dss-dl-zip" onClick={() => downloadZip(s.id)} title="All files + README + license (.zip)">.zip ↓</button>
             </div>
           </Item>
         ))}
@@ -296,6 +297,8 @@ export default function DsShell() {
         .dss-dl button:hover { background: var(--leaf); color: #23110d; border-color: var(--leaf); }
         .dss-dl .dss-dl-zip { border-color: var(--leaf); color: var(--leaf-2); }
         .dss-dl .dss-dl-zip:hover { background: var(--leaf); color: #23110d; }
+        .dss-dl .dss-dl-figma { border-color: color-mix(in srgb, var(--leaf) 60%, transparent); color: var(--leaf-2); }
+        .dss-dl .dss-dl-figma:hover { background: var(--leaf-2); color: #23110d; border-color: var(--leaf-2); }
         /* the note closes the royal skin band */
         .dss-dl-note { background: #23110d; color: rgba(244,230,200,.5); margin: 0; padding: 0 var(--edge) 22px;
           font-size: 10.5px; border-bottom: 3px solid #d9a441; }
