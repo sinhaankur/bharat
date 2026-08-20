@@ -22,6 +22,9 @@ type Plate = {
   era: string
   place: string
   line: string      // one-line heritage
+  // "the UI is the heritage" — how the design decisions read out of the material.
+  // Each: a short label + the line that ties a UI choice back to the source.
+  craft: { k: string; v: string }[]
   motif: 'pillar' | 'halo' | 'vimana' | 'jharokha' | 'chassis' | 'loom' | 'backwater'
   palette: { name: string; hex: string }[]
   ground: string    // plate ground
@@ -35,6 +38,11 @@ const PLATES: Plate[] = [
   {
     id: 'mauryan', no: 'I', name: 'Mauryan', era: 'c. 322–185 BCE', place: 'Magadha · the first empire',
     line: 'Stone, sky & the incised line — the austere imperial skeleton, carved from Chunar sandstone.',
+    craft: [
+      { k: 'The 2px corner', v: 'a Mauryan line was incised, not printed — chiselled into sandstone, it stays sharp' },
+      { k: 'The action colour', v: 'the vermilion of a correction cut over an edict' },
+      { k: 'The spinner', v: 'the Ashokan chakra, still turning' },
+    ],
     motif: 'pillar', ground: '#efe7d2', ink: '#2a2018', accent: '#c1440e', skin: 'chassis', href: 'design-system.html',
     palette: [
       { name: 'Chunar sandstone', hex: '#d8c9a6' }, { name: 'Ashokan polish', hex: '#b8a67e' },
@@ -44,6 +52,11 @@ const PLATES: Plate[] = [
   {
     id: 'gupta', no: 'II', name: 'Gupta', era: 'c. 320–550 CE', place: 'the classical age',
     line: 'Plaster, fresco & the ornate halo — Mathura red sandstone and the jewel-tones of Ajanta.',
+    craft: [
+      { k: 'The 6px corner', v: 'Gupta ornament is modelled in plaster, not incised — its edges roll, never chisel' },
+      { k: 'The action colour', v: 'the halo-gold of the prabhāvali, where the eye is meant to land' },
+      { k: 'The type ramp', v: 'tālamāna iconometry — proportion by the rule, never by eye' },
+    ],
     motif: 'halo', ground: '#f2e7cf', ink: '#3a241a', accent: '#c9a227', skin: 'gupta', href: 'ds-gupta.html',
     palette: [
       { name: 'Ajanta plaster', hex: '#efe1c4' }, { name: 'Mathura rose', hex: '#c58a6a' },
@@ -53,6 +66,11 @@ const PLATES: Plate[] = [
   {
     id: 'chola', no: 'III', name: 'Chola', era: '9th–13th c. CE', place: 'Tamil imperial',
     line: 'Bronze, granite & the sacred red — Thanjavur granite and kumkum vermilion as the action.',
+    craft: [
+      { k: 'The 3px corner', v: 'dry-stacked granite, block on block without mortar — the edge holds because the stone does' },
+      { k: 'The action colour', v: 'kumkum — the red of active worship; it already means "here, now, do this"' },
+      { k: 'The data table', v: 'temple walls ARE the ledger — endowments carved in ruled lines of stone' },
+    ],
     motif: 'vimana', ground: '#f0e9dd', ink: '#3a2a1a', accent: '#a8322b', skin: 'tamil', href: 'ds-chola.html',
     palette: [
       { name: 'Sacred ash', hex: '#eae3d4' }, { name: 'Gopuram gold', hex: '#c9862b' },
@@ -62,6 +80,11 @@ const PLATES: Plate[] = [
   {
     id: 'rajput', no: 'IV', name: 'Rajput', era: '8th–18th c.', place: 'the desert courts',
     line: 'Sandstone, mirror-work & miniature colour — Jaisalmer gold, indigo, and gold-leaf on wasli.',
+    craft: [
+      { k: 'The 5px corner', v: 'the cusped jharokha arch — ornamented but crisp, a line painted with a squirrel-hair brush' },
+      { k: 'The action colour', v: 'cinnabar vermilion — the loudest pigment on the page, saved for the one thing that matters' },
+      { k: 'The card', v: 'a jharokha — a carved balcony window framing one scene, not a wall of them' },
+    ],
     motif: 'jharokha', ground: '#f4ead2', ink: '#3a2418', accent: '#c9345a', skin: 'rajasthan', href: 'ds-rajput.html',
     palette: [
       { name: 'Wasli cream', hex: '#efe2c6' }, { name: 'Haveli sandstone', hex: '#cc9a54' },
@@ -71,6 +94,11 @@ const PLATES: Plate[] = [
   {
     id: 'kerala', no: 'V', name: 'Kerala', era: 'living', place: 'the backwater coast',
     line: 'Coir green, brass & rain — the temple-and-lagoon register of the Malabar coast.',
+    craft: [
+      { k: 'The ground', v: 'the green of the backwater and the paddy — the register reads as water and leaf' },
+      { k: 'The action colour', v: 'temple brass, warmed by lamp-oil — the metal of the kuthu-vilakku' },
+      { k: 'The corner', v: 'the curved eave of the sloped tiled roof, shaped to shed the monsoon' },
+    ],
     motif: 'backwater', ground: '#e9ecdd', ink: '#1c241a', accent: '#2f7d4f', skin: 'kerala',
     palette: [
       { name: 'Coir', hex: '#c7b489' }, { name: 'Backwater green', hex: '#2f7d4f' },
@@ -80,6 +108,11 @@ const PLATES: Plate[] = [
   {
     id: 'naga', no: 'VI', name: 'Nagaland', era: 'living', place: 'the loom of the hills',
     line: 'Shawl bands, warrior red & loom black — the woven grammar of the Naga highlands.',
+    craft: [
+      { k: 'The bands', v: 'the loin-loom shawl is woven in fixed stripes — the layout is a weave, not a grid' },
+      { k: 'The action colour', v: 'warrior red — the band a man earns the right to wear' },
+      { k: 'The corner', v: 'the hard selvedge edge of the loom, squared where the weft turns' },
+    ],
     motif: 'loom', ground: '#efe6d8', ink: '#201a16', accent: '#b3271f', skin: 'naga',
     palette: [
       { name: 'Loom cream', hex: '#e6dcc6' }, { name: 'Warrior red', hex: '#b3271f' },
@@ -230,6 +263,17 @@ export default function Gallery() {
                         <span key={c.name} className="gal-sw" style={{ background: c.hex }} title={`${c.name} · ${c.hex}`} />
                       ))}
                     </div>
+                    {/* "the UI is the heritage" — how the design reads out of the material */}
+                    {active && (
+                      <dl className="gal-craft">
+                        {pl.craft.map((c) => (
+                          <div key={c.k} className="gal-craft-row">
+                            <dt>{c.k}</dt>
+                            <dd>{c.v}</dd>
+                          </div>
+                        ))}
+                      </dl>
+                    )}
                     <div className="gal-actions">
                       {pl.skin && (
                         <button
@@ -330,6 +374,13 @@ const galleryCss = `
   .gal-palette { display: flex; gap: 0; justify-content: center; margin: 20px 0 0;
     border: 1px solid color-mix(in srgb, var(--pl-ink) 25%, transparent); }
   .gal-sw { width: 44px; height: 26px; }
+  /* "the UI is the heritage" — the craft lines under the palette */
+  .gal-craft { margin: 18px 0 0; text-align: left; display: grid; gap: 9px;
+    border-top: 1px solid color-mix(in srgb, var(--pl-ink) 16%, transparent); padding-top: 14px; }
+  .gal-craft-row { display: grid; grid-template-columns: 108px 1fr; gap: 12px; align-items: baseline; }
+  .gal-craft dt { font: 600 10px var(--font-mono); letter-spacing: .06em; text-transform: uppercase;
+    color: var(--pl-accent); }
+  .gal-craft dd { margin: 0; font: 400 12px/1.5 var(--font-ui); color: color-mix(in srgb, var(--pl-ink) 78%, transparent); }
   .gal-actions { display: flex; gap: 10px; justify-content: center; margin: 20px 0 2px; flex-wrap: wrap; }
   .gal-wear { font: 700 12px var(--font-ui); cursor: pointer; background: var(--pl-accent); color: #fff;
     border: 0; padding: 9px 16px; }
