@@ -92,77 +92,75 @@
      ATLAS_NAV above. A section is a curated reader label whose items are drawn
      from real pages. `lead` = the one story/tool to surface first in the menu.
      Utility (About) deliberately lives only in the footer. */
+  /* Public-first arrangement (2026-08-19): FIVE reader topics anyone understands —
+     News · Money · Land · History · Languages — plus a single About that gathers the
+     project's tools, sources and craft. '3D' is a format, not a topic, so its views
+     fold into the topic they belong to (globe→Money, temples→History, terrain→Land).
+     Every page stays reachable. Labels are plain; jargon lives in the hints, not the
+     top nav. nav-data.js is the single source → header, drawer, footer, home, search. */
   g.ATLAS_SECTIONS = [
-    { label: "News", href: "feed.html", tagline: "Start with today — then see who spun it, and when it happened before.", items: [
-      { href: "feed.html", text: "The feed", hint: "today's headlines, clustered by place" },
-      { href: "feed.html#bias", text: "Bias vs the record", hint: "the spin, next to the sourced number" },
-      { href: "timeline.html", text: "Timeline", hint: "how the story built up, event by event" },
+    { label: "News", href: "feed.html", tagline: "What's happening now — and who's spinning it. The headlines, next to the numbers.", items: [
+      { href: "feed.html", text: "Today's news", hint: "the headlines, gathered by place" },
+      { href: "feed.html#bias", text: "The spin check", hint: "each story, next to the sourced number" },
+      { href: "timeline.html", text: "How it built up", hint: "the story over time, event by event" },
     ]},
-    { label: "Money", href: "index.html", tagline: "Follow one rupee: onto the map, up the rankings, down the chain of command.", items: [
-      { href: "index.html", text: "The map", hint: "start here — every district, coloured by money" },
-      { href: "state-of-india.html", text: "State of India", hint: "then zoom out — who carries the country" },
-      { href: "explore.html", text: "Explore / query", hint: "ask your own question of all 594 districts" },
-      { href: "command-chain.html", text: "Chain of command", hint: "and see who answers for it, tier by tier" },
+    { label: "Money", href: "index.html", tagline: "Where India's public money goes — every district on the map, and who answers for it.", items: [
+      { href: "index.html", text: "The money map", hint: "start here — every district, coloured by money" },
+      { href: "india-3d.html", text: "See it on the globe", hint: "the same India in 3D — real Earth, every layer" },
+      { href: "globe-map.html", text: "Globe → flat map", hint: "watch the globe unroll into the map" },
+      { href: "state-of-india.html", text: "Which states carry the country", hint: "every state ranked by what it gives & gets" },
+      { href: "explore.html", text: "Ask your own question", hint: "filter & rank all 594 districts" },
+      { href: "command-chain.html", text: "Who's in charge", hint: "the chain of command, tier by tier" },
     ]},
-    { label: "Land", href: "encroachment-atlas.html", tagline: "Read the ground itself: where water returns, and where it's unsafe to build.", items: [
-      { href: "encroachment-atlas.html", text: "Built where water returns", hint: "start here — habitation on flood land" },
-      { href: "terrain-3d.html", text: "District terrain 3D", hint: "the relief beneath it — river & plain" },
-      { href: "flood-3d.html", text: "Flood explorer", hint: "raise the water over real terrain" },
-      { href: "quake-tsunami.html", text: "Quake & tsunami", hint: "the live hazard — USGS + historical" },
+    { label: "Land", href: "encroachment-atlas.html", tagline: "Read the ground itself — where the water returns, and where it's unsafe to build.", items: [
+      { href: "encroachment-atlas.html", text: "Built where water returns", hint: "start here — homes on flood land" },
+      { href: "terrain-3d.html", text: "The land in 3D", hint: "real relief — river, plain & mountain" },
+      { href: "flood-3d.html", text: "Raise the water", hint: "flooding, over real terrain" },
+      { href: "quake-tsunami.html", text: "Earthquakes & tsunamis", hint: "the live hazard — USGS + historical" },
     ]},
-    { label: "History", href: "ancient-india.html", tagline: "Walk 5,000 years: the timeline first, then rulers, temples, blood and the toll.", items: [
-      { href: "ancient-india.html", text: "Ancient India timeline", hint: "start here — 5,000 years on one spine" },
-      { href: "ashoka.html", text: "Ashoka's rule of the land", hint: "one empire, read in its own edicts" },
-      { href: "heritage-atlas.html", text: "Sacred ground", hint: "the temples — builders & destruction" },
+    { label: "History", href: "ancient-india.html", tagline: "Walk 5,000 years — the timeline, the rulers, the temples, and the record of what happened.", items: [
+      { href: "ancient-india.html", text: "5,000 years, one timeline", hint: "start here — the whole spine" },
+      { href: "ashoka.html", text: "Ashoka's empire", hint: "one empire, read in its own edicts" },
+      { href: "heritage-atlas.html", text: "Temples & sacred ground", hint: "who built them — and who destroyed them" },
       { href: "cave-walk.html", text: "Walk inside a temple", hint: "step in — a first-person reconstruction" },
-      { href: "deep-history.html", text: "Deep history in DNA", hint: "who we are — ancient-DNA population shifts" },
-      { href: "atrocities.html", text: "History's deadliest", hint: "the cost — the 100 deadliest events, mapped" },
+      { href: "heritage-3d.html", text: "Temples in 3D", hint: "scanned & modelled, as they stand and stood" },
+      { href: "temple-forms.html", text: "How temples are shaped", hint: "Nagara · Dravida · Kalinga, modelled to real dims" },
+      { href: "deep-history.html", text: "Who we are, in DNA", hint: "the ancient-DNA population shifts" },
+      { href: "atrocities.html", text: "History's deadliest events", hint: "the 100 worst, mapped and counted" },
     ]},
-    { label: "Languages", href: "languages.html", tagline: "One hub, then the journey of a word, the script trees, and a text across tongues.", items: [
-      { href: "languages.html", text: "Languages of Bharat", hint: "start here — the hub for every tongue & script" },
-      { href: "journey.html", text: "The journey of a word", hint: "scroll one word through 4,000 years" },
-      { href: "scripts.html", text: "Scripts & families", hint: "the family trees — Indo-Aryan vs Dravidian + Brahmi" },
-      { href: "vedas.html", text: "Texts across languages", hint: "one text, many translations, compared" },
+    { label: "Languages", href: "languages.html", tagline: "Every tongue & script of Bharat — the families, the journey of a word, one text across many.", items: [
+      { href: "languages.html", text: "Every language & script", hint: "start here — the hub" },
+      { href: "journey.html", text: "The journey of a word", hint: "one word through 4,000 years" },
+      { href: "scripts.html", text: "The script family tree", hint: "Indo-Aryan vs Dravidian + Brahmi" },
+      { href: "vedas.html", text: "One text, many tongues", hint: "the Rigveda, translated & compared" },
     ]},
-    { label: "3D", href: "india-3d.html", tagline: "See it for real: the globe, unrolled to a map, down into the terrain and the temples.", items: [
-      { href: "india-3d.html", text: "India in 3D — the globe", hint: "start here — real Earth, 594 districts, layers" },
-      { href: "globe-map.html", text: "Globe → map", hint: "watch the globe unroll into a flat map" },
-      { href: "terrain-3d.html", text: "Real topography", hint: "the land in relief — open DEM elevation" },
-      { href: "heritage-3d.html", text: "Temples in 3D (photogrammetry)", hint: "scanned temples & ruins, as they survive" },
-      { href: "temple-forms.html", text: "Temple forms in 3D (parametric)", hint: "Nagara · Dravida · Kalinga, modelled to real dims" },
-      { href: "mesh.html", text: "The mesh", hint: "the whole thing connected — money, cases, people" },
-    ]},
-    { label: "Design", href: "indic-design-systems.html", tagline: "One atomic spine, many heritages — the Indic design systems.", items: [
-      { href: "indic-design-systems.html", text: "The systems", hint: "the family hub — every system, one atomic spine", icon: "🪷", children: [
-        { href: "design-system.html", text: "Mauryan", hint: "stone, sky & the incised line" },
-        { href: "ds-gupta.html", text: "Gupta", hint: "plaster, fresco & the ornate halo" },
-        { href: "ds-chola.html", text: "Chola", hint: "bronze, granite & the sacred red" },
-        { href: "ds-rajput.html", text: "Rajput", hint: "sandstone, mirror-work & miniature colour" },
+    { label: "About", href: "how-it-works.html", tagline: "What this is, how it's built, where every number comes from — and the design behind it.", items: [
+      { href: "how-it-works.html", text: "How it works", hint: "start here — the project in plain terms", children: [
+        { href: "engines.html", text: "The 7 engines", hint: "the lenses that read the whole atlas" },
+        { href: "global.html", text: "India vs the world", hint: "GDP, income & industry, compared" },
+        { href: "geopolitical-chess.html", text: "The geopolitical board", hint: "who rules each player (a framing)" },
+        { href: "mesh.html", text: "How it all connects", hint: "money, cases, officials & districts" },
       ] },
-      { href: "design-system.html", text: "Atomic reference", hint: "the spine — tokens to templates", icon: "🎨", children: [
-        { href: "design-system.html#tokens", text: "Tokens", hint: "the raw design decisions" },
-        { href: "design-system.html#atoms", text: "Atoms", hint: "the smallest parts" },
-        { href: "design-system.html#molecules", text: "Molecules", hint: "atoms combined" },
-        { href: "design-system.html#organisms", text: "Organisms", hint: "sections & patterns" },
-        { href: "design-system.html#templates", text: "Templates", hint: "whole-page registers" },
+      { href: "knowledge.html", text: "The data & sources", hint: "every figure, traced to its citation", children: [
+        { href: "knowledge.html", text: "Knowledge base", hint: "the whole data catalog" },
+        { href: "provenance.html", text: "Every figure → its source", hint: "the provenance ledger, 0 unattributed" },
+        { href: "officials.html", text: "Officials to track", hint: "the sourced accountability register" },
+        { href: "references.html", text: "Sources", hint: "every citation" },
+        { href: "data.html", text: "Get the data", hint: "download & API" },
+        { href: "library.html", text: "Reading room", hint: "the primary texts" },
       ] },
-      { href: "app/design-systems/", text: "India by Design Systems", hint: "the flagship deck — a skin per state, over one chassis", ext: true, children: [
-        { href: "app/design-systems/", text: "The flag layer", hint: "22 dhvaja as banner grammar", ext: true },
-        { href: "app/canvas/", text: "The canvas", hint: "every screen of the atlas, one deck", ext: true },
+      { href: "indic-design-systems.html", text: "The design behind it", hint: "Indic Designs™ — India's own design systems", children: [
+        { href: "app/design-systems/", text: "India by Design Systems", hint: "the flagship — a skin per state, one chassis", ext: true },
+        { href: "app/design-systems/#gallery", text: "The gallery", hint: "walk the systems, plate by plate", ext: true },
+        { href: "indic-design-systems.html", text: "The family", hint: "Mauryan · Gupta · Chola · Rajput" },
+        { href: "design-system.html", text: "Atomic reference", hint: "tokens → templates" },
       ] },
-    ]},
-    { label: "Study", href: "engines.html", tagline: "The lenses that read the whole atlas — the engines, the board, the world, the sources.", items: [
-      { href: "engines.html", text: "The 7 engines", hint: "start here — the composable lenses (Survey → News)" },
-      { href: "geopolitical-chess.html", text: "Geopolitical chess", hint: "the dollar is the board — who rules each player" },
-      { href: "global.html", text: "India vs world", hint: "zoom out — GDP, income, industry vs the world" },
-      { href: "library.html", text: "Reading room", hint: "go to the source — the primary texts" },
-    ]},
-    { label: "Data", href: "knowledge.html", tagline: "The receipts: the catalog, the named officials, then every figure back to its citation.", items: [
-      { href: "knowledge.html", text: "Knowledge base", hint: "start here — the whole data catalog" },
-      { href: "officials.html", text: "Officials to track", hint: "the accountability register — cited to the naming authority" },
-      { href: "provenance.html", text: "Provenance ledger", hint: "every figure → its citation, 0 unattributed" },
-      { href: "data.html", text: "Data & API", hint: "get the data" },
-      { href: "references.html", text: "Sources", hint: "every citation" },
+      { href: "about.html", text: "Methodology & honesty", hint: "the sourced-or-gap rule, and the limits", children: [
+        { href: "about.html", text: "Methodology & disclaimer", hint: "how we source, what we don't claim" },
+        { href: "for-organisations.html", text: "For organisations", hint: "licensing, widgets, commissioned work" },
+        { href: "share.html", text: "Share", hint: "post a card from the data" },
+        { href: "sitemap.html", text: "Everything (site map)", hint: "every page, one list" },
+      ] },
     ]},
   ];
 })(typeof window !== "undefined" ? window : this);
