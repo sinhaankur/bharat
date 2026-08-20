@@ -121,6 +121,54 @@ SYSTEMS = {
                      "suggests the canon was often a guiding ideal rather than a strict rule — "),
             "cite": '<a href="https://en.wikipedia.org/wiki/Talamana" target="_blank" rel="noopener">Talamana ↗</a> · <a href="heritage-atlas.html">Ajanta &amp; Gupta sites</a>',
         },
+        # each specimen tells the GUPTA story — plaster, fresco, the ornate halo, iconometry
+        "specimen_stories": {
+            "Type scale": (
+                "Gupta sculpture followed <b>tālamāna</b> — the body measured in face-lengths, on a fixed "
+                "scale from one to ten. This type ramp is that iconometry: proportion by the rule, never by eye."),
+            "Spacing · radius · elevation": (
+                "The corner softens to a foliate 6px — Gupta ornament is <em>modelled in plaster</em>, not incised "
+                "in stone, so its edges are rounded and rolled, never chiselled sharp."),
+            "Buttons": (
+                "The action colour is the <b>halo-gold</b> of the prabhāvali — the radiant disc behind every Gupta "
+                "figure. A button, like the halo, is where the eye is meant to land."),
+            "Text input · textarea · select": (
+                "An empty field is a wall freshly limed for fresco — the ground before the first ochre line. The focus "
+                "ring is the master's brush touching down; the invalid state, the iron-oxide red of a reworked passage."),
+            "Checkbox · radio · switch": (
+                "A mark set on the plaster — the confident single stroke of the Ajanta painter, who could not erase. "
+                "Checked is committed; the switch is a shrine-lamp lit or left dark."),
+            "Tags · badges · dots": (
+                "The Gupta gold <b>dinara</b> carried the king and his Garuda in a fine struck rim. These tags are that "
+                "coin's legend: a small, exact mark that says whose authority this is."),
+            "Chip · icon-button · kbd · spinner · rule": (
+                "The spinner turns like the prabhāvali's rays around a seated figure; the rule is the fresco's "
+                "register-line, ruled in red to divide one painted scene from the next."),
+            "Field (label + control + help/error)": (
+                "Label, field and gloss bound as one — like a mural panel: the scene, the border that holds it, and the "
+                "cartouche naming the story below. The group is the meaning."),
+            "Segmented control · tabs · pagination": (
+                "The Ajanta wall runs as bays, each a complete jātaka, read one at a time as you move along the veranda. "
+                "The segmented control is that colonnade — many scenes, one lit to the front."),
+            "Alert · stat · breadcrumb": (
+                "The breadcrumb is the pradakṣiṇā path — the circumambulation around the sanctum, stage by stage, "
+                "that always returns you to where you entered."),
+            "Card &amp; card grid": (
+                "A card is a fresco bay under its painted arch — a framed scene that invites you in to read it, not a "
+                "wall of text. Tag, heading and hint are its cartouche."),
+            "Data table": (
+                "The Gupta mints and guilds kept meticulous accounts in ruled registers; the astronomers of the age tabled "
+                "the heavens. This table is that discipline — every figure aligned in its column, ready to be read."),
+            "Toolbar": (
+                "The lintel of the Gupta shrine carried the auspicious marks above the doorway — everything invoked before "
+                "you crossed in. The toolbar sits over the view the same way: the instruments, ranged along the top."),
+            "Dialog": (
+                "The dialog is the <b>garbhagriha</b> — the small dark image-chamber the whole temple exists to hold. The "
+                "world dims to plaster shadow; one lit figure remains, and asks for a single act of attention."),
+            "Template starters": (
+                "A finished shrine — sanctum, porch, halo and fresco brought together to one canon. The templates are the "
+                "consecrated temple: proof the parts, composed, hold as a whole."),
+        },
     },
     "chola": {
         "theme_css": "theme-chola.css",
@@ -214,6 +262,54 @@ SYSTEMS = {
                      "inscriptions studied since the ASI's early epigraphy; Chola bronze iconography. Read from "
                      "surviving stone and metal — "),
             "cite": '<a href="https://en.wikipedia.org/wiki/Chola_art_and_architecture" target="_blank" rel="noopener">Chola art ↗</a> · <a href="heritage-atlas.html">the temples</a>',
+        },
+        # each specimen tells the CHOLA story — bronze, granite, kumkum, the great temple
+        "specimen_stories": {
+            "Type scale": (
+                "The Brihadisvara vimana rises in <b>thirteen measured tiers</b> to 216 feet, each storey a fixed step of "
+                "the last. This type ramp climbs the same way — proportion by the tier, never an ad-hoc pixel."),
+            "Spacing · radius · elevation": (
+                "The corner stays a monumental <b>3px</b> — Chola form is dry-stacked <em>granite</em>, block on block "
+                "without mortar. Soft radii would betray the stone; the edge holds because the stone does."),
+            "Buttons": (
+                "The action colour is <b>kumkum</b> vermilion — the sacred red of active worship, dabbed on the deity and "
+                "the devotee. In the culture it already means <em>here, now, do this</em>; so it means it here too."),
+            "Text input · textarea · select": (
+                "An empty field is a wax blank before the lost-wax pour — the form waiting for the metal. The focus ring is "
+                "the first heat; the invalid state, the kumkum stroke that marks a flaw in the cast."),
+            "Checkbox · radio · switch": (
+                "A mark made and kept — struck into the temple wall like the mason's guild-sign. The switch is the sanctum "
+                "lamp lit or dark; the checkbox, the chisel-tick that certifies a course complete."),
+            "Tags · badges · dots": (
+                "The Chola bronze bears its <b>iconographic marks</b> — the flame-ring, the drum, the raised foot — so a "
+                "Nataraja is unmistakable anywhere. These tags are that iconography: a small mark that certifies what a thing is."),
+            "Chip · icon-button · kbd · spinner · rule": (
+                "The spinner is the flame-wheel around the dancing Shiva, forever turning; the rule is the temple's "
+                "plinth-line, the cut course that runs level around the whole granite mass."),
+            "Field (label + control + help/error)": (
+                "Label, control and helper bound as one — like a Chola endowment carved in stone: the grant, the land it "
+                "governs, and the terms beneath. No clause stands alone; the record is the whole."),
+            "Segmented control · tabs · pagination": (
+                "The gopuram's tiers each carry their own ranked figures, yet rise as one tower. The segmented control is "
+                "that vimana — distinct storeys, a single mount, one brought to the front at a time."),
+            "Alert · stat · breadcrumb": (
+                "The breadcrumb is the maritime line the Chola navy sailed — Nagapattinam to Srivijaya, port by port — "
+                "each stage a place you can name on the way back to the harbour you left."),
+            "Card &amp; card grid": (
+                "A card is a niche in the temple wall — the framed <em>devakoshta</em> that holds one deity and draws the "
+                "eye to it. A doorway to one figure, not a wall of them."),
+            "Data table": (
+                "Chola temple walls ARE the ledger — thousands of inscriptions record endowments, wages and audits in ruled "
+                "lines of stone, a public account book. This table is that wall: every figure in its cell, aligned to be read."),
+            "Toolbar": (
+                "The gopuram gateway carried the guardians and the standards above the threshold — everything ranged over "
+                "the entrance. The toolbar sits over the view the same way: the instruments, along the top."),
+            "Dialog": (
+                "The dialog is the <b>garbhagriha</b> beneath the great vimana — the small dark sanctum the whole mountain "
+                "of granite exists to shelter. All else falls to shadow; one bronze remains, lit, and asks for one act."),
+            "Template starters": (
+                "A finished temple — plinth, vimana, gopuram and bronze raised to one plan and consecrated. The templates are "
+                "the Great Living Temple: proof the parts, composed, stand for a thousand years."),
         },
     },
     "rajput": {
@@ -310,6 +406,54 @@ SYSTEMS = {
                      "Bundi–Kota); miniature technique on wasli. Read from surviving folios and workshop practice — "),
             "cite": '<a href="https://en.wikipedia.org/wiki/Rajput_painting" target="_blank" rel="noopener">Rajput painting ↗</a> · <a href="heritage-atlas.html">forts &amp; courts</a>',
         },
+        # each specimen tells the RAJPUT story — wasli, miniature pigment, jharokha, fort
+        "specimen_stories": {
+            "Type scale": (
+                "The miniature was built in a <b>fixed making-order</b> — wasli, under-drawing, burnished ground, mineral "
+                "pigment, gold last. This type ramp is that discipline: measured steps in sequence, never ad-hoc."),
+            "Spacing · radius · elevation": (
+                "The corner takes a <b>5px jharokha</b> arch — the cusped curve of the fort's oriel window. Ornamented but "
+                "crisp: a Rajput line is <em>painted with a squirrel-hair brush</em>, sharp, never plush."),
+            "Buttons": (
+                "The action colour is miniature <b>vermilion</b> — cinnabar, the loudest pigment on the wasli page, saved "
+                "for the turban, the flag, the one thing the eye must go to first. A button is that vermilion."),
+            "Text input · textarea · select": (
+                "An empty field is a sheet of burnished wasli awaiting the brush; the focus ring is the under-drawing's "
+                "first charcoal line. The invalid state borrows the vermilion of a correction laid over the fault."),
+            "Checkbox · radio · switch": (
+                "A choice set down in mineral pigment — the miniaturist's committed stroke, made once on paper that will not "
+                "forgive. The switch is a haveli lamp lit or dark; the checkbox, the gold dot that says <em>done</em>."),
+            "Tags · badges · dots": (
+                "Every court's folios carry its <b>atelier hand</b> — Mewar, Kishangarh, Bundi, each recognisable at a "
+                "glance. These tags are that signature: a small mark naming which workshop, and what, a thing is."),
+            "Chip · icon-button · kbd · spinner · rule": (
+                "The spinner turns like the chakra in a Ragamala sky; the rule is the folio's <b>hashiya</b> — the ruled "
+                "gold-and-indigo border that frames every miniature page."),
+            "Field (label + control + help/error)": (
+                "Label, field and gloss bound as one — like a miniature: the painted scene, the illuminated border that "
+                "holds it, and the Devanagari couplet inscribed above. The page is the whole."),
+            "Segmented control · tabs · pagination": (
+                "A Ragamala set is thirty-six moods, each its own folio, turned one at a time. The segmented control is that "
+                "album — distinct pages, one binding, one lifted to view at a time."),
+            "Alert · stat · breadcrumb": (
+                "The breadcrumb is the climb to the fort — Amber's ramp through gate after gate (Suraj Pol, Ganesh Pol) to "
+                "the palace at the top, each threshold a stage on the way you can retrace."),
+            "Card &amp; card grid": (
+                "A card is a <b>jharokha</b> — the cusped balcony window that frames the durbar below and invites the eye "
+                "through. A carved opening onto one scene, not a wall of them."),
+            "Data table": (
+                "The Rajput court ran on the <b>bahi-khata</b> — the red cloth-bound ledger of the munshi, revenue and "
+                "grant entered in ruled columns. This table is that account book: every figure in its cell, aligned to be read."),
+            "Toolbar": (
+                "The fort's gateway carried its arms and standards over the arch — everything ranged above the threshold "
+                "before you rode in. The toolbar sits over the view the same way: the instruments, along the top."),
+            "Dialog": (
+                "The dialog is the <b>sheesh mahal</b> — the mirror-hall lit by a single lamp, where a thousand reflections "
+                "fall dark but one flame holds. The world dims; one lit chamber remains, and asks for a single choice."),
+            "Template starters": (
+                "A finished folio — wasli, painting, border and gold brought together to the atelier's canon; a fort raised "
+                "to one plan. The templates are that completed page: proof the parts, composed, hold as a whole."),
+        },
     },
 }
 
@@ -371,6 +515,36 @@ def legacy_html(lg):
         '        <p class="ds-legacy-note">{note}<span class="ds-legacy-cite">{cite}</span></p>\n'
         '      </div>'
     ).format(lede=lg["lede"], cards=cards, note=lg["note"], cite=lg["cite"])
+
+
+def swap_specimen_stories(html, stories):
+    """Replace the <span class="heritage">…</span> line inside each specimen block with
+    the system's OWN heritage story for that specimen — so every system speaks its own
+    tale through the whole page, not Mauryan's. `stories` is keyed by the specimen's
+    <h4> title (use &amp; as it appears in the markup). Specimens not in the dict keep
+    the template line (safe fallback)."""
+    if not stories:
+        return html
+    # walk each ds-spec block; within it, find the h4 title and swap its heritage span
+    spec_re = re.compile(r'(<div class="ds-spec">.*?</div>\s*</div>)', re.S)
+
+    def repl(m):
+        block = m.group(1)
+        tm = re.search(r'<h4>(.*?)</h4>', block, re.S)
+        if not tm:
+            return block
+        title = tm.group(1).strip()
+        story = stories.get(title)
+        if not story:
+            return block
+        # replace the FIRST heritage span in this block (the desc line)
+        new_block, n = re.subn(
+            r'<span class="heritage">.*?</span>',
+            lambda _m: '<span class="heritage">{}</span>'.format(story),
+            block, count=1, flags=re.S)
+        return new_block if n else block
+
+    return spec_re.sub(repl, html)
 
 
 # tiers that get a faint room-number watermark
@@ -451,6 +625,10 @@ def build(name, cfg):
         html = re.sub(r'<div class="ds-legacy">.*?</div>\s*</section>',
                       lambda m: legacy_html(cfg["legacy"]) + "\n    </section>",
                       html, count=1, flags=re.S)
+
+    # 6d) per-specimen heritage STORY — each system tells its OWN tale through every
+    # specimen (Gupta via fresco/halo, Chola via bronze/temple, Rajput via miniature/fort)
+    html = swap_specimen_stories(html, cfg.get("specimen_stories"))
 
     # 7) sprite specimen + its script are Mauryan-only
     html = SPRITE_BLOCK_RE.sub("", html)
