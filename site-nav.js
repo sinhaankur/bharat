@@ -246,6 +246,8 @@
 
   // big category links for the slide-out drawer (Vox-style full-list menu).
   // supports L3: an item's children[] render as an indented sublist.
+  // Uses getSections() (the SAME 6 topic sections as the top bar) so desktop and
+  // mobile show one consistent structure — not two different maps.
   function drawerLinks() {
     const dItem = (i, depth) => {
       const ext = i.ext ? ' target="_blank" rel="noopener"' : "";
@@ -254,7 +256,7 @@
       if (!kids) return link;
       return link + `<div class="snav-dl-sub">${kids.map(c => dItem(c, depth + 1)).join("")}</div>`;
     };
-    return getNav().map(g => `
+    return getSections().map(g => `
       <div class="snav-dl-group">
         <div class="snav-dl-h">${g.label}</div>
         ${g.items.map(i => dItem(i, 2)).join("")}
