@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 // Self-hosted fonts via @fontsource — bundled into the app, so there is NO network
 // fetch at build time (next/font/google was aborting the CI build when the Google
 // Fonts request failed) or at runtime. Weights match the handoff.
@@ -29,6 +29,14 @@ export const metadata: Metadata = {
   title: 'Bharat — the India District Atlas',
   description:
     'Money, land, and law — side by side for 594 districts. Every figure cites a public source; a missing number is shown as an explicit gap, never guessed.',
+  appleWebApp: { capable: true, title: 'Bharat', statusBarStyle: 'default' },
+}
+
+// theme-color + viewport (Next 16 keeps these out of `metadata`)
+export const viewport: Viewport = {
+  themeColor: '#cc8900',
+  width: 'device-width',
+  initialScale: 1,
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

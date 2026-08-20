@@ -1,0 +1,15 @@
+{
+  "name": "Bharat — Money, Land & Memory",
+  "short_name": "Bharat",
+  "description": "Tracing India's public money to every district — sourced, or it's a gap.",
+  "start_url": "/bharat/index.html",
+  "scope": "/bharat/",
+  "display": "standalone",
+  "background_color": "#ece3cd",
+  "theme_color": "#cc8900",
+  "lang": "en",
+  "icons": [
+    { "src": "/bharat/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/bharat/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}

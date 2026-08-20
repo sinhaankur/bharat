@@ -53,15 +53,31 @@
       m.setAttribute(attr, k); m.setAttribute("content", v);
       head.appendChild(m);
     }
-    // favicon — the site shipped without one (every page 404'd favicon.ico). Inject an
-    // SVG pin, derived from this script's own folder, unless the page already set one.
+    // favicon + PWA — the site shipped without one (every page 404'd favicon.ico).
+    // Inject the SVG seal, the web manifest, theme-color and apple-touch bits, derived
+    // from this script's own folder, unless the page already set them.
+    let base = "";
+    const me = document.currentScript || [...document.scripts].find(s => /site-nav\.js/.test(s.src));
+    if (me && me.src) base = me.src.replace(/site-nav\.js.*$/, "");
     if (!head.querySelector('link[rel~="icon"]')) {
-      let base = "";
-      const me = document.currentScript || [...document.scripts].find(s => /site-nav\.js/.test(s.src));
-      if (me && me.src) base = me.src.replace(/site-nav\.js.*$/, "");
       const fav = document.createElement("link");
       fav.rel = "icon"; fav.type = "image/svg+xml"; fav.href = base + "favicon.svg";
       head.appendChild(fav);
+    }
+    if (!head.querySelector('link[rel="apple-touch-icon"]')) {
+      const at = document.createElement("link");
+      at.rel = "apple-touch-icon"; at.href = base + "favicon.svg";
+      head.appendChild(at);
+    }
+    if (!head.querySelector('link[rel="manifest"]')) {
+      const mf = document.createElement("link");
+      mf.rel = "manifest"; mf.href = base + "site.webmanifest";
+      head.appendChild(mf);
+    }
+    if (!head.querySelector('meta[name="theme-color"]')) {
+      const tc = document.createElement("meta");
+      tc.name = "theme-color"; tc.content = "#cc8900";
+      head.appendChild(tc);
     }
     // canonical
     if (!head.querySelector('link[rel="canonical"]')) {
@@ -79,6 +95,21 @@
       });
       head.appendChild(ld);
     }
+  }
+
+  // ---- PWA: register the service worker (offline + add-to-home-screen) -------
+  // Scoped to this script's own folder so it works under the /bharat/ deploy. Fails
+  // silently on file:// or unsupported browsers. Skipped in embed mode.
+  function registerSW() {
+    if (!("serviceWorker" in navigator)) return;
+    if (location.protocol === "file:") return;
+    if (new URLSearchParams(location.search).get("embed") === "1") return;
+    let base = "";
+    const me = document.currentScript || [...document.scripts].find(s => /site-nav\.js/.test(s.src));
+    if (me && me.src) base = me.src.replace(/site-nav\.js.*$/, "");
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register(base + "sw.js", { scope: base || "./" }).catch(() => {});
+    });
   }
 
   // ---- Information Architecture: task-based, 5 groups -------------------
@@ -368,6 +399,7 @@
 
   function mount() {
     injectSEO();
+    registerSW();
     ensureA11y();
     ensureMotion();
     ensureSprite();   // Mauryan icons for the section nav

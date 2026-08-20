@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-mauryan">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Not found — Bharat</title>
+  <meta name="description" content="That page isn't here. Find your way back into the atlas — the map, the news, the history and more." />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .nf-wrap { max-width: 720px; margin: 0 auto; padding: clamp(3rem, 10vh, 7rem) 1.5rem 6rem; text-align: center; }
+    .nf-code { font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--accent); }
+    .nf-wrap h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.05; margin: 0.6rem 0 0.8rem; }
+    .nf-wrap p { color: var(--muted-foreground); font-size: 1.05rem; line-height: 1.6; max-width: 46ch; margin: 0 auto 2rem; }
+    .nf-links { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; }
+    .nf-links a { font-family: var(--font-ui); font-size: 0.95rem; font-weight: 600; text-decoration: none;
+      color: var(--foreground); border: 1.5px solid var(--border-strong); border-radius: var(--radius-sm, 4px); padding: 0.55rem 1rem; transition: background .15s, color .15s, border-color .15s; }
+    .nf-links a:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .nf-links a.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .nf-search { margin-top: 1.6rem; font-size: 0.9rem; color: var(--muted-foreground); }
+    .nf-search kbd { font-family: var(--font-mono); border: 1px solid var(--border-strong); border-radius: 3px; padding: 1px 6px; }
+  </style>
+</head>
+<body>
+  <div id="site-nav"></div>
+
+  <main class="nf-wrap">
+    <div class="nf-code">404 · sourced, or it's a gap</div>
+    <h1>This page is a gap.</h1>
+    <p>The address you followed isn't in the atlas — a moved page, a typo, or a link that never landed. Here's the way back in.</p>
+    <nav class="nf-links" aria-label="Get back into the atlas">
+      <a class="primary" href="index.html">The money map</a>
+      <a href="feed.html">News</a>
+      <a href="ancient-india.html">History</a>
+      <a href="languages.html">Languages</a>
+      <a href="how-it-works.html">About</a>
+      <a href="sitemap.html">Everything (site map)</a>
+    </nav>
+    <p class="nf-search">Or press <kbd>/</kbd> to search the whole atlas.</p>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="nav-data.js"></script>
+  <script src="command-palette.js"></script>
+  <script src="site-nav.js"></script>
+</body>
+</html>
