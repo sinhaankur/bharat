@@ -1,6 +1,10 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { motion, useMotionValue, animate } from 'motion/react'
+import { SPRING } from '@/lib/motion'
+
+const STRIDE = 520 // plate width (480) + rail gap (40)
 
 /* ────────────────────────────────────────────────────────────────────────────
    GALLERY MODE — the design systems shown one at a time, as framed plates hung
@@ -109,14 +113,14 @@ function Motif({ kind, color }: { kind: Plate['motif']; color: string }) {
 export default function Gallery() {
   const [i, setI] = useState(0)
   const [reduced, setReduced] = useState(false)
-  const railRef = useRef<HTMLDivElement>(null)
-  const dragStart = useRef<number | null>(null)
-  const [dragDX, setDragDX] = useState(0)
   const wheelLock = useRef(0)
   const n = PLATES.length
   const cur = PLATES[i]
 
-  const go = useCallback((next: number) => setI((v) => Math.max(0, Math.min(n - 1, next))), [n])
+  // the rail position as a Motion value — spring-driven, and draggable directly.
+  const x = useMotionValue(-0 * STRIDE)
+
+  const go = useCallback((next: number) => setI(() => Math.max(0, Math.min(n - 1, next))), [n])
   const prev = useCallback(() => go(i - 1), [go, i])
   const next = useCallback(() => go(i + 1), [go, i])
 
@@ -126,6 +130,14 @@ export default function Gallery() {
       (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)
     )
   }, [])
+
+  // spring the rail to the active plate whenever the index changes (or jump if reduced)
+  useEffect(() => {
+    const target = -i * STRIDE
+    if (reduced) { x.set(target); return }
+    const controls = animate(x, target, SPRING.snap)
+    return () => controls.stop()
+  }, [i, reduced, x])
 
   // keyboard
   useEffect(() => {
@@ -146,14 +158,11 @@ export default function Gallery() {
     d > 0 ? next() : prev()
   }
 
-  // drag / swipe
-  function onDown(clientX: number) { dragStart.current = clientX; setDragDX(0) }
-  function onMove(clientX: number) { if (dragStart.current != null) setDragDX(clientX - dragStart.current) }
-  function onUp() {
-    if (dragStart.current != null) {
-      if (dragDX < -60) next(); else if (dragDX > 60) prev()
-    }
-    dragStart.current = null; setDragDX(0)
+  // physics drag → snap. On release, pick the nearest plate, biased by fling velocity.
+  function onDragEnd(_e: unknown, info: { offset: { x: number }; velocity: { x: number } }) {
+    const moved = info.offset.x + info.velocity.x * 0.18   // fling adds momentum
+    const steps = Math.round(-moved / STRIDE)
+    go(i + steps)
   }
 
   // spotlight follows the active plate's accent
@@ -179,34 +188,29 @@ export default function Gallery() {
         <span className="gal-count">{String(i + 1).padStart(2, '0')}<span className="gal-count-sep">/</span>{String(n).padStart(2, '0')}</span>
       </div>
 
-      {/* the rail of framed plates */}
-      <div
-        ref={railRef}
-        className="gal-stage"
-        onMouseDown={(e) => onDown(e.clientX)}
-        onMouseMove={(e) => dragStart.current != null && onMove(e.clientX)}
-        onMouseUp={onUp}
-        onMouseLeave={onUp}
-        onTouchStart={(e) => onDown(e.touches[0].clientX)}
-        onTouchMove={(e) => onMove(e.touches[0].clientX)}
-        onTouchEnd={onUp}
-      >
-        <div
+      {/* the rail of framed plates — a spring-driven, draggable Motion value */}
+      <div className="gal-stage">
+        <motion.div
           className="gal-rail"
-          style={{
-            transform: `translateX(calc(50% - ${i * 520 + 260}px + ${dragDX}px))`,
-            transition: dragStart.current != null || reduced ? 'none' : 'transform .6s cubic-bezier(.32,.72,0,1)',
-          }}
+          style={{ x, marginLeft: 'calc(50% - 260px)' }}
+          drag={reduced ? false : 'x'}
+          dragConstraints={{ left: -(n - 1) * STRIDE, right: 0 }}
+          dragElastic={0.14}
+          onDragEnd={onDragEnd}
         >
           {PLATES.map((pl, idx) => {
             const active = idx === i
             return (
-              <article
+              <motion.article
                 key={pl.id}
                 className={`gal-plate${active ? ' is-active' : ''}`}
                 aria-hidden={!active}
                 style={{ ['--pl-ground' as string]: pl.ground, ['--pl-ink' as string]: pl.ink, ['--pl-accent' as string]: pl.accent }}
                 onClick={() => !active && go(idx)}
+                animate={reduced ? undefined : { scale: active ? 1 : 0.86, opacity: active ? 1 : 0.38 }}
+                transition={SPRING.soft}
+                whileHover={!active && !reduced ? { scale: 0.9, opacity: 0.6 } : undefined}
+                whileTap={!active && !reduced ? { scale: 0.87 } : undefined}
               >
                 {/* gilt frame */}
                 <div className="gal-frame">
@@ -239,10 +243,10 @@ export default function Gallery() {
                 </div>
                 {/* brass nameplate under the frame */}
                 <div className="gal-brass">{pl.name.toUpperCase()} · {pl.era}</div>
-              </article>
+              </motion.article>
             )
           })}
-        </div>
+        </motion.div>
       </div>
 
       {/* prev / next arrows */}
@@ -296,8 +300,10 @@ const galleryCss = `
   .gal-stage:active { cursor: grabbing; }
   .gal-rail { display: flex; align-items: center; gap: 40px; will-change: transform; }
 
-  .gal-plate { flex: 0 0 480px; width: 480px; opacity: .38; transform: scale(.86);
-    transition: opacity .6s ease, transform .6s cubic-bezier(.32,.72,0,1); filter: saturate(.7); cursor: pointer; }
+  /* scale + opacity are driven by Motion (spring); CSS only handles the look + a
+     static resting state as a fallback (covers reduced-motion, where Motion leaves
+     transforms alone — Motion overrides these inline when it's animating). */
+  .gal-plate { flex: 0 0 480px; width: 480px; opacity: .38; transform: scale(.86); filter: saturate(.7); cursor: pointer; }
   .gal-plate.is-active { opacity: 1; transform: scale(1); filter: none; cursor: default; }
 
   /* the gilt frame — a double gold-leaf border with corner flourishes */
