@@ -20,6 +20,7 @@ const base = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const SECTIONS: { id: string; label: string }[] = [
   { id: 'ds-scripts', label: 'The script layer' },
   { id: 'ds-flags', label: 'The flag layer' },
+  { id: 'ds-relations', label: 'The relations layer' },
   { id: 'ds-timeline', label: 'The time layer' },
   { id: 'ds-version-register', label: 'Version register' },
   { id: 'ds-explorations', label: 'Explorations' },
