@@ -8,8 +8,11 @@ import { useEffect, useState } from 'react'
 // SKINS now lives in lib/skins (plain data) so server components can import it too;
 // re-exported here so existing importers keep working.
 import { SKINS, type Skin } from '@/lib/skins'
+import { TOKEN_SETS } from '@/lib/design-tokens'
 export { SKINS }
 export type { Skin }
+
+const base = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
 export default function SkinSwitcher() {
   const [open, setOpen] = useState(false)
@@ -49,6 +52,19 @@ export default function SkinSwitcher() {
                 {s.id === skin && <span className="sk-check" aria-hidden>✓</span>}
               </button>
             ))}
+            {/* the STORY of the worn skin — switching teaches the heritage */}
+            {(() => {
+              const t = TOKEN_SETS[skin]
+              const story = t?.story || t?.from
+              if (!story) return null
+              return (
+                <div className="sk-story" aria-live="polite">
+                  <span className="sk-story-k">{current.label} — the story</span>
+                  <p className="sk-story-p">{story}</p>
+                  <a className="sk-story-link" href={`${base}/design-systems/#gallery`}>Walk the gallery →</a>
+                </div>
+              )
+            })()}
             <div className="sk-foot">Primary stays Gupta · states swap only the tokens, never the layout.</div>
           </div>
         </>
@@ -70,6 +86,12 @@ export default function SkinSwitcher() {
         .sk-t { font: 700 13px var(--font-ui); }
         .sk-n { font: 400 11px var(--font-ui); color: var(--muted); }
         .sk-check { margin-left: auto; color: var(--accent); font-weight: 700; }
+        /* the story of the currently-worn skin — updates as you switch */
+        .sk-story { padding: 12px 14px; border-top: 1px solid var(--line); background: color-mix(in srgb, var(--accent) 5%, transparent); }
+        .sk-story-k { display: block; font: 700 9.5px var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+        .sk-story-p { margin: 6px 0 0; font: 400 11.5px/1.55 var(--font-ui); color: var(--ink); }
+        .sk-story-link { display: inline-block; margin-top: 8px; font: 600 11px var(--font-ui); color: var(--accent); text-decoration: none; }
+        .sk-story-link:hover { text-decoration: underline; }
         .sk-foot { font: italic 400 11px var(--font-ui); color: var(--muted); padding: 10px 14px; border-top: 1px solid var(--line); }
         @media (max-width: 900px) { .sk-label { display: none; } }
       `}</style>
