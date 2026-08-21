@@ -284,8 +284,10 @@ export default function DsShell() {
         .dss-skin:hover { transform: translateY(-3px); box-shadow: 0 8px 22px rgba(0,0,0,.4); border-color: var(--leaf); }
         .dss-skin.on { border-color: var(--leaf-2); box-shadow: 0 0 0 1px var(--leaf-2), 0 8px 22px rgba(0,0,0,.45); }
         .dss-skin-band { height: 12px; width: 100%; display: block; }
-        .dss-skin-apply { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; text-align: left;
-          cursor: pointer; background: transparent; border: 0; width: 100%; padding: 10px 12px 12px; color: inherit; }
+        /* grow the body so the download bar always aligns at the card bottom, even
+           when a skin's origin line is longer/shorter — keeps the row even */
+        .dss-skin-apply { flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; text-align: left;
+          cursor: pointer; background: transparent; border: 0; width: 100%; padding: 12px 12px 14px; color: inherit; }
         .dss-skin-name { font: 700 16px var(--font-ui); color: var(--cream); }
         .dss-skin-note { font: 400 12px var(--font-ui); color: rgba(244,230,200,.6); }
         .dss-skin-cta { font: 600 11px var(--font-mono); letter-spacing: .04em; color: var(--leaf-2); margin-top: 4px; }
