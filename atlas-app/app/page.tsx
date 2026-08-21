@@ -4,6 +4,7 @@ import SiteHeader from '@/components/site-header'
 import SiteFooter from '@/components/site-footer'
 import HomeMotion from './home-motion'
 import { classicMapHref } from '@/lib/links'
+import { SKINS } from '@/lib/skins'
 
 // The home — faithful to the handoff's Atlas Home.dc.html: "The atlas of modern
 // India." over a modular grid, animated red stat counters, and the bordered entry
@@ -102,6 +103,31 @@ export default function HomePage() {
         </section>
       </main>
 
+      {/* BRAND MOMENT — India, told in its own design language. A full-bleed royal band
+          that carries the design-system story onto the landing surface. */}
+      <section className="hm-brand" aria-label="Indic Designs — India's own design language">
+        <div className="hm-brand-in">
+          <div className="hm-brand-kicker">Indic Designs™ · India&apos;s own design language</div>
+          <h2 className="hm-brand-h">
+            An atlas of India deserves to be <em>told in India&apos;s own hand.</em>
+          </h2>
+          <p className="hm-brand-lede">
+            So we built one — a design language <b>for Bharat</b>, one system per heritage. The colour, the
+            corner, the motif of each are read straight out of that place: kumkum vermilion from a Chola
+            temple, halo-gold from an Ajanta fresco, cinnabar from a Rajput miniature. One chassis, many
+            Indias — worn over the whole atlas.
+          </p>
+          {/* the systems, as a swatch strip — a teaser into the gallery */}
+          <div className="hm-brand-strip" aria-hidden="true">
+            {SKINS.map((s) => (
+              <span key={s.id} className="hm-brand-sw" title={s.label}
+                style={{ background: s.swatch, boxShadow: `inset 0 -5px 0 ${s.band}` }} />
+            ))}
+          </div>
+          <a className="hm-brand-cta" href="design-systems/">Walk the gallery →</a>
+        </div>
+      </section>
+
       <SiteFooter />
       <HomeMotion />
 
@@ -168,6 +194,26 @@ export default function HomePage() {
         .hm-cell-t { font-family: var(--font-display); font-weight: 800; font-size: 26px; line-height: 30px; letter-spacing: -0.01em; margin: 22px 0 0; }
         .hm-cell-b { font-size: 15px; line-height: 24px; color: color-mix(in srgb, var(--ink) 78%, transparent); margin: 12px 0 0; max-width: 36ch; }
         .hm-arrow { display: block; margin-top: 28px; color: var(--accent); }
+
+        /* ── BRAND MOMENT — the deep-royal band, carrying the design-system register ── */
+        .hm-brand { background:
+            radial-gradient(120% 100% at 50% -20%, #351a13 0%, #23110d 55%, #170b08 100%);
+          border-top: 3px solid #d9a441; }
+        .hm-brand-in { max-width: 900px; margin: 0 auto; padding: clamp(56px,9vh,104px) var(--edge); text-align: center; }
+        .hm-brand-kicker { font: 700 11px var(--font-mono); letter-spacing: .24em; text-transform: uppercase; color: #f0cd7a; margin-bottom: 18px; }
+        .hm-brand-h { font: 400 clamp(28px,4.4vw,50px)/1.12 'Rozha One', var(--font-display); color: #f4e6c8; margin: 0 auto; max-width: 20ch; }
+        .hm-brand-h em { font-style: italic;
+          background: linear-gradient(180deg, #f0cd7a, #d9a441 70%, #b8842f);
+          -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .hm-brand-lede { font: 400 clamp(15px,1.3vw,17px)/1.75 var(--font-ui); color: rgba(244,230,200,.78); max-width: 62ch; margin: 22px auto 0; }
+        .hm-brand-lede b { color: #f0cd7a; font-weight: 600; }
+        .hm-brand-strip { display: flex; justify-content: center; gap: 0; margin: 30px auto 0; width: max-content;
+          border: 1px solid rgba(217,164,65,.4); }
+        .hm-brand-sw { width: clamp(34px,6vw,54px); height: 30px; display: block; }
+        .hm-brand-cta { display: inline-block; margin-top: 30px; font: 700 13px var(--font-ui);
+          color: #23110d; background: linear-gradient(180deg,#f0cd7a,#d9a441); padding: 12px 24px; text-decoration: none;
+          transition: filter .15s ease, transform .15s ease; }
+        .hm-brand-cta:hover { filter: brightness(1.06); transform: translateY(-2px); }
       `}</style>
     </>
   )

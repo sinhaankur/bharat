@@ -5,18 +5,11 @@ import { useEffect, useState } from 'react'
 // The design-system switcher (user requirement): pick which Indic design system skins
 // the WHOLE site. Sets html[data-skin], persists to localStorage, so every page
 // reskins live via the token layer (layout never changes — CLAUDE.md). Default = Gupta.
-export type Skin = { id: string; label: string; note: string; swatch: string; band: string }
-
-export const SKINS: Skin[] = [
-  { id: 'gupta', label: 'Gupta', note: 'the warm default — stone & house gold', swatch: '#cc8900', band: '#cc8900' },
-  { id: 'chassis', label: 'Modernist', note: 'the bare structural chassis — red on grey', swatch: '#ec3013', band: '#ec3013' },
-  { id: 'kashmir', label: 'Kashmir', note: 'valley stone · saffron · trefoil', swatch: '#d98a2b', band: '#6e7f8c' },
-  { id: 'rajasthan', label: 'Rajasthan', note: 'pink sandstone · leheriya · indigo', swatch: '#c9345a', band: '#2a4a7a' },
-  { id: 'tamil', label: 'Tamil Nadu', note: 'granite · kumkum · temple gold', swatch: '#a8322b', band: '#c9862b' },
-  { id: 'kerala', label: 'Kerala', note: 'backwater green · coir · brass', swatch: '#2f7d4f', band: '#b8863b' },
-  { id: 'assam', label: 'Assam', note: 'gamosa weave · red border · green', swatch: '#c0392b', band: '#3f6b45' },
-  { id: 'naga', label: 'Nagaland', note: 'Naga shawl bands · loom red', swatch: '#b3271f', band: '#201a16' },
-]
+// SKINS now lives in lib/skins (plain data) so server components can import it too;
+// re-exported here so existing importers keep working.
+import { SKINS, type Skin } from '@/lib/skins'
+export { SKINS }
+export type { Skin }
 
 export default function SkinSwitcher() {
   const [open, setOpen] = useState(false)
