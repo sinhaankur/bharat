@@ -2577,6 +2577,25 @@ html[data-reduce-motion="1"] .brand:hover .bha-seal .bha-ring, html[data-reduce-
 }
 .ul-grow:hover::after { transform: scaleX(1); }
 
+/* ambient-sound toggle in the header */
+.snav-ambient {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.05em;
+  color: var(--muted-foreground); background: transparent;
+  border: 1px solid var(--border-strong); border-radius: 999px;
+  padding: 0.3rem 0.7rem; cursor: pointer;
+  transition: color .22s var(--ease-lux), background .22s, border-color .22s;
+}
+.snav-ambient:hover { color: var(--foreground); border-color: var(--gilt); }
+.snav-ambient.on { color: var(--gilt); border-color: var(--gilt); }
+.snav-ambient .amb-ico {
+  width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: 0.45; transition: 0.3s;
+}
+.snav-ambient.on .amb-ico { opacity: 1; box-shadow: 0 0 8px var(--gilt); animation: amb-pulse 1.7s var(--ease-lux) infinite; }
+@keyframes amb-pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.5); } }
+@media (max-width: 760px) { .snav-ambient .amb-label { display: none; } }
+@media (prefers-reduced-motion: reduce) { .snav-ambient.on .amb-ico { animation: none; } }
+
 /* vertical → horizontal scroll section */
 [data-hscroll] { position: relative; }
 [data-hscroll] > .hscroll-sticky {

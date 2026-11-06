@@ -255,6 +255,9 @@
           <a class="brand" href="home.html" aria-label="Bharat — home">${sealLogo(30)}<span class="brand-lockup"><span class="brand-word">Bharat<span class="brand-stop">.</span></span><span class="brand-tag">INDIC DESIGNS</span></span></a>
           <div class="snav-groups">${groups}</div>
           <div class="snav-actions">
+            <button id="ambient-toggle" class="snav-ambient" aria-pressed="false" aria-label="Toggle ambient sound" title="Ambient sound">
+              <span class="amb-ico" aria-hidden="true"></span><span class="amb-label">Sound</span>
+            </button>
             <button class="snav-search" aria-label="Search" title="Search the atlas (press /)" onclick="window.CommandPalette&&window.CommandPalette.open()">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4.5 4.5"/></svg>
               <span class="snav-search-label">Search the atlas</span><span class="snav-search-key">/</span>
