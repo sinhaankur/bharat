@@ -37,9 +37,13 @@
     </nav>
 
     <!-- THE SYSTEMS -->
-    <section class="ds-tier" id="systems">
-      <div class="ds-tier-head"><span class="num">◆</span><h2>The systems</h2><span class="glossword">built · specced · planned</span></div>
-      <div class="ds-systems" id="ds-systems"></div>
+    <section class="ds-tier" id="systems" data-hscroll data-no-reveal>
+      <div class="hscroll-sticky">
+        <div style="width:100%">
+          <div class="ds-tier-head" style="padding:0 8vw"><span class="num">◆</span><h2>The systems</h2><span class="glossword">scroll to move sideways through the family →</span></div>
+          <div class="ds-systems hscroll-row" id="ds-systems"></div>
+        </div>
+      </div>
     </section>
 
     <!-- THE METHOD -->
@@ -112,7 +116,7 @@
       var live = sys.href ? "" : ' style="pointer-events:none;opacity:.7"';
       var tag = sys.href ? "a" : "div";
       var hrefAttr = sys.href ? ' href="' + esc(sys.href) + '"' : "";
-      return "<" + tag + ' class="ds-syscard"' + hrefAttr + live + ">" +
+      return "<" + tag + ' class="ds-syscard lift tilt" data-tilt="5"' + hrefAttr + live + ">" +
         '<div class="band">' + band + '</div>' +
         '<div class="body"><div class="era">' + esc(sys.era) + '</div>' +
         '<h3>' + esc(sys.name) + '</h3>' +
@@ -121,6 +125,9 @@
         (sys.href ? ' <span class="ed-card-meta" style="margin-left:.4rem">Open <span class="arrow">→</span></span>' : "") +
         "</div></" + tag + ">";
     }).join("");
+    // cards were just built — (re)wire the hscroll + tilt/lift onto them.
+    if (window.Interactions && window.Interactions.refresh) window.Interactions.refresh();
+    else addEventListener("load", function () { window.Interactions && window.Interactions.refresh(); });
   })();
   </script>
   <script src="ds-page.js"></script>
