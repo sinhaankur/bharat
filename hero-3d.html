@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bharat — One land, measured</title>
+  <meta name="description" content="Scroll into Bharat: a cinematic 3D flight over India — states rising by the constraints that shape them, rivers igniting across the land. An atlas of money, land and memory." />
+  <meta property="og:title" content="Bharat — One land, measured" />
+  <meta property="og:description" content="A cinematic 3D flight over India. Scroll to enter the atlas." />
+  <meta property="og:image" content="og-image.png" />
+  <link rel="icon" href="favicon.svg" />
+
+  <style>
+    /* ── Chola theme ──────────────────────────────────────────────────────────
+       Thanjavur bronze-age palette: deep temple-sanctum dark, cast & aged bronze,
+       vermilion (kumkum) as the action colour, gilded gopuram-gold, sacred-ash
+       ivory for text. A gold-on-dark cinematic register. Mirrors theme-chola.css. */
+    :root {
+      --ink: #f4efe4;                              /* vibhuti — sacred-ash ivory */
+      --ink-dim: rgba(244, 239, 228, 0.64);
+      --ink-faint: rgba(244, 239, 228, 0.34);
+      --gold: #c99a34;                             /* gopuram gilt */
+      --gold-soft: #e4c069;
+      --bronze: #7d5a2e;
+      --vermilion: #b3341f;                        /* kumkum — the sacred red */
+      --bg0: #120b08;                              /* deepest sanctum */
+      --bg1: #211712;                              /* sanctum interior */
+      --bg2: #2a1d14;
+      --glass: rgba(33, 23, 18, 0.52);             /* bronze-tinted glass */
+      --glass-brd: rgba(201, 154, 52, 0.22);
+      --serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Georgia', serif;
+      --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, system-ui, sans-serif;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--bg0);
+      color: var(--ink);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* The canvas is fixed — it is the whole world. Scrolling moves the camera
+       through it; the page itself is just a tall "scroll track". */
+    #stage {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 120% 90% at 50% 6%, #3a281a 0%, var(--bg1) 40%, var(--bg0) 100%);
+    }
+    #c { width: 100%; height: 100%; display: block; }
+
+    /* vignette + top/bottom fade for cinematic framing */
+    #vignette {
+      position: fixed; inset: 0; z-index: 1; pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 70% at 50% 50%, transparent 55%, rgba(4,5,8,0.55) 100%),
+        linear-gradient(to bottom, rgba(4,5,8,0.5) 0%, transparent 18%, transparent 78%, rgba(4,5,8,0.72) 100%);
+      opacity: 0.9;
+    }
+    /* film grain */
+    #grain {
+      position: fixed; inset: -50%; z-index: 2; pointer-events: none; opacity: 0.045;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      animation: grain 6s steps(6) infinite;
+    }
+    @keyframes grain {
+      0%,100%{transform:translate(0,0)} 20%{transform:translate(-4%,2%)}
+      40%{transform:translate(3%,-3%)} 60%{transform:translate(-2%,4%)} 80%{transform:translate(4%,1%)}
+    }
+
+    /* ---- scroll track: one tall section per story act ---- */
+    #scroll { position: relative; z-index: 3; }
+    .act {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 0 8vw;
+    }
+    .act[data-align="center"] { justify-content: center; text-align: center; }
+    .act[data-align="right"]  { justify-content: flex-end; text-align: right; }
+
+    .card {
+      max-width: 30rem;
+      opacity: 0;
+      transform: translateY(26px);
+      transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+      will-change: opacity, transform;
+    }
+    .act.in .card { opacity: 1; transform: none; }
+
+    .kicker {
+      font-size: 0.72rem; letter-spacing: 0.32em; text-transform: uppercase;
+      color: var(--gold); margin: 0 0 1rem; font-weight: 600;
+    }
+    .act h2 {
+      font-family: var(--serif); font-weight: 500;
+      font-size: clamp(2rem, 5.2vw, 3.6rem); line-height: 1.04;
+      margin: 0 0 1rem; letter-spacing: -0.01em;
+    }
+    .act h2 em { color: var(--gold-soft); font-style: italic; }
+    .act p {
+      font-size: clamp(1rem, 1.5vw, 1.18rem); line-height: 1.6;
+      color: var(--ink-dim); margin: 0; max-width: 32ch;
+    }
+    .act[data-align="center"] p, .act[data-align="right"] p { margin-left: auto; margin-right: 0; }
+    .act[data-align="center"] p { margin-right: auto; }
+
+    /* ---- opening title (first screen) ---- */
+    #intro .mark {
+      font-family: var(--serif); font-weight: 500;
+      font-size: clamp(3.4rem, 11vw, 8rem); line-height: 0.9;
+      letter-spacing: -0.02em; margin: 0;
+      background: linear-gradient(180deg, var(--ink) 0%, var(--gold-soft) 160%);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    #intro .sub {
+      margin: 1.2rem auto 0; max-width: 34ch;
+      color: var(--ink-dim); font-size: clamp(1rem, 1.6vw, 1.25rem); line-height: 1.5;
+    }
+    .scroll-hint {
+      position: absolute; bottom: 7vh; left: 50%; transform: translateX(-50%);
+      color: var(--ink-faint); font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase;
+      display: flex; flex-direction: column; align-items: center; gap: 0.7rem;
+    }
+    .scroll-hint .line {
+      width: 1px; height: 34px;
+      background: linear-gradient(var(--gold), transparent);
+      animation: drift 1.9s var(--ease) infinite;
+    }
+    @keyframes drift { 0%{transform:scaleY(0);transform-origin:top} 40%{transform:scaleY(1);transform-origin:top} 60%{transform:scaleY(1);transform-origin:bottom} 100%{transform:scaleY(0);transform-origin:bottom} }
+
+    /* ---- final CTA (glass) ---- */
+    #outro .panel {
+      display: inline-flex; flex-direction: column; align-items: center; gap: 1.4rem;
+      padding: 2.6rem 2.8rem;
+      background: var(--glass);
+      border: 1px solid var(--glass-brd);
+      border-radius: 20px;
+      backdrop-filter: blur(16px) saturate(120%);
+      -webkit-backdrop-filter: blur(16px) saturate(120%);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+    .cta-row { display: flex; gap: 0.9rem; flex-wrap: wrap; justify-content: center; }
+    .btn {
+      font-family: var(--sans); font-size: 0.95rem; font-weight: 600;
+      padding: 0.85rem 1.6rem; border-radius: 999px; text-decoration: none;
+      transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease), background 0.25s;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-soft) 100%);
+      color: #1a1205; box-shadow: 0 8px 28px rgba(230,177,62,0.35);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(230,177,62,0.5); }
+    .btn-ghost { background: rgba(244,234,214,0.06); color: var(--ink); border: 1px solid var(--glass-brd); }
+    .btn-ghost:hover { background: rgba(244,234,214,0.12); transform: translateY(-2px); }
+
+    /* ---- fixed chrome ---- */
+    .brand {
+      position: fixed; top: 1.6rem; left: 2rem; z-index: 6;
+      font-family: var(--serif); font-size: 1.15rem; letter-spacing: 0.02em;
+      color: var(--ink); text-decoration: none; mix-blend-mode: difference;
+    }
+    .skip {
+      position: fixed; top: 1.6rem; right: 2rem; z-index: 6;
+      font-size: 0.78rem; letter-spacing: 0.08em; text-decoration: none;
+      color: var(--ink-dim); border-bottom: 1px solid transparent; transition: 0.25s;
+    }
+    .skip:hover { color: var(--ink); border-color: var(--gold); }
+
+    /* progress rail */
+    #rail {
+      position: fixed; right: 1.6rem; top: 50%; transform: translateY(-50%);
+      z-index: 6; display: flex; flex-direction: column; gap: 0.75rem; align-items: center;
+    }
+    #rail .dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: rgba(244,234,214,0.22); transition: 0.4s var(--ease);
+    }
+    #rail .dot.on { background: var(--gold); transform: scale(1.5); box-shadow: 0 0 12px rgba(201,154,52,0.6); }
+
+    /* component read-out HUD, bottom-left */
+    #hud {
+      position: fixed; left: 2rem; bottom: 2rem; z-index: 6;
+      display: flex; flex-direction: column; gap: 0.15rem;
+      padding: 0.85rem 1.1rem 0.9rem 1rem;
+      background: var(--glass); border: 1px solid var(--glass-brd);
+      border-left: 2px solid var(--gold);
+      border-radius: 4px 12px 12px 4px;
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      min-width: 15rem; transition: opacity 0.5s var(--ease);
+    }
+    #hud .hud-idx { font-family: var(--serif); font-size: 0.72rem; color: var(--gold); letter-spacing: 0.2em; }
+    #hud .hud-name {
+      font-family: var(--serif); font-size: 1.15rem; color: var(--ink); line-height: 1.1;
+      transition: opacity 0.35s var(--ease);
+    }
+    #hud .hud-meta { font-size: 0.72rem; color: var(--ink-faint); letter-spacing: 0.04em; margin-top: 0.1rem; }
+    @media (max-width: 640px) { #hud { display: none; } }
+
+    /* loader */
+    #loader {
+      position: fixed; inset: 0; z-index: 10; background: var(--bg0);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.1rem;
+      transition: opacity 0.8s var(--ease); font-family: var(--serif);
+    }
+    #loader.gone { opacity: 0; pointer-events: none; }
+    #loader .ring { width: 42px; height: 42px; border: 2px solid rgba(244,234,214,0.15); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.9s linear infinite; }
+    #loader .lw { color: var(--ink-dim); font-size: 0.85rem; letter-spacing: 0.26em; text-transform: uppercase; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 640px) {
+      .act { padding: 0 6vw; }
+      #rail, .brand { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      #grain, .scroll-hint .line { animation: none; }
+      .card { transition: opacity 0.4s ease; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="brand" href="app/">भारत · Bharat</a>
+  <a class="skip" href="app/">Skip intro →</a>
+
+  <div id="stage"><canvas id="c"></canvas></div>
+  <div id="vignette"></div>
+  <div id="grain"></div>
+
+  <nav id="rail" aria-hidden="true"></nav>
+
+  <!-- component read-out: names the stratum currently peeled off (igloo-style callout) -->
+  <div id="hud" aria-hidden="true">
+    <span class="hud-idx">00</span>
+    <span class="hud-name">The whole</span>
+    <span class="hud-meta">52,608 vertices · one merged relief</span>
+  </div>
+
+  <div id="loader">
+    <div class="ring" aria-hidden="true"></div>
+    <div class="lw">Raising the land…</div>
+  </div>
+
+  <main id="scroll">
+    <!-- The scroll is a DESCENT: you fall through the country, and as you go
+         deeper it comes apart into the strata an atlas is made of —
+         land → states → rivers → risk → the per-district data itself. -->
+
+    <!-- ACT 0 — title / the whole, from above -->
+    <section class="act" data-act="0" data-align="center" id="intro">
+      <div class="card">
+        <h1 class="mark">One&nbsp;land,<br>in&nbsp;layers.</h1>
+        <p class="sub">Scroll to fall through India — and watch it come apart into the strata an atlas is made of.</p>
+      </div>
+      <div class="scroll-hint"><span>Descend</span><span class="line"></span></div>
+    </section>
+
+    <!-- ACT 1 — states separate -->
+    <section class="act" data-act="1" data-align="left">
+      <div class="card">
+        <p class="kicker">Layer 01 · the political</p>
+        <h2>Thirty-six pieces <em>lift apart</em>.</h2>
+        <p>Twenty-eight states, eight union territories — each rising by what constrains it on the ground: coast to protect, floods to survive, terrain too hard to build on.</p>
+      </div>
+    </section>
+
+    <!-- ACT 2 — rivers ignite as a stratum -->
+    <section class="act" data-act="2" data-align="right">
+      <div class="card">
+        <p class="kicker">Layer 02 · the hydrological</p>
+        <h2>Rivers float <em>above</em> the land.</h2>
+        <p>The Ganga, the Brahmaputra, the Godavari, the Cauvery — lifted off as their own stratum. They settled every city and still move most of the country's water, money and silt.</p>
+      </div>
+    </section>
+
+    <!-- ACT 3 — risk colour floods in -->
+    <section class="act" data-act="3" data-align="left">
+      <div class="card">
+        <p class="kicker">Layer 03 · the risk surface</p>
+        <h2>Then it burns <em>into colour</em>.</h2>
+        <p>Vermilion where coast and floodplain overlap. Bronze and granite for plateau, plains, desert. Every hue is a documented constraint — the CRZ, the CWC flood maps, the terrain index — never a verdict.</p>
+      </div>
+    </section>
+
+    <!-- ACT 4 — district data particle field + CTA -->
+    <section class="act" data-act="4" data-align="center" id="outro">
+      <div class="card">
+        <div class="panel">
+          <p class="kicker" style="margin:0">Layer 04 · and underneath, the data</p>
+          <h2 style="margin:0">Seven hundred districts,<br>each with a ledger.</h2>
+          <p style="margin:0.2rem auto 0;max-width:40ch;color:var(--ink-dim)">Every point of light is a district you can open — money, land, people, risk, sourced and per-district.</p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="app/">Enter the atlas →</a>
+            <a class="btn btn-ghost" href="classic.html">Open the classic map</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+    import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+    import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+    import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+    import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+    const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const NACTS = 5; // 0..4
+
+    // ---- Chola palette (JS mirror of the CSS theme) ----
+    const COL = {
+      bg0: 0x120b08, sanctum: 0x211712, bronze: 0x7d5a2e, bronzeDeep: 0x5a3f1f,
+      gold: 0xc99a34, goldSoft: 0xe4c069, vermilion: 0xb3341f, granite: 0xb7ad9a,
+      river: 0x6fb7c9, ivory: 0xf4efe4,
+    };
+
+    // ---- scene ----
+    const canvas = document.getElementById('c');
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(COL.bg0, 0.026);
+
+    const camera = new THREE.PerspectiveCamera(42, innerWidth / innerHeight, 0.1, 200);
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.3;
+
+    // ---- enhanced render: a procedural bronze-sanctum environment ----
+    // A generated gradient cubemap gives the metal real reflections (igloo-style sheen)
+    // without shipping an HDRI file. Warm gilt above, deep sanctum below.
+    (function buildEnv() {
+      const pmrem = new THREE.PMREMGenerator(renderer);
+      pmrem.compileEquirectangularShader();
+      const c = document.createElement('canvas'); c.width = 16; c.height = 256;
+      const g = c.getContext('2d');
+      const grad = g.createLinearGradient(0, 0, 0, 256);
+      grad.addColorStop(0.0, '#4a371f');   // gilt sky
+      grad.addColorStop(0.35, '#2a1d14');
+      grad.addColorStop(0.62, '#1a110c');
+      grad.addColorStop(1.0, '#0b0705');   // sanctum floor
+      g.fillStyle = grad; g.fillRect(0, 0, 16, 256);
+      const tex = new THREE.CanvasTexture(c);
+      tex.mapping = THREE.EquirectangularReflectionMapping;
+      scene.environment = pmrem.fromEquirectangular(tex).texture;
+      tex.dispose(); pmrem.dispose();
+    })();
+
+    // ---- post: bloom for the gilt/river glow ----
+    const composer = new EffectComposer(renderer);
+    composer.addPass(new RenderPass(scene, camera));
+    const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.62, 0.7, 0.82);
+    composer.addPass(bloom);
+    composer.addPass(new OutputPass());
+
+    // ---- lighting: warm temple key, bronze fill, gilt rim ----
+    scene.add(new THREE.HemisphereLight(0xe4c069, 0x0a0705, 0.45));
+    const key = new THREE.DirectionalLight(0xffe8c0, 1.45); key.position.set(6, 14, 8); scene.add(key);
+    const fill = new THREE.DirectionalLight(0x8a6a3a, 0.5); fill.position.set(-8, 4, -6); scene.add(fill);
+    const rim = new THREE.DirectionalLight(0xc99a34, 0.8); rim.position.set(-4, 2, 10); scene.add(rim);
+
+    // a slow drift of gilt dust/embers for depth (declared before the IIFE that fills it)
+    let dustPts;
+    (function dust() {
+      const n = 900, pos = new Float32Array(n * 3);
+      for (let i = 0; i < n; i++) {
+        pos[i*3]   = (Math.random() - 0.5) * 120;
+        pos[i*3+1] = (Math.random() - 0.5) * 70;
+        pos[i*3+2] = (Math.random() - 0.5) * 120;
+      }
+      const g = new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+      const m = new THREE.PointsMaterial({ color: 0xe4c069, size: 0.1, transparent: true, opacity: 0.4, depthWrite: false });
+      dustPts = new THREE.Points(g, m); scene.add(dustPts);
+    })();
+
+    // ---- the model group ----
+    const group = new THREE.Group();
+    scene.add(group);
+    let model = null, meshes = [], riverLines = null, modelSpan = 8, districtPts = null;
+    let modelBox = null;
+
+    // River colour palette (echoes the atlas rivers)
+    const RIVER_COLOR = COL.river;
+
+    // lon/lat → the model's XZ footprint (shared by rivers + district points)
+    const LON0 = 68, LON1 = 98, LAT0 = 6, LAT1 = 37;
+    function geoToModel(lon, lat, y) {
+      const b = modelBox;
+      const u = (lon - LON0) / (LON1 - LON0);
+      const v = (lat - LAT0) / (LAT1 - LAT0);
+      return [ b.min.x + u * (b.max.x - b.min.x), y, b.max.z - v * (b.max.z - b.min.z) ];
+    }
+
+    // ---- district particle field (Layer 04): a point of light per district ----
+    function buildDistricts() {
+      fetch('district-centroids.json').then(r => r.ok ? r.json() : null).then(d => {
+        if (!d) return;
+        // Shape: { centroids: { "State|District": [lat, lng] } }  — note lat FIRST.
+        const pts = [];
+        const push = (lon, lat) => { if (isFinite(lon) && isFinite(lat)) pts.push([lon, lat]); };
+        const src = d.centroids || d;
+        if (Array.isArray(src)) src.forEach(o => push(o.lng ?? o.lon, o.lat));
+        else Object.values(src).forEach(v => { if (Array.isArray(v) && v.length >= 2) push(v[1], v[0]); }); // [lat,lng] → (lon,lat)
+        if (!pts.length) return;
+        const top = modelBox.max.y + 0.02;
+        const pos = new Float32Array(pts.length * 3);
+        pts.forEach((p, i) => { const m = geoToModel(p[0], p[1], top); pos[i*3]=m[0]; pos[i*3+1]=m[1]; pos[i*3+2]=m[2]; });
+        const geo = new THREE.BufferGeometry();
+        geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+        const spr = (() => { const c = document.createElement('canvas'); c.width=c.height=64; const x=c.getContext('2d');
+          const g=x.createRadialGradient(32,32,0,32,32,32); g.addColorStop(0,'#fff'); g.addColorStop(0.3,'#e4c069'); g.addColorStop(1,'rgba(201,154,52,0)');
+          x.fillStyle=g; x.fillRect(0,0,64,64); const t=new THREE.CanvasTexture(c); return t; })();
+        const mat = new THREE.PointsMaterial({ size: modelSpan * 0.02, map: spr, color: COL.goldSoft,
+          transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true });
+        districtPts = new THREE.Points(geo, mat);
+        group.add(districtPts);
+      }).catch(() => {});
+    }
+
+    function buildRivers() {
+      // Draw major rivers from india-rivers.geojson as additive glowing lines,
+      // mapped into the model's XZ footprint. Fails quietly if the file is absent.
+      fetch('india-rivers.geojson').then(r => r.ok ? r.json() : null).then(gj => {
+        if (!gj || !gj.features) return;
+        const topY = modelBox.max.y + 0.04;
+        const positions = [];
+        const pushLine = coords => {
+          for (let i = 0; i < coords.length - 1; i++) {
+            const a = geoToModel(coords[i][0], coords[i][1], topY);
+            const b = geoToModel(coords[i+1][0], coords[i+1][1], topY);
+            positions.push(a[0],a[1],a[2], b[0],b[1],b[2]);
+          }
+        };
+        let drawn = 0;
+        for (const f of gj.features) {
+          if (drawn > 260) break;
+          const g = f.geometry; if (!g) continue;
+          if (g.type === 'LineString') { pushLine(g.coordinates); drawn++; }
+          else if (g.type === 'MultiLineString') { g.coordinates.forEach(c => { pushLine(c); drawn++; }); }
+        }
+        if (!positions.length) return;
+        const geo = new THREE.BufferGeometry();
+        geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+        const mat = new THREE.LineBasicMaterial({ color: RIVER_COLOR, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false });
+        riverLines = new THREE.LineSegments(geo, mat);
+        group.add(riverLines);   // its own stratum — lifted in Act 2
+      }).catch(() => {});
+    }
+
+    const loader = new GLTFLoader();
+    loader.load('india.glb', gltf => {
+      model = gltf.scene;
+      model.traverse(o => {
+        if (o.isMesh) {
+          // Start desaturated/dark (Act 0 silhouette); colour revives in Act 3.
+          o.material = o.material.clone();
+          o.material.vertexColors = true;
+          o.material.metalness = 0.5;      // enhanced: bronze-like, catches the env map
+          o.material.roughness = 0.38;
+          o.material.envMapIntensity = 1.15;
+          o.material.emissive = new THREE.Color(0x2a1d10);  // warm self-glow so the relief never goes black
+          o.material.emissiveIntensity = 0.6;
+
+          // store the baked vertex colours so we can fade them in later
+          const col = o.geometry.getAttribute('color');
+          if (col) { o.userData.baseColors = col.array.slice(0); o.userData.colorAttr = col; }
+
+          // EXPLODE SETUP: the GLB is one merged mesh, so we separate it per-vertex.
+          // We bucket each vertex by its XZ into a pseudo-"state cell" and record a
+          // normalised radial offset; the explode shifts cells outward + up along
+          // that offset, so the country breaks into drifting plates. Smoother and
+          // more cinematic than hard chunks, and needs no per-state meshes.
+          const pos = o.geometry.getAttribute('position');
+          o.userData.basePos = pos.array.slice(0);
+          o.userData.posAttr = pos;
+          const n = pos.count;
+          const cell = new Float32Array(n * 3);  // per-vertex explode direction
+          // find footprint for radial direction
+          o.geometry.computeBoundingBox();
+          const bb = o.geometry.boundingBox;
+          const cx = (bb.min.x + bb.max.x) / 2, cz = (bb.min.z + bb.max.z) / 2;
+          const GRID = 7; // quantise into plates so neighbours move together
+          for (let i = 0; i < n; i++) {
+            const x = pos.array[i*3], z = pos.array[i*3+2];
+            // quantise to plate centre
+            const gx = Math.round((x - cx) / (modelSpanLocal(bb) / GRID));
+            const gz = Math.round((z - cz) / (modelSpanLocal(bb) / GRID));
+            let dx = gx, dz = gz;
+            const len = Math.hypot(dx, dz) || 1;
+            cell[i*3]   = (dx / len);            // outward X
+            cell[i*3+1] = 0.4 + 0.25 * ((gx*31 + gz*17) % 5) / 4; // varied lift per plate
+            cell[i*3+2] = (dz / len);            // outward Z
+          }
+          o.userData.cell = cell;
+          meshes.push(o);
+        }
+      });
+      // centre on origin, sit on the floor (same as atlas-3d.html)
+      const box = new THREE.Box3().setFromObject(model);
+      const c = box.getCenter(new THREE.Vector3());
+      model.position.sub(new THREE.Vector3(c.x, box.min.y, c.z));
+      group.add(model);
+      modelBox = new THREE.Box3().setFromObject(model);
+      modelSpan = Math.max(modelBox.max.x - modelBox.min.x, modelBox.max.z - modelBox.min.z) || 8;
+
+      buildRivers();
+      buildDistricts();
+      setGrey(1);           // begin fully desaturated
+      setExplode(0);        // begin assembled
+      hideLoader();
+      update(true);         // snap camera to current scroll
+    }, undefined, err => {
+      document.querySelector('#loader .lw').textContent = 'Could not load the land.';
+      console.error(err);
+      setTimeout(hideLoader, 900);
+    });
+
+    function modelSpanLocal(bb) { return Math.max(bb.max.x - bb.min.x, bb.max.z - bb.min.z) || 8; }
+
+    // EXPLODE: k=0 assembled, k=1 fully separated plates (drifted out + up).
+    function setExplode(k) {
+      if (!meshes.length) return;
+      const amp = modelSpan * 0.14 * k;   // outward spread
+      const lift = modelSpan * 0.10 * k;  // vertical lift
+      for (const o of meshes) {
+        const base = o.userData.basePos, cell = o.userData.cell, attr = o.userData.posAttr;
+        if (!base || !cell || !attr) continue;
+        const arr = attr.array;
+        for (let i = 0; i < arr.length; i += 3) {
+          arr[i]   = base[i]   + cell[i]   * amp;
+          arr[i+1] = base[i+1] + cell[i+1] * lift;
+          arr[i+2] = base[i+2] + cell[i+2] * amp;
+        }
+        attr.needsUpdate = true;
+        // Plates only TRANSLATE (no rotation), so baked normals stay valid — we skip
+        // the per-frame computeVertexNormals() that would thrash 52k verts and stutter.
+      }
+    }
+
+    function hideLoader() {
+      const l = document.getElementById('loader');
+      l.classList.add('gone');
+      setTimeout(() => l.remove(), 900);
+    }
+
+    // Blend each mesh's baked risk colours toward a dark BRONZE silhouette.
+    // k=1 → unlit bronze relief (Chola sanctum); k=0 → full documented risk colour.
+    const BRZ = { r: 0.30, g: 0.20, b: 0.11 };   // cast-bronze tint
+    function setGrey(k) {
+      for (const o of meshes) {
+        const base = o.userData.baseColors, attr = o.userData.colorAttr;
+        if (!base || !attr) continue;
+        const arr = attr.array;
+        for (let i = 0; i < arr.length; i += 3) {
+          const r = base[i], g = base[i+1], b = base[i+2];
+          const lum = (0.299*r + 0.587*g + 0.114*b);
+          // target = bronze tint modulated by the vertex's own luminance (keeps relief readable)
+          const tr = BRZ.r * (0.5 + lum), tg = BRZ.g * (0.5 + lum), tb = BRZ.b * (0.5 + lum);
+          arr[i]   = r + (tr - r) * k;
+          arr[i+1] = g + (tg - g) * k;
+          arr[i+2] = b + (tb - b) * k;
+        }
+        attr.needsUpdate = true;
+      }
+    }
+
+    // ---- camera choreography: a keyframe per act, eased by scroll progress ----
+    // Positions are in model-span units so they scale to whatever india.glb measures.
+    // The scroll is a DESCENT: Y falls, FOV tightens, and each layer peels off in turn.
+    //   grey 1→0 colour reveal · exp 0→1 plates lift apart · riv river stratum · dist districts
+    const KEYS = [
+      { pos: [0.0, 2.4, 2.05], tgt: [0, 0.15, 0], fov: 44, grey: 1.0, riv: 0.0, exp: 0.0, dist: 0.0 }, // 0 high above, dark whole
+      { pos: [0.9, 1.5, 1.7 ], tgt: [0, 0.32, 0], fov: 42, grey: 0.9, riv: 0.0, exp: 1.0, dist: 0.0 }, // 1 states lift apart
+      { pos: [-0.8, 1.95,1.4 ], tgt: [0, 0.30, 0], fov: 40, grey: 0.78,riv: 1.0, exp: 0.82,dist: 0.0 }, // 2 rivers float above
+      { pos: [0.7, 1.15,1.55], tgt: [0, 0.30, 0], fov: 43, grey: 0.0, riv: 0.7, exp: 0.5, dist: 0.25 }, // 3 colour burns in
+      { pos: [0.0, 1.05,1.5 ], tgt: [0, 0.30, 0], fov: 46, grey: 0.0, riv: 0.4, exp: 0.15,dist: 1.0 }, // 4 settle, districts glow
+    ];
+
+    const tmpA = new THREE.Vector3(), tmpB = new THREE.Vector3(), curTgt = new THREE.Vector3();
+    const easeInOut = t => t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t+2, 2)/2;
+
+    function lerpKey(a, b, t) {
+      const e = easeInOut(t);
+      const mix = (ka, kb) => ka + (kb - ka) * e;
+      return {
+        pos: [mix(a.pos[0],b.pos[0]), mix(a.pos[1],b.pos[1]), mix(a.pos[2],b.pos[2])],
+        tgt: [mix(a.tgt[0],b.tgt[0]), mix(a.tgt[1],b.tgt[1]), mix(a.tgt[2],b.tgt[2])],
+        fov: mix(a.fov,b.fov), grey: mix(a.grey,b.grey), riv: mix(a.riv,b.riv),
+        exp: mix(a.exp,b.exp), dist: mix(a.dist,b.dist),
+      };
+    }
+
+    let scrollProg = 0;      // 0..(NACTS-1)
+    function readScroll() {
+      const max = document.body.scrollHeight - innerHeight;
+      const p = max > 0 ? scrollY / max : 0;
+      scrollProg = p * (NACTS - 1);
+      updateRail();
+    }
+
+    // smoothed camera + layer state
+    let smPos = new THREE.Vector3(), smTgt = new THREE.Vector3(), smFov = 46, inited = false;
+    let sGrey = 1, sRiv = 0, sExp = 0, sDist = 0;
+    let lastExp = -1, lastGrey = -1;   // only rebuild heavy per-vertex work when it moves
+
+    function update(snap) {
+      const i = Math.max(0, Math.min(NACTS - 2, Math.floor(scrollProg)));
+      const frac = Math.min(1, scrollProg - i);
+      const k = lerpKey(KEYS[i], KEYS[i+1], frac);
+
+      const s = modelSpan;
+      tmpA.set(k.pos[0]*s, k.pos[1]*s, k.pos[2]*s);
+      tmpB.set(k.tgt[0]*s, k.tgt[1]*s, k.tgt[2]*s);
+
+      if (snap || !inited) { smPos.copy(tmpA); smTgt.copy(tmpB); smFov = k.fov; inited = true; }
+      const lp = REDUCED ? 1 : 0.08;
+      smPos.lerp(tmpA, lp); smTgt.lerp(tmpB, lp);
+      smFov += (k.fov - smFov) * lp;
+
+      camera.position.copy(smPos);
+      curTgt.copy(smTgt);
+      camera.lookAt(curTgt);
+      camera.fov = smFov; camera.updateProjectionMatrix();
+
+      // smoothed layer params
+      sGrey += (k.grey - sGrey) * lp;
+      sRiv  += (k.riv  - sRiv ) * lp;
+      sExp  += (k.exp  - sExp ) * lp;
+      sDist += (k.dist - sDist) * lp;
+
+      // colour reveal — rebuild only when it has visibly changed (per-vertex cost)
+      if (Math.abs(sGrey - lastGrey) > 0.004) { setGrey(sGrey); lastGrey = sGrey; }
+      // explode plates — same guard
+      if (Math.abs(sExp - lastExp) > 0.004) { setExplode(sExp); lastExp = sExp; }
+
+      // river stratum: glow in AND lift off the surface as its own layer
+      if (riverLines) {
+        riverLines.material.opacity = sRiv * 0.95;
+        riverLines.position.y = modelSpan * 0.18 * sRiv;
+      }
+      // district field: fade in + float just above
+      if (districtPts) {
+        districtPts.material.opacity = sDist;
+        districtPts.position.y = modelSpan * 0.06 * sDist;
+      }
+    }
+
+    // ---- intersection: reveal cards + mark active act on the rail ----
+    const acts = [...document.querySelectorAll('.act')];
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+    }, { threshold: 0.35 });
+    acts.forEach(a => io.observe(a));
+
+    // progress rail dots
+    const rail = document.getElementById('rail');
+    acts.forEach((_, i) => { const d = document.createElement('span'); d.className = 'dot'; rail.appendChild(d); });
+    const dots = [...rail.children];
+
+    // component read-out copy per act (igloo-style callouts naming the stratum)
+    const HUD = [
+      ['00', 'The whole',      '52,608 vertices · one merged relief'],
+      ['01', 'States & UTs',   '36 plates · height = coast + flood + terrain'],
+      ['02', 'River courses',  'Natural Earth · lifted to its own stratum'],
+      ['03', 'Risk surface',   'CRZ · CWC flood maps · terrain index'],
+      ['04', 'District ledger','594 centroids · money · land · people · risk'],
+    ];
+    const hud = document.getElementById('hud');
+    const hudIdx = hud.querySelector('.hud-idx'), hudName = hud.querySelector('.hud-name'), hudMeta = hud.querySelector('.hud-meta');
+    let hudActive = -1;
+    function updateRail() {
+      const active = Math.round(scrollProg);
+      dots.forEach((d, i) => d.classList.toggle('on', i === active));
+      if (active !== hudActive && HUD[active]) {
+        hudActive = active;
+        hudName.style.opacity = 0;
+        setTimeout(() => {
+          hudIdx.textContent = HUD[active][0];
+          hudName.textContent = HUD[active][1];
+          hudMeta.textContent = HUD[active][2];
+          hudName.style.opacity = 1;
+        }, 180);
+      }
+    }
+
+    // ---- loop ----
+    let t0 = performance.now();
+    function loop(now) {
+      const dt = (now - t0) / 1000; t0 = now;
+      update(false);
+      // gentle idle yaw of the whole group for life (disabled under reduced motion)
+      if (!REDUCED && group && model) group.rotation.y = Math.sin(now * 0.00009) * 0.08;
+      if (dustPts && !REDUCED) dustPts.rotation.y += dt * 0.01;
+      // district points twinkle via size pulse
+      if (districtPts && !REDUCED) districtPts.material.size = modelSpan * (0.018 + 0.004 * Math.sin(now * 0.002));
+      composer.render();
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+
+    // ---- events ----
+    addEventListener('scroll', readScroll, { passive: true });
+    addEventListener('resize', () => {
+      camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+      composer.setSize(innerWidth, innerHeight);
+      bloom.setSize(innerWidth, innerHeight);
+    });
+    readScroll();
+
+    // If reduced-motion, lighten the mood: skip grain-heavy idle, keep it legible.
+    if (REDUCED) { bloom.strength = 0.3; }
+  </script>
+</body>
+</html>

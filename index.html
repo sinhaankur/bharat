@@ -6,10 +6,18 @@
   <title>Bharat — Money, Land &amp; Memory</title>
   <meta name="description" content="An atlas of India — its money and power, its land and rivers, its scripts and faiths. Sourced, per-district, open." />
   <link rel="canonical" href="https://sinhaankur.github.io/bharat/app/" />
-  <!-- The front door is the new Mauryan-designed app. The classic India map
-       lives at classic.html and opens from the app's "Open the map" button. -->
-  <meta http-equiv="refresh" content="0; url=app/" />
-  <script>location.replace('app/' + location.search + location.hash);</script>
+  <!-- The front door is the cinematic 3D hero (hero-3d.html): a scroll-driven
+       flight over India that leads into the atlas. The classic India map lives at
+       classic.html; the app lives at app/. Respect ?skip to go straight in. -->
+  <script>
+    (function () {
+      var p = new URLSearchParams(location.search);
+      // allow deep-links to bypass the intro: index.html?skip or any hash/query for the app
+      var dest = (p.has('skip') || location.hash) ? 'app/' : 'hero-3d.html';
+      location.replace(dest + location.search + location.hash);
+    })();
+  </script>
+  <noscript><meta http-equiv="refresh" content="0; url=hero-3d.html" /></noscript>
   <style>
     html,body{margin:0;height:100%;background:#f8f4ea;color:#33251a;
       font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
@@ -26,7 +34,7 @@
   <div class="wrap">
     <div class="spin" aria-hidden="true"></div>
     <p>Taking you to <strong>Bharat</strong>…<br />
-      <a href="app/">Enter the atlas</a> · <a href="classic.html">the classic map</a></p>
+      <a href="hero-3d.html">Enter</a> · <a href="app/">the atlas</a> · <a href="classic.html">the classic map</a></p>
   </div>
 </body>
 </html>
