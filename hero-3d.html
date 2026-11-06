@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bharat — One land, measured</title>
-  <meta name="description" content="Scroll into Bharat: a cinematic 3D flight over India — states rising by the constraints that shape them, rivers igniting across the land. An atlas of money, land and memory." />
-  <meta property="og:title" content="Bharat — One land, measured" />
-  <meta property="og:description" content="A cinematic 3D flight over India. Scroll to enter the atlas." />
+  <title>Bharat — Same land, every age</title>
+  <meta name="description" content="Scroll up through 67,000 years of one country — from deep prehistory to the Indus, the Vedic age, Ashoka's empire and the golden age, arriving at a living, per-district atlas of India." />
+  <meta property="og:title" content="Bharat — Same land, every age" />
+  <meta property="og:description" content="A cinematic descent through time over India. Scroll from deep prehistory to today, then enter the atlas." />
   <meta property="og:image" content="og-image.png" />
   <link rel="icon" href="favicon.svg" />
 
@@ -185,10 +185,28 @@
     }
     .skip {
       position: fixed; top: 1.6rem; right: 2rem; z-index: 6;
-      font-size: 0.78rem; letter-spacing: 0.08em; text-decoration: none;
+      font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em; text-decoration: none;
       color: var(--ink-dim); border-bottom: 1px solid transparent; transition: 0.25s;
     }
     .skip:hover { color: var(--ink); border-color: var(--gold); }
+
+    /* ambient-sound toggle */
+    #snd {
+      position: fixed; top: 1.5rem; right: 7.5rem; z-index: 6;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em;
+      color: var(--ink-dim); background: rgba(244,239,228,0.04);
+      border: 1px solid var(--glass-brd); border-radius: 999px;
+      padding: 0.4rem 0.8rem; cursor: pointer; transition: 0.25s;
+    }
+    #snd:hover { color: var(--ink); background: rgba(244,239,228,0.09); }
+    #snd.on { color: var(--gold-soft); border-color: var(--gold); }
+    #snd .snd-ico {
+      width: 9px; height: 9px; border-radius: 50%;
+      background: currentColor; opacity: 0.5; transition: 0.3s;
+    }
+    #snd.on .snd-ico { opacity: 1; box-shadow: 0 0 8px var(--gold); animation: pulse 1.6s var(--ease) infinite; }
+    @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.4)} }
 
     /* progress rail */
     #rail {
@@ -235,6 +253,7 @@
     @media (max-width: 640px) {
       .act { padding: 0 6vw; }
       #rail, .brand { display: none; }
+      #snd { right: 6.5rem; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -246,6 +265,9 @@
 </head>
 <body>
   <a class="brand" href="app/">भारत · Bharat</a>
+  <button id="snd" aria-pressed="false" aria-label="Toggle ambient sound">
+    <span class="snd-ico" aria-hidden="true"></span><span class="snd-label">Sound</span>
+  </button>
   <a class="skip" href="app/">Skip intro →</a>
 
   <div id="stage"><canvas id="c"></canvas></div>
@@ -254,66 +276,79 @@
 
   <nav id="rail" aria-hidden="true"></nav>
 
-  <!-- component read-out: names the stratum currently peeled off (igloo-style callout) -->
+  <!-- era read-out: names the age we're surfacing through (igloo-style callout) -->
   <div id="hud" aria-hidden="true">
-    <span class="hud-idx">00</span>
-    <span class="hud-name">The whole</span>
-    <span class="hud-meta">52,608 vertices · one merged relief</span>
+    <span class="hud-idx">65,000 BCE</span>
+    <span class="hud-name">Deep prehistory</span>
+    <span class="hud-meta">the substrate · ancestral, unknown tongues</span>
   </div>
 
   <div id="loader">
     <div class="ring" aria-hidden="true"></div>
-    <div class="lw">Raising the land…</div>
+    <div class="lw"><span id="load-pct">0</span>% · raising the land</div>
   </div>
 
   <main id="scroll">
-    <!-- The scroll is a DESCENT: you fall through the country, and as you go
-         deeper it comes apart into the strata an atlas is made of —
-         land → states → rivers → risk → the per-district data itself. -->
+    <!-- The scroll is a DESCENT THROUGH TIME. The land never changes — it is always
+         India — but we surface up the centuries, era by era (eras from
+         ancient-india.json), the light and palette shifting with each age, until we
+         arrive at today and the living atlas. One confident line per act. -->
 
-    <!-- ACT 0 — title / the whole, from above -->
+    <!-- ACT 0 — title -->
     <section class="act" data-act="0" data-align="center" id="intro">
       <div class="card">
-        <h1 class="mark">One&nbsp;land,<br>in&nbsp;layers.</h1>
-        <p class="sub">Scroll to fall through India — and watch it come apart into the strata an atlas is made of.</p>
+        <h1 class="mark">Same&nbsp;land.<br>Every&nbsp;age.</h1>
+        <p class="sub">Scroll up through sixty-seven thousand years of one country.</p>
       </div>
-      <div class="scroll-hint"><span>Descend</span><span class="line"></span></div>
+      <div class="scroll-hint"><span>Begin · 65,000 BCE</span><span class="line"></span></div>
     </section>
 
-    <!-- ACT 1 — states separate -->
+    <!-- ACT 1 — prehistory -->
     <section class="act" data-act="1" data-align="left">
       <div class="card">
-        <p class="kicker">Layer 01 · the political</p>
-        <h2>Thirty-six pieces <em>lift apart</em>.</h2>
-        <p>Twenty-eight states, eight union territories — each rising by what constrains it on the ground: coast to protect, floods to survive, terrain too hard to build on.</p>
+        <p class="kicker">65,000 BCE · the substrate</p>
+        <h2>First, only <em>land</em>.</h2>
       </div>
     </section>
 
-    <!-- ACT 2 — rivers ignite as a stratum -->
+    <!-- ACT 2 — Indus -->
     <section class="act" data-act="2" data-align="right">
       <div class="card">
-        <p class="kicker">Layer 02 · the hydrological</p>
-        <h2>Rivers float <em>above</em> the land.</h2>
-        <p>The Ganga, the Brahmaputra, the Godavari, the Cauvery — lifted off as their own stratum. They settled every city and still move most of the country's water, money and silt.</p>
+        <p class="kicker">2600 BCE · Harappa</p>
+        <h2>The first cities find the <em>rivers</em>.</h2>
       </div>
     </section>
 
-    <!-- ACT 3 — risk colour floods in -->
+    <!-- ACT 3 — Vedic / Mahajanapada -->
     <section class="act" data-act="3" data-align="left">
       <div class="card">
-        <p class="kicker">Layer 03 · the risk surface</p>
-        <h2>Then it burns <em>into colour</em>.</h2>
-        <p>Vermilion where coast and floodplain overlap. Bronze and granite for plateau, plains, desert. Every hue is a documented constraint — the CRZ, the CWC flood maps, the terrain index — never a verdict.</p>
+        <p class="kicker">1500–350 BCE · the spoken age</p>
+        <h2>Languages spread like <em>watersheds</em>.</h2>
       </div>
     </section>
 
-    <!-- ACT 4 — district data particle field + CTA -->
-    <section class="act" data-act="4" data-align="center" id="outro">
+    <!-- ACT 4 — Mauryan -->
+    <section class="act" data-act="4" data-align="right">
+      <div class="card">
+        <p class="kicker">322 BCE · Ashoka</p>
+        <h2>One empire, carved in <em>edict and stone</em>.</h2>
+      </div>
+    </section>
+
+    <!-- ACT 5 — Classical / Gupta→Chola -->
+    <section class="act" data-act="5" data-align="left">
+      <div class="card">
+        <p class="kicker">185 BCE – 1279 CE · the classical age</p>
+        <h2>Bronze, temple, and <em>gold</em>.</h2>
+      </div>
+    </section>
+
+    <!-- ACT 6 — today + CTA -->
+    <section class="act" data-act="6" data-align="center" id="outro">
       <div class="card">
         <div class="panel">
-          <p class="kicker" style="margin:0">Layer 04 · and underneath, the data</p>
-          <h2 style="margin:0">Seven hundred districts,<br>each with a ledger.</h2>
-          <p style="margin:0.2rem auto 0;max-width:40ch;color:var(--ink-dim)">Every point of light is a district you can open — money, land, people, risk, sourced and per-district.</p>
+          <p class="kicker" style="margin:0">Today · 766 districts</p>
+          <h2 style="margin:0">And now it's <em>yours to read</em>.</h2>
           <div class="cta-row">
             <a class="btn btn-primary" href="app/">Enter the atlas →</a>
             <a class="btn btn-ghost" href="classic.html">Open the classic map</a>
@@ -341,7 +376,7 @@
     import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 
     const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const NACTS = 5; // 0..4
+    const NACTS = 7; // 0..6 — intro + five eras + today
 
     // ---- Chola palette (JS mirror of the CSS theme) ----
     const COL = {
@@ -361,7 +396,7 @@
     renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
     renderer.setSize(innerWidth, innerHeight);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.3;
+    renderer.toneMappingExposure = 1.45;
 
     // ---- enhanced render: a procedural bronze-sanctum environment ----
     // A generated gradient cubemap gives the metal real reflections (igloo-style sheen)
@@ -390,8 +425,8 @@
     composer.addPass(bloom);
     composer.addPass(new OutputPass());
 
-    // ---- lighting: warm temple key, bronze fill, gilt rim ----
-    scene.add(new THREE.HemisphereLight(0xe4c069, 0x0a0705, 0.45));
+    // ---- lighting: warm key, fill, gilt rim + hemisphere (recoloured per era) ----
+    const hemi = new THREE.HemisphereLight(0xe4c069, 0x0a0705, 0.45); scene.add(hemi);
     const key = new THREE.DirectionalLight(0xffe8c0, 1.45); key.position.set(6, 14, 8); scene.add(key);
     const fill = new THREE.DirectionalLight(0x8a6a3a, 0.5); fill.position.set(-8, 4, -6); scene.add(fill);
     const rim = new THREE.DirectionalLight(0xc99a34, 0.8); rim.position.set(-4, 2, 10); scene.add(rim);
@@ -485,6 +520,7 @@
       }).catch(() => {});
     }
 
+    const loadPct = document.getElementById('load-pct');
     const loader = new GLTFLoader();
     loader.load('india.glb', gltf => {
       model = gltf.scene;
@@ -544,14 +580,25 @@
       buildRivers();
       buildDistricts();
       setGrey(1);           // begin fully desaturated
-      setExplode(0);        // begin assembled
+      setExplode(sExp0());  // begin at the intro era's slight relief
+      if (loadPct) loadPct.textContent = '100';
       hideLoader();
       update(true);         // snap camera to current scroll
-    }, undefined, err => {
+    }, xhr => {
+      // loading-as-theatre: real byte progress drives the count-up
+      if (loadPct && xhr.lengthComputable) {
+        loadPct.textContent = String(Math.round((xhr.loaded / xhr.total) * 100));
+      } else if (loadPct) {
+        // length unknown (gzip) — ease toward 90 so it still feels alive
+        const cur = parseInt(loadPct.textContent) || 0;
+        if (cur < 90) loadPct.textContent = String(cur + 3);
+      }
+    }, err => {
       document.querySelector('#loader .lw').textContent = 'Could not load the land.';
       console.error(err);
       setTimeout(hideLoader, 900);
     });
+    const sExp0 = () => KEYS[0].exp;
 
     function modelSpanLocal(bb) { return Math.max(bb.max.x - bb.min.x, bb.max.z - bb.min.z) || 8; }
 
@@ -602,20 +649,33 @@
       }
     }
 
-    // ---- camera choreography: a keyframe per act, eased by scroll progress ----
-    // Positions are in model-span units so they scale to whatever india.glb measures.
-    // The scroll is a DESCENT: Y falls, FOV tightens, and each layer peels off in turn.
-    //   grey 1→0 colour reveal · exp 0→1 plates lift apart · riv river stratum · dist districts
+    // ---- DESCENT THROUGH TIME: one keyframe per era, eased by scroll ----
+    // Positions in model-span units. The land barely explodes (it's always India);
+    // instead each ERA changes the LIGHT (warm) and the land's colour CAST (tint),
+    // layering in rivers at the Indus age and full risk-colour + districts by today.
+    //   grey 1→0 colour reveal · riv rivers · exp slight relief lift · dist districts
+    //   tint = per-era land cast (hex) · warm = hemisphere light colour (hex)
     const KEYS = [
-      { pos: [0.0, 2.4, 2.05], tgt: [0, 0.15, 0], fov: 44, grey: 1.0, riv: 0.0, exp: 0.0, dist: 0.0 }, // 0 high above, dark whole
-      { pos: [0.9, 1.5, 1.7 ], tgt: [0, 0.32, 0], fov: 42, grey: 0.9, riv: 0.0, exp: 1.0, dist: 0.0 }, // 1 states lift apart
-      { pos: [-0.8, 1.95,1.4 ], tgt: [0, 0.30, 0], fov: 40, grey: 0.78,riv: 1.0, exp: 0.82,dist: 0.0 }, // 2 rivers float above
-      { pos: [0.7, 1.15,1.55], tgt: [0, 0.30, 0], fov: 43, grey: 0.0, riv: 0.7, exp: 0.5, dist: 0.25 }, // 3 colour burns in
-      { pos: [0.0, 1.05,1.5 ], tgt: [0, 0.30, 0], fov: 46, grey: 0.0, riv: 0.4, exp: 0.15,dist: 1.0 }, // 4 settle, districts glow
+      // 0 · intro — deep time, cold and dark, the bare land
+      { pos: [0.0, 2.1, 2.1 ], tgt: [0, 0.18, 0], fov: 44, grey: 1.0, riv: 0.0, exp: 0.08, dist: 0.0, tint: 0x3a3330, warm: 0x4a4650 },
+      // 1 · prehistory — first relief, still monochrome stone
+      { pos: [0.7, 1.7, 1.85], tgt: [0, 0.28, 0], fov: 42, grey: 0.95,riv: 0.0, exp: 0.14, dist: 0.0, tint: 0x5a4a3a, warm: 0x6a5a48 },
+      // 2 · Indus — rivers appear; cities find the water (cool river-blue cast)
+      { pos: [-0.8, 1.6, 1.7 ], tgt: [0, 0.28, 0], fov: 41, grey: 0.78,riv: 1.0, exp: 0.12, dist: 0.0, tint: 0x5f6f7a, warm: 0x7fa0c0 },
+      // 3 · Vedic/Mahajanapada — warm dawn, language spreads (Mauryan ochre dawn)
+      { pos: [0.8, 1.45, 1.6 ], tgt: [0, 0.30, 0], fov: 42, grey: 0.55,riv: 0.8, exp: 0.12, dist: 0.0, tint: 0x9a6a2e, warm: 0xcc8900 },
+      // 4 · Mauryan — Ashoka; edict ochre + Mauryan gold
+      { pos: [-0.6, 1.5, 1.55], tgt: [0, 0.30, 0], fov: 41, grey: 0.30,riv: 0.6, exp: 0.12, dist: 0.0, tint: 0xb07a2e, warm: 0xe0a020 },
+      // 5 · Classical/Gupta→Chola — the golden age; bronze, temple, gold, full colour
+      { pos: [0.6, 1.35, 1.5 ], tgt: [0, 0.30, 0], fov: 43, grey: 0.0, riv: 0.5, exp: 0.12, dist: 0.3, tint: 0xc99a34, warm: 0xe4c069 },
+      // 6 · today — the living atlas; full colour, districts glow
+      { pos: [0.0, 1.15, 1.55], tgt: [0, 0.30, 0], fov: 46, grey: 0.0, riv: 0.4, exp: 0.10, dist: 1.0, tint: 0xd8b24a, warm: 0xf0d890 },
     ];
 
     const tmpA = new THREE.Vector3(), tmpB = new THREE.Vector3(), curTgt = new THREE.Vector3();
     const easeInOut = t => t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t+2, 2)/2;
+    const _ca = new THREE.Color(), _cb = new THREE.Color(), _cm = new THREE.Color();
+    const mixHex = (a, b, e) => { _ca.setHex(a); _cb.setHex(b); return _cm.copy(_ca).lerp(_cb, e); };
 
     function lerpKey(a, b, t) {
       const e = easeInOut(t);
@@ -625,6 +685,7 @@
         tgt: [mix(a.tgt[0],b.tgt[0]), mix(a.tgt[1],b.tgt[1]), mix(a.tgt[2],b.tgt[2])],
         fov: mix(a.fov,b.fov), grey: mix(a.grey,b.grey), riv: mix(a.riv,b.riv),
         exp: mix(a.exp,b.exp), dist: mix(a.dist,b.dist),
+        tint: mixHex(a.tint, b.tint, e).clone(), warm: mixHex(a.warm, b.warm, e).clone(),
       };
     }
 
@@ -674,12 +735,23 @@
       // river stratum: glow in AND lift off the surface as its own layer
       if (riverLines) {
         riverLines.material.opacity = sRiv * 0.95;
-        riverLines.position.y = modelSpan * 0.18 * sRiv;
+        riverLines.position.y = modelSpan * 0.14 * sRiv;
       }
       // district field: fade in + float just above
       if (districtPts) {
         districtPts.material.opacity = sDist;
         districtPts.position.y = modelSpan * 0.06 * sDist;
+      }
+
+      // ERA LIGHT: recolour the key + hemisphere toward the era's warmth, and tint
+      // the fog so the whole age has a mood. Smoothed toward the target each frame.
+      if (k.warm) {
+        key.color.lerp(k.warm, lp);
+        hemi.color.lerp(k.warm, lp);
+      }
+      if (k.tint) {
+        rim.color.lerp(k.tint, lp);
+        scene.fog.color.lerp(_cm.copy(k.tint).multiplyScalar(0.22), lp);
       }
     }
 
@@ -695,13 +767,15 @@
     acts.forEach((_, i) => { const d = document.createElement('span'); d.className = 'dot'; rail.appendChild(d); });
     const dots = [...rail.children];
 
-    // component read-out copy per act (igloo-style callouts naming the stratum)
+    // era read-out per act (igloo-style callout naming the age + date)
     const HUD = [
-      ['00', 'The whole',      '52,608 vertices · one merged relief'],
-      ['01', 'States & UTs',   '36 plates · height = coast + flood + terrain'],
-      ['02', 'River courses',  'Natural Earth · lifted to its own stratum'],
-      ['03', 'Risk surface',   'CRZ · CWC flood maps · terrain index'],
-      ['04', 'District ledger','594 centroids · money · land · people · risk'],
+      ['65,000 BCE', 'Deep prehistory',  'the substrate · ancestral, unknown tongues'],
+      ['50,000 BCE', 'First peopling',   'stone, river, forest · no borders yet'],
+      ['2600 BCE',   'Indus / Harappa',  'the first cities find the rivers'],
+      ['1500 BCE',   'Vedic age',        'Vedic Sanskrit · the spoken country spreads'],
+      ['322 BCE',    'Mauryan empire',   'Ashoka · edict and stone · Prakrit of state'],
+      ['≈500 CE',    'Classical / Gupta→Chola', 'bronze · temple · the golden age'],
+      ['Today',      'The living atlas', '766 districts · money · land · people · risk'],
     ];
     const hud = document.getElementById('hud');
     const hudIdx = hud.querySelector('.hud-idx'), hudName = hud.querySelector('.hud-name'), hudMeta = hud.querySelector('.hud-meta');
@@ -721,13 +795,26 @@
       }
     }
 
+    // ---- cursor parallax: the land leans toward the pointer (igloo "alive" feel) ----
+    let mx = 0, my = 0, pmx = 0, pmy = 0;   // target + smoothed pointer (-1..1)
+    if (!REDUCED) {
+      addEventListener('pointermove', e => {
+        mx = (e.clientX / innerWidth) * 2 - 1;
+        my = (e.clientY / innerHeight) * 2 - 1;
+      }, { passive: true });
+    }
+
     // ---- loop ----
     let t0 = performance.now();
     function loop(now) {
       const dt = (now - t0) / 1000; t0 = now;
       update(false);
-      // gentle idle yaw of the whole group for life (disabled under reduced motion)
-      if (!REDUCED && group && model) group.rotation.y = Math.sin(now * 0.00009) * 0.08;
+      if (!REDUCED && group && model) {
+        // idle yaw + pointer parallax lean, both smoothed
+        pmx += (mx - pmx) * 0.05; pmy += (my - pmy) * 0.05;
+        group.rotation.y = Math.sin(now * 0.00009) * 0.06 + pmx * 0.18;
+        group.rotation.x = pmy * 0.08;
+      }
       if (dustPts && !REDUCED) dustPts.rotation.y += dt * 0.01;
       // district points twinkle via size pulse
       if (districtPts && !REDUCED) districtPts.material.size = modelSpan * (0.018 + 0.004 * Math.sin(now * 0.002));
@@ -735,6 +822,43 @@
       requestAnimationFrame(loop);
     }
     requestAnimationFrame(loop);
+
+    // ---- ambient audio: a low tonal drone, synthesised (no file shipped) ----
+    // Starts muted; fades in on first user gesture (autoplay policy), toggled by the
+    // sound button. A soft bronze "singing bowl" pad — two detuned sines + slow LFO.
+    const audio = (function () {
+      let ctx, master, started = false, on = false;
+      function build() {
+        ctx = new (window.AudioContext || window.webkitAudioContext)();
+        master = ctx.createGain(); master.gain.value = 0; master.connect(ctx.destination);
+        const freqs = [55, 110, 164.81, 220];       // A1 drone + fifth-ish overtones
+        freqs.forEach((f, i) => {
+          const o = ctx.createOscillator(); o.type = 'sine'; o.frequency.value = f;
+          const g = ctx.createGain(); g.gain.value = (i === 0 ? 0.5 : 0.16) / freqs.length;
+          const lfo = ctx.createOscillator(); lfo.frequency.value = 0.05 + i * 0.03;
+          const lg = ctx.createGain(); lg.gain.value = 0.5; lfo.connect(lg); lg.connect(g.gain);
+          o.connect(g); g.connect(master); o.start(); lfo.start();
+        });
+      }
+      return {
+        toggle() {
+          if (!started) { build(); started = true; }
+          if (ctx.state === 'suspended') ctx.resume();
+          on = !on;
+          master.gain.cancelScheduledValues(ctx.currentTime);
+          master.gain.linearRampToValueAtTime(on ? 0.22 : 0, ctx.currentTime + 1.2);
+          return on;
+        },
+        get on() { return on; }
+      };
+    })();
+    const sndBtn = document.getElementById('snd');
+    if (sndBtn) sndBtn.addEventListener('click', () => {
+      const on = audio.toggle();
+      sndBtn.setAttribute('aria-pressed', String(on));
+      sndBtn.classList.toggle('on', on);
+      sndBtn.querySelector('.snd-label').textContent = on ? 'Sound on' : 'Sound';
+    });
 
     // ---- events ----
     addEventListener('scroll', readScroll, { passive: true });
