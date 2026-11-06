@@ -22,6 +22,7 @@
   // ---- cursor spotlight: a warm radial glow that trails the pointer ----
   function cursorGlow() {
     if (reduced() || COARSE) return;
+    if (document.getElementById("cursor-glow")) return;   // idempotent across refresh()
     var el = document.createElement("div");
     el.id = "cursor-glow"; el.setAttribute("aria-hidden", "true");
     document.body.appendChild(el);
@@ -38,6 +39,7 @@
   function magnetic() {
     if (reduced() || COARSE) return;
     document.querySelectorAll(".magnetic").forEach(function (el) {
+      if (el._magBound) return; el._magBound = true;        // bind once across refresh()
       var strength = parseFloat(el.getAttribute("data-magnetic")) || 0.3;
       el.addEventListener("pointermove", function (e) {
         var r = el.getBoundingClientRect();
@@ -53,6 +55,7 @@
   function tilt() {
     if (reduced() || COARSE) return;
     document.querySelectorAll(".tilt").forEach(function (el) {
+      if (el._tiltBound) return; el._tiltBound = true;       // bind once across refresh()
       var max = parseFloat(el.getAttribute("data-tilt")) || 6; // degrees
       el.style.transformStyle = "preserve-3d";
       el.addEventListener("pointermove", function (e) {
@@ -73,6 +76,7 @@
     if (reduced()) return; // leave as a normal (vertical/overflow) list
 
     sections.forEach(function (sec) {
+      if (sec._hsBound) return; sec._hsBound = true;          // bind once across refresh()
       var row = sec.querySelector(".hscroll-row");
       if (!row) return;
       // the section is made tall (= row width) so there's vertical distance to map.
