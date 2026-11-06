@@ -504,12 +504,13 @@
             positions.push(a[0],a[1],a[2], b[0],b[1],b[2]);
           }
         };
-        let drawn = 0;
+        // Draw EVERY river in the set (Natural Earth 10m, India bbox) — the Indus,
+        // Ganges, Brahmaputra, Godavari, Krishna, Cauvery, Narmada and all tributaries.
+        // These are cheap line segments in a single draw call, so no cap is needed.
         for (const f of gj.features) {
-          if (drawn > 260) break;
           const g = f.geometry; if (!g) continue;
-          if (g.type === 'LineString') { pushLine(g.coordinates); drawn++; }
-          else if (g.type === 'MultiLineString') { g.coordinates.forEach(c => { pushLine(c); drawn++; }); }
+          if (g.type === 'LineString') { pushLine(g.coordinates); }
+          else if (g.type === 'MultiLineString') { g.coordinates.forEach(c => pushLine(c)); }
         }
         if (!positions.length) return;
         const geo = new THREE.BufferGeometry();
