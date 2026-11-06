@@ -127,12 +127,11 @@
       { href: "temple-forms.html", text: "How temples are shaped", hint: "Nagara · Dravida · Kalinga, modelled to real dims" },
       { href: "deep-history.html", text: "Who we are, in DNA", hint: "the ancient-DNA population shifts" },
       { href: "atrocities.html", text: "History's deadliest events", hint: "the 100 worst, mapped and counted" },
-    ]},
-    { label: "Languages", href: "languages.html", tagline: "Every tongue & script of Bharat — the families, the journey of a word, one text across many.", items: [
-      { href: "languages.html", text: "Every language & script", hint: "start here — the hub" },
-      { href: "journey.html", text: "The journey of a word", hint: "one word through 4,000 years" },
-      { href: "scripts.html", text: "The script family tree", hint: "Indo-Aryan vs Dravidian + Brahmi" },
-      { href: "vedas.html", text: "One text, many tongues", hint: "the Rigveda, translated & compared" },
+      { href: "languages.html", text: "Languages & scripts of Bharat", hint: "the hub — families, the journey of a word, one text across many", children: [
+        { href: "journey.html", text: "The journey of a word", hint: "one word through 4,000 years" },
+        { href: "scripts.html", text: "The script family tree", hint: "Indo-Aryan vs Dravidian + Brahmi" },
+        { href: "vedas.html", text: "One text, many tongues", hint: "the Rigveda, translated & compared" },
+      ] },
     ]},
     { label: "About", href: "how-it-works.html", tagline: "What this is, how it's built, where every number comes from — and the design behind it.", items: [
       { href: "how-it-works.html", text: "How it works", hint: "start here — the project in plain terms", children: [
