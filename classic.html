@@ -86,6 +86,76 @@
   <link rel="preconnect" href="https://server.arcgisonline.com" crossorigin />
   <link rel="dns-prefetch" href="https://api.rainviewer.com" />
   <link rel="prefetch" href="district-ledger.json" as="fetch" crossorigin />
+
+  <!-- Premium chrome polish — page-scoped, layered on top of the shared theme so the
+       map stays instantly usable but the surfaces feel crafted: soft depth, gilt
+       hairlines, eased hovers. Uses only shared tokens (--accent/--gold/--surface…),
+       so it inherits whatever theme is active and never fights the house CSS. -->
+  <style>
+    :root { --gilt: var(--gold, #cc8900); --ease-lux: cubic-bezier(.22,1,.36,1); }
+
+    /* the side panel reads as a crafted card, not a flat column */
+    .india-side-panel {
+      box-shadow: 0 1px 0 rgba(255,255,255,.5) inset, 0 18px 50px -24px rgba(60,40,12,.45);
+      border-radius: 14px;
+    }
+    .india-side-header .india-display {
+      letter-spacing: -0.015em; line-height: 1.04;
+    }
+    .india-side-header .india-display em {
+      font-style: italic; color: var(--gilt);
+      background: linear-gradient(transparent 68%, color-mix(in oklab, var(--gilt) 22%, transparent) 0);
+    }
+
+    /* view buttons: quieter at rest, gilt + lift on hover, confident when active */
+    .ind-btn {
+      transition: background .22s var(--ease-lux), color .22s var(--ease-lux),
+                  box-shadow .22s var(--ease-lux), transform .16s var(--ease-lux);
+    }
+    .ind-btn:hover { transform: translateY(-1px); }
+    .ind-btn.active {
+      box-shadow: 0 2px 0 color-mix(in oklab, var(--gilt) 60%, transparent),
+                  0 8px 20px -10px color-mix(in oklab, var(--gilt) 70%, transparent);
+    }
+
+    /* the map frame: a thin gilt hairline + soft inner depth */
+    #india-map-wrap {
+      border-radius: 14px; overflow: hidden;
+      box-shadow: 0 0 0 1px color-mix(in oklab, var(--gilt) 24%, transparent),
+                  0 24px 60px -30px rgba(60,40,12,.5);
+    }
+    /* legend + readout float as frosted chips */
+    #india-map-legend, #india-map-readout {
+      backdrop-filter: blur(8px) saturate(115%);
+      -webkit-backdrop-filter: blur(8px) saturate(115%);
+      box-shadow: 0 8px 24px -14px rgba(0,0,0,.4);
+      transition: transform .3s var(--ease-lux), box-shadow .3s var(--ease-lux);
+    }
+    #india-map-readout:hover { transform: translateY(-2px); box-shadow: 0 12px 30px -14px rgba(0,0,0,.5); }
+
+    /* search + expand: gilt focus ring */
+    #map-search-input:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px color-mix(in oklab, var(--gilt) 55%, transparent);
+    }
+    #map-expand-btn { transition: transform .2s var(--ease-lux), background .2s; }
+    #map-expand-btn:hover { transform: scale(1.08); }
+
+    /* the reference link → a quiet pill that warms on hover */
+    .india-ref-link {
+      border-radius: 999px; padding: 4px 12px;
+      border: 1px solid color-mix(in oklab, var(--gilt) 30%, transparent);
+      transition: background .22s var(--ease-lux), color .22s, border-color .22s;
+    }
+    .india-ref-link:hover {
+      background: color-mix(in oklab, var(--gilt) 14%, transparent);
+      border-color: var(--gilt);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ind-btn, #india-map-readout, #map-expand-btn, .india-ref-link { transition: none; }
+    }
+  </style>
 </head>
 <body>
 
@@ -130,16 +200,16 @@
       <aside class="india-side-panel">
         <header class="india-side-header">
           <div>
-            <div class="eyebrow">India · state-wise revenue, corruption, GDP</div>
-            <h2 class="display india-display">Who <em>earns</em>. Who <em>leaks</em>. Who <em>gets fed</em>.</h2>
-            <p class="india-side-sub">
+            <div class="eyebrow" data-reveal data-reveal-delay="0">India · state-wise revenue, corruption, GDP</div>
+            <h2 class="display india-display" data-reveal data-reveal-delay="80">Who <em>earns</em>. Who <em>leaks</em>. Who <em>gets fed</em>.</h2>
+            <p class="india-side-sub" data-reveal data-reveal-delay="160">
               Three lenses on India's 28 states + UTs over 10 fiscal years. Tap a state for its 10-year sparkline, governance footprint (IAS strength, state employees, bribe-paid %), and structural pros / cons.
             </p>
           </div>
-          <a class="india-ref-link" href="references.html">Sources ↗</a>
+          <a class="india-ref-link ripple" href="references.html" data-reveal data-reveal-delay="220">Sources ↗</a>
         </header>
 
-        <div class="india-controls">
+        <div class="india-controls" data-reveal data-reveal-delay="240">
           <div class="india-view-group" role="tablist" aria-label="View">
             <button class="ind-btn active" data-view="ownTax">Own revenue</button>
             <button class="ind-btn" data-view="corruption">Corruption %</button>
@@ -197,5 +267,7 @@
   <script src="site-nav.js"></script>
   <script src="share-widget.js"></script>
   <script src="view-switch.js"></script>
+  <!-- House scroll motion: data-reveal / stagger / ripple — reduce-motion safe. -->
+  <script defer src="motion.js"></script>
 </body>
 </html>
