@@ -1,8 +1,8 @@
 {
   "_meta": {
     "purpose": "Aggregated news_items (link + snippet only). moderation=pending until a human approves; auto anchors must be confirmed. See news-timeline-schema.md.",
-    "generated_at": "2026-11-08T18:07:31+00:00",
-    "count": 68426,
+    "generated_at": "2026-11-09T00:20:58+00:00",
+    "count": 68434,
     "safety": "Link-don't-republish; always attributed; lean is third-party aggregation (lean_source); nothing shown until moderation=approved."
   },
   "news_items": [
@@ -876823,6 +876823,30 @@
       "moderation": "pending"
     },
     {
+      "id": "ni_the_hindu_national_cracker_ban_ver_poor_article71681158_ece",
+      "headline": "Thick smog blankets Delhi on Deepavali night, AQI at 20 stations ‘severe’",
+      "outlet": "The Hindu",
+      "outlet_lean": "centre-left",
+      "lean_source": "Multiple published India media-bias assessments classify The Hindu as centre-left; recorded as third-party aggregation, not our judgement.",
+      "outlet_type": "national",
+      "language": "en",
+      "url": "https://www.thehindu.com/news/cities/Delhi/delhi-air-quality-deepavali-cracker-ban-ver-poor/article71681158.ece",
+      "snippet": "The Air Quality Early Warning System (EWS) has forecast that Delhi's air quality is likely to slip into the 'severe' category from November 9 and remain there for the subsequent few days",
+      "published_at": "Sun, 08 Nov 2026 23:03:38 +0530",
+      "ingested_at": "2026-11-09T00:20:58+00:00",
+      "ingest_source": "rss:the_hindu_national",
+      "geo": {
+        "state": "Delhi",
+        "district": "Delhi"
+      },
+      "scheme_ref": null,
+      "official_ref": null,
+      "fiscal_event_ids": [],
+      "anchor_confidence": "auto_suggested",
+      "paywalled": false,
+      "moderation": "pending"
+    },
+    {
       "id": "ni_livemint_news_ed_in_war_on_ukraine_11794157943924_html",
       "headline": "Hacked Records Show 400,000 Russians Killed in War on Ukraine",
       "outlet": "Mint",
@@ -1138687,6 +1138711,30 @@
       "moderation": "pending"
     },
     {
+      "id": "ni_abp_marathi_mr_ee_major_take_aways_marathi_news_1444903",
+      "headline": "Gold Rate: सोन्याच्या दरात घसरण कायम, सोन्याचे दर वाढणार की आणखी घसरणार? जागतिक सुवर्ण परिषदेनं दिले मोठे संकेत",
+      "outlet": "ABP Majha (Marathi)",
+      "outlet_lean": "unknown",
+      "lean_source": "No citable bias assessment for the regional edition; left unknown. Marathi-language — for Maharashtra districts.",
+      "outlet_type": "regional_daily",
+      "language": "mr",
+      "url": "https://marathi.abplive.com/photo-gallery/business/world-gold-council-prediction-gold-rate-in-upcoming-days-check-three-major-take-aways-marathi-news-1444903",
+      "snippet": "Gold Rate: सोन्याचे दर वाढणार की घसरणार? जागतिक सुवर्ण परिषदेनं दिले मोठे संकेत",
+      "published_at": "Mon, 9 Nov 2026 00:01:29 +0530",
+      "ingested_at": "2026-11-09T00:20:58+00:00",
+      "ingest_source": "rss:abp_marathi_mr",
+      "geo": {
+        "state": null,
+        "district": null
+      },
+      "scheme_ref": null,
+      "official_ref": null,
+      "fiscal_event_ids": [],
+      "anchor_confidence": "unanchored",
+      "paywalled": false,
+      "moderation": "pending"
+    },
+    {
       "id": "ni_news18_india_2_day_police_remand_news18_10315506_html",
       "headline": "Delhi PG Collapse: Owner & Wife Sent To Judicial Custody, Son Gets 2-Day Police Remand | News18",
       "outlet": "News18",
@@ -1317646,6 +1317694,150 @@
       "geo": {
         "state": "West Bengal",
         "district": "Kolkata"
+      },
+      "scheme_ref": null,
+      "official_ref": null,
+      "fiscal_event_ids": [],
+      "anchor_confidence": "auto_suggested",
+      "paywalled": false,
+      "moderation": "pending"
+    },
+    {
+      "id": "ni_ndtv_khabar_hi_ar_kya_kare_12300192_publisher_newsstand",
+      "headline": "Somvati Amavasya 2026: साल की अंतिम सोमवती अमावस्या आज, जानें स्नान-दान का शुभ मुहूर्त और धार्मिक महत्व",
+      "outlet": "NDTV Khabar",
+      "outlet_lean": "unknown",
+      "lean_source": "No single citable bias assessment applied to the Hindi edition; left unknown. Hindi-language coverage — powers cross-language blindspot detection.",
+      "outlet_type": "tv",
+      "language": "hi",
+      "url": "https://ndtv.in/faith/somvati-amavasya-2026-date-shubh-muhurat-snan-daan-kartik-amavasya-par-kya-kare-12300192#publisher=newsstand",
+      "snippet": "इस साल कार्तिक महीने की अमावस्या पर सोमवती अमावस्या का संयोग बन रहा है. ये साल की अंतिम सोमवती अमावस्या होगी. यहां जानिए अंतिम सोमवती अमावस्या पर स्नान-दान का शुभ मुहूर्त और धार्मिक महत्व.",
+      "published_at": "Mon, 09 Nov 2026 05:22:14 +0530",
+      "ingested_at": "2026-11-09T00:20:58+00:00",
+      "ingest_source": "rss:ndtv_khabar_hi",
+      "geo": {
+        "state": null,
+        "district": null
+      },
+      "scheme_ref": null,
+      "official_ref": null,
+      "fiscal_event_ids": [],
+      "anchor_confidence": "unanchored",
+      "paywalled": false,
+      "moderation": "pending"
+    },
+    {
+      "id": "ni_ndtv_khabar_hi_ubh_muhurat_12299756_publisher_newsstand",
+      "headline": "Aaj Ka Panchang 9 November 2026: आज सोमवती अमावस्या पर जानें पूजा का शुभ मुहूर्त, राहुकाल, तिथि और पूरे दिन का पंचांग",
+      "outlet": "NDTV Khabar",
+      "outlet_lean": "unknown",
+      "lean_source": "No single citable bias assessment applied to the Hindi edition; left unknown. Hindi-language coverage — powers cross-language blindspot detection.",
+      "outlet_type": "tv",
+      "language": "hi",
+      "url": "https://ndtv.in/faith/aaj-ka-panchang-9-november-2026-somvati-amavasya-date-shubh-ashubh-muhurat-12299756#publisher=newsstand",
+      "snippet": "आज 9 नवंबर 2026, सोमवार का दिन है. आज कार्तिक महीने की अमावस्या तिथि है. सोमवार को अमावस्या पड़ने के कारण इस दिन का धार्मिक महत्व और भी बढ़ जाता है. पढ़ें आज के पंचांग-",
+      "published_at": "Mon, 09 Nov 2026 05:00:04 +0530",
+      "ingested_at": "2026-11-09T00:20:58+00:00",
+      "ingest_source": "rss:ndtv_khabar_hi",
+      "geo": {
+        "state": null,
+        "district": null
+      },
+      "scheme_ref": null,
+      "official_ref": null,
+      "fiscal_event_ids": [],
+      "anchor_confidence": "unanchored",
+      "paywalled": false,
+      "moderation": "pending"
+    },
+    {
+      "id": "ni_the_hindu_national_guts_around_12_shops_article71681226_ece",
+      "headline": "Fire engulfs Jammu’s Nehru Market, guts around 12 shops",
+      "outlet": "The Hindu",
+      "outlet_lean": "centre-left",
+      "lean_source": "Multiple published India media-bias assessments classify The Hindu as centre-left; recorded as third-party aggregation, not our judgement.",
+      "outlet_type": "national",
+      "language": "en",
+      "url": "https://www.thehindu.com/news/national/jammu-and-kashmir/fire-engulfs-jammus-nehru-market-guts-around-12-shops/article71681226.ece",
+      "snippet": "Another blaze was reported in the border district of Kathua, where, a store room at the district police lines went up in flames",
+      "published_at": "Mon, 09 Nov 2026 02:59:17 +0530",
+      "ingested_at": "2026-11-09T00:20:58+00:00",
+      "ingest_source": "rss:the_hindu_national",
+      "geo": {
+        "state": "Jammu & Kashmir",
+        "district": "Jammu"
+      },
+      "scheme_ref": null,
+      "official_ref": null,
+      "fiscal_event_ids": [],
+      "anchor_confidence": "auto_suggested",
+      "paywalled": false,
+      "moderation": "pending"
+    },
+    {
+      "id": "ni_the_hindu_national_rackers_on_deepavali_article71681210_ece",
+      "headline": "Air pollution over 50 times WHO limit in parts of Delhi as people defy ban on firecrackers on Deepavali",
+      "outlet": "The Hindu",
+      "outlet_lean": "centre-left",
+      "lean_source": "Multiple published India media-bias assessments classify The Hindu as centre-left; recorded as third-party aggregation, not our judgement.",
+      "outlet_type": "national",
+      "language": "en",
+      "url": "https://www.thehindu.com/news/cities/Delhi/air-pollution-over-50-times-who-limit-in-parts-of-delhi-as-people-defy-ban-on-firecrackers-on-deepavali/article71681210.ece",
+      "snippet": "The overall air quality of Delhi continued to be in the “very poor” category while many parts of the city continued to reel under “severe” air quality",
+      "published_at": "Mon, 09 Nov 2026 01:01:12 +0530",
+      "ingested_at": "2026-11-09T00:20:58+00:00",
+      "ingest_source": "rss:the_hindu_national",
+      "geo": {
+        "state": "Delhi",
+        "district": "Delhi"
+      },
+      "scheme_ref": null,
+      "official_ref": null,
+      "fiscal_event_ids": [],
+      "anchor_confidence": "auto_suggested",
+      "paywalled": false,
+      "moderation": "pending"
+    },
+    {
+      "id": "ni_the_hindu_national_d_in_yemen_evacuated_article71681203_ece",
+      "headline": "19 Indian seafarers stranded in Yemen evacuated, Embassy says",
+      "outlet": "The Hindu",
+      "outlet_lean": "centre-left",
+      "lean_source": "Multiple published India media-bias assessments classify The Hindu as centre-left; recorded as third-party aggregation, not our judgement.",
+      "outlet_type": "national",
+      "language": "en",
+      "url": "https://www.thehindu.com/news/national/indian-seafarers-stranded-in-yemen-evacuated/article71681203.ece",
+      "snippet": "The evacuation comes days after India said 14 Indian nationals aboard a yacht involved in an incident off the Yemeni coast were safe",
+      "published_at": "Mon, 09 Nov 2026 00:43:45 +0530",
+      "ingested_at": "2026-11-09T00:20:58+00:00",
+      "ingest_source": "rss:the_hindu_national",
+      "geo": {
+        "state": null,
+        "district": null
+      },
+      "scheme_ref": null,
+      "official_ref": null,
+      "fiscal_event_ids": [],
+      "anchor_confidence": "unanchored",
+      "paywalled": false,
+      "moderation": "pending"
+    },
+    {
+      "id": "ni_ndtv_india_en_i_nears_400_12301098_publisher_newsstand",
+      "headline": "Delhi-NCR Chokes On Diwali Night As Smoke Engulfs City, AQI Nears 400",
+      "outlet": "NDTV",
+      "outlet_lean": "centre-left",
+      "lean_source": "Third-party India media-bias aggregations broadly place NDTV's English edition centre-left; recorded as aggregation, not our judgement.",
+      "outlet_type": "tv",
+      "language": "en",
+      "url": "https://www.ndtv.com/india-news/delhi-pollution-delhi-diwali-pollution-delhi-aqi-delhi-aqi-delhi-ncr-chokes-on-diwali-night-as-smoke-engulfs-city-aqi-nears-400-12301098#publisher=newsstand",
+      "snippet": "In the run-up to Diwali, the Commission for Air Quality Management (CAQM) enforced Stage 3 of the Graded Response Action Plan (GRAP) across Delhi-NCR.",
+      "published_at": "Mon, 09 Nov 2026 00:40:11 +0530",
+      "ingested_at": "2026-11-09T00:20:58+00:00",
+      "ingest_source": "rss:ndtv_india_en",
+      "geo": {
+        "state": "Delhi",
+        "district": "Delhi"
       },
       "scheme_ref": null,
       "official_ref": null,
