@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-mauryan theme-light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The tribes that made it — folk design systems of Bharat | Bharat</title>
+  <meta name="description" content="A family of design systems drawn from India's living tribal and folk art — Warli, Gond, Mithila, Pattachitra, Bhil, Saura. Each with its own palette grounded in real pigment, its language and script rendered live, a font pairing, a before→after history, and design ideas. Author: Sinhaankur." />
+  <meta name="robots" content="noindex" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="theme-mauryan.css" />
+  <link rel="stylesheet" href="ds-page.css" />
+  <link rel="stylesheet" href="ds-motion.css" />
+  <style>
+    /* ---- tribe cards: a richer specimen than the system hub card ----
+       Each tribe is a full plate: palette · script · fonts · history · ideas.
+       Painted entirely from tokens + inline swatch colours so it reskins and
+       inherits all of ds-motion.css for free. */
+    .tribes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: var(--sp-5); margin-top: var(--sp-6); }
+    .tribe { border: 1px solid var(--border-strong); border-radius: var(--ds-radius, 10px); overflow: hidden;
+      background: var(--card); display: flex; flex-direction: column;
+      transition: transform .3s var(--ds-ease), box-shadow .3s ease, border-color .2s ease; }
+    .tribe:hover { transform: translateY(-5px); box-shadow: 0 30px 64px -28px color-mix(in srgb, var(--foreground) 55%, transparent); border-color: var(--accent); }
+
+    /* the palette band doubles as the card's header — real pigment names on hover */
+    .tribe .band { display: flex; height: 92px; position: relative; overflow: hidden; }
+    .tribe .band span { flex: 1; position: relative; transition: flex .4s var(--ds-smooth, cubic-bezier(.32,.72,0,1)); }
+    .tribe .band:hover span { flex: .6; }
+    .tribe .band:hover span:hover { flex: 2.4; }
+    .tribe .band span::after { content: attr(data-pig); position: absolute; left: 0; right: 0; bottom: 0;
+      font-family: var(--font-mono); font-size: 9px; letter-spacing: .02em; text-transform: uppercase;
+      padding: 3px 5px; color: #fff; background: color-mix(in srgb, #000 44%, transparent);
+      opacity: 0; transition: opacity .25s ease; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .tribe .band span:hover::after { opacity: 1; }
+    /* the shine sweep from ds-page.css's syscard, reused */
+    .tribe .band::before { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+      background: linear-gradient(115deg, transparent 40%, color-mix(in srgb, #fff 26%, transparent) 50%, transparent 60%);
+      transform: translateX(-120%); transition: transform .7s ease; }
+    .tribe:hover .band::before { transform: translateX(120%); }
+
+    .tribe .body { padding: 1rem 1.15rem 1.2rem; display: flex; flex-direction: column; gap: .55rem; flex: 1; }
+    .tribe .region { font-family: var(--font-mono); font-size: var(--fs-3xs); text-transform: uppercase; letter-spacing: .08em; color: var(--muted-foreground); }
+    .tribe h3 { font-family: var(--font-display); font-weight: 600; font-size: var(--fs-xl); margin: .1rem 0 0; line-height: 1.05; }
+    .tribe .tagline { font-style: italic; font-family: var(--font-italic); color: var(--accent); font-size: var(--fs-sm); margin: 0; }
+    .tribe .hist { font-size: var(--fs-xs); line-height: 1.6; color: var(--muted-foreground); margin: .2rem 0 0; }
+    .tribe .hist b { color: var(--foreground); font-weight: 600; }
+
+    /* the live script specimen — rendered in the real Indic font, big */
+    .tribe .script { margin: .5rem 0; padding: .65rem .7rem; border: 1px dashed var(--border); border-radius: 7px;
+      background: color-mix(in srgb, var(--accent) 5%, var(--card)); }
+    .tribe .script .glyphs { font-size: 1.7rem; line-height: 1.25; color: var(--foreground); }
+    .tribe .script .rom { font-family: var(--font-mono); font-size: var(--fs-3xs); color: var(--muted-foreground); margin-top: .25rem; }
+    .tribe .script .lang { font-family: var(--font-mono); font-size: var(--fs-3xs); text-transform: uppercase; letter-spacing: .06em; color: var(--accent); }
+
+    /* the meta strip: language family · font pairing */
+    .tribe .meta-rows { margin-top: auto; display: grid; gap: .3rem; padding-top: .55rem; border-top: 1px solid var(--border); }
+    .tribe .mrow { display: flex; gap: .5rem; font-size: var(--fs-2xs); line-height: 1.4; }
+    .tribe .mrow .k { font-family: var(--font-mono); font-size: var(--fs-3xs); text-transform: uppercase; letter-spacing: .05em; color: var(--muted-foreground); min-width: 74px; flex: none; padding-top: 1px; }
+    .tribe .mrow .v { color: var(--foreground); }
+    .tribe .mrow .v b { color: var(--accent); font-weight: 600; }
+
+    .tribe .ideas { font-size: var(--fs-2xs); color: var(--muted-foreground); line-height: 1.55; margin: 0; }
+    .tribe .ideas b { color: var(--foreground); }
+
+    @media (max-width: 560px) { .tribes-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div id="site-nav"></div>
+
+  <main class="ds-wrap">
+    <header class="ds-head">
+      <div class="ds-kicker">Indic design systems · the tribes</div>
+      <h1>The tribes that <em>made it</em></h1>
+      <p class="sub">Before the empires, before the temples, there were the <b>Adivasi</b> — India's first peoples, and
+        the first to turn pigment into a visual language. This is a family of design systems drawn from their
+        <b>living folk art</b>: each tribe's own <b>palette</b> (ground from real earth and plant), its <b>language and
+        script</b> rendered here in its own letters, a <b>font pairing</b>, a <b>before → after</b> history of what
+        transpired, and the <b>design ideas</b> we take from it. Not decoration borrowed — India's own grammar,
+        credited to the people who made it.</p>
+      <div class="ds-skins" data-ds-skins="mauryan"></div>
+      <p class="by">Research-grounded; pigment and language notes cite real sources. Systems &amp; authorship ·
+        <b>Sinhaankur</b> ™ / ©. See the <a href="indic-design-systems.html">dynastic family →</a></p>
+      <a class="ds-scrollcue" href="#tribes"><span class="dot"></span> Enter the gallery</a>
+    </header>
+
+    <nav class="ds-toc" aria-label="Sections">
+      <a href="#tribes">The tribes</a>
+      <a href="#family">Language family</a>
+      <a href="#method">Method</a>
+    </nav>
+
+    <!-- THE TRIBES -->
+    <section class="ds-tier" id="tribes">
+      <div class="ds-tier-head"><span class="num">◆</span><h2>The tribes</h2><span class="glossword">palette · script · fonts · history · ideas</span></div>
+      <div class="tribes-grid ds-systems" id="tribes-grid"></div>
+    </section>
+
+    <!-- LANGUAGE FAMILY -->
+    <section class="ds-tier" id="family">
+      <div class="ds-tier-head"><span class="num">§</span><h2>The language family — and what transpired</h2></div>
+      <div class="ds-why">
+        <h3>Three great families, one subcontinent</h3>
+        <p>India's tongues fall into a few deep families. The <b>Indo-Aryan</b> branch (Hindi, Bengali, Marathi,
+          Odia, Gujarati, Punjabi…) arrived with the <b>Indo-European</b> expansion and layered over an older
+          India; it carries the <b>Devanagari / Brahmi</b>-descended scripts. The <b>Dravidian</b> family (Tamil,
+          Telugu, Kannada, Malayalam) is the deep south's own, likely the language of much of the
+          <b>Harappan</b> world. And the <b>Austroasiatic</b> (Munda) family — <b>Santali</b>, Ho, Mundari — is
+          older still on this soil, the tongue of many Adivasi nations, written today in the purpose-made
+          <b>Ol Chiki</b> script.</p>
+        <p><b>What transpired:</b> as Indo-Aryan speech and the Sanskritic world spread, many tribal languages were
+          pushed to the forest and hill margins — and for centuries had <b>no script of their own</b>, their art
+          carrying what writing could not. The twentieth century answered with invented alphabets
+          (<b>Ol Chiki</b> for Santali, 1925; Sorang Sompeng for Sora) and, lately, Unicode — so a Santal child can
+          now read her own language in her own letters. The <b>art never stopped</b>; it was the script that finally
+          caught up. Each card below shows the tribe's language in its <i>own</i> script, live.</p>
+      </div>
+    </section>
+
+    <!-- METHOD -->
+    <section class="ds-tier" id="method">
+      <div class="ds-tier-head"><span class="num">♦</span><h2>Method — a folk tradition, read as a system</h2></div>
+      <div class="ds-why">
+        <h3>Palette, grammar, hand</h3>
+        <p>We read each tradition the way we read a design system: its <b>tokens</b> are the pigments (and they are
+          <i>real</i> — Warli's two-colour white-on-geru, Gond's charcoal-and-chui-mitti); its <b>atoms</b> are the
+          repeating marks (Warli's triangle-body figures, Gond's dot-and-dash fill, Mithila's double outline); its
+          <b>grammar</b> is how those marks fill a wall. We never flatten a sacred tradition into a UI kit — we credit
+          it, source it, and take the <b>design idea</b>, the way the dynastic systems take the discipline of stone or
+          bronze without copying the icon.</p>
+        <p>Pigment and language notes are sourced (Warli &amp; Gond pigment facts verified against published
+          descriptions of each craft). Scripts render in self-hosted <b>Noto</b> Indic fonts already bundled with the
+          site, so the letters are never tofu.</p>
+      </div>
+    </section>
+
+    <p class="ds-foot">The tribes are the first family in the <a href="indic-design-systems.html">Indic design
+      systems</a> project; the dynastic systems (<a href="design-system.html">Mauryan</a>, Gupta, Chola, Rajput) are
+      their formal cousins. Sources: published descriptions of Warli and Gond pigment practice; Ol Chiki / Munda
+      language history. Systems &amp; authorship <b>Sinhaankur</b> ™ / ©.</p>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script>
+  (function () {
+    /* The tribal registry. Every field is grounded:
+       - band[]  : real pigment colours, each with its source name (data-pig)
+       - script  : the tribe's language rendered in its OWN Noto font (.f-*)
+       - family  : Indo-Aryan / Dravidian / Austroasiatic (Munda)
+       - history : before → after / what transpired (kept factual + brief)
+       The cards reuse .ds-systems so ds-motion.css staggers them in on scroll. */
+    var TRIBES = [
+      {
+        name: "Warli", region: "Palghar, Maharashtra · Sahyadri hills",
+        tagline: "two colours, a whole cosmos",
+        band: [["#8a3a24","geru red-ochre ground"],["#f3ece0","rice-paste white"],["#6b2c1b","cow-dung base"],["#c9a24b","turmeric (rare)"]],
+        script: { cls: "f-devanagari", glyphs: "वारली", rom: "vārlī", lang: "Warli · Indo-Aryan (Marathi-adjacent)" },
+        family: "Indo-Aryan", fonts: "Fraunces display · a geometric sans for the figures",
+        history: "<b>Before:</b> women painted white rice-paste figures onto red-ochre mud walls for weddings and harvest — among India's oldest unbroken wall traditions. <b>After:</b> moved from wall to paper and canvas in the 1970s (Jivya Soma Mashe), now a GI-tagged global style.",
+        ideas: "<b>Design idea:</b> extreme restraint — one ink, one ground. Triangle-torso figures = a tiny icon grammar. Proof that a two-token palette can carry an entire world."
+      },
+      {
+        name: "Gond", region: "Patangarh, Madhya Pradesh · central India",
+        tagline: "line, dot & dash — the forest breathing",
+        band: [["#1c1a17","charcoal black"],["#d9a53a","chui-mitti yellow"],["#9c5b2e","gheru brown"],["#b63426","hibiscus red"],["#3f6b3a","leaf green"]],
+        script: { cls: "f-devanagari", glyphs: "गोंडी", rom: "goṇḍī", lang: "Gondi · Dravidian" },
+        family: "Dravidian", fonts: "Rozha One display · Karla for captions",
+        history: "<b>Before:</b> <i>digna</i> and <i>bhittichitra</i> — ritual mud-wall and floor art of the Pardhan Gond, in pigment from charcoal, soil, sap and dung. <b>After:</b> Jangarh Singh Shyam turned it into studio painting in 1980s Bhopal; 'Jangarh Kalam' is now a named school.",
+        ideas: "<b>Design idea:</b> every surface fills with a signature of dots and dashes — a texture token. A vivid multi-hue palette, yet unified by that single fill rhythm."
+      },
+      {
+        name: "Mithila", region: "Madhubani, Bihar · Mithila region",
+        tagline: "the double line that never leaves a gap",
+        band: [["#b4321f","vermilion / sindoor"],["#e8c33b","turmeric yellow"],["#1f5c4d","leaf & bel green"],["#24456e","indigo blue"],["#f1e6cf","rice-paste ground"]],
+        script: { cls: "f-devanagari", glyphs: "मैथिली", rom: "maithilī", lang: "Maithili · Indo-Aryan" },
+        family: "Indo-Aryan", fonts: "Fraunces · Noto Devanagari for Maithili",
+        history: "<b>Before:</b> women of Mithila painted <i>kohbar</i> wedding-chamber walls for centuries, filling every space with nature and deity. <b>After:</b> the 1934 drought and later paper commissions moved it to handmade sheets; now one of India's most recognised folk forms.",
+        ideas: "<b>Design idea:</b> horror vacui as a layout rule — no empty space, a <b>double outline</b> on every shape, and bold fields of saturated natural dye."
+      },
+      {
+        name: "Pattachitra", region: "Raghurajpur, Odisha · Puri",
+        tagline: "cloth-scroll icons in mineral colour",
+        band: [["#c23a1f","hingula red"],["#e7b839","haritala yellow"],["#1c3f6e","indigo"],["#17110c","lamp-black"],["#efe3c6","conch white"]],
+        script: { cls: "f-odia", glyphs: "ଓଡ଼ିଆ", rom: "oḍiā", lang: "Odia · Indo-Aryan" },
+        family: "Indo-Aryan", fonts: "Fraunces · Noto Oriya for the caption line",
+        history: "<b>Before:</b> temple-town painters made <i>pattachitra</i> — cloth scrolls of Jagannath and the epics — in mineral and shell pigments, bound to the Puri temple's ritual calendar. <b>After:</b> Raghurajpur became a living heritage craft village; the form now travels as fine art.",
+        ideas: "<b>Design idea:</b> a strict iconographic grammar — ornate borders, flat figures, no shadow. Everything is outline and fill, like a hand-inked icon set."
+      },
+      {
+        name: "Bhil", region: "western MP, Gujarat, Rajasthan",
+        tagline: "a sky of coloured dots",
+        band: [["#c6391f","red earth"],["#e3a92c","yellow ochre"],["#2f6d8c","sky blue"],["#3d7a3a","green"],["#201b16","charcoal"]],
+        script: { cls: "f-devanagari", glyphs: "भीली", rom: "bhīlī", lang: "Bhili · Indo-Aryan" },
+        family: "Indo-Aryan", fonts: "Rozha One · Karla",
+        history: "<b>Before:</b> the Bhil — one of India's largest Adivasi nations — marked walls with <i>pithora</i> ritual horses and deities for vows and harvest. <b>After:</b> Lado Bai, Bhuri Bai and others brought it to canvas from the 1980s Bharat Bhavan circle.",
+        ideas: "<b>Design idea:</b> fields built entirely from <b>dots</b> — a pointillist fill token. The dots carry colour and texture at once; the figure is the negative space between them."
+      },
+      {
+        name: "Saura / Santal", region: "Odisha & Jharkhand · eastern hills",
+        tagline: "the icon-mural, and a script made on purpose",
+        band: [["#7a2a1c","red-ochre ground"],["#efe7d6","rice-paste white"],["#1c1712","soot black"],["#9c6b2f","earth brown"]],
+        script: { cls: "f-olchiki", glyphs: "ᱚᱞ ᱪᱤᱠᱤ", rom: "ol chiki", lang: "Santali · Austroasiatic (Munda)" },
+        family: "Austroasiatic (Munda)", fonts: "Fraunces · Noto Ol Chiki — a native tribal script",
+        history: "<b>Before:</b> Saura <i>idital</i> wall-icons honoured ancestors in white on red-ochre — and the Munda languages had <b>no script of their own</b>. <b>After:</b> Raghunath Murmu devised <b>Ol Chiki</b> for Santali in 1925; it is now official and in Unicode — the art's missing alphabet, finally written.",
+        ideas: "<b>Design idea:</b> a whole mural as one framed <b>icon</b>, figures woven into a border like a single glyph. The real lesson: a design system can include <b>inventing the writing itself</b>."
+      }
+    ];
+
+    var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
+
+    document.getElementById("tribes-grid").innerHTML = TRIBES.map(function (t) {
+      var band = t.band.map(function (p) {
+        return '<span style="background:' + esc(p[0]) + '" data-pig="' + esc(p[1]) + '"></span>';
+      }).join("");
+      return '<article class="tribe">' +
+        '<div class="band" aria-hidden="true">' + band + '</div>' +
+        '<div class="body">' +
+          '<div class="region">' + esc(t.region) + '</div>' +
+          '<h3>' + esc(t.name) + '</h3>' +
+          '<p class="tagline">' + esc(t.tagline) + '</p>' +
+          '<div class="script">' +
+            '<div class="lang">' + esc(t.script.lang) + '</div>' +
+            '<div class="glyphs ' + esc(t.script.cls) + '">' + esc(t.script.glyphs) + '</div>' +
+            '<div class="rom">' + esc(t.script.rom) + '</div>' +
+          '</div>' +
+          '<p class="hist">' + t.history + '</p>' +
+          '<div class="meta-rows">' +
+            '<div class="mrow"><span class="k">Family</span><span class="v"><b>' + esc(t.family) + '</b></span></div>' +
+            '<div class="mrow"><span class="k">Fonts</span><span class="v">' + esc(t.fonts) + '</span></div>' +
+          '</div>' +
+          '<p class="ideas">' + t.ideas + '</p>' +
+        '</div>' +
+      '</article>';
+    }).join("");
+  })();
+  </script>
+  <script src="ds-page.js"></script>
+  <script src="command-palette.js"></script>
+  <script src="site-nav.js"></script>
+  <script defer src="ambient-sound.js"></script>
+  <script defer src="auto-reveal.js"></script>
+  <script defer src="interactions.js"></script>
+  <script defer src="motion.js"></script>
+</body>
+</html>
