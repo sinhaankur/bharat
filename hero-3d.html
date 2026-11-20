@@ -527,6 +527,11 @@
 
     // ---- the model group ----
     const group = new THREE.Group();
+    // ORIENTATION FIX: the GLB maps lon→+X (east). The hero camera sits on −Z looking
+    // toward +Z (north), and under that view +X points LEFT on screen — so India rendered
+    // MIRRORED (east on the left). Flip the whole group on X so east sits on the right,
+    // as on a real north-up map. (Verified against a labeled top-down GLB render.)
+    group.scale.x = -1;
     scene.add(group);
     let model = null, meshes = [], riverLines = null, modelSpan = 8, districtPts = null;
     let modelBox = null;
