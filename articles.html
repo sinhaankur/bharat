@@ -42,18 +42,16 @@
 
     <div class="ar-list" id="list"><p class="ar-empty">Loading…</p></div>
 
-    <!-- Newsletter: reader revenue beats ads at small scale. Swap the form action
-         for your provider (Substack/Buttondown/Ghost) when you pick one. -->
+    <!-- No mailing list by design: the data is open, so you read the source, not our digest. -->
     <div class="nl">
       <h2>The fiscal brief</h2>
-      <p>A periodic, plain-language note on where India's public money went — which districts, which
-      schemes, what the audits found. No spam; unsubscribe anytime.</p>
-      <form id="nl-form" onsubmit="return nlSubmit(event)">
-        <input type="email" id="nl-email" placeholder="you@email.com" required aria-label="Email" />
-        <button type="submit">Subscribe</button>
-      </form>
-      <div class="note" id="nl-note">Provider not yet connected — replace the form action with your
-      Substack/Buttondown/Ghost embed to start collecting subscribers.</div>
+      <p>There's no mailing list — and no tracking. Where India's public money went is in the open
+      data, district by district, scheme by scheme, with the audit source attached. Read it yourself,
+      or watch the repo for every change.</p>
+      <div class="nl-actions" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:4px">
+        <a class="ed-btn ed-btn--primary" href="data.html">Open the data</a>
+        <a class="ed-btn ed-btn--ghost" href="https://github.com/sinhaankur/bharat" target="_blank" rel="noopener">Watch the repo ↗</a>
+      </div>
     </div>
   </main>
 
@@ -75,12 +73,6 @@
           </div>
         </a>`).join("");
     }).catch(e => document.getElementById("list").innerHTML = `<p class="ar-empty">Load error: ${esc(e.message)}</p>`);
-
-    function nlSubmit(e) {
-      e.preventDefault();
-      document.getElementById("nl-note").textContent = "Thanks! (Connect a newsletter provider to actually capture this — see the comment in the page source.)";
-      return false;
-    }
   </script>
   <script src="command-palette.js"></script>
   <script src="site-nav.js"></script>

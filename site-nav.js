@@ -335,12 +335,12 @@
         <div class="sfoot-news">
           <div>
             <p class="sfoot-news-t">Follow the money to your district.</p>
-            <p class="sfoot-news-s">One email a month — what changed in the data, what got sourced, what's still a gap. No tracking.</p>
+            <p class="sfoot-news-s">No mailing list, no tracking — the data is open. Watch the repo for every change, or read the sources yourself.</p>
           </div>
-          <form class="sfoot-news-form" onsubmit="return false">
-            <input type="email" class="sfoot-input" placeholder="your@email.in" aria-label="Email" />
-            <button type="button" class="sfoot-sub">Subscribe</button>
-          </form>
+          <div class="sfoot-news-form">
+            <a class="sfoot-sub" href="https://github.com/sinhaankur/bharat" target="_blank" rel="noopener">Watch the repo ↗</a>
+            <a class="sfoot-sub sfoot-sub--ghost" href="data.html">Open the data</a>
+          </div>
         </div>
         <div class="sfoot-cols">
           <div class="sfoot-brand">
