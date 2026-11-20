@@ -47,3 +47,23 @@ stays at 0, text sets instantly.
 **Before / after.** Before: eras cross-fade palette only; titles plain-fade. After: each era
 boundary gets a gold ink-bleed chromatic wipe and the era name resolves from scrambled
 glyphs — the igloo "transition + text" demo, in Bharat's iconography.
+
+---
+
+## Phase 3 — Refractive Dharmachakra jewel (advanced rendering)
+
+**What I'm learning.** igloo's "ice" is `MeshPhysicalMaterial` with **transmission** — the
+renderer renders the scene to a backbuffer and the material *refracts* that texture through
+the mesh (the FBO trick), bent by `ior`/`thickness`; `dispersion` splits it into spectral
+fringes; `attenuationColor`/`Distance` tint the glass volume; `clearcoat` adds a wet sheen.
+Transmission is expensive (an extra scene render), so it needs a perf fallback.
+
+**The Bharat build.** `buildJewel()` makes a **24-spoke Dharmachakra** (rim torus + hub +
+24 box spokes) in a transmission physical material (ior 1.6, dispersion 2.2, gold
+attenuation), floating above India as the crest, turning slowly in its own plane, growing in
+at the top and receding as the descent begins. Low-perf devices (`LOW_PERF`) get a matte
+gold wheel instead — same silhouette, no transmission cost. The tilt lays it back toward the
+high camera so all 24 spokes read as a clear chakra, not an edge-on ellipse.
+
+**Before / after.** Before: the hero had no focal emblem. After: a glass Ashoka wheel crowns
+the composition — the refractive "jewel" moment, as our national symbol.
