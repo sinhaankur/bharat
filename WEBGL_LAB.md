@@ -91,3 +91,36 @@ reduced-motion = static form.
 India into the national wheel and then into its cities as you travel the timeline — the
 roadmap's capstone effect, told as Bharat's own story. (Point size reads best on real GPUs;
 SwiftShader under-renders it, so a real-browser tuning pass is noted.)
+
+---
+
+## Phase 5 — Assemble + the capstone (GLB bake, perf, push)
+
+**What I'm learning.** The capstone is *assembly + pipeline*: sequence the demos into one
+scroll so each act reveals one effect, and squeeze the 3D data for the web (igloo's "custom
+exporters"). Our pipeline analog is the Python GLB builder — bake the good look into the
+asset instead of fixing it client-side every load.
+
+**The Bharat build.** (1) Choreography already falls out of the shared `scrollProg`: Lenis
+scroll throughout; the jewel crowns the intro; the transition wipe fires at each boundary;
+the particle morph runs India→chakra→cities across the descent. (2) Rebuilt `india.glb` via
+`build_india_solid_glb.py` with a **baked bronze→gold height palette** (default; the old
+flood-risk class colours remain behind `INDIA_GLB_PALETTE=class`), so the base is good
+everywhere — the client-side override is now just a refinement. (3) Perf: device-tiered
+particle count + transmission (`LOW_PERF`), all layers reduced-motion safe. Pushed live.
+
+**Before / after.** Before: five separate ideas + a muddy base GLB. After: one cohesive,
+igloo-grade Bharat hero on a warm baked landmass — smooth scroll, gold-ink transitions,
+a glass chakra crest, and a particle field that tells the country's story, live.
+
+---
+
+## Where this maps to igloo's actual skill set
+(from the igloo.inc teardown the user shared)
+- **Real-time graphics (Three.js, GLSL):** our transition pass, fresnel rim, glass
+  transmission, particle shader, scramble text — Phases 2–4. ✓
+- **Procedural 3D (Houdini/Blender):** our Blender Ashoka pillar + the Python GLB bake. ✓
+- **Pipeline/exporters:** `build_*_glb.py` squeezing geometry to web GLB. ✓
+- **Front-end (scroll/timelines/perf):** Lenis, the act choreography, perf tiers. ✓
+- **Sound synced to motion:** the hero's synth drone exists; syncing it to the particle
+  morph is the next natural step (noted for a follow-up).

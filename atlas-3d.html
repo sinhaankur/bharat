@@ -120,7 +120,7 @@
     }
 
     // Legend from the sidecar meta so it always matches the model.
-    fetch('india-glb-meta.json').then(r => r.json()).then(meta => {
+    fetch('india-constraint-meta.json').then(r => r.json()).then(meta => {
       const seen = new Set(meta.states.map(s => s.class));
       const order = ['coast-flood','flood','coast','himalayan-hill','northeast-hill','plateau','indo-gangetic-plain','coastal-plain','desert-arid','island','other'];
       document.getElementById('a3-legend').innerHTML =
@@ -129,7 +129,7 @@
         ).join('') + '<span class="a3-leg-item" style="opacity:0.7">· height = coastal + flood + terrain constraint</span>';
     }).catch(() => {});
 
-    new GLTFLoader().load('india.glb', (gltf) => {
+    new GLTFLoader().load('india-constraint.glb', (gltf) => {
       readout.textContent = 'Hover a state · drag to orbit · scroll to zoom';
       const model = gltf.scene;
       // vertex colours are baked into the mesh; enable them
@@ -145,7 +145,7 @@
       model.position.sub(new THREE.Vector3(c.x, box.min.y, c.z));
       scene.add(model);
     }, undefined, (err) => {
-      readout.textContent = 'Could not load india.glb — build it with: python3 build_india_glb.py';
+      readout.textContent = 'Could not load india-constraint.glb — build with: python3 build_india_solid_glb.py';
       console.error(err);
     });
 
