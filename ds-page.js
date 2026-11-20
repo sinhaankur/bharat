@@ -136,6 +136,16 @@
     if (m) linked[m[0]] = true;
   });
   function applySkin(cls) {
+    // crossfade the whole gallery instead of a hard swap: dip saturation/opacity
+    // for one beat while colours cross-tween (house rule: tween on change, never
+    // hard-cut). Reduce-motion: swap instantly, no dip.
+    var wrap = document.querySelector(".ds-wrap");
+    var rm = root.getAttribute("data-reduce-motion") === "1" ||
+      (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    if (wrap && !rm) {
+      wrap.classList.add("ds-skinning");
+      setTimeout(function () { wrap.classList.remove("ds-skinning"); }, 320);
+    }
     root.className = cls;
     // re-render any live token galleries after the skin changes
     renderTokens();
@@ -358,6 +368,93 @@
     window.addEventListener("scroll", sweep, { passive: true });
     window.addEventListener("resize", sweep, { passive: true });
   }
+
+  /* ---------- ATOMS SELF-DEMO ----------
+     Each specimen plays its own interaction ONCE when it scrolls into view:
+     we add .ds-played to its .ds-demo (atoms/molecules) and .ds-spec (token
+     scales), and ds-motion.css drives the staggered pop/rise/grow. Real hover
+     and press take over afterwards. Reduce-motion: tag immediately, no motion. */
+  (function selfDemo() {
+    var demos = Array.prototype.slice.call(document.querySelectorAll(".ds-demo"));
+    var specs = Array.prototype.slice.call(document.querySelectorAll(".ds-spec"));
+    var all = demos.map(function (d) { return { el: d, cls: "ds-played" }; })
+      .concat(specs.map(function (s) { return { el: s, cls: "ds-played" }; }));
+    if (!all.length) return;
+    function play(item) { if (item.el && !item.el.classList.contains(item.cls)) item.el.classList.add(item.cls); }
+    if (reduceMotion || !("IntersectionObserver" in window)) {
+      all.forEach(play); return;
+    }
+    var map = new WeakMap(); all.forEach(function (it) { map.set(it.el, it); });
+    var dio = new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { play(map.get(en.target)); obs.unobserve(en.target); }
+      });
+    }, { rootMargin: "0px 0px -12% 0px", threshold: 0.18 });
+    all.forEach(function (it) { dio.observe(it.el); });
+  })();
+
+  /* ---------- GALLERY CARDS ENTRANCE ----------
+     The system cards rise + stagger in when the grid scrolls into view
+     (ds-motion.css keys off .ds-cards-in on the .ds-systems container). The
+     grid is built by the page's inline script, which may run after us, so we
+     watch for it and re-arm. */
+  (function galleryCardsEntrance() {
+    function arm(grid) {
+      if (!grid || grid.dataset.dsArmed) return;
+      grid.dataset.dsArmed = "1";
+      if (reduceMotion || !("IntersectionObserver" in window)) { grid.classList.add("ds-cards-in"); return; }
+      var fire = function () { grid.classList.add("ds-cards-in"); };
+      var gio = new IntersectionObserver(function (entries, obs) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) { fire(); obs.unobserve(en.target); }
+        });
+      }, { rootMargin: "0px 0px -8% 0px", threshold: 0.1 });
+      gio.observe(grid);
+      // safety net: if the grid is already on-screen (it usually is near the top
+      // of the gallery) or the observer never fires, reveal after a beat so cards
+      // can never stay stuck at opacity:0.
+      setTimeout(function () {
+        if (grid.classList.contains("ds-cards-in")) return;
+        var r = grid.getBoundingClientRect(), vh = window.innerHeight || document.documentElement.clientHeight;
+        if (r.top < vh && r.bottom > 0) fire();
+      }, 400);
+      // absolute backstop: never leave cards invisible for more than ~2.5s.
+      setTimeout(fire, 2500);
+    }
+    var grid = document.querySelector(".ds-systems");
+    if (grid && grid.children.length) { arm(grid); return; }
+    // grid not populated yet — observe for cards being injected, then arm once.
+    if (grid && "MutationObserver" in window) {
+      var mo = new MutationObserver(function () {
+        if (grid.children.length) { arm(grid); mo.disconnect(); }
+      });
+      mo.observe(grid, { childList: true });
+    }
+    // safety net: arm on load regardless
+    window.addEventListener("load", function () { arm(document.querySelector(".ds-systems")); });
+  })();
+
+  /* ---------- HERO MOTIF PARALLAX ----------
+     The full-bleed motif watermark drifts slightly against the scroll — a cheap
+     transform the CSS reads via --ds-par. Reduce-motion: never set it. */
+  (function heroParallax() {
+    if (reduceMotion) return;
+    var motif = document.querySelector(".ds-motif");
+    var head = document.querySelector(".ds-head");
+    if (!motif || !head) return;
+    var parTicking = false;
+    function onScroll() {
+      if (parTicking) return; parTicking = true;
+      window.requestAnimationFrame(function () {
+        var y = window.scrollY || document.documentElement.scrollTop || 0;
+        var h = head.offsetHeight || 1;
+        if (y < h * 1.1) motif.style.setProperty("--ds-par", (y * 0.12).toFixed(1) + "px");
+        parTicking = false;
+      });
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+  })();
 
   // reading-progress bar
   var bar = document.createElement("div");
