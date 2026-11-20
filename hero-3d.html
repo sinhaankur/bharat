@@ -665,7 +665,7 @@
         // size it as a landmark: a touch taller than the relief, readable but not huge
         const bb = new THREE.Box3().setFromObject(pil);
         const h = (bb.max.y - bb.min.y) || 1;
-        const target = modelSpan * 0.42;          // capital height in model units
+        const target = modelSpan * 0.62;          // capital height — tall enough to read as a landmark
         const s = target / h;
         pil.scale.setScalar(s);
         // re-measure after scaling, drop its base to the land surface at Sarnath
@@ -992,6 +992,16 @@
       // explode plates — same guard
       if (Math.abs(sExp - lastExp) > 0.004) { setExplode(sExp); lastExp = sExp; }
 
+      // LAND BRIGHTNESS GUARD: once the warm colour is fully revealed (later acts),
+      // drop the land's self-glow + rim amp so it doesn't bloom into a lightbulb.
+      // Dark early acts keep the glow; bright coloured acts calm down.
+      for (const o of meshes) {
+        if (!o.material) continue;
+        o.material.emissiveIntensity = 0.10 + 0.22 * sGrey;   // 0.32 dark → 0.10 lit
+        const sh = o.material.userData.shader;
+        if (sh && sh.uniforms.uRimAmp) sh.uniforms.uRimAmp.value = 0.35 + 0.35 * sGrey;
+      }
+
       // river stratum: glow in AND lift off the surface as its own layer
       if (riverLines) {
         riverLines.material.opacity = sRiv * 0.95;
@@ -1015,7 +1025,7 @@
           ashokaPillar.traverse(o => {
             if (o.isMesh && o.material) {
               o.material.opacity = er;
-              o.material.emissiveIntensity = 0.15 + 0.55 * er;   // glows at the peak
+              o.material.emissiveIntensity = 0.25 + 0.9 * er;    // glows bright at the peak so it stands out
             }
           });
         }
