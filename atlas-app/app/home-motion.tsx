@@ -35,7 +35,10 @@ export default function HomeMotion() {
     const counters = Array.from(document.querySelectorAll<HTMLElement>('[data-count]'))
     const finalText = (el: HTMLElement) =>
       (+el.dataset.count!).toFixed(+(el.dataset.decimals || 0)) + (el.dataset.suffix || '')
+    const done = new WeakSet<HTMLElement>()
     const run = (el: HTMLElement) => {
+      if (done.has(el)) return
+      done.add(el)
       const target = +el.dataset.count!, dec = +(el.dataset.decimals || 0), suffix = el.dataset.suffix || ''
       const t0 = performance.now(), dur = 1400
       const step = (t: number) => {
@@ -45,16 +48,30 @@ export default function HomeMotion() {
       }
       requestAnimationFrame(step)
     }
+    const inView = (el: HTMLElement) => {
+      const r = el.getBoundingClientRect()
+      return r.top < (innerHeight || document.documentElement.clientHeight) && r.bottom > 0
+    }
     let io: IntersectionObserver | null = null
+    const fallbacks: number[] = []
     if (reduced) counters.forEach((el) => (el.textContent = finalText(el)))
     else {
       io = new IntersectionObserver((entries) => {
         entries.forEach((e) => { if (e.isIntersecting) { run(e.target as HTMLElement); io!.unobserve(e.target) } })
-      }, { threshold: 0.5 })
-      counters.forEach((el) => io!.observe(el))
+      }, { threshold: 0.4 })
+      counters.forEach((el) => {
+        io!.observe(el)
+        // run immediately if already in view on mount (stats near the fold)
+        if (inView(el)) run(el)
+        // safety net: a counter must NEVER stay stuck at 0 — force the value after a beat
+        // whether or not the observer ever fires (covers below-fold, no-scroll, headless).
+        fallbacks.push(window.setTimeout(() => {
+          if (!done.has(el)) { el.textContent = finalText(el) }
+        }, 2600))
+      })
     }
 
-    return () => { timers.forEach(clearTimeout); io?.disconnect() }
+    return () => { timers.forEach(clearTimeout); fallbacks.forEach(clearTimeout); io?.disconnect() }
   }, [])
 
   return null
