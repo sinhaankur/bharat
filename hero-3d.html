@@ -533,6 +533,8 @@
     let coastLine = null, coastMat = null, coastTotalLen = 0;   // the crisp gold coastline
     let cityPts = null, cityData = [];                          // great cities that ignite
     let meridian = null;                                        // the gold meridian sweep
+    let jewel = null, jewelGroup = null;                        // the refractive Dharmachakra (Phase 3)
+    const LOW_PERF = (navigator.hardwareConcurrency || 4) <= 4 || /Mobi|Android/i.test(navigator.userAgent);
 
     // River colour palette (echoes the atlas rivers)
     const RIVER_COLOR = COL.river;
@@ -671,6 +673,60 @@
         transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true });
       cityPts = new THREE.Points(geo, mat);
       group.add(cityPts);
+    }
+
+    // ---- THE JEWEL (Phase 3) — the Dharmachakra as a refractive crystal emblem.
+    // A 24-spoke wheel (rim torus + hub + spokes) in MeshPhysicalMaterial transmission +
+    // dispersion, floating above the land, turning slowly, catching the gold light. It is
+    // the crest of the piece. On low-perf devices it falls back to a matte gold wheel. ----
+    function buildJewel() {
+      jewelGroup = new THREE.Group();
+      const R = modelSpan * 0.2;           // wheel radius
+      const tube = R * 0.055;              // rim thickness
+      const parts = [];
+
+      // rim (torus), hub (small torus), 24 spokes (thin boxes)
+      parts.push(new THREE.Mesh(new THREE.TorusGeometry(R, tube, 24, 120)));
+      parts.push(new THREE.Mesh(new THREE.TorusGeometry(R * 0.16, tube * 1.1, 20, 48)));
+      const spokeGeo = new THREE.BoxGeometry(tube * 0.9, R * 0.82, tube * 0.9);
+      for (let i = 0; i < 24; i++) {
+        const a = (i / 24) * Math.PI * 2;
+        const sp = new THREE.Mesh(spokeGeo);
+        sp.position.set(Math.cos(a) * R * 0.5, Math.sin(a) * R * 0.5, 0);
+        sp.rotation.z = a - Math.PI / 2;
+        parts.push(sp);
+      }
+
+      let mat;
+      if (LOW_PERF) {
+        // matte gold fallback — cheap, still on-brand
+        mat = new THREE.MeshStandardMaterial({ color: 0xe4c069, metalness: 0.9, roughness: 0.25,
+          emissive: 0x3a2a12, emissiveIntensity: 0.4, envMapIntensity: 1.4 });
+      } else {
+        mat = new THREE.MeshPhysicalMaterial({
+          transmission: 1.0, thickness: R * 0.5, ior: 1.6, roughness: 0.05,
+          metalness: 0.0, transparent: true,
+          attenuationColor: new THREE.Color(0xf0cf82), attenuationDistance: R * 1.4,
+          specularIntensity: 1.0, envMapIntensity: 1.6, clearcoat: 1.0, clearcoatRoughness: 0.1,
+          dispersion: 2.2,   // three r160+ supports dispersion on physical material
+          emissive: new THREE.Color(0x120c04), emissiveIntensity: 0.3,
+        });
+      }
+      parts.forEach(m => { m.material = mat; jewelGroup.add(m); });
+
+      // nest: outer group holds position + the upright tilt; inner spins in its own plane
+      const spinner = new THREE.Group();
+      jewelGroup.children.slice().forEach(c => spinner.add(c));
+      jewelGroup.add(spinner);
+      jewelGroup.userData.spinner = spinner;
+      // the wheel is built in the XY plane (faces +Z). The camera sits high on −Z looking
+      // down, so lay the wheel back toward horizontal (normal → up/camera) and the spokes
+      // read as a clear chakra rather than an edge-on ellipse.
+      jewelGroup.rotation.x = -1.15;
+      jewelGroup.position.set(0, modelBox.max.y + modelSpan * 0.72, 0);
+      jewelGroup.scale.setScalar(0.001);      // grows in during the intro
+      jewel = jewelGroup;
+      group.add(jewelGroup);
     }
 
     function buildRivers() {
@@ -837,6 +893,7 @@
 
       buildCoastline();     // the crisp gold identity outline
       buildCities();        // great cities that ignite
+      buildJewel();         // the refractive Dharmachakra crest (Phase 3)
       buildRivers();
       buildDistricts();
       buildAshokaPillar();  // rises at the Mauryan act
@@ -1216,6 +1273,18 @@
       if (!REDUCED) {
         const a = now * 0.00013;
         rim.position.set(Math.cos(a) * 12, 3, Math.sin(a) * 12);
+      }
+      // JEWEL (Phase 3): present at the title/intro beat (acts 0–1.5), turning slowly;
+      // grows in, then recedes as the descent into the eras begins.
+      if (jewel) {
+        const present = Math.max(0, Math.min(1, 1 - (scrollProg - 0.4) / 1.3));  // 1 at top → 0 by act ~1.7
+        const s = 0.0001 + present;                                              // grow from ~0
+        jewel.scale.setScalar(s);
+        jewel.visible = present > 0.01;
+        // spin the inner group in the wheel's own plane (about its face normal)
+        if (!REDUCED && jewel.userData.spinner) jewel.userData.spinner.rotation.z = now * 0.00035;
+        // lift it gently as it recedes so it floats up out of frame
+        jewel.position.y = modelBox.max.y + modelSpan * (0.72 + (1 - present) * 0.5);
       }
       composer.render();
       requestAnimationFrame(loop);
