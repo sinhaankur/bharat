@@ -25,3 +25,25 @@ loop. Reduced-motion → Lenis off, fall back to raw scroll (no change for those
 
 **Before / after.** Before: scroll jumps act-to-act with the OS scroll steps. After: the
 journey eases continuously — the backbone of the igloo feel.
+
+---
+
+## Phase 2 — Shader transition + glyph-scramble title
+
+**What I'm learning.** Two of igloo's signatures. (1) A **full-screen post pass**: after the
+scene renders to a texture (`tDiffuse`), a fragment shader resamples that texture with
+per-pixel *offsets* — shift R/G/B samples apart for a **chromatic split**, and push the UV
+along a **value-noise field** for a displacement "wipe". `fbm`/value-noise is the
+procedural-texture workhorse. (2) **Glyph scramble**: cycle random characters per letter,
+locking them left→right on an ease-out curve, so text "resolves" like a terminal.
+
+**The Bharat build.** A `ShaderPass` (`TransitionShader`) between bloom and output: at rest
+`uAmt=0` (no-op); as scroll crosses an era boundary, `uAmt` bumps up (sin of the fractional
+scroll) and the pass adds an **ink-bleed displacement + RGB split + gold flecks** on the
+noise ridges — our "turning a page of time", not icy frost. The era name in the HUD uses
+`scrambleTo()`, mixing Brahmi/Devanagari + Latin glyphs as it resolves. Reduced-motion: pass
+stays at 0, text sets instantly.
+
+**Before / after.** Before: eras cross-fade palette only; titles plain-fade. After: each era
+boundary gets a gold ink-bleed chromatic wipe and the era name resolves from scrambled
+glyphs — the igloo "transition + text" demo, in Bharat's iconography.

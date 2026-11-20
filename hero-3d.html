@@ -390,6 +390,7 @@
     import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
     import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
     import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+    import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
     // fat-line coastline (crisp on hi-DPI; basic gl.LINES is 1px + jaggy)
     import { Line2 } from 'three/addons/lines/Line2.js';
     import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
@@ -446,6 +447,51 @@
     composer.addPass(new RenderPass(scene, camera));
     const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.32, 0.5, 0.92);
     composer.addPass(bloom);
+
+    // ---- post: era-transition pass (Phase 2) ----
+    // A full-screen shader that, when uAmt pulses up at an era boundary, applies a
+    // chromatic (RGB-split) shear + a gold "ink-bleed" displacement grown from value
+    // noise — our motif for turning a page of time. At rest (uAmt→0) it's a no-op.
+    const TransitionShader = {
+      uniforms: {
+        tDiffuse: { value: null },
+        uAmt:     { value: 0 },        // 0..1 transition intensity
+        uTime:    { value: 0 },
+        uGold:    { value: new THREE.Color(0xf0cf82) },
+        uRes:     { value: new THREE.Vector2(innerWidth, innerHeight) },
+      },
+      vertexShader: `varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
+      fragmentShader: `
+        varying vec2 vUv; uniform sampler2D tDiffuse; uniform float uAmt; uniform float uTime;
+        uniform vec3 uGold; uniform vec2 uRes;
+        // cheap value noise
+        float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1,311.7)))*43758.5453); }
+        float vnoise(vec2 p){ vec2 i=floor(p), f=fract(p); f=f*f*(3.0-2.0*f);
+          float a=hash(i), b=hash(i+vec2(1,0)), c=hash(i+vec2(0,1)), d=hash(i+vec2(1,1));
+          return mix(mix(a,b,f.x), mix(c,d,f.x), f.y); }
+        void main(){
+          vec2 uv = vUv;
+          float amt = uAmt;
+          // ink-bleed displacement field (vertical bias — a page turning)
+          float n = vnoise(uv*vec2(7.0,3.0) + vec2(0.0, uTime*0.15));
+          vec2 disp = vec2((n-0.5), (vnoise(uv*9.0+13.3)-0.5)) * 0.03 * amt;
+          // chromatic split grows with amt
+          float ca = 0.009 * amt;
+          vec2 dir = normalize(uv - 0.5 + 1e-4);
+          vec4 col;
+          col.r = texture2D(tDiffuse, uv + disp + dir*ca).r;
+          col.g = texture2D(tDiffuse, uv + disp).g;
+          col.b = texture2D(tDiffuse, uv + disp - dir*ca).b;
+          col.a = 1.0;
+          // gold ink flecks bloom along the noise ridges during the transition
+          float ridge = smoothstep(0.55, 0.75, n) * amt;
+          col.rgb += uGold * ridge * 0.5;
+          gl_FragColor = col;
+        }`
+    };
+    const transitionPass = new ShaderPass(TransitionShader);
+    composer.addPass(transitionPass);
+
     composer.addPass(new OutputPass());
     (function enableComposerMSAA() {
       const gl = renderer.getContext();
@@ -1089,18 +1135,39 @@
     const hud = document.getElementById('hud');
     const hudIdx = hud.querySelector('.hud-idx'), hudName = hud.querySelector('.hud-name'), hudMeta = hud.querySelector('.hud-meta');
     let hudActive = -1;
+
+    // ---- glyph scramble (Phase 2) — the era name resolves like a terminal, mixing
+    // Brahmi/Devanagari + Latin glyphs, settling left→right. A signature igloo move. ----
+    const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789अआइकखगचटतनपबमयरलवशषसह𑀅𑀖𑀧𑀫𑀭';
+    function scrambleTo(el, text, dur = 620) {
+      if (REDUCED) { el.textContent = text; el.style.opacity = 1; return; }
+      el.style.opacity = 1;
+      const start = performance.now();
+      const rand = () => SCRAMBLE_CHARS[(Math.random() * SCRAMBLE_CHARS.length) | 0];
+      if (el._scrambleRAF) cancelAnimationFrame(el._scrambleRAF);
+      const tick = (now) => {
+        const p = Math.min(1, (now - start) / dur);
+        // ease-out reveal: more characters locked as p grows
+        const locked = Math.floor(text.length * (p < 1 ? (1 - Math.pow(1 - p, 2)) : 1));
+        let out = '';
+        for (let i = 0; i < text.length; i++) {
+          out += i < locked ? text[i] : (text[i] === ' ' ? ' ' : rand());
+        }
+        el.textContent = out;
+        if (p < 1) el._scrambleRAF = requestAnimationFrame(tick);
+        else el.textContent = text;
+      };
+      el._scrambleRAF = requestAnimationFrame(tick);
+    }
+
     function updateRail() {
       const active = Math.round(scrollProg);
       dots.forEach((d, i) => d.classList.toggle('on', i === active));
       if (active !== hudActive && HUD[active]) {
         hudActive = active;
-        hudName.style.opacity = 0;
-        setTimeout(() => {
-          hudIdx.textContent = HUD[active][0];
-          hudName.textContent = HUD[active][1];
-          hudMeta.textContent = HUD[active][2];
-          hudName.style.opacity = 1;
-        }, 180);
+        hudIdx.textContent = HUD[active][0];
+        hudMeta.textContent = HUD[active][2];
+        scrambleTo(hudName, HUD[active][1]);   // the era name resolves via scramble
       }
     }
 
@@ -1119,6 +1186,20 @@
       const dt = (now - t0) / 1000; t0 = now;
       if (lenis) lenis.raf(now);   // advance the smooth-scroll each frame
       update(false);
+
+      // TRANSITION PASS (Phase 2): pulse uAmt up as we cross an era boundary. The frac
+      // part of scrollProg is 0 at an act, 0.5 mid-transition — a smooth bump peaks there.
+      if (!REDUCED && transitionPass) {
+        const frac = scrollProg - Math.floor(scrollProg);
+        const bump = Math.sin(Math.min(1, frac) * Math.PI);   // 0 at acts, 1 mid-transition
+        // only show it in the thick of a transition, and never on the very first act hold
+        const amt = (scrollProg > 0.15 && scrollProg < (NACTS - 1.05)) ? Math.pow(bump, 1.8) * 0.6 : 0;
+        transitionPass.uniforms.uAmt.value += (amt - transitionPass.uniforms.uAmt.value) * 0.2;
+        transitionPass.uniforms.uTime.value = now * 0.001;
+        transitionPass.uniforms.uRes.value.set(innerWidth, innerHeight);
+      } else if (transitionPass) {
+        transitionPass.uniforms.uAmt.value = 0;
+      }
       if (!REDUCED && group && model) {
         // idle yaw + pointer parallax lean, both smoothed
         pmx += (mx - pmx) * 0.05; pmy += (my - pmy) * 0.05;
