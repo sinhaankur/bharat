@@ -319,9 +319,10 @@ html[data-reduce-motion="1"] .snav-cta:hover, html[data-reduce-motion="1"] .sfoo
 .sfoot-news { max-width: 1240px; margin: 0 auto; padding: 34px var(--pad-x); display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; border-bottom: 1px solid color-mix(in srgb, var(--chrome-band) 35%, transparent); }
 .sfoot-news-t { font-family: var(--chrome-display); font-size: 24px; margin: 0; color: var(--chrome-foot-tx); }
 .sfoot-news-s { font-size: 13px; color: rgba(240,230,208,.65); margin: 6px 0 0; max-width: 52ch; }
-.sfoot-news-form { display: flex; }
+.sfoot-news-form { display: flex; gap: 10px; flex-wrap: wrap; }
 .sfoot-input { background: transparent; border: 1.5px solid rgba(240,230,208,.4); color: var(--chrome-foot-tx); padding: 11px 14px; font: 400 14px var(--chrome-ui); min-width: 210px; outline: none; border-radius: 0; }
-.sfoot-sub { background: var(--chrome-band); color: #2a1610; border: 0; padding: 11px 20px; font: 700 14px var(--chrome-ui); cursor: pointer; border-radius: 0; }
+.sfoot-sub { background: var(--chrome-band); color: #2a1610; border: 0; padding: 11px 20px; font: 700 14px var(--chrome-ui); cursor: pointer; border-radius: 0; text-decoration: none; display: inline-flex; align-items: center; }
+.sfoot-sub--ghost { background: transparent; color: var(--chrome-foot-tx); border: 1.5px solid rgba(240,230,208,.4); font-weight: 600; }
 .sfoot-cols { max-width: 1240px; margin: 0 auto; padding: 40px var(--pad-x) 46px; display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 38px 30px; }
 @media (max-width: 760px) { .sfoot-cols { grid-template-columns: 1fr 1fr; } }
 .sfoot-mark { display: inline-flex; align-items: center; gap: 11px; }
