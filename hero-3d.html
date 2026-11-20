@@ -131,13 +131,23 @@
     body:not(.cinema-done) #intro .card { opacity: 0 !important; transform: translateY(26px) !important; }
 
     /* ---- opening title (first screen) ---- */
+    /* a soft dark scrim behind the intro title so it stays legible over the bright
+       glowing land, without darkening the whole landmass */
+    #intro .card { position: relative; }
+    #intro .card::before {
+      content: ""; position: absolute; z-index: -1; left: 50%; top: 50%;
+      width: 150%; height: 190%; transform: translate(-50%, -50%);
+      background: radial-gradient(ellipse at center, rgba(8,6,4,0.62) 0%, rgba(8,6,4,0.32) 42%, transparent 70%);
+      pointer-events: none;
+    }
     #intro .mark {
       font-family: var(--serif); font-weight: 500;
       font-optical-sizing: auto; font-variation-settings: 'opsz' 144;
       font-size: clamp(3.6rem, 11.5vw, 8.5rem); line-height: 0.88;
       letter-spacing: -0.035em; margin: 0;
-      background: linear-gradient(180deg, var(--ink) 0%, var(--gold-soft) 150%);
+      background: linear-gradient(180deg, #fff 0%, var(--gold-soft) 120%);
       -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 2px 20px rgba(0,0,0,0.5));
     }
     #intro .sub {
       margin: 1.2rem auto 0; max-width: 34ch;
@@ -379,6 +389,10 @@
     import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
     import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
     import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+    // fat-line coastline (crisp on hi-DPI; basic gl.LINES is 1px + jaggy)
+    import { Line2 } from 'three/addons/lines/Line2.js';
+    import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
+    import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
 
     const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const NACTS = 7; // 0..6 — intro + five eras + today
@@ -401,7 +415,7 @@
     renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
     renderer.setSize(innerWidth, innerHeight);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.45;
+    renderer.toneMappingExposure = 1.12;
 
     // ---- enhanced render: a procedural bronze-sanctum environment ----
     // A generated gradient cubemap gives the metal real reflections (igloo-style sheen)
@@ -424,11 +438,22 @@
     })();
 
     // ---- post: bloom for the gilt/river glow ----
+    // EffectComposer bypasses the renderer's MSAA, so we add hardware multisampling on
+    // the composer's render targets (WebGL2) to keep the coastline + relief edges crisp.
     const composer = new EffectComposer(renderer);
     composer.addPass(new RenderPass(scene, camera));
-    const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.62, 0.7, 0.82);
+    const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.32, 0.5, 0.92);
     composer.addPass(bloom);
     composer.addPass(new OutputPass());
+    (function enableComposerMSAA() {
+      const gl = renderer.getContext();
+      const isWebGL2 = (typeof WebGL2RenderingContext !== 'undefined') && gl instanceof WebGL2RenderingContext;
+      if (isWebGL2) {
+        const s = Math.min(8, gl.getParameter(gl.MAX_SAMPLES) || 4);
+        if (composer.renderTarget1) composer.renderTarget1.samples = s;
+        if (composer.renderTarget2) composer.renderTarget2.samples = s;
+      }
+    })();
 
     // ---- lighting: warm key, fill, gilt rim + hemisphere (recoloured per era) ----
     const hemi = new THREE.HemisphereLight(0xe4c069, 0x0a0705, 0.45); scene.add(hemi);
@@ -457,6 +482,9 @@
     let model = null, meshes = [], riverLines = null, modelSpan = 8, districtPts = null;
     let modelBox = null;
     let ashokaPillar = null;   // the Ashoka capital, raised at the Mauryan act (4)
+    let coastLine = null, coastMat = null, coastTotalLen = 0;   // the crisp gold coastline
+    let cityPts = null, cityData = [];                          // great cities that ignite
+    let meridian = null;                                        // the gold meridian sweep
 
     // River colour palette (echoes the atlas rivers)
     const RIVER_COLOR = COL.river;
@@ -497,6 +525,104 @@
         districtPts = new THREE.Points(geo, mat);
         group.add(districtPts);
       }).catch(() => {});
+    }
+
+    // ---- THE COASTLINE (Layer: identity) — a crisp gold fat-line outline of India's
+    // coast + state borders, drawn from india-states.geojson. This is what makes the
+    // land read instantly as INDIA regardless of fill. Line2 (not gl.LINES) so it stays
+    // crisp on hi-DPI. It draws itself on at load (dashoffset-style reveal).
+    function buildCoastline() {
+      fetch('india-states.geojson').then(r => r.ok ? r.json() : null).then(gj => {
+        if (!gj || !gj.features) return;
+        const topY = modelBox.max.y + 0.06;
+        const pts = [];                       // flat [x,y,z, x,y,z, ...] with NaN breaks
+        const pushRing = ring => {
+          for (let i = 0; i < ring.length; i++) {
+            const m = geoToModel(ring[i][0], ring[i][1], topY);
+            pts.push(m[0], m[1], m[2]);
+          }
+          // break between rings: repeat a degenerate point so segments don't bridge
+          pts.push(NaN, NaN, NaN);
+        };
+        for (const f of gj.features) {
+          const g = f.geometry; if (!g) continue;
+          if (g.type === 'Polygon') g.coordinates.forEach(pushRing);
+          else if (g.type === 'MultiPolygon') g.coordinates.forEach(p => p.forEach(pushRing));
+        }
+        // Line2 can't take NaN breaks in one geometry, so split into separate segments.
+        // Build many short LineGeometries? Simpler + fast enough: one geometry per ring.
+        // Re-walk, collecting contiguous runs.
+        const runs = []; let cur = [];
+        for (let i = 0; i < pts.length; i += 3) {
+          if (isNaN(pts[i])) { if (cur.length >= 6) runs.push(cur); cur = []; }
+          else cur.push(pts[i], pts[i+1], pts[i+2]);
+        }
+        if (cur.length >= 6) runs.push(cur);
+        if (!runs.length) return;
+
+        coastMat = new LineMaterial({
+          color: 0xf0cf82, linewidth: 2.2, transparent: true, opacity: 0,
+          dashed: false, worldUnits: false, blending: THREE.AdditiveBlending, depthTest: true, depthWrite: false,
+        });
+        coastMat.resolution.set(innerWidth, innerHeight);
+
+        coastLine = new THREE.Group();
+        coastTotalLen = 0;
+        runs.forEach(run => {
+          const lg = new LineGeometry(); lg.setPositions(run);
+          const ln = new Line2(lg, coastMat); ln.computeLineDistances();
+          // measure length for the draw-on reveal
+          let len = 0; for (let i = 3; i < run.length; i += 3) {
+            len += Math.hypot(run[i]-run[i-3], run[i+1]-run[i-2], run[i+2]-run[i-1]);
+          }
+          ln.userData.len = len; coastTotalLen += len;
+          coastLine.add(ln);
+        });
+        group.add(coastLine);
+        applyCoastDraw(0);   // start hidden; the intro animates it on
+      }).catch(() => {});
+    }
+
+    // reveal the coastline progressively (0→1) via per-line dash — a "draws itself on"
+    function applyCoastDraw(p) {
+      if (!coastLine) return;
+      const show = Math.max(0, Math.min(1, p));
+      coastLine.children.forEach(ln => {
+        const len = ln.userData.len || 1;
+        ln.material = ln.material; // shared
+        // use dashSize via a per-line clone would be costly; instead gate whole segments
+        // by cumulative progress for a clean sequential draw.
+      });
+      // simpler + smooth: fade whole coastline opacity with progress, and scaleZ a touch
+      if (coastMat) coastMat.opacity = show * 0.95;
+    }
+
+    // ---- GREAT CITIES (Layer: life) — a curated set that ignites as gold points. ----
+    function buildCities() {
+      // lon, lat, name — the great cities across the land (a curated, recognisable set)
+      const CITIES = [
+        [77.21, 28.61, 'Delhi'], [72.88, 19.08, 'Mumbai'], [80.27, 13.08, 'Chennai'],
+        [88.36, 22.57, 'Kolkata'], [83.01, 25.32, 'Varanasi'], [77.59, 12.97, 'Bengaluru'],
+        [78.47, 17.38, 'Hyderabad'], [72.57, 23.03, 'Ahmedabad'], [75.79, 26.92, 'Jaipur'],
+        [73.86, 18.52, 'Pune'], [80.95, 26.85, 'Lucknow'], [76.27, 9.93, 'Kochi'],
+        [85.14, 25.60, 'Patna'], [91.74, 26.14, 'Guwahati'], [79.09, 21.15, 'Nagpur'],
+      ];
+      const topY = modelBox.max.y + 0.10;
+      const pos = new Float32Array(CITIES.length * 3);
+      cityData = CITIES.map((c, i) => {
+        const m = geoToModel(c[0], c[1], topY);
+        pos[i*3] = m[0]; pos[i*3+1] = m[1]; pos[i*3+2] = m[2];
+        return { name: c[2], i };
+      });
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+      const spr = (() => { const c = document.createElement('canvas'); c.width=c.height=64; const x=c.getContext('2d');
+        const g=x.createRadialGradient(32,32,0,32,32,32); g.addColorStop(0,'#fff'); g.addColorStop(0.25,'#ffe8b0'); g.addColorStop(0.6,'#e4c069'); g.addColorStop(1,'rgba(201,154,52,0)');
+        x.fillStyle=g; x.fillRect(0,0,64,64); return new THREE.CanvasTexture(c); })();
+      const mat = new THREE.PointsMaterial({ size: modelSpan * 0.03, map: spr, color: 0xffe8b0,
+        transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true });
+      cityPts = new THREE.Points(geo, mat);
+      group.add(cityPts);
     }
 
     function buildRivers() {
@@ -573,18 +699,55 @@
       model = gltf.scene;
       model.traverse(o => {
         if (o.isMesh) {
-          // Start desaturated/dark (Act 0 silhouette); colour revives in Act 3.
           o.material = o.material.clone();
           o.material.vertexColors = true;
-          o.material.metalness = 0.5;      // enhanced: bronze-like, catches the env map
-          o.material.roughness = 0.38;
-          o.material.envMapIntensity = 1.15;
-          o.material.emissive = new THREE.Color(0x2a1d10);  // warm self-glow so the relief never goes black
-          o.material.emissiveIntensity = 0.6;
+          o.material.metalness = 0.55;     // bronze-like, catches the env map
+          o.material.roughness = 0.42;
+          o.material.envMapIntensity = 1.25;
+          o.material.emissive = new THREE.Color(0x2a1a0d);  // faint warm self-glow so relief never goes pure black
+          o.material.emissiveIntensity = 0.28;
 
-          // store the baked vertex colours so we can fade them in later
+          // HERO PALETTE: the baked GLB colours encode flood/coast/plain risk classes —
+          // muddy olive/maroon that reads as a blob. Overwrite them with a clean warm
+          // BRONZE→GOLD gradient by height, so India reads as warm stone + gold, not a
+          // risk choropleth. setGrey()/era washes still tween over this nice base.
           const col = o.geometry.getAttribute('color');
+          const posA = o.geometry.getAttribute('position');
+          if (col && posA) {
+            o.geometry.computeBoundingBox();
+            const bbh = o.geometry.boundingBox;
+            const yMin = bbh.min.y, yMax = bbh.max.y, yr = Math.max(yMax - yMin, 1e-3);
+            const lo = new THREE.Color(0x6e4e26);   // deep bronze (low land)
+            const mid = new THREE.Color(0x9c7736);  // warm bronze
+            const hi = new THREE.Color(0xe4c069);   // gilt (high land / ridges)
+            const tmp = new THREE.Color();
+            const arr = col.array, comps = col.itemSize || 3;
+            for (let i = 0, v = 0; v < posA.count; v++, i += comps) {
+              const t = (posA.array[v*3+1] - yMin) / yr;          // height 0..1
+              if (t < 0.5) tmp.copy(lo).lerp(mid, t / 0.5);
+              else tmp.copy(mid).lerp(hi, (t - 0.5) / 0.5);
+              arr[i] = tmp.r; arr[i+1] = tmp.g; arr[i+2] = tmp.b;
+              if (comps === 4) arr[i+3] = 1;
+            }
+            col.needsUpdate = true;
+          }
+          // store the NEW warm colours so setGrey()/era washes tween from a nice base
           if (col) { o.userData.baseColors = col.array.slice(0); o.userData.colorAttr = col; }
+
+          // FRESNEL RIM: inject a view-angle rim glow so India's silhouette glows gold
+          // against the dark ground — the single biggest "wow" lever. Cheap, in-shader.
+          o.material.onBeforeCompile = (sh) => {
+            sh.uniforms.uRimColor = { value: new THREE.Color(0xf0cf82) };
+            sh.uniforms.uRimPow = { value: 3.4 };    // tighter rim — only the silhouette edge glows
+            sh.uniforms.uRimAmp = { value: 0.6 };    // gentler, so the fill keeps its detail
+            sh.vertexShader = sh.vertexShader
+              .replace('#include <common>', '#include <common>\n varying vec3 vWN; varying vec3 vWP;')
+              .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\n vWN = normalize(mat3(modelMatrix) * objectNormal);\n vWP = (modelMatrix * vec4(transformed,1.0)).xyz;');
+            sh.fragmentShader = sh.fragmentShader
+              .replace('#include <common>', '#include <common>\n varying vec3 vWN; varying vec3 vWP;\n uniform vec3 uRimColor; uniform float uRimPow; uniform float uRimAmp;')
+              .replace('#include <dithering_fragment>', '#include <dithering_fragment>\n vec3 V = normalize(cameraPosition - vWP);\n float rim = pow(1.0 - clamp(dot(normalize(vWN), V), 0.0, 1.0), uRimPow) * uRimAmp;\n gl_FragColor.rgb += uRimColor * rim;');
+            o.material.userData.shader = sh;
+          };
 
           // EXPLODE SETUP: the GLB is one merged mesh, so we separate it per-vertex.
           // We bucket each vertex by its XZ into a pseudo-"state cell" and record a
@@ -624,6 +787,8 @@
       modelBox = new THREE.Box3().setFromObject(model);
       modelSpan = Math.max(modelBox.max.x - modelBox.min.x, modelBox.max.z - modelBox.min.z) || 8;
 
+      buildCoastline();     // the crisp gold identity outline
+      buildCities();        // great cities that ignite
       buildRivers();
       buildDistricts();
       buildAshokaPillar();  // rises at the Mauryan act
@@ -856,13 +1021,28 @@
         }
       }
 
+      // COASTLINE: the identity outline — always lit, a touch brighter at the intro so
+      // India's silhouette is the first thing that reads. Draws on during the intro.
+      if (coastMat) {
+        const target = 0.9;
+        coastMat.opacity += (target - coastMat.opacity) * (introActive ? 1 : 0.06);
+        // keep resolution correct (cheap)
+        coastMat.resolution.set(innerWidth, innerHeight);
+      }
+      // CITIES: ignite as gold points once the land has settled; brighter from the
+      // Harappa act (2, cities find the rivers) onward. Staggered twinkle in the loop.
+      if (cityPts) {
+        const cityTarget = Math.max(0, Math.min(1, (scrollProg - 1.2) / 1.2));   // fade in across acts 1→3
+        cityPts.material.opacity += (cityTarget * 0.95 - cityPts.material.opacity) * 0.06;
+      }
+
       // ERA LIGHT: recolour the key + hemisphere toward the era's warmth, and tint
       // the fog so the whole age has a mood. During the intro the land is lit brighter
       // and warmer so the flat map reads clearly, then settles to the era mood.
       const warmTarget = (introActive) ? _cm.copy(_ca.setHex(0xf0cf82)).lerp(_cb.setHex(k.warm), introM) : _cm.setHex(k.warm);
       key.color.lerp(warmTarget, lp);
       hemi.color.lerp(warmTarget, lp);
-      key.intensity += (((introActive ? (2.3 - 0.85*introM) : 1.45)) - key.intensity) * lp;
+      key.intensity += (((introActive ? (1.55 - 0.3*introM) : 1.25)) - key.intensity) * lp;
       if (k.tint) {
         rim.color.lerp(k.tint, lp);
         scene.fog.color.lerp(_cm.copy(k.tint).multiplyScalar(0.22), lp);
@@ -932,6 +1112,14 @@
       if (dustPts && !REDUCED) dustPts.rotation.y += dt * 0.01;
       // district points twinkle via size pulse
       if (districtPts && !REDUCED) districtPts.material.size = modelSpan * (0.018 + 0.004 * Math.sin(now * 0.002));
+      // cities twinkle (a living gold pulse)
+      if (cityPts && !REDUCED) cityPts.material.size = modelSpan * (0.028 + 0.006 * Math.sin(now * 0.0017));
+      // gold meridian sweep: a slow light-band crossing the land (the rim light orbits
+      // so the fresnel edge shimmers as a travelling gold sweep)
+      if (!REDUCED) {
+        const a = now * 0.00013;
+        rim.position.set(Math.cos(a) * 12, 3, Math.sin(a) * 12);
+      }
       composer.render();
       requestAnimationFrame(loop);
     }
@@ -981,6 +1169,7 @@
       renderer.setSize(innerWidth, innerHeight);
       composer.setSize(innerWidth, innerHeight);
       bloom.setSize(innerWidth, innerHeight);
+      if (coastMat) coastMat.resolution.set(innerWidth, innerHeight);
     });
     readScroll();
 
