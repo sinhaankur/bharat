@@ -18,6 +18,7 @@
       { href: "hero.html", text: "One screen (globe app)", hint: "the whole atlas on one screen", icon: "🌍", keywords: "app dashboard everything single screen globe" },
       { href: "state-of-india.html", text: "State of India", hint: "who carries the country — states ranked", icon: "🏛", rail: true, keywords: "states ranked ranking leaderboard richest poorest" },
       { href: "explore.html", text: "Explore / query", hint: "filter & rank all 594 districts", icon: "🔎", rail: true, keywords: "search filter query find rank compare districts data" },
+      { href: "news-journey.html", text: "The News Journey", hint: "a story from promise to delivery — fact vs framing", icon: "🧭", rail: true, keywords: "news journey story chain timeline fiscal event lifecycle sanction delay audit outcome bias fact framing perspective blindspot polarization ground news" },
       { href: "feed.html", text: "News feed", hint: "bias vs the record, by place", icon: "📰", rail: true, keywords: "news media bias headlines events current affairs ground" },
       { href: "timeline.html", text: "Timeline", hint: "events over time", icon: "🕐", keywords: "time history events chronology when" },
     ]},
@@ -101,7 +102,8 @@
      Every page stays reachable. Labels are plain; jargon lives in the hints, not the
      top nav. nav-data.js is the single source → header, drawer, footer, home, search. */
   g.ATLAS_SECTIONS = [
-    { label: "News", href: "feed.html", tagline: "What's happening now — and who's spinning it. The headlines, next to the numbers.", items: [
+    { label: "News", href: "news-journey.html", tagline: "Not a feed — a journey. Each public-money story from promise to delivery, fact vs framing, and who's missing.", items: [
+      { href: "news-journey.html", text: "The News Journey", hint: "a story as a dated rail — fact vs framing, with the blindspot" },
       { href: "feed.html", text: "Today's news", hint: "the headlines, gathered by place" },
       { href: "feed.html#bias", text: "The spin check", hint: "each story, next to the sourced number" },
       { href: "timeline.html", text: "How it built up", hint: "the story over time, event by event" },
