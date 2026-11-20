@@ -377,7 +377,8 @@
     {
       "imports": {
         "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/",
+        "lenis": "./vendor/lenis/lenis.mjs"
       }
     }
   </script>
@@ -393,6 +394,7 @@
     import { Line2 } from 'three/addons/lines/Line2.js';
     import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
     import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
+    import Lenis from 'lenis';   // smooth-damped scroll — the igloo "feel"
 
     const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const NACTS = 7; // 0..6 — intro + five eras + today
@@ -911,9 +913,12 @@
     }
 
     let scrollProg = 0;      // 0..(NACTS-1)
+    let lenis = null;        // smooth-scroll instance (Phase 1)
     function readScroll() {
       const max = document.body.scrollHeight - innerHeight;
-      const p = max > 0 ? scrollY / max : 0;
+      // Prefer Lenis's smoothed scroll (the igloo feel); fall back to raw scrollY.
+      const sy = (lenis && typeof lenis.scroll === 'number') ? lenis.scroll : scrollY;
+      const p = max > 0 ? sy / max : 0;
       scrollProg = p * (NACTS - 1);
       updateRail();
     }
@@ -1112,6 +1117,7 @@
     let t0 = performance.now();
     function loop(now) {
       const dt = (now - t0) / 1000; t0 = now;
+      if (lenis) lenis.raf(now);   // advance the smooth-scroll each frame
       update(false);
       if (!REDUCED && group && model) {
         // idle yaw + pointer parallax lean, both smoothed
@@ -1171,6 +1177,21 @@
       sndBtn.classList.toggle('on', on);
       sndBtn.querySelector('.snd-label').textContent = on ? 'Sound on' : 'Sound';
     });
+
+    // ---- Lenis smooth scroll (Phase 1 — the igloo backbone) ----
+    // Eases a virtual scroll position each frame; we read lenis.scroll in readScroll().
+    // Disabled under reduced-motion so those users get plain native scroll.
+    if (!REDUCED) {
+      try {
+        lenis = new Lenis({
+          lerp: 0.085,              // damping — lower = smoother/slower settle
+          wheelMultiplier: 0.9,
+          smoothWheel: true,
+          syncTouch: true,
+        });
+        lenis.on('scroll', readScroll);
+      } catch (e) { lenis = null; console.warn('Lenis unavailable, native scroll:', e); }
+    }
 
     // ---- events ----
     addEventListener('scroll', readScroll, { passive: true });
