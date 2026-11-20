@@ -76,6 +76,7 @@
       { href: "indic-design-systems.html", text: "Indic design systems", hint: "the family — Mauryan, Gupta, Chola, Rajput… one atomic spine, many heritages", icon: "🪷", keywords: "indic design systems family atomic mauryan gupta chola rajput heritage tokens skins per state sinhaankur" },
       { href: "design-system.html", text: "Design system — Mauryan", hint: "the flagship atomic reference: tokens, atoms, molecules, organisms, templates", icon: "🎨", keywords: "design system brand style guide tokens colors components ui ux theme atomic mauryan reference cookbook" },
       { href: "tribes.html", text: "The tribes that made it", hint: "folk design systems — Warli, Gond, Mithila, Pattachitra, Bhil, Saura — palette, script, fonts, history", icon: "🪶", keywords: "tribes tribal adivasi folk art warli gond madhubani mithila pattachitra bhil saura santal ol chiki palette pigment language script fonts austroasiatic munda dravidian indo-aryan" },
+      { href: "social-fabric.html", text: "The social fabric", hint: "the people of Ashoka's India — priest, merchant, guild (shreni), artisan, farmer, soldier, officer — role, term, tools, trade", icon: "🧑‍🌾", keywords: "social fabric society mauryan ashoka people varna jati shreni guild merchant shreshthin priest brahmana artisan karu farmer kshaka soldier kshatriya adhyaksha officer megasthenes arthashastra seven classes trade occupation" },
       { href: "app/design-systems/", text: "India by Design Systems", hint: "the flagship deck — one chassis, many Indias (Indic skins)", icon: "🪷", ext: true, keywords: "indic design systems flagship skins states chassis modernist segment lattice" },
       { href: "app/canvas/", text: "The canvas", hint: "every screen of the atlas, one deck", icon: "🗂", ext: true, keywords: "canvas mockups deck every screen design pages map" },
       { href: "about.html", text: "Methodology & disclaimer", icon: "📋", keywords: "about methodology disclaimer legal how method" },
@@ -154,6 +155,7 @@
         { href: "app/design-systems/#gallery", text: "The gallery", hint: "walk the systems, plate by plate", ext: true },
         { href: "indic-design-systems.html", text: "The family", hint: "Mauryan · Gupta · Chola · Rajput" },
         { href: "tribes.html", text: "The tribes that made it", hint: "Warli · Gond · Mithila · Pattachitra · Bhil · Saura" },
+        { href: "social-fabric.html", text: "The social fabric", hint: "Ashoka's India — priest, merchant, guild, artisan, farmer, soldier, officer" },
         { href: "design-system.html", text: "Atomic reference", hint: "tokens → templates" },
       ] },
       { href: "about.html", text: "Methodology & honesty", hint: "the sourced-or-gap rule, and the limits", children: [

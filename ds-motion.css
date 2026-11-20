@@ -187,21 +187,24 @@
 .ds-systems.ds-cards-in .ds-syscard:nth-child(n+9) { animation-delay: .62s; }
 @keyframes dsCardRise { to { opacity: 1; transform: none; } }
 
-/* tribe cards (tribes.html) ride the same staggered entrance */
-.ds-systems .tribe { opacity: 0; transform: translateY(26px); }
-.ds-systems.ds-cards-in .tribe { animation: dsCardRise .7s var(--ds-expo) both; }
-.ds-systems.ds-cards-in .tribe:nth-child(1) { animation-delay: .00s; }
-.ds-systems.ds-cards-in .tribe:nth-child(2) { animation-delay: .08s; }
-.ds-systems.ds-cards-in .tribe:nth-child(3) { animation-delay: .16s; }
-.ds-systems.ds-cards-in .tribe:nth-child(4) { animation-delay: .24s; }
-.ds-systems.ds-cards-in .tribe:nth-child(5) { animation-delay: .32s; }
-.ds-systems.ds-cards-in .tribe:nth-child(6) { animation-delay: .40s; }
-.ds-systems.ds-cards-in .tribe:nth-child(n+7) { animation-delay: .46s; }
+/* tribe cards (tribes.html) + role cards (social-fabric.html) ride the same
+   staggered entrance */
+.ds-systems .tribe, .ds-systems .role { opacity: 0; transform: translateY(26px); }
+.ds-systems.ds-cards-in .tribe,
+.ds-systems.ds-cards-in .role { animation: dsCardRise .7s var(--ds-expo) both; }
+.ds-systems.ds-cards-in .tribe:nth-child(1), .ds-systems.ds-cards-in .role:nth-child(1) { animation-delay: .00s; }
+.ds-systems.ds-cards-in .tribe:nth-child(2), .ds-systems.ds-cards-in .role:nth-child(2) { animation-delay: .08s; }
+.ds-systems.ds-cards-in .tribe:nth-child(3), .ds-systems.ds-cards-in .role:nth-child(3) { animation-delay: .16s; }
+.ds-systems.ds-cards-in .tribe:nth-child(4), .ds-systems.ds-cards-in .role:nth-child(4) { animation-delay: .24s; }
+.ds-systems.ds-cards-in .tribe:nth-child(5), .ds-systems.ds-cards-in .role:nth-child(5) { animation-delay: .32s; }
+.ds-systems.ds-cards-in .tribe:nth-child(6), .ds-systems.ds-cards-in .role:nth-child(6) { animation-delay: .40s; }
+.ds-systems.ds-cards-in .tribe:nth-child(n+7), .ds-systems.ds-cards-in .role:nth-child(n+7) { animation-delay: .46s; }
 
 /* the colour band breathes — each stripe drifts in brightness very slowly, out
    of phase, so the palette feels like pigment catching light. */
 .ds-syscard .band span,
-.tribe .band span { animation: dsBandBreathe 9s ease-in-out infinite; }
+.tribe .band span,
+.role .band span { animation: dsBandBreathe 9s ease-in-out infinite; }
 .ds-syscard .band span:nth-child(2) { animation-delay: -2.2s; }
 .ds-syscard .band span:nth-child(3) { animation-delay: -4.4s; }
 .ds-syscard .band span:nth-child(4) { animation-delay: -6.6s; }
@@ -253,13 +256,14 @@
   .ds-spec.ds-played .ds-sw,
   .ds-systems.ds-cards-in .ds-syscard,
   .ds-systems.ds-cards-in .tribe,
-  .ds-syscard .band span, .tribe .band span,
+  .ds-systems.ds-cards-in .role,
+  .ds-syscard .band span, .tribe .band span, .role .band span,
   .ds-tier.is-revealed .ds-tier-head .num {
     animation: none !important;
   }
   .ds-wrap .will-reveal { transition: opacity .4s ease; transform: none; }
   .ds-head > *:not(.ds-motif):not(.ds-seal), .ds-scrollcue { opacity: 1; transform: none; }
-  .ds-systems .ds-syscard, .ds-systems .tribe { opacity: 1; transform: none; }
+  .ds-systems .ds-syscard, .ds-systems .tribe, .ds-systems .role { opacity: 1; transform: none; }
   .ds-motif { transform: none !important; }
 }
 html[data-reduce-motion="1"] .ds-seal,
@@ -276,8 +280,10 @@ html[data-reduce-motion="1"] .ds-spec.ds-played .ds-scale .box,
 html[data-reduce-motion="1"] .ds-spec.ds-played .ds-sw,
 html[data-reduce-motion="1"] .ds-systems.ds-cards-in .ds-syscard,
 html[data-reduce-motion="1"] .ds-systems.ds-cards-in .tribe,
+html[data-reduce-motion="1"] .ds-systems.ds-cards-in .role,
 html[data-reduce-motion="1"] .ds-syscard .band span,
 html[data-reduce-motion="1"] .tribe .band span,
+html[data-reduce-motion="1"] .role .band span,
 html[data-reduce-motion="1"] .ds-tier.is-revealed .ds-tier-head .num {
   animation: none !important;
 }
@@ -285,6 +291,7 @@ html[data-reduce-motion="1"] .ds-wrap .will-reveal { transition: opacity .4s eas
 html[data-reduce-motion="1"] .ds-head > *:not(.ds-motif):not(.ds-seal),
 html[data-reduce-motion="1"] .ds-scrollcue,
 html[data-reduce-motion="1"] .ds-systems .ds-syscard,
-html[data-reduce-motion="1"] .ds-systems .tribe { opacity: 1; transform: none; }
+html[data-reduce-motion="1"] .ds-systems .tribe,
+html[data-reduce-motion="1"] .ds-systems .role { opacity: 1; transform: none; }
 html[data-reduce-motion="1"] .ds-motif { transform: none !important; }
 html[data-reduce-motion="1"] .ds-wrap.ds-skinning { filter: none; }
