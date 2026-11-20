@@ -588,6 +588,9 @@ def do_pillar():
         ("chakra",  lambda: p_crowning_chakra(SHAFT_H + BELL_H + ABA_H + LION_H)),
     ]
     n = len(stages)
+    # Match the temple-forms convention: export EVERY cumulative stage as _s1.._sN
+    # AND the finished model as the plain glb (so the viewer's stage 0..N maps to
+    # _s1.._sN then the full model — no off-by-one).
     for k in range(1, n + 1):
         wipe()
         objs = []
@@ -595,7 +598,9 @@ def do_pillar():
             objs += fn()
         whole = join(objs, "ashoka_pillar")
         normalise(whole, target_h=12.0)
-        export(whole, "ashoka_pillar" if k == n else f"ashoka_pillar_s{k}")
+        export(whole, f"ashoka_pillar_s{k}")
+        if k == n:
+            export(whole, "ashoka_pillar")   # the finished full model too
 
 
 def do_capital():

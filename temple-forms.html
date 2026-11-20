@@ -191,6 +191,9 @@
 
     // The six archetypes: model file + description + defining features + orientation.
     const TYPES = [
+      { id: "ashoka_pillar", icon: "🦁", name: "Ashokan stambha", sub: "Mauryan pillar + lion capital", facing: "cardinal",
+        blurb: "The earliest Indian monumental type here (3rd c. BCE): a single polished Chunar-sandstone shaft ~15.25 m tall set straight in the earth with no base, crowned by the bell (inverted-lotus) capital, an abacus of four animals and four wheels, and four addorsed Asiatic lions. The crowning Dharmachakra is lost; shown reconstructed. The capital is India's State Emblem.",
+        features: ["Monolithic shaft, gentle taper Ø0.71 m → Ø0.56 m, Mauryan mirror polish", "Campaniform inverted-lotus (padma) bell capital", "Abacus: lion · elephant · bull · horse, each split by a 24-spoke chakra", "Four addorsed Asiatic lions facing the four quarters", "Crowning 32-spoke Dharmachakra — now lost, reconstructed here"] },
       { id: "nagara", icon: "🛕", name: "Nagara", sub: "N-India shikhara", facing: "east",
         blurb: "The North-Indian style: a curvilinear beehive tower (shikhara) rising over the sanctum (garbhagriha), crowned by a ribbed amalaka disc and a kalasha finial.",
         features: ["Curvilinear shikhara — a smooth vertical curve to the peak", "Amalaka (ribbed stone disc) + kalasha (pot finial) on top", "Mandapa (pillared porch) projecting toward the entrance", "Sanctum is a small dark cella; height, not interior space, is the point"] },
@@ -260,6 +263,13 @@
 
     // ── construction sequences: how each marvel is built, stage by stage, with the math ──
     const STAGES = {
+      ashoka_pillar: [
+        { part: "Monolithic shaft", how: "A single block of fine Chunar sandstone is cut, dressed to a gentle upward taper, polished to the Mauryan mirror finish, hauled to the site and set straight into the earth — no base or pedestal.", math: "A slight cone: Ø 0.71 m at the base → Ø 0.56 m at the top over ~15.25 m. Set in the ground so the shaft seems to grow from the earth." },
+        { part: "Bell (lotus) capital", how: "Atop the shaft sits the campaniform bell — a downturned (inverted) lotus, its narrow neck meeting the shaft and flaring out to seat the abacus.", math: "A concave lathe profile: radius r = neck + (lip−neck)·t^1.7 — the lotus's accelerating flare, ~0.61 m high." },
+        { part: "Abacus drum", how: "A round slab is set on the bell, carved in relief with four animals — lion, elephant, bull, horse — each separated by a 24-spoke Dharmachakra.", math: "A cylinder Ø 0.86 m, 0.34 m high. Four animals on the axes, four wheels at 45° between them — eightfold radial symmetry." },
+        { part: "Four lions", how: "Four Asiatic lions are carved back-to-back (addorsed) on the abacus, each facing one of the four quarters, manes rendered as rows of flame-like locks.", math: "Four-fold rotational symmetry (90° apart); each lion ≈ 1.1 m, haunches meeting at the central axis." },
+        { part: "Crowning wheel (lost)", how: "A great Dharmachakra once crowned the lions, seated in a square dowel-slot still visible on the abacus top. It is lost; shown here reconstructed.", math: "A 32-spoke wheel — the Ashoka Chakra — mounted horizontally on the lions' backs. Reconstruction, not original stone." }
+      ],
       nagara: [
         { part: "Jagati (plinth)", how: "A raised stone platform is laid, squared to the cardinal directions on a vastu-purusha-mandala grid.", math: "Plan = a square grid (mandala); the sanctum sits on the central pada (brahmasthana)." },
         { part: "Garbhagriha (sanctum)", how: "The small dark cube of the womb-chamber is raised over the deity — thick walls, tiny interior.", math: "A cube: side ≈ the base module. The doorway is set on the east axis." },
