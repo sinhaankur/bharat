@@ -1,0 +1,274 @@
+/* ds-motion.css — the house motion layer for the Indic design-system pages.
+   Author: Sinhaankur. Load AFTER ds-page.css.
+
+   This translates the ~20 motion details used across sinhaankur.com into CSS for
+   these plain-HTML pages. The whole site shares ONE physics (see MOTION_SYSTEM.md):
+
+     --ds-expo  : cubic-bezier(.16, 1, .3, 1)   the house ease (expo-out) — reveals
+     --ds-smooth: cubic-bezier(.32,.72, 0, 1)   slower in-out — hero / big moves
+     --ds-ease  : spring (from ds-page.css)     playful pop — chips, cards, pins
+
+   Rules we never break:
+     • fast in, gentle out · one focal change · stagger siblings
+     • only GPU-cheap props animate (opacity, transform) — never width/height/top/left
+     • everything honours prefers-reduced-motion AND the a11y flag [data-reduce-motion="1"]
+   Under reduce-motion, content still APPEARS (opacity) but all transforms/loops drop.
+   ============================================================ */
+
+.ds-wrap {
+  --ds-expo: cubic-bezier(.16, 1, .3, 1);
+  --ds-smooth: cubic-bezier(.32, .72, 0, 1);
+  /* --ds-ease (spring) comes from ds-page.css; keep a fallback just in case */
+  --ds-ease: var(--ease-spring, cubic-bezier(.2, .9, .3, 1.2));
+}
+
+/* ============================================================
+   1 · HERO — the title wall comes alive
+   ============================================================ */
+
+/* 1a. The seal medallion slowly draws itself in on load, then breathes.
+   It's a line-drawing, so we animate stroke-dashoffset (draw-on) + a very slow
+   rotation. Low-key: this is a watermark, not a spinner. */
+.ds-seal svg { --ds-seal-rot: 0deg; }
+.ds-seal svg [stroke] {
+  stroke-dasharray: 1200;
+  stroke-dashoffset: 1200;
+  animation: dsSealDraw 2.4s var(--ds-expo) .2s forwards;
+}
+.ds-seal {
+  animation: dsSealSpin 120s linear infinite;
+  transform-origin: 50% 50%;
+}
+@keyframes dsSealDraw { to { stroke-dashoffset: 0; } }
+@keyframes dsSealSpin { to { transform: rotate(360deg); } }
+
+/* 1b. The motif watermark drifts with scroll (parallax) — ds-page.js sets
+   --ds-par; here we just apply it cheaply via transform. A faint shimmer sweeps
+   across it on load so the wall feels mounted, not printed. */
+.ds-motif { will-change: transform; transform: translate3d(0, var(--ds-par, 0px), 0); }
+.ds-motif svg [stroke] {
+  stroke-dasharray: 2400; stroke-dashoffset: 2400;
+  animation: dsMotifDraw 3.2s var(--ds-expo) .35s forwards;
+}
+@keyframes dsMotifDraw { to { stroke-dashoffset: 0; } }
+
+/* 1c. Hero text rises in on load, one focal line at a time (kicker → title →
+   lede → plate → skins → by). Enter quickly, settle softly. */
+.ds-head > *:not(.ds-motif):not(.ds-seal):not(.ds-scrollcue) {
+  opacity: 0; transform: translateY(18px);
+  animation: dsHeroRise .8s var(--ds-expo) both;
+}
+.ds-head .ds-kicker, .ds-head .eyebrow { animation-delay: .05s; }
+.ds-head h1 { animation-delay: .14s; }
+.ds-head .sub { animation-delay: .26s; }
+.ds-head .ds-plate { animation-delay: .36s; }
+.ds-head .ds-skins { animation-delay: .44s; }
+.ds-head .by { animation-delay: .52s; }
+.ds-scrollcue { opacity: 0; animation: dsFadeIn .6s var(--ds-expo) .9s forwards; }
+@keyframes dsHeroRise { to { opacity: 1; transform: none; } }
+@keyframes dsFadeIn { to { opacity: 1; } }
+
+/* ============================================================
+   2 · REVEAL — the site's rise-in, as the house expo ease
+   (ds-page.js tags sections .will-reveal → .is-revealed; we style it here so
+   the whole gallery breathes on the SAME curve as sinhaankur.com.)
+   ============================================================ */
+.ds-wrap .will-reveal {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity .7s var(--ds-expo), transform .7s var(--ds-expo);
+}
+.ds-wrap .will-reveal.is-revealed { opacity: 1; transform: none; }
+
+/* ============================================================
+   3 · ATOMS SELF-DEMO — each specimen plays its own interaction once, when it
+   scrolls into view (ds-page.js adds .ds-played to the enclosing .ds-demo).
+   Then real hover/press takes over. This is the heart of "the atoms are alive".
+   ============================================================ */
+
+/* 3a. Buttons: ripple-flash in, staggered left→right. The press ripple itself is
+   the real :active state below. */
+.ds-demo.ds-played .ed-btn {
+  animation: dsPopIn .5s var(--ds-ease) both;
+}
+.ds-demo.ds-played .ed-btn:nth-child(1) { animation-delay: .00s; }
+.ds-demo.ds-played .ed-btn:nth-child(2) { animation-delay: .06s; }
+.ds-demo.ds-played .ed-btn:nth-child(3) { animation-delay: .12s; }
+.ds-demo.ds-played .ed-btn:nth-child(4) { animation-delay: .18s; }
+
+/* real button feel — press scales to .97 with an inset (house gesture) */
+.ds-demo .ed-btn { transition: transform .12s var(--ds-expo), box-shadow .2s var(--ds-expo), filter .2s ease; }
+.ds-demo .ed-btn:hover:not([disabled]) { transform: translateY(-1px); }
+.ds-demo .ed-btn:active:not([disabled]) { transform: scale(.97); }
+
+/* 3b. Badges / tags / chips: spring-pop in, staggered. */
+.ds-demo.ds-played .ds-badge,
+.ds-demo.ds-played .ed-tag,
+.ds-demo.ds-played .ds-chip {
+  animation: dsPopIn .5s var(--ds-ease) both;
+}
+.ds-demo.ds-played .ds-badge:nth-child(1), .ds-demo.ds-played .ed-tag:nth-child(1), .ds-demo.ds-played .ds-chip:nth-child(1) { animation-delay: .00s; }
+.ds-demo.ds-played .ds-badge:nth-child(2), .ds-demo.ds-played .ed-tag:nth-child(2), .ds-demo.ds-played .ds-chip:nth-child(2) { animation-delay: .05s; }
+.ds-demo.ds-played .ds-badge:nth-child(3), .ds-demo.ds-played .ed-tag:nth-child(3), .ds-demo.ds-played .ds-chip:nth-child(3) { animation-delay: .10s; }
+.ds-demo.ds-played .ds-badge:nth-child(4), .ds-demo.ds-played .ed-tag:nth-child(4), .ds-demo.ds-played .ds-chip:nth-child(4) { animation-delay: .15s; }
+.ds-demo.ds-played .ds-badge:nth-child(n+5), .ds-demo.ds-played .ed-tag:nth-child(n+5), .ds-demo.ds-played .ds-chip:nth-child(n+5) { animation-delay: .20s; }
+
+/* chip toggle feel on hover (spring) */
+.ds-demo .ds-chip { transition: transform .2s var(--ds-ease), background-color .2s ease, color .2s ease; }
+.ds-demo .ds-chip:hover { transform: translateY(-2px); }
+
+/* 3c. Inputs / checks: rise + fade, staggered down the column. */
+.ds-demo.ds-played .ds-input,
+.ds-demo.ds-played .ds-check,
+.ds-demo.ds-played textarea,
+.ds-demo.ds-played select {
+  animation: dsRiseIn .55s var(--ds-expo) both;
+}
+.ds-demo.ds-played .ds-demo-stage > *:nth-child(1) { animation-delay: .00s; }
+.ds-demo.ds-played .ds-demo-stage > *:nth-child(2) { animation-delay: .07s; }
+.ds-demo.ds-played .ds-demo-stage > *:nth-child(3) { animation-delay: .14s; }
+.ds-demo.ds-played .ds-demo-stage > *:nth-child(4) { animation-delay: .21s; }
+
+/* focus ring blooms (house: never hide the affordance, just make it feel alive) */
+.ds-demo .ds-input, .ds-demo textarea, .ds-demo select {
+  transition: border-color .2s var(--ds-expo), box-shadow .25s var(--ds-expo); }
+
+@keyframes dsPopIn { from { opacity: 0; transform: translateY(8px) scale(.94); } to { opacity: 1; transform: none; } }
+@keyframes dsRiseIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+/* 3d. Token scales draw themselves: spacing boxes grow from zero width, radius
+   boxes round in, elevation lifts. All transform-based (scaleX), never width. */
+.ds-spec.ds-played .ds-scale .box { transform-origin: left center; animation: dsGrowX .6s var(--ds-expo) both; }
+.ds-spec.ds-played .ds-scale .item:nth-child(1) .box { animation-delay: .00s; }
+.ds-spec.ds-played .ds-scale .item:nth-child(2) .box { animation-delay: .05s; }
+.ds-spec.ds-played .ds-scale .item:nth-child(3) .box { animation-delay: .10s; }
+.ds-spec.ds-played .ds-scale .item:nth-child(4) .box { animation-delay: .15s; }
+.ds-spec.ds-played .ds-scale .item:nth-child(n+5) .box { animation-delay: .20s; }
+.ds-spec.ds-played .ds-scale .ebox { animation: dsPopIn .55s var(--ds-ease) both; }
+@keyframes dsGrowX { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* 3e. Swatch chips flip up in a gentle cascade when the token room appears. */
+.ds-spec.ds-played .ds-sw { animation: dsPopIn .5s var(--ds-ease) both; }
+.ds-spec.ds-played .ds-sw:nth-child(3n+1) { animation-delay: .00s; }
+.ds-spec.ds-played .ds-sw:nth-child(3n+2) { animation-delay: .06s; }
+.ds-spec.ds-played .ds-sw:nth-child(3n+3) { animation-delay: .12s; }
+
+/* ============================================================
+   4 · LINKS — underline sweep left→right (house detail #6)
+   Applies to in-prose links and the "Open →" card meta.
+   ============================================================ */
+.ds-why a, .ds-story a, .ds-foot a, .ds-head .by a {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1.5px; background-position: 0 100%; background-repeat: no-repeat;
+  transition: background-size .35s var(--ds-expo);
+  text-decoration: none;
+}
+.ds-why a:hover, .ds-story a:hover, .ds-foot a:hover, .ds-head .by a:hover {
+  background-size: 100% 1.5px;
+}
+/* the "Open →" arrow nudges on card hover (house card detail) */
+.ds-syscard .arrow { display: inline-block; transition: transform .25s var(--ds-expo); }
+.ds-syscard:hover .arrow { transform: translateX(4px); }
+
+/* ============================================================
+   5 · GALLERY CARDS — richer entrance + alive band
+   The lift/tilt + shine sweep already live in ds-page.css; here we add the
+   scroll-in entrance (staggered) and a slow ambient drift on the colour band.
+   ============================================================ */
+.ds-systems .ds-syscard { opacity: 0; transform: translateY(26px); }
+.ds-systems.ds-cards-in .ds-syscard { animation: dsCardRise .7s var(--ds-expo) both; }
+.ds-systems.ds-cards-in .ds-syscard:nth-child(1) { animation-delay: .00s; }
+.ds-systems.ds-cards-in .ds-syscard:nth-child(2) { animation-delay: .08s; }
+.ds-systems.ds-cards-in .ds-syscard:nth-child(3) { animation-delay: .16s; }
+.ds-systems.ds-cards-in .ds-syscard:nth-child(4) { animation-delay: .24s; }
+.ds-systems.ds-cards-in .ds-syscard:nth-child(5) { animation-delay: .32s; }
+.ds-systems.ds-cards-in .ds-syscard:nth-child(6) { animation-delay: .40s; }
+.ds-systems.ds-cards-in .ds-syscard:nth-child(7) { animation-delay: .48s; }
+.ds-systems.ds-cards-in .ds-syscard:nth-child(8) { animation-delay: .56s; }
+.ds-systems.ds-cards-in .ds-syscard:nth-child(n+9) { animation-delay: .62s; }
+@keyframes dsCardRise { to { opacity: 1; transform: none; } }
+
+/* the colour band breathes — each stripe drifts in brightness very slowly, out
+   of phase, so the palette feels like pigment catching light. */
+.ds-syscard .band span { animation: dsBandBreathe 9s ease-in-out infinite; }
+.ds-syscard .band span:nth-child(2) { animation-delay: -2.2s; }
+.ds-syscard .band span:nth-child(3) { animation-delay: -4.4s; }
+.ds-syscard .band span:nth-child(4) { animation-delay: -6.6s; }
+.ds-syscard .band span:nth-child(5) { animation-delay: -1.1s; }
+@keyframes dsBandBreathe { 0%, 100% { filter: brightness(1); } 50% { filter: brightness(1.08) saturate(1.05); } }
+
+/* ============================================================
+   6 · SKIN SWITCH — crossfade the whole gallery instead of a hard swap.
+   ds-page.js adds .ds-skinning for one frame around the className change; we
+   dip the page's opacity/blur briefly so colours cross-tween (house detail:
+   "tween on change, never hard-cut").
+   ============================================================ */
+.ds-wrap { transition: filter .28s var(--ds-smooth); }
+.ds-wrap.ds-skinning { filter: saturate(.6) brightness(1.03); }
+.ds-skinning .ds-swatches,
+.ds-skinning .ds-demo-stage,
+.ds-skinning .ds-scale { animation: dsSkinFlash .5s var(--ds-smooth); }
+@keyframes dsSkinFlash { 0% { opacity: .35; } 100% { opacity: 1; } }
+
+/* skin chips: spring fill + the active one gets a soft ring (chip toggle feel) */
+.ds-skins .ds-chip { transition: transform .18s var(--ds-ease), background-color .2s ease, color .2s ease, box-shadow .2s ease; }
+.ds-skins .ds-chip:hover { transform: translateY(-1px); }
+.ds-skins .ds-chip.is-on { box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 45%, transparent); }
+
+/* ============================================================
+   7 · MISC house details — TOC, progress, scroll cue already exist; add the
+   number-watermark parallax + a subtle count-up affordance hook.
+   ============================================================ */
+/* reading-progress uses the house ease now (was linear) */
+.ds-progress { transition: width .15s var(--ds-expo); }
+
+/* big faint section numeral behind each tier head drifts on scroll */
+.ds-tier-head .num { display: inline-block; transition: transform .4s var(--ds-expo); }
+.ds-tier.is-revealed .ds-tier-head .num { animation: dsNumIn .7s var(--ds-ease) both; }
+@keyframes dsNumIn { from { opacity: 0; transform: translateX(-10px) rotate(-8deg); } to { opacity: 1; transform: none; } }
+
+/* ============================================================
+   REDUCE-MOTION — content still appears (opacity), all transforms + loops drop.
+   Covers BOTH the OS setting and the a11y panel flag.
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .ds-seal, .ds-seal svg [stroke], .ds-motif svg [stroke],
+  .ds-head > *, .ds-scrollcue,
+  .ds-demo.ds-played .ed-btn, .ds-demo.ds-played .ds-badge,
+  .ds-demo.ds-played .ed-tag, .ds-demo.ds-played .ds-chip,
+  .ds-demo.ds-played .ds-input, .ds-demo.ds-played .ds-check,
+  .ds-demo.ds-played textarea, .ds-demo.ds-played select,
+  .ds-spec.ds-played .ds-scale .box, .ds-spec.ds-played .ds-scale .ebox,
+  .ds-spec.ds-played .ds-sw,
+  .ds-systems.ds-cards-in .ds-syscard,
+  .ds-syscard .band span,
+  .ds-tier.is-revealed .ds-tier-head .num {
+    animation: none !important;
+  }
+  .ds-wrap .will-reveal { transition: opacity .4s ease; transform: none; }
+  .ds-head > *:not(.ds-motif):not(.ds-seal), .ds-scrollcue { opacity: 1; transform: none; }
+  .ds-systems .ds-syscard { opacity: 1; transform: none; }
+  .ds-motif { transform: none !important; }
+}
+html[data-reduce-motion="1"] .ds-seal,
+html[data-reduce-motion="1"] .ds-seal svg [stroke],
+html[data-reduce-motion="1"] .ds-motif svg [stroke],
+html[data-reduce-motion="1"] .ds-head > *,
+html[data-reduce-motion="1"] .ds-scrollcue,
+html[data-reduce-motion="1"] .ds-demo.ds-played .ed-btn,
+html[data-reduce-motion="1"] .ds-demo.ds-played .ds-badge,
+html[data-reduce-motion="1"] .ds-demo.ds-played .ed-tag,
+html[data-reduce-motion="1"] .ds-demo.ds-played .ds-chip,
+html[data-reduce-motion="1"] .ds-demo.ds-played .ds-input,
+html[data-reduce-motion="1"] .ds-spec.ds-played .ds-scale .box,
+html[data-reduce-motion="1"] .ds-spec.ds-played .ds-sw,
+html[data-reduce-motion="1"] .ds-systems.ds-cards-in .ds-syscard,
+html[data-reduce-motion="1"] .ds-syscard .band span,
+html[data-reduce-motion="1"] .ds-tier.is-revealed .ds-tier-head .num {
+  animation: none !important;
+}
+html[data-reduce-motion="1"] .ds-wrap .will-reveal { transition: opacity .4s ease; transform: none; }
+html[data-reduce-motion="1"] .ds-head > *:not(.ds-motif):not(.ds-seal),
+html[data-reduce-motion="1"] .ds-scrollcue,
+html[data-reduce-motion="1"] .ds-systems .ds-syscard { opacity: 1; transform: none; }
+html[data-reduce-motion="1"] .ds-motif { transform: none !important; }
+html[data-reduce-motion="1"] .ds-wrap.ds-skinning { filter: none; }
