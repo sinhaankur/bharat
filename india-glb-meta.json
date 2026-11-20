@@ -1,25 +1,9 @@
 {
-  "generated_by": "build_india_glb.py",
-  "geometry_source": "india-states.geojson (state boundaries)",
-  "height_encodes": "physical-constraint index = BASE + coastal(CRZ) + flood-prone(CWC/NDMA) + terrain-difficulty. A documented SUM of already-sourced constraint flags — NOT an outcome score and NOT a 'development-hindrance score'.",
-  "height_weights": {
-    "base": 0.15,
-    "coast": 0.25,
-    "flood": 0.35,
-    "terrain": {
-      "himalayan-hill": 0.6,
-      "northeast-hill": 0.5,
-      "plateau": 0.25,
-      "indo-gangetic-plain": 0.15,
-      "coastal-plain": 0.2,
-      "desert-arid": 0.3,
-      "island": 0.45
-    }
-  },
-  "colour_encodes": "constraint class (coast+flood > flood > coast > terrain)",
-  "GAP_civilian_only": "This GLB includes ALL land. The requested 'civilian area only, no government land' cut is NOT applied: India has no open cadastral ownership layer to distinguish civilian vs government parcels (per-state revenue records, mostly not machine-readable). Recorded as a gap, not silently dropped.",
-  "vertices": 52608,
-  "triangles": 78612,
+  "generated_by": "build_india_solid_glb.py",
+  "geometry_source": "india-states.geojson (state boundaries, SOLID fill via mapbox_earcut)",
+  "convention": "lon->+X (east), lat->+Z (north), height->+Y",
+  "vertices": 52768,
+  "triangles": 78712,
   "states": [
     {
       "state": "Arunachal Pradesh",
@@ -163,7 +147,7 @@
       "on_coast": true,
       "flood_prone": true,
       "terrain": "coastal-plain",
-      "tri_count": 1357
+      "tri_count": 1366
     },
     {
       "state": "Madhya Pradesh",
@@ -172,7 +156,7 @@
       "on_coast": false,
       "flood_prone": false,
       "terrain": "plateau",
-      "tri_count": 6388
+      "tri_count": 6402
     },
     {
       "state": "Andaman & Nicobar",
@@ -190,7 +174,7 @@
       "on_coast": true,
       "flood_prone": false,
       "terrain": "coastal-plain",
-      "tri_count": 3793
+      "tri_count": 3800
     },
     {
       "state": "Lakshadweep",
@@ -298,7 +282,7 @@
       "on_coast": true,
       "flood_prone": false,
       "terrain": "coastal-plain",
-      "tri_count": 2529
+      "tri_count": 2578
     },
     {
       "state": "Uttar Pradesh",
@@ -325,7 +309,7 @@
       "on_coast": true,
       "flood_prone": true,
       "terrain": "coastal-plain",
-      "tri_count": 4228
+      "tri_count": 4243
     },
     {
       "state": "Puducherry",
@@ -334,7 +318,7 @@
       "on_coast": true,
       "flood_prone": false,
       "terrain": "coastal-plain",
-      "tri_count": 347
+      "tri_count": 353
     },
     {
       "state": "Maharashtra",
