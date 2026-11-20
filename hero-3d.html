@@ -126,6 +126,10 @@
     .act[data-align="center"] p, .act[data-align="right"] p { margin-left: auto; margin-right: 0; }
     .act[data-align="center"] p { margin-right: auto; }
 
+    /* Hold the title back until the flat-map intro has begun tilting in, so India
+       reads as a clean map first. body.cinema-done releases it. */
+    body:not(.cinema-done) #intro .card { opacity: 0 !important; transform: translateY(26px) !important; }
+
     /* ---- opening title (first screen) ---- */
     #intro .mark {
       font-family: var(--serif); font-weight: 500;
@@ -283,6 +287,7 @@
     <span class="hud-meta">the substrate · ancestral, unknown tongues</span>
   </div>
 
+
   <div id="loader">
     <div class="ring" aria-hidden="true"></div>
     <div class="lw"><span id="load-pct">0</span>% · raising the land</div>
@@ -298,9 +303,9 @@
     <section class="act" data-act="0" data-align="center" id="intro">
       <div class="card">
         <h1 class="mark">Same&nbsp;land.<br>Every&nbsp;age.</h1>
-        <p class="sub">Scroll up through sixty-seven thousand years of one country.</p>
+        <p class="sub">Scroll through sixty-seven thousand years of one country.</p>
       </div>
-      <div class="scroll-hint"><span>Begin · 65,000 BCE</span><span class="line"></span></div>
+      <div class="scroll-hint"><span>Scroll to begin · 65,000 BCE</span><span class="line"></span></div>
     </section>
 
     <!-- ACT 1 — prehistory -->
@@ -451,6 +456,7 @@
     scene.add(group);
     let model = null, meshes = [], riverLines = null, modelSpan = 8, districtPts = null;
     let modelBox = null;
+    let ashokaPillar = null;   // the Ashoka capital, raised at the Mauryan act (4)
 
     // River colour palette (echoes the atlas rivers)
     const RIVER_COLOR = COL.river;
@@ -461,7 +467,10 @@
       const b = modelBox;
       const u = (lon - LON0) / (LON1 - LON0);
       const v = (lat - LAT0) / (LAT1 - LAT0);
-      return [ b.min.x + u * (b.max.x - b.min.x), y, b.max.z - v * (b.max.z - b.min.z) ];
+      // The GLB (build_india_glb.py) maps lon->+X (east) and lat->+Z (north), i.e.
+      // north = +Z. Rivers/districts MUST use the same handedness or they land flipped
+      // north-south off the terrain. So north (v=1) -> b.max.z (+Z).
+      return [ b.min.x + u * (b.max.x - b.min.x), y, b.min.z + v * (b.max.z - b.min.z) ];
     }
 
     // ---- district particle field (Layer 04): a point of light per district ----
@@ -519,6 +528,43 @@
         riverLines = new THREE.LineSegments(geo, mat);
         group.add(riverLines);   // its own stratum — lifted in Act 2
       }).catch(() => {});
+    }
+
+    // ---- the Ashoka pillar (Layer: Mauryan act) — the lion capital, standing at
+    // Sarnath on the land, rising + glowing at Act 4 and sinking again after. It is
+    // its own built asset (assets/temples-3d/ashoka_capital.glb). Fails quietly. ----
+    function buildAshokaPillar() {
+      new GLTFLoader().load('assets/temples-3d/ashoka_capital.glb', gltf => {
+        const pil = gltf.scene;
+        // size it as a landmark: a touch taller than the relief, readable but not huge
+        const bb = new THREE.Box3().setFromObject(pil);
+        const h = (bb.max.y - bb.min.y) || 1;
+        const target = modelSpan * 0.42;          // capital height in model units
+        const s = target / h;
+        pil.scale.setScalar(s);
+        // re-measure after scaling, drop its base to the land surface at Sarnath
+        const bb2 = new THREE.Box3().setFromObject(pil);
+        const cx = (bb2.min.x + bb2.max.x) / 2, cz = (bb2.min.z + bb2.max.z) / 2;
+        // Sarnath ≈ 83.0°E, 25.38°N — anchor the capital there on the terrain top
+        const at = geoToModel(83.0, 25.38, modelBox.max.y);
+        pil.position.set(at[0] - cx, at[1] - bb2.min.y, at[2] - cz);
+        pil.userData.groundY = pil.position.y;    // remember its standing height
+        // warm polished-stone look that catches the Mauryan gold light
+        pil.traverse(o => {
+          if (o.isMesh) {
+            o.material = o.material.clone();
+            o.material.metalness = 0.35;
+            o.material.roughness = 0.4;
+            o.material.emissive = new THREE.Color(0x3a2a12);
+            o.material.emissiveIntensity = 0.0;   // lit up at Act 4 in update()
+            o.material.transparent = true;
+            o.material.opacity = 0;                // revealed by the 'pil' param
+            o.material.envMapIntensity = 1.2;
+          }
+        });
+        ashokaPillar = pil;
+        group.add(pil);
+      }, undefined, () => {});   // quiet on error
     }
 
     const loadPct = document.getElementById('load-pct');
@@ -580,6 +626,7 @@
 
       buildRivers();
       buildDistricts();
+      buildAshokaPillar();  // rises at the Mauryan act
       setGrey(1);           // begin fully desaturated
       setExplode(sExp0());  // begin at the intro era's slight relief
       if (loadPct) loadPct.textContent = '100';
@@ -627,6 +674,10 @@
       const l = document.getElementById('loader');
       l.classList.add('gone');
       setTimeout(() => l.remove(), 900);
+      if (REDUCED) { document.body.classList.add('cinema-done'); return; }
+      introStart = performance.now();   // begin the flat-map → tilt intro cinema
+      // safety: always release the title even if the cinema is interrupted
+      setTimeout(() => document.body.classList.add('cinema-done'), INTRO_HOLD + INTRO_MOVE * 0.5);
     }
 
     // Blend each mesh's baked risk colours toward a dark BRONZE silhouette.
@@ -656,21 +707,25 @@
     // layering in rivers at the Indus age and full risk-colour + districts by today.
     //   grey 1→0 colour reveal · riv rivers · exp slight relief lift · dist districts
     //   tint = per-era land cast (hex) · warm = hemisphere light colour (hex)
+    // Camera sits on the SOUTH (−Z) side, high up, looking north at the origin, so the
+    // land reads as a proper map: peninsula down, Himalaya across the top, east on the
+    // right (verified against a top-down render of india.glb — north is −Z in the GLB,
+    // so viewing from −Z un-mirrors east/west). High y keeps it map-like, not edge-on.
     const KEYS = [
-      // 0 · intro — deep time, cold and dark, the bare land
-      { pos: [0.0, 2.1, 2.1 ], tgt: [0, 0.18, 0], fov: 44, grey: 1.0, riv: 0.0, exp: 0.08, dist: 0.0, tint: 0x3a3330, warm: 0x4a4650 },
+      // 0 · intro — deep time, cold and dark, the bare land (highest / widest)
+      { pos: [0.0, 2.3, -1.5 ], tgt: [0, 0.10, 0], fov: 44, grey: 1.0, riv: 0.0, exp: 0.08, dist: 0.0, pil: 0.0, tint: 0x3a3330, warm: 0x4a4650 },
       // 1 · prehistory — first relief, still monochrome stone
-      { pos: [0.7, 1.7, 1.85], tgt: [0, 0.28, 0], fov: 42, grey: 0.95,riv: 0.0, exp: 0.14, dist: 0.0, tint: 0x5a4a3a, warm: 0x6a5a48 },
+      { pos: [0.35, 2.15, -1.35], tgt: [0, 0.14, 0], fov: 42, grey: 0.95,riv: 0.0, exp: 0.14, dist: 0.0, pil: 0.0, tint: 0x5a4a3a, warm: 0x6a5a48 },
       // 2 · Indus — rivers appear; cities find the water (cool river-blue cast)
-      { pos: [-0.8, 1.6, 1.7 ], tgt: [0, 0.28, 0], fov: 41, grey: 0.78,riv: 1.0, exp: 0.12, dist: 0.0, tint: 0x5f6f7a, warm: 0x7fa0c0 },
-      // 3 · Vedic/Mahajanapada — warm dawn, language spreads (Mauryan ochre dawn)
-      { pos: [0.8, 1.45, 1.6 ], tgt: [0, 0.30, 0], fov: 42, grey: 0.55,riv: 0.8, exp: 0.12, dist: 0.0, tint: 0x9a6a2e, warm: 0xcc8900 },
-      // 4 · Mauryan — Ashoka; edict ochre + Mauryan gold
-      { pos: [-0.6, 1.5, 1.55], tgt: [0, 0.30, 0], fov: 41, grey: 0.30,riv: 0.6, exp: 0.12, dist: 0.0, tint: 0xb07a2e, warm: 0xe0a020 },
-      // 5 · Classical/Gupta→Chola — the golden age; bronze, temple, gold, full colour
-      { pos: [0.6, 1.35, 1.5 ], tgt: [0, 0.30, 0], fov: 43, grey: 0.0, riv: 0.5, exp: 0.12, dist: 0.3, tint: 0xc99a34, warm: 0xe4c069 },
-      // 6 · today — the living atlas; full colour, districts glow
-      { pos: [0.0, 1.15, 1.55], tgt: [0, 0.30, 0], fov: 46, grey: 0.0, riv: 0.4, exp: 0.10, dist: 1.0, tint: 0xd8b24a, warm: 0xf0d890 },
+      { pos: [-0.4, 2.05, -1.25], tgt: [0, 0.16, 0], fov: 41, grey: 0.78,riv: 1.0, exp: 0.12, dist: 0.0, pil: 0.0, tint: 0x5f6f7a, warm: 0x7fa0c0 },
+      // 3 · Vedic/Mahajanapada — warm dawn, language spreads (the pillar begins to rise)
+      { pos: [0.4, 1.95, -1.2 ], tgt: [0, 0.18, 0], fov: 42, grey: 0.55,riv: 0.8, exp: 0.12, dist: 0.0, pil: 0.25, tint: 0x9a6a2e, warm: 0xcc8900 },
+      // 4 · Mauryan — Ashoka; edict ochre + Mauryan gold — THE PILLAR STANDS
+      { pos: [-0.3, 1.9, -1.15], tgt: [0, 0.18, 0], fov: 41, grey: 0.30,riv: 0.6, exp: 0.12, dist: 0.0, pil: 1.0, tint: 0xb07a2e, warm: 0xe0a020 },
+      // 5 · Classical/Gupta→Chola — the golden age; the pillar recedes into the land
+      { pos: [0.3, 1.85, -1.1 ], tgt: [0, 0.18, 0], fov: 43, grey: 0.0, riv: 0.5, exp: 0.12, dist: 0.3, pil: 0.3, tint: 0xc99a34, warm: 0xe4c069 },
+      // 6 · today — the living atlas; full colour, districts glow (closest, most top-down)
+      { pos: [0.0, 1.95, -0.95], tgt: [0, 0.16, 0], fov: 46, grey: 0.0, riv: 0.4, exp: 0.10, dist: 1.0, pil: 0.0, tint: 0xd8b24a, warm: 0xf0d890 },
     ];
 
     const tmpA = new THREE.Vector3(), tmpB = new THREE.Vector3(), curTgt = new THREE.Vector3();
@@ -685,7 +740,7 @@
         pos: [mix(a.pos[0],b.pos[0]), mix(a.pos[1],b.pos[1]), mix(a.pos[2],b.pos[2])],
         tgt: [mix(a.tgt[0],b.tgt[0]), mix(a.tgt[1],b.tgt[1]), mix(a.tgt[2],b.tgt[2])],
         fov: mix(a.fov,b.fov), grey: mix(a.grey,b.grey), riv: mix(a.riv,b.riv),
-        exp: mix(a.exp,b.exp), dist: mix(a.dist,b.dist),
+        exp: mix(a.exp,b.exp), dist: mix(a.dist,b.dist), pil: mix(a.pil,b.pil),
         tint: mixHex(a.tint, b.tint, e).clone(), warm: mixHex(a.warm, b.warm, e).clone(),
       };
     }
@@ -700,8 +755,23 @@
 
     // smoothed camera + layer state
     let smPos = new THREE.Vector3(), smTgt = new THREE.Vector3(), smFov = 46, inited = false;
-    let sGrey = 1, sRiv = 0, sExp = 0, sDist = 0;
+    let sGrey = 1, sRiv = 0, sExp = 0, sDist = 0, sPil = 0;
     let lastExp = -1, lastGrey = -1;   // only rebuild heavy per-vertex work when it moves
+
+    // ---- INTRO CINEMA: first show India as a flat TOP-DOWN MAP, hold a beat, then
+    // tilt down + rise into the cinematic era view. Grounds the viewer in a familiar
+    // map before the 3D animation loads in. Runs once; scroll takes over afterward. ----
+    let introStart = -1;                 // set when the map finishes loading
+    const INTRO_HOLD = 1200;             // ms the flat map holds, readable
+    const INTRO_MOVE = 2200;             // ms to ease from flat map → era-0 tilt
+    const introEase = t => t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2, 3)/2;  // smootherstep-ish
+    const _flatPos = new THREE.Vector3(), _flatTgt = new THREE.Vector3();
+    // true overhead: straight down the +Y axis, a hair of +Z so "up" on screen is north
+    function flatMapPose() {
+      const s = modelSpan;
+      _flatPos.set(0, s * 1.75, -0.0001 * s);   // overhead, close enough to fill the frame
+      _flatTgt.set(0, 0, 0);
+    }
 
     function update(snap) {
       const i = Math.max(0, Math.min(NACTS - 2, Math.floor(scrollProg)));
@@ -712,8 +782,27 @@
       tmpA.set(k.pos[0]*s, k.pos[1]*s, k.pos[2]*s);
       tmpB.set(k.tgt[0]*s, k.tgt[1]*s, k.tgt[2]*s);
 
+      // INTRO CINEMA: before scroll control, hold on the flat top-down map, then ease
+      // into the era-0 tilt. m=0 → flat map, m=1 → normal cinematic pose.
+      let introActive = false, introM = 1;
+      if (!REDUCED && introStart >= 0 && scrollY < 4) {
+        const dt = performance.now() - introStart;
+        if (dt < INTRO_HOLD + INTRO_MOVE) {
+          introActive = true;
+          introM = dt <= INTRO_HOLD ? 0 : introEase((dt - INTRO_HOLD) / INTRO_MOVE);
+          flatMapPose();
+          tmpA.lerpVectors(_flatPos, tmpA, introM);   // flat → era-0 position
+          tmpB.lerpVectors(_flatTgt, tmpB, introM);   // flat → era-0 target
+          // release the title once the tilt is well underway
+          if (introM > 0.35) document.body.classList.add('cinema-done');
+        } else {
+          document.body.classList.add('cinema-done');
+        }
+      }
+
       if (snap || !inited) { smPos.copy(tmpA); smTgt.copy(tmpB); smFov = k.fov; inited = true; }
-      const lp = REDUCED ? 1 : 0.08;
+      // snap hard during the intro cinema so it plays its own eased curve, not a double lerp
+      const lp = (REDUCED || introActive) ? 1 : 0.08;
       smPos.lerp(tmpA, lp); smTgt.lerp(tmpB, lp);
       smFov += (k.fov - smFov) * lp;
 
@@ -722,11 +811,16 @@
       camera.lookAt(curTgt);
       camera.fov = smFov; camera.updateProjectionMatrix();
 
-      // smoothed layer params
-      sGrey += (k.grey - sGrey) * lp;
+      // smoothed layer params. During the intro, keep the land LIGHT enough to read as
+      // a map (relief + coastline visible), then ease back to the dark era-0 cast as the
+      // camera tilts in — so it begins as a clear map, then dims into deep time.
+      let greyTarget = k.grey;
+      if (introActive) greyTarget = 0.28 + (k.grey - 0.28) * introM;   // flat=light → era-0 dark
+      sGrey += (greyTarget - sGrey) * lp;
       sRiv  += (k.riv  - sRiv ) * lp;
       sExp  += (k.exp  - sExp ) * lp;
       sDist += (k.dist - sDist) * lp;
+      sPil  += (k.pil  - sPil ) * lp;
 
       // colour reveal — rebuild only when it has visibly changed (per-vertex cost)
       if (Math.abs(sGrey - lastGrey) > 0.004) { setGrey(sGrey); lastGrey = sGrey; }
@@ -743,13 +837,32 @@
         districtPts.material.opacity = sDist;
         districtPts.position.y = modelSpan * 0.06 * sDist;
       }
+      // Ashoka pillar: rises from the land (sunk → standing), fades in and catches
+      // the Mauryan gold light as sPil → 1 at Act 4; sinks + dims before/after.
+      if (ashokaPillar) {
+        const p = Math.max(0, Math.min(1, sPil));
+        ashokaPillar.visible = p > 0.002;
+        if (ashokaPillar.visible) {
+          const groundY = ashokaPillar.userData.groundY || 0;
+          // ease the rise so it emerges rather than pops
+          const er = p < 0.5 ? 2*p*p : 1 - Math.pow(-2*p+2, 2)/2;
+          ashokaPillar.position.y = groundY - modelSpan * 0.5 * (1 - er);
+          ashokaPillar.traverse(o => {
+            if (o.isMesh && o.material) {
+              o.material.opacity = er;
+              o.material.emissiveIntensity = 0.15 + 0.55 * er;   // glows at the peak
+            }
+          });
+        }
+      }
 
       // ERA LIGHT: recolour the key + hemisphere toward the era's warmth, and tint
-      // the fog so the whole age has a mood. Smoothed toward the target each frame.
-      if (k.warm) {
-        key.color.lerp(k.warm, lp);
-        hemi.color.lerp(k.warm, lp);
-      }
+      // the fog so the whole age has a mood. During the intro the land is lit brighter
+      // and warmer so the flat map reads clearly, then settles to the era mood.
+      const warmTarget = (introActive) ? _cm.copy(_ca.setHex(0xf0cf82)).lerp(_cb.setHex(k.warm), introM) : _cm.setHex(k.warm);
+      key.color.lerp(warmTarget, lp);
+      hemi.color.lerp(warmTarget, lp);
+      key.intensity += (((introActive ? (2.3 - 0.85*introM) : 1.45)) - key.intensity) * lp;
       if (k.tint) {
         rim.color.lerp(k.tint, lp);
         scene.fog.color.lerp(_cm.copy(k.tint).multiplyScalar(0.22), lp);
