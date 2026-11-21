@@ -21,8 +21,27 @@
   // maxZoom = MAX_ZOOM everywhere (lets you keep zooming); maxNativeZoom = the
   // source's REAL ceiling (probed 2026-07-11 over India): CARTO 20, Esri 19,
   // OpenTopo 17, Sentinel-2 16. Deep-zoom note fires when zoom > native.
+  // A tile-free "Plain" base: a solid warm-paper canvas drawn by Leaflet's GridLayer,
+  // so the vector choropleth sits on a clean branded background with ZERO third-party
+  // tiles (and therefore no provider watermarks / "API key required" fallbacks). This is
+  // the default — raster basemaps remain available as toggles for those who want them.
+  function plainBase(L, color) {
+    const Plain = L.GridLayer.extend({
+      createTile: function () {
+        const t = document.createElement('canvas');
+        const size = this.getTileSize(); t.width = size.x; t.height = size.y;
+        const ctx = t.getContext('2d');
+        ctx.fillStyle = color || '#f3ecdd';   // warm Bharat paper
+        ctx.fillRect(0, 0, t.width, t.height);
+        return t;
+      },
+    });
+    return new Plain({ attribution: 'Bharat · Indic Designs', maxZoom: MAX_ZOOM });
+  }
+
   function basemaps(L) {
     return {
+      'Plain': plainBase(L, '#f3ecdd'),
       'Light map': L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
         subdomains: 'abcd', attribution: '&copy; OSM, &copy; CARTO', maxZoom: MAX_ZOOM, maxNativeZoom: 20,
       }),
