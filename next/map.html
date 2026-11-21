@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-mauryan theme-dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<script>(function(){try{var s=localStorage.getItem('bh_skin');if(s)document.documentElement.className=s;}catch(e){}})();</script>
+<title>Every district, on one map · Bharat</title><meta name="description" content="India by public money — every district on one interactive map, sourced.">
+<link rel="canonical" href="https://sinhaankur.github.io/bharat/map.html"><meta property="og:site_name" content="Bharat">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Devanagari&family=Noto+Sans+Bengali&family=Noto+Sans+Gurmukhi&family=Noto+Sans+Gujarati&family=Noto+Sans+Oriya&family=Noto+Sans+Tamil&family=Noto+Sans+Telugu&family=Noto+Sans+Kannada&family=Noto+Sans+Malayalam&family=Noto+Sans+Sinhala&family=Noto+Sans+Brahmi&family=Noto+Sans+Grantha&display=swap" rel="stylesheet"><link rel="stylesheet" href="css/site.css"><link rel="stylesheet" href="css/theme-mauryan.css"><link rel="stylesheet" href="css/theme-gupta.css"><link rel="stylesheet" href="css/theme-chola.css"><link rel="stylesheet" href="css/theme-rajput.css"><link rel="stylesheet" href="css/theme-kashmir.css"><link rel="stylesheet" href="css/theme-tamil.css"><link rel="stylesheet" href="css/theme-kerala.css"><link rel="stylesheet" href="css/theme-assam.css"><link rel="stylesheet" href="css/theme-naga.css"><link rel="stylesheet" href="css/theme-rajasthan.css"><link rel="stylesheet" href="vendor/leaflet/leaflet.css"><link rel="stylesheet" href="styles.css"></head>
+<body data-door="1">
+<main><div class="wrap"><p class="crumb"><a href="index.html">Home</a> / <a href="money.html">Money and power</a> / The map</p><div class="hero" style="padding:26px 0 24px"><div><p class="kick"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#i-bull"/></svg>Money and power · The map</p><h1>Every district, on <em>one map</em></h1><p class="lede">India by public money — tap a state for its ten-year story, its governance footprint, and who answers for it. Drag the year. The ground is a clean, tile-free base; the data is sourced, or shown as a gap.</p></div><div></div></div><div class="rule"></div></div>
+<style>
+    :root { --gilt: var(--gold, #cc8900); --ease-lux: cubic-bezier(.22,1,.36,1); }
+
+    /* the side panel reads as a crafted card, not a flat column */
+    .india-side-panel {
+      box-shadow: 0 1px 0 rgba(255,255,255,.5) inset, 0 18px 50px -24px rgba(60,40,12,.45);
+      border-radius: 14px;
+    }
+    .india-side-header .india-display {
+      letter-spacing: -0.015em; line-height: 1.04;
+    }
+    .india-side-header .india-display em {
+      font-style: italic; color: var(--gilt);
+      background: linear-gradient(transparent 68%, color-mix(in oklab, var(--gilt) 22%, transparent) 0);
+    }
+
+    /* view buttons: quieter at rest, gilt + lift on hover, confident when active */
+    .ind-btn {
+      transition: background .22s var(--ease-lux), color .22s var(--ease-lux),
+                  box-shadow .22s var(--ease-lux), transform .16s var(--ease-lux);
+    }
+    .ind-btn:hover { transform: translateY(-1px); }
+    .ind-btn.active {
+      box-shadow: 0 2px 0 color-mix(in oklab, var(--gilt) 60%, transparent),
+                  0 8px 20px -10px color-mix(in oklab, var(--gilt) 70%, transparent);
+    }
+
+    /* the map frame: a thin gilt hairline + soft inner depth */
+    #india-map-wrap {
+      border-radius: 14px; overflow: hidden;
+      box-shadow: 0 0 0 1px color-mix(in oklab, var(--gilt) 24%, transparent),
+                  0 24px 60px -30px rgba(60,40,12,.5);
+    }
+    /* legend + readout float as frosted chips */
+    #india-map-legend, #india-map-readout {
+      backdrop-filter: blur(8px) saturate(115%);
+      -webkit-backdrop-filter: blur(8px) saturate(115%);
+      box-shadow: 0 8px 24px -14px rgba(0,0,0,.4);
+      transition: transform .3s var(--ease-lux), box-shadow .3s var(--ease-lux);
+    }
+    #india-map-readout:hover { transform: translateY(-2px); box-shadow: 0 12px 30px -14px rgba(0,0,0,.5); }
+
+    /* search + expand: gilt focus ring */
+    #map-search-input:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px color-mix(in oklab, var(--gilt) 55%, transparent);
+    }
+    #map-expand-btn { transition: transform .2s var(--ease-lux), background .2s; }
+    #map-expand-btn:hover { transform: scale(1.08); }
+
+    /* the reference link → a quiet pill that warms on hover */
+    .india-ref-link {
+      border-radius: 999px; padding: 4px 12px;
+      border: 1px solid color-mix(in oklab, var(--gilt) 30%, transparent);
+      transition: background .22s var(--ease-lux), color .22s, border-color .22s;
+    }
+    .india-ref-link:hover {
+      background: color-mix(in oklab, var(--gilt) 14%, transparent);
+      border-color: var(--gilt);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ind-btn, #india-map-readout, #map-expand-btn, .india-ref-link { transition: none; }
+    }
+
+    /* ── LIGHT DECLUTTER (page-scoped) — more breathing room + clearer hierarchy,
+       no layout/logic changes. Softens the dense control + data panels. ── */
+    .india-side-panel { padding: 1.4rem 1.3rem 1.5rem; gap: 1.15rem; }
+    /* control groups get calmer, airier cards */
+    .india-controls { padding: 1rem 1rem; gap: 0.75rem; border-radius: 12px;
+      background: color-mix(in oklab, var(--surface) 92%, transparent); }
+    /* section headings in the data panel read as clear tiers, not a wall of text */
+    .india-side-panel h2, .india-side-panel h3, .india-side-panel .sec-title,
+    .india-side-panel .panel-title {
+      letter-spacing: 0.02em; margin-top: 0.2rem; }
+    /* give the metric-toggle rows room to breathe */
+    .india-view-group { gap: 6px; }
+    .ind-btn { padding: 7px 13px; }
+    /* tables / leaderboards: a touch more row rhythm so figures scan */
+    .india-side-panel table td, .india-side-panel table th { padding-top: 5px; padding-bottom: 5px; }
+    /* a quiet hairline between stacked panel sections for separation without boxes */
+    .india-side-panel > section + section,
+    .india-side-panel > div + div.panel-sec { border-top: 1px solid color-mix(in oklab, var(--border) 70%, transparent); padding-top: 1rem; }
+    /* the map readout chip: a touch more presence */
+    #india-map-readout { padding: 0.7rem 0.95rem; }
+  </style><div class="map-rebuild"><section id="map" class="india-fullbleed">
+    <div class="india-shell">
+
+      <div class="india-map-side">
+        <div id="india-map-wrap">
+          <div id="india-map"></div>
+          <div id="map-search">
+            <input id="map-search-input" type="search" placeholder="Search a district, state or place… (e.g. Pune, Assam)" autocomplete="off" aria-label="Search a place to view its topography" />
+            <div id="map-search-results" hidden></div>
+          </div>
+          <button id="map-expand-btn" title="Expand map (India in pixels)" aria-label="Expand map">⛶</button>
+          <div id="india-map-readout">
+            <div class="readout-label mono">Hover a state</div>
+            <div class="readout-name">—</div>
+            <div class="readout-value">—</div>
+          </div>
+          <div id="india-map-legend">
+            <div class="india-legend-title mono" id="india-legend-title">Own tax revenue (₹ '000 cr)</div>
+            <div class="india-legend-bar"><span class="india-legend-grad" id="india-legend-grad"></span></div>
+            <div class="india-legend-ticks mono">
+              <span id="india-legend-min">—</span>
+              <span id="india-legend-mid">—</span>
+              <span id="india-legend-max">—</span>
+            </div>
+            <div class="india-legend-foot mono">Click a state for detail · drag the year slider for history</div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="india-side-panel">
+        <header class="india-side-header">
+          <div>
+            <div class="eyebrow" data-reveal data-reveal-delay="0">India · state-wise revenue, corruption, GDP</div>
+            <h2 class="display india-display" data-reveal data-reveal-delay="80">Who <em>earns</em>. Who <em>leaks</em>. Who <em>gets fed</em>.</h2>
+            <p class="india-side-sub" data-reveal data-reveal-delay="160">
+              Three lenses on India's 28 states + UTs over 10 fiscal years. Tap a state for its 10-year sparkline, governance footprint (IAS strength, state employees, bribe-paid %), and structural pros / cons.
+            </p>
+          </div>
+          <a class="india-ref-link ripple" href="references.html" data-reveal data-reveal-delay="220">Sources ↗</a>
+        </header>
+
+        <div class="india-controls" data-reveal data-reveal-delay="240">
+          <div class="india-view-group" role="tablist" aria-label="View">
+            <button class="ind-btn active" data-view="ownTax">Own revenue</button>
+            <button class="ind-btn" data-view="corruption">Corruption %</button>
+            <button class="ind-btn" data-view="gsdp">GSDP</button>
+            <button class="ind-btn" data-view="perCapitaGsdp" title="GSDP per resident per year">GDP / person</button>
+            <button class="ind-btn" data-view="wealthPerCapita" title="RBI per-capita income — nominal ₹, not PPP-adjusted">₹ Wealth / person</button>
+            <button class="ind-btn" data-view="ownTaxPctGsdp">Revenue / GSDP</button>
+            <button class="ind-btn" data-view="netFlow">Net flow</button>
+            <button class="ind-btn" data-view="devolution">Devolution in</button>
+            <button class="ind-btn" data-view="contribution">Contribution out</button>
+            <button class="ind-btn" data-view="fcShare" title="Finance Commission horizontal allocation %">FC share</button>
+            <span class="ind-group-sep" aria-hidden="true"></span>
+            <button class="ind-btn ind-btn--safety" data-view="crime" title="NCRB total cognizable crime rate per lakh (2023)">🚨 Crime</button>
+            <button class="ind-btn ind-btn--safety" data-view="prisons" title="NCRB prison occupancy (% of capacity)">⛓ Jails</button>
+            <button class="ind-btn ind-btn--safety" data-view="unrest" title="News-attention: items flagged in the news feed (tier-3 signal, not a verified event count)">📰 News attention</button>
+          </div>
+          <div class="india-year-group">
+            <span class="india-year-label mono">Year</span>
+            <input type="range" id="india-year" min="0" max="9" value="9" step="1" aria-label="Year" />
+            <span class="india-year-value mono" id="india-year-value">FY24</span>
+          </div>
+          <div class="india-fc-strip" id="india-fc-strip" aria-hidden="true"></div>
+        </div>
+
+        <div class="india-main">
+          <div id="india-detail" class="india-detail">
+            <div class="india-detail-empty">
+              <div class="eyebrow">No state selected</div>
+              <p class="india-detail-empty-body">Click any state to see its 10-year history, fiscal flows, governance footprint, and structural pros / cons.</p>
+              <div id="india-summary" class="india-summary-inline"></div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </section></div>
+</main>
+<script src="js/nav.js"></script><script src="js/site.js"></script><script defer src="js/webgl.js"></script>
+<script src="vendor/leaflet/leaflet.js"></script><script src="dem.js"></script><script src="map-layers.js"></script><script src="map-ui.js"></script><script src="time-scrubber.js"></script><script src="event-heatmap.js"></script><script src="coverage.js"></script><script src="query-engine.js"></script><script src="vulnerability.js"></script><script src="accountability-arc.js"></script><script src="stats-bar.js"></script><script src="app.js"></script>
+</body></html>

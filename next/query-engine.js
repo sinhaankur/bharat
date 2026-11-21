@@ -1,0 +1,188 @@
+/* query-engine.js — client-side query/filter engine over all 594 districts.
+ *
+ * No backend: it flattens the district-ledger into one row per district with a small
+ * set of boolean/numeric FACETS (legal zone, flood, CRZ, unsafe, palaeochannel,
+ * encroachment, monsoon, low-elevation, high-rain, vulnerability count, fund-freeze
+ * flag, grant dependence, population). The UI then AND/ORs chosen facets to answer
+ * cross-cutting questions like "CRZ AND flood-chronic AND fund-freeze".
+ *
+ * Sourced-or-gap honesty carries through: a facet is TRUE only where the source is
+ * pinned; false/absent can mean "not flagged" OR "gap" — never asserted as safe.
+ *
+ * Loaded as a plain <script>; exposes window.QueryEngine.
+ *   QE.build(ledger) → { rows, facets, run(activeKeys, mode) }
+ *     rows        — [{state, district, ...facet booleans/numbers}]
+ *     facets      — ordered [{key, label, group, test(row), describe}]
+ *     run(keys, mode='AND') → filtered rows (mode 'AND' | 'OR')
+ */
+(function (global) {
+  'use strict';
+
+  // Fund-freeze / dysfunction flag — mirrors app.js districtMoneyHeadline so the
+  // engine and the map agree on what "flagged" means.
+  function ledgerFlagged(dist) {
+    const rows = (dist.ledger && Array.isArray(dist.ledger)) ? dist.ledger : [];
+    const rowFlag = rows.some(r => {
+      const w = r.what_happened || {};
+      return w.audit_flag === 'fund_release_frozen' || w.lapsed === true ||
+        w.audit_flag === 'zero_completion' || (typeof r.money_in_cr === 'number' && r.money_in_cr === 0);
+    });
+    const noteFlag = (dist.system_notes || []).some(n => /freeze|frozen|withh/i.test((n.kind || '') + ' ' + (n.note || '')));
+    return rowFlag || noteFlag;
+  }
+
+  function headlineMoney(dist) {
+    const vals = ((dist.ledger && Array.isArray(dist.ledger)) ? dist.ledger : [])
+      .map(r => r.money_in_cr).filter(v => typeof v === 'number');
+    return vals.length ? Math.max(...vals) : null;
+  }
+
+  // Vulnerability signal count — reuse window.Vuln if present, else compute inline.
+  function vulnCount(g) {
+    if (global.Vuln && typeof global.Vuln.signals === 'function') return global.Vuln.signals(g).count;
+    let n = 0;
+    if (g.flood_level === 'district-chronic') n++;
+    const e = g.elevation && g.elevation.centroid_m;
+    if (typeof e === 'number' && e < 100) n++;
+    if (/high/.test((g.rainfall && g.rainfall.band) || '')) n++;
+    if (g.encroachment && g.encroachment.cases && g.encroachment.cases.length) n++;
+    if (g.paleochannel && g.paleochannel.documented) n++;
+    if (g.unsafe_zone && g.unsafe_zone.documented) n++;
+    if (g.monsoon_inundation && g.monsoon_inundation.documented) n++;
+    if (g.encroachment_zone && g.encroachment_zone.documented) n++;
+    return n;
+  }
+
+  function build(ledger, opts) {
+    opts = opts || {};
+    const newsCounts = opts.newsCounts || {};   // "State|District" → count (optional)
+    const safety = (opts.safety && opts.safety.states) || {};   // state → safety block (safety.json)
+    const rows = [];
+    for (const [sn, s] of Object.entries((ledger && ledger.states) || {})) {
+      const sf = safety[sn] || null;   // NCRB crime/prisons + unrest, state-level
+      for (const [dn, dist] of Object.entries(s.districts || {})) {
+        const g = (dist.dimensions && dist.dimensions.geography) || {};
+        const elev = g.elevation && typeof g.elevation.centroid_m === 'number' ? g.elevation.centroid_m : null;
+        const covPct = (global.Coverage && typeof global.Coverage.score === 'function')
+          ? global.Coverage.score(dist, { newsCount: newsCounts[sn + '|' + dn] || 0 }).pct : 0;
+        const health = (dist.dimensions && dist.dimensions.health) || {};
+        const economy = (dist.dimensions && dist.dimensions.economy) || {};
+        const vehicles = (dist.dimensions && dist.dimensions.vehicles) || {};
+        const aviation = (dist.dimensions && dist.dimensions.aviation) || {};
+        const housing = (dist.dimensions && dist.dimensions.housing) || {};
+        rows.push({
+          state: sn, district: dn,
+          crz: !!(g.crz && g.crz.applies) || !!g.on_coast,
+          flood_chronic: g.flood_level === 'district-chronic',
+          flood_state: g.flood_level === 'state-flood-prone',
+          unsafe: !!(g.unsafe_zone && g.unsafe_zone.documented),
+          paleo: !!(g.paleochannel && g.paleochannel.documented),
+          encroach: !!(g.encroachment && g.encroachment.cases && g.encroachment.cases.length),
+          enc_zone: !!(g.encroachment_zone && g.encroachment_zone.documented),
+          monsoon: !!(g.monsoon_inundation && g.monsoon_inundation.documented),
+          low_elev: elev != null && elev < 100,
+          high_rain: /high/.test((g.rainfall && g.rainfall.band) || ''),
+          vuln: vulnCount(g),
+          flagged: ledgerFlagged(dist),
+          money: headlineMoney(dist),
+          has_ledger: !!(dist.ledger && dist.ledger.length),
+          cov_pct: covPct,
+          imr: typeof health.imr === 'number' ? health.imr : null,
+          stunting: typeof health.stunting_u5_pct === 'number' ? health.stunting_u5_pct : null,
+          income: typeof economy.percapita_nsdp_inr === 'number' ? economy.percapita_nsdp_inr : null,
+          income_tier: economy.income_tier || null,
+          has_rto: Array.isArray(vehicles.rto_codes) && vehicles.rto_codes.length > 0,
+          plate_prefix: vehicles.plate_prefix || null,
+          has_airport: aviation.has_airport === true,
+          intl_airport: aviation.has_airport === true && aviation.category === 'international',
+          housing_tracked: housing.tracked === true,
+          elev,
+          // State-level safety/justice (NCRB) stamped onto each district row.
+          crime_rate: sf && sf.crime && sf.crime.rate_per_lakh != null ? sf.crime.rate_per_lakh : null,
+          crime_gap: !sf || !sf.crime || sf.crime.rate_per_lakh == null,
+          prison_occ: sf && sf.prisons ? (sf.prisons.occupancy_pct != null ? sf.prisons.occupancy_pct : (sf.prisons.occupancy_band_mid != null ? sf.prisons.occupancy_band_mid : null)) : null,
+          prison_band: sf && sf.prisons ? (sf.prisons.occupancy_band || null) : null,
+          prison_jails: sf && sf.prisons && sf.prisons.jails != null ? sf.prisons.jails : null,
+          unrest_n: sf && sf.unrest ? (sf.unrest.news_mentions || 0) : 0,
+          density: sf && sf.density && sf.density.per_km2 != null ? sf.density.per_km2 : null,
+        });
+      }
+    }
+
+    // Facet catalogue — key, human label, group, and a predicate.
+    const facets = [
+      { key: 'crz', group: 'Legal / zoning', label: 'Coastal Regulation Zone (CRZ)', test: r => r.crz,
+        describe: 'Touches the sea → CRZ 2019 caps near-shore construction' },
+      { key: 'unsafe', group: 'Legal / zoning', label: 'Declared unsafe / no-development', test: r => r.unsafe,
+        describe: 'An authority declared it unsafe / no-development' },
+      { key: 'enc_zone', group: 'Legal / zoning', label: 'Delineated encroachment zone', test: r => r.enc_zone,
+        describe: 'Inside a published floodplain / FTL / buffer line' },
+      { key: 'flood_chronic', group: 'Flood & water', label: 'Flood-chronic (CWC/NDMA)', test: r => r.flood_chronic,
+        describe: 'Repeatedly flooded per CWC/NDMA/Bhuvan' },
+      { key: 'monsoon', group: 'Flood & water', label: 'Monsoon seasonal inundation', test: r => r.monsoon,
+        describe: 'Floods specifically in the monsoon (Bhuvan/IMD)' },
+      { key: 'paleo', group: 'Flood & water', label: "On a river's old bed (palaeochannel)", test: r => r.paleo,
+        describe: 'Built over a river\'s natural historic course' },
+      { key: 'encroach', group: 'Flood & water', label: 'Documented encroachment case', test: r => r.encroach,
+        describe: 'A pinned NGT/court/CAG encroachment case' },
+      { key: 'low_elev', group: 'Terrain', label: 'Low-lying (<100 m)', test: r => r.low_elev,
+        describe: 'SRTM centroid elevation under 100 m' },
+      { key: 'high_rain', group: 'Terrain', label: 'High rainfall band (IMD)', test: r => r.high_rain,
+        describe: 'IMD climate band is high / very-high' },
+      { key: 'vuln3', group: 'Risk stack', label: '3+ risk signals stack', test: r => r.vuln >= 3,
+        describe: 'Three or more sourced risk signals overlap' },
+      { key: 'flagged', group: 'Money', label: '⚠ Fund freeze / audit flag', test: r => r.flagged,
+        describe: 'A frozen/lapsed/zero-completion row or freeze note in the ledger' },
+      { key: 'has_ledger', group: 'Money', label: 'Has a money-flow ledger', test: r => r.has_ledger,
+        describe: 'A deep-dive fiscal ledger is pinned for this district' },
+      { key: 'cov_deep', group: 'Source coverage', label: 'Well-sourced (deep/partial)', test: r => r.cov_pct >= 30,
+        describe: 'At least 30% of this district is pinned to sources (not a baseline skeleton)' },
+      { key: 'cov_thin', group: 'Source coverage', label: 'Thin / baseline (a gap-heavy)', test: r => r.cov_pct < 30,
+        describe: 'Under 30% sourced — mostly structure-only, figures still a gap' },
+      { key: 'high_imr', group: 'Health & wealth', label: 'High infant mortality (IMR ≥ 35)', test: r => r.imr != null && r.imr >= 35,
+        describe: "State IMR ≥ 35 / 1,000 (NFHS-5) — the worse-health end" },
+      { key: 'high_stunting', group: 'Health & wealth', label: 'High child stunting (≥ 35%)', test: r => r.stunting != null && r.stunting >= 35,
+        describe: 'State under-5 stunting ≥ 35% (NFHS-5)' },
+      { key: 'low_income', group: 'Health & wealth', label: 'Lower-income state (per-capita)', test: r => r.income_tier === 'low' || r.income_tier === 'lower-middle',
+        describe: 'State per-capita NSDP in the low / lower-middle tier (RBI)' },
+      { key: 'income_gap', group: 'Health & wealth', label: 'Income figure is a gap', test: r => r.income == null,
+        describe: 'No published per-capita NSDP (small UTs absent from the RBI Handbook) — a gap, not zero' },
+      { key: 'high_crime', group: 'Safety & justice', label: 'High crime rate (> 500 / lakh)', test: r => r.crime_rate != null && r.crime_rate > 500,
+        describe: "State NCRB total cognizable crime rate above 500 / lakh (2023). A higher rate can mean fuller reporting, not only more crime." },
+      { key: 'low_crime', group: 'Safety & justice', label: 'Lower crime rate (< 250 / lakh)', test: r => r.crime_rate != null && r.crime_rate < 250,
+        describe: 'State NCRB crime rate under 250 / lakh — low rates can also mask under-reporting.' },
+      { key: 'crime_gap', group: 'Safety & justice', label: 'Crime figure is a gap', test: r => r.crime_gap,
+        describe: 'No NCRB crime rate transcribed for this state yet — a gap, not zero.' },
+      { key: 'prison_overcrowded', group: 'Safety & justice', label: 'Overcrowded prisons (> 100%)', test: r => (r.prison_occ != null && r.prison_occ > 100) || r.prison_band === 'high' || r.prison_band === 'veryhigh' || r.prison_band === 'severe',
+        describe: 'NCRB prison occupancy over 100% of sanctioned capacity (exact figure or IJR/NCRB band).' },
+      { key: 'prison_severe', group: 'Safety & justice', label: 'Severely overcrowded prisons (150%+)', test: r => (r.prison_occ != null && r.prison_occ >= 150) || r.prison_band === 'severe',
+        describe: 'NCRB occupancy in the "severe" band (150–185%, UNODC "extreme") — Delhi, MP, UP, Uttarakhand, Meghalaya, Sikkim.' },
+      { key: 'unrest_active', group: 'Safety & justice', label: 'Recent protest / unrest in the news', test: r => r.unrest_n > 0,
+        describe: 'At least one protest/strike/clash item anchored to the state in the news feed (tier-3 signal, not an official count).' },
+      { key: 'dense', group: 'Safety & justice', label: 'High population density (> 1,000 / km²)', test: r => r.density != null && r.density > 1000,
+        describe: 'State population density above 1,000 people / km² (Census area ÷ population).' },
+      { key: 'has_rto', group: 'Civic', label: 'Has a pinned district RTO', test: r => r.has_rto,
+        describe: 'A district-level Regional Transport Office code + office is pinned (MoRTH/Vahan)' },
+      { key: 'has_airport', group: 'Civic', label: 'Has an operational airport', test: r => r.has_airport,
+        describe: 'An AAI/DGCA operational airport is in this district' },
+      { key: 'intl_airport', group: 'Civic', label: 'International airport', test: r => r.intl_airport,
+        describe: 'The district airport is an international gateway (AAI)' },
+      { key: 'housing_tracked', group: 'Civic', label: 'In an official house-price index', test: r => r.housing_tracked,
+        describe: 'City tracked by RBI HPI or NHB RESIDEX' },
+      { key: 'housing_untracked', group: 'Civic', label: 'No official house-price index', test: r => !r.housing_tracked,
+        describe: "No RBI HPI / NHB RESIDEX coverage — why a per-district 'housing bubble' can't be measured officially" },
+    ];
+    const facetByKey = Object.fromEntries(facets.map(f => [f.key, f]));
+
+    function run(activeKeys, mode) {
+      const keys = (activeKeys || []).filter(k => facetByKey[k]);
+      if (!keys.length) return rows.slice();
+      const tests = keys.map(k => facetByKey[k].test);
+      return rows.filter(r => mode === 'OR' ? tests.some(t => t(r)) : tests.every(t => t(r)));
+    }
+
+    return { rows, facets, facetByKey, run };
+  }
+
+  global.QueryEngine = { build };
+})(typeof window !== 'undefined' ? window : this);

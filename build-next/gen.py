@@ -8,6 +8,10 @@ try:
     from render_discover import discover_body, tribes_india_body, kingdoms_body
 except Exception:
     discover_body=None; tribes_india_body=None; kingdoms_body=None
+try:
+    from render_map import map_body, copy_map_deps, map_head_links
+except Exception:
+    map_body=None
 OUT=os.environ.get('BHARAT_OUT','out')+'/';HERE=os.path.dirname(os.path.abspath(__file__))+'/';R=os.environ.get('BHARAT_REPO','..')+'/';LIVE='https://sinhaankur.github.io/bharat/'
 j=lambda f:json.load(open(R+f))
 A=json.load(open(HERE+'inputs/atlas.json'))
@@ -24,7 +28,7 @@ GAP='<span class="chip">gap</span>'
 
 DOORS=[
  ('Today','What is happening, and who is telling it?','i-edict','today.html',[('news-journey.html','The News Journey','a story as a dated rail, fact beside framing'),('feed.html',"Today's news",'who the outlets are, and where coverage falls'),('feed.html#bias','The spin check','coverage by published lean'),('timeline.html','How it built up','the record, event by event'),('articles.html','Analysis','written pieces')]),
- ('Money and power','Where does public money go, and who answers for it?','i-bull','money.html',[('money-map.html','The money map','every district, coloured by money'),('state-of-india.html','Which states carry the country','every state by what it gives and gets'),('explore.html','Ask your own question','filter and rank all 594 districts'),('command-chain.html',"Who's in charge",'the chain of command, tier by tier'),('officials.html','Officials to track','the sourced accountability register'),('mesh.html','How it all connects','money, cases, officials and districts'),('engines.html','The 7 engines','the lenses that read the whole atlas'),('global.html','India vs the world','GDP, income and industry, compared'),('geopolitical-chess.html','The geopolitical board','who rules each player, a framing'),('usa.html','Compare with the US','the same lens on another federation'),('hero.html','The whole atlas on one screen','the globe app')]),
+ ('Money and power','Where does public money go, and who answers for it?','i-bull','money.html',[('map.html','The interactive map','every district, tap for the ten-year story'),('money-map.html','The money map','every district, coloured by money'),('state-of-india.html','Which states carry the country','every state by what it gives and gets'),('explore.html','Ask your own question','filter and rank all 594 districts'),('command-chain.html',"Who's in charge",'the chain of command, tier by tier'),('officials.html','Officials to track','the sourced accountability register'),('mesh.html','How it all connects','money, cases, officials and districts'),('engines.html','The 7 engines','the lenses that read the whole atlas'),('global.html','India vs the world','GDP, income and industry, compared'),('geopolitical-chess.html','The geopolitical board','who rules each player, a framing'),('usa.html','Compare with the US','the same lens on another federation'),('hero.html','The whole atlas on one screen','the globe app')]),
  ('Land and water','What is the ground like, and where is it unsafe to build?','i-tree','land.html',[('encroachment-atlas.html','Built where water returns','homes on flood land'),('terrain-3d.html','The land in 3D','real relief, river, plain and mountain'),('flood-3d.html','Raise the water','flooding, over real terrain'),('quake-tsunami.html','Earthquakes and tsunamis','the hazard record'),('atlas-3d.html','India by constraint','states by development constraint'),('india-3d.html','The globe','the same India on real Earth'),('globe-map.html','Globe to flat map','watch the globe unroll')]),
  ('The long story','How did we get here?','i-lion','story.html',[('discover.html','Discover Bharat, state by state','the people, kingdoms and heritage of each state'),('kingdoms.html','Kingdoms and their flags','the standards that outlasted empires'),('ancient-india.html','5,000 years, one timeline','the whole spine'),('ashoka.html',"Ashoka's empire",'one empire, read in its own edicts'),('heritage-atlas.html','Temples and sacred ground','who built them, and what happened to them'),('temple-forms.html','How temples are shaped','measured drawings, to real dimensions'),('cave-walk.html','Walk inside a temple','a first-person reconstruction'),('heritage-3d.html','Temples in 3D','scanned and modelled'),('deep-history.html','Who we are, in DNA','the ancient-DNA population shifts'),('social-fabric.html','The social fabric',"the people of Ashoka's India"),('atrocities.html',"History's deadliest events",'the 100 worst, counted'),('history.html','History race','states over time')]),
  ('Words and craft','How do we speak, write and make?','i-lotus','words.html',[('languages.html','Languages and scripts of Bharat','families, names and where they come from'),('journey.html','The journey of a word','one word through 4,000 years'),('scripts.html','The script family tree','one ancestor, many alphabets'),('vedas.html','One text, many tongues','the Hymn of Creation, compared'),('library.html','Reading room','the primary texts'),('tribes.html','The tribes that made it','Warli, Gond, Mithila and more'),('tribes-india.html','Every listed tribe','all 727, state by state, searchable'),('indic-design-systems.html','Indic design systems','the colours and where they come from'),('design-systems.html','India by design systems','a skin per state, one chassis'),('design-system.html','Atomic reference','tokens to templates'),('canvas.html','The canvas','every screen, one deck')]),
@@ -677,10 +681,29 @@ def shellbare(f,di,title,lede,body,crumb):
 </main>
 <script src="js/nav.js"></script>{'<script src="js/base.js"></script>' if hasmap else ''}<script src="js/site.js"></script><script defer src="js/webgl.js"></script>
 </body></html>'''
+
+def shellmap(f,di,title,lede,hero,body,crumb,headcss,endjs):
+    """The map page: our chrome + the classic India fiscal map engine (Leaflet + app.js),
+    with its vendor CSS in <head> and its scripts before </body>. Rebuilt 'inside the new
+    design' — dark bronze/gold, 15-skins, WebGL, the tile-free Plain base."""
+    plain=re.sub(r'\*','',title)
+    return f'''<!DOCTYPE html>
+<html lang="en" class="theme-mauryan theme-dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<script>(function(){{try{{var s=localStorage.getItem('bh_skin');if(s)document.documentElement.className=s;}}catch(e){{}}}})();</script>
+<title>{e(plain)} · Bharat</title><meta name="description" content="{e(re.sub("<[^>]+>","",lede)[:155])}">
+<link rel="canonical" href="{LIVE}{f}"><meta property="og:site_name" content="Bharat">
+{FONTS}<link rel="stylesheet" href="css/site.css">{_THEME_LINKS}{headcss}</head>
+<body data-door="{di}">
+<main><div class="wrap"><p class="crumb">{crumb}</p>{hero}</div>
+{body}
+</main>
+<script src="js/nav.js"></script><script src="js/site.js"></script><script defer src="js/webgl.js"></script>
+{endjs}
+</body></html>'''
 made=[]
 # pages handled by the canvas importer (skipped in the normal door loop; emitted separately).
 # Declared up front so the door loop skips them before the canvas block runs.
-CANVAS_PAGES={'discover.html','tribes.html','tribes-india.html','kingdoms.html'}
+CANVAS_PAGES={'discover.html','tribes.html','tribes-india.html','kingdoms.html','map.html'}
 if load_canvas:
     CANVAS_PAGES |= {'tribe-'+s[6:].lower()+'.html' for s in canvas_available() if s.startswith('Tribe-')}
     CANVAS_PAGES |= {'region-'+s[7:].lower()+'.html' for s in canvas_available() if s.startswith('Region-')}
@@ -723,6 +746,22 @@ if discover_body:
         '<div class="wrap">'+_dhero+'</div>'+discover_body(),
         '<a href="index.html">Home</a> / <a href="story.html">The long story</a> / Discover Bharat'))
     made.append('discover.html')
+
+# the interactive India fiscal MAP (classic.html engine) rebuilt inside the new design.
+if map_body:
+    CANVAS_PAGES.add('map.html')
+    _mheadcss,_mendjs=map_head_links()
+    _mhero=('<div class="hero" style="padding:26px 0 24px"><div><p class="kick"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#i-bull"/></svg>Money and power · The map</p>'
+            '<h1>Every district, on <em>one map</em></h1>'
+            '<p class="lede">India by public money — tap a state for its ten-year story, its governance footprint, and who answers for it. Drag the year. The ground is a clean, tile-free base; the data is sourced, or shown as a gap.</p></div><div></div></div><div class="rule"></div>')
+    open(OUT+'map.html','w').write(shellmap(
+        'map.html', 1, 'Every district, on *one map*',
+        'India by public money — every district on one interactive map, sourced.',
+        _mhero, map_body(),
+        '<a href="index.html">Home</a> / <a href="money.html">Money and power</a> / The map',
+        _mheadcss, _mendjs))
+    made.append('map.html')
+    copy_map_deps(OUT.rstrip('/'), R.rstrip('/'))
 
 # Phase 3: the tribe design-system pages (static canvas content) — wrapped in our chrome under
 # Words-and-craft. These are fully static (no {{ }}), so a straight import + shellbare wrap.
