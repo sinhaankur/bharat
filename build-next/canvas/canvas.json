@@ -1,0 +1,566 @@
+{
+  "artboards": [
+    {
+      "file": "Main.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 3560,
+      "title": "Front page — WebGL eras",
+      "expand": "fill",
+      "page": "front",
+      "is_interactive": true
+    },
+    {
+      "file": "DesignSystem.dc.html",
+      "x": 1520,
+      "y": 0,
+      "w": 1440,
+      "h": 5600,
+      "title": "House design system",
+      "expand": "fill",
+      "page": "front",
+      "is_interactive": true
+    },
+    {
+      "file": "States.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 3400,
+      "title": "Discover Bharat, state by state",
+      "expand": "fill",
+      "page": "discover",
+      "is_interactive": true
+    },
+    {
+      "file": "Tribes.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 3300,
+      "title": "Tribes — overview, gaps, dynasty skins",
+      "expand": "fill",
+      "page": "tribes"
+    },
+    {
+      "file": "Tribe-Warli.dc.html",
+      "x": 1520,
+      "y": 0,
+      "w": 1280,
+      "h": 3000,
+      "title": "Tribe — Warli",
+      "expand": "fill",
+      "page": "tribes"
+    },
+    {
+      "file": "Tribe-Gond.dc.html",
+      "x": 2880,
+      "y": 0,
+      "w": 1280,
+      "h": 3000,
+      "title": "Tribe — Gond",
+      "expand": "fill",
+      "page": "tribes"
+    },
+    {
+      "file": "Tribe-Mithila.dc.html",
+      "x": 4240,
+      "y": 0,
+      "w": 1280,
+      "h": 3000,
+      "title": "Tribe — Mithila",
+      "expand": "fill",
+      "page": "tribes"
+    },
+    {
+      "file": "Tribe-Pattachitra.dc.html",
+      "x": 5600,
+      "y": 0,
+      "w": 1280,
+      "h": 3000,
+      "title": "Tribe — Pattachitra",
+      "expand": "fill",
+      "page": "tribes"
+    },
+    {
+      "file": "Tribe-Bhil.dc.html",
+      "x": 6960,
+      "y": 0,
+      "w": 1280,
+      "h": 3000,
+      "title": "Tribe — Bhil",
+      "expand": "fill",
+      "page": "tribes"
+    },
+    {
+      "file": "Tribe-Saura.dc.html",
+      "x": 8320,
+      "y": 0,
+      "w": 1280,
+      "h": 3000,
+      "title": "Tribe — Saura / Santal",
+      "expand": "fill",
+      "page": "tribes"
+    },
+    {
+      "file": "Door-Today.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 2360,
+      "title": "Door 1 — Today",
+      "expand": "fill",
+      "page": "doors",
+      "is_interactive": true
+    },
+    {
+      "file": "Door-Money.dc.html",
+      "x": 1520,
+      "y": 0,
+      "w": 1440,
+      "h": 2880,
+      "title": "Door 2 — Money and power",
+      "expand": "fill",
+      "page": "doors",
+      "is_interactive": true
+    },
+    {
+      "file": "Door-Land.dc.html",
+      "x": 3040,
+      "y": 0,
+      "w": 1440,
+      "h": 2620,
+      "title": "Door 3 — Land and water",
+      "expand": "fill",
+      "page": "doors",
+      "is_interactive": true
+    },
+    {
+      "file": "Door-Story.dc.html",
+      "x": 4560,
+      "y": 0,
+      "w": 1440,
+      "h": 2880,
+      "title": "Door 4 — The long story",
+      "expand": "fill",
+      "page": "doors",
+      "is_interactive": true
+    },
+    {
+      "file": "Door-Words.dc.html",
+      "x": 6080,
+      "y": 0,
+      "w": 1440,
+      "h": 2880,
+      "title": "Door 5 — Words and craft",
+      "expand": "fill",
+      "page": "doors",
+      "is_interactive": true
+    },
+    {
+      "file": "Door-Receipts.dc.html",
+      "x": 7600,
+      "y": 0,
+      "w": 1440,
+      "h": 2880,
+      "title": "Door 6 — Receipts",
+      "expand": "fill",
+      "page": "doors",
+      "is_interactive": true
+    },
+    {
+      "file": "Regions.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 2300,
+      "title": "India by design systems — one page, dyed 22 ways",
+      "expand": "fill",
+      "page": "skins",
+      "is_interactive": true
+    },
+    {
+      "file": "Skin-Kashmir.dc.html",
+      "x": 1520,
+      "y": 0,
+      "w": 1280,
+      "h": 3000,
+      "title": "State skin — Kashmir",
+      "expand": "fill",
+      "page": "skins"
+    },
+    {
+      "file": "Skin-Rajasthan.dc.html",
+      "x": 2880,
+      "y": 0,
+      "w": 1280,
+      "h": 3000,
+      "title": "State skin — Rajasthan",
+      "expand": "fill",
+      "page": "skins"
+    },
+    {
+      "file": "Skin-Tamil.dc.html",
+      "x": 4240,
+      "y": 0,
+      "w": 1280,
+      "h": 3000,
+      "title": "State skin — Tamil Nadu",
+      "expand": "fill",
+      "page": "skins"
+    },
+    {
+      "file": "Skin-Kerala.dc.html",
+      "x": 5600,
+      "y": 0,
+      "w": 1280,
+      "h": 3000,
+      "title": "State skin — Kerala",
+      "expand": "fill",
+      "page": "skins"
+    },
+    {
+      "file": "Skin-Assam.dc.html",
+      "x": 6960,
+      "y": 0,
+      "w": 1280,
+      "h": 3000,
+      "title": "State skin — Assam",
+      "expand": "fill",
+      "page": "skins"
+    },
+    {
+      "file": "Skin-Naga.dc.html",
+      "x": 8320,
+      "y": 0,
+      "w": 1280,
+      "h": 3000,
+      "title": "State skin — Nagaland",
+      "expand": "fill",
+      "page": "skins"
+    },
+    {
+      "file": "Skin-Mauryan.dc.html",
+      "x": 1520,
+      "y": 3500,
+      "w": 1280,
+      "h": 3000,
+      "title": "Dynasty register — Mauryan",
+      "expand": "fill",
+      "page": "skins",
+      "is_interactive": true
+    },
+    {
+      "file": "Skin-Gupta.dc.html",
+      "x": 2880,
+      "y": 3500,
+      "w": 1280,
+      "h": 3000,
+      "title": "Dynasty register — Gupta",
+      "expand": "fill",
+      "page": "skins",
+      "is_interactive": true
+    },
+    {
+      "file": "Skin-Chola.dc.html",
+      "x": 4240,
+      "y": 3500,
+      "w": 1280,
+      "h": 3000,
+      "title": "Dynasty register — Chola",
+      "expand": "fill",
+      "page": "skins",
+      "is_interactive": true
+    },
+    {
+      "file": "Skin-Rajput.dc.html",
+      "x": 5600,
+      "y": 3500,
+      "w": 1280,
+      "h": 3000,
+      "title": "Dynasty register — Rajput",
+      "expand": "fill",
+      "page": "skins",
+      "is_interactive": true
+    },
+    {
+      "file": "Tribes-India.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 7400,
+      "title": "Every listed tribe — map, timeline, all 727 entries",
+      "expand": "fill",
+      "page": "atlas",
+      "is_interactive": true
+    },
+    {
+      "file": "Region-Bengal.dc.html",
+      "x": 1520,
+      "y": 0,
+      "w": 1440,
+      "h": 4200,
+      "title": "Region — Bengal, both sides",
+      "expand": "fill",
+      "page": "atlas"
+    },
+    {
+      "file": "Region-Bihar.dc.html",
+      "x": 3040,
+      "y": 0,
+      "w": 1440,
+      "h": 4200,
+      "title": "Region — Bihar before and after",
+      "expand": "fill",
+      "page": "atlas"
+    },
+    {
+      "file": "Region-Rajasthan.dc.html",
+      "x": 4560,
+      "y": 0,
+      "w": 1440,
+      "h": 4200,
+      "title": "Region — Rajasthan",
+      "expand": "fill",
+      "page": "atlas"
+    },
+    {
+      "file": "Region-Haryana.dc.html",
+      "x": 6080,
+      "y": 0,
+      "w": 1440,
+      "h": 4200,
+      "title": "Region — Haryana before and after",
+      "expand": "fill",
+      "page": "atlas"
+    },
+    {
+      "file": "Tribe-Sohrai.dc.html",
+      "x": 1520,
+      "y": 3500,
+      "w": 1280,
+      "h": 3100,
+      "title": "Tribe — Sohrai",
+      "expand": "fill",
+      "page": "tribes"
+    },
+    {
+      "file": "Tribe-Khovar.dc.html",
+      "x": 2880,
+      "y": 3500,
+      "w": 1280,
+      "h": 3100,
+      "title": "Tribe — Khovar",
+      "expand": "fill",
+      "page": "tribes"
+    },
+    {
+      "file": "Tribe-Pithora.dc.html",
+      "x": 4240,
+      "y": 3500,
+      "w": 1280,
+      "h": 3100,
+      "title": "Tribe — Pithora",
+      "expand": "fill",
+      "page": "tribes"
+    },
+    {
+      "file": "Tribe-Toda.dc.html",
+      "x": 5600,
+      "y": 3500,
+      "w": 1280,
+      "h": 3100,
+      "title": "Tribe — Toda",
+      "expand": "fill",
+      "page": "tribes"
+    },
+    {
+      "file": "Tribe-Naga.dc.html",
+      "x": 6960,
+      "y": 3500,
+      "w": 1280,
+      "h": 3100,
+      "title": "Tribe — Chakhesang Naga",
+      "expand": "fill",
+      "page": "tribes"
+    },
+    {
+      "file": "Tribe-Kurumba.dc.html",
+      "x": 8320,
+      "y": 3500,
+      "w": 1280,
+      "h": 3100,
+      "title": "Tribe — Kurumba",
+      "expand": "fill",
+      "page": "tribes"
+    },
+    {
+      "file": "Tribe-Jadupatua.dc.html",
+      "x": 9680,
+      "y": 3500,
+      "w": 1280,
+      "h": 3100,
+      "title": "Tribe — Jadupatua",
+      "expand": "fill",
+      "page": "tribes"
+    },
+    {
+      "file": "Tribe-Mizo.dc.html",
+      "x": 11040,
+      "y": 3500,
+      "w": 1280,
+      "h": 3100,
+      "title": "Tribe — Mizo Puan",
+      "expand": "fill",
+      "page": "tribes"
+    },
+    {
+      "file": "Tribe-Bodo.dc.html",
+      "x": 12400,
+      "y": 3500,
+      "w": 1280,
+      "h": 3100,
+      "title": "Tribe — Bodo Aronai",
+      "expand": "fill",
+      "page": "tribes"
+    },
+    {
+      "file": "Kingdoms.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 4600,
+      "title": "Kingdoms and their flags",
+      "expand": "fill",
+      "page": "kingdoms",
+      "is_interactive": true
+    },
+    {
+      "file": "Region-Goa.dc.html",
+      "x": 1520,
+      "y": 0,
+      "w": 1440,
+      "h": 4200,
+      "title": "Goa before and after 1510",
+      "expand": "fill",
+      "page": "kingdoms"
+    }
+  ],
+  "annotations": [
+    {
+      "id": "t_front",
+      "x": 0,
+      "y": -300,
+      "w": 240,
+      "maxW": 2960,
+      "text": "Front page and house system",
+      "kind": "title1",
+      "page": "front"
+    },
+    {
+      "id": "t_tribes",
+      "x": 0,
+      "y": -300,
+      "w": 240,
+      "maxW": 8000,
+      "text": "Tribe design systems — one chassis, fifteen skins",
+      "kind": "title1",
+      "page": "tribes"
+    },
+    {
+      "id": "t_doors",
+      "x": 0,
+      "y": -300,
+      "w": 240,
+      "maxW": 8000,
+      "text": "Six doors — all 53 views, by status",
+      "kind": "title1",
+      "page": "doors"
+    },
+    {
+      "id": "t_skins",
+      "x": 0,
+      "y": -300,
+      "w": 240,
+      "maxW": 8000,
+      "text": "India by design systems — state skins",
+      "kind": "title1",
+      "page": "skins"
+    },
+    {
+      "id": "t_dyn",
+      "x": 1520,
+      "y": 3200,
+      "w": 240,
+      "maxW": 5360,
+      "text": "Dynasty registers — light and dark",
+      "kind": "title1",
+      "page": "skins"
+    },
+    {
+      "id": "t_atlas",
+      "x": 0,
+      "y": -300,
+      "w": 240,
+      "maxW": 7520,
+      "text": "Every listed tribe — and four regions, before and after",
+      "kind": "title1",
+      "page": "atlas"
+    },
+    {
+      "id": "t_tribes2",
+      "x": 1520,
+      "y": 3200,
+      "w": 240,
+      "maxW": 8000,
+      "text": "Nine more systems — researched pigments, dyes and yarns",
+      "kind": "title1",
+      "page": "tribes"
+    },
+    {
+      "id": "t_kingdoms",
+      "x": 0,
+      "y": -300,
+      "w": 240,
+      "maxW": 2960,
+      "text": "Kingdoms, their flags, and what became of them",
+      "kind": "title1",
+      "page": "kingdoms"
+    }
+  ],
+  "launch": {
+    "view": "canvas",
+    "page": "front"
+  },
+  "pages": [
+    {
+      "id": "front",
+      "name": "Front page and system"
+    },
+    {
+      "id": "discover",
+      "name": "Discover Bharat by state"
+    },
+    {
+      "id": "tribes",
+      "name": "Tribe design systems"
+    },
+    {
+      "id": "doors",
+      "name": "Six doors"
+    },
+    {
+      "id": "skins",
+      "name": "Regional and dynasty skins"
+    },
+    {
+      "id": "atlas",
+      "name": "Every listed tribe"
+    },
+    {
+      "id": "kingdoms",
+      "name": "Kingdoms and flags"
+    }
+  ]
+}

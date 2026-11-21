@@ -1,0 +1,161 @@
+#!/usr/bin/env python3
+"""
+render_discover.py — pre-render the "Discover Bharat, one state at a time" page to STATIC
+HTML (no React / no canvas runtime), from the DATA object inside canvas/States.dc.html.
+
+The canvas original drove a per-state panel with {{ cur.* }} bindings via a React runtime.
+We parse its DATA (clean JSON: 36 states, each with people/kingdoms/sites/… rows), pre-render
+every state's panel in Python, and ship a tiny vanilla-JS switcher that shows the chosen
+state (map click or list). No framework. Honesty chips preserved (gap = dashed amber).
+
+Exposes:  discover_body()  → the full page content HTML for gen.py's shellbare().
+"""
+import os, re, json, html as _html
+
+HERE = os.path.dirname(os.path.abspath(__file__)) + "/"
+e = lambda s: _html.escape(str(s if s is not None else ""), quote=True)
+
+# which canvas pages are ALREADY emitted as real pages (so a link to them is valid). As
+# Phases 3–4 land the tribes/kingdoms, add their slugs here. Until then, links to not-yet-
+# imported canvas pages are rendered as plain text (no dead href).
+_LIVE_TARGETS = {"discover.html", "tribes.html", "index.html"}
+
+def _route(href):
+    """Rewrite a canvas .dc.html href → our page, or '' if that page isn't built yet."""
+    if not href or not isinstance(href, str):
+        return ""
+    if href.startswith("http") or href.endswith(".html") and ".dc." not in href:
+        return href
+    name = href[:-8] if href.endswith(".dc.html") else href
+    if name == "Main":
+        return "index.html"
+    if name in ("States",): return "discover.html"
+    if name == "Tribes": return "tribes.html"
+    if name.startswith("Tribe-"): tgt = "tribe-" + name[6:].lower() + ".html"
+    elif name == "Kingdoms": tgt = "kingdoms.html"
+    elif name.startswith("Region-"): tgt = "region-" + name[7:].lower() + ".html"
+    elif name.startswith("Skin-"): tgt = "skin-" + name[5:].lower() + ".html"
+    else: tgt = name.lower() + ".html"
+    return tgt if tgt in _LIVE_TARGETS else ""   # only link if the page exists
+
+
+def _load_data():
+    doc = open(HERE + "canvas/States.dc.html", encoding="utf-8").read()
+    m = re.search(r"const DATA\s*=\s*(\{.*?\});", doc, re.S)
+    if not m:
+        return {}
+    return json.loads(m.group(1))
+
+
+def _chip(label, gap=False):
+    if gap:
+        return f'<span style="display:inline-block;font:500 11px var(--mono);text-transform:uppercase;letter-spacing:.06em;color:#e6a35a;border:1px dashed #e6a35a;border-radius:999px;padding:2px 9px">{e(label)}</span>'
+    return f'<span style="display:inline-block;font:500 11px var(--mono);text-transform:uppercase;letter-spacing:.06em;color:#9fd0ae;border:1px solid rgba(159,208,174,.5);border-radius:999px;padding:2px 9px">{e(label)}</span>'
+
+
+def _community(r):
+    """One 'people who were here first' entry: a card, gap-dashed if not sourced."""
+    name = e(r.get("name", ""))
+    label = e(r.get("label", ""))
+    col = r.get("col", "#e4c069")
+    dashed = r.get("bd") == "dashed" or r.get("plain")
+    href = _route(r.get("href") or "")
+    border = f"1px {'dashed' if dashed else 'solid'} {('rgba(201,162,39,.4)' if not dashed else '#e6a35a')}"
+    linked = href and r.get("link")
+    inner = (f'<a href="{e(href)}" style="text-decoration:none;color:inherit">' if linked else "<div>") \
+        + f'<b style="display:block;font:500 15px var(--sans);color:var(--ink)">{name}</b>' \
+        + f'<span style="font-size:12.5px;color:var(--soft);line-height:1.4">{label}</span>' \
+        + ("</a>" if linked else "</div>")
+    return f'<div style="border:{border};border-radius:6px;padding:10px 12px;border-left:3px solid {e(col)}">{inner}</div>'
+
+
+def _rowlist(rows, kind):
+    """A generic sourced-row list (kingdoms, sites, powers)."""
+    out = []
+    for r in rows:
+        name = e(r.get("name") or r.get("t") or "")
+        extra = e(r.get("fate") or r.get("what") or r.get("seat") or r.get("status") or "")
+        href = _route(r.get("href") or (r.get("link") if isinstance(r.get("link"), str) else ""))
+        a = f'<a href="{e(href)}" style="color:var(--gold)">{name}</a>' if href else f'<b style="color:var(--ink)">{name}</b>'
+        out.append(f'<div style="padding:7px 0;border-bottom:1px solid var(--hair);font-size:14px">{a}'
+                   + (f' <span style="color:var(--soft)">· {extra}</span>' if extra else "") + "</div>")
+    return "".join(out) or f'<p style="color:var(--soft);font-size:14px">No {kind} sourced yet — <span style="color:#e6a35a">a gap</span>.</p>'
+
+
+def _state_panel(sid, s):
+    name = e(s.get("name", ""))
+    share = e(s.get("share", ""))
+    sharenote = e(s.get("sharenote", ""))
+    # headline tiles for the state
+    tiles = [
+        (s.get("share", "—"), "ST share of population", s.get("sharegap")),
+        (s.get("ntribes", "0"), "tribe entries listed", False),
+        (s.get("nsites", "0"), "heritage sites", False),
+        (s.get("ndyn", "0"), "dynasties / powers", False),
+    ]
+    tilehtml = "".join(
+        f'<div><b style="display:block;font:500 30px var(--display);color:var(--ink);line-height:1">{e(v)}</b>'
+        f'<span style="font-size:12px;color:var(--soft)">{e(l)}</span>'
+        + (f' {_chip("gap", True)}' if g else "") + "</div>"
+        for v, l, g in tiles)
+
+    communities = "".join(_community(r) for r in (s.get("rows") or []))
+    comm_block = (f'<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-top:14px">{communities}</div>'
+                  if communities else f'<p style="color:var(--soft)">No communities sourced yet — <span style="color:#e6a35a">a gap</span>.</p>')
+
+    kings = _rowlist(s.get("kings") or [], "kingdoms")
+    sites = _rowlist(s.get("sites") or [], "heritage sites")
+    powers = _rowlist(s.get("pv") or [], "regional powers")
+
+    return f'''<div class="st-panel" data-state="{sid}" style="display:none">
+      <h2 style="font:500 clamp(28px,3.6vw,42px)/1.08 var(--display);letter-spacing:-.02em;color:var(--ink);margin:0">{name}</h2>
+      <p style="font-size:13px;color:var(--soft);margin:6px 0 0">{share} ST population · {sharenote}</p>
+      <div style="display:flex;flex-wrap:wrap;gap:26px;margin:20px 0 26px">{tilehtml}</div>
+      <h3 style="font:500 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--gilt);margin:0 0 4px">1 · The people who were here first</h3>
+      {comm_block}
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:28px">
+        <div><h3 style="font:500 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--gilt);margin:0 0 8px">2 · Kingdoms that rose</h3>{kings}</div>
+        <div><h3 style="font:500 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--gilt);margin:0 0 8px">3 · What still stands</h3>{sites}</div>
+      </div>
+      <div style="margin-top:24px"><h3 style="font:500 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--gilt);margin:0 0 8px">Regional powers</h3>{powers}</div>
+    </div>'''
+
+
+def discover_body():
+    data = _load_data()
+    states = sorted(data.items(), key=lambda kv: kv[1].get("name", ""))
+    # the state picker (a simple sourced list; the map stays as a decorative SVG from the canvas)
+    picker = "".join(
+        f'<button type="button" class="st-pick" data-state="{sid}" '
+        f'style="text-align:left;background:none;border:1px solid var(--line);border-radius:6px;padding:9px 12px;color:var(--ink);font:500 14px var(--sans);cursor:pointer">{e(s.get("name",""))}'
+        f'<span style="display:block;font:500 11px var(--mono);color:var(--soft)">{e(s.get("ntribes","0"))} communities · {e(s.get("nsites","0"))} sites</span></button>'
+        for sid, s in states)
+    panels = "".join(_state_panel(sid, s) for sid, s in states)
+    first = states[0][0] if states else "s0"
+
+    return f'''<section class="b"><div class="wrap">
+      <p class="sub" data-r>Discover · state by state</p>
+      <div style="display:grid;grid-template-columns:300px 1fr;gap:34px;align-items:start" class="st-grid">
+        <div style="position:sticky;top:84px">
+          <p style="font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--soft);margin:0 0 10px">Choose a state</p>
+          <div style="display:grid;gap:7px;max-height:72vh;overflow:auto">{picker}</div>
+        </div>
+        <div id="st-detail">{panels}</div>
+      </div>
+    </div></section>
+    <style>@media(max-width:820px){{.st-grid{{grid-template-columns:1fr !important}}.st-grid>div:first-child{{position:static !important}}}}</style>
+    <script>(function(){{
+      var panels=document.querySelectorAll('.st-panel'),picks=document.querySelectorAll('.st-pick');
+      function show(id){{panels.forEach(function(p){{p.style.display=p.dataset.state===id?'block':'none'}});
+        picks.forEach(function(b){{var on=b.dataset.state===id;b.style.borderColor=on?'var(--gold)':'var(--line)';b.style.color=on?'var(--gold)':'var(--ink)'}});}}
+      picks.forEach(function(b){{b.addEventListener('click',function(){{show(b.dataset.state)}})}});
+      show('{first}');
+    }})();</script>'''
+
+
+if __name__ == "__main__":
+    body = discover_body()
+    print("discover body:", len(body), "chars")
+    import re as _re
+    print("state panels:", len(_re.findall(r'class="st-panel"', body)))
+    print("has {{ leftover?:", "{{" in body)
