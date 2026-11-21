@@ -863,3 +863,16 @@ for f in made:
     for h in re.findall(r'href="([^"#:]+\.html)(?:#[^"]*)?"',open(OUT+''+f).read()):
         if not os.path.exists(OUT+''+h): bad.add((f,h))
 print('broken',sorted(bad)[:20]);print('wiki hrefs',sum(len(re.findall(r'href="[^"]*wiki',open(OUT+''+f).read())) for f in made))
+
+# ---- Claude-design adaptive pages (LAST, so they win over the generated versions) ----
+# The Claude-design bundle is the canonical look. De-bundle it into STANDALONE responsive pages
+# (each carries its own @media CSS, so it adapts phone→desktop — unlike the 1440px iframe bundle).
+# These overwrite index.html + the region-*/design-systems slugs the generator also emits.
+try:
+    from debundle import debundle
+    _cb = HERE + 'inputs/landing-bundle.html'
+    if os.path.exists(_cb):
+        _w = debundle(_cb, OUT.rstrip('/') or '.')
+        print('claude-design adaptive pages:', len(_w), '->', ', '.join(s for s, _ in _w))
+except Exception as _e:
+    print('debundle skipped:', _e)
