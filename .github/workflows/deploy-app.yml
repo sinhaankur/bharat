@@ -16,6 +16,10 @@ on:
       - '.github/workflows/deploy-app.yml'
       - '*.html'
       - '*.json'
+      - '*.js'             # app.js, sw.js, map scripts etc. — a change here must redeploy
+      - '*.css'            # styles.css + theme-*.css
+      - '*.svg'
+      - 'vendor/**'
       - 'next/**'          # the generator rebuild preview (published at /bharat/next/)
 
 permissions:
