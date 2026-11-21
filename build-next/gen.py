@@ -5,9 +5,9 @@ try:
 except Exception:
     load_canvas=None; canvas_available=lambda:[]
 try:
-    from render_discover import discover_body
+    from render_discover import discover_body, tribes_india_body
 except Exception:
-    discover_body=None
+    discover_body=None; tribes_india_body=None
 OUT=os.environ.get('BHARAT_OUT','out')+'/';HERE=os.path.dirname(os.path.abspath(__file__))+'/';R=os.environ.get('BHARAT_REPO','..')+'/';LIVE='https://sinhaankur.github.io/bharat/'
 j=lambda f:json.load(open(R+f))
 A=json.load(open(HERE+'inputs/atlas.json'))
@@ -27,7 +27,7 @@ DOORS=[
  ('Money and power','Where does public money go, and who answers for it?','i-bull','money.html',[('money-map.html','The money map','every district, coloured by money'),('state-of-india.html','Which states carry the country','every state by what it gives and gets'),('explore.html','Ask your own question','filter and rank all 594 districts'),('command-chain.html',"Who's in charge",'the chain of command, tier by tier'),('officials.html','Officials to track','the sourced accountability register'),('mesh.html','How it all connects','money, cases, officials and districts'),('engines.html','The 7 engines','the lenses that read the whole atlas'),('global.html','India vs the world','GDP, income and industry, compared'),('geopolitical-chess.html','The geopolitical board','who rules each player, a framing'),('usa.html','Compare with the US','the same lens on another federation'),('hero.html','The whole atlas on one screen','the globe app')]),
  ('Land and water','What is the ground like, and where is it unsafe to build?','i-tree','land.html',[('encroachment-atlas.html','Built where water returns','homes on flood land'),('terrain-3d.html','The land in 3D','real relief, river, plain and mountain'),('flood-3d.html','Raise the water','flooding, over real terrain'),('quake-tsunami.html','Earthquakes and tsunamis','the hazard record'),('atlas-3d.html','India by constraint','states by development constraint'),('india-3d.html','The globe','the same India on real Earth'),('globe-map.html','Globe to flat map','watch the globe unroll')]),
  ('The long story','How did we get here?','i-lion','story.html',[('discover.html','Discover Bharat, state by state','the people, kingdoms and heritage of each state'),('ancient-india.html','5,000 years, one timeline','the whole spine'),('ashoka.html',"Ashoka's empire",'one empire, read in its own edicts'),('heritage-atlas.html','Temples and sacred ground','who built them, and what happened to them'),('temple-forms.html','How temples are shaped','measured drawings, to real dimensions'),('cave-walk.html','Walk inside a temple','a first-person reconstruction'),('heritage-3d.html','Temples in 3D','scanned and modelled'),('deep-history.html','Who we are, in DNA','the ancient-DNA population shifts'),('social-fabric.html','The social fabric',"the people of Ashoka's India"),('atrocities.html',"History's deadliest events",'the 100 worst, counted'),('history.html','History race','states over time')]),
- ('Words and craft','How do we speak, write and make?','i-lotus','words.html',[('languages.html','Languages and scripts of Bharat','families, names and where they come from'),('journey.html','The journey of a word','one word through 4,000 years'),('scripts.html','The script family tree','one ancestor, many alphabets'),('vedas.html','One text, many tongues','the Hymn of Creation, compared'),('library.html','Reading room','the primary texts'),('tribes.html','The tribes that made it','Warli, Gond, Mithila and more'),('indic-design-systems.html','Indic design systems','the colours and where they come from'),('design-systems.html','India by design systems','a skin per state, one chassis'),('design-system.html','Atomic reference','tokens to templates'),('canvas.html','The canvas','every screen, one deck')]),
+ ('Words and craft','How do we speak, write and make?','i-lotus','words.html',[('languages.html','Languages and scripts of Bharat','families, names and where they come from'),('journey.html','The journey of a word','one word through 4,000 years'),('scripts.html','The script family tree','one ancestor, many alphabets'),('vedas.html','One text, many tongues','the Hymn of Creation, compared'),('library.html','Reading room','the primary texts'),('tribes.html','The tribes that made it','Warli, Gond, Mithila and more'),('tribes-india.html','Every listed tribe','all 727, state by state, searchable'),('indic-design-systems.html','Indic design systems','the colours and where they come from'),('design-systems.html','India by design systems','a skin per state, one chassis'),('design-system.html','Atomic reference','tokens to templates'),('canvas.html','The canvas','every screen, one deck')]),
  ('Receipts','How do you know?','i-jali','receipts.html',[('how-it-works.html','How it works','the project in plain terms'),('about.html','Methodology and honesty','the sourced-or-gap rule, and the limits'),('knowledge.html','The data and sources','what is built and what is proven'),('provenance.html','Every figure to its source','the provenance ledger'),('references.html','Sources','every citation, by tier'),('data.html','Get the data','files and formats'),('for-organisations.html','For organisations','licensing and commissioned work'),('share.html','Share','post a card from the data'),('privacy-policy.html','Privacy and policy','no tracking, no mailing list'),('sitemap.html','Site map','every page, one list')]),
 ]
 ORIG={'money-map.html':'index.html','design-systems.html':'app/design-systems/','canvas.html':'app/canvas/'}
@@ -670,8 +670,11 @@ def shellbare(f,di,title,lede,body,crumb):
 <script src="js/nav.js"></script>{'<script src="js/base.js"></script>' if hasmap else ''}<script src="js/site.js"></script><script defer src="js/webgl.js"></script>
 </body></html>'''
 made=[]
-# pages handled by the canvas importer (skipped in the normal door loop; emitted separately)
-CANVAS_PAGES={'discover.html'}
+# pages handled by the canvas importer (skipped in the normal door loop; emitted separately).
+# Declared up front so the door loop skips them before the canvas block runs.
+CANVAS_PAGES={'discover.html','tribes.html','tribes-india.html'}
+if load_canvas:
+    CANVAS_PAGES |= {'tribe-'+s[6:].lower()+'.html' for s in canvas_available() if s.startswith('Tribe-')}
 DOORLEDE=['The atlas gathers the news but shows none of it until a person has approved it. Start with who is telling the story.','Public money, from the Union to the district, beside the people who answer for it.','The physical country: terrain, water, and the places the water takes back.','Most of this story happens long before Delhi\'s sultans or the British. Begin at the beginning.','Unrelated language families, one family of scripts, and the crafts that carry them.','Every figure cites a source or is shown as a gap. This is where you check.']
 def feature(di):
     if di==0: return sec('The feed, *counted*',news_tiles(),sub='Where it stands')
@@ -711,6 +714,43 @@ if discover_body:
         '<div class="wrap">'+_dhero+'</div>'+discover_body(),
         '<a href="index.html">Home</a> / <a href="story.html">The long story</a> / Discover Bharat'))
     made.append('discover.html')
+
+# Phase 3: the tribe design-system pages (static canvas content) — wrapped in our chrome under
+# Words-and-craft. These are fully static (no {{ }}), so a straight import + shellbare wrap.
+if load_canvas:
+    _cv=set(canvas_available())
+    _tribe_slugs=sorted(s[6:] for s in _cv if s.startswith('Tribe-'))
+    _tribe_name={ 'Bhil':'Bhil','Bodo':'Bodo Aronai','Gond':'Gond','Jadupatua':'Jadupatua','Khovar':'Khovar','Kurumba':'Kurumba','Mithila':'Mithila','Mizo':'Mizo Puan','Naga':'Chakhesang Naga','Pattachitra':'Pattachitra','Pithora':'Pithora','Saura':'Saura / Santal','Sohrai':'Sohrai','Toda':'Toda','Warli':'Warli' }
+    for _slug in _tribe_slugs:
+        _nm=_tribe_name.get(_slug,_slug); _out='tribe-'+_slug.lower()+'.html'
+        CANVAS_PAGES.add(_out)
+        open(OUT+_out,'w').write(shellbare(
+            _out, 4, _nm,
+            'A folk design system: palette, native script, pattern and components, read as one system.',
+            canvas_body('Tribe-'+_slug),
+            f'<a href="index.html">Home</a> / <a href="words.html">Words and craft</a> / <a href="tribes.html">The tribes that made it</a> / {e(_nm)}'))
+        made.append(_out)
+    # the Tribes overview (static) replaces our generated tribes.html
+    if 'Tribes' in _cv:
+        CANVAS_PAGES.add('tribes.html')
+        open(OUT+'tribes.html','w').write(shellbare(
+            'tribes.html', 4, 'The tribes that *made it*',
+            'Folk design systems drawn from India\'s living tribal art — palette, script, pattern, read as systems.',
+            canvas_body('Tribes'),
+            '<a href="index.html">Home</a> / <a href="words.html">Words and craft</a> / The tribes that made it'))
+        made.append('tribes.html')
+    # the 727-entry index — pre-rendered static (no React) with a vanilla search filter.
+    if tribes_india_body:
+        CANVAS_PAGES.add('tribes-india.html')
+        _tihero=('<div class="hero" style="padding:26px 0 30px"><div><p class="kick"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#i-lotus"/></svg>Words and craft · The full list</p>'
+                 '<h1>Every listed tribe of <em>Bharat</em></h1>'
+                 '<p class="lede">All 727 Scheduled-Tribe entries, state by state, searchable. A palette is built for only a few so far; the rest are named, not filled in — a gap, shown as a gap.</p></div><div></div></div><div class="rule"></div>')
+        open(OUT+'tribes-india.html','w').write(shellbare(
+            'tribes-india.html', 4, 'Every listed tribe of *Bharat*',
+            'All 727 Scheduled-Tribe entries, state by state, searchable.',
+            '<div class="wrap">'+_tihero+'</div>'+tribes_india_body(),
+            '<a href="index.html">Home</a> / <a href="words.html">Words and craft</a> / <a href="tribes.html">The tribes that made it</a> / Every listed tribe'))
+        made.append('tribes-india.html')
 sm='<div class="sm-cols">'+''.join(f'<section data-r><p class="sub">{len(ps)} views</p><h2><a href="{h}" style="border:0;font:inherit;display:inline">{e(l)}</a></h2><p class="q">{e(q)}</p>'+''.join(f'<a href="{f}">{e(t)}<span>{e(hint)}</span></a>' for f,t,hint in ps)+'</section>' for l,q,ic,h,ps in DOORS)+'</div>'
 open(OUT+'sitemap.html','w').write(shell('sitemap.html',5,TITLES['sitemap.html'],'Receipts · Site map',f'Six questions, {sum(len(d[4]) for d in DOORS)} views. Each page has one name and one home.','',sec('',sm)+'<section class="b"><div class="wrap" data-r><a class="btn solid" href="index.html">Front page: Bharat through time</a></div></section>','<a href="index.html">Home</a> / <a href="receipts.html">Receipts</a> / Site map'));made.append('sitemap.html')
 # front page: point everything at local pages

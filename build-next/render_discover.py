@@ -153,9 +153,50 @@ def discover_body():
     }})();</script>'''
 
 
+def _tribes_india_data():
+    doc = open(HERE + "canvas/Tribes-India.dc.html", encoding="utf-8").read()
+    m = re.search(r"data\s*=\s*(\[\{.*?\}\]);", doc, re.S) or re.search(r"data\s*=\s*(\[.*?\])\s*[;\n]", doc, re.S)
+    return json.loads(m.group(1)) if m else []
+
+
+def tribes_india_body():
+    """Pre-render the 'every listed tribe' index (727 entries across states) to static HTML
+    + a tiny vanilla search filter. No React."""
+    groups = _tribes_india_data()
+    total = sum(g.get("n", len(g.get("items", []))) for g in groups)
+    cards = []
+    for g in groups:
+        st = e(g.get("state", ""))
+        items = g.get("items", [])
+        lis = "".join(f'<li data-k="{e(it.lower())}" style="padding:4px 0;border-bottom:1px solid var(--hair);font-size:13.5px;color:var(--soft)">{e(it)}</li>' for it in items)
+        cards.append(
+            f'<section class="tig" data-state="{st.lower()}" data-r style="break-inside:avoid;margin-bottom:22px">'
+            f'<h3 style="font:500 16px var(--display);color:var(--ink);margin:0 0 4px">{st} '
+            f'<span style="font:500 11px var(--mono);color:var(--gilt)">{len(items)}</span></h3>'
+            f'<ul style="list-style:none;margin:0;padding:0">{lis}</ul></section>')
+    grid = '<div class="ti-grid" style="column-width:260px;column-gap:28px">' + "".join(cards) + "</div>"
+    return f'''<section class="b"><div class="wrap">
+      <p class="sub" data-r>Every listed tribe · {total} entries across {len(groups)} states</p>
+      <input id="ti-q" type="search" placeholder="Search a community or state — for example Gond, Bhil, or Odisha"
+        aria-label="Search the tribe list"
+        style="width:min(560px,100%);min-height:48px;padding:0 18px;border-radius:24px;border:1px solid var(--line);background:var(--panel-80);color:var(--ink);font:16px var(--sans);margin:4px 0 22px">
+      <p id="ti-count" class="note" data-r></p>
+      {grid}
+    </div></section>
+    <script>(function(){{
+      var q=document.getElementById('ti-q'),secs=document.querySelectorAll('.tig'),cnt=document.getElementById('ti-count');
+      function run(){{var v=q.value.trim().toLowerCase(),shown=0,items=0;
+        secs.forEach(function(s){{var any=false;s.querySelectorAll('li').forEach(function(li){{var ok=!v||li.dataset.k.indexOf(v)>-1||s.dataset.state.indexOf(v)>-1;li.style.display=ok?'':'none';if(ok){{any=true;items++}}}});s.style.display=any?'':'none';if(any)shown++}});
+        cnt.textContent=v?(items+' communities in '+shown+' states match "'+v+'"'):'';}}
+      q.addEventListener('input',run);
+    }})();</script>'''
+
+
 if __name__ == "__main__":
     body = discover_body()
     print("discover body:", len(body), "chars")
     import re as _re
     print("state panels:", len(_re.findall(r'class="st-panel"', body)))
     print("has {{ leftover?:", "{{" in body)
+    tib = tribes_india_body()
+    print("tribes-india body:", len(tib), "chars · groups:", len(_re.findall(r'class="tig"', tib)), "· {{ leftover?:", "{{" in tib)
