@@ -599,6 +599,7 @@ os.makedirs(OUT+'js',exist_ok=True);os.makedirs(OUT+'css',exist_ok=True)
 open(OUT+'js/nav.js','w').write('window.NAV='+NAVJS+';window.SPRITE='+json.dumps(SPRITE)+';')
 open(OUT+'js/base.js','w').write('window.BASE='+json.dumps({'states':A['states'],'rivers':A['rivers'],'dim':A['dim'],'held':HELD},ensure_ascii=False,separators=(',',':'))+';')
 open(OUT+'js/site.js','w').write(open(HERE+'js/site.js').read());open(OUT+'css/site.css','w').write(open(HERE+'css/site.css').read())
+if os.path.exists(HERE+'js/webgl.js'): open(OUT+'js/webgl.js','w').write(open(HERE+'js/webgl.js').read())
 # our Indic skin stylesheets (the 9-skin theme system) — copied from the repo root so the
 # skin switcher can reskin every generated page. site.css bridges --bg/--ink/… → --background/
 # --foreground/… which these set, so one component set reskins across all skins.
@@ -619,7 +620,7 @@ def shell(f,di,title,kick,lede,how,body,crumb,nextprev=''):
 <div class="hero"><div><p class="kick"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#{DOORS[di][2]}"/></svg>{e(kick)}</p><h1>{h1(title)}</h1><p class="lede">{lede}</p></div>{f'<div class="how" data-r><b>How we know</b>{how}</div>' if how else '<div></div>'}</div><div class="rule"></div></div>
 {body}
 <div class="wrap">{nextprev}</div></main>
-<script src="js/nav.js"></script>{'<script src="js/base.js"></script>' if hasmap else ''}{'<script src="js/districts.js"></script>' if 'DIST' in body else ''}<script src="js/site.js"></script>
+<script src="js/nav.js"></script>{'<script src="js/base.js"></script>' if hasmap else ''}{'<script src="js/districts.js"></script>' if 'DIST' in body else ''}<script src="js/site.js"></script><script defer src="js/webgl.js"></script>
 </body></html>'''
 made=[]
 DOORLEDE=['The atlas gathers the news but shows none of it until a person has approved it. Start with who is telling the story.','Public money, from the Union to the district, beside the people who answer for it.','The physical country: terrain, water, and the places the water takes back.','Most of this story happens long before Delhi\'s sultans or the British. Begin at the beginning.','Unrelated language families, one family of scripts, and the crafts that carry them.','Every figure cites a source or is shown as a gap. This is where you check.']
