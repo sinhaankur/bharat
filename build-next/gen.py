@@ -5,9 +5,9 @@ try:
 except Exception:
     load_canvas=None; canvas_available=lambda:[]
 try:
-    from render_discover import discover_body, tribes_india_body
+    from render_discover import discover_body, tribes_india_body, kingdoms_body
 except Exception:
-    discover_body=None; tribes_india_body=None
+    discover_body=None; tribes_india_body=None; kingdoms_body=None
 OUT=os.environ.get('BHARAT_OUT','out')+'/';HERE=os.path.dirname(os.path.abspath(__file__))+'/';R=os.environ.get('BHARAT_REPO','..')+'/';LIVE='https://sinhaankur.github.io/bharat/'
 j=lambda f:json.load(open(R+f))
 A=json.load(open(HERE+'inputs/atlas.json'))
@@ -26,7 +26,7 @@ DOORS=[
  ('Today','What is happening, and who is telling it?','i-edict','today.html',[('news-journey.html','The News Journey','a story as a dated rail, fact beside framing'),('feed.html',"Today's news",'who the outlets are, and where coverage falls'),('feed.html#bias','The spin check','coverage by published lean'),('timeline.html','How it built up','the record, event by event'),('articles.html','Analysis','written pieces')]),
  ('Money and power','Where does public money go, and who answers for it?','i-bull','money.html',[('money-map.html','The money map','every district, coloured by money'),('state-of-india.html','Which states carry the country','every state by what it gives and gets'),('explore.html','Ask your own question','filter and rank all 594 districts'),('command-chain.html',"Who's in charge",'the chain of command, tier by tier'),('officials.html','Officials to track','the sourced accountability register'),('mesh.html','How it all connects','money, cases, officials and districts'),('engines.html','The 7 engines','the lenses that read the whole atlas'),('global.html','India vs the world','GDP, income and industry, compared'),('geopolitical-chess.html','The geopolitical board','who rules each player, a framing'),('usa.html','Compare with the US','the same lens on another federation'),('hero.html','The whole atlas on one screen','the globe app')]),
  ('Land and water','What is the ground like, and where is it unsafe to build?','i-tree','land.html',[('encroachment-atlas.html','Built where water returns','homes on flood land'),('terrain-3d.html','The land in 3D','real relief, river, plain and mountain'),('flood-3d.html','Raise the water','flooding, over real terrain'),('quake-tsunami.html','Earthquakes and tsunamis','the hazard record'),('atlas-3d.html','India by constraint','states by development constraint'),('india-3d.html','The globe','the same India on real Earth'),('globe-map.html','Globe to flat map','watch the globe unroll')]),
- ('The long story','How did we get here?','i-lion','story.html',[('discover.html','Discover Bharat, state by state','the people, kingdoms and heritage of each state'),('ancient-india.html','5,000 years, one timeline','the whole spine'),('ashoka.html',"Ashoka's empire",'one empire, read in its own edicts'),('heritage-atlas.html','Temples and sacred ground','who built them, and what happened to them'),('temple-forms.html','How temples are shaped','measured drawings, to real dimensions'),('cave-walk.html','Walk inside a temple','a first-person reconstruction'),('heritage-3d.html','Temples in 3D','scanned and modelled'),('deep-history.html','Who we are, in DNA','the ancient-DNA population shifts'),('social-fabric.html','The social fabric',"the people of Ashoka's India"),('atrocities.html',"History's deadliest events",'the 100 worst, counted'),('history.html','History race','states over time')]),
+ ('The long story','How did we get here?','i-lion','story.html',[('discover.html','Discover Bharat, state by state','the people, kingdoms and heritage of each state'),('kingdoms.html','Kingdoms and their flags','the standards that outlasted empires'),('ancient-india.html','5,000 years, one timeline','the whole spine'),('ashoka.html',"Ashoka's empire",'one empire, read in its own edicts'),('heritage-atlas.html','Temples and sacred ground','who built them, and what happened to them'),('temple-forms.html','How temples are shaped','measured drawings, to real dimensions'),('cave-walk.html','Walk inside a temple','a first-person reconstruction'),('heritage-3d.html','Temples in 3D','scanned and modelled'),('deep-history.html','Who we are, in DNA','the ancient-DNA population shifts'),('social-fabric.html','The social fabric',"the people of Ashoka's India"),('atrocities.html',"History's deadliest events",'the 100 worst, counted'),('history.html','History race','states over time')]),
  ('Words and craft','How do we speak, write and make?','i-lotus','words.html',[('languages.html','Languages and scripts of Bharat','families, names and where they come from'),('journey.html','The journey of a word','one word through 4,000 years'),('scripts.html','The script family tree','one ancestor, many alphabets'),('vedas.html','One text, many tongues','the Hymn of Creation, compared'),('library.html','Reading room','the primary texts'),('tribes.html','The tribes that made it','Warli, Gond, Mithila and more'),('tribes-india.html','Every listed tribe','all 727, state by state, searchable'),('indic-design-systems.html','Indic design systems','the colours and where they come from'),('design-systems.html','India by design systems','a skin per state, one chassis'),('design-system.html','Atomic reference','tokens to templates'),('canvas.html','The canvas','every screen, one deck')]),
  ('Receipts','How do you know?','i-jali','receipts.html',[('how-it-works.html','How it works','the project in plain terms'),('about.html','Methodology and honesty','the sourced-or-gap rule, and the limits'),('knowledge.html','The data and sources','what is built and what is proven'),('provenance.html','Every figure to its source','the provenance ledger'),('references.html','Sources','every citation, by tier'),('data.html','Get the data','files and formats'),('for-organisations.html','For organisations','licensing and commissioned work'),('share.html','Share','post a card from the data'),('privacy-policy.html','Privacy and policy','no tracking, no mailing list'),('sitemap.html','Site map','every page, one list')]),
 ]
@@ -680,7 +680,7 @@ def shellbare(f,di,title,lede,body,crumb):
 made=[]
 # pages handled by the canvas importer (skipped in the normal door loop; emitted separately).
 # Declared up front so the door loop skips them before the canvas block runs.
-CANVAS_PAGES={'discover.html','tribes.html','tribes-india.html'}
+CANVAS_PAGES={'discover.html','tribes.html','tribes-india.html','kingdoms.html'}
 if load_canvas:
     CANVAS_PAGES |= {'tribe-'+s[6:].lower()+'.html' for s in canvas_available() if s.startswith('Tribe-')}
     CANVAS_PAGES |= {'region-'+s[7:].lower()+'.html' for s in canvas_available() if s.startswith('Region-')}
@@ -759,6 +759,18 @@ if load_canvas:
             canvas_body('Region-'+_rs),
             f'<a href="index.html">Home</a> / <a href="story.html">The long story</a> / <a href="discover.html">Discover Bharat</a> / {e(_rn)}'))
         made.append(_ro)
+    # Kingdoms & flags — pre-rendered static (no React) from the canvas component's rows.
+    if kingdoms_body:
+        CANVAS_PAGES.add('kingdoms.html')
+        _khero=('<div class="hero" style="padding:26px 0 30px"><div><p class="kick"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#i-lion"/></svg>The long story · Kingdoms</p>'
+                '<h1>The standards that outlasted <em>empires</em></h1>'
+                '<p class="lede">The princely states kept their own flags through the Mughal centuries and under British paramountcy, until they joined India in 1947–1950. Each standard is drawn from a written description; where the source names the colours but not their shade, the shade is representative.</p></div><div></div></div><div class="rule"></div>')
+        open(OUT+'kingdoms.html','w').write(shellbare(
+            'kingdoms.html', 3, 'The standards that outlasted *empires*',
+            'Princely-state flags, drawn from written description, and how long each one lasted.',
+            '<div class="wrap">'+_khero+'</div>'+kingdoms_body(),
+            '<a href="index.html">Home</a> / <a href="story.html">The long story</a> / Kingdoms and flags'))
+        made.append('kingdoms.html')
     # the 727-entry index — pre-rendered static (no React) with a vanilla search filter.
     if tribes_india_body:
         CANVAS_PAGES.add('tribes-india.html')

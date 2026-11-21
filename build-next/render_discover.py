@@ -192,6 +192,44 @@ def tribes_india_body():
     }})();</script>'''
 
 
+def _kingdoms_rows():
+    doc = open(HERE + "canvas/Kingdoms.dc.html", encoding="utf-8").read()
+    m = re.search(r"rows\s*=\s*(\[\{.*?\}\])\s*[;,]", doc, re.S)
+    return json.loads(m.group(1)) if m else []
+
+
+def kingdoms_body():
+    """Pre-render the princely-state flags + 'how long each one lasted' timeline (static).
+    Each row: a drawn flag (the bg gradient), its name + fate, and a lifespan bar."""
+    rows = _kingdoms_rows()
+    # the flag wall
+    flags = "".join(
+        f'<figure style="margin:0">'
+        f'<div style="height:66px;border-radius:4px;border:1px solid var(--line);background:{r.get("bg","#333")}"></div>'
+        f'<figcaption style="margin-top:8px"><b style="display:block;font:500 15px var(--sans);color:var(--ink)">{e(r.get("name",""))}</b>'
+        f'<span style="font-size:12px;color:var(--soft)">{e(r.get("fate",""))}</span></figcaption></figure>'
+        for r in rows)
+    flagwall = f'<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:20px">{flags}</div>'
+    # the lifespan timeline (each row a bar positioned left/width %)
+    bars = "".join(
+        f'<div style="display:grid;grid-template-columns:150px 1fr;gap:14px;align-items:center;padding:7px 0;border-bottom:1px solid var(--hair)">'
+        f'<div style="font-size:13.5px;color:var(--ink);font-weight:500">{e(r.get("name",""))}</div>'
+        f'<div style="position:relative;height:14px;background:var(--hair);border-radius:7px">'
+        f'<div style="position:absolute;left:{e(r.get("left","0%"))};width:{e(r.get("width","0%"))};top:0;bottom:0;background:linear-gradient(90deg,var(--gilt),var(--gold));border-radius:7px"></div>'
+        + (f'<div style="position:absolute;left:{e(r.get("endleft","0%"))};top:-3px;width:3px;height:20px;background:{e(r.get("endcol","#9fd0ae"))};border-radius:2px"></div>' if r.get("endcol") else "")
+        + "</div></div>"
+        for r in rows)
+    timeline = f'<div style="margin-top:14px">{bars}</div>'
+    return f'''<section class="b"><div class="wrap">
+      <p class="sub" data-r>Kingdoms · standards sourced from written description</p>
+      <p class="p" data-r style="max-width:62ch">Each flag is drawn from a written description. Where a description is sourced, the frame is left empty. Shades are representative; the sources name colours, not their hex.</p>
+      {flagwall}
+      <h2 data-r style="margin-top:46px">How long each one <em>lasted</em></h2>
+      <p class="note" data-r style="max-width:62ch">Every bar is woven in its flag's colours, from founding to the year it joined India or fell. Most kept their thrones through the Mughal centuries and under British paramountcy, until 1947 to 1950.</p>
+      {timeline}
+    </div></section>'''
+
+
 if __name__ == "__main__":
     body = discover_body()
     print("discover body:", len(body), "chars")
