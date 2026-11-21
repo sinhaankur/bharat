@@ -89,6 +89,8 @@
     .nj-tag.status-resolved { color: var(--nj-green); border-color: color-mix(in srgb, var(--nj-green) 40%, var(--nj-line2)); }
     .nj-tag.status-open { color: var(--nj-amber); border-color: color-mix(in srgb, var(--nj-amber) 40%, var(--nj-line2)); }
     .nj-new { color: var(--nj-green); border-color: var(--nj-green); animation: njGlow 2s var(--nj-ease) 3; }
+    .nj-auto { color: var(--nj-dim2); border-color: var(--nj-line2); border-style: dashed;
+      letter-spacing: .04em; }
     @keyframes njGlow { 0%,100% { box-shadow: 0 0 0 0 transparent; } 50% { box-shadow: 0 0 10px -2px var(--nj-green); } }
     .nj-ch-title { font-family: var(--font-display, serif); font-weight: 500; font-size: clamp(1.2rem, 2.4vw, 1.75rem); line-height: 1.12; margin: 0 0 .5rem; }
     .nj-ch-one { color: var(--nj-dim); font-size: .92rem; line-height: 1.55; max-width: 92ch; margin: 0; }
@@ -374,6 +376,7 @@
             '<span class="nj-tag scheme">' + esc(chain.scheme_ref || "scheme") + '</span>' +
             '<span class="nj-tag">' + esc((chain.geo && chain.geo.district) || (chain.geo && chain.geo.state) || "India") + '</span>' +
             '<span class="nj-tag ' + statusCls + '">' + esc(chain.status || "open") + '</span>' +
+            (chain.generated ? '<span class="nj-tag nj-auto" title="Auto-derived from the news — reported, not documented">auto · from the news</span>' : '') +
             (isNew ? '<span class="nj-tag nj-new">new</span>' : '') +
           '</div>' +
           '<h2 class="nj-ch-title">' + esc(chain.title) + '</h2>' +

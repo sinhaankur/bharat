@@ -1,7 +1,7 @@
 {
   "_meta": {
     "purpose": "Fund-lifecycle events on a timeline, anchored to the district ledger, grouped into story chains. The atomic unit of the news/timeline layer. See news-timeline-schema.md.",
-    "as_of": "2026-06-24",
+    "as_of": "2026-11-20",
     "rules": "Same sourcing discipline as the ledger: every event carries a source + tier and a confidence (documented = gov source / reported = news only / alleged). amount_cr stays null unless PDF-cited (figure_gap). No event is fabricated; seeds are real, ledger-anchored stories.",
     "stage_order": [
       "sanction",
@@ -30,61 +30,10 @@
       "human_impact": "Plain-language, factual statement of what this meant for residents (what was denied or delivered) — 'human value, not economic contribution'. No adjectives of blame; state the concrete effect.",
       "social_line": "A ready-to-post one-liner (<=200 chars) for auto social posting (share.html / post_to_social.py). Facts + figure + source-implied, never an accusation."
     },
-    "per_capita_note": "per_capita_inr is rupees per resident (amount_cr * 1e7 / population). Population from district-pop.json (Census 2011). Scope 'state' uses the summed state population; 'district' uses the district population. Shown to make cost HUMAN and comparable, not to assert contribution."
+    "per_capita_note": "per_capita_inr is rupees per resident (amount_cr * 1e7 / population). Population from district-pop.json (Census 2011). Scope 'state' uses the summed state population; 'district' uses the district population. Shown to make cost HUMAN and comparable, not to assert contribution.",
+    "generated_note": "story_chains/fiscal_events with generated=true are auto-derived from scheme-anchored news by gen_fiscal_events.py — confidence 'reported' (news only), never documented; figures only if cited."
   },
   "story_chains": [
-    {
-      "id": "sc_birbhum_mgnregs_freeze",
-      "title": "Birbhum's MGNREGS money: frozen at the top for four years",
-      "geo": {
-        "state": "West Bengal",
-        "district": "Birbhum"
-      },
-      "scheme_ref": "MGNREGS",
-      "status": "resolved",
-      "event_ids": [
-        "fe_wb_mgnregs_freeze_2022",
-        "fe_wb_mgnregs_dues_2025",
-        "fe_wb_mgnregs_sc_2026",
-        "fe_wb_mgnregs_resume_2026"
-      ],
-      "started_at": "2022-03-09",
-      "last_event_at": "2026-06-01",
-      "one_line": "Centre froze WB's MGNREGS funds under Sec 27 (Mar 2022); ₹3,038 cr dues piled up; resumed Jun 2026 after Supreme Court intervention. Dysfunction = money WITHHELD upstream, not misspent.",
-      "promise": {
-        "entity": "Government of India (MGNREGA statutory guarantee)",
-        "stated": "MGNREGA guarantees at least 100 days of wage employment in a financial year to every rural household whose adults volunteer to do unskilled manual work.",
-        "kind": "statute",
-        "source": {
-          "type": "gov_pdf",
-          "title": "The Mahatma Gandhi NREGA, 2005 — Section 3",
-          "url": "https://nrega.nic.in/amendments/original_act_MGNREGA.pdf",
-          "source_tier": 1
-        }
-      },
-      "result": {
-        "stated": "Fund release to West Bengal was frozen from 9 Mar 2022 under Sec 27; no MGNREGS wages flowed to WB districts for ~4 years until a June 2026 resumption after Supreme Court intervention.",
-        "outcome": "withheld_then_resumed",
-        "confidence": "reported"
-      },
-      "actual_cost": {
-        "amount_cr": 3038,
-        "amount_note": "Centre-stated pending MGNREGS dues to WB (Rajya Sabha, 2025) — the withheld amount, not district-split.",
-        "scope": "state",
-        "population": 91276115,
-        "per_capita_inr": 333,
-        "per_capita_note": "₹3,038 cr ÷ WB Census-2011 population — ₹333 of guaranteed-wage money withheld per WB resident (state scope; NOT Birbhum-specific).",
-        "figure_gap": false,
-        "source": {
-          "type": "news",
-          "title": "Centre owes ₹3,000 crore MGNREGA dues to Bengal (Rajya Sabha)",
-          "url": "https://www.business-standard.com/india-news/centre-owes-3-000-crore-mgnrega-dues-to-bengal-govt-in-rajya-sabha-125080101525_1.html",
-          "source_tier": 4
-        }
-      },
-      "human_impact": "The statutory job guarantee stopped functioning in WB's rural districts: households that would have earned MGNREGS wages did not, unbuilt assets and reported distress migration followed. ~₹333 of guaranteed-wage money per resident sat withheld upstream.",
-      "social_line": "West Bengal's MGNREGS job-guarantee funds were frozen by the Centre for ~4 years — ₹3,038 cr in dues, ~₹333 per resident withheld — until the Supreme Court pushed a June 2026 restart. [sourced]"
-    },
     {
       "id": "sc_kolkata_kmc_grant",
       "title": "Kolkata's civic money: over half flows down as grant",
@@ -187,6 +136,58 @@
       "social_line": "The Supreme Court has ordered West Bengal to clear ~11 years of DA arrears — about ₹10,000 cr, ~₹50,000 of delayed pay per employee — for ~20 lakh state employees. [SC judgment, Feb 2026]"
     },
     {
+      "id": "sc_birbhum_mgnregs_freeze",
+      "title": "Birbhum's MGNREGS money: frozen at the top for four years",
+      "geo": {
+        "state": "West Bengal",
+        "district": "Birbhum"
+      },
+      "scheme_ref": "MGNREGS",
+      "status": "resolved",
+      "event_ids": [
+        "fe_wb_mgnregs_freeze_2022",
+        "fe_wb_mgnregs_dues_2025",
+        "fe_wb_mgnregs_sc_2026",
+        "fe_wb_mgnregs_resume_2026"
+      ],
+      "started_at": "2022-03-09",
+      "last_event_at": "2026-06-01",
+      "one_line": "Centre froze WB's MGNREGS funds under Sec 27 (Mar 2022); ₹3,038 cr dues piled up; resumed Jun 2026 after Supreme Court intervention. Dysfunction = money WITHHELD upstream, not misspent.",
+      "promise": {
+        "entity": "Government of India (MGNREGA statutory guarantee)",
+        "stated": "MGNREGA guarantees at least 100 days of wage employment in a financial year to every rural household whose adults volunteer to do unskilled manual work.",
+        "kind": "statute",
+        "source": {
+          "type": "gov_pdf",
+          "title": "The Mahatma Gandhi NREGA, 2005 — Section 3",
+          "url": "https://nrega.nic.in/amendments/original_act_MGNREGA.pdf",
+          "source_tier": 1
+        }
+      },
+      "result": {
+        "stated": "Fund release to West Bengal was frozen from 9 Mar 2022 under Sec 27; no MGNREGS wages flowed to WB districts for ~4 years until a June 2026 resumption after Supreme Court intervention.",
+        "outcome": "withheld_then_resumed",
+        "confidence": "reported"
+      },
+      "actual_cost": {
+        "amount_cr": 3038,
+        "amount_note": "Centre-stated pending MGNREGS dues to WB (Rajya Sabha, 2025) — the withheld amount, not district-split.",
+        "scope": "state",
+        "population": 91276115,
+        "per_capita_inr": 333,
+        "per_capita_note": "₹3,038 cr ÷ WB Census-2011 population — ₹333 of guaranteed-wage money withheld per WB resident (state scope; NOT Birbhum-specific).",
+        "figure_gap": false,
+        "source": {
+          "type": "news",
+          "title": "Centre owes ₹3,000 crore MGNREGA dues to Bengal (Rajya Sabha)",
+          "url": "https://www.business-standard.com/india-news/centre-owes-3-000-crore-mgnrega-dues-to-bengal-govt-in-rajya-sabha-125080101525_1.html",
+          "source_tier": 4
+        }
+      },
+      "human_impact": "The statutory job guarantee stopped functioning in WB's rural districts: households that would have earned MGNREGS wages did not, unbuilt assets and reported distress migration followed. ~₹333 of guaranteed-wage money per resident sat withheld upstream.",
+      "social_line": "West Bengal's MGNREGS job-guarantee funds were frozen by the Centre for ~4 years — ₹3,038 cr in dues, ~₹333 per resident withheld — until the Supreme Court pushed a June 2026 restart. [sourced]"
+    },
+    {
       "id": "sc_punjab_pension_arrears",
       "title": "Punjab's pension arrears: age-staggered payout struck down, full release ordered",
       "geo": {
@@ -236,6 +237,162 @@
       },
       "human_impact": "About 4 lakh Punjab pensioners (with ~3.5 lakh serving employees, ~7.5 lakh in all) were kept waiting for DA/DR they were legally owed — while All-India-Service officers drew full benefits from the same Consolidated Fund, a disparity the High Court flagged. The exact rupee arrears per pensioner is a gap; the documented fact is the delay and its scale.",
       "social_line": "A court struck down Punjab's plan to pay pension arrears in age-based instalments as arbitrary — ~4 lakh pensioners (7.5 lakh in all) are owed DA/DR at central rates, ordered released by 30 Jun 2026. [P&H High Court]"
+    },
+    {
+      "id": "sc_gen_e4d227c3be",
+      "title": "PMAY-G in Delhi — a developing story (from the news)",
+      "geo": {
+        "state": "Delhi",
+        "district": null
+      },
+      "scheme_ref": "PMAY-G",
+      "status": "open",
+      "event_ids": [
+        "fe_gen_64e4d739de"
+      ],
+      "started_at": "2026-08-13",
+      "last_event_at": "2026-08-13",
+      "one_line": "1 report on PMAY-G in Delhi, 2026-08-13 → 2026-08-13. News-derived; reported, not documented.",
+      "generated": true
+    },
+    {
+      "id": "sc_gen_035e8ddc92",
+      "title": "PMAY-U in Kerala — a developing story (from the news)",
+      "geo": {
+        "state": "Kerala",
+        "district": null
+      },
+      "scheme_ref": "PMAY-U",
+      "status": "open",
+      "event_ids": [
+        "fe_gen_977a3ada00"
+      ],
+      "started_at": "2026-08-15",
+      "last_event_at": "2026-08-15",
+      "one_line": "1 report on PMAY-U in Kerala, 2026-08-15 → 2026-08-15. News-derived; reported, not documented.",
+      "generated": true
+    },
+    {
+      "id": "sc_gen_ec67b8ae05",
+      "title": "MPLADS in Himachal Pradesh — a developing story (from the news)",
+      "geo": {
+        "state": "Himachal Pradesh",
+        "district": null
+      },
+      "scheme_ref": "MPLADS",
+      "status": "open",
+      "event_ids": [
+        "fe_gen_6645587564"
+      ],
+      "started_at": "2026-09-05",
+      "last_event_at": "2026-09-05",
+      "one_line": "1 report on MPLADS in Himachal Pradesh, 2026-09-05 → 2026-09-05. News-derived; reported, not documented.",
+      "generated": true
+    },
+    {
+      "id": "sc_gen_35a5ed57d2",
+      "title": "PMAY-G in Andhra Pradesh — a developing story (from the news)",
+      "geo": {
+        "state": "Andhra Pradesh",
+        "district": null
+      },
+      "scheme_ref": "PMAY-G",
+      "status": "resolved",
+      "event_ids": [
+        "fe_gen_baadf5b411"
+      ],
+      "started_at": "2026-09-16",
+      "last_event_at": "2026-09-16",
+      "one_line": "1 report on PMAY-G in Andhra Pradesh, 2026-09-16 → 2026-09-16. News-derived; reported, not documented.",
+      "generated": true
+    },
+    {
+      "id": "sc_gen_18024bf712",
+      "title": "MGNREGS — a developing story (from the news)",
+      "geo": {
+        "state": null,
+        "district": null
+      },
+      "scheme_ref": "MGNREGS",
+      "status": "open",
+      "event_ids": [
+        "fe_gen_d5ee0e41be",
+        "fe_gen_f5e9758f6d"
+      ],
+      "started_at": "2026-08-22",
+      "last_event_at": "2026-09-17",
+      "one_line": "2 reports on MGNREGS, 2026-08-22 → 2026-09-17. News-derived; reported, not documented.",
+      "generated": true
+    },
+    {
+      "id": "sc_gen_d6ffc70d26",
+      "title": "AMRUT in Delhi — a developing story (from the news)",
+      "geo": {
+        "state": "Delhi",
+        "district": null
+      },
+      "scheme_ref": "AMRUT",
+      "status": "open",
+      "event_ids": [
+        "fe_gen_e433af9e07"
+      ],
+      "started_at": "2026-10-17",
+      "last_event_at": "2026-10-17",
+      "one_line": "1 report on AMRUT in Delhi, 2026-10-17 → 2026-10-17. News-derived; reported, not documented.",
+      "generated": true
+    },
+    {
+      "id": "sc_gen_a887ea1304",
+      "title": "AMRUT in Maharashtra — a developing story (from the news)",
+      "geo": {
+        "state": "Maharashtra",
+        "district": null
+      },
+      "scheme_ref": "AMRUT",
+      "status": "open",
+      "event_ids": [
+        "fe_gen_d7fe51885a",
+        "fe_gen_e30ae344e3"
+      ],
+      "started_at": "2026-09-07",
+      "last_event_at": "2026-10-22",
+      "one_line": "2 reports on AMRUT in Maharashtra, 2026-09-07 → 2026-10-22. News-derived; reported, not documented.",
+      "generated": true
+    },
+    {
+      "id": "sc_gen_3c1667c5f7",
+      "title": "MPLADS — a developing story (from the news)",
+      "geo": {
+        "state": null,
+        "district": null
+      },
+      "scheme_ref": "MPLADS",
+      "status": "open",
+      "event_ids": [
+        "fe_gen_d3fb330063"
+      ],
+      "started_at": "2026-10-24",
+      "last_event_at": "2026-10-24",
+      "one_line": "1 report on MPLADS, 2026-10-24 → 2026-10-24. News-derived; reported, not documented.",
+      "generated": true
+    },
+    {
+      "id": "sc_gen_659d315332",
+      "title": "PMAY-G in Bihar — a developing story (from the news)",
+      "geo": {
+        "state": "Bihar",
+        "district": null
+      },
+      "scheme_ref": "PMAY-G",
+      "status": "resolved",
+      "event_ids": [
+        "fe_gen_627602c3b7",
+        "fe_gen_bfb7b97a00"
+      ],
+      "started_at": "2026-08-21",
+      "last_event_at": "2026-11-05",
+      "one_line": "2 reports on PMAY-G in Bihar, 2026-08-21 → 2026-11-05. News-derived; reported, not documented.",
+      "generated": true
     }
   ],
   "fiscal_events": [
@@ -393,6 +550,402 @@
       }
     },
     {
+      "id": "fe_gen_977a3ada00",
+      "date": "2026-08-15",
+      "date_precision": "day",
+      "stage": "sanction",
+      "title": "Cut in LIFE Mission allocation: Kerala govt. has deceived poor, homeless people, says Pinarayi Vijayan",
+      "summary": "Under revised PMAY-U 2.0 guidelines, beneficiaries are required to bear 25% of the total project cost, amounting to ₹1 lakh; Kerala Leader of the Opposition says State government’s decision to bow to anti-people conditions imposed by the Centre cannot be…",
+      "geo": {
+        "state": "Kerala",
+        "district": null
+      },
+      "scheme_ref": "PMAY-U",
+      "official_ref": null,
+      "ledger_row_ref": null,
+      "amount_cr": 0.01,
+      "figure_gap": false,
+      "chain_id": "sc_gen_035e8ddc92",
+      "chain_seq": 1,
+      "primary_source": {
+        "type": "news",
+        "title": "The Hindu",
+        "url": "https://www.thehindu.com/news/national/kerala/cut-in-life-mission-allocation-kerala-govt-has-deceived-poor-homeless-people-says-pinarayi-vijayan/article71350128.ece",
+        "source_tier": 4
+      },
+      "corroborating_news": [
+        "ni_the_hindu_national_ays_pinarayi_vijayan_article71350128_ece"
+      ],
+      "confidence": "reported",
+      "needs_pdf_upgrade": true,
+      "severity": null,
+      "generated": true,
+      "ingest_source": "gen_fiscal_events.py"
+    },
+    {
+      "id": "fe_gen_d5ee0e41be",
+      "date": "2026-08-22",
+      "date_precision": "day",
+      "stage": "delay",
+      "title": "Supreme Court lauds scrapped MGNREGA as a ‘good, effective scheme’",
+      "summary": "The scheme was applauded by a three-judge Bench while hearing a petition on delayed wages under the defunct scheme; petition seeks to elevate the right to work as a fundamental right",
+      "geo": {
+        "state": null,
+        "district": null
+      },
+      "scheme_ref": "MGNREGS",
+      "official_ref": null,
+      "ledger_row_ref": null,
+      "amount_cr": null,
+      "figure_gap": true,
+      "chain_id": "sc_gen_18024bf712",
+      "chain_seq": 1,
+      "primary_source": {
+        "type": "news",
+        "title": "The Hindu",
+        "url": "https://www.thehindu.com/news/national/supreme-court-lauds-scrapped-mgnrega-scheme-calls-it-neither-freebie-nor-exploitation/article71373402.ece",
+        "source_tier": 4
+      },
+      "corroborating_news": [
+        "ni_the_hindu_national_bie_nor_exploitation_article71373402_ece"
+      ],
+      "confidence": "reported",
+      "needs_pdf_upgrade": true,
+      "severity": null,
+      "generated": true,
+      "ingest_source": "gen_fiscal_events.py"
+    },
+    {
+      "id": "fe_gen_f5e9758f6d",
+      "date": "2026-09-17",
+      "date_precision": "day",
+      "stage": "release",
+      "title": "Panchayats facing crisis as material costs for MGNREGS in previous financial year yet to be disbursed",
+      "summary": "The total material costs owed to the panchayats in the State is estimated at over ₹500 crore",
+      "geo": {
+        "state": null,
+        "district": null
+      },
+      "scheme_ref": "MGNREGS",
+      "official_ref": null,
+      "ledger_row_ref": null,
+      "amount_cr": 500.0,
+      "figure_gap": false,
+      "chain_id": "sc_gen_18024bf712",
+      "chain_seq": 2,
+      "primary_source": {
+        "type": "news",
+        "title": "The Hindu",
+        "url": "https://www.thehindu.com/news/national/kerala/panchayats-facing-crisis-as-material-costs-for-mgnregs-in-previous-financial-year-yet-to-be-disbursed/article71477252.ece",
+        "source_tier": 4
+      },
+      "corroborating_news": [
+        "ni_the_hindu_national_yet_to_be_disbursed_article71477252_ece"
+      ],
+      "confidence": "reported",
+      "needs_pdf_upgrade": true,
+      "severity": null,
+      "generated": true,
+      "ingest_source": "gen_fiscal_events.py"
+    },
+    {
+      "id": "fe_gen_baadf5b411",
+      "date": "2026-09-16",
+      "date_precision": "day",
+      "stage": "outcome",
+      "title": "Centre allocates five lakh houses to Andhra and Telangana under PMAY-G, says Pemmasani",
+      "summary": "Andhra Pradesh gets 2.25 lakh more houses and Telangana 1.21 lakh; only 23% of the 2019-24 allocation to AP has been completed, the Minister says",
+      "geo": {
+        "state": "Andhra Pradesh",
+        "district": null
+      },
+      "scheme_ref": "PMAY-G",
+      "official_ref": null,
+      "ledger_row_ref": null,
+      "amount_cr": null,
+      "figure_gap": true,
+      "chain_id": "sc_gen_35a5ed57d2",
+      "chain_seq": 1,
+      "primary_source": {
+        "type": "news",
+        "title": "The Hindu",
+        "url": "https://www.thehindu.com/news/national/andhra-pradesh/centre-allocates-five-lakh-houses-to-andhra-and-telangana-under-pmay-g-says-pemmasani/article71471274.ece",
+        "source_tier": 4
+      },
+      "corroborating_news": [
+        "ni_the_hindu_national_may_g_says_pemmasani_article71471274_ece"
+      ],
+      "confidence": "reported",
+      "needs_pdf_upgrade": true,
+      "severity": null,
+      "generated": true,
+      "ingest_source": "gen_fiscal_events.py"
+    },
+    {
+      "id": "fe_gen_d3fb330063",
+      "date": "2026-10-24",
+      "date_precision": "day",
+      "stage": "release",
+      "title": "Enhancement of MPs’ development fund key topic selected by Parliamentary panel for study",
+      "summary": "The committee will examine the guidelines governing the release of MPLADS funds and assess the need to enhance the allocation under the scheme",
+      "geo": {
+        "state": null,
+        "district": null
+      },
+      "scheme_ref": "MPLADS",
+      "official_ref": null,
+      "ledger_row_ref": null,
+      "amount_cr": null,
+      "figure_gap": true,
+      "chain_id": "sc_gen_3c1667c5f7",
+      "chain_seq": 1,
+      "primary_source": {
+        "type": "news",
+        "title": "The Hindu",
+        "url": "https://www.thehindu.com/news/national/enhancement-of-mps-development-fund-key-topic-selected-by-parliamentary-panel-for-study/article71619347.ece",
+        "source_tier": 4
+      },
+      "corroborating_news": [
+        "ni_the_hindu_national_tary_panel_for_study_article71619347_ece"
+      ],
+      "confidence": "reported",
+      "needs_pdf_upgrade": true,
+      "severity": null,
+      "generated": true,
+      "ingest_source": "gen_fiscal_events.py"
+    },
+    {
+      "id": "fe_gen_627602c3b7",
+      "date": "2026-08-21",
+      "date_precision": "day",
+      "stage": "outcome",
+      "title": "Over 11.18 lakh permanent houses to be built in Bihar under PMAY-G, says Shivraj Singh Chouhan",
+      "summary": "The ‘Grih Pravesh’ ceremony for 2.35 lakh Pradhan Mantri Awas units was completed in the 2026-27 financial year; house keys to beneficiaries and sanction letters to newly selected beneficiaries distributed",
+      "geo": {
+        "state": "Bihar",
+        "district": null
+      },
+      "scheme_ref": "PMAY-G",
+      "official_ref": null,
+      "ledger_row_ref": null,
+      "amount_cr": null,
+      "figure_gap": true,
+      "chain_id": "sc_gen_659d315332",
+      "chain_seq": 1,
+      "primary_source": {
+        "type": "news",
+        "title": "The Hindu",
+        "url": "https://www.thehindu.com/news/national/bihar/over-1118-lakh-permanent-houses-to-be-built-in-bihar-under-pmay-g-says-shivraj-singh-chouhan/article71369236.ece",
+        "source_tier": 4
+      },
+      "corroborating_news": [
+        "ni_the_hindu_national_hivraj_singh_chouhan_article71369236_ece"
+      ],
+      "confidence": "reported",
+      "needs_pdf_upgrade": true,
+      "severity": null,
+      "generated": true,
+      "ingest_source": "gen_fiscal_events.py"
+    },
+    {
+      "id": "fe_gen_bfb7b97a00",
+      "date": "2026-11-05",
+      "date_precision": "day",
+      "stage": "outcome",
+      "title": "More than 43 lakh pucca houses completed in Bihar for poor families",
+      "summary": "₹56,743.40 crore spent under PMAY-G so far in the State; of the 43 lakh houses, 36.63 lakh pucca houses built in just yearrs between FY 2016-17 & 2021-22",
+      "geo": {
+        "state": "Bihar",
+        "district": null
+      },
+      "scheme_ref": "PMAY-G",
+      "official_ref": null,
+      "ledger_row_ref": null,
+      "amount_cr": 56743.4,
+      "figure_gap": false,
+      "chain_id": "sc_gen_659d315332",
+      "chain_seq": 2,
+      "primary_source": {
+        "type": "news",
+        "title": "The Hindu",
+        "url": "https://www.thehindu.com/news/national/bihar/more-than-43-lakh-pucca-houses-completed-in-bihar-for-poor-families/article71666913.ece",
+        "source_tier": 4
+      },
+      "corroborating_news": [
+        "ni_the_hindu_national_ar_for_poor_families_article71666913_ece"
+      ],
+      "confidence": "reported",
+      "needs_pdf_upgrade": true,
+      "severity": null,
+      "generated": true,
+      "ingest_source": "gen_fiscal_events.py"
+    },
+    {
+      "id": "fe_gen_d7fe51885a",
+      "date": "2026-09-07",
+      "date_precision": "day",
+      "stage": "audit_flag",
+      "title": "‘Please let me go’: Woman begs for passage at Mumbai super car rally flagged off by Amruta Fadnavis | Viral video",
+      "summary": "The rally, organised by the Queens’ Drive Club, featured Maharashtra Deputy Chief Minister Devendra Fadnavis’ wife, Amruta Fadnavis, as the chief guest to flag off an all-women luxury car convoy.",
+      "geo": {
+        "state": "Maharashtra",
+        "district": null
+      },
+      "scheme_ref": "AMRUT",
+      "official_ref": null,
+      "ledger_row_ref": null,
+      "amount_cr": null,
+      "figure_gap": true,
+      "chain_id": "sc_gen_a887ea1304",
+      "chain_seq": 1,
+      "primary_source": {
+        "type": "news",
+        "title": "Mint",
+        "url": "https://www.livemint.com/news/trends/please-let-me-go-woman-begs-for-passage-at-mumbai-super-car-rally-flagged-off-by-amruta-fadnavis-viral-video-11788765625954.html",
+        "source_tier": 4
+      },
+      "corroborating_news": [
+        "ni_livemint_news_fadnavis_viral_video_11788765625954_html"
+      ],
+      "confidence": "reported",
+      "needs_pdf_upgrade": true,
+      "severity": null,
+      "generated": true,
+      "ingest_source": "gen_fiscal_events.py"
+    },
+    {
+      "id": "fe_gen_e30ae344e3",
+      "date": "2026-10-22",
+      "date_precision": "day",
+      "stage": "investigation",
+      "title": "Amruta Fadnavis trolling row: Social media users take sarcastic digs at Maharashtra CM’s wife after FIR against X users over her remarks on Muslim participation in Garba",
+      "summary": "Some accounts booked by Maharashtra Cyber department for posts criticizing Amruta Fadnavis have been suspended, raising questions over administration's high-handed in handling criticism.",
+      "geo": {
+        "state": "Maharashtra",
+        "district": null
+      },
+      "scheme_ref": "AMRUT",
+      "official_ref": null,
+      "ledger_row_ref": null,
+      "amount_cr": null,
+      "figure_gap": true,
+      "chain_id": "sc_gen_a887ea1304",
+      "chain_seq": 2,
+      "primary_source": {
+        "type": "news",
+        "title": "OpIndia",
+        "url": "https://www.opindia.com/2026/10/amruta-fadnavis-muslim-garba-remark-social-media-users-take-digs-after-fir-against-x-users/",
+        "source_tier": 4
+      },
+      "corroborating_news": [
+        "ni_opindia_feed_ers_take_digs_after_fir_against_x_users"
+      ],
+      "confidence": "reported",
+      "needs_pdf_upgrade": true,
+      "severity": null,
+      "generated": true,
+      "ingest_source": "gen_fiscal_events.py"
+    },
+    {
+      "id": "fe_gen_e433af9e07",
+      "date": "2026-10-17",
+      "date_precision": "day",
+      "stage": "shortfall",
+      "title": "G. Devarajan criticises LDF over unspent AMRUT funds, promises push for Keralam’s dues from Centre",
+      "summary": "Keralam’s special representative in Delhi says the previous Left Democratic Front (LDF) government stumbled in securing the State’s rightful funds from the Union government",
+      "geo": {
+        "state": "Delhi",
+        "district": "Delhi"
+      },
+      "scheme_ref": "AMRUT",
+      "official_ref": null,
+      "ledger_row_ref": null,
+      "amount_cr": null,
+      "figure_gap": true,
+      "chain_id": "sc_gen_d6ffc70d26",
+      "chain_seq": 1,
+      "primary_source": {
+        "type": "news",
+        "title": "The Hindu",
+        "url": "https://www.thehindu.com/news/national/kerala/g-devarajan-criticises-ldf-over-unspent-amrut-funds-promises-push-for-keralams-dues-from-centre/article71596264.ece",
+        "source_tier": 4
+      },
+      "corroborating_news": [
+        "ni_the_hindu_national_ams_dues_from_centre_article71596264_ece"
+      ],
+      "confidence": "reported",
+      "needs_pdf_upgrade": true,
+      "severity": null,
+      "generated": true,
+      "ingest_source": "gen_fiscal_events.py"
+    },
+    {
+      "id": "fe_gen_64e4d739de",
+      "date": "2026-08-13",
+      "date_precision": "day",
+      "stage": "sanction",
+      "title": "Allocate 11.56 lakh houses to Telangana under PMAY-G 2.0: Housing Minister urges Centre",
+      "summary": "Mr. Reddy submitted a representation regarding this to the Union Minister for Rural Development Shivraj Singh Chouhan in New Delhi and invited him to visit the State",
+      "geo": {
+        "state": "Delhi",
+        "district": "Delhi"
+      },
+      "scheme_ref": "PMAY-G",
+      "official_ref": null,
+      "ledger_row_ref": null,
+      "amount_cr": null,
+      "figure_gap": true,
+      "chain_id": "sc_gen_e4d227c3be",
+      "chain_seq": 1,
+      "primary_source": {
+        "type": "news",
+        "title": "The Hindu",
+        "url": "https://www.thehindu.com/news/national/telangana/allocate-1156-lakh-houses-to-telangana-under-pmay-g-20-housing-minister-urges-centre/article71337811.ece",
+        "source_tier": 4
+      },
+      "corroborating_news": [
+        "ni_the_hindu_national_inister_urges_centre_article71337811_ece"
+      ],
+      "confidence": "reported",
+      "needs_pdf_upgrade": true,
+      "severity": null,
+      "generated": true,
+      "ingest_source": "gen_fiscal_events.py"
+    },
+    {
+      "id": "fe_gen_6645587564",
+      "date": "2026-09-05",
+      "date_precision": "day",
+      "stage": "delay",
+      "title": "‘Should I give the money like an idiot?’: Kangana Ranaut tears into Mandi officials over  ₹11 cr in unused funds",
+      "summary": "BJP MP Kangana Ranaut confronted officials in Mandi over delays in development work, alleging that a substantial portion of ₹11 crore in MPLADS-linked funds remained unutilised despite a mounting backlog.",
+      "geo": {
+        "state": "Himachal Pradesh",
+        "district": "Mandi"
+      },
+      "scheme_ref": "MPLADS",
+      "official_ref": null,
+      "ledger_row_ref": null,
+      "amount_cr": 11.0,
+      "figure_gap": false,
+      "chain_id": "sc_gen_ec67b8ae05",
+      "chain_seq": 1,
+      "primary_source": {
+        "type": "news",
+        "title": "Mint",
+        "url": "https://www.livemint.com/news/india/should-i-give-the-money-like-an-idiot-kangana-ranaut-tears-into-mandi-officials-over-11-cr-in-unused-funds-11788618799136.html",
+        "source_tier": 4
+      },
+      "corroborating_news": [
+        "ni_livemint_news_1_cr_in_unused_funds_11788618799136_html"
+      ],
+      "confidence": "reported",
+      "needs_pdf_upgrade": true,
+      "severity": null,
+      "generated": true,
+      "ingest_source": "gen_fiscal_events.py"
+    },
+    {
       "id": "fe_kmc_grant_be_2025",
       "date": "2025-04-01",
       "date_precision": "day",
@@ -430,13 +983,100 @@
       }
     },
     {
+      "id": "fe_pb_pension_plan_2025",
+      "date": "2025-02-18",
+      "date_precision": "day",
+      "stage": "delay",
+      "title": "Punjab issues a plan to pay pension arrears in age-based instalments",
+      "summary": "Citing financial constraints, Punjab issued a 'Liquidation Plan' dated 18 Feb 2025 that staggered payment of pension DA/DR arrears based on the pensioner's age — deferring dues the state had accepted on the Central Government pattern.",
+      "geo": {
+        "state": "Punjab",
+        "district": "Ludhiana"
+      },
+      "scheme_ref": "_STATE_PENSION",
+      "official_ref": "chief_secretary",
+      "ledger_row_ref": null,
+      "amount_cr": null,
+      "chain_id": "sc_punjab_pension_arrears",
+      "chain_seq": 1,
+      "primary_source": {
+        "type": "news",
+        "title": "Punjab & Haryana High Court quashes staggered pension arrears plan",
+        "url": "https://www.livelaw.in/high-court/punjab-and-haryana-high-court/punjab-haryana-high-court-quashes-staggered-pension-arrears-plan-directs-punjab-to-release-pending-dadr-531973",
+        "source_tier": 4
+      },
+      "corroborating_news": [],
+      "confidence": "reported",
+      "figure_gap": true,
+      "needs_pdf_upgrade": true
+    },
+    {
+      "id": "fe_pb_pension_hc_2026",
+      "date": "2026-02-01",
+      "date_precision": "month",
+      "stage": "action",
+      "title": "High Court quashes the age-staggered plan, orders full release",
+      "summary": "The Punjab & Haryana High Court struck down the age-based staggering as arbitrary and violative of Article 14, directing the state and its corporations to release all pending DA/DR to employees and pensioners at the All-India-Service (central) rate by 30 Jun 2026, with the Chief Secretary to file a compliance report.",
+      "geo": {
+        "state": "Punjab",
+        "district": "Ludhiana"
+      },
+      "scheme_ref": "_STATE_PENSION",
+      "official_ref": "chief_secretary",
+      "ledger_row_ref": null,
+      "amount_cr": null,
+      "chain_id": "sc_punjab_pension_arrears",
+      "chain_seq": 2,
+      "primary_source": {
+        "type": "news",
+        "title": "Punjab & Haryana High Court directs Punjab to release pending DA/DR",
+        "url": "https://www.livelaw.in/high-court/punjab-and-haryana-high-court/punjab-haryana-high-court-quashes-staggered-pension-arrears-plan-directs-punjab-to-release-pending-dadr-531973",
+        "source_tier": 4
+      },
+      "corroborating_news": [],
+      "confidence": "documented",
+      "figure_gap": true,
+      "needs_pdf_upgrade": true
+    },
+    {
+      "id": "fe_pb_pension_pending_2026",
+      "date": "2026-06-30",
+      "date_precision": "day",
+      "stage": "shortfall",
+      "title": "Deadline arrives; implementation reportedly still pending",
+      "summary": "As of the court-set 30 Jun 2026 deadline, reporting indicated Punjab had yet to implement the revised DA/DR for its ~3.5 lakh employees and ~4 lakh pensioners, again citing fiscal constraints — leaving ~7.5 lakh people awaiting their legally-affirmed dues.",
+      "geo": {
+        "state": "Punjab",
+        "district": "Ludhiana"
+      },
+      "scheme_ref": "_STATE_PENSION",
+      "official_ref": "chief_secretary",
+      "ledger_row_ref": null,
+      "amount_cr": null,
+      "chain_id": "sc_punjab_pension_arrears",
+      "chain_seq": 3,
+      "primary_source": {
+        "type": "news",
+        "title": "Punjab pending DA dispute: 7.5 lakh employees and pensioners waiting for their legal due",
+        "url": "https://www.oneindia.com/india/punjab-pending-da-dispute-7-5-lakh-employees-and-pensioners-waiting-for-their-legal-due-court-call-8144015.html",
+        "source_tier": 4
+      },
+      "corroborating_news": [],
+      "confidence": "reported",
+      "figure_gap": true,
+      "needs_pdf_upgrade": true
+    },
+    {
       "id": "fe_wb_da_hc_2022",
       "date": "2022-05-20",
       "date_precision": "day",
       "stage": "audit_flag",
       "title": "Calcutta High Court orders WB to pay DA at central rates",
       "summary": "The Calcutta High Court ruled that West Bengal must align its dearness-allowance disbursal with central government rates, treating DA as an enforceable entitlement of state employees. The state challenged the order in the Supreme Court.",
-      "geo": { "state": "West Bengal", "district": "Kolkata" },
+      "geo": {
+        "state": "West Bengal",
+        "district": "Kolkata"
+      },
       "scheme_ref": "_STATE_ESTABLISHMENT",
       "official_ref": "chief_secretary",
       "ledger_row_ref": null,
@@ -461,7 +1101,10 @@
       "stage": "delay",
       "title": "Supreme Court interim order: WB to pay 25% of DA arrears in 6 weeks",
       "summary": "The Supreme Court directed West Bengal to pay 25% of the outstanding DA arrears (accumulated 2009–2019 under the 5th Pay Commission, ~₹10,000 cr) to its employees within six weeks — an interim step while the balance was worked out.",
-      "geo": { "state": "West Bengal", "district": "Kolkata" },
+      "geo": {
+        "state": "West Bengal",
+        "district": "Kolkata"
+      },
       "scheme_ref": "_STATE_ESTABLISHMENT",
       "official_ref": "chief_secretary",
       "ledger_row_ref": null,
@@ -487,7 +1130,10 @@
       "stage": "action",
       "title": "Supreme Court final judgment: WB must clear ~11 years of DA arrears",
       "summary": "On 5 Feb 2026 the Supreme Court upheld employees' entitlement and directed West Bengal to clear DA arrears for 2009–2019 for ~20 lakh employees, with a court-appointed committee (chaired by former Justice Indu Malhotra, with the CAG or a nominee) fixing the exact amount and instalment schedule. Amounts paid are not to be recovered even if the law later changes.",
-      "geo": { "state": "West Bengal", "district": "Kolkata" },
+      "geo": {
+        "state": "West Bengal",
+        "district": "Kolkata"
+      },
       "scheme_ref": "_STATE_ESTABLISHMENT",
       "official_ref": "chief_secretary",
       "ledger_row_ref": null,
@@ -503,81 +1149,6 @@
       "corroborating_news": [],
       "confidence": "documented",
       "figure_gap": false,
-      "needs_pdf_upgrade": true
-    },
-    {
-      "id": "fe_pb_pension_plan_2025",
-      "date": "2025-02-18",
-      "date_precision": "day",
-      "stage": "delay",
-      "title": "Punjab issues a plan to pay pension arrears in age-based instalments",
-      "summary": "Citing financial constraints, Punjab issued a 'Liquidation Plan' dated 18 Feb 2025 that staggered payment of pension DA/DR arrears based on the pensioner's age — deferring dues the state had accepted on the Central Government pattern.",
-      "geo": { "state": "Punjab", "district": "Ludhiana" },
-      "scheme_ref": "_STATE_PENSION",
-      "official_ref": "chief_secretary",
-      "ledger_row_ref": null,
-      "amount_cr": null,
-      "chain_id": "sc_punjab_pension_arrears",
-      "chain_seq": 1,
-      "primary_source": {
-        "type": "news",
-        "title": "Punjab & Haryana High Court quashes staggered pension arrears plan",
-        "url": "https://www.livelaw.in/high-court/punjab-and-haryana-high-court/punjab-haryana-high-court-quashes-staggered-pension-arrears-plan-directs-punjab-to-release-pending-dadr-531973",
-        "source_tier": 4
-      },
-      "corroborating_news": [],
-      "confidence": "reported",
-      "figure_gap": true,
-      "needs_pdf_upgrade": true
-    },
-    {
-      "id": "fe_pb_pension_hc_2026",
-      "date": "2026-02-01",
-      "date_precision": "month",
-      "stage": "action",
-      "title": "High Court quashes the age-staggered plan, orders full release",
-      "summary": "The Punjab & Haryana High Court struck down the age-based staggering as arbitrary and violative of Article 14, directing the state and its corporations to release all pending DA/DR to employees and pensioners at the All-India-Service (central) rate by 30 Jun 2026, with the Chief Secretary to file a compliance report.",
-      "geo": { "state": "Punjab", "district": "Ludhiana" },
-      "scheme_ref": "_STATE_PENSION",
-      "official_ref": "chief_secretary",
-      "ledger_row_ref": null,
-      "amount_cr": null,
-      "chain_id": "sc_punjab_pension_arrears",
-      "chain_seq": 2,
-      "primary_source": {
-        "type": "news",
-        "title": "Punjab & Haryana High Court directs Punjab to release pending DA/DR",
-        "url": "https://www.livelaw.in/high-court/punjab-and-haryana-high-court/punjab-haryana-high-court-quashes-staggered-pension-arrears-plan-directs-punjab-to-release-pending-dadr-531973",
-        "source_tier": 4
-      },
-      "corroborating_news": [],
-      "confidence": "documented",
-      "figure_gap": true,
-      "needs_pdf_upgrade": true
-    },
-    {
-      "id": "fe_pb_pension_pending_2026",
-      "date": "2026-06-30",
-      "date_precision": "day",
-      "stage": "shortfall",
-      "title": "Deadline arrives; implementation reportedly still pending",
-      "summary": "As of the court-set 30 Jun 2026 deadline, reporting indicated Punjab had yet to implement the revised DA/DR for its ~3.5 lakh employees and ~4 lakh pensioners, again citing fiscal constraints — leaving ~7.5 lakh people awaiting their legally-affirmed dues.",
-      "geo": { "state": "Punjab", "district": "Ludhiana" },
-      "scheme_ref": "_STATE_PENSION",
-      "official_ref": "chief_secretary",
-      "ledger_row_ref": null,
-      "amount_cr": null,
-      "chain_id": "sc_punjab_pension_arrears",
-      "chain_seq": 3,
-      "primary_source": {
-        "type": "news",
-        "title": "Punjab pending DA dispute: 7.5 lakh employees and pensioners waiting for their legal due",
-        "url": "https://www.oneindia.com/india/punjab-pending-da-dispute-7-5-lakh-employees-and-pensioners-waiting-for-their-legal-due-court-call-8144015.html",
-        "source_tier": 4
-      },
-      "corroborating_news": [],
-      "confidence": "reported",
-      "figure_gap": true,
       "needs_pdf_upgrade": true
     }
   ]
