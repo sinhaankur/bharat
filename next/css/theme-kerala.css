@@ -1,0 +1,20 @@
+/* theme-kerala.css — state skin, from the canvas Skin page's palette.
+   REVERSIBLE: link after site.css; add class="theme-kerala" to <html>. Light + dark registers. */
+html.theme-kerala {
+  --accent: #2f7d4f; --gold-leaf: #2f7d4f;
+  --background: #eef2e6; --surface: #dde7cf; --card: #dde7cf;
+  --foreground: #1c241a; --muted-foreground: color-mix(in oklab, #1c241a 62%, #dde7cf);
+  --border: color-mix(in oklab, #1c241a 22%, transparent);
+  --border-strong: color-mix(in oklab, #1c241a 40%, transparent);
+  --indigo: #b8863b;
+}
+html.theme-kerala.theme-dark {
+  --background: color-mix(in oklab, #1c241a 86%, #000);
+  --surface: color-mix(in oklab, #1c241a 78%, #000);
+  --card: color-mix(in oklab, #1c241a 78%, #000);
+  --foreground: color-mix(in oklab, #dde7cf 92%, #fff);
+  --muted-foreground: color-mix(in oklab, #dde7cf 60%, #1c241a);
+  --border: color-mix(in oklab, #2f7d4f 26%, transparent);
+  --border-strong: color-mix(in oklab, #2f7d4f 46%, transparent);
+  --accent: color-mix(in oklab, #2f7d4f 86%, #fff);
+}

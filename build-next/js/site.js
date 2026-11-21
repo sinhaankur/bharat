@@ -3,7 +3,9 @@ const HI={"Today": "आज", "Money and power": "धन और सत्ता",
 let LANG='en';try{LANG=localStorage.getItem('bh_lang')||'en'}catch(e){}
 /* the 9 Indic skins (class on <html>, remembered in localStorage) — the design system's
    signature. Matches ds-page.js's registry. Default = Mauryan · temple (dark). */
-const SKINS=[['theme-mauryan theme-dark','Mauryan · temple'],['theme-mauryan theme-light','Mauryan · stone'],['theme-gupta theme-dark','Gupta · cave'],['theme-gupta theme-light','Gupta · plaster'],['theme-chola theme-dark','Chola · sanctum'],['theme-chola theme-light','Chola · granite'],['theme-rajput theme-dark','Rajput · sheesh'],['theme-rajput theme-light','Rajput · wasli'],['theme-light','House · gold']];
+const SKINS=[['theme-mauryan theme-dark','Mauryan · temple'],['theme-mauryan theme-light','Mauryan · stone'],['theme-gupta theme-dark','Gupta · cave'],['theme-gupta theme-light','Gupta · plaster'],['theme-chola theme-dark','Chola · sanctum'],['theme-chola theme-light','Chola · granite'],['theme-rajput theme-dark','Rajput · sheesh'],['theme-rajput theme-light','Rajput · wasli'],
+  ['theme-kashmir theme-light','Kashmir'],['theme-tamil theme-light','Tamil Nadu'],['theme-kerala theme-light','Kerala'],['theme-assam theme-light','Assam'],['theme-naga theme-light','Nagaland'],['theme-rajasthan theme-light','Rajasthan'],
+  ['theme-light','House · gold']];
 let SKIN='theme-mauryan theme-dark';try{SKIN=localStorage.getItem('bh_skin')||SKIN}catch(e){}
 const T=s=>LANG==='hi'&&HI[s]||s;
 const N=window.NAV,doc=document,root=doc.documentElement,body=doc.body;

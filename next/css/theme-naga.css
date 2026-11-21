@@ -1,0 +1,20 @@
+/* theme-naga.css — state skin, from the canvas Skin page's palette.
+   REVERSIBLE: link after site.css; add class="theme-naga" to <html>. Light + dark registers. */
+html.theme-naga {
+  --accent: #b3271f; --gold-leaf: #b3271f;
+  --background: #f2ece2; --surface: #e5dccd; --card: #e5dccd;
+  --foreground: #201a16; --muted-foreground: color-mix(in oklab, #201a16 62%, #e5dccd);
+  --border: color-mix(in oklab, #201a16 22%, transparent);
+  --border-strong: color-mix(in oklab, #201a16 40%, transparent);
+  --indigo: #201a16;
+}
+html.theme-naga.theme-dark {
+  --background: color-mix(in oklab, #201a16 86%, #000);
+  --surface: color-mix(in oklab, #201a16 78%, #000);
+  --card: color-mix(in oklab, #201a16 78%, #000);
+  --foreground: color-mix(in oklab, #e5dccd 92%, #fff);
+  --muted-foreground: color-mix(in oklab, #e5dccd 60%, #201a16);
+  --border: color-mix(in oklab, #b3271f 26%, transparent);
+  --border-strong: color-mix(in oklab, #b3271f 46%, transparent);
+  --accent: color-mix(in oklab, #b3271f 86%, #fff);
+}

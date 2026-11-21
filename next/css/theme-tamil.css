@@ -1,0 +1,20 @@
+/* theme-tamil.css — state skin, from the canvas Skin page's palette.
+   REVERSIBLE: link after site.css; add class="theme-tamil" to <html>. Light + dark registers. */
+html.theme-tamil {
+  --accent: #a8322b; --gold-leaf: #a8322b;
+  --background: #f5efe4; --surface: #eadfc8; --card: #eadfc8;
+  --foreground: #231c14; --muted-foreground: color-mix(in oklab, #231c14 62%, #eadfc8);
+  --border: color-mix(in oklab, #231c14 22%, transparent);
+  --border-strong: color-mix(in oklab, #231c14 40%, transparent);
+  --indigo: #c9862b;
+}
+html.theme-tamil.theme-dark {
+  --background: color-mix(in oklab, #231c14 86%, #000);
+  --surface: color-mix(in oklab, #231c14 78%, #000);
+  --card: color-mix(in oklab, #231c14 78%, #000);
+  --foreground: color-mix(in oklab, #eadfc8 92%, #fff);
+  --muted-foreground: color-mix(in oklab, #eadfc8 60%, #231c14);
+  --border: color-mix(in oklab, #a8322b 26%, transparent);
+  --border-strong: color-mix(in oklab, #a8322b 46%, transparent);
+  --accent: color-mix(in oklab, #a8322b 86%, #fff);
+}

@@ -614,6 +614,14 @@ if os.path.exists(HERE+'js/webgl.js'): open(OUT+'js/webgl.js','w').write(open(HE
 # --foreground/… which these set, so one component set reskins across all skins.
 for _t in ('theme-mauryan.css','theme-gupta.css','theme-chola.css','theme-rajput.css'):
     if os.path.exists(R+_t): shutil.copy(R+_t, OUT+'css/'+_t)
+# the 6 NEW state skins (Kashmir/Tamil/Kerala/Assam/Naga/Rajasthan) — generated from the
+# canvas Skin pages' palettes into theme-<state>.css so the switcher becomes 15 skins.
+try:
+    from gen_state_skins import write_state_skins
+    STATE_SKIN_SLUGS = write_state_skins(OUT+'css')
+except Exception as _e:
+    STATE_SKIN_SLUGS = []
+_THEME_LINKS = ''.join(f'<link rel="stylesheet" href="css/theme-{s}.css">' for s in ('mauryan','gupta','chola','rajput')+tuple(STATE_SKIN_SLUGS))
 FONTS='<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Devanagari&family=Noto+Sans+Bengali&family=Noto+Sans+Gurmukhi&family=Noto+Sans+Gujarati&family=Noto+Sans+Oriya&family=Noto+Sans+Tamil&family=Noto+Sans+Telugu&family=Noto+Sans+Kannada&family=Noto+Sans+Malayalam&family=Noto+Sans+Sinhala&family=Noto+Sans+Brahmi&family=Noto+Sans+Grantha&display=swap" rel="stylesheet">'
 def shell(f,di,title,kick,lede,how,body,crumb,nextprev=''):
     plain=re.sub(r'\*','',title)
@@ -623,7 +631,7 @@ def shell(f,di,title,kick,lede,how,body,crumb,nextprev=''):
 <script>/* apply the remembered Indic skin before paint (no flash) */(function(){{try{{var s=localStorage.getItem('bh_skin');if(s)document.documentElement.className=s;}}catch(e){{}}}})();</script>
 <title>{e(plain)} · Bharat</title><meta name="description" content="{e(re.sub("<[^>]+>","",lede)[:155])}">
 <link rel="canonical" href="{LIVE}{f}"><meta property="og:title" content="{e(plain)} · Bharat"><meta property="og:description" content="{e(re.sub('<[^>]+>','',lede)[:155])}"><meta property="og:type" content="article"><meta property="og:site_name" content="Bharat"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{json.dumps({'@context':'https://schema.org','@type':'WebPage','name':plain,'isPartOf':{'@type':'WebSite','name':'Bharat','url':LIVE},'breadcrumb':{'@type':'BreadcrumbList','itemListElement':[{'@type':'ListItem','position':i+1,'name':n} for i,n in enumerate(re.sub('<[^>]+>','',crumb).split(' / '))]}})}</script>
-{FONTS}<link rel="stylesheet" href="css/site.css"><link rel="stylesheet" href="css/theme-mauryan.css"><link rel="stylesheet" href="css/theme-gupta.css"><link rel="stylesheet" href="css/theme-chola.css"><link rel="stylesheet" href="css/theme-rajput.css"></head>
+{FONTS}<link rel="stylesheet" href="css/site.css">{_THEME_LINKS}</head>
 <body data-door="{di}">
 <main><div class="wrap"><p class="crumb">{crumb}</p>
 <div class="hero"><div><p class="kick"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#{DOORS[di][2]}"/></svg>{e(kick)}</p><h1>{h1(title)}</h1><p class="lede">{lede}</p></div>{f'<div class="how" data-r><b>How we know</b>{how}</div>' if how else '<div></div>'}</div><div class="rule"></div></div>
@@ -662,7 +670,7 @@ def shellbare(f,di,title,lede,body,crumb):
 <script>/* apply the remembered Indic skin before paint */(function(){{try{{var s=localStorage.getItem('bh_skin');if(s)document.documentElement.className=s;}}catch(e){{}}}})();</script>
 <title>{e(plain)} · Bharat</title><meta name="description" content="{e(re.sub("<[^>]+>","",lede)[:155])}">
 <link rel="canonical" href="{LIVE}{f}"><meta property="og:title" content="{e(plain)} · Bharat"><meta property="og:site_name" content="Bharat"><meta name="twitter:card" content="summary_large_image">
-{FONTS}<link rel="stylesheet" href="css/site.css"><link rel="stylesheet" href="css/theme-mauryan.css"><link rel="stylesheet" href="css/theme-gupta.css"><link rel="stylesheet" href="css/theme-chola.css"><link rel="stylesheet" href="css/theme-rajput.css"></head>
+{FONTS}<link rel="stylesheet" href="css/site.css">{_THEME_LINKS}</head>
 <body data-door="{di}">
 <main><div class="wrap"><p class="crumb">{crumb}</p></div>
 {body}
@@ -675,6 +683,7 @@ made=[]
 CANVAS_PAGES={'discover.html','tribes.html','tribes-india.html'}
 if load_canvas:
     CANVAS_PAGES |= {'tribe-'+s[6:].lower()+'.html' for s in canvas_available() if s.startswith('Tribe-')}
+    CANVAS_PAGES |= {'region-'+s[7:].lower()+'.html' for s in canvas_available() if s.startswith('Region-')}
 DOORLEDE=['The atlas gathers the news but shows none of it until a person has approved it. Start with who is telling the story.','Public money, from the Union to the district, beside the people who answer for it.','The physical country: terrain, water, and the places the water takes back.','Most of this story happens long before Delhi\'s sultans or the British. Begin at the beginning.','Unrelated language families, one family of scripts, and the crafts that carry them.','Every figure cites a source or is shown as a gap. This is where you check.']
 def feature(di):
     if di==0: return sec('The feed, *counted*',news_tiles(),sub='Where it stands')
@@ -739,6 +748,17 @@ if load_canvas:
             canvas_body('Tribes'),
             '<a href="index.html">Home</a> / <a href="words.html">Words and craft</a> / The tribes that made it'))
         made.append('tribes.html')
+    # Phase 4: the Region "before & after" pages (static canvas content) under the long story.
+    _region_name={'Bengal':'Bengal, both sides','Bihar':'Bihar, before and after','Goa':'Goa, before and after 1510','Haryana':'Haryana, before and after','Rajasthan':'Rajasthan'}
+    for _rs in sorted(s[7:] for s in _cv if s.startswith('Region-')):
+        _rn=_region_name.get(_rs,_rs); _ro='region-'+_rs.lower()+'.html'
+        CANVAS_PAGES.add(_ro)
+        open(OUT+_ro,'w').write(shellbare(
+            _ro, 3, _rn,
+            'A region read before and after a turning point — what changed, and what the record shows.',
+            canvas_body('Region-'+_rs),
+            f'<a href="index.html">Home</a> / <a href="story.html">The long story</a> / <a href="discover.html">Discover Bharat</a> / {e(_rn)}'))
+        made.append(_ro)
     # the 727-entry index — pre-rendered static (no React) with a vanilla search filter.
     if tribes_india_body:
         CANVAS_PAGES.add('tribes-india.html')
