@@ -39,4 +39,3 @@ interactive-vercel-ship-26-i-2/.next/
 # In production the iframes point at the atlas root instead (legacyUrl()),
 # so this must NOT be committed (it's a circular ../.. symlink).
 interactive-vercel-ship-26-i-2/public/legacy
-next/
