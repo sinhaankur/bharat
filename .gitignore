@@ -7,8 +7,10 @@ node_modules/
 *.log
 package-lock.json
 
-# news-feed.json IS committed now — the ingest-news.yml workflow scrapes RSS (link+snippet
-# only) and auto-commits it every 6h so the live feed shows present India news.
+# news-feed.json IS committed (the ingest-news.yml bot auto-commits it every 6h so the live
+# feed shows current India news) — but it's a ROLLING WINDOW: ingest_news.py keeps only the
+# last 90 days / 3000 items (~4MB), never an ever-growing archive. It once reached 100MB; the
+# retention cap in ingest_news.py keeps that from recurring.
 # Curator's local export — feed into apply_curation.py, not committed.
 curation-export.json
 # Social auto-poster local state + secrets — NEVER commit keys.
@@ -41,3 +43,6 @@ interactive-vercel-ship-26-i-2/.next/
 interactive-vercel-ship-26-i-2/public/legacy
 bharat-for-claude.zip
 next/news-feed.json
+# The raw Claude-design export (9.3MB) — a one-shot design INPUT, already unpacked by
+# build-next/unpack_final.py into real pages. Kept on disk as source-of-truth, not committed.
+build-next/final-bundle.html

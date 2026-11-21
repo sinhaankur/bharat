@@ -24,7 +24,7 @@ import re
 import sys
 import html
 import urllib.request
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from xml.etree import ElementTree as ET
 
 FEEDS = "feeds.json"
@@ -278,14 +278,28 @@ def main():
             by_url[link] = item
             added += 1
 
+    # Retention: the feed is a *rolling window*, not an archive. Without this it only grows
+    # (it reached 75k items / 100MB once), bloating the repo + every deploy. Keep items
+    # ingested in the last RETAIN_DAYS, with a hard RETAIN_MAX cap so the file stays a few MB
+    # forever. Newest-first by published_at; ingested_at breaks ties / handles missing dates.
+    RETAIN_DAYS, RETAIN_MAX = 90, 3000
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=RETAIN_DAYS)).isoformat()
+    kept = [n for n in by_url.values() if (n.get("ingested_at") or "") >= cutoff]
+    kept.sort(key=lambda n: (n.get("published_at") or "", n.get("ingested_at") or ""), reverse=True)
+    pruned = len(by_url) - len(kept)
+    if len(kept) > RETAIN_MAX:
+        pruned += len(kept) - RETAIN_MAX
+        kept = kept[:RETAIN_MAX]
+
     out = {
         "_meta": {
             "purpose": "Aggregated news_items (link + snippet only). moderation=pending until a human approves; auto anchors must be confirmed. See news-timeline-schema.md.",
             "generated_at": now,
-            "count": len(by_url),
+            "count": len(kept),
+            "retention": f"rolling {RETAIN_DAYS}d, max {RETAIN_MAX} items",
             "safety": "Link-don't-republish; always attributed; lean is third-party aggregation (lean_source); nothing shown until moderation=approved.",
         },
-        "news_items": sorted(by_url.values(), key=lambda n: n.get("published_at") or "", reverse=True),
+        "news_items": kept,
     }
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, indent=2)
