@@ -1,0 +1,61 @@
+/* theme-rajput.css — the Rajput register of the Indic design systems.
+   Author: Sinhaankur.  Heritage (medieval Rajasthan courts, c. 8th–18th c.):
+   - Fort & haveli sandstone — Jaisalmer "Golden City" yellow sandstone; Jodhpur.
+   - Sheesh Mahal (mirror-work) — tiny mirrors on indigo/emerald ground.
+   - Rajput / Mewar miniature painting — vivid indigo, vermilion, malachite green,
+     and gold leaf on cream wasli paper.
+   Sources: Wikipedia — Rajput painting; Rajput architecture; Jaisalmer Fort.
+
+   REVERSIBLE LAYER: link AFTER styles.css, add class="theme-rajput" to <html>.
+   Add theme-dark for the sheesh-mahal (mirror-hall) night register.
+   Same token contract. */
+html.theme-rajput {
+  /* `html.` prefix raises specificity to (0,1,1) to override html.theme-light */
+  /* Rajput palette (heritage-sourced) */
+  --haveli:      #e7c98a;   /* Jaisalmer golden sandstone, sunlit */
+  --haveli-2:    #d9b46a;   /* sandstone in shadow */
+  --wasli:       #f6ecd6;   /* cream miniature-painting paper — the ground */
+  --indigo-mss:  #274a8c;   /* miniature indigo */
+  --vermilion:   #c8331f;   /* sindoor / miniature red — the action colour */
+  --malachite:   #2f6b4f;   /* malachite green */
+  --gold-leaf-r: #c79a2e;   /* gold leaf highlights */
+  --court-ink:   #3a2a12;   /* deep sepia court ink */
+  --lac-red:     #8f2a1c;   /* lac / deep red */
+
+  /* remap house surfaces onto wasli/sandstone; ink is court sepia */
+  --background: var(--wasli); --card: #fbf3e0; --surface: #fbf3e0;
+  --muted: #ecdcbb; --foreground: var(--court-ink);
+  --muted-foreground: #806a44;
+  --border: rgba(58, 42, 18, 0.20); --border-strong: rgba(58, 42, 18, 0.42);
+  --surface-2: #f0e3c6;
+
+  /* Rajput action colour = miniature vermilion; secondary hue = court indigo */
+  --accent: var(--vermilion); --accent-ink: #9e2415; --accent-tint: #f4dcd4;
+  --indigo: var(--indigo-mss);
+  --success: var(--malachite); --warning: var(--gold-leaf-r);
+  --danger: var(--vermilion); --info: var(--indigo-mss);
+
+  /* ornamented but crisp — arched, small radius (jharokha framing) */
+  --ds-radius: 5px;
+}
+
+/* dark "sheesh mahal" — mirror hall at night: deep indigo, gold + mirror glints */
+html.theme-rajput.theme-dark, html.theme-rajput .register-dark {
+  --background: #12172a; --card: #1b2340; --surface: #1b2340;
+  --foreground: #f2ead6; --muted: #232c4e; --muted-foreground: #b9c0da;
+  --border: rgba(199, 154, 46, 0.26); --border-strong: rgba(199, 154, 46, 0.48);
+  --surface-2: #171d38;
+  --accent: #e06a4a; --accent-ink: #ef8b6f;
+  --indigo: #6f8fd6;
+}
+
+/* the Rajput finish — a gold-leaf hairline + faint mirror glint on cards */
+.theme-rajput .ed-card::before, .theme-rajput .card::before {
+  content: ""; position: absolute; inset: 0 0 auto 0; height: 2px;
+  background: linear-gradient(90deg, var(--gold-leaf-r), var(--indigo-mss) 50%, var(--gold-leaf-r));
+  opacity: .7; pointer-events: none; }
+.theme-rajput .ed-card, .theme-rajput .card, .theme-rajput .ds-demo { position: relative; }
+
+/* rules read as gold-leaf inlay lines */
+.theme-rajput .ds-rule, .theme-rajput hr { border: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold-leaf-r) 15%, var(--gold-leaf-r) 85%, transparent); opacity: .7; }

@@ -1,0 +1,20 @@
+/* theme-kashmir.css — state skin, from the canvas Skin page's palette.
+   REVERSIBLE: link after site.css; add class="theme-kashmir" to <html>. Light + dark registers. */
+html.theme-kashmir {
+  --accent: #d98a2b; --gold-leaf: #d98a2b;
+  --background: #f4efe6; --surface: #e9e0d0; --card: #e9e0d0;
+  --foreground: #241f1a; --muted-foreground: color-mix(in oklab, #241f1a 62%, #e9e0d0);
+  --border: color-mix(in oklab, #241f1a 22%, transparent);
+  --border-strong: color-mix(in oklab, #241f1a 40%, transparent);
+  --indigo: #6e7f8c;
+}
+html.theme-kashmir.theme-dark {
+  --background: color-mix(in oklab, #241f1a 86%, #000);
+  --surface: color-mix(in oklab, #241f1a 78%, #000);
+  --card: color-mix(in oklab, #241f1a 78%, #000);
+  --foreground: color-mix(in oklab, #e9e0d0 92%, #fff);
+  --muted-foreground: color-mix(in oklab, #e9e0d0 60%, #241f1a);
+  --border: color-mix(in oklab, #d98a2b 26%, transparent);
+  --border-strong: color-mix(in oklab, #d98a2b 46%, transparent);
+  --accent: color-mix(in oklab, #d98a2b 86%, #fff);
+}

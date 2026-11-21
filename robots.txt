@@ -1,7 +1,3 @@
 User-agent: *
 Allow: /
-
-# Internal / non-page assets — fine to skip
-Disallow: /curate.html
-
-Sitemap: https://sinhaankur.github.io/india-fiscal-map/sitemap.xml
+Sitemap: https://sinhaankur.github.io/bharat/sitemap.xml

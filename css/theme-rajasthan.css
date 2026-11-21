@@ -1,0 +1,20 @@
+/* theme-rajasthan.css — state skin, from the canvas Skin page's palette.
+   REVERSIBLE: link after site.css; add class="theme-rajasthan" to <html>. Light + dark registers. */
+html.theme-rajasthan {
+  --accent: #c9345a; --gold-leaf: #c9345a;
+  --background: #fbeee8; --surface: #f6dccf; --card: #f6dccf;
+  --foreground: #3a1f1a; --muted-foreground: color-mix(in oklab, #3a1f1a 62%, #f6dccf);
+  --border: color-mix(in oklab, #3a1f1a 22%, transparent);
+  --border-strong: color-mix(in oklab, #3a1f1a 40%, transparent);
+  --indigo: #2a4a7a;
+}
+html.theme-rajasthan.theme-dark {
+  --background: color-mix(in oklab, #3a1f1a 86%, #000);
+  --surface: color-mix(in oklab, #3a1f1a 78%, #000);
+  --card: color-mix(in oklab, #3a1f1a 78%, #000);
+  --foreground: color-mix(in oklab, #f6dccf 92%, #fff);
+  --muted-foreground: color-mix(in oklab, #f6dccf 60%, #3a1f1a);
+  --border: color-mix(in oklab, #c9345a 26%, transparent);
+  --border-strong: color-mix(in oklab, #c9345a 46%, transparent);
+  --accent: color-mix(in oklab, #c9345a 86%, #fff);
+}

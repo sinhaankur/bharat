@@ -50,6 +50,9 @@ def copy_map_deps(out_dir, repo_dir):
         src = os.path.join(repo_dir, rel)
         if os.path.exists(src):
             dst = os.path.join(out_dir, rel)
+            # when building to root, src and dst are the same file — nothing to copy
+            if os.path.abspath(src) == os.path.abspath(dst):
+                return True
             os.makedirs(os.path.dirname(dst), exist_ok=True)
             shutil.copy(src, dst)
             return True

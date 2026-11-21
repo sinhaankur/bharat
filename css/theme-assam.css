@@ -1,0 +1,20 @@
+/* theme-assam.css — state skin, from the canvas Skin page's palette.
+   REVERSIBLE: link after site.css; add class="theme-assam" to <html>. Light + dark registers. */
+html.theme-assam {
+  --accent: #c0392b; --gold-leaf: #c0392b;
+  --background: #f6f1e6; --surface: #ece2cd; --card: #ece2cd;
+  --foreground: #232019; --muted-foreground: color-mix(in oklab, #232019 62%, #ece2cd);
+  --border: color-mix(in oklab, #232019 22%, transparent);
+  --border-strong: color-mix(in oklab, #232019 40%, transparent);
+  --indigo: #3f6b45;
+}
+html.theme-assam.theme-dark {
+  --background: color-mix(in oklab, #232019 86%, #000);
+  --surface: color-mix(in oklab, #232019 78%, #000);
+  --card: color-mix(in oklab, #232019 78%, #000);
+  --foreground: color-mix(in oklab, #ece2cd 92%, #fff);
+  --muted-foreground: color-mix(in oklab, #ece2cd 60%, #232019);
+  --border: color-mix(in oklab, #c0392b 26%, transparent);
+  --border-strong: color-mix(in oklab, #c0392b 46%, transparent);
+  --accent: color-mix(in oklab, #c0392b 86%, #fff);
+}
