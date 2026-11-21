@@ -850,10 +850,11 @@ focus=f"""<section class="sec" id="focus"><div class="wrap"><p class="when">In f
 </div></div></section>"""
 idx=idx.replace('<section class="sec" id="map">',focus+'<section class="sec" id="map">',1)
 idx=idx.replace('<a class="cue" href="#indus"><i></i>Begin the journey</a>','<a class="cue" href="#indus"><i></i>Begin the journey</a><p style="margin:14px 0 0"><a class="btn" href="#vedic">In focus: the Vedic age</a><a class="btn" href="#maurya">In focus: Ashoka\'s empire</a></p>',1)
-# The Claude-design bundle is the real landing page (index.html) — the designed 7-page
-# L1/L2 experience with its own WebGL. Keep this generated scrollytelling front page as
-# through-time.html so the generator never clobbers the hand-placed landing.
-open(OUT+'through-time.html','w').write(idx.replace('href="index.html"','href="through-time.html"'));made.append('through-time.html')
+# The native scrollytelling front page IS the landing (index.html): it's responsive, its gold
+# भारत particle hero animates on iPhone (unlike the desktop-only Claude bundle), and it carries the
+# 4-door header. It's written to BOTH index.html and through-time.html (same page, stable alias).
+open(OUT+'index.html','w').write(idx);made.append('index.html')
+open(OUT+'through-time.html','w').write(idx);made.append('through-time.html')
 open(OUT+'sitemap.xml','w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+''.join(f'<url><loc>{LIVE}{f}</loc></url>' for f in sorted(set(made)))+'</urlset>');open(OUT+'robots.txt','w').write('User-agent: *\nAllow: /\nSitemap: '+LIVE+'sitemap.xml\n')
 print('orig files',copy_orig() if os.environ.get('EMBED') else 0)
 print(len(made),'pages',sum(os.path.getsize(OUT+''+f) for f in made)//1024,'KB');print('left live links in index:',len(re.findall(re.escape(LIVE),idx)))
