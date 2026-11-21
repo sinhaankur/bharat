@@ -63,7 +63,19 @@
       return new THREE.CanvasTexture(c);
     })();
 
-    var N = lowPerf ? 1400 : 3600;
+    // DATA AS PARTICLES: scale the field by the page's lead datum where one exists —
+    // the biggest [data-n] stat (news items, districts, sites…), so the animation IS the
+    // data. Clamped to a sane range + perf tier. Falls back to a default count.
+    var leadN = 0;
+    try {
+      document.querySelectorAll("[data-n]").forEach(function (el) {
+        var v = parseFloat(el.getAttribute("data-n")); if (v > leadN) leadN = v;
+      });
+    } catch (e) {}
+    var capN = lowPerf ? 2200 : 6000;
+    var baseN = lowPerf ? 1400 : 3600;
+    // map the datum logarithmically so 15 and 74,938 both read, then clamp
+    var N = leadN > 0 ? Math.max(900, Math.min(capN, Math.round(baseN * (0.5 + Math.log10(leadN + 1) / 5)))) : baseN;
     var pos = new Float32Array(N * 3);
     var group = new THREE.Group();
     scene.add(group);
@@ -155,8 +167,11 @@
       renderer.setSize(innerWidth, innerHeight);
     });
 
-    // camera eases in from the page-transition (the shared camera idea: a small push-in)
+    // CAMERA BETWEEN PAGES: ease in on load (push-in from z=11→9); when site.js marks the
+    // page leaving (html.leaving), pull the camera back so the emblem recedes as the page
+    // exits — the camera "travels" between pages rather than a flat fade.
     camera.position.z = 11;
+    var root = document.documentElement;
     var t0 = performance.now();
     function loop(now) {
       var dt = (now - t0) / 1000; t0 = now;
@@ -167,7 +182,9 @@
       group.rotation.x = -0.12 + pmy * 0.1;
       group.rotation.y += pmx * 0.0008;
       if (door === 3 || door === 4) group.rotation.z += dt * 0.02;                  // chakra spin in-plane
-      if (camera.position.z > 9) camera.position.z += (9 - camera.position.z) * 0.04; // settle push-in
+      var targetZ = root.classList.contains("leaving") ? 15 : 9;                     // recede on exit
+      camera.position.z += (targetZ - camera.position.z) * (root.classList.contains("leaving") ? 0.12 : 0.04);
+      if (root.classList.contains("leaving")) canvas.style.opacity = Math.max(0, +canvas.style.opacity - 0.03) || "0.47";
       // keep the gold in sync if the skin changed
       if ((now | 0) % 40 === 0 && door !== 0) { var g = doorGold(); mat.color.copy(g); }
       renderer.render(scene, camera);
