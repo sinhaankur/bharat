@@ -2911,13 +2911,15 @@
     // a Mapbox token. Ships no key; licensed, so opt-in only. Added last in the list.
     const hd = MapLayers.satelliteHD(L);
     if (hd) basemaps['Satellite HD (your Mapbox key)'] = hd;
-    basemaps['Light map'].addTo(map);      // default (Indic light Modernist)
+    basemaps['Plain'].addTo(map);          // default: tile-free warm paper (no third-party
+                                            // tiles → no provider watermarks). Raster bases
+                                            // remain as toggles for those who want them.
     const labels = MapLayers.labels(L);
     const hillshade = MapLayers.hillshade(L);
     const elevTint = buildElevationTintLayer();   // custom GridLayer (uses DEM decode)
     const { rain, clouds } = MapLayers.weather(L);
     // Stash for the unified layers panel (replaces the default Leaflet controls).
-    mapLayers = { basemaps, labels, hillshade, elevTint, rain, clouds, current: 'Light map' };
+    mapLayers = { basemaps, labels, hillshade, elevTint, rain, clouds, current: 'Plain' };
     // Deep-zoom note + zoom/scale readout (map-ui.js) — reads the active basemap's
     // real resolution so it can flag upscaling.
     mapUI = MapUI.setup(map, { getActiveBasemap: () => mapLayers.basemaps[mapLayers.current] });
