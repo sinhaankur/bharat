@@ -1,7 +1,7 @@
 {
   "_meta": {
     "purpose": "Fund-lifecycle events on a timeline, anchored to the district ledger, grouped into story chains. The atomic unit of the news/timeline layer. See news-timeline-schema.md.",
-    "as_of": "2026-11-20",
+    "as_of": "2026-11-21",
     "rules": "Same sourcing discipline as the ledger: every event carries a source + tier and a confidence (documented = gov source / reported = news only / alleged). amount_cr stays null unless PDF-cited (figure_gap). No event is fabricated; seeds are real, ledger-anchored stories.",
     "stage_order": [
       "sanction",
