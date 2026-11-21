@@ -5,19 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bharat — Money, Land &amp; Memory</title>
   <meta name="description" content="An atlas of India — its money and power, its land and rivers, its scripts and faiths. Sourced, per-district, open." />
-  <link rel="canonical" href="https://sinhaankur.github.io/bharat/app/" />
-  <!-- The front door is the atlas (app/). The cinematic 3D hero (hero-3d.html) is kept
-       as an optional "flyover" — reachable via ?hero, not the default landing. The
-       classic India map lives at classic.html. -->
+  <link rel="canonical" href="https://sinhaankur.github.io/bharat/next/" />
+  <!-- The front door is the new rebuild (next/): the 15-skin WebGL design, latest work.
+       ?app  → the classic atlas (app/).  ?hero → the cinematic 3D flyover (hero-3d.html).
+       The classic India map lives at classic.html. -->
   <script>
     (function () {
       var p = new URLSearchParams(location.search);
-      // default → the atlas. Opt into the cinematic flyover only with ?hero.
-      var dest = p.has('hero') ? 'hero-3d.html' : 'app/';
-      location.replace(dest + location.search.replace(/[?&]hero\b/, '') + location.hash);
+      // default → the new rebuild. Opt into the older atlas (?app) or the flyover (?hero).
+      var dest = p.has('hero') ? 'hero-3d.html' : p.has('app') ? 'app/' : 'next/';
+      location.replace(dest + location.search.replace(/[?&](hero|app)\b/g, '') + location.hash);
     })();
   </script>
-  <noscript><meta http-equiv="refresh" content="0; url=app/" /></noscript>
+  <noscript><meta http-equiv="refresh" content="0; url=next/" /></noscript>
   <style>
     html,body{margin:0;height:100%;background:#f8f4ea;color:#33251a;
       font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
@@ -34,7 +34,7 @@
   <div class="wrap">
     <div class="spin" aria-hidden="true"></div>
     <p>Taking you to <strong>Bharat</strong>…<br />
-      <a href="app/">Enter the atlas</a> · <a href="classic.html">the classic map</a> · <a href="index.html?hero">the flyover</a></p>
+      <a href="next/">Enter Bharat</a> · <a href="app/">the classic atlas</a> · <a href="classic.html">the map</a> · <a href="index.html?hero">the flyover</a></p>
   </div>
 </body>
 </html>
