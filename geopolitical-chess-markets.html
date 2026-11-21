@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Three economies on one board — Canada · US · India</title>
+  <meta name="description" content="A framing companion to Geopolitical Chess: how Canada, the US and India actually earn their living — what their real economies run on, what their stock markets price, and why the petrodollar privilege belongs to the US alone (not to oil producers like Canada). Figures sourced; the reading is labelled framing." />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .gc-wrap { max-width: 1120px; margin: 0 auto; padding: 2.4rem 1.5rem 6rem; }
+    .gc-back { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted-foreground); display: inline-block; margin-bottom: 1.4rem; border: 1px solid var(--border-strong); padding: 5px 12px; border-radius: 999px; text-decoration: none; }
+    .gc-back:hover { color: var(--foreground); border-color: var(--foreground); }
+
+    .gc-eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted-foreground); }
+    .gc-wrap h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(2.1rem, 4vw, 3.1rem); line-height: 1.02; margin: 0.4rem 0 0.7rem; letter-spacing: -0.015em; }
+    .gc-wrap h1 em { font-family: var(--font-italic); font-style: italic; }
+    .gc-lede { font-size: 15px; color: var(--muted-foreground); line-height: 1.65; margin: 0 0 1.4rem; max-width: 820px; }
+    .gc-lede b { color: var(--foreground); font-weight: 500; }
+
+    /* framing banner — this whole page is a reading, say so */
+    .gc-frame { border: 1px solid oklch(0.5 0.14 30 / 0.5); border-left: 3px solid oklch(0.48 0.180 30); background: oklch(0.17 0.02 30); border-radius: var(--radius-sm); padding: 0.9rem 1.1rem; margin: 0 0 2.2rem; }
+    .gc-frame h3 { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.09em; text-transform: uppercase; color: oklch(0.48 0.160 40); margin: 0 0 0.45rem; }
+    .gc-frame p { font-size: 12.5px; line-height: 1.6; color: oklch(0.88 0.02 40); margin: 0; }
+
+    .frame-tag { font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.06em; text-transform: uppercase; color: oklch(0.48 0.150 45); border: 1px solid oklch(0.6 0.13 45 / 0.5); border-radius: 4px; padding: 0 4px; margin-right: 5px; white-space: nowrap; vertical-align: middle; }
+
+    /* embedded Dollar Engine figure */
+    .de-fig { margin: 0 0 2.4rem; }
+    .de-fig iframe { width: 100%; height: 520px; border: 1px solid var(--border-strong); border-radius: var(--radius); background: #0b0b0b; display: block; }
+    .de-fig figcaption { font-size: 12.5px; color: var(--muted-foreground); line-height: 1.6; margin-top: 0.6rem; max-width: 820px; }
+    .de-fig figcaption b { color: var(--foreground); }
+    @media (max-width: 640px) { .de-fig iframe { height: 420px; } }
+
+    .gc-section-h { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.4rem, 2.6vw, 1.9rem); letter-spacing: -0.01em; margin: 2.8rem 0 0.4rem; }
+    .gc-section-sub { font-size: 13px; color: var(--muted-foreground); line-height: 1.6; margin: 0 0 1.1rem; max-width: 760px; }
+
+    /* comparison table */
+    .cmp { border: 1px solid var(--border-strong); border-radius: var(--radius); overflow: hidden; background: var(--card); margin: 0 0 1rem; }
+    .cmp table { width: 100%; border-collapse: collapse; }
+    .cmp th, .cmp td { text-align: left; padding: 0.7rem 0.95rem; font-size: 13px; line-height: 1.5; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .cmp thead th { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted-foreground); background: var(--muted); position: sticky; top: 0; }
+    .cmp thead th:first-child { color: var(--foreground); }
+    .cmp tbody th { font-family: var(--font-sans); font-weight: 600; color: var(--foreground); width: 26%; }
+    .cmp td b { color: var(--foreground); font-weight: 600; }
+    .cmp tr:last-child th, .cmp tr:last-child td { border-bottom: 0; }
+    .cmp .flag { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; display: block; color: var(--accent); margin-bottom: 2px; }
+    .col-us { background: oklch(0.48 0.09 250 / 0.06); }
+    @media (max-width: 720px) { .cmp { overflow-x: auto; } .cmp table { min-width: 620px; } }
+
+    /* key-point cards */
+    .kp { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.9rem; margin: 1rem 0 0.6rem; }
+    .kp-card { border: 1px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--background); padding: 0.9rem 1rem; }
+    .kp-card h4 { font-family: var(--font-sans); font-weight: 600; font-size: 13.5px; color: var(--foreground); margin: 0 0 0.35rem; }
+    .kp-card p { font-size: 12.5px; line-height: 1.6; color: var(--muted-foreground); margin: 0; }
+    .kp-card p b { color: var(--foreground); }
+
+    /* petrodollar flow */
+    .flow { border: 1px solid var(--border-strong); border-radius: var(--radius); background: linear-gradient(135deg, oklch(0.19 0.03 150 / 0.5) 0%, var(--card) 60%); padding: 1.3rem 1.4rem; margin: 1rem 0; }
+    .flow ol { margin: 0; padding-left: 1.2rem; }
+    .flow li { font-size: 13px; line-height: 1.7; color: var(--foreground); margin-bottom: 0.4rem; }
+    .flow li b { color: var(--accent); }
+    .verdict { border-left: 3px solid var(--accent); padding: 0.3rem 0 0.3rem 0.9rem; margin: 1.2rem 0; font-size: 14px; line-height: 1.6; color: var(--foreground); }
+
+    .gc-doc { border: 1px solid var(--border-strong); border-radius: var(--radius-sm); margin: 2.4rem 0 0; background: var(--background); }
+    .gc-doc summary { cursor: pointer; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted-foreground); padding: 0.8rem 1rem; }
+    .gc-doc[open] summary { color: var(--foreground); border-bottom: 1px solid var(--border); }
+    .gc-doc-body { padding: 1rem 1.1rem; }
+    .gc-doc-body h4 { font-family: var(--font-sans); font-size: 12.5px; margin: 0 0 0.4rem; }
+    .gc-doc-body p, .gc-doc-body li { font-size: 11.5px; line-height: 1.7; color: var(--muted-foreground); }
+    .gc-doc-src a { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <main class="gc-wrap">
+    <a class="gc-back" href="geopolitical-chess.html">← Back to Geopolitical Chess</a>
+
+    <div class="gc-eyebrow">Study · a framing · companion</div>
+    <h1>Three economies, <em>one board</em></h1>
+    <p class="gc-lede">Geopolitical Chess argues the US dollar is the <b>board</b> everyone plays on. This companion asks the next question: <b>what does each player actually earn its living doing?</b> Canada, the United States and India — what their <b>real economies</b> run on, what their <b>stock markets</b> actually price, and why the <b>petrodollar privilege</b> belongs to the country whose currency oil is <b>priced in</b> — not to oil producers like Canada.</p>
+
+    <div class="gc-frame">
+      <h3>⚠ Numbers are sourced · the reading is a framing</h3>
+      <p>Every figure below is <b>as-of dated</b> and sourced (IMF, World Bank, Statistics Canada, SIFMA, S&amp;P/TSX, NSE/BSE, NASSCOM, EIA/IEA). The <b>interpretation</b> — "core engine", "no exorbitant privilege", "commodity currency" — is <span class="frame-tag">Framing</span> editorial reading, tagged as such. It's a model to argue with, not a verdict.</p>
+    </div>
+
+    <!-- THE DOLLAR ENGINE — interactive isometric figure (anatomy skill) -->
+    <figure class="de-fig">
+      <iframe src="dollar-engine-figure.html" title="The Dollar Engine — interactive isometric figure" loading="lazy" scrolling="no"></iframe>
+      <figcaption>An interactive model of the reserve-currency system. <b>Hover / drag across it</b> to raise system stress and watch the engine squeeze each economy: India (oil importer) hardest, China diverting flow to petroyuan, Canada riding risk. <span class="frame-tag">Framing · not investment advice</span></figcaption>
+    </figure>
+
+    <!-- 1 · REAL ECONOMY -->
+    <h2 class="gc-section-h">1 · What each economy actually runs on</h2>
+    <p class="gc-section-sub">The "real economy" — where GDP and jobs come from — differs sharply from what the stock market prices (next section). <span class="frame-tag">Framing</span> The "core engine" row is the editorial read.</p>
+    <div class="cmp">
+      <table>
+        <thead>
+          <tr><th>Dimension</th><th>Canada</th><th class="col-us">United States</th><th>India</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>GDP (nominal, 2026)</th><td>~US$2.4T <span class="flag">11th</span></td><td class="col-us">~US$29T+ <span class="flag">1st</span></td><td>~US$4.1T <span class="flag">6th</span></td></tr>
+          <tr><th>Services share of GDP</th><td>~70%</td><td class="col-us">~80%</td><td>~56%</td></tr>
+          <tr><th>Manufacturing</th><td>~10% · <b>shrinking</b> (−2.6% in '25)</td><td class="col-us">~11% · <b>advanced</b> (aero, semis, defense)</td><td>~14% · <b>growing</b> (5th-largest maker)</td></tr>
+          <tr><th>Resources</th><td><b>Core.</b> Oil & gas ~7.2% GDP; 4th-largest oil producer; metals/potash</td><td class="col-us">Large producer, but a small share of a huge economy</td><td>Minor exporter; large <b>importer</b> of energy</td></tr>
+          <tr><th>Signature export</th><td>Oil/gas (~$197B), metals (~$124B)</td><td class="col-us">Tech, IP, services, finance, the <b>dollar itself</b></td><td><b>IT services</b> (~$246B exports), engineering goods</td></tr>
+          <tr><th>Core engine <span class="frame-tag">Framing</span></th><td>Commodities + <b>real estate/housing</b></td><td class="col-us"><b>Innovation + reserve-currency privilege</b></td><td><b>Services/IT + demographics</b></td></tr>
+          <tr><th>Key weakness <span class="frame-tag">Framing</span></th><td>Productivity <b>~30% below US</b>; capital stuck in housing &amp; resources, not R&amp;D/AI</td><td class="col-us">Debt &amp; deficits; privilege depends on trust</td><td>Agriculture is ~16% of GDP but employs <b>~45%</b> of workers</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="kp">
+      <div class="kp-card"><h4>"Canada has no core industry" — half true</h4><p>It <b>does</b> have core industries — energy, mining, banking — but they're <b>concentrated and low-productivity</b>. The missing piece vs the US is a large <b>tech / advanced-manufacturing</b> core. AI was ~30% of US GDP growth last year; ~5% in Canada.</p></div>
+      <div class="kp-card"><h4>The productivity gap</h4><p>Canadian capital piled into <b>housing and mature resources</b> (profitable, but they don't raise output per worker). Canada spends a larger share of investment on <b>residential housing than any OECD country</b>.</p></div>
+      <div class="kp-card"><h4>India's bet</h4><p>India is trying to build the dynamic core Canada lacks: a <b>~$315B tech industry</b> (79% exported) plus a deliberate manufacturing push — the opposite of a resource-rentier model.</p></div>
+    </div>
+
+    <!-- 2 · THE MARKET -->
+    <h2 class="gc-section-h">2 · What the stock market actually prices</h2>
+    <p class="gc-section-sub">A country's index is <b>not</b> a mirror of its economy. In Canada and India the benchmarks are dominated by <b>financials</b>; only the US index reflects its economy's real engine (tech).</p>
+    <div class="cmp">
+      <table>
+        <thead>
+          <tr><th>Benchmark</th><th>Canada · S&amp;P/TSX</th><th class="col-us">US · S&amp;P 500</th><th>India · Nifty 50</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>Top sector</th><td><b>Financials ~36%</b></td><td class="col-us"><b>Tech / comms ~40%+</b></td><td><b>Financials ~37%</b></td></tr>
+          <tr><th>2nd / 3rd</th><td>Energy ~17% · Materials ~16%</td><td class="col-us">Healthcare · consumer · financials</td><td>Energy ~9% · IT ~9%</td></tr>
+          <tr><th>Concentration</th><td>Top 3 sectors ≈ <b>69%</b></td><td class="col-us">Mega-cap tech-led, but deep &amp; broad</td><td>Financials-heavy; agri (16% of GDP) ≈ <b>0.5%</b> of index</td></tr>
+          <tr><th>Does it mirror the economy? <span class="frame-tag">Framing</span></th><td><b>No</b> — bank/resource proxy</td><td class="col-us"><b>Largely yes</b> — tech core shows up</td><td><b>No</b> — financials proxy</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="gc-section-sub">The pattern: Canada's and India's indices are <b>financials-heavy and misrepresent their real economies</b>; the US index actually reflects its tech-driven core. That is itself a structural difference between the three.</p>
+
+    <!-- 3 · PETRODOLLAR -->
+    <h2 class="gc-section-h">3 · Does the petrodollar engine work for Canada?</h2>
+    <p class="gc-section-sub">Short answer: <b>no.</b> The privilege belongs to the currency oil is <b>priced in</b> (USD) — not to oil <b>producers</b>. This is the key correction to "Canada sells oil, so it must benefit like the US."</p>
+
+    <div class="flow">
+      <ol>
+        <li>Most globally traded oil is <b>invoiced &amp; settled in US dollars</b> — a convention since the 1970s, not a treaty.</li>
+        <li>Every country therefore needs <b>dollars to buy oil</b> → constant global demand for USD.</li>
+        <li>Oil exporters (incl. Gulf states, many <b>USD-pegged</b>) earn dollars, then <b>recycle them into US Treasuries</b> — "petrodollar recycling".</li>
+        <li>That funds US <b>deficit spending cheaply</b> and lets the US effectively <b>print the world's reserve currency</b> — the "exorbitant privilege".</li>
+      </ol>
+    </div>
+
+    <div class="kp">
+      <div class="kp-card"><h4>Canada earns petrodollars — it doesn't issue them</h4><p>Canada is a top-4 oil producer, but its crude is <b>priced in USD</b> at WTI/WCS benchmarks (~90% sold to the US, at a discount). It is a <b>price-taker</b> on the receiving side.</p></div>
+      <div class="kp-card"><h4>The CAD is a commodity currency</h4><p>The loonie historically <b>rises and falls with oil</b> — the <b>opposite</b> of a privilege. The USD is the safe haven oil is priced <em>in</em>; the CAD weakens when oil falls.</p></div>
+      <div class="kp-card"><h4>No "print to pay" backstop</h4><p>If Canada over-prints CAD it just gets <b>inflation + a weaker currency</b>. There is no global demand sink to absorb it, as there is for the dollar.</p></div>
+      <div class="kp-card"><h4>On OPEC &amp; "printed money"</h4><p>OPEC is ~12–13 members (OPEC+ ~23, not 51). Gulf states don't price their currency on printed money — many <b>peg to the USD</b> and recycle oil dollars into Treasuries. The flow benefits <b>the US</b>, not the producers.</p></div>
+    </div>
+
+    <p class="gc-section-sub" style="margin-top:1.1rem">The convention is <b>eroding at the margins</b>: the dollar's reserve share has slipped toward multi-decade lows, and some China–Gulf oil now settles in yuan (scale disputed). But this is <b>gradual diversification toward a multipolar currency system</b>, not an overnight collapse — and either way it is a story about the <b>dollar</b>, not about Canada.</p>
+
+    <div class="verdict">
+      <span class="frame-tag">Framing</span> <b>Bottom line.</b> The petrodollar privilege is a <b>US-dollar</b> phenomenon. Canada, despite pumping more oil than almost anyone, sits on the price-taker side with a currency that <em>weakens</em> when oil falls — structurally the inverse of the US position. India, a large energy <b>importer</b>, is exposed the other way: a strong dollar and dear oil <b>raise its import bill</b>.
+    </div>
+
+    <!-- 4 · HOW THE DOLLAR ENGINE ACTUALLY WORKS -->
+    <h2 class="gc-section-h">4 · How the dollar engine actually works</h2>
+    <p class="gc-section-sub">"Petrodollar" is just the <b>oldest spoke</b> of a bigger wheel. Four mechanisms, each well-established in economics, explain why the dollar sits at the centre — and why that's both a privilege and a trap.</p>
+    <div class="kp">
+      <div class="kp-card"><h4>① Exorbitant privilege</h4><p>Because the world wants dollar <b>safe assets</b>, the US borrows below the rate anyone else pays — a permanent subsidy ("seigniorage") that funds a standing trade deficit. And it borrows <b>in its own currency</b>, so it can never be forced to default: the Fed can always issue dollars. Named by France's finance minister in 1965; the Dutch (1600s) and British (1800s) had it before.</p></div>
+      <div class="kp-card"><h4>② The Triffin dilemma — the trap</h4><p>To supply the world with dollars, the US <b>must run deficits</b>. But endless deficits eventually erode confidence in the very asset everyone holds. Robert Triffin (1960) predicted this would break the gold standard — which it did in <b>1971</b>. The dilemma never left; it just changed shape. This is the structural reason "dollar dominance forever" is <b>not</b> guaranteed.</p></div>
+      <div class="kp-card"><h4>③ Dollar recycling — the loop</h4><p>The deeper privilege isn't that oil is bought in dollars — it's that surplus countries <b>recycle those dollars back into US Treasuries</b>. That funds US deficits cheaply. The key insight for a geopolitical investor: <b>even if trade keeps using dollars, the privilege erodes if countries stop parking their reserves in US assets</b> (central-bank gold buying, BRICS).</p></div>
+      <div class="kp-card"><h4>④ The Eurodollar system — the hidden size</h4><p>Most "dollars" exist <b>offshore</b>, created by non-US banks lending dollars to each other (~$14T+), far beyond what the Fed prints. It's why the Fed had to rescue the <em>world</em> in 2008 &amp; 2020 with swap lines. It also means global dollar liquidity can <b>vanish in a crisis</b> — the single biggest tail risk to everything priced in dollars.</p></div>
+    </div>
+    <p class="gc-section-sub" style="margin-top:1rem"><span class="frame-tag">Framing</span> <b>The investor takeaway:</b> the dollar's dominance is real and sticky, but it rests on <b>trust + recycling</b>, not a law of nature. De-dollarisation is <b>gradual, not a switch</b> — so bet on <b>direction and fragility</b> (a multipolar drift, periodic dollar-liquidity squeezes), not on a date for collapse.</p>
+
+    <!-- 5 · HOW THIS REACHES YOUR PORTFOLIO -->
+    <h2 class="gc-section-h">5 · How geopolitics reaches your portfolio</h2>
+    <p class="gc-section-sub">This is the chain that connects a central-bank decision to your returns. Understanding it is the point — it's why a thesis can beat a reflexive index buy.</p>
+    <div class="flow">
+      <ol>
+        <li><b>US bond yields rise</b> → by <b>interest-rate parity</b>, capital chases the higher dollar return, so the <b>dollar strengthens now</b>.</li>
+        <li><b>Capital flows reverse out of emerging markets</b> (the carry trade unwinds) — money flees back to dollar safety.</li>
+        <li><b>EM currencies fall; dollar debts get heavier</b> ("original sin": they borrowed in USD, earn in local currency) → a self-reinforcing <b>doom loop</b>.</li>
+        <li><b>Commodity currencies</b> (CAD) track risk + yields more than oil now; <b>importers</b> (India) get hit twice — dearer dollars <em>and</em> dearer dollar-priced oil.</li>
+      </ol>
+    </div>
+    <div class="kp">
+      <div class="kp-card"><h4>Why a weak currency doesn't "fix" India</h4><p>Textbook says a cheaper rupee boosts exports and self-corrects. It fails here (<b>Marshall–Lerner</b>): oil demand is <b>inelastic</b> — India buys the same barrels at a higher rupee cost. A ~$10 oil rise adds ~$14–15B to the import bill; each ₹1 of depreciation adds ~$1.6B. The rupee's fall <b>widens</b> the deficit, not narrows it.</p></div>
+      <div class="kp-card"><h4>Why CAD stopped tracking oil</h4><p>In 2026 the loonie <b>decoupled</b> from crude — oil sands investment shrank as a share of GDP, and <b>bond yields + global risk appetite</b> now drive it more than WTI. A "commodity currency" that no longer rallies on oil is itself a signal about Canada's shifting economy.</p></div>
+      <div class="kp-card"><h4>The uncomfortable ETF truth</h4><p>A cap-weighted index ETF is <b>not neutral</b> — a TSX ETF is ~69% banks/energy/materials, so you're <b>already making a concentrated macro bet</b>, just an unexamined one. "Understanding the market" means choosing exposures (country · currency · sector · duration · real assets) that match your thesis.</p></div>
+      <div class="kp-card"><h4>So is an ETF the "true answer"? <span class="frame-tag">Framing</span></h4><p>Often the honest answer is: the ETF isn't the <b>problem</b>, the <b>default index</b> is. You can express a geopolitical view <em>with</em> ETFs — currency-hedged vs unhedged, equal-weight vs cap-weight, sector/commodity/gold/short-duration bond funds — usually more cheaply and with less single-name risk than picking stocks. The edge is in the <b>allocation</b>, not the wrapper.</p></div>
+    </div>
+    <div class="verdict">
+      <span class="frame-tag">Framing · not investment advice</span> <b>The through-line:</b> yields move currencies (parity) → capital flows enforce it → dollar strength tightens the whole world, hitting dollar-debt importers hardest. Your real choices are <b>which country, which currency exposure, which sector, and how much duration/real-asset ballast</b> — the index just picks those <em>for</em> you by market cap. Decide them on purpose.
+    </div>
+
+    <!-- 6 · WHY CHESS IS THE WRONG GAME -->
+    <h2 class="gc-section-h">6 · Why "chess" is the wrong game</h2>
+    <p class="gc-section-sub">The parent page calls the dollar the <b>board</b> and each country a <b>piece</b> — a useful lens, but chess quietly smuggles in assumptions that geopolitics breaks. The ways it breaks <em>are</em> the insight. <span class="frame-tag">Framing</span></p>
+    <div class="cmp">
+      <table>
+        <thead>
+          <tr><th>Chess assumes…</th><th>Geopolitics actually is…</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>Two players, fixed sides</th><td><b>Many players</b> (this board has 15), shifting coalitions, no stable "us vs them".</td></tr>
+          <tr><th>Fixed rules</th><td>The strongest players <b>write and break the rules mid-game</b> — sanctions, SWIFT cut-offs, tariffs rewrite the board.</td></tr>
+          <tr><th>Perfect information</th><td><b>Hidden intent, bluffing, deception</b>, secret deals, intelligence failures.</td></tr>
+          <tr><th>Pieces have fixed powers</th><td>A "pawn" at a chokepoint (Taiwan, Hormuz) can <b>decide everything</b>; a "queen" can be paralysed.</td></tr>
+          <tr><th>Players are unitary</th><td>Each piece is <b>itself a contested board</b> — ruling party, military, backers, public, all pulling.</td></tr>
+          <tr><th>Zero-sum; someone wins</th><td>Mostly <b>non-zero-sum</b> — trade enriches both sides; nobody "wins", the game never ends.</td></tr>
+          <tr><th>You move your own pieces</th><td>A country is <b>both player and board</b> — acted upon while acting.</td></tr>
+          <tr><th>Turn-based</th><td><b>Simultaneous and continuous</b> — no one waits for your move.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="gc-section-sub" style="margin-top:1.1rem">So which game fits better? Each captures something chess can't:</p>
+    <div class="kp">
+      <div class="kp-card"><h4>Poker</h4><p><b>Hidden cards, bluffing, betting, reading opponents.</b> Captures incomplete information and deception — the sanctions brinkmanship and signalling that chess, with everything on the table, cannot model.</p></div>
+      <div class="kp-card"><h4>Go (Weiqi)</h4><p>China's own strategic metaphor: <b>influence and encirclement, not capture.</b> Slow accumulation of position with no single decisive blow — a far better fit for gradual de-dollarisation than a checkmate.</p></div>
+      <div class="kp-card"><h4>A market / ecosystem</h4><p><b>Interdependence, flows, feedback loops, no referee.</b> This is the model the rest of this page uses — and the one the Dollar Engine above literally draws.</p></div>
+      <div class="kp-card"><h4>Iterated games</h4><p><b>Repeated prisoner's dilemmas with reputation.</b> Cooperation and defection play out over time; there is no final move, so today's betrayal is priced into tomorrow's deal.</p></div>
+    </div>
+    <div class="verdict">
+      <span class="frame-tag">Framing</span> <b>The deepest break:</b> in chess the board is <b>neutral and fixed</b>. In geopolitics <b>the board is the prize</b> — the dollar <em>is</em> the board, and the whole contest is over who controls or replaces it. No chess move can represent that; it's exactly what the engine above is built to show. Keep the chess lens for who-is-allied-with-whom; reach for poker, Go or the market when you need bluffing, encirclement or interdependence.
+    </div>
+
+    <!-- DOC -->
+    <details class="gc-doc">
+      <summary>How to read this &amp; sources</summary>
+      <div class="gc-doc-body">
+        <h4>How to read it honestly</h4>
+        <ul>
+          <li><b>Figures are sourced &amp; as-of dated</b> (2024–2026); they show scale and direction, not a live feed.</li>
+          <li>The <b>reading</b> — "core engine", "no privilege", "commodity currency" — is <span class="frame-tag">Framing</span> interpretation, tagged throughout. Argue with it.</li>
+          <li>Index weights move daily; GDP shares mix 2024–2026 estimates. This is <b>not investment advice.</b></li>
+        </ul>
+        <div class="gc-doc-src">
+          <h4>Sources &amp; references</h4>
+          <p style="font-family:var(--font-mono);font-size:11px;line-height:1.7">
+            IMF World Economic Outlook &amp; COFER (reserve shares) · World Bank · Statistics Canada (GDP by industry) · SIFMA (US bond market) · S&amp;P Dow Jones Indices (S&amp;P 500, S&amp;P/TSX) · NSE/BSE (Nifty 50, Sensex) · NASSCOM (India tech, FY26) · EIA / IEA (oil, petrodollar) · Bank of Canada · BIS (Eurodollar / offshore dollar credit) · Council on Foreign Relations (petrodollar) · Triffin (1960) &amp; Bretton Woods history · interest-rate parity &amp; Marshall–Lerner (standard international-finance theory) · Brookings / SEACEN (strong-dollar &amp; EM capital flows) · ORF (India oil-import &amp; rupee).
+          </p>
+          <p style="font-size:11.5px;color:var(--muted-foreground)">See also the site's <a href="references.html">Sources</a>, the <a href="provenance.html">Provenance ledger</a>, and the parent <a href="geopolitical-chess.html">Geopolitical Chess</a>.</p>
+        </div>
+      </div>
+    </details>
+  </main>
+</body>
+</html>
