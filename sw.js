@@ -4,10 +4,10 @@
        fall back to cache, then to a cached offline shell.
      • static assets (css/js/svg/json/fonts) → stale-while-revalidate.
    Bump CACHE to invalidate. Scope is the /bharat/ deploy. */
-const CACHE = 'bharat-v1';
+const CACHE = 'bharat-v2';
 const CORE = [
-  './',
-  './index.html',
+  // NB: index.html is NOT precached — it's a tiny redirect that must always be network-fresh
+  // (a stale copy sends people to the wrong front door). The HTML handler below is network-first.
   './styles.css',
   './site-nav.js',
   './nav-data.js',
