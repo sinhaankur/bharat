@@ -23,13 +23,13 @@ MAP_SCRIPTS = [
     "vulnerability.js", "accountability-arc.js", "stats-bar.js", "app.js",
 ]
 MAP_VENDOR_CSS = ["vendor/leaflet/leaflet.css"]
-# data + assets the map fetches at runtime (copied so it works under next/)
+# Data the map fetches at runtime. We copy the SMALL files (so the map works self-contained
+# under /next/) but NOT news-feed.json (~100MB) — that view degrades gracefully in app.js.
 MAP_DATA = [
     "district-ledger.json", "india-fiscal.json", "india-states.geojson",
     "india-rivers.geojson", "district-pop.json", "district-centroids.json",
     "safety.json", "officials.json", "coverage.json", "india-extras.json",
-    "news-feed.json",
-]
+]  # note: news-feed.json (100MB) intentionally excluded — the news-attention view no-ops
 
 
 def map_body():
