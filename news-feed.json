@@ -1,7 +1,7 @@
 {
   "_meta": {
     "purpose": "Aggregated news_items (link + snippet only). moderation=pending until a human approves; auto anchors must be confirmed. See news-timeline-schema.md.",
-    "generated_at": "2026-11-22T12:09:20+00:00",
+    "generated_at": "2026-11-22T18:07:39+00:00",
     "count": 3000,
     "retention": "rolling 90d, max 3000 items",
     "safety": "Link-don't-republish; always attributed; lean is third-party aggregation (lean_source); nothing shown until moderation=approved."
