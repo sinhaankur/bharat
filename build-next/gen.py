@@ -869,10 +869,25 @@ print('broken',sorted(bad)[:20]);print('wiki hrefs',sum(len(re.findall(r'href="[
 # (each carries its own @media CSS, so it adapts phone→desktop — unlike the 1440px iframe bundle).
 # These overwrite index.html + the region-*/design-systems slugs the generator also emits.
 try:
-    from debundle import debundle
+    from debundle import debundle, process_main
+    _od = OUT.rstrip('/') or '.'
     _cb = HERE + 'inputs/landing-bundle.html'
     if os.path.exists(_cb):
-        _w = debundle(_cb, OUT.rstrip('/') or '.')
+        _w = debundle(_cb, _od)   # Discover + regions + design-systems -> discover.html etc.
         print('claude-design adaptive pages:', len(_w), '->', ', '.join(s for s, _ in _w))
+    # The REAL landing: Main.dc.html ('Bharat, through five thousand years', animated era timeline).
+    _main = HERE + 'inputs/main-landing.dc.html'
+    if os.path.exists(_main):
+        process_main(_main, _od, 'index.html')
+        # it needs ./_runtime/{react,react-dom,support}.js — copy them beside it
+        _rt_src = R + '_runtime'
+        if os.path.isdir(_rt_src):
+            import shutil
+            _rt_dst = os.path.join(_od, '_runtime')
+            if os.path.abspath(_rt_src) != os.path.abspath(_rt_dst):
+                os.makedirs(_rt_dst, exist_ok=True)
+                for _f in os.listdir(_rt_src):
+                    shutil.copy(os.path.join(_rt_src, _f), os.path.join(_rt_dst, _f))
+        print('MAIN landing: index.html <- Main.dc.html (Bharat, through five thousand years)')
 except Exception as _e:
-    print('debundle skipped:', _e)
+    import traceback; print('debundle skipped:', _e); traceback.print_exc()

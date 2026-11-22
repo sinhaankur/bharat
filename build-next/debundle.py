@@ -12,9 +12,10 @@ Run:  python3 build-next/debundle.py <bundle.html> <out_dir>
 """
 import sys, os, re, json, base64, gzip
 
-# the bundle page TITLE -> our site slug. index.html is the Discover landing.
+# the bundle page TITLE -> our site slug. index.html is the Main landing (added separately);
+# the Discover page is discover.html.
 TITLE_SLUG = {
-    "Discover Bharat, one state at a time": "index.html",
+    "Discover Bharat, one state at a time": "discover.html",
     "Bengal, both sides of the line": "region-bengal.html",
     "Bihar had many tribes": "region-bihar.html",
     "Bihar and Jharkhand": "region-bihar.html",
@@ -51,6 +52,10 @@ def _slug_for_dc(name):
         return "tribe-" + base[6:].lower() + ".html"
     if base.startswith("Region-"):
         return "region-" + base[7:].lower() + ".html"
+    # the Main landing's door links (Door-Money etc.) -> our 4-door hubs
+    if base.startswith("Door-"):
+        return {"Money": "discover.html", "Land": "story.html", "Story": "story.html",
+                "Words": "words.html", "Today": "today.html", "Receipts": "about.html"}.get(base[5:], base[5:].lower() + ".html")
     return base.lower() + ".html"
 
 
@@ -59,7 +64,7 @@ def _slug_for_dc(name):
 # may carry escaped quotes inside the bundler manifest, so match both \" and " forms.)
 NAV_FIX = {
     "story": "story.html",       # was index.html — "the story page is missing" bug
-    "discover": "index.html",    # the landing IS the Discover page, so keep Discover -> index.html
+    "discover": "discover.html", # the landing is now Main, so Discover -> discover.html
     "peoples": "tribes.html",
     "kingdoms": "kingdoms.html",
     "today": "today.html",
@@ -150,6 +155,17 @@ def debundle(bundle_path, out_dir):
         open(os.path.join(out_dir, slug), "w").write(_rewrite(p))
         written.append((slug, title))
     return written
+
+
+def process_main(main_path, out_dir, slug="index.html"):
+    """The real landing — Main.dc.html ('Bharat, through five thousand years', the animated era
+    timeline). It's a Canvas React export that needs ./_runtime/{react,react-dom,support}.js. We
+    keep its runtime, rewrite its .dc.html nav links to real slugs, and make it adaptive. Returns
+    the slug written. Copy the _runtime/ dir into out_dir separately (gen.py does)."""
+    h = open(main_path, encoding="utf-8", errors="replace").read()
+    h = _rewrite(h)  # rewrites .dc.html links + nav + viewport + fluid widths
+    open(os.path.join(out_dir, slug), "w").write(h)
+    return slug
 
 
 if __name__ == "__main__":
