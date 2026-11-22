@@ -54,15 +54,62 @@ def _slug_for_dc(name):
     return base.lower() + ".html"
 
 
+# The Claude export hardcodes some L1 nav links to index.html (it was the bundle's first page).
+# Repoint each L1 door's nav link to its REAL hub page, by its data-i18n label. (href and data-i18n
+# may carry escaped quotes inside the bundler manifest, so match both \" and " forms.)
+NAV_FIX = {
+    "story": "story.html",       # was index.html — "the story page is missing" bug
+    "discover": "index.html",    # the landing IS the Discover page, so keep Discover -> index.html
+    "peoples": "tribes.html",
+    "kingdoms": "kingdoms.html",
+    "today": "today.html",
+    "about": "about.html",
+}
+
+
+def _fix_nav(html):
+    """Repoint each L1 nav anchor (identified by its data-i18n label) to the right hub."""
+    for label, slug in NAV_FIX.items():
+        # <a ... href="SOMETHING" ... data-i18n="LABEL"> — rewrite the href before the label
+        html = re.sub(
+            r'(href=\\?")[^"\\]*(\\?"[^>]*data-i18n=\\?"' + label + r'\\?")',
+            lambda m, s=slug: m.group(1) + s + m.group(2),
+            html)
+    return html
+
+
 def _rewrite(html):
     # rewrite every '<Name>.dc.html' (escaped or not) to a real slug
     html = re.sub(r'([A-Za-z][A-Za-z0-9-]*)\.dc\.html',
                   lambda m: _slug_for_dc(m.group(0)), html)
+    html = _fix_nav(html)
     # ensure a viewport meta so phones size correctly
     if not re.search(r'<meta[^>]*viewport', html):
         html = re.sub(r'(<head[^>]*>)',
                       r'\1\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">',
                       html, count=1)
+    # phone polish: the Claude pages have no sub-820px breakpoint, so the big display heading +
+    # a few labels clip past ~400px. Add a small-screen override that fluid-sizes the hero type
+    # and kills any horizontal overflow — WITHOUT touching the desktop design.
+    phone_css = (
+        "<style>@media (max-width:760px){"
+        "html,body{overflow-x:hidden!important;max-width:100vw!important}"
+        # the content root + every section the Claude design pins at 1080–1440px → fluid
+        "#dc-root,#dc-root *{max-width:100%!important}"
+        "#dc-root [style*='width:1180px'],#dc-root [style*='width: 1180px'],"
+        "#dc-root [style*='width:1240px'],#dc-root [style*='width: 1240px'],"
+        "#dc-root [style*='width:1080px'],#dc-root [style*='width: 1080px'],"
+        "#dc-root [style*='width:1440px'],#dc-root [style*='width: 1440px']"
+        "{width:100%!important;min-width:0!important}"
+        # fluid display type so the big heading never runs off-screen
+        "#dc-root h1,#dc-root [style*='font-size: 72px'],#dc-root [style*='font-size:72px'],"
+        "#dc-root [style*='font-size: 64px'],#dc-root [style*='font-size: 56px']"
+        "{font-size:clamp(30px,8.5vw,52px)!important;line-height:1.1!important;overflow-wrap:anywhere}"
+        "img,svg,canvas,iframe{max-width:100%!important;height:auto}"
+        "}</style>"
+    )
+    if "</head>" in html:
+        html = html.replace("</head>", phone_css + "</head>", 1)
     return html
 
 
