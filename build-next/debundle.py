@@ -88,28 +88,36 @@ def _rewrite(html):
         html = re.sub(r'(<head[^>]*>)',
                       r'\1\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">',
                       html, count=1)
-    # phone polish: the Claude pages have no sub-820px breakpoint, so the big display heading +
-    # a few labels clip past ~400px. Add a small-screen override that fluid-sizes the hero type
-    # and kills any horizontal overflow — WITHOUT touching the desktop design.
-    phone_css = (
-        "<style>@media (max-width:760px){"
-        "html,body{overflow-x:hidden!important;max-width:100vw!important}"
-        # the content root + every section the Claude design pins at 1080–1440px → fluid
-        "#dc-root,#dc-root *{max-width:100%!important}"
-        "#dc-root [style*='width:1180px'],#dc-root [style*='width: 1180px'],"
-        "#dc-root [style*='width:1240px'],#dc-root [style*='width: 1240px'],"
-        "#dc-root [style*='width:1080px'],#dc-root [style*='width: 1080px'],"
-        "#dc-root [style*='width:1440px'],#dc-root [style*='width: 1440px']"
-        "{width:100%!important;min-width:0!important}"
-        # fluid display type so the big heading never runs off-screen
-        "#dc-root h1,#dc-root [style*='font-size: 72px'],#dc-root [style*='font-size:72px'],"
-        "#dc-root [style*='font-size: 64px'],#dc-root [style*='font-size: 56px']"
-        "{font-size:clamp(30px,8.5vw,52px)!important;line-height:1.1!important;overflow-wrap:anywhere}"
-        "img,svg,canvas,iframe{max-width:100%!important;height:auto}"
-        "}</style>"
-    )
+    # Phone polish — the RELIABLE way: the x-dc runtime rebuilds <head> and strips any <style> we
+    # add there, but it keeps the content's OWN inline/style declarations. So rewrite the fixed
+    # pixel widths THEMSELVES to fluid min(..,100%), right in the bundled source. This survives the
+    # runtime and makes the artboard shrink to the viewport without touching the desktop look.
+    def fluid(m):
+        prop, val, unit = m.group(1), m.group(2), m.group(3)
+        # only widen-constrainers (>=900px) become fluid; small fixed widths (icons, chips) stay
+        return f"{prop}:min({val}{unit},100%)" if int(val) >= 900 else m.group(0)
+    html = re.sub(r'(width|max-width)\s*:\s*(\d{3,4})(px)', fluid, html)
+    # fluid display type: the hero uses very large px font-sizes that overflow narrow screens
+    def fluidfont(m):
+        val = int(m.group(1))
+        return f"font-size:clamp(30px,8vw,{val}px)" if val >= 48 else m.group(0)
+    html = re.sub(r'font-size\s*:\s*(\d{2,3})px', fluidfont, html)
+    # grids with a fixed min column (minmax(280px,...)) can't shrink below that min + siblings,
+    # which overflows phones — let the min collapse to 0 so columns reflow.
+    html = re.sub(r'minmax\(\s*(\d{3,4})px', lambda m: 'minmax(min(' + m.group(1) + 'px,100%)', html)
+    # big horizontal paddings (the artboard's side gutters, 40–120px) → viewport-relative
+    html = re.sub(r'padding(-left|-right)?\s*:\s*(\d{2,3})px',
+                  lambda m: (f"padding{m.group(1) or ''}:min({m.group(2)}px,5vw)" if int(m.group(2)) >= 40 else m.group(0)),
+                  html)
+    # a proper mobile stylesheet INSIDE the page (survives the runtime, which keeps body <style>):
+    guard = ("<style>html,body{overflow-x:hidden;max-width:100%}"
+             "img,svg,canvas,iframe{max-width:100%;height:auto}"
+             "@media(max-width:640px){"
+             "[style*='white-space: nowrap'],[style*='white-space:nowrap']{white-space:normal!important}"
+             "[style*='grid-template-columns']{grid-template-columns:1fr!important}"
+             "}</style>")
     if "</head>" in html:
-        html = html.replace("</head>", phone_css + "</head>", 1)
+        html = html.replace("</head>", guard + "</head>", 1)
     return html
 
 
