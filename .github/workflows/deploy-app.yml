@@ -71,6 +71,8 @@ jobs:
           rsync -a --exclude '.git' --exclude 'node_modules' --exclude '_site' \
                 --exclude 'atlas-app' --exclude '.github' \
                 --exclude '.venv-font' --exclude '__pycache__' \
+                --exclude 'build' --exclude 'docs' --exclude 'scripts' \
+                --exclude 'build-next' --exclude 'refs' \
                 ./ _site/
           # 2) the rebuilt Modernist × Mauryan app under /app
           mkdir -p _site/app
