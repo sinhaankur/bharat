@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>News viewer · read any story, with its signals · Bharat</title>
+<meta name="description" content="Open any news item in a frame and read it beside two things: the outlet's third-party lean, and transparent per-article signals. The atlas records; it does not judge.">
+<link rel="canonical" href="https://sinhaankur.github.io/bharat/news-viewer.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style id="bh-mobile-guard">
+:root{
+  --bg:#120d0a;--deep:#0b0806;--card:rgba(24,16,13,.82);--ink:#f4efe4;--soft:#c9b89d;
+  --gold:#f0b429;--golddeep:#cc8900;--gilt:#e4c069;--line:rgba(201,162,39,.24);
+  --hair:rgba(244,239,228,.08);--gap:#e6a35a;--ok:#9fd0ae;
+  --left:#6fb7c9;--right:#e0764f;--centre:#a9c184;
+}
+*{box-sizing:border-box}
+html,body{overflow-x:hidden;max-width:100%}
+body{margin:0;background:var(--bg);color:var(--soft);font-family:'Inter','Segoe UI',system-ui,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.5}
+a{color:var(--gold);text-decoration:none}
+a:hover{color:var(--gilt)}
+.wrap{max-width:1280px;margin:0 auto;padding:40px max(4vw,16px) 120px}
+
+/* header */
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:8px}
+.top .back{color:var(--gold);font:500 12px 'JetBrains Mono',ui-monospace,Menlo,monospace;letter-spacing:.14em}
+h1{font-family:'Fraunces',Georgia,serif;font-weight:500;font-size:clamp(32px,5vw,56px);line-height:1.03;letter-spacing:-.025em;color:var(--ink);margin:18px 0 10px}
+h1 em{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:400;color:var(--gilt)}
+.lede{font-size:17px;max-width:66ch;margin:0 0 6px}
+.rulebar{margin:10px 0 0;font-size:13px;color:var(--soft);opacity:.8;max-width:72ch}
+.rulebar b{color:var(--gilt);font-weight:600}
+
+/* method note */
+.method{margin:22px 0 28px;padding:14px 16px;border:1px solid var(--line);border-left:3px solid var(--gap);border-radius:6px;background:rgba(230,163,90,.05);font-size:13.5px;color:var(--soft);max-width:80ch}
+.method b{color:var(--ink)}
+
+/* controls */
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 0 20px}
+.ctl{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 12px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink);font:500 13px 'Inter',system-ui,sans-serif;cursor:pointer;transition:border-color .2s,background-color .2s}
+.ctl:hover,.ctl[aria-pressed=true]{border-color:var(--gold)}
+.ctl[aria-pressed=true]{background:rgba(240,180,41,.12)}
+.search{flex:1 1 240px;min-width:180px;height:36px;padding:0 14px;border:1px solid var(--line);border-radius:999px;background:var(--deep);color:var(--ink);font:400 14px 'Inter',system-ui,sans-serif}
+.search::placeholder{color:var(--soft);opacity:.6}
+.count{font:500 12px 'JetBrains Mono',ui-monospace,Menlo,monospace;letter-spacing:.08em;color:var(--soft);opacity:.75}
+
+/* layout: list + reader */
+.layout{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:24px;align-items:start}
+.list{display:flex;flex-direction:column;gap:12px;max-height:78vh;overflow-y:auto;padding-right:6px}
+.list::-webkit-scrollbar{width:8px}
+.list::-webkit-scrollbar-thumb{background:var(--line);border-radius:8px}
+
+/* item card */
+.item{border:1px solid var(--hair);border-radius:8px;padding:14px 16px;background:var(--card);cursor:pointer;transition:border-color .25s cubic-bezier(.16,1,.3,1),transform .25s cubic-bezier(.16,1,.3,1)}
+.item:hover{border-color:rgba(240,180,41,.5);transform:translateY(-1px)}
+.item[aria-current=true]{border-color:var(--gold);background:rgba(240,180,41,.08)}
+.ih{font-family:'Fraunces',Georgia,serif;font-weight:500;font-size:17px;line-height:1.25;color:var(--ink);margin:0 0 8px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:12px;color:var(--soft)}
+.outlet{font-weight:600;color:var(--ink)}
+.dot{opacity:.4}
+
+/* badges */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;font:500 11px 'JetBrains Mono',ui-monospace,Menlo,monospace;letter-spacing:.04em;border:1px solid transparent}
+.lean-centre{color:var(--centre);border-color:rgba(169,193,132,.4)}
+.lean-left,.lean-centre-left{color:var(--left);border-color:rgba(111,183,201,.4)}
+.lean-right,.lean-centre-right{color:var(--right);border-color:rgba(224,118,79,.4)}
+.lean-unknown{color:var(--soft);border-color:var(--hair);opacity:.8}
+.sig{color:var(--gap);border-color:rgba(230,163,90,.45);background:rgba(230,163,90,.06)}
+.type{color:var(--soft);border-color:var(--hair)}
+
+/* reader panel */
+.reader{position:sticky;top:20px;border:1px solid var(--line);border-radius:10px;background:var(--deep);overflow:hidden;min-height:60vh}
+.rhead{padding:16px 18px;border-bottom:1px solid var(--hair)}
+.rtitle{font-family:'Fraunces',Georgia,serif;font-weight:500;font-size:22px;line-height:1.2;color:var(--ink);margin:0 0 8px}
+.rmeta{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:12.5px;color:var(--soft);margin-bottom:10px}
+.signals{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 0}
+.leanwhy{margin:10px 0 0;font-size:12.5px;color:var(--soft);opacity:.85;font-style:italic;font-family:'Instrument Serif',Georgia,serif;font-size:15px}
+.ractions{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 0}
+.btn{display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 16px;border-radius:999px;font:600 13px 'Inter',system-ui,sans-serif;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--ink);transition:border-color .2s,background-color .2s}
+.btn:hover{border-color:var(--gold)}
+.btn.primary{background:var(--gold);color:#1a1108;border-color:var(--gold)}
+.btn.primary:hover{background:var(--gilt)}
+.framewrap{position:relative;width:100%;height:62vh;background:var(--bg)}
+.framewrap iframe{width:100%;height:100%;border:0;display:block;background:#fff}
+.fallback{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:32px;text-align:center}
+.fallback .fi{font-family:'Fraunces',Georgia,serif;font-size:20px;color:var(--ink)}
+.fallback p{max-width:48ch;font-size:14px;color:var(--soft);margin:0}
+.snip{max-width:56ch;font-size:15px;line-height:1.6;color:var(--ink);text-align:left;border-left:2px solid var(--line);padding-left:14px}
+.empty{color:var(--soft);opacity:.7;text-align:center;padding:60px 20px;font-size:15px}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--line);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr}
+  .list{max-height:none;overflow:visible}
+  .reader{position:static}
+  .framewrap{height:70vh}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="back" href="today.html">← NEWS</a>
+    <a class="back" href="main.html" style="opacity:.7">BHARAT</a>
+  </div>
+
+  <h1>Read any story, <em>with its signals</em></h1>
+  <p class="lede">Open a news item in a frame and read it next to two things: where third parties place the outlet, and transparent, per-article signals you can check yourself.</p>
+  <p class="rulebar"><b>The atlas records; it does not judge.</b> The outlet lean is a third-party assessment carried as-is. The per-article signals are a plain checklist — each one shows the rule that fired. Neither is a verdict on whether a story is true.</p>
+
+  <div class="method">
+    <b>What the signals mean.</b> <span class="badge lean-centre" style="pointer-events:none">lean</span> is the outlet's position per outside aggregations (left / centre / right), recorded with its source. <span class="badge sig" style="pointer-events:none">signal</span> is a per-article pattern: a bait-style headline, no byline in the link, a paywall, ALL-CAPS, or number-bait. A signal is a prompt to read carefully, not proof of anything. Every item here is unverified until a person approves it — the frame is the original page, served by its publisher.
+  </div>
+
+  <div class="controls">
+    <input class="search" id="q" type="search" placeholder="Search headlines and outlets…" aria-label="Search">
+    <button class="ctl" data-filter="signals" aria-pressed="false">Has signals</button>
+    <button class="ctl" data-filter="lean" aria-pressed="false">Lean known</button>
+    <span class="count" id="count">loading…</span>
+  </div>
+
+  <div class="layout">
+    <div class="list" id="list" aria-label="News items"><div class="empty"><span class="spinner"></span> Loading the feed…</div></div>
+    <div class="reader" id="reader">
+      <div class="rhead"><div class="empty">Pick a story on the left to read it here, with its signals.</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var FEED = "news-feed.json";
+  var items = [], view = [], current = null;
+  var filters = { signals:false, lean:false, q:"" };
+
+  // ---- transparent per-article signal rules (each returns a label + the rule that fired) ----
+  var BAIT = /\b(shocking|you won'?t believe|this is why|here'?s why|the reason|will blow your mind|goes viral|breaks the internet|slams|destroys|epic|savage|mindblowing|jaw-dropping|watch|must see|number \d+ will)\b/i;
+  var NUMBAIT = /^\s*\d+\s+(things|ways|reasons|facts|times|signs|photos|pictures|moments|times)\b/i;
+
+  function signalsFor(it){
+    var out = [];
+    var h = it.headline || "";
+    if (BAIT.test(h)) out.push({k:"bait headline", why:"headline uses a curiosity/outrage pattern"});
+    if (NUMBAIT.test(h)) out.push({k:"listicle", why:"headline is number-bait (“N things…”)"});
+    // ALL CAPS words (3+ letters), excluding common acronyms length<=4 handled loosely
+    var caps = (h.match(/\b[A-Z]{4,}\b/g) || []).filter(function(w){ return !/^(GDP|UPSC|NEET|IPO|GST|RBI|SEBI|ISRO|BCCI|UIDAI)$/.test(w); });
+    if (caps.length >= 2) out.push({k:"shouting", why:"two or more ALL-CAPS words in the headline"});
+    if (it.paywalled) out.push({k:"paywall", why:"outlet marks this as paywalled"});
+    // no byline heuristic: url path has no author-ish segment AND snippet very short
+    if ((it.snippet||"").trim().length < 40) out.push({k:"thin", why:"almost no summary text in the link"});
+    if (it.outlet_type === "tv") out.push({k:"tv desk", why:"from a TV outlet's web desk — often fast, aggregated copy"});
+    return out;
+  }
+
+  function leanClass(l){
+    l = (l||"unknown").toLowerCase();
+    if (l === "centre") return "lean-centre";
+    if (l === "left" || l === "centre-left") return "lean-centre-left";
+    if (l === "right" || l === "centre-right") return "lean-centre-right";
+    return "lean-unknown";
+  }
+
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+
+  function fmtDate(it){
+    var d = new Date(it.ingested_at || it.published_at || 0);
+    if (isNaN(d)) return "";
+    try { return d.toLocaleDateString(undefined,{month:"short",day:"numeric"}); } catch(e){ return ""; }
+  }
+
+  function passes(it){
+    if (filters.signals && signalsFor(it).length === 0) return false;
+    if (filters.lean && (!it.outlet_lean || it.outlet_lean === "unknown")) return false;
+    if (filters.q){
+      var hay = ((it.headline||"") + " " + (it.outlet||"")).toLowerCase();
+      if (hay.indexOf(filters.q) === -1) return false;
+    }
+    return true;
+  }
+
+  function renderList(){
+    view = items.filter(passes).slice(0, 400);
+    var list = document.getElementById("list");
+    document.getElementById("count").textContent = view.length + " of " + items.length + " shown";
+    if (!view.length){ list.innerHTML = '<div class="empty">No items match. Clear a filter or the search.</div>'; return; }
+    var html = "";
+    for (var i=0;i<view.length;i++){
+      var it = view[i];
+      var sigs = signalsFor(it);
+      var lc = leanClass(it.outlet_lean);
+      html += '<div class="item" data-i="'+i+'" role="button" tabindex="0">'
+        + '<p class="ih">'+esc(it.headline)+'</p>'
+        + '<div class="meta">'
+          + '<span class="outlet">'+esc(it.outlet||"Unknown")+'</span>'
+          + '<span class="dot">·</span>'
+          + '<span>'+esc(fmtDate(it))+'</span>'
+          + '<span class="badge '+lc+'">'+esc(it.outlet_lean||"unknown")+'</span>'
+          + (sigs.length ? '<span class="badge sig">'+sigs.length+' signal'+(sigs.length>1?'s':'')+'</span>' : '')
+        + '</div></div>';
+    }
+    list.innerHTML = html;
+  }
+
+  function openItem(i){
+    current = i;
+    var it = view[i];
+    if (!it) return;
+    [].forEach.call(document.querySelectorAll('.item'), function(el){ el.setAttribute('aria-current', el.getAttribute('data-i')==String(i) ? 'true':'false'); });
+    var sigs = signalsFor(it);
+    var lc = leanClass(it.outlet_lean);
+    var reader = document.getElementById("reader");
+    var sigHtml = sigs.map(function(s){ return '<span class="badge sig" title="'+esc(s.why)+'">'+esc(s.k)+'</span>'; }).join('');
+    reader.innerHTML =
+      '<div class="rhead">'
+      + '<p class="rtitle">'+esc(it.headline)+'</p>'
+      + '<div class="rmeta"><span class="outlet">'+esc(it.outlet||"Unknown")+'</span>'
+        + '<span class="dot">·</span><span class="badge type">'+esc(it.outlet_type||"outlet")+'</span>'
+        + '<span class="badge '+lc+'">lean: '+esc(it.outlet_lean||"unknown")+'</span>'
+        + '<span class="dot">·</span><span>'+esc(fmtDate(it))+'</span>'
+        + (it.language && it.language!=="en" ? '<span class="badge type">'+esc(it.language)+'</span>' : '')
+        + '</div>'
+      + (it.lean_source ? '<p class="leanwhy">Why this lean: '+esc(it.lean_source)+'</p>' : '')
+      + '<div class="signals">'+(sigHtml || '<span class="badge type" style="opacity:.7">no per-article signals fired</span>')+'</div>'
+      + '<div class="ractions">'
+        + '<a class="btn primary" href="'+esc(it.url)+'" target="_blank" rel="noopener noreferrer">Open original ↗</a>'
+        + '<button class="btn" id="tryframe">Try to load in frame</button>'
+        + '</div>'
+      + '</div>'
+      + '<div class="framewrap" id="fw">'
+        + '<div class="fallback" id="fb"><div class="fi">Read the snippet, then open the source</div>'
+        + '<p>Most publishers block being shown inside another page, so the atlas does not try to re-host their article. The frame opens only if the publisher allows it.</p>'
+        + (it.snippet ? '<div class="snip">'+esc(it.snippet)+'</div>' : '')
+        + '</div>'
+      + '</div>';
+    document.getElementById("tryframe").addEventListener("click", function(){ tryFrame(it, this); });
+  }
+
+  function tryFrame(it, btn){
+    var fw = document.getElementById("fw");
+    btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> loading';
+    var ifr = document.createElement("iframe");
+    ifr.setAttribute("referrerpolicy","no-referrer");
+    ifr.setAttribute("sandbox","allow-scripts allow-same-origin allow-popups");
+    var settled = false;
+    var timer = setTimeout(function(){
+      if (settled) return; settled = true;
+      // many sites silently refuse; after a grace period assume blocked if the frame stayed blank
+      btn.disabled = false; btn.textContent = "Blocked by publisher — use Open original";
+    }, 4500);
+    ifr.addEventListener("load", function(){
+      if (settled) return;
+      // if cross-origin blocked, accessing contentDocument throws; treat as blocked
+      try {
+        var d = ifr.contentDocument;
+        if (!d || !d.body || d.body.innerHTML.trim()==="") throw new Error("blank");
+        settled = true; clearTimeout(timer);
+        document.getElementById("fb").style.display = "none";
+        btn.textContent = "Loaded in frame";
+      } catch(e){
+        settled = true; clearTimeout(timer);
+        btn.disabled = false; btn.textContent = "Blocked by publisher — use Open original";
+      }
+    });
+    ifr.src = it.url;
+    fw.insertBefore(ifr, fw.firstChild);
+  }
+
+  // events
+  document.getElementById("list").addEventListener("click", function(e){
+    var el = e.target.closest(".item"); if (el) openItem(+el.getAttribute("data-i"));
+  });
+  document.getElementById("list").addEventListener("keydown", function(e){
+    if (e.key==="Enter"||e.key===" "){ var el=e.target.closest(".item"); if(el){ e.preventDefault(); openItem(+el.getAttribute("data-i")); } }
+  });
+  document.getElementById("q").addEventListener("input", function(e){ filters.q = e.target.value.trim().toLowerCase(); renderList(); });
+  [].forEach.call(document.querySelectorAll(".ctl[data-filter]"), function(b){
+    b.addEventListener("click", function(){
+      var f = b.getAttribute("data-filter");
+      filters[f] = !filters[f];
+      b.setAttribute("aria-pressed", filters[f] ? "true":"false");
+      renderList();
+    });
+  });
+
+  // load feed
+  fetch(FEED, {cache:"no-store"}).then(function(r){ return r.json(); }).then(function(d){
+    items = (d && d.news_items) ? d.news_items : [];
+    // newest first
+    items.sort(function(a,b){ return new Date(b.ingested_at||b.published_at||0) - new Date(a.ingested_at||a.published_at||0); });
+    renderList();
+  }).catch(function(e){
+    document.getElementById("list").innerHTML = '<div class="empty">Could not load the feed. It is served at <code>news-feed.json</code>.</div>';
+    document.getElementById("count").textContent = "";
+  });
+})();
+</script>
+</body>
+</html>
