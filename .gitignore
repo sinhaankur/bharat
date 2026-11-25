@@ -4,6 +4,8 @@
 .idea/
 .vscode/
 node_modules/
+# Claude Code: keep personal local settings out of the repo, but DO commit skills
+.claude/settings.local.json
 *.log
 package-lock.json
 
