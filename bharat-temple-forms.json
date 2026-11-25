@@ -1,0 +1,3528 @@
+[
+ {
+  "key": "nagara",
+  "form": "Nagara",
+  "modelled_on": "Kandariya Mahadeva, Khajuraho",
+  "region": "North and central India",
+  "built": "c. 1030 CE",
+  "facing": "Entrance faces east",
+  "measures": [
+   {
+    "l": "Height",
+    "v": "31 m"
+   },
+   {
+    "l": "Length",
+    "v": "30.5 m"
+   },
+   {
+    "l": "Width",
+    "v": "20 m"
+   },
+   {
+    "l": "Platform",
+    "v": "3 m high"
+   },
+   {
+    "l": "Smaller spires",
+    "v": "84"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "Sandstone, carved almost everywhere. Bands of figures run round the outer walls between the balconies, and the roof is a cluster of smaller towers climbing to the main one, like a range of hills.",
+  "drawn_by_eye": "The 84 smaller spires are counted in the source; the model shows 20 of them. Hall roof heights are drawn by eye. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "Built in sandstone, raised on a terraced platform (jagati), with the tower over the sanctum.",
+    "src": "UNESCO 240",
+    "u": "https://whc.unesco.org/en/list/240",
+    "has": true,
+    "gap": false
+   },
+   {
+    "t": "Shown here course by course in blocks about 0.55 m high. Block size is drawn by eye.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "The Samarangana Sutradhara, a treatise attributed to King Bhoja, covers temple plans, measurement and towers. Which text, if any, these builders used is not recorded.",
+    "src": "Samarangana Sutradhara, attributed to Bhoja (summary, D. N. Shukla)",
+    "u": "https://www.wisdomlib.org/hinduism/book/samarangana-sutradhara-summary/d/doc1085277.html",
+    "has": true,
+    "gap": false
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "Steps up to the platform (jagati)",
+    "note": "The temple stands on a platform 3 m high. You climb to it from the east end."
+   },
+   {
+    "name": "Entrance porch (ardha-mandapa)",
+    "note": "A pillared porch under a carved arch: the first covered space, and the lightest."
+   },
+   {
+    "name": "Great hall (maha-mandapa)",
+    "note": "Four pillars carry a ceiling of stepped rings. Balconies on both sides let in light from the side."
+   },
+   {
+    "name": "Vestibule (antarala)",
+    "note": "Two pillars and a lintel mark the vestibule between the great hall and the sanctum."
+   },
+   {
+    "name": "Sanctum (garbhagriha)",
+    "note": "The shrine of Shiva: a small, dark room with a linga at its centre, under the highest point of the tower."
+   },
+   {
+    "name": "Walkway round the sanctum (pradakshina)",
+    "note": "A passage runs round the sanctum, so it can be walked round. Balcony windows light it."
+   }
+  ],
+  "sources": [
+   {
+    "t": "UNESCO listing: Khajuraho Group of Monuments",
+    "u": "https://whc.unesco.org/en/list/240",
+    "tier": "T2"
+   }
+  ],
+  "model_file": "models/bharat-nagara.obj"
+ },
+ {
+  "key": "dravidian",
+  "form": "Dravida",
+  "modelled_on": "Brihadeeswarar (Peruvudaiyar), Thanjavur",
+  "region": "South India",
+  "built": "completed 1010 CE (Rajaraja Chola I)",
+  "facing": "Entrance faces east",
+  "measures": [
+   {
+    "l": "Vimana height",
+    "v": "66 m"
+   },
+   {
+    "l": "Storeys",
+    "v": "13"
+   },
+   {
+    "l": "Capstone",
+    "v": "about 80 tonnes"
+   },
+   {
+    "l": "Complex",
+    "v": "240 × 122 m"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "Granite, laid in courses. The tower rises in plain storeys; the figures are set in niches along the walls below, and the passage round the sanctum is painted inside.",
+  "drawn_by_eye": "The base width of the vimana, the halls and the gateway (gopuram) are drawn by eye. The source notes that here, unusually, the gateway is lower than the vimana. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "Thirteen tiers (talas) over a ground tier of two levels, crowned by an octagonal dome.",
+    "src": "UNESCO 250",
+    "u": "https://whc.unesco.org/en/list/250",
+    "has": true,
+    "gap": false
+   },
+   {
+    "t": "The Russian text of the same listing says granite blocks, partly brick, under a single-stone capstone.",
+    "src": "UNESCO 250, Russian text",
+    "u": "https://whc.unesco.org/en/list/250",
+    "has": true,
+    "gap": false
+   },
+   {
+    "t": "Shown here in blocks about 0.75 m high. Block size is drawn by eye.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   },
+   {
+    "t": "Granite, brought from far off: sources differ on how far. Inscriptions in the temple name its architect, Kunjara Mallan Raja Raja Perunthachan.",
+    "src": "Sanskriti Magazine: Brihadeeswarar temple",
+    "u": "https://www.sanskritimagazine.com/?p=33620",
+    "has": true,
+    "gap": false
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "South Indian building treatises such as the Mayamata set out how to choose a site, face a temple, size it and pick its materials. Which text, if any, these builders used is not recorded.",
+    "src": "Mayamata, ed. and tr. Bruno Dagens (IGNCA)",
+    "u": "https://ignca.gov.in/mayamatam/",
+    "has": true,
+    "gap": false
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "Gateway",
+    "note": "The way in from the east. The source notes the gateways here are lower than the vimana, the reverse of most later southern temples."
+   },
+   {
+    "name": "Nandi pavilion",
+    "note": "A stone bull, Shiva’s mount, lies in its own pillared pavilion, facing the sanctum."
+   },
+   {
+    "name": "Great hall",
+    "note": "A pillared hall on the axis to the sanctum. The light falls away as you walk west."
+   },
+   {
+    "name": "Sanctum",
+    "note": "A very large linga stands in the dark sanctum, directly under the vimana."
+   },
+   {
+    "name": "Passage between the walls",
+    "note": "The sanctum has a double wall, with a passage between the two that runs round the shrine. The listing notes mural paintings on its walls."
+   },
+   {
+    "name": "Writing on the walls",
+    "note": "Long lines in Tamil run across the north and west walls of the central shrine, in the upper tier. Here they repeat the temple’s own name from the inscriptions, Rajarajesvaram."
+   }
+  ],
+  "sources": [
+   {
+    "t": "UNESCO listing: Great Living Chola Temples",
+    "u": "https://whc.unesco.org/en/list/250",
+    "tier": "T2"
+   }
+  ],
+  "model_file": "models/bharat-dravidian.obj"
+ },
+ {
+  "key": "stupa",
+  "form": "Stupa",
+  "modelled_on": "Great Stupa (Stupa 1), Sanchi",
+  "region": "Buddhist, across India",
+  "built": "3rd c. BCE (Ashoka), enlarged 2nd–1st c. BCE",
+  "facing": "Four gateways, one to each direction",
+  "measures": [
+   {
+    "l": "Dome width",
+    "v": "36.6 m"
+   },
+   {
+    "l": "Dome height",
+    "v": "16.46 m"
+   },
+   {
+    "l": "Gateways",
+    "v": "4"
+   },
+   {
+    "l": "Umbrella tiers",
+    "v": "3"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "The dome is plain. The carving is on the four stone gateways, which copy wooden building and are covered with stories of the Buddha, who is shown by symbols, not as a figure.",
+  "drawn_by_eye": "The drum height, railing and gateway heights are drawn by eye; the dome is to the measured width and height. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "Began as a brick stupa beside Ashoka’s pillar. Under the Sungas it was enlarged and faced with dressed stone.",
+    "src": "UNESCO 524",
+    "u": "https://whc.unesco.org/en/list/524",
+    "has": true,
+    "gap": false
+   },
+   {
+    "t": "The railings and gateways copy wooden building in stone.",
+    "src": "UNESCO 524",
+    "u": "https://whc.unesco.org/en/list/524",
+    "has": true,
+    "gap": false
+   },
+   {
+    "t": "Shown here as stone facing laid in courses about 0.45 m high, drawn by eye. The brick core inside is not drawn.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "No building text tied to this site is named in the sources used here.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "East gateway",
+    "note": "One of four carved gateways, one at each of the four directions."
+   },
+   {
+    "name": "Donors’ lines on the railing",
+    "note": "Short lines in Brahmi are cut into the railing posts. Each records a gift; here the letters read danam, the gift, and the donors’ names are left out."
+   },
+   {
+    "name": "Ground path, inside the railing",
+    "note": "The stone railing encloses a path. Pilgrims walk round the dome keeping it on their right."
+   },
+   {
+    "name": "Stairway to the terrace",
+    "note": "A stair climbs from the ground path to a second walkway on the drum."
+   },
+   {
+    "name": "Ashoka’s pillar",
+    "note": "The lower shaft of Ashoka’s polished stone pillar stands by the south gateway. UNESCO describes the column and its capital of lions; the capital is not drawn here. The shaft carries an edict warning against division in the Buddhist order."
+   },
+   {
+    "name": "Upper walkway",
+    "note": "The walkway on the drum. From here the dome rises 16.46 m to the railed box and its three umbrellas."
+   }
+  ],
+  "sources": [
+   {
+    "t": "UNESCO listing: Buddhist Monuments at Sanchi",
+    "u": "https://whc.unesco.org/en/list/524",
+    "tier": "T2"
+   }
+  ],
+  "model_file": "models/bharat-stupa.obj"
+ },
+ {
+  "key": "jain",
+  "form": "Jain chaumukha",
+  "modelled_on": "Chaumukha (Adinatha) temple, Ranakpur",
+  "region": "Rajasthan and Gujarat",
+  "built": "begun c. 1437 CE",
+  "facing": "Four entrances, one to each direction",
+  "measures": [
+   {
+    "l": "Base",
+    "v": "48,000 sq ft (about 66.8 m square)"
+   },
+   {
+    "l": "Domes",
+    "v": "80"
+   },
+   {
+    "l": "Pillars",
+    "v": "1,444"
+   },
+   {
+    "l": "Halls",
+    "v": "29"
+   },
+   {
+    "l": "Storeys",
+    "v": "3"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "Pale marble, carved inside on a forest of pillars. The ceilings close in rings of carving, and light comes in from open courts between the halls.",
+  "drawn_by_eye": "All 80 domes are placed, one per bay of a nine-by-nine grid with the spire at the centre. The 1,444 pillars are not modelled one by one, and heights are drawn by eye. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "Light marble, over a base of about 48,000 square feet. The atlas’s temple file credits Rajasthan Tourism and the ASI; no government page is linked yet.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   },
+   {
+    "t": "Shown here in courses about 0.5 m high, drawn by eye.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "It was begun about 1437 in Mewar, where Mandana, head builder to Rana Kumbha, wrote treatises on temple building such as the Prasadamandana. Whether they guided this temple is not recorded.",
+    "src": "Jaina Art and Architecture, vol. 2: Mandana and his treatises under Rana Kumbha",
+    "u": "https://jainqq.org/pagetext/Jaina_Art_and_Architecture_Vol_02/011013/261",
+    "has": true,
+    "gap": false
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "Stairway and doorway",
+    "note": "Each of the four sides has its own stair and door, so the temple can be entered from any direction."
+   },
+   {
+    "name": "Pillared halls",
+    "note": "The source counts 1,444 pillars in 29 halls. Here the pillars stand on a regular grid, far fewer than the real number."
+   },
+   {
+    "name": "Under a dome",
+    "note": "Each dome is drawn as stepped rings closing to a hanging centre. The source counts 80."
+   },
+   {
+    "name": "The four-faced image",
+    "note": "Through each of the four doors you face the same image of Adinatha, set four ways back to back."
+   }
+  ],
+  "sources": [],
+  "model_file": "models/bharat-jain.obj"
+ },
+ {
+  "key": "kashmiri",
+  "form": "Kashmiri",
+  "modelled_on": "Martand Sun Temple, Anantnag",
+  "region": "Kashmir valley",
+  "built": "8th c. CE (Lalitaditya Muktapida)",
+  "facing": "Entrance faces west",
+  "measures": [
+   {
+    "l": "Colonnade",
+    "v": "84 columns"
+   },
+   {
+    "l": "Roof",
+    "v": "steep, two-tier, pyramidal"
+   },
+   {
+    "l": "Plan",
+    "v": "shrine inside a peristyle"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "Large grey blocks, with trefoil arches and pointed pediments over doors and niches. Figures were carved in the niches; most are now worn or broken.",
+  "drawn_by_eye": "All 84 columns are placed. The temple is a ruin today; it is drawn here whole, as a reconstruction by eye: the pyramid roofs, the gables with trefoil arches and the gilded finial are not from a source, and the source gives no dimensions. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "The sources here do not yet say what stone was used or how it was laid.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "No building text tied to the Kashmir temples is named in the sources used here.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "Gateway",
+    "note": "The way into the courtyard, through the line of columns."
+   },
+   {
+    "name": "Colonnade",
+    "note": "A covered walk on 84 columns runs round the courtyard."
+   },
+   {
+    "name": "Courtyard",
+    "note": "The shrine stands alone in the middle, on its own plinth."
+   },
+   {
+    "name": "Porch",
+    "note": "A porch leads from the plinth stairs to the sanctum door."
+   },
+   {
+    "name": "Sanctum",
+    "note": "The image that stood here is lost. The temple is a roofless ruin today; it is drawn whole here, by eye."
+   }
+  ],
+  "sources": [],
+  "model_file": "models/bharat-kashmiri.obj"
+ },
+ {
+  "key": "sun_temple",
+  "form": "Kalinga (Konark)",
+  "modelled_on": "Konark Sun Temple, Odisha",
+  "region": "Odisha",
+  "built": "13th c. CE (Narasimhadeva I)",
+  "facing": "Entrance faces east, to the sunrise",
+  "measures": [
+   {
+    "l": "Hall (jagamohana)",
+    "v": "30 × 30 m, 30 m high"
+   },
+   {
+    "l": "Tower (deul)",
+    "v": "about 70 m, now collapsed"
+   },
+   {
+    "l": "Wheels",
+    "v": "24, 3 m across, 8 spokes"
+   },
+   {
+    "l": "Horses",
+    "v": "7"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "The temple is made as the chariot of the sun: carved stone wheels round the base, pulled by stone horses. The walls above the wheels are covered in figures.",
+  "drawn_by_eye": "The tower fell long ago; its height is the source’s estimate, so it is drawn in a pale tone. Platform height is drawn by eye. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "Built over twelve years by 1,200 artisans.",
+    "src": "UNESCO 246",
+    "u": "https://whc.unesco.org/en/list/246",
+    "has": true,
+    "gap": false
+   },
+   {
+    "t": "Metal cramps tie the stones together; salt air has corroded them in the past.",
+    "src": "UNESCO 246",
+    "u": "https://whc.unesco.org/en/list/246",
+    "has": true,
+    "gap": false
+   },
+   {
+    "t": "The hall’s roof is made of horizontal tiers grouped in three stages.",
+    "src": "ASI: Konark",
+    "u": "https://asi.nic.in/pages/WorldHeritageKonarak",
+    "has": true,
+    "gap": false
+   },
+   {
+    "t": "Shown here in courses about 0.6 m high, drawn by eye.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   },
+   {
+    "t": "Iron beams were built into the stone; they have lasted about 800 years in salt air.",
+    "src": "Odisha Bytes: the iron beams",
+    "u": "https://odishabytes.com/union-steel-minister-calls-for-study-on-quality-of-iron-used-in-konark-temple/",
+    "has": true,
+    "gap": false
+   },
+   {
+    "t": "Palm-leaf records of the building work and its accounts survive from the years it was built, 1246 to 1258, studied by Alice Boner.",
+    "src": "Swarajya: the Konark records",
+    "u": "https://swarajyamag.com/ideas/the-many-mysteries-of-the-konark-sun-temple",
+    "has": true,
+    "gap": false
+   },
+   {
+    "t": "A 2025 review gathers what is known and what is guessed about the methods.",
+    "src": "F1000Research: the Konark temple’s construction",
+    "u": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12203308/",
+    "has": true,
+    "gap": false
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "The Shilpa Prakasha, a medieval Odisha text on temple building, describes temples of this family and the diagrams (yantras) laid under their plans. Whether these builders knew it is not recorded.",
+    "src": "Shilpa Prakasha, tr. Alice Boner and Sadasiva Rath Sarma",
+    "u": "https://www.mlbd.in/products/silpa-prakasa-by-ramacandra-mahapatra-kaula-bhattaraka-medieval-orissan-sanskrit-text-on-temple-architecture-bettina-baumer-rajendra-prasad-das-alice-boner-9788120820524-8120820525",
+    "has": true,
+    "gap": false
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "The seven horses",
+    "note": "Horses at the foot of the main stair draw the Sun’s chariot."
+   },
+   {
+    "name": "A wheel up close",
+    "note": "Each of the 24 wheels is about 3 m across with 8 spokes, carved into the side of the platform."
+   },
+   {
+    "name": "Hall doorway, sealed",
+    "note": "The hall was filled with sand and sealed in 1903 to stop it collapsing. The ASI began taking the sand out in 2022."
+   },
+   {
+    "name": "Where the tower stood",
+    "note": "The tower has collapsed. It is drawn pale, at the source’s estimated height of about 70 m."
+   }
+  ],
+  "sources": [
+   {
+    "t": "ASI: World Heritage, Konark",
+    "u": "https://asi.nic.in/pages/WorldHeritageKonarak",
+    "tier": "T2"
+   },
+   {
+    "t": "UNESCO listing: Sun Temple, Konârak",
+    "u": "https://whc.unesco.org/en/list/246",
+    "tier": "T2"
+   }
+  ],
+  "model_file": "models/bharat-sun_temple.obj"
+ },
+ {
+  "key": "elephanta",
+  "form": "Rock-cut hall",
+  "modelled_on": "Great Cave (Cave 1), Elephanta",
+  "region": "Elephanta, Western Deccan",
+  "built": "5th–8th c. CE",
+  "facing": "Main entrance faces north",
+  "measures": [
+   {
+    "l": "Hall",
+    "v": "39 × 39 m"
+   },
+   {
+    "l": "Trimurti",
+    "v": "5.45 m high"
+   },
+   {
+    "l": "Method",
+    "v": "excavated into basalt"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "Cut into basalt. The figures stand out of the rock in deep panels; the largest, the three-headed Shiva, rises 5.45 m from the back wall.",
+  "drawn_by_eye": "This one is subtractive: step two removes the hill. The pillar layout and hill shape are drawn by eye. The rock surface is drawn by eye. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "Rock-cut: carved out of the hill as one piece, not built up from blocks.",
+    "src": "UNESCO 244",
+    "u": "https://whc.unesco.org/en/list/244",
+    "has": true,
+    "gap": false
+   },
+   {
+    "t": "So here the build runs the other way: step two takes the hill away and leaves the hall.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "No building text tied to this site is named in the sources used here.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "Entrance",
+    "note": "The hall opens through a row of pillars. The daylight fades as you go in."
+   },
+   {
+    "name": "Among the pillars",
+    "note": "Pillars with cushion-shaped tops stand in rows, left standing as the rock round them was cut away."
+   },
+   {
+    "name": "Linga shrine",
+    "note": "A square shrine with a door on each side, each door flanked by tall guardian figures. A linga stands inside."
+   },
+   {
+    "name": "The Trimurti",
+    "note": "The three-headed Shiva on the back wall, 5.45 m high, cut from the same rock as the hall."
+   }
+  ],
+  "sources": [
+   {
+    "t": "UNESCO listing: Elephanta Caves",
+    "u": "https://whc.unesco.org/en/list/244",
+    "tier": "T2"
+   }
+  ],
+  "model_file": "models/bharat-elephanta.obj"
+ },
+ {
+  "key": "ajanta",
+  "form": "Chaitya cave",
+  "modelled_on": "A prayer hall (chaitya) at Ajanta",
+  "region": "Ajanta, Deccan",
+  "built": "2nd c. BCE to 6th c. CE",
+  "facing": "Facing not sourced; drawn facing south",
+  "measures": [
+   {
+    "l": "Caves at Ajanta",
+    "v": "30"
+   },
+   {
+    "l": "Prayer halls",
+    "v": "5: caves 9, 10, 19, 26, 29"
+   },
+   {
+    "l": "Cut in",
+    "v": "two phases, about four centuries apart"
+   },
+   {
+    "l": "Setting",
+    "v": "a cliff above the Waghora river"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "Cut into basalt. The carving is in the facades and pillars. Inside, walls and ceilings were plastered and painted, and the paintings are what Ajanta is best known for.",
+  "drawn_by_eye": "The listing gives no dimensions, so every size here is drawn by eye. The layout follows its description of a chaitya hall; it is not a model of one numbered cave. The rock surface is drawn by eye. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "Cut from a vertical cliff above the Waghora river; rock-cut stairs link the caves to the river.",
+    "src": "UNESCO 242",
+    "u": "https://whc.unesco.org/en/list/242",
+    "has": true,
+    "gap": false
+   },
+   {
+    "t": "A chaitya hall has a vaulted ceiling and a rounded end, a horseshoe-shaped window on the front, colonnades dividing the nave from the aisles, and a rock-cut stupa.",
+    "src": "UNESCO 242",
+    "u": "https://whc.unesco.org/en/list/242",
+    "has": true,
+    "gap": false
+   },
+   {
+    "t": "Here the cutting runs from the cliff face inward. The order of cutting is drawn by eye.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "No building text tied to this site is named in the sources used here.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "The cliff face",
+    "note": "The front of the cave: a doorway, with the horseshoe window above it to light the nave."
+   },
+   {
+    "name": "Doorway",
+    "note": "Step in from daylight; the hall beyond is lit only through the window above you."
+   },
+   {
+    "name": "Nave",
+    "note": "Rows of pillars divide the nave from the side aisles. The ribs overhead copy a timber roof in stone."
+   },
+   {
+    "name": "The stupa",
+    "note": "At the rounded end stands a stupa, cut from the same rock as the hall. The second phase at Ajanta worshipped the Buddha in image form; the seated figure here is drawn by eye."
+   },
+   {
+    "name": "Side aisle",
+    "note": "The aisle runs behind the pillars and round the stupa, so the hall can be walked round."
+   }
+  ],
+  "sources": [
+   {
+    "t": "UNESCO listing: Ajanta Caves",
+    "u": "https://whc.unesco.org/en/list/242",
+    "tier": "T2"
+   }
+  ],
+  "model_file": "models/bharat-ajanta.obj"
+ },
+ {
+  "key": "ellora",
+  "form": "Monolith temple",
+  "modelled_on": "Kailasa temple (Cave 16), Ellora",
+  "region": "Ellora, Deccan",
+  "built": "Hindu caves: 7th to 10th c. CE",
+  "facing": "Entrance faces west",
+  "measures": [
+   {
+    "l": "Caves at Ellora",
+    "v": "34"
+   },
+   {
+    "l": "Along the cliff",
+    "v": "more than 2 km"
+   },
+   {
+    "l": "Hindu caves",
+    "v": "13 to 29"
+   },
+   {
+    "l": "Kailasa",
+    "v": "largest single-rock temple at Ellora"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "One temple cut downwards from the hillside, the rock round it taken away. Elephants, panels and figures were left standing in the rock as the carvers went down.",
+  "drawn_by_eye": "The listing gives no dimensions, so every size here is drawn by eye, and the layout is simplified: the side galleries, bridges and smaller shrines are left out. The rock surface is drawn by eye. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "Carved out of the rock, not built up, copying the forms of constructed temples. The listing calls it a technological exploit without equal.",
+    "src": "UNESCO 243",
+    "u": "https://whc.unesco.org/en/list/243",
+    "has": true,
+    "gap": false
+   },
+   {
+    "t": "Here the rock is cut away from the top down. The order of cutting is drawn by eye.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   },
+   {
+    "t": "Three trenches were cut straight down into the hillside to the base of the hill, leaving a block to carve. About 1.5 to 2 million cubic feet of rock came out. Scholars think the carvers worked from the top down; no reliable source settles how.",
+    "src": "Indian Culture portal: Kailasa temple",
+    "u": "https://indianculture.gov.in/stories/kailasa-majestic-temple-ellora",
+    "has": true,
+    "gap": false
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "No building text tied to this site is named in the sources used here.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "Gateway",
+    "note": "A screen of rock left standing across the front, with a passage through it."
+   },
+   {
+    "name": "The court",
+    "note": "The open pit cut round the temple. Two free-standing pillars and two elephants were left standing in it; all are simplified here."
+   },
+   {
+    "name": "Nandi pavilion",
+    "note": "A stone bull in its own pavilion faces the temple."
+   },
+   {
+    "name": "Stairs to the upper storey",
+    "note": "The lower storey is solid rock. The hall and sanctum stand on top of it."
+   },
+   {
+    "name": "Pillared hall",
+    "note": "The listing notes traces of painting on the ceilings of the front hall."
+   },
+   {
+    "name": "Sanctum",
+    "note": "A linga in the dark sanctum, under the tower."
+   }
+  ],
+  "sources": [
+   {
+    "t": "UNESCO listing: Ellora Caves",
+    "u": "https://whc.unesco.org/en/list/243",
+    "tier": "T2"
+   }
+  ],
+  "model_file": "models/bharat-ellora.obj"
+ },
+ {
+  "key": "hoysala",
+  "form": "Hoysala star shrine",
+  "modelled_on": "Keshava temple, Somanathapura",
+  "region": "Southern Karnataka",
+  "built": "13th c. CE",
+  "facing": "Entrance faces east",
+  "measures": [
+   {
+    "l": "Shrines",
+    "v": "3, each on a star plan"
+   },
+   {
+    "l": "Stone",
+    "v": "soapstone, cut fine"
+   },
+   {
+    "l": "Every size",
+    "v": "drawn by eye"
+   },
+   {
+    "l": "Measured plan",
+    "v": "not linked yet"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "Soft stone that hardens in air, so the carving is very fine: rows of elephants, horses and scrolls run round the base in bands, with figures above them.",
+  "drawn_by_eye": "No measured plan is linked, so every size here is drawn by eye. The star has sixteen points; the bands of friezes round the walls are a repeating pattern. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "The order shown, court first and towers last, is drawn by eye.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "South Indian building treatises such as the Mayamata set out how to choose a site, face a temple, size it and pick its materials. Which text, if any, these builders used is not recorded.",
+    "src": "Mayamata, ed. and tr. Bruno Dagens (IGNCA)",
+    "u": "https://ignca.gov.in/mayamatam/",
+    "has": true,
+    "gap": false
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "Gateway",
+    "note": "You enter through the east side of a walled court."
+   },
+   {
+    "name": "Cloister",
+    "note": "A pillared walk runs round the inside of the wall, looking in at the temple."
+   },
+   {
+    "name": "Hall",
+    "note": "One hall serves all three shrines. Its pillars are turned like wood on a lathe."
+   },
+   {
+    "name": "West shrine",
+    "note": "Each shrine holds a standing image. The figures here are drawn by eye."
+   }
+  ],
+  "sources": [
+   {
+    "t": "UNESCO listing: Sacred Ensembles of the Hoysalas",
+    "u": "https://whc.unesco.org/en/list/1670",
+    "tier": "T2"
+   }
+  ],
+  "model_file": "models/bharat-hoysala.obj"
+ },
+ {
+  "key": "stepwell",
+  "form": "Stepwell: corridor",
+  "modelled_on": "Rani ki Vav, Patan",
+  "region": "Gujarat",
+  "built": "11th c. CE",
+  "facing": "Entered from the east; the well is at the west end",
+  "measures": [
+   {
+    "l": "Length and width",
+    "v": "64 m by 19.8 m"
+   },
+   {
+    "l": "Tank",
+    "v": "9.5 by 9.4 m, 23 m down"
+   },
+   {
+    "l": "Well shaft",
+    "v": "10 m across, 30 m deep"
+   },
+   {
+    "l": "Levels of stairs",
+    "v": "7, with 4 pavilions"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "Sandstone panels line the walls, with rows of carved gods and goddesses on every level down to the water.",
+  "drawn_by_eye": "Length, width, tank, well shaft and the counts follow the sources. CyArk gives the well as 88 ft (26.8 m) deep and UNESCO as 30 m; it is drawn at 30 m. The length of each flight, the height of each pavilion storey and the sculpture are drawn by eye. The land is drawn as a wide raised plain so the cut can go down into it. The water level is drawn by eye: in a stepwell it rises and falls with the seasons. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "The well stands at the western end, and the pavilions have more storeys toward it.",
+    "src": "UNESCO 922",
+    "u": "https://whc.unesco.org/en/list/922",
+    "has": true,
+    "gap": false
+   },
+   {
+    "t": "A team laser-scanned the whole stepwell over two weeks in October 2011.",
+    "src": "CyArk",
+    "u": "https://www.cyark.org/projects/rani-ki-vav/in-depth",
+    "has": true,
+    "gap": false
+   },
+   {
+    "t": "The order shown, digging first and pavilions after, is drawn by eye.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "The Aparajitaprccha, a Gujarat treatise, was compiled under Bhima II (1178 to 1240), later than this building. It records the tradition rather than this plan.",
+    "src": "SOAS paper, Architectural Science in Jain Poetry: the Aparajitaprccha and the Vastusara",
+    "u": "https://www.SOAS.ac.uk/sites/default/files/2022-06/Architectural%20Science%20in%20Jain%20Poetry%20The%20Descriptions%20of%20Kum%C4%81rap%C4%81la%27s%20Temples%20file128225.pdf",
+    "has": true,
+    "gap": false
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "Ground level",
+    "note": "From above there is almost nothing to see: a parapet and a gap in the ground."
+   },
+   {
+    "name": "First levels",
+    "note": "The steps go down between walls lined with rows of sculpture niches."
+   },
+   {
+    "name": "Under the pavilions",
+    "note": "Pillared pavilions bridge the corridor. The nearer the well, the more storeys they have."
+   },
+   {
+    "name": "The tank",
+    "note": "The lowest level reaches a tank 23 m below the ground. Beyond it is the well shaft, 10 m across."
+   }
+  ],
+  "sources": [
+   {
+    "t": "UNESCO listing: Rani-ki-Vav, Patan",
+    "u": "https://whc.unesco.org/en/list/922",
+    "tier": "T2"
+   },
+   {
+    "t": "CyArk: Rani ki Vav, from the 2011 laser scan",
+    "u": "https://www.cyark.org/projects/rani-ki-vav/in-depth",
+    "tier": "T4"
+   }
+  ],
+  "model_file": "models/bharat-stepwell.obj"
+ },
+ {
+  "key": "kund",
+  "form": "Stepwell: square",
+  "modelled_on": "Chand Baori, Abhaneri",
+  "region": "Rajasthan",
+  "built": "About 9th c. CE",
+  "facing": "Facing not sourced",
+  "measures": [
+   {
+    "l": "Terraces drawn",
+    "v": "10"
+   },
+   {
+    "l": "Stepped sides",
+    "v": "3 of 4"
+   },
+   {
+    "l": "Every size",
+    "v": "drawn by eye"
+   },
+   {
+    "l": "Source",
+    "v": "none linked yet"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "Thousands of small steps in a criss-cross pattern down three sides. The art is the geometry, which changes as you move round.",
+  "drawn_by_eye": "Nothing here is sourced yet: the depth, the number of terraces and the count of flights are drawn by eye. The land is drawn as a wide raised plain so the pit can go down into it. The water level is drawn by eye: in a stepwell it rises and falls with the seasons. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "The order shown, terraces first and the gallery wall after, is drawn by eye and not yet sourced.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "No building text tied to this site is named in the sources used here.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "The rim",
+    "note": "From the edge the walls fall away in terraces, each cut by pairs of small flights."
+   },
+   {
+    "name": "Half way down",
+    "note": "Every terrace is reached by a pair of flights that meet at a landing, so many people can go down at once."
+   },
+   {
+    "name": "The water",
+    "note": "At the bottom is the pool. The wall of galleries rises straight up on the far side."
+   }
+  ],
+  "sources": [],
+  "model_file": "models/bharat-kund.obj"
+ },
+ {
+  "key": "goa",
+  "form": "Kadamba-period shrine",
+  "modelled_on": "Mahadev temple, Tambdi Surla",
+  "region": "Goa",
+  "built": "About 12th to 13th c. CE",
+  "facing": "Door faces east",
+  "measures": [
+   {
+    "l": "Parts",
+    "v": "sanctum, vestibule, hall"
+   },
+   {
+    "l": "Stone",
+    "v": "dark basalt"
+   },
+   {
+    "l": "Every size",
+    "v": "drawn by eye"
+   },
+   {
+    "l": "Source",
+    "v": "none linked yet"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "Dark basalt, which is hard to carve, so the walls are kept plain with crisp mouldings. The ceiling of the hall carries a carved lotus.",
+  "drawn_by_eye": "Nothing here is sourced yet: plan, heights and the date are drawn or given by eye. The forest is a scatter of generic trees. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "The order shown is drawn by eye and not yet sourced.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "No building text tied to this site is named in the sources used here.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "Forest path",
+    "note": "The temple sits in a clearing, low and dark against the trees."
+   },
+   {
+    "name": "Open hall",
+    "note": "Four turned pillars carry the roof. A low wall with a sloping back runs round the sides as a seat."
+   },
+   {
+    "name": "Sanctum",
+    "note": "A short vestibule leads to the sanctum and its linga."
+   }
+  ],
+  "sources": [],
+  "model_file": "models/bharat-goa.obj"
+ },
+ {
+  "key": "bhojpur",
+  "form": "Unfinished temple",
+  "modelled_on": "Bhojeshwar temple, Bhojpur",
+  "region": "Madhya Pradesh",
+  "built": "11th c. CE, under Raja Bhoja; left unfinished",
+  "facing": "Entrance faces west",
+  "measures": [
+   {
+    "l": "Plan",
+    "v": "20.1 m square"
+   },
+   {
+    "l": "Columns",
+    "v": "4, each 12 m"
+   },
+   {
+    "l": "Linga",
+    "v": "2.3 m high, 5.4 m round"
+   },
+   {
+    "l": "Pedestal",
+    "v": "about 8 m"
+   },
+   {
+    "l": "Roof",
+    "v": "never finished"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "Sandstone left unfinished, so you can see how far the work got: the doorway and columns are carved, the walls are plain.",
+  "drawn_by_eye": "Sourced: the square plan, the four columns and their height, the linga and its pedestal, the three plain walls with blind balconies, the unfinished roof, the ramps and the date. Drawn by eye: the platform size, the wall height, the doorway, the shape of the columns and pedestal, how far the roof rings reached, and the length and place of the ramp. The roof is shown open, as the builders left it; the cover added in modern times is not drawn. The last stage, drawn pale, is conjecture: the ramp was built to raise stone for a superstructure that was never put up. Adam Hardy, who documented the drawings cut into the rocks around the site, argues the temple was meant to carry a Bhumija tower, the Malwa form with rows of small spires on each face, and would have been the largest Hindu temple of its day. The tower’s size and detail are drawn by eye. The temple faces west. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "Stone was cut at quarries nearby and hauled up earth ramps, which were normally taken away at the end. Here the work stopped, so a ramp and unused blocks remain.",
+    "src": "UNESCO tentative list: Bhojeshwar Mahadev Temple",
+    "u": "https://whc.unesco.org/en/tentativelists/6733",
+    "has": true,
+    "gap": false
+   },
+   {
+    "t": "Working drawings for the temple, its plan, pillars, mouldings and doorway, are cut into the rocks nearby, and they match what stands.",
+    "src": "UNESCO tentative list: Bhojeshwar temple",
+    "u": "https://whc.unesco.org/en/tentativelists/6733",
+    "has": true,
+    "gap": false
+   },
+   {
+    "t": "An earth ramp behind the temple, photographed in 1882, carried the big blocks up.",
+    "src": "British Library: Deen Dayal photograph, 1882",
+    "u": "https://searcharchives.bl.uk/catalog/041-003037191",
+    "has": true,
+    "gap": false
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "Bhoja, the king credited with this temple, is also credited with a building treatise, the Samarangana Sutradhara. That the rock drawings follow it is a scholars’ reading, not a record.",
+    "src": "Samarangana Sutradhara, attributed to Bhoja (summary, D. N. Shukla)",
+    "u": "https://www.wisdomlib.org/hinduism/book/samarangana-sutradhara-summary/d/doc1085277.html",
+    "has": true,
+    "gap": false
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "From the west",
+    "note": "The platform and the single great doorway. The other three walls are plain."
+   },
+   {
+    "name": "On the platform",
+    "note": "A raised platform lies in front of the door, meant for a hall that was never built."
+   },
+   {
+    "name": "At the doorway",
+    "note": "Look in and up: four columns, each 12 m, and between them the pedestal with the linga on top, 2.3 m high and 5.4 m round."
+   },
+   {
+    "name": "At the foot of the pedestal",
+    "note": "The pedestal is about 8 m high, so from here only the top of the linga shows above its edge. Higher still the roof stops and the sky shows."
+   },
+   {
+    "name": "The builders’ ramp",
+    "note": "An earth ramp for hauling blocks up. It was never cleared away."
+   }
+  ],
+  "sources": [
+   {
+    "t": "UNESCO tentative list: Bhojeshwar Mahadev Temple, Bhojpur",
+    "u": "https://whc.unesco.org/en/tentativelists/6733",
+    "tier": "T2"
+   },
+   {
+    "t": "Adam Hardy, Theory and Practice of Temple Architecture in Medieval India: the Bhojpur line drawings (2015)",
+    "u": "https://orca.cardiff.ac.uk/id/eprint/68219/",
+    "tier": "T4"
+   },
+   {
+    "t": "Adam Hardy, Ashapuri: resurrecting a medieval temple site (on the intended Bhumija form)",
+    "u": "https://orca.cardiff.ac.uk/70618/1/24%20Adam%20Hardy.pdf",
+    "tier": "T4"
+   }
+  ],
+  "model_file": "models/bharat-bhojpur.obj"
+ },
+ {
+  "key": "bamiyan",
+  "form": "Cliff colossus",
+  "modelled_on": "The Buddhas of Bamiyan, as before 2001",
+  "region": "Bamiyan valley, Afghanistan",
+  "built": "Smaller: 544 to 595 CE. Larger: 591 to 644 CE. Destroyed March 2001",
+  "facing": "The cliff faces south",
+  "measures": [
+   {
+    "l": "Larger figure",
+    "v": "55 m with its base"
+   },
+   {
+    "l": "Smaller figure",
+    "v": "38 m"
+   },
+   {
+    "l": "Larger niche",
+    "v": "about 60 m by 25 m"
+   },
+   {
+    "l": "Niche depth",
+    "v": "about 16 m"
+   },
+   {
+    "l": "Robes",
+    "v": "clay over rock, up to 8 cm"
+   },
+   {
+    "l": "Last paint",
+    "v": "one red, one white"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "The rock was cut to the rough shape of each figure; the robes were then modelled in clay over it and painted.",
+  "drawn_by_eye": "Sourced: the two heights, the dates, the size and three-lobed outline of the larger niche, the straight outline of the smaller, the clay robes and their last colours, the faces cut away above the lips, the missing forearms, the bare feet on lotus bases, the stairs and galleries, the seated figure of about 12 m and the empty niche between. Drawn by eye: the proportions of the bodies, the size of the smaller niche, the exact spacing of the folds, the patches of lost plaster, and where each cave cell sits. The vaults over the heads were painted; that painting is not drawn. The last stage is conjecture throughout: the larger figure with its right hand raised and left arm down follows a suggestion of 1928, and whether the faces were ever masks is disputed. The real cliff is about 1 km long and 100 m high with the two niches about 800 m apart; here it is shortened so both fit in one view. The rock surface is drawn by eye. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "The figures were cut from the cliff itself, and the robes were then modelled over the rock in two or three layers of clay and painted. The order of cutting shown is drawn by eye.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "No building text tied to this site is named in the sources used here.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "From the valley",
+    "note": "The cliff runs along the north side of the valley, with the two niches in it."
+   },
+   {
+    "name": "The larger Buddha",
+    "note": "The larger figure, 55 m, stood in the western niche, which is three-lobed: it widens at the shoulders and closes in a round head. Its last coat of paint was red."
+   },
+   {
+    "name": "At the feet",
+    "note": "Look straight up. The feet were bare, each on a lotus base, with chapels cut into the rock around them."
+   },
+   {
+    "name": "The smaller Buddha",
+    "note": "The smaller figure, 38 m, stood in the eastern niche and is the older of the two. Its last coat of paint was white."
+   },
+   {
+    "name": "The seated Buddha",
+    "note": "Between the two stood smaller niches: one held a seated figure of about 12 m, and one stood empty."
+   }
+  ],
+  "sources": [
+   {
+    "t": "UNESCO listing: Cultural Landscape and Archaeological Remains of the Bamiyan Valley",
+    "u": "https://whc.unesco.org/en/list/208",
+    "tier": "T2"
+   },
+   {
+    "t": "ICOMOS, The Giant Buddhas of Bamiyan (2009): outline of the niches, faces, forearms, feet, galleries",
+    "u": "https://www.icomos.de/data/pdf/xix-0421-1302-46.pdf",
+    "tier": "T2"
+   },
+   {
+    "t": "ETH Zurich, the Bamiyan project: size of the larger niche and of the cliff",
+    "u": "https://www.cipaheritagedocumentation.org/wp-content/uploads/2018/12/Gruen-e.a.-Modeling-and-visualization-of-landscape-and-objects-using-multi-resolution-image-data.pdf",
+    "tier": "T2"
+   },
+   {
+    "t": "Technical University of Munich, 2011: dates, clay layers and paint from the fragments",
+    "u": "https://www.sciencedaily.com/releases/2011/02/110225122816.htm",
+    "tier": "T2"
+   }
+  ],
+  "model_file": "models/bharat-bamiyan.obj"
+ },
+ {
+  "key": "shore",
+  "form": "Shore temple",
+  "modelled_on": "Shore Temple, Mamallapuram",
+  "region": "Tamil Nadu coast",
+  "built": "About 8th c. CE",
+  "facing": "Larger shrine faces east, to the sea",
+  "measures": [
+   {
+    "l": "Towers",
+    "v": "2, one large and one small"
+   },
+   {
+    "l": "Setting",
+    "v": "the sea on one side"
+   },
+   {
+    "l": "Every size",
+    "v": "drawn by eye"
+   },
+   {
+    "l": "Measured plan",
+    "v": "not linked yet"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "Built of granite blocks, not cut from the rock. The sea air has worn its carving soft.",
+  "drawn_by_eye": "No measured plan is linked, so every size is drawn by eye. The sea is a flat sheet and the bulls are small copies of one figure. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "The order shown is drawn by eye.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "South Indian building treatises such as the Mayamata set out how to choose a site, face a temple, size it and pick its materials. Which text, if any, these builders used is not recorded.",
+    "src": "Mayamata, ed. and tr. Bruno Dagens (IGNCA)",
+    "u": "https://ignca.gov.in/mayamatam/",
+    "has": true,
+    "gap": false
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "From the sand",
+    "note": "The two towers stand one behind the other, the taller facing the sea."
+   },
+   {
+    "name": "The court",
+    "note": "A low wall runs round the platform with rows of bulls along its top."
+   },
+   {
+    "name": "East shrine",
+    "note": "The larger shrine opens towards the sea and the sunrise."
+   },
+   {
+    "name": "The sea side",
+    "note": "The water comes up to the rocks below the platform."
+   }
+  ],
+  "sources": [
+   {
+    "t": "UNESCO listing: Group of Monuments at Mahabalipuram",
+    "u": "https://whc.unesco.org/en/list/249",
+    "tier": "T2"
+   }
+  ],
+  "model_file": "models/bharat-shore.obj"
+ },
+ {
+  "key": "mangeshi",
+  "form": "Goan temple and lamp tower",
+  "modelled_on": "Mangeshi temple, Ponda",
+  "region": "Goa",
+  "built": "18th c. CE on this site",
+  "facing": "Facing not sourced",
+  "measures": [
+   {
+    "l": "Lamp tower",
+    "v": "7 storeys drawn"
+   },
+   {
+    "l": "Roofs",
+    "v": "pitched tile, and a dome"
+   },
+   {
+    "l": "Every size",
+    "v": "drawn by eye"
+   },
+   {
+    "l": "Source",
+    "v": "none linked yet"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "Walls plastered and painted. The lamp tower is the showpiece, its niches holding oil lamps.",
+  "drawn_by_eye": "Nothing here is sourced yet: plan, heights and the date are drawn or given by eye. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "The order shown is drawn by eye and not yet sourced.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "No building text tied to this site is named in the sources used here.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "From the gate",
+    "note": "The lamp tower comes first, taller than the temple behind it."
+   },
+   {
+    "name": "Lamp tower",
+    "note": "Eight-sided, with a ring of niches for lamps on every storey."
+   },
+   {
+    "name": "Hall",
+    "note": "A long hall under a tiled roof, with windows down both sides."
+   },
+   {
+    "name": "Sanctum",
+    "note": "The sanctum and its linga sit under the dome."
+   }
+  ],
+  "sources": [],
+  "model_file": "models/bharat-mangeshi.obj"
+ },
+ {
+  "key": "harmandir",
+  "form": "Gurdwara in a pool",
+  "modelled_on": "Harmandir Sahib (Golden Temple)",
+  "region": "Amritsar, Punjab",
+  "built": "Tank 1570 to 1577; shrine 1588 to 1604; marble and gold 1802 to 1839",
+  "facing": "A door on each of four sides",
+  "measures": [
+   {
+    "l": "Tank, at the top",
+    "v": "510 × 490 ft"
+   },
+   {
+    "l": "Causeway",
+    "v": "202 × 21 ft"
+   },
+   {
+    "l": "Sanctum",
+    "v": "40 ft 4 in square"
+   },
+   {
+    "l": "First-floor roof",
+    "v": "26 ft 9 in"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "Marble below, with inlaid panels and doors faced in silver; gilded copper above, on the upper outer walls, the kiosks and the dome. The inlay here is a pattern standing in for the real work.",
+  "drawn_by_eye": "Sourced: the tank (510 by 490 ft at the top, 17 ft deep, with stepped sides), the causeway (202 by 21 ft, on arches, ten lanterns on each side and a sundial post), the platform (66 ft 4 in square) and its 13 ft walk, the sanctum (40 ft 4 in square) with four doors, the first-floor roof at 26 ft 9 in, the 4 ft parapet with 58 small turrets and corner cupolas, the third-storey room with three gates, the low fluted dome on a lotus base with 36 turrets round it, the Darshani Deorhi (66 by 36 ft, its doorway about 10 ft by 8 ft 6 in), Har ki Pauri with 16 steps down to the water, and the Akal Takht opposite the Deorhi. The SGPC page gives the completion as both 1601 and 1604. Drawn by eye: the height of the marble storey, the dome and the Deorhi, the water level, the buildings round the walk, and the form of the Akal Takht. Which way the tank’s longer side runs is not given; it is drawn east to west. Inside there is no image; the scripture rests under a canopy, drawn here as a plain stand. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "The tank was dug from 1570 and finished in 1577. The foundation stone of the shrine was laid in December 1588.",
+    "src": "SGPC",
+    "u": "https://sgpc.net/sri-harmandir-sahib-2/",
+    "has": true,
+    "gap": false
+   },
+   {
+    "t": "Maharaja Ranjit Singh’s rebuilding and ornament ran from 1802 to 1839. The upper outer walls, the kiosks and the central dome were gold-plated.",
+    "src": "Arshi 1989, pp. 12–13, 27",
+    "u": "https://archive.org/details/TheGoldenTemple-HistoryArtAndArchitecture",
+    "has": true,
+    "gap": false
+   },
+   {
+    "t": "The doors were faced in silver in 1830 and 1832. The four chhatris on the Darshani Deorhi were built in 1845.",
+    "src": "Arshi 1989, pp. 54, 62",
+    "u": "https://archive.org/details/TheGoldenTemple-HistoryArtAndArchitecture",
+    "has": true,
+    "gap": false
+   },
+   {
+    "t": "How its stones were cut, moved and raised is not yet sourced here.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "No building text tied to this site is named in the sources used here.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "Darshani Deorhi",
+    "note": "The two-storey gateway on the west side of the tank, 66 by 36 ft, its doorway about 10 ft high. The Akal Takht stands opposite it."
+   },
+   {
+    "name": "The causeway",
+    "note": "202 ft long and 21 ft wide, on arches, with gilded lanterns on fluted marble posts along each side. A sundial post takes one lantern’s place on the north side."
+   },
+   {
+    "name": "Across the water",
+    "note": "From the walk round the tank: the shrine and its reflection."
+   },
+   {
+    "name": "Round the shrine",
+    "note": "The 13 ft walk round the sanctum, on a platform 66 ft 4 in square."
+   },
+   {
+    "name": "Har ki Pauri",
+    "note": "At the back, a half-hexagonal hall, two storeys high, with 16 marble steps down to the water. The source records hymns written there in gold letters; Gurmukhi letters stand in for them here."
+   },
+   {
+    "name": "Inside",
+    "note": "There is no image. The scripture rests under a canopy at the centre."
+   }
+  ],
+  "sources": [
+   {
+    "t": "SGPC: Sri Harmandir Sahib, its history and building",
+    "u": "https://sgpc.net/sri-harmandir-sahib-2/",
+    "tier": "T4"
+   },
+   {
+    "t": "P. S. Arshi, The Golden Temple: History, Art and Architecture (1989)",
+    "u": "https://archive.org/details/TheGoldenTemple-HistoryArtAndArchitecture",
+    "tier": "T4"
+   }
+  ],
+  "model_file": "models/bharat-harmandir.obj"
+ },
+ {
+  "key": "somapura",
+  "form": "Terraced monastery temple",
+  "modelled_on": "Somapura Mahavihara",
+  "region": "Paharpur, Bangladesh",
+  "built": "About 8th c. CE",
+  "facing": "Facing not sourced",
+  "measures": [
+   {
+    "l": "Plan",
+    "v": "a cross, in 3 terraces"
+   },
+   {
+    "l": "Court",
+    "v": "ringed by cells"
+   },
+   {
+    "l": "Every size",
+    "v": "drawn by eye"
+   },
+   {
+    "l": "Measured plan",
+    "v": "not linked yet"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "Brick, with rows of terracotta plaques set along the terrace walls, showing people, animals and gods.",
+  "drawn_by_eye": "A ruin today, drawn whole by eye: the court is drawn smaller than it is, the number of cells is not counted from a plan, and the top shrine is invented. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "Shown rising terrace by terrace in brick. The order is drawn by eye.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "No building text tied to this site is named in the sources used here.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "Gateway",
+    "note": "One gate leads through the ring of cells into the court."
+   },
+   {
+    "name": "The court",
+    "note": "Cells for monks line all four sides, each with its own door."
+   },
+   {
+    "name": "First terrace",
+    "note": "The walk round each terrace passes a band of plaques, drawn here as a pattern."
+   },
+   {
+    "name": "Top shrine",
+    "note": "The shrine at the top is not known; this one is invented."
+   }
+  ],
+  "sources": [
+   {
+    "t": "UNESCO listing: Ruins of the Buddhist Vihara at Paharpur",
+    "u": "https://whc.unesco.org/en/list/322",
+    "tier": "T2"
+   }
+  ],
+  "model_file": "models/bharat-somapura.obj"
+ },
+ {
+  "key": "pillar",
+  "form": "Pillar of Ashoka",
+  "modelled_on": "Ashoka pillar and lion capital, Sarnath",
+  "region": "Sarnath, Uttar Pradesh",
+  "built": "3rd c. BCE",
+  "facing": "A lion faces each direction",
+  "measures": [
+   {
+    "l": "Shaft",
+    "v": "one stone"
+   },
+   {
+    "l": "Capital",
+    "v": "one block, about 7 ft"
+   },
+   {
+    "l": "Pillar, as first set up",
+    "v": "40 to 50 ft"
+   },
+   {
+    "l": "Stone",
+    "v": "buff sandstone"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "One sandstone shaft, polished to a shine, with a capital of four lions back to back, also polished.",
+  "drawn_by_eye": "Sourced: the shaft cut from a single piece of stone, the capital (bell, slab, animals and lions) cut from a single block about 7 ft tall, the original height of 40 to 50 ft, and the buff sandstone. The pillar at Sarnath is broken and its capital is kept in the museum there; it is drawn here whole, at about 40 ft. Drawn by eye: the exact height, the platform and railing, the wheel on top and its spokes. The edict is drawn as described under Writing on the stone. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "The shaft was cut from a single piece of stone and the capital from a single block, then set on top. The shaft appears whole here, not course by course.",
+    "src": "ORIAS, UC Berkeley",
+    "u": "https://orias.berkeley.edu/lion-capital-ashoka",
+    "has": true,
+    "gap": false
+   },
+   {
+    "t": "The capital is shown going from block to rough shape to finished carving in place on the shaft. It would have been carved on the ground and then raised; how it was lifted is not known. The rough stage is drawn by eye, after the way carvers rough out with a point chisel before finishing.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   },
+   {
+    "t": "Ashoka’s pillars were usually cut from buff, fine-grained sandstone with small black spots, quarried at Chunar near Varanasi.",
+    "src": "British Museum",
+    "u": "https://artsandculture.google.com/asset/pillar-of-emperor-ashoka/aAF6un9FwO-1KQ",
+    "has": true,
+    "gap": false
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "No building text tied to this site is named in the sources used here.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "From the gate",
+    "note": "A single shaft with nothing round it but a low railing."
+   },
+   {
+    "name": "The edict",
+    "note": "Lines of Brahmi are cut into the polished stone on the side facing the gate, a little above eye height. The letters are Brahmi; the words repeat the opening found across Ashoka’s edicts, not the Sarnath text itself."
+   },
+   {
+    "name": "Level with the lions",
+    "note": "Seen from a scaffold: the bell of petals, the slab with its wheels and animals, and the four lions."
+   }
+  ],
+  "sources": [
+   {
+    "t": "ORIAS, UC Berkeley: the Lion Capital of Ashoka",
+    "u": "https://orias.berkeley.edu/lion-capital-ashoka",
+    "tier": "T4"
+   },
+   {
+    "t": "British Museum: Pillar of Emperor Ashoka, on the stone of the pillars",
+    "u": "https://artsandculture.google.com/asset/pillar-of-emperor-ashoka/aAF6un9FwO-1KQ",
+    "tier": "T4"
+   }
+  ],
+  "model_file": "models/bharat-pillar.obj"
+ },
+ {
+  "key": "pandrethan",
+  "form": "Shrine in a tank",
+  "modelled_on": "Pandrethan temple, Srinagar",
+  "region": "Srinagar, Kashmir",
+  "built": "About 10th c. CE",
+  "facing": "Facing not sourced",
+  "measures": [
+   {
+    "l": "Porches",
+    "v": "4, each with a trefoil arch"
+   },
+   {
+    "l": "Roof",
+    "v": "pyramid, in 2 tiers"
+   },
+   {
+    "l": "Every size",
+    "v": "drawn by eye"
+   },
+   {
+    "l": "Source",
+    "v": "none linked yet"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "Grey stone, plain outside. The ceiling inside carries a carved open lotus.",
+  "drawn_by_eye": "Nothing here is sourced yet: sizes and the date are drawn or given by eye. The lotus on the ceiling is a simple rosette. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "The order shown is drawn by eye and not yet sourced.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "No building text tied to the Kashmir temples is named in the sources used here.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "From the bank",
+    "note": "The shrine stands in the water, joined to the bank by a short causeway."
+   },
+   {
+    "name": "Causeway",
+    "note": "Each face has a porch under a gable, with a three-lobed arch cut into it."
+   },
+   {
+    "name": "Look up",
+    "note": "The ceiling is one of the best-known carvings in Kashmir. Here it is a plain lotus."
+   }
+  ],
+  "sources": [],
+  "model_file": "models/bharat-pandrethan.obj"
+ },
+ {
+  "key": "avanti",
+  "form": "Shrine in a colonnaded court",
+  "modelled_on": "Avantiswami temple, Avantipura",
+  "region": "Avantipura, Kashmir",
+  "built": "9th c. CE; a ruin today",
+  "facing": "Facing not sourced",
+  "measures": [
+   {
+    "l": "Shrines",
+    "v": "1 and 4 at the corners"
+   },
+   {
+    "l": "Court",
+    "v": "cells behind a colonnade"
+   },
+   {
+    "l": "Every size",
+    "v": "drawn by eye"
+   },
+   {
+    "l": "Source",
+    "v": "none linked yet"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "Grey stone, with figures in niches and on the pillars of the colonnade round the court.",
+  "drawn_by_eye": "A ruin today, drawn whole as a reconstruction by eye. Nothing is sourced yet: the roofs, the number of cells and columns, and the image inside are invented. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "The order shown is drawn by eye and not yet sourced.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "No building text tied to the Kashmir temples is named in the sources used here.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "Gateway",
+    "note": "The gateway is a building in its own right, with a chamber on each side of the passage."
+   },
+   {
+    "name": "The court",
+    "note": "A colonnade runs round the court, with a cell behind each bay."
+   },
+   {
+    "name": "Platform",
+    "note": "The shrine stands on a platform, with a smaller shrine at each of its corners."
+   },
+   {
+    "name": "Sanctum",
+    "note": "The temple was dedicated to Vishnu. The image here is drawn by eye."
+   }
+  ],
+  "sources": [],
+  "model_file": "models/bharat-avanti.obj"
+ },
+ {
+  "key": "shankara",
+  "form": "Hilltop shrine",
+  "modelled_on": "Shankaracharya temple, Srinagar",
+  "region": "Srinagar, Kashmir",
+  "built": "Date disputed; not sourced here",
+  "facing": "Facing not sourced",
+  "measures": [
+   {
+    "l": "Plinth",
+    "v": "8 sides"
+   },
+   {
+    "l": "Reached by",
+    "v": "a long stair"
+   },
+   {
+    "l": "Every size",
+    "v": "drawn by eye"
+   },
+   {
+    "l": "Source",
+    "v": "none linked yet"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "A plain stone shrine on a high base. Its effect comes from its place on the hilltop.",
+  "drawn_by_eye": "Nothing here is sourced yet. The hill is drawn far lower than the real one so the temple can be seen, and the number of steps is not counted. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "The order shown is drawn by eye and not yet sourced.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "No building text tied to the Kashmir temples is named in the sources used here.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "Foot of the hill",
+    "note": "The temple is a speck at the top; a stair runs straight up to it."
+   },
+   {
+    "name": "On the stair",
+    "note": "Low walls line the stair on both sides."
+   },
+   {
+    "name": "On the plinth",
+    "note": "A walk runs round the shrine on top of the eight-sided plinth."
+   },
+   {
+    "name": "Shrine",
+    "note": "The room inside is round."
+   }
+  ],
+  "sources": [],
+  "model_file": "models/bharat-shankara.obj"
+ },
+ {
+  "key": "gopuram",
+  "form": "Dravida temple city",
+  "modelled_on": "Meenakshi temple, Madurai",
+  "region": "Tamil Nadu",
+  "built": "Mostly 16th to 17th c. CE",
+  "facing": "Four gates, one to each direction",
+  "measures": [
+   {
+    "l": "Gate towers drawn",
+    "v": "4 outer, 4 inner"
+   },
+   {
+    "l": "Shrines",
+    "v": "2, under gold roofs"
+   },
+   {
+    "l": "Every size",
+    "v": "drawn by eye"
+   },
+   {
+    "l": "Source",
+    "v": "none linked yet"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "The gate towers are covered with painted plaster figures, stacked tier on tier.",
+  "drawn_by_eye": "Nothing here is sourced yet: the plan, the heights and the number of towers are drawn by eye, and only the largest towers are shown. Tower colours stand in for painted stucco figures. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "The order shown, shrines first and the tallest gate towers last, is drawn by eye and not yet sourced.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "South Indian building treatises such as the Mayamata set out how to choose a site, face a temple, size it and pick its materials. Which text, if any, these builders used is not recorded.",
+    "src": "Mayamata, ed. and tr. Bruno Dagens (IGNCA)",
+    "u": "https://ignca.gov.in/mayamatam/",
+    "has": true,
+    "gap": false
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "East gate tower",
+    "note": "A stone base with a passage through it, and tier on tier of painted figures above."
+   },
+   {
+    "name": "The tank",
+    "note": "A stepped tank inside the walls, with a golden lotus drawn at its centre."
+   },
+   {
+    "name": "Pillared hall",
+    "note": "A hall of many pillars, drawn here as a plain grid."
+   },
+   {
+    "name": "Shrine",
+    "note": "The holiest room has the smallest roof, covered in gold."
+   }
+  ],
+  "sources": [],
+  "model_file": "models/bharat-gopuram.obj"
+ },
+ {
+  "key": "mahabodhi",
+  "form": "Brick tower",
+  "modelled_on": "Mahabodhi temple, Bodh Gaya",
+  "region": "Bodh Gaya, Bihar",
+  "built": "5th to 6th c. CE, restored later",
+  "facing": "Door faces east",
+  "measures": [
+   {
+    "l": "Towers",
+    "v": "1 and 4 at the corners"
+   },
+   {
+    "l": "Material",
+    "v": "brick"
+   },
+   {
+    "l": "Every size",
+    "v": "drawn by eye"
+   },
+   {
+    "l": "Measured elevation",
+    "v": "not linked yet"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "Brick and plaster, with niches for figures on the faces of the tower.",
+  "drawn_by_eye": "No measured elevation is linked, so the height and the taper are drawn by eye. The railing is drawn as plain posts and rails. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "Shown rising in brick courses about 0.3 m high. Course size and order are drawn by eye.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "No building text tied to this site is named in the sources used here.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "Approach",
+    "note": "The tower rises straight-sided from a square base, with a small copy of itself at each corner."
+   },
+   {
+    "name": "Doorway",
+    "note": "A porch on the east side leads into the shrine."
+   },
+   {
+    "name": "Shrine",
+    "note": "A seated Buddha, gilded. The figure is drawn by eye."
+   },
+   {
+    "name": "The tree",
+    "note": "Behind the temple, on the west, stands the Bodhi tree with a stone seat beneath it."
+   }
+  ],
+  "sources": [
+   {
+    "t": "UNESCO listing: Mahabodhi Temple Complex at Bodh Gaya",
+    "u": "https://whc.unesco.org/en/list/1056",
+    "tier": "T2"
+   }
+  ],
+  "model_file": "models/bharat-mahabodhi.obj"
+ },
+ {
+  "key": "vittala",
+  "form": "Pillared hall",
+  "modelled_on": "Vittala temple, Hampi",
+  "region": "Hampi, Karnataka",
+  "built": "15th c. CE, under Deva Raya II; enlarged later",
+  "facing": "Facing not sourced; drawn facing east",
+  "measures": [
+   {
+    "l": "Hall",
+    "v": "56 pillars"
+   },
+   {
+    "l": "Chariot",
+    "v": "a shrine to Garuda"
+   },
+   {
+    "l": "Stone",
+    "v": "granite"
+   },
+   {
+    "l": "Court size",
+    "v": "drawn by eye"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "Granite is hard and splits in big blocks, so the carving here is deep and bold rather than fine. Each pillar of the great hall is cut as one thick shaft with slender columns round it, and the chariot is made of granite blocks dressed to look like a single cart, with stone wheels.",
+  "drawn_by_eye": "Sourced: the court, the stone chariot in it, the hall and its 56 pillars, and the date. For the chariot: the platform about a foot high, wheels carved in concentric floral rings that turn on their axles, niches between pilasters with corner colonettes, the two elephants that replaced two horses, the broken ladder, and the brick tower with a rounded top in 19th-century photographs, drawn pale as the last stage. The chariot faces the sanctum. Drawn by eye: the size of the court, the plan of the hall, the height of every part, and the brick gate tower. Each pillar is drawn as a central shaft ringed by thin columns; the real pillars differ from one another. Facing is not sourced; it is drawn facing east. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "The court and hall are granite, cut nearby. The order shown is drawn by eye.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   },
+   {
+    "t": "Granite boulders were split along a line of drilled holes: dry wooden pegs were driven in and wetted, and swelled. Half-split rows of holes can still be seen at Hampi.",
+    "src": "hampi.in: how the boulders were split",
+    "u": "https://hampi.in/?p=90",
+    "has": true,
+    "gap": false
+   },
+   {
+    "t": "The hall pillars ring when struck; acousticians have measured the hall’s sound.",
+    "src": "Acoustical Society: sounds of two temples",
+    "u": "https://acoustics.org/tag/clarity",
+    "has": true,
+    "gap": false
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "South Indian building treatises such as the Mayamata set out how to choose a site, face a temple, size it and pick its materials. Which text, if any, these builders used is not recorded.",
+    "src": "Mayamata, ed. and tr. Bruno Dagens (IGNCA)",
+    "u": "https://ignca.gov.in/mayamatam/",
+    "has": true,
+    "gap": false
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "From the east gate",
+    "note": "The court opens out with the stone chariot in front and the hall behind."
+   },
+   {
+    "name": "The stone chariot",
+    "note": "A shrine to Garuda made to look like a chariot, with stone wheels and elephants before it."
+   },
+   {
+    "name": "In the great hall",
+    "note": "56 pillars, each a thick shaft with slender columns round it."
+   },
+   {
+    "name": "Sanctum door",
+    "note": "Beyond the hall, the dark sanctum."
+   }
+  ],
+  "sources": [
+   {
+    "t": "Hampi district administration: Vijaya Vithala temple, its chariot and 56 musical pillars",
+    "u": "https://vijayanagara.nic.in/?p=27793",
+    "tier": "T2"
+   },
+   {
+    "t": "Karnataka Tourism: the stone chariot",
+    "u": "https://karnatakatourism.org/attractions/stone-chariot/",
+    "tier": "T2"
+   },
+   {
+    "t": "UNESCO listing: Group of Monuments at Hampi",
+    "u": "https://whc.unesco.org/en/list/241",
+    "tier": "T2"
+   },
+   {
+    "t": "Drishti IAS: built under Deva Raya II",
+    "u": "https://www.drishtiias.com/daily-news-analysis/hampi-stone-chariot",
+    "tier": "T4"
+   },
+   {
+    "t": "MAP Academy: Stone Chariot, Vitthala Temple (platform, wheels, elephants and horses, ladder, the brick tower lost in the 1940s)",
+    "u": "https://mapacademy.io/article/stone-chariot-vitthala-temple/",
+    "tier": "T4"
+   }
+  ],
+  "model_file": "models/bharat-vittala.obj"
+ },
+ {
+  "key": "pattadakal",
+  "form": "Early Dravida temple",
+  "modelled_on": "Virupaksha temple, Pattadakal",
+  "region": "Pattadakal, Karnataka",
+  "built": "c. 740 CE, by Queen Lokamahadevi",
+  "facing": "Facing not sourced; drawn facing east",
+  "measures": [
+   {
+    "l": "Built",
+    "v": "c. 740 CE"
+   },
+   {
+    "l": "Patron",
+    "v": "Queen Lokamahadevi"
+   },
+   {
+    "l": "Walls",
+    "v": "with gateways"
+   },
+   {
+    "l": "Stone",
+    "v": "sandstone"
+   },
+   {
+    "l": "Sizes",
+    "v": "drawn by eye"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "Sandstone is soft enough to carve in detail, so the outer walls carry figures in niches between pilasters, and the hall pillars carry scenes from the epics. The tower rises in storeys, each ringed with small model shrines.",
+  "drawn_by_eye": "Sourced: the date, the patron, the walls with gateways, and the mix of southern and northern towers in the group. Drawn by eye: every size, the number of pillars, the storeys of the tower, and where the northern towers stand. Facing is not sourced; it is drawn facing east. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "Built of sandstone. The order shown is drawn by eye.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   },
+   {
+    "t": "The sandstone came from quarries close by, still marked by the Chalukya stonecutters’ wedges, whose shape differs from later Vijayanagara marks.",
+    "src": "Deccan Herald: stories that stones tell",
+    "u": "https://www.deccanherald.com/india/karnataka/stories-that-stones-tell-us-918152.html",
+    "has": true,
+    "gap": false
+   },
+   {
+    "t": "Acousticians have measured the sound inside this temple.",
+    "src": "Acoustical Society: sounds of two temples",
+    "u": "https://acoustics.org/tag/clarity",
+    "has": true,
+    "gap": false
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "South Indian building treatises such as the Mayamata set out how to choose a site, face a temple, size it and pick its materials. Which text, if any, these builders used is not recorded.",
+    "src": "Mayamata, ed. and tr. Bruno Dagens (IGNCA)",
+    "u": "https://ignca.gov.in/mayamatam/",
+    "has": true,
+    "gap": false
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "From the east",
+    "note": "The Nandi pavilion stands in front of the temple, inside the wall."
+   },
+   {
+    "name": "Nandi pavilion",
+    "note": "The bull faces the sanctum."
+   },
+   {
+    "name": "Pillared hall",
+    "note": "Rows of carved pillars lead to the sanctum."
+   },
+   {
+    "name": "The passage round the sanctum",
+    "note": "A dark passage lets worshippers walk round the shrine inside."
+   }
+  ],
+  "sources": [
+   {
+    "t": "Indian Culture (Ministry of Culture): Group of Monuments at Pattadakal",
+    "u": "https://indianculture.gov.in/unesco/heritage-sites/group-monuments-pattadakal",
+    "tier": "T2"
+   },
+   {
+    "t": "UNESCO listing: Group of Monuments at Pattadakal",
+    "u": "https://whc.unesco.org/en/list/239",
+    "tier": "T2"
+   }
+  ],
+  "model_file": "models/bharat-pattadakal.obj"
+ },
+ {
+  "key": "modhera",
+  "form": "Sun temple and tank",
+  "modelled_on": "Sun temple, Modhera",
+  "region": "Modhera, Gujarat",
+  "built": "after 1026 CE, under Bhima I",
+  "facing": "Entrance faces east",
+  "measures": [
+   {
+    "l": "Tank",
+    "v": "53.6 m by 36.6 m"
+   },
+   {
+    "l": "Small shrines in the tank",
+    "v": "108"
+   },
+   {
+    "l": "Gateway",
+    "v": "two pillars, arch lost"
+   },
+   {
+    "l": "Stone",
+    "v": "sandstone"
+   },
+   {
+    "l": "Faces",
+    "v": "east"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "The sandstone is carved from plinth to roof. Bands of figures, dancers and animals run round the halls, the pillars are covered top to bottom, and the tank steps are cut in small pyramids so they read as one big pattern from above.",
+  "drawn_by_eye": "Sourced: the tank size, the 108 small shrines in it, the three parts on one axis, the two gateway pillars, the date and the facing. Drawn by eye: the depth and number of terraces, the halls and their heights, and the ruined tower. Fewer small shrines are drawn than the 108 that stand. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "The tank, the open hall and the shrine hall stand on one east-west line.",
+    "src": "Incredible India: Sun Temple, Modhera",
+    "u": "https://www.incredibleindia.gov.in/en/gujarat/patan/sun-temple",
+    "has": true,
+    "gap": false
+   },
+   {
+    "t": "How its stones were cut, moved and raised is not yet sourced here.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "The Aparajitaprccha, a Gujarat treatise, was compiled under Bhima II (1178 to 1240), later than this building. It records the tradition rather than this plan.",
+    "src": "SOAS paper, Architectural Science in Jain Poetry: the Aparajitaprccha and the Vastusara",
+    "u": "https://www.SOAS.ac.uk/sites/default/files/2022-06/Architectural%20Science%20in%20Jain%20Poetry%20The%20Descriptions%20of%20Kum%C4%81rap%C4%81la%27s%20Temples%20file128225.pdf",
+    "has": true,
+    "gap": false
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "Across the tank",
+    "note": "Terraces of steps go down on every side, with small shrines on them."
+   },
+   {
+    "name": "The gateway",
+    "note": "Two pillars stand. The arch that joined them is gone."
+   },
+   {
+    "name": "The open hall",
+    "note": "Carved pillars and arches on a square plan set corner-on."
+   },
+   {
+    "name": "Shrine hall",
+    "note": "The closed hall in front of the sanctum."
+   }
+  ],
+  "sources": [
+   {
+    "t": "Incredible India: Sun Temple, Modhera, the tank and its 108 shrines",
+    "u": "https://www.incredibleindia.gov.in/en/gujarat/patan/sun-temple",
+    "tier": "T2"
+   },
+   {
+    "t": "Mandira Bhattacharya, The Sun Temple at Modhera (Karatoya, 2012)",
+    "u": "https://ir.nbu.ac.in/bitstreams/98038519-6062-4dad-90b0-84bd6a770a7e/download",
+    "tier": "T4"
+   }
+  ],
+  "model_file": "models/bharat-modhera.obj"
+ },
+ {
+  "key": "rathas",
+  "form": "Monolithic shrines",
+  "modelled_on": "The five rathas, Mamallapuram",
+  "region": "Mamallapuram, Tamil Nadu",
+  "built": "7th c. CE, Pallava",
+  "facing": "Facing not sourced; drawn facing west",
+  "measures": [
+   {
+    "l": "Shrines",
+    "v": "5, each from one outcrop"
+   },
+   {
+    "l": "Animals",
+    "v": "elephant, lion, bull"
+   },
+   {
+    "l": "Stone",
+    "v": "granite"
+   },
+   {
+    "l": "Sizes",
+    "v": "drawn by eye"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "Nothing was built up. Carvers worked down from the top of each boulder, so the roofs were finished first and the floors last. Wooden roofs, beams and thatch are copied in granite, and the figures on the walls are cut from the same rock as the walls.",
+  "drawn_by_eye": "Sourced: the five monolithic shrines, their kinds, and the date. Drawn by eye: every size and the spacing. A figure of 11 m often quoted for the Dharmaraja ratha has not been checked against a primary source, so it is not used. Facing is not sourced; the fronts are drawn facing west. The rock surface is drawn by eye. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "Each ratha was cut down from the top of a granite outcrop, so the roof was finished before the floor. The order shown is drawn by eye.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   },
+   {
+    "t": "Wedge marks remain on an unfinished ratha at Mamallapuram, where the granite was split.",
+    "src": "Deccan Herald: stories that stones tell",
+    "u": "https://www.deccanherald.com/india/karnataka/stories-that-stones-tell-us-918152.html",
+    "has": true,
+    "gap": false
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "South Indian building treatises such as the Mayamata set out how to choose a site, face a temple, size it and pick its materials. Which text, if any, these builders used is not recorded.",
+    "src": "Mayamata, ed. and tr. Bruno Dagens (IGNCA)",
+    "u": "https://ignca.gov.in/mayamatam/",
+    "has": true,
+    "gap": false
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "In front of the row",
+    "note": "Five shrines in a line, each a different kind of building."
+   },
+   {
+    "name": "Along the row",
+    "note": "Draupadi’s hut, Arjuna’s tower and Bhima’s long hall."
+   },
+   {
+    "name": "The elephant",
+    "note": "A life-size elephant cut from the same rock, beside the apse-ended shrine."
+   },
+   {
+    "name": "Dharmaraja ratha",
+    "note": "The tallest, in three storeys."
+   }
+  ],
+  "sources": [
+   {
+    "t": "UNESCO listing: Group of Monuments at Mahabalipuram",
+    "u": "https://whc.unesco.org/en/list/249",
+    "tier": "T2"
+   }
+  ],
+  "model_file": "models/bharat-rathas.obj"
+ },
+ {
+  "key": "kamakhya",
+  "form": "Nilachal temple",
+  "modelled_on": "Kamakhya temple, Nilachal hill",
+  "region": "Guwahati, Assam",
+  "built": "rebuilt 1565 on the ruins of an older stone temple",
+  "facing": "Facing not sourced; drawn facing west",
+  "measures": [
+   {
+    "l": "Rebuilt",
+    "v": "1565"
+   },
+   {
+    "l": "Base",
+    "v": "stone, from the older temple"
+   },
+   {
+    "l": "Dome",
+    "v": "brick"
+   },
+   {
+    "l": "Sizes",
+    "v": "drawn by eye"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "Two materials meet here. The lower part is stone, reused from the temple that stood before, and keeps its bands of carved figures. Above it the dome is brick, which cannot take deep carving, so it gets its pattern from its many faces and ribs.",
+  "drawn_by_eye": "Sourced: the rebuilding of 1565, the reuse of the older stone ruins, and the hill site. Drawn by eye: every size, the number of faces on the dome, the small spires, and the three halls. Facing is not sourced; it is drawn with the entrance to the west. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "The stone base reuses the ruins of the earlier temple; the dome above is brick.",
+    "src": "Kamrup Metropolitan district administration",
+    "u": "https://kamrupmetro.assam.gov.in/tourist-place-detail/218",
+    "has": true,
+    "gap": false
+   },
+   {
+    "t": "Rebuilt in 1565 on the ruins of an older stone temple, whose stone was used again in the base.",
+    "src": "Kamrup Metropolitan district administration",
+    "u": "https://kamrupmetro.assam.gov.in/tourist-place-detail/218",
+    "has": true,
+    "gap": false
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "No building text tied to this site is named in the sources used here.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "From the front",
+    "note": "Three halls in a row lead to the domed sanctum."
+   },
+   {
+    "name": "The dome",
+    "note": "Many-sided, in brick, ringed with small spires."
+   },
+   {
+    "name": "In the halls",
+    "note": "One hall after another, each with its own roof."
+   },
+   {
+    "name": "Towards the sanctum",
+    "note": "The sanctum is reached last, down in the dark."
+   }
+  ],
+  "sources": [
+   {
+    "t": "Kamrup Metropolitan district administration: Kamakhya temple, rebuilt 1565",
+    "u": "https://kamrupmetro.assam.gov.in/tourist-place-detail/218",
+    "tier": "T2"
+   },
+   {
+    "t": "Kamakhya temple trust: architecture",
+    "u": "https://maakamakhya.org/architecture",
+    "tier": "T4"
+   }
+  ],
+  "model_file": "models/bharat-kamakhya.obj"
+ },
+ {
+  "key": "vadakkunnathan",
+  "form": "Kerala temple",
+  "modelled_on": "Vadakkunnathan temple, Thrissur",
+  "region": "Thrissur, Kerala",
+  "built": "date not sourced",
+  "facing": "Entered by the west gate",
+  "measures": [
+   {
+    "l": "Compound",
+    "v": "nine acres, walled"
+   },
+   {
+    "l": "Gates",
+    "v": "4"
+   },
+   {
+    "l": "Theatre hall",
+    "v": "koothambalam"
+   },
+   {
+    "l": "Walls",
+    "v": "laterite"
+   },
+   {
+    "l": "Shrine sizes",
+    "v": "drawn by eye"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "Laterite, a soft red stone cut in blocks, makes the walls and bases. The rich work is in wood: brackets, ceilings and roof frames are carved in timber, and the roofs are sheathed in metal. The walls of the shrines are painted.",
+  "drawn_by_eye": "Sourced: the nine-acre walled compound, the theatre hall and its place to the left of the west gate. Drawn by eye: every size, the roofs, the cloister and the shrines. The real compound is larger than drawn. Facing is not sourced beyond the west gate. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "Laterite walls and bases, with roofs and brackets in timber. The order shown is drawn by eye.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "Kerala temples follow the Tantrasamuccaya, written in 1428 and still treated as the manual for temple building and ritual. Whether this temple is older than the text is not sourced here.",
+    "src": "A. K. V. Arjun, Revisiting Tantrasamuccaya (IJFMR)",
+    "u": "https://www.ijfmr.com/research-paper.php?id=6670",
+    "has": true,
+    "gap": false
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "West gate",
+    "note": "A pavilion gate in the laterite wall."
+   },
+   {
+    "name": "In the compound",
+    "note": "Open ground round the cloister."
+   },
+   {
+    "name": "The shrines",
+    "note": "Round and square shrines under cone and pyramid roofs."
+   },
+   {
+    "name": "Theatre hall",
+    "note": "To the left as you come in by the west gate."
+   }
+  ],
+  "sources": [
+   {
+    "t": "Kerala Tourism: Vadakkumnatha temple, the nine-acre compound and theatre hall",
+    "u": "https://www.keralatourism.org/destination/vadakkumnatha-temple-thrissur/70",
+    "tier": "T2"
+   },
+   {
+    "t": "Incredible India: the Vadakkumnathan temple",
+    "u": "https://www.incredibleindia.gov.in/en/kerala/thrissur/the-vadakkumnathan-temple",
+    "tier": "T2"
+   },
+   {
+    "t": "The News Minute: the theatre hall to the left of the west gate",
+    "u": "https://www.thenewsminute.com/kerala/pristine-vadukkunathan-temple-thrissur-town-35730",
+    "tier": "T4"
+   }
+  ],
+  "model_file": "models/bharat-vadakkunnathan.obj"
+ },
+ {
+  "key": "lingaraja",
+  "form": "Kalinga temple",
+  "modelled_on": "Lingaraja temple, Bhubaneswar",
+  "region": "Bhubaneswar, Odisha",
+  "built": "11th c. CE",
+  "facing": "Entrance faces east",
+  "measures": [
+   {
+    "l": "Tower",
+    "v": "55 m"
+   },
+   {
+    "l": "Other shrines",
+    "v": "50"
+   },
+   {
+    "l": "Halls",
+    "v": "3, plus the porch"
+   },
+   {
+    "l": "Stone",
+    "v": "sandstone"
+   },
+   {
+    "l": "Faces",
+    "v": "east"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "The tower is covered in small copies of itself, so the eye reads one tall curve made of many. The walls below carry figures in niches. The halls have stepped pyramid roofs, plain by comparison, which make the tower look taller still.",
+  "drawn_by_eye": "Sourced: the tower height, the fifty other shrines and the compound wall, and the halls stepping down from the tower. Drawn by eye: the court size, the halls and their roofs, and where each small shrine stands. Fewer small shrines are drawn than stand. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "The halls in front step down in height from the tower.",
+    "src": "Odisha Hindu Religious Endowments",
+    "u": "https://hinduendowments.odisha.gov.in/?p=233",
+    "has": true,
+    "gap": false
+   },
+   {
+    "t": "How its stones were cut, moved and raised is not yet sourced here.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "The Shilpa Prakasha, a medieval Odisha text on temple building, describes temples of this family and the diagrams (yantras) laid under their plans. Whether these builders knew it is not recorded.",
+    "src": "Shilpa Prakasha, tr. Alice Boner and Sadasiva Rath Sarma",
+    "u": "https://www.mlbd.in/products/silpa-prakasa-by-ramacandra-mahapatra-kaula-bhattaraka-medieval-orissan-sanskrit-text-on-temple-architecture-bettina-baumer-rajendra-prasad-das-alice-boner-9788120820524-8120820525",
+    "has": true,
+    "gap": false
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "East gate",
+    "note": "The tower rises at the far end of the court."
+   },
+   {
+    "name": "In the court",
+    "note": "Small shrines crowd round the main temple."
+   },
+   {
+    "name": "Below the tower",
+    "note": "Look up: the curve is made of many small copies of itself."
+   },
+   {
+    "name": "Assembly hall",
+    "note": "Under the stepped pyramid roof."
+   },
+   {
+    "name": "Sanctum door",
+    "note": "The linga, in the dark under the tower."
+   }
+  ],
+  "sources": [
+   {
+    "t": "Odisha Hindu Religious Endowments: Lingaraja temple",
+    "u": "https://hinduendowments.odisha.gov.in/?p=233",
+    "tier": "T2"
+   },
+   {
+    "t": "Incredible India: Lingaraj temple",
+    "u": "https://www.incredibleindia.gov.in/en/odisha/bhubaneswar/lingaraj-temple",
+    "tier": "T2"
+   }
+  ],
+  "model_file": "models/bharat-lingaraja.obj"
+ },
+ {
+  "key": "dilwara",
+  "form": "Marble Jain temple",
+  "modelled_on": "Vimal Vasahi, Dilwara",
+  "region": "Mount Abu, Rajasthan",
+  "built": "1031 CE; hall and cells added later",
+  "facing": "Entrance faces east",
+  "measures": [
+   {
+    "l": "Court",
+    "v": "about 40 m by 23 m"
+   },
+   {
+    "l": "Small shrines",
+    "v": "52"
+   },
+   {
+    "l": "Dome",
+    "v": "over 7 m across"
+   },
+   {
+    "l": "Stone",
+    "v": "white marble"
+   },
+   {
+    "l": "Faces",
+    "v": "east"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "Marble is fine-grained, so it can be cut thin. The work is kept inside: the outer walls are plain, and the ceilings, arches and pillars inside are worked in layers, with the dome rising in rings to a hanging lotus at its centre.",
+  "drawn_by_eye": "Sourced: the court size, the 52 small shrines and the colonnade, the dome over 7 m across, the plain outer walls, the date and the facing. Drawn by eye: the heights, the halls, the pillars and arches. The great hall was added in 1149; the cells came in two phases. The setting: the temple stands high in the Arbuda hills of Mount Abu, a range of valleys and steep slopes about 1,250 to 1,700 m up, with Guru Shikhar (1,722 m) at the north-east end of the plateau. Here the hills, the peaks and the drop to the plains are of the right order of height, but every distance is squeezed so they fit in view; Guru Shikhar really lies more than ten kilometres away by road. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "The temple came first. The great hall was added in 1149, and the ring of cells in two phases.",
+    "src": "Sehdev Kumar, Jain Temples of Rajasthan",
+    "u": "https://jainqq.org/pagetext/Jain_Temples_of_Rajasthan/011011/88",
+    "has": true,
+    "gap": false
+   },
+   {
+    "t": "How its stones were cut, moved and raised is not yet sourced here.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "Jain builders later had their own handbook, the Vastusara of Thakkura Pheru, written in 1315, long after this temple.",
+    "src": "SOAS paper, Architectural Science in Jain Poetry: the Aparajitaprccha and the Vastusara",
+    "u": "https://www.SOAS.ac.uk/sites/default/files/2022-06/Architectural%20Science%20in%20Jain%20Poetry%20The%20Descriptions%20of%20Kum%C4%81rap%C4%81la%27s%20Temples%20file128225.pdf",
+    "has": true,
+    "gap": false
+   },
+   {
+    "t": "The Aparajitaprccha, a Gujarat treatise, was compiled under Bhima II (1178 to 1240), later than this building. It records the tradition rather than this plan.",
+    "src": "SOAS paper, Architectural Science in Jain Poetry: the Aparajitaprccha and the Vastusara",
+    "u": "https://www.SOAS.ac.uk/sites/default/files/2022-06/Architectural%20Science%20in%20Jain%20Poetry%20The%20Descriptions%20of%20Kum%C4%81rap%C4%81la%27s%20Temples%20file128225.pdf",
+    "has": true,
+    "gap": false
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "Inside the entrance",
+    "note": "Plain walls outside give way to white marble inside."
+   },
+   {
+    "name": "The colonnade",
+    "note": "A row of small shrines, each with its image, behind the pillars."
+   },
+   {
+    "name": "Under the dome",
+    "note": "Look up: rings of carving close in to a hanging lotus."
+   },
+   {
+    "name": "Before the sanctum",
+    "note": "The closed hall leads to the shrine."
+   }
+  ],
+  "sources": [
+   {
+    "t": "Sehdev Kumar, Jain Temples of Rajasthan (IGNCA): the court, 52 cells and facing",
+    "u": "https://jainqq.org/explore/011011/88",
+    "tier": "T4"
+   },
+   {
+    "t": "Sehdev Kumar, Jain Temples of Rajasthan: the hall ceiling, over 7 m",
+    "u": "https://jainqq.org/pagetext/Jain_Temples_of_Rajasthan/011011/88",
+    "tier": "T4"
+   },
+   {
+    "t": "Key Biodiversity Areas: Mount Abu (Arbuda hills 1,250 to 1,700 m, valleys and steep slopes; Guru Shikhar 1,722 m)",
+    "u": "https://www.keybiodiversityareas.org/site/factsheet/18354",
+    "tier": "T4"
+   },
+   {
+    "t": "Lonely Planet: Guru Shikhar at the north-east end of the Mount Abu plateau",
+    "u": "https://www.lonelyplanet.com/points-of-interest/guru-shikhar/1561654",
+    "tier": "T4"
+   }
+  ],
+  "model_file": "models/bharat-dilwara.obj"
+ },
+ {
+  "key": "kantajew",
+  "form": "Terracotta temple",
+  "modelled_on": "Kantajew temple, Kantanagar",
+  "region": "Dinajpur, Bangladesh",
+  "built": "begun 1704, finished 1752",
+  "facing": "Facing not sourced",
+  "measures": [
+   {
+    "l": "Storeys",
+    "v": "3"
+   },
+   {
+    "l": "Spires",
+    "v": "9, lost in 1897"
+   },
+   {
+    "l": "Terracotta plaques",
+    "v": "about 15,000"
+   },
+   {
+    "l": "Built",
+    "v": "1704 to 1752"
+   },
+   {
+    "l": "Sizes",
+    "v": "drawn by eye"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "There is no good building stone in this delta, so the art is in fired clay. Small plaques, each moulded and baked, cover every wall: scenes from the epics, daily life, hunting and processions, set in rows like the frames of a strip.",
+  "drawn_by_eye": "Sourced: the three storeys, the nine spires at the corners and the top, their loss in 1897, the square central chamber, the plaques and the dates. Drawn by eye: every size, the openings, and the shape of the spires. The last stage puts the spires back as they stood before 1897. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "Brick faced with fired-clay plaques, on a sandstone plinth.",
+    "src": "BSS",
+    "u": "https://www.bssnews.net/tourism/313864",
+    "has": true,
+    "gap": false
+   },
+   {
+    "t": "How its stones were cut, moved and raised is not yet sourced here.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "No building text tied to this site is named in the sources used here.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "From the south",
+    "note": "Three storeys, each smaller than the one below."
+   },
+   {
+    "name": "At the wall",
+    "note": "Every face is covered in small terracotta plaques."
+   },
+   {
+    "name": "The corridor",
+    "note": "A passage runs round the central chamber."
+   }
+  ],
+  "sources": [
+   {
+    "t": "Beautiful Bangladesh (Bangladesh Tourism Board): Kantajew temple, nine spires lost in 1897",
+    "u": "https://beautifulbangladesh.gov.bd/newsletter/single/196",
+    "tier": "T2"
+   },
+   {
+    "t": "BSS: three storeys, nine peaks, square chamber",
+    "u": "https://www.bssnews.net/tourism/313864",
+    "tier": "T4"
+   },
+   {
+    "t": "The Daily Star: about 15,000 terracotta pieces",
+    "u": "https://www.thedailystar.net/node/1270684",
+    "tier": "T4"
+   }
+  ],
+  "model_file": "models/bharat-kantajew.obj"
+ },
+ {
+  "key": "dhakeshwari",
+  "form": "Temple compound",
+  "modelled_on": "Dhakeshwari temple, Dhaka",
+  "region": "Dhaka, Bangladesh",
+  "built": "founded by tradition in the 12th c.; present buildings later",
+  "facing": "Facing not sourced",
+  "measures": [
+   {
+    "l": "Shiva temples",
+    "v": "4, in a row"
+   },
+   {
+    "l": "Main temple",
+    "v": "Durga"
+   },
+   {
+    "l": "Pond",
+    "v": "1"
+   },
+   {
+    "l": "Sizes",
+    "v": "drawn by eye"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "The buildings are brick, plastered and painted. The decoration is in the plaster: bands of mouldings and rows of cusped arches on the walls, and bright colour instead of carving.",
+  "drawn_by_eye": "Sourced: the four identical Shiva temples in a row, their pinkish cone-like roofs, the goddess’s temple and the pond. Drawn by eye: every size and colour, the layout, and the five small towers on the main temple. The founding date is tradition, not record. Facing is not sourced. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "The order shown is drawn by eye.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "No building text tied to this site is named in the sources used here.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "From the gate",
+    "note": "The compound wall and the yellow gate."
+   },
+   {
+    "name": "The four Shiva temples",
+    "note": "Four identical temples in a row, each under a pink cone roof."
+   },
+   {
+    "name": "The goddess’s temple",
+    "note": "A front hall of arches, the sanctum behind."
+   },
+   {
+    "name": "The pond",
+    "note": "Steps lead down to the water."
+   }
+  ],
+  "sources": [
+   {
+    "t": "The Daily Star: four identical Shiva temples, the Durga temple and the pond",
+    "u": "https://www.thedailystar.net/star-weekend/heritage/temple-and-city-1212340",
+    "tier": "T4"
+   },
+   {
+    "t": "The Daily Star (2012): the pinkish cone-like roofs",
+    "u": "https://archive.thedailystar.net/lifestyle/2012/10/03/page03.htm",
+    "tier": "T4"
+   }
+  ],
+  "model_file": "models/bharat-dhakeshwari.obj"
+ },
+ {
+  "key": "shantadurga",
+  "form": "Goan temple",
+  "modelled_on": "Shantadurga temple, Kavlem",
+  "region": "Kavlem, Goa",
+  "built": "1730s, by most accounts",
+  "facing": "Facing not sourced",
+  "measures": [
+   {
+    "l": "Lamp tower",
+    "v": "yes"
+   },
+   {
+    "l": "Tank",
+    "v": "yes"
+   },
+   {
+    "l": "Guest houses",
+    "v": "yes"
+   },
+   {
+    "l": "Built",
+    "v": "1730s"
+   },
+   {
+    "l": "Sizes",
+    "v": "drawn by eye"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "Laterite walls are plastered and painted, so the effect comes from shape and colour, not carving: arched windows, white pilasters, a balustrade round the dome, and the lamp tower, whose niches are lit with oil lamps at festivals.",
+  "drawn_by_eye": "Sourced: the mix of Hindu and Portuguese forms, the lamp tower, the tank and the guest houses. Drawn by eye: every size, the number of tiers on the lamp tower, the roofs, and the dome. The temple trust says it holds no record of the exact building date. Facing is not sourced. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "The order shown is drawn by eye.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "No building text tied to this site is named in the sources used here.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "From the gate",
+    "note": "The lamp tower stands in front of the temple."
+   },
+   {
+    "name": "The lamp tower",
+    "note": "Lamps are lit in its niches at festivals."
+   },
+   {
+    "name": "In the hall",
+    "note": "Arched windows and white pillars."
+   },
+   {
+    "name": "The tank",
+    "note": "Water with stepped sides, beside the temple."
+   }
+  ],
+  "sources": [
+   {
+    "t": "Incredible India: Shri Shanta Durga temple",
+    "u": "https://www.incredibleindia.gov.in/en/goa/goa/shri-shanta-durga-temple",
+    "tier": "T2"
+   },
+   {
+    "t": "Shree Shantadurga temple trust: about the temple",
+    "u": "https://shreeshantadurga.com/temple/",
+    "tier": "T4"
+   }
+  ],
+  "model_file": "models/bharat-shantadurga.obj"
+ },
+ {
+  "key": "hinglaj",
+  "form": "Cave shrine",
+  "modelled_on": "Hinglaj Mata, Hingol National Park",
+  "region": "Hingol, Balochistan",
+  "built": "date unknown; a pilgrimage site of long standing",
+  "facing": "Facing not sourced",
+  "measures": [
+   {
+    "l": "Shrine",
+    "v": "a natural cave"
+   },
+   {
+    "l": "Image",
+    "v": "none carved"
+   },
+   {
+    "l": "Nearby",
+    "v": "mud volcano"
+   },
+   {
+    "l": "Sizes",
+    "v": "drawn by eye"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "Here the rock is not carved at all. The cave is used as it was found, and the sacred object is a natural stone, coloured with vermilion. The art is in what people bring: flags, lamps, colour and cloth.",
+  "drawn_by_eye": "Sourced: the cave in the mountain, the river, the national park, and the mud volcano on the pilgrim route. Drawn by eye: the cliff, the size of the cave, the altar, the flags, and every distance. The altar and stone are drawn from descriptions; no source is linked for them yet. The rock surface is drawn by eye. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "Nothing was built: the cave is natural.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   },
+   {
+    "t": "Nothing was built: the shrine is a natural cave in the mountain.",
+    "src": "Dawn: Hinglaj",
+    "u": "https://www.dawn.com/news/1501730",
+    "has": true,
+    "gap": false
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "No building text tied to this site is named in the sources used here.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "By the river",
+    "note": "The cliff rises behind, with the cave at its foot."
+   },
+   {
+    "name": "At the cave mouth",
+    "note": "Flags hang across the opening."
+   },
+   {
+    "name": "Inside the cave",
+    "note": "A low altar and the stone smeared with red. No carved image."
+   },
+   {
+    "name": "The mud volcano",
+    "note": "Pilgrims climb it on the way."
+   }
+  ],
+  "sources": [
+   {
+    "t": "Dawn: the cave temple in Hingol National Park, on the Hingol river",
+    "u": "https://www.dawn.com/news/1501730",
+    "tier": "T4"
+   },
+   {
+    "t": "AP via ABC News: pilgrims climb the mud volcano",
+    "u": "https://abcnews.go.com/International/wireStory/hindu-festival-southwestern-pakistan-brings-mountainous-region-life-109724858",
+    "tier": "T4"
+   }
+  ],
+  "model_file": "models/bharat-hinglaj.obj"
+ },
+ {
+  "key": "adalaj",
+  "form": "Stepwell of five levels",
+  "modelled_on": "Adalaj stepwell",
+  "region": "Adalaj, Gujarat",
+  "built": "1498",
+  "facing": "Runs north to south; entered from the south",
+  "measures": [
+   {
+    "l": "Length",
+    "v": "75.3 m"
+   },
+   {
+    "l": "Levels",
+    "v": "5"
+   },
+   {
+    "l": "Entrances",
+    "v": "3"
+   },
+   {
+    "l": "Stone",
+    "v": "sandstone"
+   },
+   {
+    "l": "Built",
+    "v": "1498"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "Every surface in the shaft is carved sandstone: bands of flowers, birds and elephants along the walls, brackets under the beams, and small shrines in niches. Light falls in from above, so the carving is lit more dimly the deeper you go.",
+  "drawn_by_eye": "Sourced: the length, the five storeys, the octagonal shaft, the north-south run with three entrances at the south, and the date. Drawn by eye: the depth, the number of steps and landings, the pillars and beams, and the width. Drawn with the entrance on +x; that is the south. The land is drawn as a wide raised plain so the cut can go down into it. The water level is drawn by eye: in a stepwell it rises and falls with the seasons. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "Cut down into the ground, then lined with carved sandstone.",
+    "src": "Incredible India: Adalaj stepwell",
+    "u": "https://www.incredibleindia.gov.in/en/gujarat/gandhinagar/adalaj-stepwell",
+    "has": true,
+    "gap": false
+   },
+   {
+    "t": "How its stones were cut, moved and raised is not yet sourced here.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "The Aparajitaprccha, compiled in Gujarat under Bhima II (1178 to 1240), is older than this stepwell; whether its builders used it is not recorded.",
+    "src": "SOAS paper, Architectural Science in Jain Poetry: the Aparajitaprccha and the Vastusara",
+    "u": "https://www.SOAS.ac.uk/sites/default/files/2022-06/Architectural%20Science%20in%20Jain%20Poetry%20The%20Descriptions%20of%20Kum%C4%81rap%C4%81la%27s%20Temples%20file128225.pdf",
+    "has": true,
+    "gap": false
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "At the entrance",
+    "note": "Look down the length of the stair."
+   },
+   {
+    "name": "On a landing",
+    "note": "Look back up through the pavilions, storey on storey."
+   },
+   {
+    "name": "In the octagonal shaft",
+    "note": "Look up: each level opens in eight sides."
+   },
+   {
+    "name": "Towards the well",
+    "note": "The round well beyond the shaft."
+   }
+  ],
+  "sources": [
+   {
+    "t": "Incredible India: Adalaj stepwell, begun 1498, five storeys",
+    "u": "https://www.incredibleindia.gov.in/en/gujarat/gandhinagar/adalaj-stepwell",
+    "tier": "T2"
+   },
+   {
+    "t": "Abhijna e-museum: length 75.3 m, runs south to north",
+    "u": "https://www.abhijna-emuseum.com/?p=3809",
+    "tier": "T4"
+   },
+   {
+    "t": "India Travelogue: entry at the south from three sides, octagonal shaft",
+    "u": "https://indiatravelogue.com/leis/heri/heri5.html",
+    "tier": "T4"
+   }
+  ],
+  "model_file": "models/bharat-adalaj.obj"
+ },
+ {
+  "key": "agrasen",
+  "form": "Stepwell of 103 steps",
+  "modelled_on": "Agrasen ki Baoli, Delhi",
+  "region": "New Delhi",
+  "built": "14th c., by most accounts",
+  "facing": "Entered from the south",
+  "measures": [
+   {
+    "l": "Size",
+    "v": "60 m by 15 m"
+   },
+   {
+    "l": "Steps",
+    "v": "103"
+   },
+   {
+    "l": "Niches",
+    "v": "3 levels"
+   },
+   {
+    "l": "Stone",
+    "v": "rubble masonry"
+   },
+   {
+    "l": "Built",
+    "v": "14th c."
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "The walls are rough stone, plastered. The art is in the rhythm: row on row of plain arched niches, repeated down the length, so the eye is drawn down the steps to the water.",
+  "drawn_by_eye": "Sourced: the length, the width, the 103 steps, the walls of arched niches in three levels, the entrance from the south and the date. Drawn by eye: the depth, the landings between flights, the size of each niche, and the well. The land is drawn as a wide raised plain so the cut can go down into it. The water level is drawn by eye: in a stepwell it rises and falls with the seasons. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "The order shown is drawn by eye.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "No building text tied to this site is named in the sources used here.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "At the top",
+    "note": "The steps go down between walls of niches."
+   },
+   {
+    "name": "On a landing",
+    "note": "Halfway down."
+   },
+   {
+    "name": "At the bottom",
+    "note": "Look back up the 103 steps."
+   },
+   {
+    "name": "The well",
+    "note": "The round well at the far end."
+   }
+  ],
+  "sources": [
+   {
+    "t": "Delhi Tourism: Agrasen ki Baoli, 60 m by 15 m, 103 steps",
+    "u": "https://delhitourism.gov.in/dt/explore_the_city/agrasen_ki_baoli.html",
+    "tier": "T2"
+   },
+   {
+    "t": "Incredible India: Agrasen ki Baoli, 14th century",
+    "u": "https://www.incredibleindia.gov.in/en/delhi/delhi/agrasen-ki-baoli",
+    "tier": "T2"
+   },
+   {
+    "t": "Show Caves: entered from the south, three levels of niches",
+    "u": "https://showcaves.com/english/in/subterranea/Agrasen.html",
+    "tier": "T4"
+   }
+  ],
+  "model_file": "models/bharat-agrasen.obj"
+ },
+ {
+  "key": "parihaspora",
+  "form": "Royal city ruins",
+  "modelled_on": "Parihaspora, Lalitaditya’s city",
+  "region": "Parihaspora, Kashmir",
+  "built": "8th c. CE, under Lalitaditya",
+  "facing": "A stair on each side of the stupa",
+  "measures": [
+   {
+    "l": "Stupa platforms",
+    "v": "2.65 m and 3.65 m high"
+   },
+   {
+    "l": "Chaitya floor",
+    "v": "one block, 14 by 12 by 6 ft"
+   },
+   {
+    "l": "Stone",
+    "v": "limestone blocks"
+   },
+   {
+    "l": "Platform widths",
+    "v": "drawn by eye"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "The stones are huge and plain. Much of the carving has gone; the drum of the stupa probably held figures of the Buddha in niches. What stands out now is scale: one floor block too heavy for anyone to carry off.",
+  "drawn_by_eye": "Sourced: the plateau, the two platform heights, the stairs on the cardinal sides, the single-block floor of the chaitya, the monastery and the date. Drawn by eye: the widths of the platforms, the drum, the scattered blocks, and where each building stands. The last two stages are conjecture, drawn pale. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "Built of large stone blocks. The order shown is drawn by eye.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   },
+   {
+    "t": "The floor of the chaitya is a single block of stone, about 14 by 12 by 6 feet.",
+    "src": "Roger Bilham, CU Boulder: Parihasapura",
+    "u": "https://cires1.colorado.edu/~bilham/KashmirTemples/Parihansapura.html",
+    "has": true,
+    "gap": false
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "No building text tied to the Kashmir temples is named in the sources used here.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "On the plateau",
+    "note": "The ruins spread out on the flat top."
+   },
+   {
+    "name": "At the stupa",
+    "note": "Two platforms, a stair in the middle of each side."
+   },
+   {
+    "name": "The chaitya",
+    "note": "Look down at the floor: a single block of stone."
+   },
+   {
+    "name": "The monastery",
+    "note": "Low walls of cells round a court."
+   }
+  ],
+  "sources": [
+   {
+    "t": "The Kashmir Archive: Buddhist monuments at Parihaspura, the double platform",
+    "u": "https://sites.google.com/view/thekashmirarchive/srinagar/other-monuments/buddhist-monuments-parihaspura",
+    "tier": "T4"
+   },
+   {
+    "t": "Roger Bilham, CU Boulder: Parihasapura, the chaitya floor block",
+    "u": "https://cires1.colorado.edu/~bilham/KashmirTemples/Parihansapura.html",
+    "tier": "T4"
+   }
+  ],
+  "model_file": "models/bharat-parihaspora.obj"
+ },
+ {
+  "key": "harwan",
+  "form": "Terraced monastery",
+  "modelled_on": "Harwan Buddhist site",
+  "region": "Harwan, Srinagar",
+  "built": "about 3rd to 5th c. CE; dates disputed",
+  "facing": "Facing not sourced",
+  "measures": [
+   {
+    "l": "Terraces",
+    "v": "3"
+   },
+   {
+    "l": "Shrine",
+    "v": "apsidal, pebble masonry"
+   },
+   {
+    "l": "Courtyard",
+    "v": "moulded tiles"
+   },
+   {
+    "l": "Sizes",
+    "v": "drawn by eye"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "The masonry is river pebbles set in patterns between larger stones. The art is in the floor: tiles of fired clay, each pressed from a mould, showing people, animals, birds and plants, laid together into a pavement, with larger tiles facing the bench where the monks sat.",
+  "drawn_by_eye": "Sourced: the three terraces, the apsidal shrine in diaper-pebble masonry with its antechamber and round sanctum, the paved courtyard, and the large tiles as bench risers. Drawn by eye: every size, the cells and stupa base on the lower terraces, and the tile pattern. The tiles are no longer on site. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "Terraces were cut into the hillside and faced with pebble masonry.",
+    "src": "Vikaspedia (ASI)",
+    "u": "https://en.vikaspedia.in/viewcontent/education/archaeological-survey-of-india/ancient-monastery-and-stupa-at-harwan-in-srinagar?lgn=en",
+    "has": true,
+    "gap": false
+   },
+   {
+    "t": "The courtyard tiles were pressed in moulds and fired; larger ones faced the bench.",
+    "src": "Ashmolean Museum: Harwan tile",
+    "u": "https://jameelcentre.ashmolean.org/collection/921/object/11178",
+    "has": true,
+    "gap": false
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "No building text tied to this site is named in the sources used here.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "At the foot",
+    "note": "Three terraces climb the slope."
+   },
+   {
+    "name": "Middle terrace",
+    "note": "A round stupa base."
+   },
+   {
+    "name": "The tiled courtyard",
+    "note": "Look down at the pavement of moulded tiles."
+   },
+   {
+    "name": "The apsidal shrine",
+    "note": "An antechamber, then the round sanctum."
+   }
+  ],
+  "sources": [
+   {
+    "t": "Vikaspedia (ASI): monastery and stupa at Harwan, the apsidal shrine and tiled court",
+    "u": "https://en.vikaspedia.in/viewcontent/education/archaeological-survey-of-india/ancient-monastery-and-stupa-at-harwan-in-srinagar?lgn=en",
+    "tier": "T2"
+   },
+   {
+    "t": "Ashmolean Museum: Harwan tiles as bench risers and floor",
+    "u": "https://jameelcentre.ashmolean.org/collection/921/object/11178",
+    "tier": "T4"
+   }
+  ],
+  "model_file": "models/bharat-harwan.obj"
+ },
+ {
+  "key": "naranag",
+  "form": "Mountain temple courts",
+  "modelled_on": "Naranag temples",
+  "region": "Naranag, Kashmir",
+  "built": "8th c. CE, under Lalitaditya",
+  "facing": "Facing not sourced",
+  "measures": [
+   {
+    "l": "First court",
+    "v": "53.65 m by 39.60 m"
+   },
+   {
+    "l": "Second court",
+    "v": "50 m by 42 m"
+   },
+   {
+    "l": "Temples",
+    "v": "8 and 12"
+   },
+   {
+    "l": "Stone",
+    "v": "grey granite"
+   },
+   {
+    "l": "Apart",
+    "v": "about 200 m"
+   }
+  ],
+  "how_the_art_sits_on_the_stone": "Granite is hard to carve finely, so the decoration is in the shapes: trefoil arches, pediments over the doors, and fluted pilasters, cut crisp and large. The walls are built of big dressed blocks.",
+  "drawn_by_eye": "Sourced: the two courts, their sizes, the eight temples of the first, the two-roomed gatehouse of the second, the granite, the date, and the 200 m between the groups. Drawn by eye: where each temple stands, their sizes, and the valley. The courts are drawn 90 m apart so both fit in one view. The same archive gives other sizes for the courts on another page. The roofs are gone and are drawn after other Kashmir temples of the time. The carving is a repeating pattern standing in for the real sculpture. Trees and grass are kinds common to the region, placed by eye, not surveyed.",
+  "how_it_was_built": [
+   {
+    "t": "Built of grey granite. The order shown is drawn by eye.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "building_texts": [
+   {
+    "t": "No building text tied to the Kashmir temples is named in the sources used here.",
+    "src": "",
+    "u": "",
+    "has": false,
+    "gap": true
+   }
+  ],
+  "places_to_stand": [
+   {
+    "name": "In the valley",
+    "note": "The two courts by the river."
+   },
+   {
+    "name": "First court",
+    "note": "Eight temples within the wall."
+   },
+   {
+    "name": "Second court gate",
+    "note": "The gatehouse of two rooms."
+   },
+   {
+    "name": "Inside the second court",
+    "note": "Twelve temples round the main one."
+   }
+  ],
+  "sources": [
+   {
+    "t": "The Kashmir Archive: Naranag, two groups 200 m apart, the first court 53.65 m by 39.60 m",
+    "u": "https://sites.google.com/view/thekashmirarchive/ganderbal/temples/temple-no-3-naranag",
+    "tier": "T4"
+   },
+   {
+    "t": "The Kashmir Archive: Naranag, the second court and its two-roomed gateway",
+    "u": "https://sites.google.com/view/thekashmirarchive/ganderbal/temples/temples-naranag",
+    "tier": "T4"
+   }
+  ],
+  "model_file": "models/bharat-naranag.obj"
+ }
+]

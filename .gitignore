@@ -6,6 +6,10 @@
 node_modules/
 # Claude Code: keep personal local settings out of the repo, but DO commit skills
 .claude/settings.local.json
+# Exported 3D models (huge, generated client-side by the temples page download button) — never commit
+*.obj
+models/
+bharat-temples-3d/
 *.log
 package-lock.json
 
