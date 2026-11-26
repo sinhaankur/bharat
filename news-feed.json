@@ -1,7 +1,7 @@
 {
   "_meta": {
     "purpose": "Aggregated news_items (link + snippet only). moderation=pending until a human approves; auto anchors must be confirmed. See news-timeline-schema.md.",
-    "generated_at": "2026-11-26T00:18:29+00:00",
+    "generated_at": "2026-11-26T06:12:31+00:00",
     "count": 3000,
     "retention": "rolling 90d, max 3000 items",
     "safety": "Link-don't-republish; always attributed; lean is third-party aggregation (lean_source); nothing shown until moderation=approved."
@@ -54680,6 +54680,30 @@
       "moderation": "pending"
     },
     {
+      "id": "ni_abp_telugu_te_oad_shot_in_leg_like_raptadu_case_264393",
+      "headline": "Meerut Police Half Encounter: యువతిపై దాడి చేసిన ఉన్మాదికి రాప్తాడు తరహా ట్రీట్మెంట్.. మీరట్ పోలీసుల హాఫ్ ఎన్‌కౌంటర్‌లో కాలికి బుల్లెట్ గాయం!",
+      "outlet": "ABP Desam (Telugu)",
+      "outlet_lean": "unknown",
+      "lean_source": "No citable bias assessment for the regional edition; left unknown. Telugu-language — for Andhra Pradesh / Telangana districts.",
+      "outlet_type": "regional_daily",
+      "language": "te",
+      "url": "https://telugu.abplive.com/news/meerut-police-half-encounter-accused-salman-dragged-woman-on-road-shot-in-leg-like-raptadu-case-264393",
+      "snippet": "Meerut Police Half Encounter: యువతిపై దాడి చేసిన ఉన్మాదికి రాప్తాడు తరహా ట్రీట్మెంట్.. మీరట్ పోలీసుల హాఫ్ ఎన్‌కౌంటర్‌లో కాలికి బుల్లెట్ గాయం!",
+      "published_at": "Wed, 25 Nov 2026 20:06:42 +0530",
+      "ingested_at": "2026-11-26T06:12:31+00:00",
+      "ingest_source": "rss:abp_telugu_te",
+      "geo": {
+        "state": "Uttar Pradesh",
+        "district": "Meerut"
+      },
+      "scheme_ref": null,
+      "official_ref": null,
+      "fiscal_event_ids": [],
+      "anchor_confidence": "auto_suggested",
+      "paywalled": false,
+      "moderation": "pending"
+    },
+    {
       "id": "ni_ndtv_india_en_repentance_12376561_publisher_newsstand",
       "headline": "After Row Over Vande Mataram At J&K Waqf Board Event, Muslim Clerics Pray In Remorse",
       "outlet": "NDTV",
@@ -71972,30 +71996,6 @@
       "published_at": "Tue, 24 Nov 2026 23:35:29 +0530",
       "ingested_at": "2026-11-25T00:18:56+00:00",
       "ingest_source": "rss:ndtv_india_en",
-      "geo": {
-        "state": "Delhi",
-        "district": "Delhi"
-      },
-      "scheme_ref": null,
-      "official_ref": null,
-      "fiscal_event_ids": [],
-      "anchor_confidence": "auto_suggested",
-      "paywalled": false,
-      "moderation": "pending"
-    },
-    {
-      "id": "ni_news18_india_police_station_attack_ws_l_10439493_html",
-      "headline": "Who Is Nabeel? Family Feuds, Police Summons Before Delhi Jama Masjid Police Station Attack",
-      "outlet": "News18",
-      "outlet_lean": "centre-right",
-      "lean_source": "Third-party media-bias aggregations broadly place Network18/News18 centre-right; recorded as aggregation, not our judgement.",
-      "outlet_type": "tv",
-      "language": "en",
-      "url": "https://www.news18.com/india/who-is-nabeel-family-feuds-police-summons-before-delhi-jama-masjid-police-station-attack-ws-l-10439493.html",
-      "snippet": "Police suspect domestic disputes and a recent family complaint triggered Nabeel to launch a knife attack inside Delhi Jama Masjid police station, injuring multiple personnel.",
-      "published_at": "Tue, 24 Nov 2026 23:34:26 +0530",
-      "ingested_at": "2026-11-24T18:08:39+00:00",
-      "ingest_source": "rss:news18_india",
       "geo": {
         "state": "Delhi",
         "district": "Delhi"
